@@ -34,6 +34,6 @@ hello()
 |---|---|
 | Markdown | 준비 완료 |
 | Jekyll | 자동 빌드 |
-| GitHub Pages | 공개 예정 |
+| GitHub Pages | 공개 완료 |
 
 앞으로 이 공간에 AI, 데이터 분석, 투자 리서치와 서버 운영 기록을 정리할 예정입니다.
