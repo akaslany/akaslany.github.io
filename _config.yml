@@ -1,0 +1,14 @@
+title: "Ki-jung's Technical Notes"
+description: "AI, 데이터, 투자와 서버 운영 기록"
+lang: ko-KR
+timezone: Asia/Seoul
+url: "https://akaslany.github.io"
+baseurl: ""
+theme: minima
+permalink: /:year/:month/:day/:title/
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+show_excerpts: true
+author:
+  name: "Ki-jung Kim"
