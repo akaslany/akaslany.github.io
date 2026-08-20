@@ -42,9 +42,9 @@ description: "한국은행 전일 보도자료를 통화정책·금융시장·�
 
 ### 3. 전체 목록
 - [C/외환·대외] 한국은행 부총재 인사 — 인사운영팀 / 2026.08.20
-  - [원문 보기](https://www.bok.or.kr/portal/bbs/B0000502/view.do?nttId=11063967&searchCnd=1&searchKwd=&depth2=200038&depth3=201263&date=&sdate=&edate=&sort=1&pageUnit=30&depth=201263&pageIndex=1&programType=newsData&menuNo=201265&oldMenuNo=201263)
+- [원문 보기](https://www.bok.or.kr/portal/bbs/B0000502/view.do?nttId=11063967&searchCnd=1&searchKwd=&depth2=200038&depth3=201263&date=&sdate=&edate=&sort=1&pageUnit=30&depth=201263&pageIndex=1&programType=newsData&menuNo=201265&oldMenuNo=201263)
 - [C/외환·대외] 2026년 2/4분기 국제투자대조표(잠정) — 국외투자통계팀 / 2026.08.20
-  - [원문 보기](https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063936&searchCnd=1&searchKwd=&depth2=200038&depth3=201263&date=&sdate=&edate=&sort=1&pageUnit=30&depth=201263&pageIndex=1&programType=newsData&menuNo=201264&oldMenuNo=201263)
+- [원문 보기](https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063936&searchCnd=1&searchKwd=&depth2=200038&depth3=201263&date=&sdate=&edate=&sort=1&pageUnit=30&depth=201263&pageIndex=1&programType=newsData&menuNo=201264&oldMenuNo=201263)
 
 ### 4. 매크로 시그널 맵
 - 외환·대외: 원화·대외유동성·국제공조 점검
