@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "미국·한국 증시 주간 핵심 일정 — 2026-08-31~2026-09-04"
-date: 2026-08-26 08:00:00 +0900
+date: 2026-08-26 00:00:00 +0900
 categories:
   - weekly-market-calendar
 tags:
