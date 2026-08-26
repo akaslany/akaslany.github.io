@@ -257,14 +257,14 @@ JW는 고평가 대형 R&D 제약사보다 할인돼 있고 종근당과 유사�
 
 ## 핵심 출처
 
-1. DART 2026 반기보고서: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814004216
-2. DART 2025 사업보고서: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001544
-3. DART 2022 사업보고서: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20230321001149
-4. DART 2026-08-11 Epaminurad 3상 Top-line: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260811800882
-5. DART 2026-08-14 Bofanglutide 국내 3상 신청: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814803657
-6. DART 2026-04-08 Bofanglutide 라이선스 도입: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260408801297
-7. DART 2026-04-30 31개 품목 판매업무정지: https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260430001776
-8. Epaminurad EPIC 등록: https://clinicaltrials.gov/study/NCT05815901
-9. Bofanglutide 비만 2상 등록: https://clinicaltrials.gov/study/NCT06256562
-10. Bofanglutide 당뇨 2상 등록: https://clinicaltrials.gov/study/NCT06256549
+1. [DART 2026 반기보고서](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814004216)
+2. [DART 2025 사업보고서](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260318001544)
+3. [DART 2022 사업보고서](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20230321001149)
+4. [DART 2026-08-11 Epaminurad 3상 Top-line](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260811800882)
+5. [DART 2026-08-14 Bofanglutide 국내 3상 신청](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260814803657)
+6. [DART 2026-04-08 Bofanglutide 라이선스 도입](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260408801297)
+7. [DART 2026-04-30 31개 품목 판매업무정지](https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260430001776)
+8. [Epaminurad EPIC 등록 — ClinicalTrials.gov](https://clinicaltrials.gov/study/NCT05815901)
+9. [Bofanglutide 비만 2상 등록 — ClinicalTrials.gov](https://clinicaltrials.gov/study/NCT06256562)
+10. [Bofanglutide 당뇨 2상 등록 — ClinicalTrials.gov](https://clinicaltrials.gov/study/NCT06256549)
 11. KRX 기반 로컬 수정주가·기본정보 DB: 2026-08-26 스냅샷
