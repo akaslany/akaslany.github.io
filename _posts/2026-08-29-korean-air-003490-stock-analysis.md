@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "대한항공(003490) 종합 주식 분석 — 통합의 네트워크 경제가 레버리지를 이길 수 있는가"
-date: 2026-08-29 15:15:00 +0900
+date: 2026-08-29 15:05:00 +0900
 categories: [stock-analysis]
 tags: [대한항공, 003490, 한국주식, 항공, 아시아나, DART, 기업분석, 밸류에이션]
 permalink: /stock-analysis/003490/2026-08-28/
