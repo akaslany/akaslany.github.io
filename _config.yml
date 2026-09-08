@@ -11,3 +11,12 @@ plugins:
   - jekyll-seo-tag
 show_excerpts: true
 author: "Ki-jung Kim"
+header_pages:
+  - briefings.md
+  - ai-intel.md
+  - bok-briefing.md
+  - liquidity.md
+  - market-calendar.md
+  - motir-policy.md
+  - stock-analysis.md
+  - us-policy-intel.md

@@ -15,5 +15,5 @@ permalink: /briefings/
 {% endfor %}
 
 {% if reports.size > 5 %}
-[이전 보고서 전체 보기 → History]({{ "/history/" | relative_url }})
+[이전 보고서 전체 보기 → History]({{ "/history/#global-risk" | relative_url }})
 {% endif %}

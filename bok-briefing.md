@@ -8,9 +8,14 @@ permalink: /bok-briefing/
 
 {% assign posts = site.categories["bok-briefing"] %}
 {% if posts and posts.size > 0 %}
-{% for post in posts %}
+{% assign recent_posts = posts | slice: 0, 5 %}
+{% for post in recent_posts %}
 - {{ post.date | date: "%Y-%m-%d" }} — [{{ post.title }}]({{ post.url | relative_url }})
 {% endfor %}
+{% if posts.size > 5 %}
+
+[이전 보고서 전체 보기 → History]({{ "/history/#bok-briefing" | relative_url }})
+{% endif %}
 {% else %}
 아직 공개된 브리핑이 없습니다.
 {% endif %}
