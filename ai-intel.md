@@ -8,14 +8,9 @@ permalink: /ai-intel/
 
 {% assign posts = site.categories["ai-daily-intel"] %}
 {% if posts and posts.size > 0 %}
-{% assign recent_posts = posts | slice: 0, 5 %}
-{% for post in recent_posts %}
+{% for post in posts %}
 - {{ post.date | date: "%Y-%m-%d" }} — [{{ post.title }}]({{ post.url | relative_url }})
 {% endfor %}
-{% if posts.size > 5 %}
-
-[이전 보고서 전체 보기 → History]({{ "/history/#ai-daily-intel" | relative_url }})
-{% endif %}
 {% else %}
 아직 공개된 리포트가 없습니다.
 {% endif %}
