@@ -8,14 +8,9 @@ FRED·연준 계열 공개 데이터를 이용해 Net Liquidity, TGA, ON RRP, �
 
 {% assign posts = site.categories["us-liquidity"] %}
 {% if posts and posts.size > 0 %}
-{% assign recent_posts = posts | slice: 0, 5 %}
-{% for post in recent_posts %}
+{% for post in posts %}
 - {{ post.date | date: "%Y-%m-%d" }} — [{{ post.title }}]({{ post.url | relative_url }})
 {% endfor %}
-{% if posts.size > 5 %}
-
-[이전 보고서 전체 보기 → History]({{ "/history/#us-liquidity" | relative_url }})
-{% endif %}
 {% else %}
 아직 공개된 리포트가 없습니다.
 {% endif %}
