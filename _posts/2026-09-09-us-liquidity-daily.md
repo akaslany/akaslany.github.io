@@ -9,7 +9,7 @@ permalink: /liquidity/2026-09-09/
 
 > **공개 자료 안내:** FRED·연준·미 재무부·뉴욕 연은 계열 공개 시계열을 규칙 기반으로 집계한 정보 자료입니다. 지표별 관측일과 발표 주기가 달라 최신성이 서로 다를 수 있으며, 투자 권유나 수익 보장이 아닙니다.
 
-> 판단시각 2026-09-08T20:00:00.449262-04:00 이전 공개분만 사용한다. 미확인 자료를 0으로 대체하지 않는다.
+> 판단시각 2026-09-08T20:02:44.046693-04:00 이전 공개분만 사용한다. 미확인 자료를 0으로 대체하지 않는다.
 
 ## 1. Regime
 
@@ -17,13 +17,13 @@ permalink: /liquidity/2026-09-09/
 
 ## 2. 24h Changes
 
-관측 상태: fed-assets=no-new-observation; reserves-wed=no-new-observation; sofr=new-observation; effr=new-observation; rrp=new-observation; tga=new-observation; iorb=new-observation; srf=no-change. `no-change`는 새 공표값이 같다는 뜻이고 `no-new-observation`은 새 공표가 없어 변화를 계산하지 않았다는 뜻이다. 후자를 0 또는 횡보로 해석하지 않는다.
+관측 상태: fed-assets=no-new-observation; reserves-wed=no-new-observation; sofr=new-observation; effr=new-observation; rrp=new-observation; tga=new-observation; iorb=new-observation; srf=missing. `no-change`는 새 공표값이 같다는 뜻이고 `no-new-observation`은 새 공표가 없어 변화를 계산하지 않았다는 뜻이다. 후자를 0 또는 횡보로 해석하지 않는다.
 
 ## 3. Fact Cards
 
-- **Fed/H.4.1:** 총자산 6786.376 USD bn; 지급준비금 2894.531 USD bn.
-- **Treasury/DTS:** TGA null USD mn.
-- **Money markets:** ON RRP 626000000 USD bn; SOFR/volume 3.65; 2888; IORB 3.65 (derived from target upper bound)%.
+- **Fed/H.4.1:** 주간평균 reserve-funds 공급요인 6786.376 USD bn; 주간평균 지급준비금 2894.531 USD bn. 수요일 시점 총자산과 혼합하지 않는다.
+- **Treasury/DTS:** TGA 903928 USD mn.
+- **Money markets:** ON RRP 0.626 USD bn; SOFR/volume 3.65; 2888; IORB 3.65 (derived from target upper bound)%.
 - **MMF/repo/credit:** 확보된 공식 관측만 표시하며 missing 항목은 점수·행동 근거에서 제외한다.
 
 ## 4. Flow Ledger / Accounting
@@ -61,7 +61,7 @@ permalink: /liquidity/2026-09-09/
 - **rrp**: fresh / new-observation / obs 2026-09-08T13:30:00-04:00 / release 2026-09-08T14:00:00-04:00 / vintage 2026-09-08 initial.
 - **tga**: fresh / new-observation / obs 2026-09-04T23:59:00-04:00 / release 2026-09-05T16:00:00-04:00 / vintage 2026-09-04 initial.
 - **iorb**: fresh / new-observation / obs 2026-09-04T16:30:00-04:00 / release 2026-09-04T16:30:00-04:00 / vintage 2026-09-04 initial.
-- **srf**: fresh / no-change / obs 2026-09-08T20:00:00.449262-04:00 / release 2026-09-08T20:00:00.449262-04:00 / vintage 2026-09-08 initial.
+- **srf**: missing / missing / obs 2026-09-08T20:02:44.046693-04:00 / release 2026-09-08T20:02:44.046693-04:00 / vintage 2026-09-08 unknown.
 - PIT 빈티지는 append-only 저장하며 critical source/schema/freshness 실패 시 게시를 차단한다.
 - Claim manifest에는 Fact/accounting/inference/not-identified를 명시한다.
 
@@ -69,7 +69,7 @@ permalink: /liquidity/2026-09-09/
 {
   "contract_version": "us-liquidity-v2/2.0",
   "report_date": "2026-09-09",
-  "decision_time": "2026-09-08T20:00:00.449262-04:00",
+  "decision_time": "2026-09-08T20:02:44.046693-04:00",
   "timezone": "America/New_York",
   "report_id": "US-LIQ-V2-20260909",
   "sources": [
@@ -245,7 +245,7 @@ permalink: /liquidity/2026-09-09/
   ],
   "observations": [
     {
-      "name": "Fed total assets",
+      "name": "H.4.1 weekly-average factors supplying reserve funds",
       "value": "6786.376",
       "unit": "USD bn",
       "observation_time": "2026-09-02T16:30:00-04:00",
@@ -259,11 +259,11 @@ permalink: /liquidity/2026-09-09/
       "revision_status": "initial",
       "observation_id": "fed-assets",
       "available_at": "2026-09-03T16:30:00-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
       "freshness_status": "fresh"
     },
     {
-      "name": "Reserve balances Wednesday level",
+      "name": "Reserve balances weekly average",
       "value": "2894.531",
       "unit": "USD bn",
       "observation_time": "2026-09-02T16:30:00-04:00",
@@ -277,7 +277,7 @@ permalink: /liquidity/2026-09-09/
       "revision_status": "initial",
       "observation_id": "reserves-wed",
       "available_at": "2026-09-03T16:30:00-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
       "freshness_status": "fresh"
     },
     {
@@ -295,7 +295,7 @@ permalink: /liquidity/2026-09-09/
       "revision_status": "initial",
       "observation_id": "sofr",
       "available_at": "2026-09-08T08:00:00-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
       "freshness_status": "fresh"
     },
     {
@@ -313,12 +313,12 @@ permalink: /liquidity/2026-09-09/
       "revision_status": "initial",
       "observation_id": "effr",
       "available_at": "2026-09-08T08:00:00-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
       "freshness_status": "fresh"
     },
     {
       "name": "ON RRP accepted amount",
-      "value": "626000000",
+      "value": "0.626",
       "unit": "USD bn",
       "frequency": "business-daily",
       "observation_time": "2026-09-08T13:30:00-04:00",
@@ -331,12 +331,12 @@ permalink: /liquidity/2026-09-09/
       "revision_status": "initial",
       "observation_id": "rrp",
       "available_at": "2026-09-08T14:00:00-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
       "freshness_status": "fresh"
     },
     {
       "name": "TGA closing balance",
-      "value": "null",
+      "value": "903928",
       "unit": "USD mn",
       "frequency": "business-daily",
       "observation_time": "2026-09-04T23:59:00-04:00",
@@ -349,7 +349,7 @@ permalink: /liquidity/2026-09-09/
       "revision_status": "initial",
       "observation_id": "tga",
       "available_at": "2026-09-05T16:00:00-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
       "freshness_status": "fresh"
     },
     {
@@ -367,26 +367,26 @@ permalink: /liquidity/2026-09-09/
       "revision_status": "initial",
       "observation_id": "iorb",
       "available_at": "2026-09-04T16:30:00-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
       "freshness_status": "fresh"
     },
     {
       "name": "Standing Repo Facility usage",
-      "value": "endpoint checked; see source",
+      "value": "unavailable; not imputed as zero",
       "unit": "USD bn",
       "frequency": "business-daily",
-      "observation_time": "2026-09-08T20:00:00.449262-04:00",
-      "release_time": "2026-09-08T20:00:00.449262-04:00",
+      "observation_time": "2026-09-08T20:02:44.046693-04:00",
+      "release_time": "2026-09-08T20:02:44.046693-04:00",
       "source_id": "nyfed-repo",
       "critical": false,
       "max_age_hours": 72,
-      "observation_status": "no-change",
-      "vintage": "2026-09-08 initial",
-      "revision_status": "initial",
+      "observation_status": "missing",
+      "vintage": "2026-09-08 unknown",
+      "revision_status": "unknown",
       "observation_id": "srf",
-      "available_at": "2026-09-08T20:00:00.449262-04:00",
-      "retrieved_at": "2026-09-08T20:00:00.449272-04:00",
-      "freshness_status": "fresh"
+      "available_at": "2026-09-08T20:02:44.046693-04:00",
+      "retrieved_at": "2026-09-08T20:02:44.046703-04:00",
+      "freshness_status": "missing"
     }
   ],
   "calendar": [
