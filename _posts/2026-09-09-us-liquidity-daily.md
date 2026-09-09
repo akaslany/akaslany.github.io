@@ -9,7 +9,7 @@ permalink: /liquidity/2026-09-09/
 
 > **공개 자료 안내:** FRED·연준·미 재무부·뉴욕 연은 계열 공개 시계열을 규칙 기반으로 집계한 정보 자료입니다. 지표별 관측일과 발표 주기가 달라 최신성이 서로 다를 수 있으며, 투자 권유나 수익 보장이 아닙니다.
 
-> 판단시각 2026-09-08T20:05:01.303816-04:00 이전 공개분만 사용한다. 미확인 자료를 0으로 대체하지 않는다.
+> 판단시각 2026-09-09T07:00:00-04:00 이전 공개분만 사용한다. 미확인 자료를 0으로 대체하지 않는다.
 
 ## 1. Regime
 
@@ -17,13 +17,24 @@ permalink: /liquidity/2026-09-09/
 
 ## 2. 24h Changes
 
-관측 상태: fed-assets=no-new-observation; reserves-wed=no-new-observation; sofr=new-observation; effr=new-observation; rrp=new-observation; tga=new-observation; iorb=new-observation; srf=missing. `no-change`는 새 공표값이 같다는 뜻이고 `no-new-observation`은 새 공표가 없어 변화를 계산하지 않았다는 뜻이다. 후자를 0 또는 횡보로 해석하지 않는다.
+- **fed-assets:** `no-new-observation`
+- **reserves-wed:** `no-new-observation`
+- **tga:** `no-new-observation`
+- **rrp:** `new-observation`
+- **sofr:** `new-observation`
+- **effr:** `new-observation`
+- **iorb:** `no-change`
+- **srf:** `missing`
+- **mmf:** `no-new-observation`
+- **credit:** `missing`
+
+`no-change`는 새 공표값이 같다는 뜻이고 `no-new-observation`은 새 공표가 없어 변화를 계산하지 않았다는 뜻이다. 후자를 0 또는 횡보로 해석하지 않는다.
 
 ## 3. Fact Cards
 
-- **Fed/H.4.1:** 주간평균 reserve-funds 공급요인 6786.376 USD bn; 주간평균 지급준비금 2894.531 USD bn. 수요일 시점 총자산과 혼합하지 않는다.
-- **Treasury/DTS:** TGA 888923 USD mn.
-- **Money markets:** ON RRP 0.626 USD bn; SOFR/volume 3.65; 2888; IORB 3.65 (derived from target upper bound)%.
+- **Fed/H.4.1:** 주간평균 reserve-funds 공급요인 6737.204 USD bn; 주간평균 지급준비금 2929.285 USD bn. 수요일 시점 총자산과 혼합하지 않는다.
+- **Treasury/DTS:** TGA 888.923; daily -15.005 USD bn.
+- **Money markets:** ON RRP 0.626; prior 0.675; change -0.049 USD bn; SOFR/volume 3.65; 2888; IORB 3.65%.
 - **MMF/repo/credit:** 확보된 공식 관측만 표시하며 missing 항목은 점수·행동 근거에서 제외한다.
 
 ## 4. Flow Ledger / Accounting
@@ -36,16 +47,17 @@ permalink: /liquidity/2026-09-09/
 ## 5. Next-14-Day Calendar
 
 범위: 2026-09-10–2026-09-23.
-- **2026-09-10 auction:** Treasury Bond auction — neutral; 22000000000; uncertainty low.
-- **2026-09-10 auction:** Treasury Bill auction — neutral; 85000000000; uncertainty low.
-- **2026-09-10 auction:** Treasury Bill auction — neutral; 90000000000; uncertainty low.
+- **2026-09-10 settlement:** Treasury settlement — reserve-add; derived -12.883 USD bn; uncertainty medium.
+- **2026-09-10 auction:** Treasury auctions — neutral; official offering amounts; see source; uncertainty low.
+- **2026-09-10 fed-release:** H.4.1 weekly release — neutral; non-cash release; uncertainty low.
+- **2026-09-15 tax:** Estimated-tax deadline — reserve-drain; unknown; no official daily forecast; uncertainty high.
 
 ## 6. Asset Scenarios
 
-숫자 확률을 붙일 보정 표본이 없으므로 likelihood class만 사용한다.
-- **Base:** 주식·UST·USD·금·BTC 모두 방향성 우위 보류. 확인: SOFR/EFFR remain near IORB and credit does not deteriorate. Counterpath: Orderly Treasury settlement but no broad risk-asset confirmation. 철회: SOFR-IORB widens persistently or SRF usage appears.
-- **Easing (medium):** 확인: Stable reserves, falling TGA and improving credit/risk breadth. Counterpath: Long yields rise through inflation or term premium. 철회: Credit spreads widen or reserves fall.
-- **Drain/stress (medium):** 확인: TGA rises as reserves fall and repo stress appears. Counterpath: MMF/RRP buffers absorb settlement without rate pressure. 철회: Funding rates and credit remain stable.
+숫자 확률을 붙일 보정 표본이 없으므로 가능성 등급만 사용한다.
+- **기본 시나리오:** 주식·미국 국채·달러·금·비트코인 모두 방향성 우위를 보류한다. 확인 조건: SOFR·EFFR가 IORB 부근을 유지하고 신용 여건이 악화되지 않는 경우. 반대 경로: 국채 결제는 질서 있게 소화되지만 위험자산 전반의 확인 신호는 없는 경우. 철회 조건: SOFR와 IORB의 금리 차가 지속해서 확대되거나 상설 레포제도(SRF) 이용이 나타나는 경우.
+- **완화 전달(가능성 중간):** 확인 조건: 지급준비금이 안정되고 TGA가 감소하며 신용 여건과 위험자산 시장 폭이 개선되는 경우. 반대 경로: 인플레이션 또는 기간 프리미엄 때문에 장기금리가 상승하는 경우. 철회 조건: 신용스프레드가 확대되거나 지급준비금이 감소하는 경우.
+- **유동성 흡수·조달 스트레스(가능성 중간):** 확인 조건: TGA가 증가하고 지급준비금이 감소하는 가운데 레포시장 스트레스가 나타나는 경우. 반대 경로: MMF·RRP 완충재가 금리 압력 없이 국채 결제를 흡수하는 경우. 철회 조건: 조달금리와 신용 여건이 안정적으로 유지되는 경우.
 유효기간은 2026-09-23까지 또는 다음 핵심 공표·결제 직후 중 먼저 도래하는 때까지다.
 
 ## 7. Counterevidence / Withdrawal
@@ -56,11 +68,13 @@ permalink: /liquidity/2026-09-09/
 
 - **fed-assets**: fresh / no-new-observation / obs 2026-09-02T16:30:00-04:00 / release 2026-09-03T16:30:00-04:00 / vintage 2026-09-03 initial.
 - **reserves-wed**: fresh / no-new-observation / obs 2026-09-02T16:30:00-04:00 / release 2026-09-03T16:30:00-04:00 / vintage 2026-09-03 initial.
-- **sofr**: fresh / new-observation / obs 2026-09-04T08:00:00-04:00 / release 2026-09-08T08:00:00-04:00 / vintage 2026-09-08 initial.
-- **effr**: fresh / new-observation / obs 2026-09-04T08:00:00-04:00 / release 2026-09-08T08:00:00-04:00 / vintage 2026-09-08 initial.
+- **tga**: fresh / no-new-observation / obs 2026-09-04T23:59:00-04:00 / release 2026-09-08T16:00:00-04:00 / vintage 2026-09-08 initial.
 - **rrp**: fresh / new-observation / obs 2026-09-08T13:30:00-04:00 / release 2026-09-08T14:00:00-04:00 / vintage 2026-09-08 initial.
-- **tga**: fresh / new-observation / obs 2026-09-04T23:59:00-04:00 / release 2026-09-05T16:00:00-04:00 / vintage 2026-09-04 initial.
-- **iorb**: fresh / new-observation / obs 2026-09-04T16:30:00-04:00 / release 2026-09-04T16:30:00-04:00 / vintage 2026-09-04 initial.
-- **srf**: missing / missing / obs 2026-09-08T20:05:01.303816-04:00 / release 2026-09-08T20:05:01.303816-04:00 / vintage 2026-09-08 unknown.
+- **sofr**: fresh / new-observation / obs 2026-09-04T08:00:00-04:00 / release 2026-09-08T08:00:00-04:00 / vintage 2026-09-08 initial.
+- **effr**: fresh / new-observation / obs 2026-09-04T09:00:00-04:00 / release 2026-09-08T09:00:00-04:00 / vintage 2026-09-08 initial.
+- **iorb**: fresh / no-change / obs 2026-09-08T16:30:00-04:00 / release 2026-09-08T16:30:00-04:00 / vintage 2026-09-08 initial.
+- **srf**: missing / missing / obs 2026-09-08T13:30:00-04:00 / release 2026-09-08T14:00:00-04:00 / vintage 2026-09-08 unknown.
+- **mmf**: fresh / no-new-observation / obs 2026-09-02T16:00:00-04:00 / release 2026-09-03T16:00:00-04:00 / vintage 2026-09-03 initial.
+- **credit**: missing / missing / obs 2026-09-08T16:00:00-04:00 / release 2026-09-08T16:00:00-04:00 / vintage 2026-09-08 unknown.
 - PIT 빈티지는 append-only 저장하며 critical source/schema/freshness 실패 시 게시를 차단한다.
 - Claim manifest에는 Fact/accounting/inference/not-identified를 명시한다.
