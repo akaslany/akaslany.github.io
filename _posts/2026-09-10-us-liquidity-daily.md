@@ -17,21 +17,20 @@ permalink: /liquidity/2026-09-10/
 
 ## 2. 24h Changes
 
-- **fed-assets:** `no-new-observation`
-- **reserves-wed:** `no-new-observation`
-- **sofr:** `new-observation`
-- **effr:** `new-observation`
-- **rrp:** `new-observation`
-- **tga:** `new-observation`
-- **iorb:** `new-observation`
-- **srf:** `missing`
 
-`no-change`는 새 공표값이 같다는 뜻이고 `no-new-observation`은 새 공표가 없어 변화를 계산하지 않았다는 뜻이다. 후자를 0 또는 횡보로 해석하지 않는다.
+- **연준 유동성 공급요인:** 새 공표 없음 — 최신값 6,737.204 USD bn
+- **지급준비금:** 새 공표 없음 — 최신값 2,929.285 USD bn
+- **SOFR:** 3.64%; 거래량 2,904 USD bn — 이전 공표 대비 **감소 -1.0bp**
+- **EFFR:** 3.63%; 거래량 107 USD bn — 이전 공표 대비 **변화 없음 +0.0bp**
+- **ON RRP:** 0.432 USD bn — 이전 공표 대비 **감소 -0.194 USD bn**
+- **미 재무부 TGA:** 880.019 USD bn — 이전 공표 대비 **증가 +879.130 USD bn**
+- **IORB:** 새 공표 없음 — 최신값 3.65%
+- **상설 레포제도(SRF):** 자료 미확보 — 0으로 대체하지 않음
 
 ## 3. Fact Cards
 
 - **Fed/H.4.1:** 주간평균 reserve-funds 공급요인 6737.204 USD bn; 주간평균 지급준비금 2929.285 USD bn. 수요일 시점 총자산과 혼합하지 않는다.
-- **Treasury/DTS:** TGA 880019 USD mn.
+- **Treasury/DTS:** TGA 880.019 USD bn.
 - **Money markets:** ON RRP 0.432 USD bn; SOFR/volume 3.64; 2904; IORB 3.65 (derived from target upper bound)%.
 - **MMF/repo/credit:** 확보된 공식 관측만 표시하며 missing 항목은 점수·행동 근거에서 제외한다.
 
