@@ -14,7 +14,9 @@ permalink: /bok-briefing/
 {% endfor %}
 {% if posts.size > 5 %}
 
-[이전 보고서 전체 보기 → History]({{ "/history/#bok-briefing" | relative_url }})
+## 이전 브리핑
+
+**[History에서 이전 보고서 전체 보기 →]({{ "/history/#bok-briefing" | relative_url }})**
 {% endif %}
 {% else %}
 아직 공개된 브리핑이 없습니다.
