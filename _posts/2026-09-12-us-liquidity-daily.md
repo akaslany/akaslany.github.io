@@ -62,15 +62,35 @@ permalink: /liquidity/2026-09-12/
 
 완화 서사는 신용 약세·장기금리 상승·위험자산 breadth 악화·SOFR 상단 압력이 반증한다. 스트레스 서사는 IORB 부근 금리, 무질서하지 않은 결제, MMF/repo 완충이 반증한다. **Not identified:** 현재 자료만으로 시장 변동 원인을 Fed, TGA, 발행, 거시뉴스 또는 포지셔닝 중 하나로 식별할 수 없다. 확인 전 unsupported action은 금지한다.
 
-## 8. Coverage & Freshness Audit
+## 8. 데이터 상태
 
-- **fed-assets**: fresh / no-new-observation / obs 2026-09-09T16:30:00-04:00 / release 2026-09-10T16:30:00-04:00 / vintage 2026-09-10 initial.
-- **reserves-wed**: fresh / no-new-observation / obs 2026-09-09T16:30:00-04:00 / release 2026-09-10T16:30:00-04:00 / vintage 2026-09-10 initial.
-- **sofr**: fresh / new-observation / obs 2026-09-10T08:00:00-04:00 / release 2026-09-11T08:00:00-04:00 / vintage 2026-09-11 initial.
-- **effr**: fresh / new-observation / obs 2026-09-10T08:00:00-04:00 / release 2026-09-11T08:00:00-04:00 / vintage 2026-09-11 initial.
-- **rrp**: fresh / new-observation / obs 2026-09-11T13:30:00-04:00 / release 2026-09-11T14:00:00-04:00 / vintage 2026-09-11 initial.
-- **tga**: fresh / new-observation / obs 2026-09-10T23:59:00-04:00 / release 2026-09-11T16:00:00-04:00 / vintage 2026-09-10 initial.
-- **iorb**: fresh / new-observation / obs 2026-09-10T16:30:00-04:00 / release 2026-09-10T16:30:00-04:00 / vintage 2026-09-10 initial.
-- **srf**: missing / missing / obs 2026-09-11T18:48:48.006554-04:00 / release 2026-09-11T18:48:48.006554-04:00 / vintage 2026-09-11 unknown.
-- PIT 빈티지는 append-only 저장하며 critical source/schema/freshness 실패 시 게시를 차단한다.
-- Claim manifest에는 Fact/accounting/inference/not-identified를 명시한다.
+**전체 상태: 분석 가능**
+
+- 분석 지표 7개 중 **7개 최신**
+- 보조 지표 **1개 미확보**
+- 오래되어 분석에서 제외된 지표 **0개**
+- 기준 시각 이후 발표된 자료 **미사용**
+
+### 지표별 상태
+
+- **연준 유동성 공급요인 · 지급준비금**  
+  9월 9일 기준 주간 자료이며 9월 10일 발표분입니다.  
+  **상태: 최신 · 다음 정기 발표 대기**
+
+- **SOFR · EFFR**  
+  최신 영업일 금리와 거래량을 반영했습니다.  
+  **상태: 최신 · 다음 정기 발표 대기**
+
+- **ON RRP · 미 재무부 TGA**  
+  최신 일별 잔액을 반영했습니다.  
+  **상태: 최신 · 신규 공표 반영**
+
+- **IORB**  
+  현재 적용되는 정책금리입니다.  
+  **상태: 유효 · 변경 없음**
+
+- **상설 레포제도(SRF)**  
+  공식 사용액을 확보하지 못했습니다. 0으로 간주하지 않고 분석 근거에서 제외했습니다.  
+  **상태: 미확보 · 판단에서 제외**
+
+> **표시 기준:** `최신`은 지표별 발표 주기에 맞는 최신 공식 자료라는 의미입니다. `신규 공표 반영`은 이전 보고서 이후 새 자료가 발표됐다는 뜻이며, `미확보`는 0이 아니라 확인할 수 없어 분석에서 제외했다는 뜻입니다.
