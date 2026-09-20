@@ -9,6 +9,7 @@ description: "Donald J. Trump Truth Social 최근 24시간 게시물의 원문 �
 ---
 
 <!-- trump-truth-report-sha256: 958350878be899e5a907e0fa5c78a571d17c2f2f4351515db8c28f2861d32a7c -->
+<!-- trump-truth-web-format: v1 -->
 
 > **공개 자료 안내:** Donald J. Trump의 Truth Social 게시물 원문만 바탕으로 한 요약입니다. `[CLAIM]`은 게시자의 주장, `[FACT]`는 제공된 게시물 텍스트에서 직접 확인되는 사실, `[UNKNOWN]`은 게시물만으로 확인할 수 없는 사항입니다. 게시물의 주장 자체는 독립적으로 검증된 사실을 뜻하지 않으며, 투자 권유나 수익 보장이 아닙니다.
 
