@@ -35,61 +35,81 @@ description: "3단계 게이트 전체 영역 그림자 테스트: 구조 검증
 ### 2. 핵심 사건 5
 
 **#1 트럼프 유엔 연설의 이란 경고 [P] [원자재] [에너지] [주식]**
+
 **[사실]** ABC의 현장 보도와 Reuters 전재 기사는 트럼프 대통령이 9월 22일 뉴욕 유엔총회 연설에서 이란과 합의 가능성을 언급하면서 합의 실패 시 강경 대응을 경고했다고 전한다. 합의 체결이나 새로운 공격 결정이 확인된 것은 아니다.
+
 **[해석]** 협상 기대와 충돌 위험이 함께 남아 원유 위험 프리미엄과 에너지 비용 전망을 흔들 수 있다.
+
 **[불확실]** 연설 원본·정확한 발언 시각과 후속 정책 결정은 대조되지 않았다.
+
 사건 시각: 2026-09-22, 뉴욕 현지시간(분 미확인). 보도: ABC 2026-09-23 03:26 AEST; CNA 게재 Reuters 2026-09-23 01:00 SGT.
-출처: ABC https://www.abc.net.au/news/2026-09-23/donald-trump-addresses-united-nations-general-assembly/107179392 ; CNA 게재 Reuters https://www.channelnewsasia.com/world/iran-us-un-trump-speech-peace-deal-6402951
+출처: ABC <https://www.abc.net.au/news/2026-09-23/donald-trump-addresses-united-nations-general-assembly/107179392> ; CNA 게재 Reuters <https://www.channelnewsasia.com/world/iran-us-un-trump-speech-peace-deal-6402951>
 핵심 5 선정 근거: 원유 공급 경로와 외교 결과 모두에 영향을 줄 수 있는 당일 정상 발언.
 전달경로: 외교 발언 → 원유 공급 위험 기대 → 에너지·주식시장 → 운송·화학·에너지 기업의 비용과 매출 전망.
 
 **#2 브렌트·WTI 9월 22일 선물 종가 하락 [E] [원자재] [에너지] [주식]**
+
 **[사실]** 연합뉴스와 CNBC 원문은 9월 22일 브렌트 선물 종가를 배럴당 99.25달러, WTI 선물 종가를 94.59달러로 보도했다. 거래소 정산 원표는 대조되지 않았다.
+
 **[해석]** 유가 하락이 지속된다면 에너지 생산기업과 연료 구매 산업의 이익 전망에는 서로 다른 방향으로 전달될 수 있다.
+
 **[불확실]** 하락을 송유관 재가동 보도 또는 외교 발언 하나의 결과로 단정할 수 없다.
+
 사건 시각: 2026-09-22 거래일 종가(거래소별 분 미확인). 연합뉴스 송고: 2026-09-23 04:51 KST.
-출처: 연합뉴스 https://www.yna.co.kr/view/AKR20260923008200075?section=economy/all ; CNBC https://www.cnbc.com/2026/09/22/oil-iran-us-bessent-un-crude.html
+출처: 연합뉴스 <https://www.yna.co.kr/view/AKR20260923008200075?section=economy/all> ; CNBC <https://www.cnbc.com/2026/09/22/oil-iran-us-bessent-un-crude.html>
 핵심 5 선정 근거: 원장에 실제 가격 수준이 제시된 광역 자산시장 사건. 가격의 as-of는 9월 22일 선물 종가다.
 전달경로: 원유 선물 종가 하락 → 원자재·물가 기대 → 에너지주 및 연료 사용 산업 → 업종별 비용·이익 전망.
 
 **#3 한국 정부의 대미 전략투자 계획 국회 보고 [P] [E] [달러] [원화] [에너지] [산업재]**
+
 **[사실]** 매일경제와 한국경제의 개별 취재 기사는 산업통상부가 9월 22일 국회에 대미투자 계획을 보고하면서 텍사스 가스발전 사업을 첫 사업으로 제시하고 웨스팅하우스 지분 인수 방안을 협의 중이라고 보도했다. 인수나 송금이 완료됐다는 뜻은 아니다.
+
 **[해석]** 사업과 자금 일정이 확정되면 달러 수요, 발전·원전 공급망과 관련 기업의 투자 계획에 영향을 줄 수 있다.
+
 **[불확실]** 국회 제출 원문·한미 최종 합의문과 집행 조건은 확인되지 않았다.
+
 사건 시각: 2026-09-22, 서울 국회 보고(분 미확인). 관련 기사 입력: 당일 12:31~17:48 KST.
-출처: 매일경제 https://www.mk.co.kr/news/economy/12159176 ; https://www.mk.co.kr/news/economy/12159631 ; 한국경제 https://www.hankyung.com/article/2026092218041 ; https://www.hankyung.com/article/2026092217701
+출처: 매일경제 <https://www.mk.co.kr/news/economy/12159176> ; <https://www.mk.co.kr/news/economy/12159631> ; 한국경제 <https://www.hankyung.com/article/2026092218041> ; <https://www.hankyung.com/article/2026092217701>
 핵심 5 선정 근거: 외환수급·에너지·원전 산업에 걸친 복수 전달경로. 같은 국회 보고에 딸린 사업들은 한 사건으로 병합했다.
 전달경로: 투자계획 보고 → 향후 달러 조달·외환수급 가능성 → 원화 및 관련 산업 자산 → 발전·원전 기업의 수주·자금비용 전망.
 
 **#4 EU의 대러 개인제재 갱신·명단 제외 합의 보도 [P] [주식] [에너지]**
+
 **[사실]** Euronews와 POLITICO는 9월 22일 회원국 협상에서 알리셰르 우스마노프·미하일 프리드만의 명단 제외에 합의했다고 보도했다. 라트비아 정부는 자국 대표의 절차상 기권 방침과 별도 자국 제재 준비를 밝혔다.
+
 **[해석]** 제재 범위 변화는 러시아 관련 자산·거래의 법적 위험 평가에 영향을 줄 수 있다.
+
 **[불확실]** EU 최종 법률문서와 발효 여부는 확인되지 않았다. 협상 합의를 이미 시행된 제재 해제로 읽어서는 안 된다.
+
 사건 시각: 2026-09-22 오후, 브뤼셀 현지(분 미확인). Euronews 게시: 16:47 GMT+2; POLITICO 표시: 16:58 CET.
-출처: Euronews https://www.euronews.com/my-europe/2026/09/22/eu-renews-russia-sanctions-but-removes-usmanov-at-frances-request ; POLITICO https://www.politico.eu/article/eu-removes-two-russian-billionaires-from-sanctions-list/ ; 라트비아 정부 https://www.mk.gov.lv/lv/jaunums/ministru-prezidents-latvija-nepielaus-sankciju-rezima-sabrukumu-un-saglabas-stingru-nostaju-pret-krievijas-kara-atbalstitajiem
+출처: Euronews <https://www.euronews.com/my-europe/2026/09/22/eu-renews-russia-sanctions-but-removes-usmanov-at-frances-request> ; POLITICO <https://www.politico.eu/article/eu-removes-two-russian-billionaires-from-sanctions-list/> ; 라트비아 정부 <https://www.mk.gov.lv/lv/jaunums/ministru-prezidents-latvija-nepielaus-sankciju-rezima-sabrukumu-un-saglabas-stingru-nostaju-pret-krievijas-kara-atbalstitajiem>
 핵심 5 선정 근거: 복수 취재와 관련 정부 성명이 있으나 최종 효력을 구분해야 하는 중요한 제재 사건.
 전달경로: 제재 협상 → 거래·신용 위험 평가 → 관련 자산시장 → 제재 노출 기업의 거래 가능성과 준법 비용.
 
 **#5 미국·덴마크·그린란드 방위협정 서명 보도 [P] [산업재] [원자재]**
+
 **[사실]** Euronews·POLITICO·El País 등은 세 정상이 9월 22일 뉴욕에서 북극 안보 협정에 서명했다고 보도했다. 협정 원문은 이 편집 원장에서 직접 확인되지 않았다.
+
 **[해석]** 시설 확대가 후속 절차로 이어지면 북극 방위 인프라와 관련 산업의 장기 계획에 영향을 줄 수 있다.
+
 **[불확실]** 서명은 비준이나 시설 건설 완료가 아니다. 조항의 정확한 효력은 협정 원문과 각국 절차 확인이 필요하다.
+
 사건 시각: 2026-09-22, 뉴욕 현지시간(분 미확인). Euronews 게시: 18:32 GMT+2; El País 게시 표시: 2026-09-23 01:04 GMT+9.
-출처: Euronews https://www.euronews.com/my-europe/2026/09/22/trump-signs-greenland-security-deal-allowing-us-to-expand-military-presence ; POLITICO https://www.politico.eu/article/donald-trump-signs-fantastic-greenland-security-deal-denmark/ ; El País https://elpais.com/internacional/2026-09-22/trump-firma-el-acuerdo-de-seguridad-con-dinamarca-y-groenlandia.html
+출처: Euronews <https://www.euronews.com/my-europe/2026/09/22/trump-signs-greenland-security-deal-allowing-us-to-expand-military-presence> ; POLITICO <https://www.politico.eu/article/donald-trump-signs-fantastic-greenland-security-deal-denmark/> ; El País <https://elpais.com/internacional/2026-09-22/trump-firma-el-acuerdo-de-seguridad-con-dinamarca-y-groenlandia.html>
 핵심 5 선정 근거: 미·유럽 안보 관계에 걸친 복수 매체의 당일 서명 보도. 미국 조사자의 단편 추출 B는 이 독립적인 유럽 원장 A로 보강되며 별도 사건으로 세지 않았다.
 전달경로: 안보협정 서명 → 장기 방위·인프라 지출 기대 → 관련 산업 자산 → 시설·장비 기업의 잠재 수요. 즉각적인 금리·가격 반응은 미확인.
 
 ### 3. 카테고리별 글로벌 브리프
-글로벌: #1 이란 경고; #18 미국의 호주 디지털 의무법안 공개 반대 **[P]****[T]****[주식]** — 미국 대사관 제출문과 ABC 확인, https://au.usembassy.gov/u-s-government-response-to-the-australian-consultation-on-the-online-safety-amendment-digital-duty-of-care-bill-2026/ ; #19 룰라의 주권·선거 간섭 관련 유엔 발언 **[P]** — Folha 현장 보도, https://www1.folha.uol.com.br/mundo/2026/09/na-onu-lula-critica-ingerencia-externa-nas-eleicoes-sem-mencionar-eua.shtml ; #20 PNG 경찰의 인신매매 의심 사건 수사 발표 **[S]** — 혐의는 경찰 주장, ABC https://www.abc.net.au/news/2026-09-23/png-police-bust-alleged-human-trafficking-ring/107183426
-미국: #17 CMS의 ACA 가입 취소·자격 검증 관련 9월 22일 발표 **[P]****[헬스케어]** — 취소 집행일이 아닌 발표일 기준; ‘사기’는 행정부 주장, CNBC https://www.cnbc.com/2026/09/22/trump-administration-removes-around-760000-obamacare-enrollments.html . #1은 글로벌, #13은 IT·테크 주 카테고리에 배치.
-유럽: #4 제재 협상; #5 북극 안보협정; #6 프랑스 연료 지원 연장·확대 발표 **[P]****[E]****[에너지]****[소비재]** — 약 4억5천만 유로는 POLITICO 보도에 귀속, https://www.politico.eu/article/france-extend-fuel-subsidies-consumers-energy-prices/ ; #21 독일 EU 담당 장관의 차기 장기예산 구상 비판 **[P]****[E]** — 발언이지 예산안 부결은 아님, https://www.politico.eu/article/germany-antonio-costa-eu-budget/
-중국: #10 경공업·방직 산업 발전계획 발표 **[P]****[산업재]****[소비재]** — 2030년 매출 수치는 목표, 제일재경 https://www.yicai.com/news/103374563.html ; #22 신주 2종의 9월 22일 상장 첫날 종가·상승률 보도 **[E]****[주식]** — 거래소 원자료 미대조, 제일재경 https://www.yicai.com/news/103374582.html
-일본: #11 미·일 정상회담의 중국·경제안보 협력 보도 **[P]****[반도체]****[산업재]** — NHK https://news.web.nhk/newsweb/na/nd-20260922de51902 ; #23 휴머노이드 방위 활용 연구 검토에 관한 교도통신 관계자 보도 **[P]****[T]****[산업재]** — 도입 결정 아님, https://news.jp/i/1475099980480921838 ; #24 태풍 25호 피해에 대한 구간 내 NHK 새 집계 **[S]** — 피해 발생 전체가 구간 내라는 뜻은 아님, https://news.web.nhk/newsweb/na/nd-20260922de51926
-한국: #3 대미투자 국회 보고; #7 9월 소비자심리지수 106.6, 전월 대비 2.1포인트 상승이라는 연합뉴스의 한국은행 조사 보도 **[E]****[소비재]****[부동산]** — https://www.yna.co.kr/view/AKR20260922176500002?section=economy/all ; #25 원화 강세와 은행 외화 위험가중자산에 관한 한국은행 관계자 평가 보도 **[E]****[원화]****[은행]** — 보고서 공개일은 기사 내 충돌로 미확정, 한국경제 https://www.hankyung.com/article/2026092211497
-암호화폐: #12 CFTC의 ‘멘션 마켓’ 계약 관련 직원 권고 **[P]****[암호화폐]** — 새 전면 금지 규칙 아님, https://www.cftc.gov/PressRoom/PressReleases/9302-26 ; #15 캐나다 6개 은행의 토큰화 예금 공동 탐색 발표 **[T]****[은행]****[암호화폐]** — 출시 아님, TD https://stories.td.com/ca/en/news/2026-09-22-six-canadian-banks-explore-development-of-a-secure-cad-token ; #16 애니모카·커런시의 역합병 협의 중단 발표 **[E]****[암호화폐]** — 상장 자체의 영구 취소는 아님, https://www.animocabrands.com/announcement/animoca-brands-and-currenc-group-suspend-merger-discussions . 세 발표의 정확한 공개시각·시간대는 원장에서 확인되지 않아 경계 확실성에 한계가 있다.
-채권·금리: #8 한국 국고채 9월 22일 만기별 종가 혼조 **[E]****[채권]** — 3년 4.040%, 10년 4.461%, 20년 4.530%는 해당일 장 마감 기준 연합뉴스 보도 수치이며 원자료 미대조, https://www.yna.co.kr/view/AKR20260922168651008
-원자재: #2 원유 선물 종가; #9 사우디 동서 송유관 초기 재가동 단계에 관한 Bloomberg의 익명 관계자 보도 **[E]****[원자재]****[에너지]** — 유량·수출 실적은 미확인, https://www.bloomberg.com/news/articles/2026-09-22/saudi-arabia-running-tests-to-resume-east-west-oil-pipeline
-IT·테크: #13 퀄컴의 Snapdragon 8 Elite Extreme Gen 6·8 Elite Gen 6 발표 **[T]****[반도체]** — 발표이지 독립 성능 검증은 아님, https://www.qualcomm.com/news/releases/2026/09/snapdragon-leads-the-agentic-ai-age-with-two-of-the-world-s-fast ; #14 퓨리서치센터의 데이터센터 환경 인식 조사 공개 **[S]****[T]** — 응답자 인식이지 실제 환경 영향 측정치가 아님, https://www.pewresearch.org/short-reads/2026/09/22/americans-views-of-data-centers-have-turned-more-negative/ ; #26 국가데이터처장의 공공 AI 데이터 기반 관련 현장 발언 **[P]****[T]** — 시행 성과 아님, 연합뉴스 https://www.yna.co.kr/view/AKR20260922156200002?section=industry/technology-science
+글로벌: #1 이란 경고; #18 미국의 호주 디지털 의무법안 공개 반대 **[P]****[T]****[주식]** — 미국 대사관 제출문과 ABC 확인, <https://au.usembassy.gov/u-s-government-response-to-the-australian-consultation-on-the-online-safety-amendment-digital-duty-of-care-bill-2026/> ; #19 룰라의 주권·선거 간섭 관련 유엔 발언 **[P]** — Folha 현장 보도, <https://www1.folha.uol.com.br/mundo/2026/09/na-onu-lula-critica-ingerencia-externa-nas-eleicoes-sem-mencionar-eua.shtml> ; #20 PNG 경찰의 인신매매 의심 사건 수사 발표 **[S]** — 혐의는 경찰 주장, ABC <https://www.abc.net.au/news/2026-09-23/png-police-bust-alleged-human-trafficking-ring/107183426>
+미국: #17 CMS의 ACA 가입 취소·자격 검증 관련 9월 22일 발표 **[P]****[헬스케어]** — 취소 집행일이 아닌 발표일 기준; ‘사기’는 행정부 주장, CNBC <https://www.cnbc.com/2026/09/22/trump-administration-removes-around-760000-obamacare-enrollments.html> . #1은 글로벌, #13은 IT·테크 주 카테고리에 배치.
+유럽: #4 제재 협상; #5 북극 안보협정; #6 프랑스 연료 지원 연장·확대 발표 **[P]****[E]****[에너지]****[소비재]** — 약 4억5천만 유로는 POLITICO 보도에 귀속, <https://www.politico.eu/article/france-extend-fuel-subsidies-consumers-energy-prices/> ; #21 독일 EU 담당 장관의 차기 장기예산 구상 비판 **[P]****[E]** — 발언이지 예산안 부결은 아님, <https://www.politico.eu/article/germany-antonio-costa-eu-budget/>
+중국: #10 경공업·방직 산업 발전계획 발표 **[P]****[산업재]****[소비재]** — 2030년 매출 수치는 목표, 제일재경 <https://www.yicai.com/news/103374563.html> ; #22 신주 2종의 9월 22일 상장 첫날 종가·상승률 보도 **[E]****[주식]** — 거래소 원자료 미대조, 제일재경 <https://www.yicai.com/news/103374582.html>
+일본: #11 미·일 정상회담의 중국·경제안보 협력 보도 **[P]****[반도체]****[산업재]** — NHK <https://news.web.nhk/newsweb/na/nd-20260922de51902> ; #23 휴머노이드 방위 활용 연구 검토에 관한 교도통신 관계자 보도 **[P]****[T]****[산업재]** — 도입 결정 아님, <https://news.jp/i/1475099980480921838> ; #24 태풍 25호 피해에 대한 구간 내 NHK 새 집계 **[S]** — 피해 발생 전체가 구간 내라는 뜻은 아님, <https://news.web.nhk/newsweb/na/nd-20260922de51926>
+한국: #3 대미투자 국회 보고; #7 9월 소비자심리지수 106.6, 전월 대비 2.1포인트 상승이라는 연합뉴스의 한국은행 조사 보도 **[E]****[소비재]****[부동산]** — <https://www.yna.co.kr/view/AKR20260922176500002?section=economy/all> ; #25 원화 강세와 은행 외화 위험가중자산에 관한 한국은행 관계자 평가 보도 **[E]****[원화]****[은행]** — 보고서 공개일은 기사 내 충돌로 미확정, 한국경제 <https://www.hankyung.com/article/2026092211497>
+암호화폐: #12 CFTC의 ‘멘션 마켓’ 계약 관련 직원 권고 **[P]****[암호화폐]** — 새 전면 금지 규칙 아님, <https://www.cftc.gov/PressRoom/PressReleases/9302-26> ; #15 캐나다 6개 은행의 토큰화 예금 공동 탐색 발표 **[T]****[은행]****[암호화폐]** — 출시 아님, TD <https://stories.td.com/ca/en/news/2026-09-22-six-canadian-banks-explore-development-of-a-secure-cad-token> ; #16 애니모카·커런시의 역합병 협의 중단 발표 **[E]****[암호화폐]** — 상장 자체의 영구 취소는 아님, <https://www.animocabrands.com/announcement/animoca-brands-and-currenc-group-suspend-merger-discussions> . 세 발표의 정확한 공개시각·시간대는 원장에서 확인되지 않아 경계 확실성에 한계가 있다.
+채권·금리: #8 한국 국고채 9월 22일 만기별 종가 혼조 **[E]****[채권]** — 3년 4.040%, 10년 4.461%, 20년 4.530%는 해당일 장 마감 기준 연합뉴스 보도 수치이며 원자료 미대조, <https://www.yna.co.kr/view/AKR20260922168651008>
+원자재: #2 원유 선물 종가; #9 사우디 동서 송유관 초기 재가동 단계에 관한 Bloomberg의 익명 관계자 보도 **[E]****[원자재]****[에너지]** — 유량·수출 실적은 미확인, <https://www.bloomberg.com/news/articles/2026-09-22/saudi-arabia-running-tests-to-resume-east-west-oil-pipeline>
+IT·테크: #13 퀄컴의 Snapdragon 8 Elite Extreme Gen 6·8 Elite Gen 6 발표 **[T]****[반도체]** — 발표이지 독립 성능 검증은 아님, <https://www.qualcomm.com/news/releases/2026/09/snapdragon-leads-the-agentic-ai-age-with-two-of-the-world-s-fast> ; #14 퓨리서치센터의 데이터센터 환경 인식 조사 공개 **[S]****[T]** — 응답자 인식이지 실제 환경 영향 측정치가 아님, <https://www.pewresearch.org/short-reads/2026/09/22/americans-views-of-data-centers-have-turned-more-negative/> ; #26 국가데이터처장의 공공 AI 데이터 기반 관련 현장 발언 **[P]****[T]** — 시행 성과 아님, 연합뉴스 <https://www.yna.co.kr/view/AKR20260922156200002?section=industry/technology-science>
 
 ### 4. 시장 전달경로
 #1은 외교·충돌 위험 → 원유 공급 기대 → 에너지·광역 주식 → 연료비와 에너지 매출 전망의 경로다. #2는 확인된 선물 종가 → 물가·원자재 기대 → 에너지주와 연료 소비 업종 → 업종별 이익 전망의 경로로, #1의 결과라고 단정하지 않는다. #3은 투자계획 → 향후 달러 조달 가능성 → 원화·관련 자산 → 발전·원전 기업 계획의 경로다. #4는 제재 협상 → 법적·신용 위험 평가 → 관련 자산 → 준법 비용의 경로이며 발효 전 단계를 구분해야 한다. #5는 안보협정 서명 → 장기 방위 지출 기대 → 산업 관련 자산 → 시설·장비 수요의 경로다. 다섯 사건 모두에 대해 별도의 즉각적인 금리·달러·신용 가격 반응이 확인된 것은 아니다.
@@ -103,11 +123,11 @@ T: #13 모바일 칩 발표, #15 토큰화 예금 탐색. 발표·탐색을 상�
 ### 6. 반대 근거와 불확실성
 중동 공급 위험 일변도의 설명에 반하는 확인된 사실은 두 가지다. #2에서 보도된 9월 22일 브렌트·WTI 선물 종가는 하락했고, #9의 Bloomberg 보도는 호르무즈를 우회하는 송유관이 초기 재가동 단계에 있다고 전했다. 다만 #9는 익명 취재이며 실제 유량과 수출 회복을 입증하지 않는다. #1의 외교 발언 역시 합의와 충돌 가능성을 함께 남긴다. 선물 정산 원표, 사우디 운영기관 자료, 이란 측 확인이 주요 공백이다.
 
-주요 확인 중(B·미채택): 글로벌 EU 제재의 법적 발효 https://www.abc.net.au/news/2026-09-23/brk-eu-sanctions-lifted-on-oligarchs/107183784 는 #4와 같은 사건이므로 중복 채택하지 않았다. 미국 조사자의 북극 협정 문서·효력 확인 https://www.whitehouse.gov/briefings-statements/2026/09/agreement-between-the-government-of-the-united-states-of-america-and-the-government-of-the-kingdom-of-denmark-together-with-the-government-of-greenland-to-amend-and-supplement-the-agreement-of-27-apri/ 는 #5와 중복이다. 유럽 Uniper 비구속 인수제안의 제출일·회사 확인 https://www.handelsblatt.com/unternehmen/energie/energie-tschechischer-milliardaer-kretinsky-bietet-fuer-uniper/100256613.html ; 중국 杉杉股份 투자계획의 원공시·시각 https://www.yicai.com/news/103374393.html ; 일본 10대 약물 과다복용 조사 발표일 https://news.jp/i/1475099942171443565 는 각각 미확인이다.
+주요 확인 중(B·미채택): 글로벌 EU 제재의 법적 발효 <https://www.abc.net.au/news/2026-09-23/brk-eu-sanctions-lifted-on-oligarchs/107183784> 는 #4와 같은 사건이므로 중복 채택하지 않았다. 미국 조사자의 북극 협정 문서·효력 확인 <https://www.whitehouse.gov/briefings-statements/2026/09/agreement-between-the-government-of-the-united-states-of-america-and-the-government-of-the-kingdom-of-denmark-together-with-the-government-of-greenland-to-amend-and-supplement-the-agreement-of-27-apri/> 는 #5와 중복이다. 유럽 Uniper 비구속 인수제안의 제출일·회사 확인 <https://www.handelsblatt.com/unternehmen/energie/energie-tschechischer-milliardaer-kretinsky-bietet-fuer-uniper/100256613.html> ; 중국 杉杉股份 투자계획의 원공시·시각 <https://www.yicai.com/news/103374393.html> ; 일본 10대 약물 과다복용 조사 발표일 <https://news.jp/i/1475099942171443565> 는 각각 미확인이다.
 
-한국의 블랙록 투자 후속절차 답보는 새 사건일이 불명확하다 https://www.yna.co.kr/view/AKR20260922183300017?section=economy/all . 첫 대미투자금 송금은 전망이지 실행이 아니다 https://www.hankyung.com/article/2026092218051 . 알래스카 LNG 관련 단독 보도는 기사 절대시각·합의문이 미확인이고 #3과 겹친다 https://www.hankyung.com/article/202609220801i . 암호화폐 영역의 Circle–Binance 거래는 SEC 문서상 계약·매각 완료일이 9월 17일로 적혀 있어 22일 보도를 신규 거래로 채택하지 않았다 https://www.sec.gov/Archives/edgar/data/1876042/000187604226000276/crcl-20260917.htm . ECB MiCA 의견의 구간 내 공개일 https://www.ecb.europa.eu/press/consultationresponse/pdf/ecb.conresp202609_micarreview.de.pdf?c026ff0fd6c52a4eb29d725e6fec3cbb 및 Clarity Act 관계자 발언의 절대 게시시각 https://www.coindesk.com/policy/2026/09/22/crypto-market-structure-can-t-wait-for-shot-at-post-election-clarity-act-surge-white-house 도 미확인이다.
+한국의 블랙록 투자 후속절차 답보는 새 사건일이 불명확하다 <https://www.yna.co.kr/view/AKR20260922183300017?section=economy/all> . 첫 대미투자금 송금은 전망이지 실행이 아니다 <https://www.hankyung.com/article/2026092218051> . 알래스카 LNG 관련 단독 보도는 기사 절대시각·합의문이 미확인이고 #3과 겹친다 <https://www.hankyung.com/article/202609220801i> . 암호화폐 영역의 Circle–Binance 거래는 SEC 문서상 계약·매각 완료일이 9월 17일로 적혀 있어 22일 보도를 신규 거래로 채택하지 않았다 <https://www.sec.gov/Archives/edgar/data/1876042/000187604226000276/crcl-20260917.htm> . ECB MiCA 의견의 구간 내 공개일 <https://www.ecb.europa.eu/press/consultationresponse/pdf/ecb.conresp202609_micarreview.de.pdf?c026ff0fd6c52a4eb29d725e6fec3cbb> 및 Clarity Act 관계자 발언의 절대 게시시각 <https://www.coindesk.com/policy/2026/09/22/crypto-market-structure-can-t-wait-for-shot-at-post-election-clarity-act-surge-white-house> 도 미확인이다.
 
-원자재 영역의 미·이란 3시간 접촉은 트럼프 발언이 보도됐지만 상대방의 회담 확인이 없다 https://www.cnbc.com/2026/09/22/oil-iran-us-bessent-un-crude.html . IT 영역의 저가형 AI 모델은 양사 공식 모델 문서·가격표가 미확인이다 https://www.cnbc.com/2026/09/22/anthropic-openai-cheaper-ai-models.html . Circle–Binance 제휴 보도 https://www.cnbc.com/2026/09/22/circle-lands-100-million-from-binance-to-ramp-up-global-usdc-expansion-.html 는 앞의 암호화폐 B와 같은 사안이다. B 링크들은 확인해야 할 주장에 접근하는 경로이지, 미확인 내용을 확정하는 근거가 아니다.
+원자재 영역의 미·이란 3시간 접촉은 트럼프 발언이 보도됐지만 상대방의 회담 확인이 없다 <https://www.cnbc.com/2026/09/22/oil-iran-us-bessent-un-crude.html> . IT 영역의 저가형 AI 모델은 양사 공식 모델 문서·가격표가 미확인이다 <https://www.cnbc.com/2026/09/22/anthropic-openai-cheaper-ai-models.html> . Circle–Binance 제휴 보도 <https://www.cnbc.com/2026/09/22/circle-lands-100-million-from-binance-to-ramp-up-global-usdc-expansion-.html> 는 앞의 암호화폐 B와 같은 사안이다. B 링크들은 확인해야 할 주장에 접근하는 경로이지, 미확인 내용을 확정하는 근거가 아니다.
 
 ### 7. 다음 확인 일정
 확정된 시각의 차기 발표 일정은 원장에 없다. 따라서 시각을 만들어 제시하지 않는다. 확인 대상은 EU의 최종 제재 법률문서·발효 공고(#4), 미국·덴마크·그린란드 협정 원문과 후속 절차(#5), 사우디 운영기관의 송유관 유량·수출 발표(#9), 미·이란 양측 공식 발표(#1), 한국 대미투자 보고서·확정 집행 일정(#3)이다. 각 공개시각은 미확인이다.
