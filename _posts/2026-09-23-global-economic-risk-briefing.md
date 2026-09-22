@@ -42,10 +42,13 @@ description: "3단계 게이트 전체 영역 그림자 테스트: 구조 검증
 
 **[불확실]** 연설 원본·정확한 발언 시각과 후속 정책 결정은 대조되지 않았다.
 
-사건 시각: 2026-09-22, 뉴욕 현지시간(분 미확인). 보도: ABC 2026-09-23 03:26 AEST; CNA 게재 Reuters 2026-09-23 01:00 SGT.
-출처: ABC <https://www.abc.net.au/news/2026-09-23/donald-trump-addresses-united-nations-general-assembly/107179392> ; CNA 게재 Reuters <https://www.channelnewsasia.com/world/iran-us-un-trump-speech-peace-deal-6402951>
-핵심 5 선정 근거: 원유 공급 경로와 외교 결과 모두에 영향을 줄 수 있는 당일 정상 발언.
-전달경로: 외교 발언 → 원유 공급 위험 기대 → 에너지·주식시장 → 운송·화학·에너지 기업의 비용과 매출 전망.
+**사건 시각:** 2026-09-22, 뉴욕 현지시간(분 미확인). 보도: ABC 2026-09-23 03:26 AEST; CNA 게재 Reuters 2026-09-23 01:00 SGT.
+
+**출처:** ABC <https://www.abc.net.au/news/2026-09-23/donald-trump-addresses-united-nations-general-assembly/107179392> ; CNA 게재 Reuters <https://www.channelnewsasia.com/world/iran-us-un-trump-speech-peace-deal-6402951>
+
+**핵심 5 선정 근거:** 원유 공급 경로와 외교 결과 모두에 영향을 줄 수 있는 당일 정상 발언.
+
+**전달경로:** 외교 발언 → 원유 공급 위험 기대 → 에너지·주식시장 → 운송·화학·에너지 기업의 비용과 매출 전망.
 
 **#2 브렌트·WTI 9월 22일 선물 종가 하락 [E] [원자재] [에너지] [주식]**
 
@@ -55,10 +58,13 @@ description: "3단계 게이트 전체 영역 그림자 테스트: 구조 검증
 
 **[불확실]** 하락을 송유관 재가동 보도 또는 외교 발언 하나의 결과로 단정할 수 없다.
 
-사건 시각: 2026-09-22 거래일 종가(거래소별 분 미확인). 연합뉴스 송고: 2026-09-23 04:51 KST.
-출처: 연합뉴스 <https://www.yna.co.kr/view/AKR20260923008200075?section=economy/all> ; CNBC <https://www.cnbc.com/2026/09/22/oil-iran-us-bessent-un-crude.html>
-핵심 5 선정 근거: 원장에 실제 가격 수준이 제시된 광역 자산시장 사건. 가격의 as-of는 9월 22일 선물 종가다.
-전달경로: 원유 선물 종가 하락 → 원자재·물가 기대 → 에너지주 및 연료 사용 산업 → 업종별 비용·이익 전망.
+**사건 시각:** 2026-09-22 거래일 종가(거래소별 분 미확인). 연합뉴스 송고: 2026-09-23 04:51 KST.
+
+**출처:** 연합뉴스 <https://www.yna.co.kr/view/AKR20260923008200075?section=economy/all> ; CNBC <https://www.cnbc.com/2026/09/22/oil-iran-us-bessent-un-crude.html>
+
+**핵심 5 선정 근거:** 원장에 실제 가격 수준이 제시된 광역 자산시장 사건. 가격의 as-of는 9월 22일 선물 종가다.
+
+**전달경로:** 원유 선물 종가 하락 → 원자재·물가 기대 → 에너지주 및 연료 사용 산업 → 업종별 비용·이익 전망.
 
 **#3 한국 정부의 대미 전략투자 계획 국회 보고 [P] [E] [달러] [원화] [에너지] [산업재]**
 
@@ -68,10 +74,15 @@ description: "3단계 게이트 전체 영역 그림자 테스트: 구조 검증
 
 **[불확실]** 국회 제출 원문·한미 최종 합의문과 집행 조건은 확인되지 않았다.
 
-사건 시각: 2026-09-22, 서울 국회 보고(분 미확인). 관련 기사 입력: 당일 12:31~17:48 KST.
-출처: 매일경제 <https://www.mk.co.kr/news/economy/12159176> ; <https://www.mk.co.kr/news/economy/12159631> ; 한국경제 <https://www.hankyung.com/article/2026092218041> ; <https://www.hankyung.com/article/2026092217701>
-핵심 5 선정 근거: 외환수급·에너지·원전 산업에 걸친 복수 전달경로. 같은 국회 보고에 딸린 사업들은 한 사건으로 병합했다.
-전달경로: 투자계획 보고 → 향후 달러 조달·외환수급 가능성 → 원화 및 관련 산업 자산 → 발전·원전 기업의 수주·자금비용 전망.
+**사건 시각:** 2026-09-22, 서울 국회 보고(분 미확인).
+
+**관련 기사 입력:** 당일 12:31~17:48 KST.
+
+**출처:** 매일경제 <https://www.mk.co.kr/news/economy/12159176> ; <https://www.mk.co.kr/news/economy/12159631> ; 한국경제 <https://www.hankyung.com/article/2026092218041> ; <https://www.hankyung.com/article/2026092217701>
+
+**핵심 5 선정 근거:** 외환수급·에너지·원전 산업에 걸친 복수 전달경로. 같은 국회 보고에 딸린 사업들은 한 사건으로 병합했다.
+
+**전달경로:** 투자계획 보고 → 향후 달러 조달·외환수급 가능성 → 원화 및 관련 산업 자산 → 발전·원전 기업의 수주·자금비용 전망.
 
 **#4 EU의 대러 개인제재 갱신·명단 제외 합의 보도 [P] [주식] [에너지]**
 
@@ -81,10 +92,13 @@ description: "3단계 게이트 전체 영역 그림자 테스트: 구조 검증
 
 **[불확실]** EU 최종 법률문서와 발효 여부는 확인되지 않았다. 협상 합의를 이미 시행된 제재 해제로 읽어서는 안 된다.
 
-사건 시각: 2026-09-22 오후, 브뤼셀 현지(분 미확인). Euronews 게시: 16:47 GMT+2; POLITICO 표시: 16:58 CET.
-출처: Euronews <https://www.euronews.com/my-europe/2026/09/22/eu-renews-russia-sanctions-but-removes-usmanov-at-frances-request> ; POLITICO <https://www.politico.eu/article/eu-removes-two-russian-billionaires-from-sanctions-list/> ; 라트비아 정부 <https://www.mk.gov.lv/lv/jaunums/ministru-prezidents-latvija-nepielaus-sankciju-rezima-sabrukumu-un-saglabas-stingru-nostaju-pret-krievijas-kara-atbalstitajiem>
-핵심 5 선정 근거: 복수 취재와 관련 정부 성명이 있으나 최종 효력을 구분해야 하는 중요한 제재 사건.
-전달경로: 제재 협상 → 거래·신용 위험 평가 → 관련 자산시장 → 제재 노출 기업의 거래 가능성과 준법 비용.
+**사건 시각:** 2026-09-22 오후, 브뤼셀 현지(분 미확인). Euronews 게시: 16:47 GMT+2; POLITICO 표시: 16:58 CET.
+
+**출처:** Euronews <https://www.euronews.com/my-europe/2026/09/22/eu-renews-russia-sanctions-but-removes-usmanov-at-frances-request> ; POLITICO <https://www.politico.eu/article/eu-removes-two-russian-billionaires-from-sanctions-list/> ; 라트비아 정부 <https://www.mk.gov.lv/lv/jaunums/ministru-prezidents-latvija-nepielaus-sankciju-rezima-sabrukumu-un-saglabas-stingru-nostaju-pret-krievijas-kara-atbalstitajiem>
+
+**핵심 5 선정 근거:** 복수 취재와 관련 정부 성명이 있으나 최종 효력을 구분해야 하는 중요한 제재 사건.
+
+**전달경로:** 제재 협상 → 거래·신용 위험 평가 → 관련 자산시장 → 제재 노출 기업의 거래 가능성과 준법 비용.
 
 **#5 미국·덴마크·그린란드 방위협정 서명 보도 [P] [산업재] [원자재]**
 
@@ -94,10 +108,13 @@ description: "3단계 게이트 전체 영역 그림자 테스트: 구조 검증
 
 **[불확실]** 서명은 비준이나 시설 건설 완료가 아니다. 조항의 정확한 효력은 협정 원문과 각국 절차 확인이 필요하다.
 
-사건 시각: 2026-09-22, 뉴욕 현지시간(분 미확인). Euronews 게시: 18:32 GMT+2; El País 게시 표시: 2026-09-23 01:04 GMT+9.
-출처: Euronews <https://www.euronews.com/my-europe/2026/09/22/trump-signs-greenland-security-deal-allowing-us-to-expand-military-presence> ; POLITICO <https://www.politico.eu/article/donald-trump-signs-fantastic-greenland-security-deal-denmark/> ; El País <https://elpais.com/internacional/2026-09-22/trump-firma-el-acuerdo-de-seguridad-con-dinamarca-y-groenlandia.html>
-핵심 5 선정 근거: 미·유럽 안보 관계에 걸친 복수 매체의 당일 서명 보도. 미국 조사자의 단편 추출 B는 이 독립적인 유럽 원장 A로 보강되며 별도 사건으로 세지 않았다.
-전달경로: 안보협정 서명 → 장기 방위·인프라 지출 기대 → 관련 산업 자산 → 시설·장비 기업의 잠재 수요. 즉각적인 금리·가격 반응은 미확인.
+**사건 시각:** 2026-09-22, 뉴욕 현지시간(분 미확인). Euronews 게시: 18:32 GMT+2; El País 게시 표시: 2026-09-23 01:04 GMT+9.
+
+**출처:** Euronews <https://www.euronews.com/my-europe/2026/09/22/trump-signs-greenland-security-deal-allowing-us-to-expand-military-presence> ; POLITICO <https://www.politico.eu/article/donald-trump-signs-fantastic-greenland-security-deal-denmark/> ; El País <https://elpais.com/internacional/2026-09-22/trump-firma-el-acuerdo-de-seguridad-con-dinamarca-y-groenlandia.html>
+
+**핵심 5 선정 근거:** 미·유럽 안보 관계에 걸친 복수 매체의 당일 서명 보도. 미국 조사자의 단편 추출 B는 이 독립적인 유럽 원장 A로 보강되며 별도 사건으로 세지 않았다.
+
+**전달경로:** 안보협정 서명 → 장기 방위·인프라 지출 기대 → 관련 산업 자산 → 시설·장비 기업의 잠재 수요. 즉각적인 금리·가격 반응은 미확인.
 
 ### 3. 카테고리별 글로벌 브리프
 글로벌: #1 이란 경고; #18 미국의 호주 디지털 의무법안 공개 반대 **[P]****[T]****[주식]** — 미국 대사관 제출문과 ABC 확인, <https://au.usembassy.gov/u-s-government-response-to-the-australian-consultation-on-the-online-safety-amendment-digital-duty-of-care-bill-2026/> ; #19 룰라의 주권·선거 간섭 관련 유엔 발언 **[P]** — Folha 현장 보도, <https://www1.folha.uol.com.br/mundo/2026/09/na-onu-lula-critica-ingerencia-externa-nas-eleicoes-sem-mencionar-eua.shtml> ; #20 PNG 경찰의 인신매매 의심 사건 수사 발표 **[S]** — 혐의는 경찰 주장, ABC <https://www.abc.net.au/news/2026-09-23/png-police-bust-alleged-human-trafficking-ring/107183426>
