@@ -117,16 +117,62 @@ description: "3단계 게이트 전체 영역 그림자 테스트: 구조 검증
 **전달경로:** 안보협정 서명 → 장기 방위·인프라 지출 기대 → 관련 산업 자산 → 시설·장비 기업의 잠재 수요. 즉각적인 금리·가격 반응은 미확인.
 
 ### 3. 카테고리별 글로벌 브리프
-글로벌: #1 이란 경고; #18 미국의 호주 디지털 의무법안 공개 반대 **[P]****[T]****[주식]** — 미국 대사관 제출문과 ABC 확인, <https://au.usembassy.gov/u-s-government-response-to-the-australian-consultation-on-the-online-safety-amendment-digital-duty-of-care-bill-2026/> ; #19 룰라의 주권·선거 간섭 관련 유엔 발언 **[P]** — Folha 현장 보도, <https://www1.folha.uol.com.br/mundo/2026/09/na-onu-lula-critica-ingerencia-externa-nas-eleicoes-sem-mencionar-eua.shtml> ; #20 PNG 경찰의 인신매매 의심 사건 수사 발표 **[S]** — 혐의는 경찰 주장, ABC <https://www.abc.net.au/news/2026-09-23/png-police-bust-alleged-human-trafficking-ring/107183426>
-미국: #17 CMS의 ACA 가입 취소·자격 검증 관련 9월 22일 발표 **[P]****[헬스케어]** — 취소 집행일이 아닌 발표일 기준; ‘사기’는 행정부 주장, CNBC <https://www.cnbc.com/2026/09/22/trump-administration-removes-around-760000-obamacare-enrollments.html> . #1은 글로벌, #13은 IT·테크 주 카테고리에 배치.
-유럽: #4 제재 협상; #5 북극 안보협정; #6 프랑스 연료 지원 연장·확대 발표 **[P]****[E]****[에너지]****[소비재]** — 약 4억5천만 유로는 POLITICO 보도에 귀속, <https://www.politico.eu/article/france-extend-fuel-subsidies-consumers-energy-prices/> ; #21 독일 EU 담당 장관의 차기 장기예산 구상 비판 **[P]****[E]** — 발언이지 예산안 부결은 아님, <https://www.politico.eu/article/germany-antonio-costa-eu-budget/>
-중국: #10 경공업·방직 산업 발전계획 발표 **[P]****[산업재]****[소비재]** — 2030년 매출 수치는 목표, 제일재경 <https://www.yicai.com/news/103374563.html> ; #22 신주 2종의 9월 22일 상장 첫날 종가·상승률 보도 **[E]****[주식]** — 거래소 원자료 미대조, 제일재경 <https://www.yicai.com/news/103374582.html>
-일본: #11 미·일 정상회담의 중국·경제안보 협력 보도 **[P]****[반도체]****[산업재]** — NHK <https://news.web.nhk/newsweb/na/nd-20260922de51902> ; #23 휴머노이드 방위 활용 연구 검토에 관한 교도통신 관계자 보도 **[P]****[T]****[산업재]** — 도입 결정 아님, <https://news.jp/i/1475099980480921838> ; #24 태풍 25호 피해에 대한 구간 내 NHK 새 집계 **[S]** — 피해 발생 전체가 구간 내라는 뜻은 아님, <https://news.web.nhk/newsweb/na/nd-20260922de51926>
-한국: #3 대미투자 국회 보고; #7 9월 소비자심리지수 106.6, 전월 대비 2.1포인트 상승이라는 연합뉴스의 한국은행 조사 보도 **[E]****[소비재]****[부동산]** — <https://www.yna.co.kr/view/AKR20260922176500002?section=economy/all> ; #25 원화 강세와 은행 외화 위험가중자산에 관한 한국은행 관계자 평가 보도 **[E]****[원화]****[은행]** — 보고서 공개일은 기사 내 충돌로 미확정, 한국경제 <https://www.hankyung.com/article/2026092211497>
-암호화폐: #12 CFTC의 ‘멘션 마켓’ 계약 관련 직원 권고 **[P]****[암호화폐]** — 새 전면 금지 규칙 아님, <https://www.cftc.gov/PressRoom/PressReleases/9302-26> ; #15 캐나다 6개 은행의 토큰화 예금 공동 탐색 발표 **[T]****[은행]****[암호화폐]** — 출시 아님, TD <https://stories.td.com/ca/en/news/2026-09-22-six-canadian-banks-explore-development-of-a-secure-cad-token> ; #16 애니모카·커런시의 역합병 협의 중단 발표 **[E]****[암호화폐]** — 상장 자체의 영구 취소는 아님, <https://www.animocabrands.com/announcement/animoca-brands-and-currenc-group-suspend-merger-discussions> . 세 발표의 정확한 공개시각·시간대는 원장에서 확인되지 않아 경계 확실성에 한계가 있다.
-채권·금리: #8 한국 국고채 9월 22일 만기별 종가 혼조 **[E]****[채권]** — 3년 4.040%, 10년 4.461%, 20년 4.530%는 해당일 장 마감 기준 연합뉴스 보도 수치이며 원자료 미대조, <https://www.yna.co.kr/view/AKR20260922168651008>
-원자재: #2 원유 선물 종가; #9 사우디 동서 송유관 초기 재가동 단계에 관한 Bloomberg의 익명 관계자 보도 **[E]****[원자재]****[에너지]** — 유량·수출 실적은 미확인, <https://www.bloomberg.com/news/articles/2026-09-22/saudi-arabia-running-tests-to-resume-east-west-oil-pipeline>
-IT·테크: #13 퀄컴의 Snapdragon 8 Elite Extreme Gen 6·8 Elite Gen 6 발표 **[T]****[반도체]** — 발표이지 독립 성능 검증은 아님, <https://www.qualcomm.com/news/releases/2026/09/snapdragon-leads-the-agentic-ai-age-with-two-of-the-world-s-fast> ; #14 퓨리서치센터의 데이터센터 환경 인식 조사 공개 **[S]****[T]** — 응답자 인식이지 실제 환경 영향 측정치가 아님, <https://www.pewresearch.org/short-reads/2026/09/22/americans-views-of-data-centers-have-turned-more-negative/> ; #26 국가데이터처장의 공공 AI 데이터 기반 관련 현장 발언 **[P]****[T]** — 시행 성과 아님, 연합뉴스 <https://www.yna.co.kr/view/AKR20260922156200002?section=industry/technology-science>
+
+#### 글로벌
+
+- #1 이란 경고
+- #18 미국의 호주 디지털 의무법안 공개 반대 **[P]** **[T]** **[주식]** — 미국 대사관 제출문과 ABC 확인, <https://au.usembassy.gov/u-s-government-response-to-the-australian-consultation-on-the-online-safety-amendment-digital-duty-of-care-bill-2026/>
+- #19 룰라의 주권·선거 간섭 관련 유엔 발언 **[P]** — Folha 현장 보도, <https://www1.folha.uol.com.br/mundo/2026/09/na-onu-lula-critica-ingerencia-externa-nas-eleicoes-sem-mencionar-eua.shtml>
+- #20 PNG 경찰의 인신매매 의심 사건 수사 발표 **[S]** — 혐의는 경찰 주장, ABC <https://www.abc.net.au/news/2026-09-23/png-police-bust-alleged-human-trafficking-ring/107183426>
+
+#### 미국
+
+- #17 CMS의 ACA 가입 취소·자격 검증 관련 9월 22일 발표 **[P]** **[헬스케어]** — 취소 집행일이 아닌 발표일 기준; ‘사기’는 행정부 주장, CNBC <https://www.cnbc.com/2026/09/22/trump-administration-removes-around-760000-obamacare-enrollments.html> . #1은 글로벌, #13은 IT·테크 주 카테고리에 배치.
+
+#### 유럽
+
+- #4 제재 협상
+- #5 북극 안보협정
+- #6 프랑스 연료 지원 연장·확대 발표 **[P]** **[E]** **[에너지]** **[소비재]** — 약 4억5천만 유로는 POLITICO 보도에 귀속, <https://www.politico.eu/article/france-extend-fuel-subsidies-consumers-energy-prices/>
+- #21 독일 EU 담당 장관의 차기 장기예산 구상 비판 **[P]** **[E]** — 발언이지 예산안 부결은 아님, <https://www.politico.eu/article/germany-antonio-costa-eu-budget/>
+
+#### 중국
+
+- #10 경공업·방직 산업 발전계획 발표 **[P]** **[산업재]** **[소비재]** — 2030년 매출 수치는 목표, 제일재경 <https://www.yicai.com/news/103374563.html>
+- #22 신주 2종의 9월 22일 상장 첫날 종가·상승률 보도 **[E]** **[주식]** — 거래소 원자료 미대조, 제일재경 <https://www.yicai.com/news/103374582.html>
+
+#### 일본
+
+- #11 미·일 정상회담의 중국·경제안보 협력 보도 **[P]** **[반도체]** **[산업재]** — NHK <https://news.web.nhk/newsweb/na/nd-20260922de51902>
+- #23 휴머노이드 방위 활용 연구 검토에 관한 교도통신 관계자 보도 **[P]** **[T]** **[산업재]** — 도입 결정 아님, <https://news.jp/i/1475099980480921838>
+- #24 태풍 25호 피해에 대한 구간 내 NHK 새 집계 **[S]** — 피해 발생 전체가 구간 내라는 뜻은 아님, <https://news.web.nhk/newsweb/na/nd-20260922de51926>
+
+#### 한국
+
+- #3 대미투자 국회 보고
+- #7 9월 소비자심리지수 106.6, 전월 대비 2.1포인트 상승이라는 연합뉴스의 한국은행 조사 보도 **[E]** **[소비재]** **[부동산]** — <https://www.yna.co.kr/view/AKR20260922176500002?section=economy/all>
+- #25 원화 강세와 은행 외화 위험가중자산에 관한 한국은행 관계자 평가 보도 **[E]** **[원화]** **[은행]** — 보고서 공개일은 기사 내 충돌로 미확정, 한국경제 <https://www.hankyung.com/article/2026092211497>
+
+#### 암호화폐
+
+- #12 CFTC의 ‘멘션 마켓’ 계약 관련 직원 권고 **[P]** **[암호화폐]** — 새 전면 금지 규칙 아님, <https://www.cftc.gov/PressRoom/PressReleases/9302-26>
+- #15 캐나다 6개 은행의 토큰화 예금 공동 탐색 발표 **[T]** **[은행]** **[암호화폐]** — 출시 아님, TD <https://stories.td.com/ca/en/news/2026-09-22-six-canadian-banks-explore-development-of-a-secure-cad-token>
+- #16 애니모카·커런시의 역합병 협의 중단 발표 **[E]** **[암호화폐]** — 상장 자체의 영구 취소는 아님, <https://www.animocabrands.com/announcement/animoca-brands-and-currenc-group-suspend-merger-discussions> . 세 발표의 정확한 공개시각·시간대는 원장에서 확인되지 않아 경계 확실성에 한계가 있다.
+
+#### 채권·금리
+
+- #8 한국 국고채 9월 22일 만기별 종가 혼조 **[E]** **[채권]** — 3년 4.040%, 10년 4.461%, 20년 4.530%는 해당일 장 마감 기준 연합뉴스 보도 수치이며 원자료 미대조, <https://www.yna.co.kr/view/AKR20260922168651008>
+
+#### 원자재
+
+- #2 원유 선물 종가
+- #9 사우디 동서 송유관 초기 재가동 단계에 관한 Bloomberg의 익명 관계자 보도 **[E]** **[원자재]** **[에너지]** — 유량·수출 실적은 미확인, <https://www.bloomberg.com/news/articles/2026-09-22/saudi-arabia-running-tests-to-resume-east-west-oil-pipeline>
+
+#### IT·테크
+
+- #13 퀄컴의 Snapdragon 8 Elite Extreme Gen 6·8 Elite Gen 6 발표 **[T]** **[반도체]** — 발표이지 독립 성능 검증은 아님, <https://www.qualcomm.com/news/releases/2026/09/snapdragon-leads-the-agentic-ai-age-with-two-of-the-world-s-fast>
+- #14 퓨리서치센터의 데이터센터 환경 인식 조사 공개 **[S]** **[T]** — 응답자 인식이지 실제 환경 영향 측정치가 아님, <https://www.pewresearch.org/short-reads/2026/09/22/americans-views-of-data-centers-have-turned-more-negative/>
+- #26 국가데이터처장의 공공 AI 데이터 기반 관련 현장 발언 **[P]** **[T]** — 시행 성과 아님, 연합뉴스 <https://www.yna.co.kr/view/AKR20260922156200002?section=industry/technology-science>
 
 ### 4. 시장 전달경로
 #1은 외교·충돌 위험 → 원유 공급 기대 → 에너지·광역 주식 → 연료비와 에너지 매출 전망의 경로다. #2는 확인된 선물 종가 → 물가·원자재 기대 → 에너지주와 연료 소비 업종 → 업종별 이익 전망의 경로로, #1의 결과라고 단정하지 않는다. #3은 투자계획 → 향후 달러 조달 가능성 → 원화·관련 자산 → 발전·원전 기업 계획의 경로다. #4는 제재 협상 → 법적·신용 위험 평가 → 관련 자산 → 준법 비용의 경로이며 발효 전 단계를 구분해야 한다. #5는 안보협정 서명 → 장기 방위 지출 기대 → 산업 관련 자산 → 시설·장비 수요의 경로다. 다섯 사건 모두에 대해 별도의 즉각적인 금리·달러·신용 가격 반응이 확인된 것은 아니다.
