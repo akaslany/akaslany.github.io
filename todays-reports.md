@@ -12,9 +12,9 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **08:25 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-09-23](/2026/09/23/global-economic-risk-briefing/)
 - **07:32 KST** — [Trump Truth Social 발언 요약 — 2026-09-23](/trump-truth/2026-09-23/)
 - **07:32 KST** — [미국 유동성·자금시장 인텔리전스 v2 — 2026-09-23](/liquidity/2026-09-23/)
-- **07:02 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-09-23](/2026/09/23/global-economic-risk-briefing/)
 - **06:06 KST** — [AI Daily Intel — 2026-09-22](/ai-intel/2026-09-22/)
 - **02:15 KST** — [미국 정책 인텔리전스 데일리 — 2026-09-23](/us-policy-intel/2026-09-23/)
 - **02:05 KST** — [한국은행 보도자료 브리핑 — 2026-09-22](/bok-briefing/2026-09-22/)
