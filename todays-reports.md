@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **08:02 KST** — [미국·한국 증시 주간 핵심 일정 — 2026-09-28~2026-10-02](/2026/09/27/us-korea-market-calendar/)
 - **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-09-27](/trump-truth/2026-09-27/)
 - **07:07 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-09-27](/2026/09/27/global-economic-risk-briefing/)
 - **06:03 KST** — [AI Daily Intel — 2026-09-26](/ai-intel/2026-09-26/)
