@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-09-29](/trump-truth/2026-09-29/)
 - **06:20 KST** — [AI Daily Intel — 2026-09-28](/ai-intel/2026-09-28/)
 - **02:02 KST** — [한국은행 보도자료 브리핑 — 2026-09-28](/bok-briefing/2026-09-28/)
 - **01:36 KST** — [미국 정책 인텔리전스 데일리 — 2026-09-29](/us-policy-intel/2026-09-29/)
