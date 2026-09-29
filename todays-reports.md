@@ -12,7 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
-- **10:26 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-09-29](/2026/09/29/global-economic-risk-briefing/)
+- **10:33 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-09-29](/2026/09/29/global-economic-risk-briefing/)
 - **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-09-29](/trump-truth/2026-09-29/)
 - **06:20 KST** — [AI Daily Intel — 2026-09-28](/ai-intel/2026-09-28/)
 - **02:02 KST** — [한국은행 보도자료 브리핑 — 2026-09-28](/bok-briefing/2026-09-28/)
