@@ -13,7 +13,7 @@ tags:
 description: "최근 24시간의 허용 출처를 직접 검증해 정리한 글로벌 경제 및 리스크 브리핑"
 ---
 
-<!-- global-news-report-sha256: 2240b98876ed6ac2af3f88f911d9904961a59a838cee01458aec1d5de4fe7f51 -->
+<!-- global-news-report-sha256: 13875366f0591c5c5537761d0a1a2507870afcec1d70cd2ace3f1d41d6888567 -->
 > **공개 자료 안내:** 최근 24시간 내 직접 확인 가능한 허용 매체의 보도를 요약·분석한 자료입니다. 사실과 해석을 구분하며 기본 판단은 관망입니다. 투자 권유나 수익 보장이 아닙니다.
 
 ## 글로벌 뉴스 브리핑 엔진 v4.0
@@ -101,69 +101,180 @@ description: "최근 24시간의 허용 출처를 직접 검증해 정리한 글
 
 사건시각 2026-09-28 일중 America/Los_Angeles (KST 09-29T04:00 추정), 게시 Fed 2026-09-28 (일자), Yahoo 2026-09-29T03:13:00+09:00, 시간대 America/Los_Angeles.
 직접 링크: <https://www.federalreserve.gov/newsevents/speech/cook20260928a.htm> , <https://finance.yahoo.com/economy/policy/article/feds-cook-warns-ai-and-oil-prices-will-continue-to-push-up-inflation-181311124.html>
-결정적 근거: 현직 투표권 이사 공식 원문과 독립 보도 문구 일치, #1 경로 직접 설명.
+결정적 근거: 현직 투표권 이사 공식 원문과 독립 보도 문구 일치, 
+
+### #1 경로 직접 설명.
 
 **전달경로:** 경고 → 인플레 기대·정책 경로 → 금리·달러·신용 → 은행·부동산·성장주.
 
 ### 3. 카테고리별 글로벌 브리프
 
-#### 글로벌
+글로벌: 
 
-- #6 Kyiv 등 다지점 드론 타격·최소 7명 사망 합산(과학원 1명 사망·19명 부상, Dnipro 3명 사망, Kharkiv 43명 부상, Zaporizhzhia 30명 부상, 폴란드 스크램블 동반) <https://www.thehindu.com/news/international/russia-hits-ukraines-largest-mobile-provider-strikes-data-centres/article71518164.ece> , <https://www.abc.net.au/news/2026-09-29/ukraine-russia-poland-strikes-scientific-centre/107205900> . #7 한국, 북한군 포로 2명 이송 공개 놓고 우크라이나에 사과·경위 설명 요구(차관 초치·대통령실 추가조치 검토 vs 비밀합의 부인) <https://www.abc.net.au/news/2026-09-28/south-korea-demands-apology-from-ukraine-over-pow-announcement/107202624> , <https://www.bbc.com/news/articles/c8ly40xx0dr0o> . #8 영국 RAF Fairford 관련 5명 보석 석방·수사 지속(테러준비·폭발물 혐의, 이란 배후 미확인 분리) <https://www.abc.net.au/news/2026-09-29/uk-police-provide-update-on-raf-fairford-investigation/107205528> . #27 Starship은 IT·테크 #27 재사용.
+### #6 Kyiv 등 다지점 드론 타격·최소 7명 사망 합산(과학원 1명 사망·19명 부상, Dnipro 3명 사망, Kharkiv 43명 부상, Zaporizhzhia 30명 부상, 폴란드 스크램블 동반) https://www.thehindu.com/news/international/russia-hits-ukraines-largest-mobile-provider-strikes-data-centres/article71518164.ece , https://www.abc.net.au/news/2026-09-29/ukraine-russia-poland-strikes-scientific-centre/107205900 .
 
-#### 미국
+### #7 한국, 북한군 포로 2명 이송 공개 놓고 우크라이나에 사과·경위 설명 요구(차관 초치·대통령실 추가조치 검토 vs 비밀합의 부인) https://www.abc.net.au/news/2026-09-28/south-korea-demands-apology-from-ukraine-over-pow-announcement/107202624 , https://www.bbc.com/news/articles/c8ly40xx0dr0o .
 
-- #4 AMD-World Labs 인수 합의(상세 #4, IT 재사용) <https://ir.amd.com/news-events/press-releases/detail/1299/amd-to-acquire-world-labs-to-advance-the-future-of-ai-compute> . #3 Nvidia 자사주 추가 승인(상세 #3, IT 재사용) <https://nvidianews.nvidia.com/news/nvidia-announces-a-150-billion-share-repurchase-authorization-increase> . #9 Mesabi 150억달러 Iowa 제철소 계획 백악관 발표(750만→1,000만톤, 2030년 목표, Nashwauk 광산 연계, 고용 1,750명 vs 2,000명 이상 상이, 계획 단계) <https://www.whitehouse.gov/releases/2026/09/mined-melted-and-poured-in-america-president-trump-reverses-years-of-anti-mining-policy/> , <https://www.cnbc.com/2026/09/28/trump-steel-plant-iowa.html> (원자재 재사용). #10 D.D.C. FEMA 선거행정 조건·20% holdback vacatur 판결(1:26-cv-02886-AHA, 9/28 의견, permanent injunction은 denied, 항소 가능) <https://storage.courtlistener.com/recap/gov.uscourts.dcd.295627/gov.uscourts.dcd.295627.42.0.pdf> , <https://www.cnbc.com/2026/09/28/elections-dhs-counterterrorism.html> .
+### #8 영국 RAF Fairford 관련 5명 보석 석방·수사 지속(테러준비·폭발물 혐의, 이란 배후 미확인 분리) https://www.abc.net.au/news/2026-09-29/uk-police-provide-update-on-raf-fairford-investigation/107205528 .
 
-#### 유럽
+### #27 Starship은 IT·테크
 
-- #11 로마 법원 Regeni 사건 이집트 보안요원 3명 납치 유죄·1명 무죄(18:39 살인 표현 후 18:45 정정본 우선, ANSA 단독 귀속, 판결문·집행 미확인) <https://www.ansa.it/english/news/general_news/2026/09/28/3-egypt-security-officials-found-guilty-of-regeni-kidnapping-but-not-murder_a47d9a85-7ee9-4797-b414-2ba9caec95da.html> . #12 EU 외무·국방장관 하이브리드 emergency protocol 후속작업 지지·NATO 중복 금지(신규 Patriot 공여 0, 찬성국 수·발동요건 미확인, Consilium 미확보) <https://www.euronews.com/2026/09/28/eu-seeks-hybrid-threat-playbook-without-duplicating-nato> . #13 Sangatte 앞바다 택시보트 조난 3명 사망·105명 탑승·102명 구조(사인·조난시각 미확정, 2026 누계 20명 As-of 9/28) <https://www.bbc.com/news/articles/c6vgy71rle35o> , <https://www.euronews.com/2026/09/28/migrant-channel-crossing-accident-leaves-three-dead> . #14 Mediapart Bardella 반유대주의 사적대화 보도와 부인·명예훼손 고소(대화 원문 미열람, 진위·맥락 미확인) <https://www.euronews.com/2026/09/28/national-rallys-bardella-denies-report-he-made-antisemitic-remarks> , <https://www.lemonde.fr/politique/article/2026/09/28/mediapart-rapporte-des-propos-antisemites-de-jordan-bardella-qui-denonce-des-faux-grossiers_6785064_823448.html> . #15 EU 의원 ICC 대미 제재 대응 blocking statute 발동 촉구와 독·네 외무 헤이그 지지방문(발동 자체 미확인, 13명 제재 인용) <https://www.politico.eu/article/block-us-sanctions-on-the-icc-eu-lawmakers-tell-commission/> , <https://apnews.com/article/icc-court-sanctions-europe-germany-00924174a59a9c86689dc50e93eec702> .
+### #27 재사용.
 
-#### 중국
+미국: 
 
-- #16 국가통계국 8월 규모이상 공업이익 전년비 4.2%(전월비 7pp 둔화)·1-8월 누적 +15.7%·매출 +6.6%(NBS 원표 미개봉, 15.7 vs 16 반올림 차이, 업종 폭증치는 단정 보류) <https://economy.caixin.com/2026-09-28/102489364.html> , <https://www.yicaiglobal.com/news/electronics-industry-drove-profit-of-industrial-enterprises-in-china-to-rise-nearly-16-in-first-8-months> . 부족 원인: 관세 프레임은 상무부 본문 미개봉·수치 단일 출처라 B 보류, 국企 15·5 계획은 공식문 미개봉·동일그룹만 확인이라 B 보류.
+### #4 AMD-World Labs 인수 합의(상세
 
-#### 일본
+#4, IT 재사용) <https://ir.amd.com/news-events/press-releases/detail/1299/amd-to-acquire-world-labs-to-advance-the-future-of-ai-compute> . 
 
-- #17 태풍 25호 호우 FDMA 제18보 As-of 9/28 08:00 사망 14·행방불명 4·부상 37·住家 1,759棟(NHK 저녁 갱신과 범위·as-of 차이, 熊本·宮崎 포함, 印旛沼 응급복구 당일 착수) <https://www.fdma.go.jp/disaster/info/items/20260918taihuu25gou18.pdf> , <https://news.web.nhk/newsweb/na/nd-20260928de52757> . #18 도쿄대 차기 총장 예정자 藤垣裕子 선정(제32대·여성 최초, 임기 2027-04-01~2033-03-31, 투표수 뒤집기 주장은 스니펫 수준이라 미확정) <https://www.u-tokyo.ac.jp/focus/ja/press/z1304_00017.html> , <https://www.nikkei.com/article/DGXZQOUD289SK0Y6A920C2000000/> . #19 岩屋 무역촉진 대표단 北京 王毅 회담 개최 사실 한정(시정 요구 문구는 Nikkei 요약만·本文 미확보라 분리) <https://news.web.nhk/newsweb/na/nd-20260929de52968> , <https://www.nikkei.com/article/DGXZQOGN28APW0Y6A920C2000000/> .
+### #3 Nvidia 자사주 추가 승인(상세
 
-#### 한국
+#3, IT 재사용) <https://nvidianews.nvidia.com/news/nvidia-announces-a-150-billion-share-repurchase-authorization-increase> . 
 
-- #20 공정위 명륜당 부당지원·가맹사업법 위반 제재(2021-12~2026-04 14개 대부업체 2,983억원 저리·절감 217억원, 잠정 과징금 총 148억원, 고발, 최종 의결서 변동 가능) <https://www.ftc.go.kr/www/selectBbsNttView.do?bordCd=3&key=12&searchCtgry=01,02&nttSn=48055> , <https://www.hankyung.com/article/2026092801641> . #21 정부 CPTPP 가입 경제 영향 잠정 분석(발효 10년 실질GDP +0.38pp·약 8.8조원, 제조 파급 연평균 6.3조→6.7조원, 농림수산 연평균 약 8,500억원 감소, 모형 추정치·협상개시 아님) <https://www.hankyung.com/article/2026092801921> , <https://www.mk.co.kr/news/economy/12162964> . 부족 원인: 금융 산별 잠정합의는 최종 합의 아님·단일 언론사 2건·원발표 미열람이라 B 보류.
+### #9 Mesabi 150억달러 Iowa 제철소 계획 백악관 발표(750만→1,000만톤, 2030년 목표, Nashwauk 광산 연계, 고용 1,750명 vs 2,000명 이상 상이, 계획 단계) https://www.whitehouse.gov/releases/2026/09/mined-melted-and-poured-in-america-president-trump-reverses-years-of-anti-mining-policy/ , https://www.cnbc.com/2026/09/28/trump-steel-plant-iowa.html (원자재 재사용).
 
-#### 암호화폐
+### #10 D.D.C. FEMA 선거행정 조건·20% holdback vacatur 판결(1:26-cv-02886-AHA, 9/28 의견, permanent injunction은 denied, 항소 가능) https://storage.courtlistener.com/recap/gov.uscourts.dcd.295627/gov.uscourts.dcd.295627.42.0.pdf , https://www.cnbc.com/2026/09/28/elections-dhs-counterterrorism.html .
 
-- #22 상원 PSI 민주당 USDT·이란 shadow banking 보고서와 Tether 당일 반박(846 지갑 분석·87% 주장 vs 2026년 이란 연계 약 5.5억달러 동결 주장, PDF 원문 미열람이라 수치 단정 불가·귀속 유지) <https://www.coindesk.com/policy/2026/09/28/tether-is-a-lifeline-for-iranian-regime-senate-dems-say-in-new-report> , <https://www.theblock.co/news/regulation/2026-09-28-tethers-usdt-center-iran-shadow-banking-network-new-senate-report-says-417094> , <https://tether.io/news/tether-has-supported-nearly-550-million-in-iran-linked-usdt-freezes-as-u-s-expands-sanctions-campaign/> . #23 Chainlink CCIP 2.0 출시(CCV·외부 verifier·16개 기본 quorum 유지, RMN 자동 역할 비활성, 공식 2.0문 미열람·도입 완료와 발표 구분) <https://www.coindesk.com/business/2026/09/28/chainlink-updates-its-crypto-bridge-tech-months-after-a-usd292-million-hack-shook-the-industry> , <https://decrypt.co/379463/chainlink-institutions-add-bridge-checks-kelp-hack> . #24 Bitget 388M 탈취 공격자 THORChain 경유 약 2,390 ETH→약 75.2 BTC 스왑(9/28 03:55-06:23 UTC, 선택 차단 거부, 귀속은 라벨 인용·가격 As-of) <https://www.coindesk.com/tech/2026/09/28/thorchain-rejects-bitget-request-to-block-hacker-as-usd6-million-moves-to-bitcoin> , <https://www.theblock.co/news/regulation/2026-09-28-bitget-attacker-tested-risk-controls-small-transfers-388-million-theft-ceo-says-417045> . #25 BTC 약 83,000달러로 하락·알트 금요일 랠리 되돌림(As-of 9/28 오전 UTC -1.7~-1.8%, 이란·유가 인과귀속은 기자 해석) <https://www.coindesk.com/markets/2026/09/28/bitcoin-falls-to-usd83-000-while-altcoins-unwind-friday-s-rally> , <https://decrypt.co/379438/bitcoin-price-falls-trump-iran-oil-yields> .
+유럽: 
 
-#### 채권·금리
+### #11 로마 법원 Regeni 사건 이집트 보안요원 3명 납치 유죄·1명 무죄(18:39 살인 표현 후 18:45 정정본 우선, ANSA 단독 귀속, 판결문·집행 미확인) https://www.ansa.it/english/news/general_news/2026/09/28/3-egypt-security-officials-found-guilty-of-regeni-kidnapping-but-not-murder_a47d9a85-7ee9-4797-b414-2ba9caec95da.html .
 
-- #1 미국 매도(상세 #1). #5 Cook 연설(상세 #5). 부족 원인: Bianco 강세 전환은 단일 인터뷰·제2 확인 없어 B 보류, BOJ·Zandi는 원자료 미확보라 B, 한은 간담은 글로벌 파급 낮아 C 제외.
+### #12 EU 외무·국방장관 하이브리드 emergency protocol 후속작업 지지·NATO 중복 금지(신규 Patriot 공여 0, 찬성국 수·발동요건 미확인, Consilium 미확보) https://www.euronews.com/2026/09/28/eu-seeks-hybrid-threat-playbook-without-duplicating-nato .
 
-#### 원자재
+### #13 Sangatte 앞바다 택시보트 조난 3명 사망·105명 탑승·102명 구조(사인·조난시각 미확정, 2026 누계 20명 As-of 9/28) https://www.bbc.com/news/articles/c6vgy71rle35o , https://www.euronews.com/2026/09/28/migrant-channel-crossing-accident-leaves-three-dead .
 
-- #2 유가 결제(상세 #2). #26 트럼프 디젤 수출금지 매우 진지 검토 재확인(We are thinking about it very seriously, AAA 디젤 약 6.50달러 배경, API 반박 직접 확인, 발동 없음) <https://www.cnbc.com/2026/09/28/diesel-oil-trump-export-ban-fuel-prices.html> , <https://www.api.org/news-policy-and-issues/news/2026/09/22/a-diesel-export-ban-would-wreak-havoc-at-home-and-abroad-heres-why> . #9 Mesabi는 미국 #9 재사용. 부족 원인: Mesabi 병합, 이란 7일안·카타르 전망은 익명·원문 미확인이라 B.
+### #14 Mediapart Bardella 반유대주의 사적대화 보도와 부인·명예훼손 고소(대화 원문 미열람, 진위·맥락 미확인) https://www.euronews.com/2026/09/28/national-rallys-bardella-denies-report-he-made-antisemitic-remarks , https://www.lemonde.fr/politique/article/2026/09/28/mediapart-rapporte-des-propos-antisemites-de-jordan-bardella-qui-denonce-des-faux-grossiers_6785064_823448.html .
 
-#### IT·테크
+### #15 EU 의원 ICC 대미 제재 대응 blocking statute 발동 촉구와 독·네 외무 헤이그 지지방문(발동 자체 미확인, 13명 제재 인용) https://www.politico.eu/article/block-us-sanctions-on-the-icc-eu-lawmakers-tell-commission/ , https://apnews.com/article/icc-court-sanctions-europe-germany-00924174a59a9c86689dc50e93eec702 .
 
-- #27 SpaceX Starship 14호기 첫 궤도 도달·V3 26기 전개 후 조기 귀환(이륙 12:48Z, 궤도 269-275km, 10시간→3시간 단축, BBC 90분 표현과 불일치 미확정) <https://www.cnbc.com/2026/09/28/spacex-prepares-to-send-starship-rocket-to-orbit-for-first-time.html> , <https://www.nikkei.com/article/DGXZQOGN289G90Y6A920C2000000/> . #4 AMD·#3 Nvidia는 미국 재사용. 부족 원인: Safety 플랫폼·Sonnet 5.5는 단일 매체·공식문 미열람이라 B 보류.
+중국: 
+
+### #16 국가통계국 8월 규모이상 공업이익 전년비 4.2%(전월비 7pp 둔화)·1-8월 누적 +15.7%·매출 +6.6%(NBS 원표 미개봉, 15.7 vs 16 반올림 차이, 업종 폭증치는 단정 보류) https://economy.caixin.com/2026-09-28/102489364.html , https://www.yicaiglobal.com/news/electronics-industry-drove-profit-of-industrial-enterprises-in-china-to-rise-nearly-16-in-first-8-months . 부족 원인: 관세 프레임은 상무부 본문 미개봉·수치 단일 출처라 B 보류, 국企 15·5 계획은 공식문 미개봉·동일그룹만 확인이라 B 보류.
+
+일본: 
+
+### #17 태풍 25호 호우 FDMA 제18보 As-of 9/28 08:00 사망 14·행방불명 4·부상 37·住家 1,759棟(NHK 저녁 갱신과 범위·as-of 차이, 熊本·宮崎 포함, 印旛沼 응급복구 당일 착수) https://www.fdma.go.jp/disaster/info/items/20260918taihuu25gou18.pdf , https://news.web.nhk/newsweb/na/nd-20260928de52757 .
+
+### #18 도쿄대 차기 총장 예정자 藤垣裕子 선정(제32대·여성 최초, 임기 2027-04-01~2033-03-31, 투표수 뒤집기 주장은 스니펫 수준이라 미확정) https://www.u-tokyo.ac.jp/focus/ja/press/z1304_00017.html , https://www.nikkei.com/article/DGXZQOUD289SK0Y6A920C2000000/ .
+
+### #19 岩屋 무역촉진 대표단 北京 王毅 회담 개최 사실 한정(시정 요구 문구는 Nikkei 요약만·本文 미확보라 분리) https://news.web.nhk/newsweb/na/nd-20260929de52968 , https://www.nikkei.com/article/DGXZQOGN28APW0Y6A920C2000000/ .
+
+한국: 
+
+### #20 공정위 명륜당 부당지원·가맹사업법 위반 제재(2021-12~2026-04 14개 대부업체 2,983억원 저리·절감 217억원, 잠정 과징금 총 148억원, 고발, 최종 의결서 변동 가능) https://www.ftc.go.kr/www/selectBbsNttView.do?bordCd=3&key=12&searchCtgry=01,02&nttSn=48055 , https://www.hankyung.com/article/2026092801641 .
+
+### #21 정부 CPTPP 가입 경제 영향 잠정 분석(발효 10년 실질GDP +0.38pp·약 8.8조원, 제조 파급 연평균 6.3조→6.7조원, 농림수산 연평균 약 8,500억원 감소, 모형 추정치·협상개시 아님) https://www.hankyung.com/article/2026092801921 , https://www.mk.co.kr/news/economy/12162964 . 부족 원인: 금융 산별 잠정합의는 최종 합의 아님·단일 언론사 2건·원발표 미열람이라 B 보류.
+
+암호화폐: 
+
+### #22 상원 PSI 민주당 USDT·이란 shadow banking 보고서와 Tether 당일 반박(846 지갑 분석·87% 주장 vs 2026년 이란 연계 약 5.5억달러 동결 주장, PDF 원문 미열람이라 수치 단정 불가·귀속 유지) https://www.coindesk.com/policy/2026/09/28/tether-is-a-lifeline-for-iranian-regime-senate-dems-say-in-new-report , https://www.theblock.co/news/regulation/2026-09-28-tethers-usdt-center-iran-shadow-banking-network-new-senate-report-says-417094 , https://tether.io/news/tether-has-supported-nearly-550-million-in-iran-linked-usdt-freezes-as-u-s-expands-sanctions-campaign/ .
+
+### #23 Chainlink CCIP 2.0 출시(CCV·외부 verifier·16개 기본 quorum 유지, RMN 자동 역할 비활성, 공식 2.0문 미열람·도입 완료와 발표 구분) https://www.coindesk.com/business/2026/09/28/chainlink-updates-its-crypto-bridge-tech-months-after-a-usd292-million-hack-shook-the-industry , https://decrypt.co/379463/chainlink-institutions-add-bridge-checks-kelp-hack .
+
+### #24 Bitget 388M 탈취 공격자 THORChain 경유 약 2,390 ETH→약 75.2 BTC 스왑(9/28 03:55-06:23 UTC, 선택 차단 거부, 귀속은 라벨 인용·가격 As-of) https://www.coindesk.com/tech/2026/09/28/thorchain-rejects-bitget-request-to-block-hacker-as-usd6-million-moves-to-bitcoin , https://www.theblock.co/news/regulation/2026-09-28-bitget-attacker-tested-risk-controls-small-transfers-388-million-theft-ceo-says-417045 .
+
+### #25 BTC 약 83,000달러로 하락·알트 금요일 랠리 되돌림(As-of 9/28 오전 UTC -1.7~-1.8%, 이란·유가 인과귀속은 기자 해석) https://www.coindesk.com/markets/2026/09/28/bitcoin-falls-to-usd83-000-while-altcoins-unwind-friday-s-rally , https://decrypt.co/379438/bitcoin-price-falls-trump-iran-oil-yields .
+
+채권·금리: 
+
+### #1 미국 매도(상세
+
+#1). 
+
+### #5 Cook 연설(상세
+
+#5). 부족 원인: Bianco 강세 전환은 단일 인터뷰·제2 확인 없어 B 보류, BOJ·Zandi는 원자료 미확보라 B, 한은 간담은 글로벌 파급 낮아 C 제외.
+원자재: 
+
+### #2 유가 결제(상세
+
+#2). 
+
+### #26 트럼프 디젤 수출금지 매우 진지 검토 재확인(We are thinking about it very seriously, AAA 디젤 약 6.50달러 배경, API 반박 직접 확인, 발동 없음) https://www.cnbc.com/2026/09/28/diesel-oil-trump-export-ban-fuel-prices.html , https://www.api.org/news-policy-and-issues/news/2026/09/22/a-diesel-export-ban-would-wreak-havoc-at-home-and-abroad-heres-why .
+
+### #9 Mesabi는 미국
+
+### #9 재사용. 부족 원인: Mesabi 병합, 이란 7일안·카타르 전망은 익명·원문 미확인이라 B.
+
+IT·테크: 
+
+### #27 SpaceX Starship 14호기 첫 궤도 도달·V3 26기 전개 후 조기 귀환(이륙 12:48Z, 궤도 269-275km, 10시간→3시간 단축, BBC 90분 표현과 불일치 미확정) https://www.cnbc.com/2026/09/28/spacex-prepares-to-send-starship-rocket-to-orbit-for-first-time.html , https://www.nikkei.com/article/DGXZQOGN289G90Y6A920C2000000/ .
+
+### #4 AMD·
+
+### #3 Nvidia는 미국 재사용. 부족 원인: Safety 플랫폼·Sonnet 5.5는 단일 매체·공식문 미열람이라 B 보류.
 
 ### 4. 시장 전달경로
 
-### #1 매도는 금리·텀프리미엄·모기지 경로로 실물·밸류 전반을 압박하고, #5 Cook은 AI·유가 상방 압력과 데이터 의존을 명시해 #1의 정책 지속 근거를 댄다. #2 유가는 인플레 기대·실질소득·운송비 경로로 #1·#5와 합류하며 소비재·화학·운송 이익을 갉아먹는다. 반대로 #3 자사주와 #4 M&A는 AI 현금흐름·위험선호·수급 경로로 #1의 압박을 상쇄한다. 비교하면 #1·#2·#5는 금리·달러·신용 긴축 방향, #3·#4는 주식 수급·반도체 이익 방향으로 갈라지며, 단기 우세는 확인된 가격(#1·#2)에 있어 부담 쪽이다.
+### #1 매도는 금리·텀프리미엄·모기지 경로로 실물·밸류 전반을 압박하고,
+
+### #5 Cook은 AI·유가 상방 압력과 데이터 의존을 명시해
+
+#1의 정책 지속 근거를 댄다. 
+
+### #2 유가는 인플레 기대·실질소득·운송비 경로로
+
+#1·
+#5와 합류하며 소비재·화학·운송 이익을 갉아먹는다. 반대로 
+
+### #3 자사주와
+
+### #4 M&A는 AI 현금흐름·위험선호·수급 경로로
+
+#1의 압박을 상쇄한다. 비교하면 
+#1·
+#2·
+- #5는 금리·달러·신용 긴축 방향,
+
+#3·
+- #4는 주식 수급·반도체 이익 방향으로 갈라지며, 단기 우세는 확인된 가격(
+
+#1·
+#2)에 있어 부담 쪽이다.
 
 ### 5. PEST Quick View
 
-**P (Political · 정치·정책):** #5·#6·#7·#8·#9·#10·#12·#15·#19·#20·#21·#22·#26. 정책·지정학이 금리·유가·제재·선거행정·통상 경로로 채권·달러·주식·원자재에 전이된다. 미확인 경계: 이란 7일안 문안·제재완화 범위·카타르 회동 시각, Fairford 이란 배후, Bardella 대화 진위, blocking statute 발동 여부, CPTPP 개방수준·협상개시, 디젤 발동 여부·기간.
-
-**E (Economic · 경제):** #1·#2·#16·#25. 금리 재설정·유가 결제·중국 공업이익·BTC 되돌림이 밸류·실질소득·심리 경로로 채권·주식·암호화폐에 전이된다. 미확인 경계: 매도 원인 비중, NBS 원표 반올림·업종 폭증치, BTC 인과귀속, 마감 후 변동.
-
-**S (Social · 사회):** #11·#13·#14·#17·#18. 사법·이주·정치 검증·재난 집계·대학 인사가 신뢰·노동·소비 경로로 주식·소비재에 약하게 전이된다. 미확인 경계: Regeni 판결문·집행, Channel 사인·조난시각·세부 인적구성, Bardella 진위, 태풍 행방불명 4 vs 2 집계 차이, UTokyo 투표수 주장.
-
-**T (Technological · 기술):** #3·#4·#23·#24·#27. 자사주·M&A·브릿지 표준·해킹 추적·궤도 실증이 수급·보안·수송용량 경로로 주식·반도체·암호화폐·산업재에 전이된다. 미확인 경계: 매입 속도, M&A 클로징·규제, CCIP 공식문·도입 범위, 공격자 귀속 재검증, Starship 체류·재진입 정밀도.
+P: 
+#5·
+#6·
+#7·
+#8·
+#9·
+#10·
+#12·
+#15·
+#19·
+#20·
+#21·
+#22·
+#26. 정책·지정학이 금리·유가·제재·선거행정·통상 경로로 채권·달러·주식·원자재에 전이된다. 미확인 경계: 이란 7일안 문안·제재완화 범위·카타르 회동 시각, Fairford 이란 배후, Bardella 대화 진위, blocking statute 발동 여부, CPTPP 개방수준·협상개시, 디젤 발동 여부·기간.
+E: 
+#1·
+#2·
+#16·
+#25. 금리 재설정·유가 결제·중국 공업이익·BTC 되돌림이 밸류·실질소득·심리 경로로 채권·주식·암호화폐에 전이된다. 미확인 경계: 매도 원인 비중, NBS 원표 반올림·업종 폭증치, BTC 인과귀속, 마감 후 변동.
+S: 
+#11·
+#13·
+#14·
+#17·
+#18. 사법·이주·정치 검증·재난 집계·대학 인사가 신뢰·노동·소비 경로로 주식·소비재에 약하게 전이된다. 미확인 경계: Regeni 판결문·집행, Channel 사인·조난시각·세부 인적구성, Bardella 진위, 태풍 행방불명 4 vs 2 집계 차이, UTokyo 투표수 주장.
+T: 
+#3·
+#4·
+#23·
+#24·
+#27. 자사주·M&A·브릿지 표준·해킹 추적·궤도 실증이 수급·보안·수송용량 경로로 주식·반도체·암호화폐·산업재에 전이된다. 미확인 경계: 매입 속도, M&A 클로징·규제, CCIP 공식문·도입 범위, 공격자 귀속 재검증, Starship 체류·재진입 정밀도.
 
 ### 6. 반대 근거와 불확실성
 
-지배 변수(고금리 장기화·유가발 인플레)와 반대되는 확인 사실 2건: (1) #3 잔여 2,350억달러·FY2028 집행 예상과 #4 약 82억달러 M&A는 AI 현금창출·위험선호·유동성 여력을 확인해 금리 압박 일변도와 반대된다. (2) #16 중국 8월 공업이익 +4.2%·1-8월 +15.7%·매출 +6.6%는 전자·AI 기여 실물 회복을 보여 고금리발 침체 단일 경로와 반대된다(원표 미개봉·반올림 경계 유지).
+지배 변수(고금리 장기화·유가발 인플레)와 반대되는 확인 사실 2건: (1)
+
+#3 잔여 2,350억달러·FY2028 집행 예상과
+
+#4 약 82억달러 M&A는 AI 현금창출·위험선호·유동성 여력을 확인해 금리 압박 일변도와 반대된다. (2)
+
+#16 중국 8월 공업이익 +4.2%·1-8월 +15.7%·매출 +6.6%는 전자·AI 기여 실물 회복을 보여 고금리발 침체 단일 경로와 반대된다(원표 미개봉·반올림 경계 유지).
 
 주요 데이터 공백과 경쟁 설명: 매도 원인 비중(유가 vs 인상베팅 vs 재정 vs AI수요), 파이프라인 복구 시각·공식 확인, Cook 이후 PCE·고용 반응, 관세 세부·발효일, 사상자 최종치, Starship 시간 불일치.
 
@@ -256,7 +367,8 @@ description: "최근 24시간의 허용 출처를 직접 검증해 정리한 글
 - **발견 기사 수:** 5
 - **고유 사건 수:** 4
 - **최종 채택 수:** 2
-부족 사유: Mesabi는 미국 #9로 병합, 이란 7일안은 익명·원문 미확인이라 B
+부족 사유: Mesabi는 미국 
+#9로 병합, 이란 7일안은 익명·원문 미확인이라 B
 
 #### IT·테크
 
@@ -266,11 +378,37 @@ description: "최근 24시간의 허용 출처를 직접 검증해 정리한 글
 - **최종 채택 수:** 1
 부족 사유: AMD·Nvidia는 미국으로 병합, Safety·Sonnet은 단일 매체·공식문 미열람이라 B 보류
 
-**주요 중복 병합 목록:** Starship 글로벌-IT→#27, AMD 미국-IT→#4, Nvidia 미국-IT→#3, Mesabi 미국-원자재→#9, Kyiv 본체-유럽 아카데미→#6, 미중 관세 글로벌-중국→B 1건. 기본 고유 합 68에서 6건 차감해 62.
+**주요 중복 병합 목록:** Starship 글로벌-IT→
+
+#27, AMD 미국-IT→
+#4, Nvidia 미국-IT→
+#3, Mesabi 미국-원자재→
+#9, Kyiv 본체-유럽 아카데미→
+#6, 미중 관세 글로벌-중국→B 1건. 기본 고유 합 68에서 6건 차감해 62.
 
 **30건 초과 제외 건수·사유 또는 30건 미달 사유:** 30건 미달, 최종 27건이 검증된 중요 고유 A 전부라 충원하지 않음. B→A 명시적 변경 없음.
 
-**공식·직접 원자료 연결 건수:** 10건 (#3 Nvidia newsroom, #4 AMD IR, #5 Fed 연설문, #9 White House 릴리스, #10 D.D.C. 판결문 PDF, #17 FDMA PDF, #18 도쿄대 보도자료, #20 FTC 보도자료, #22 Tether.io 성명, #26 API 원문).
+**공식·직접 원자료 연결 건수:** 10건 (
+
+### #3 Nvidia newsroom,
+
+### #4 AMD IR,
+
+### #5 Fed 연설문,
+
+### #9 White House 릴리스,
+
+### #10 D.D.C. 판결문 PDF,
+
+### #17 FDMA PDF,
+
+### #18 도쿄대 보도자료,
+
+### #20 FTC 보도자료,
+
+### #22 Tether.io 성명,
+
+### #26 API 원문).
 
 **접근 실패·유료벽·시간 충돌·데이터 공백:** Reuters DataDome, Politico 429, Consilium Cloudflare, Nikkei paywall, TechCrunch 429, Senate PDF akamai, Nidec IR JS, JFTC 인덱스 한계, SCIO·SASAC 422, 상무부 JS 게이트, NBS 세부표·BOJ 원문·ECB 404·FAA·SCOTUS 당일 게시 없음. 시간 충돌: 스페인 주택 게시 경계, CA 9/27 경계, DMZ 폭발 9/21 대 발표 9/28. 데이터 공백: 파이프라인 복구 시각, 관세 품목·발효일, 사상자 최종치, 매입 속도·클로징, 의사록·모기지·선물 원천.
 
