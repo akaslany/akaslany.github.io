@@ -4,20 +4,12 @@ title: "Today's Report"
 permalink: /todays-report/
 ---
 
-<!-- todays-report-date: 2026-10-01 -->
+<!-- todays-report-date: 2026-10-02 -->
 
 # Today's Report
 
-공개일: **2026-10-01 (Asia/Seoul)**
+공개일: **2026-10-02 (Asia/Seoul)**
 
-오늘 GitHub Pages에 게시된 보고서입니다.
-
-- **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-10-01](/trump-truth/2026-10-01/)
-- **07:16 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-10-01](/2026/10/01/global-economic-risk-briefing/)
-- **06:22 KST** — [AI Daily Intel — 2026-09-30](/ai-intel/2026-09-30/)
-- **02:38 KST** — [미국 정책 인텔리전스 데일리 — 2026-10-01](/us-policy-intel/2026-10-01/)
-- **02:05 KST** — [한국은행 보도자료 브리핑 — 2026-09-30](/bok-briefing/2026-09-30/)
-- **01:50 KST** — [미국 정책 인텔리전스 데일리 — 2026-09-30](/us-policy-intel/2026-09-30/)
-- **01:00 KST** — [산업통상부 정책 투자 인텔리전스 v2 — 2026-09-30](/motir-policy/2026-09-30/)
+오늘 게시된 보고서가 없습니다. 새 보고서가 게시되면 이 페이지가 자동 갱신됩니다.
 
 이 페이지는 매일 자정 이후 새 날짜 기준으로 자동 초기화됩니다.
