@@ -47,3 +47,48 @@
     font-size: 1.3rem;
   }
 }
+
+// Global economic/risk briefing only; never change other report typography.
+.global-risk-report {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: -0.015em;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    margin-top: 1.75em;
+    margin-bottom: 0.65em;
+  }
+  h1 { font-size: 36px; }
+  h2 { font-size: 30px; }
+  h3 { font-size: 24px; }
+  h4 { font-size: 20px; }
+  h5 { font-size: 18px; }
+  h6 { font-size: 16px; }
+
+  .report-label {
+    display: block;
+    font-weight: 600;
+    margin-top: 0.75em;
+  }
+  p, li { overflow-wrap: anywhere; }
+}
+
+.post:has(.global-risk-report) .post-title {
+  font-size: 36px;
+  line-height: 1.3;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+@media screen and (max-width: 600px) {
+  .global-risk-report {
+    h1 { font-size: 28px; }
+    h2 { font-size: 25px; }
+    h3 { font-size: 21px; }
+    h4 { font-size: 19px; }
+    h5 { font-size: 17px; }
+    h6 { font-size: 16px; }
+  }
+  .post:has(.global-risk-report) .post-title { font-size: 28px; }
+}
