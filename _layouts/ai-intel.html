@@ -1,0 +1,30 @@
+---
+layout: post
+---
+<style>
+.post:has(.ai-intel-report) .post-title { font-size: 1.8rem; line-height: 1.35; }
+.ai-intel-report { font-size: 16px; line-height: 1.85; overflow-wrap: anywhere; }
+.ai-intel-report p { margin: 0 0 1em; }
+.ai-intel-report h1 { font-size: 1.65rem; }
+.ai-intel-report h2 { font-size: 1.45rem; margin: 2em 0 .8em; }
+.ai-intel-report h3 { font-size: 1.2rem; margin: 1.8em 0 .8em; }
+.ai-intel-report h4, .ai-intel-report h5, .ai-intel-report h6 { font-size: 1.05rem; margin: 1.5em 0 .7em; }
+.ai-intel-report p:has(> strong:first-child) { margin-bottom: .85em; }
+.ai-intel-report p:has(> strong:first-child):has(+ p > strong:first-child) { margin-bottom: .75em; }
+.ai-intel-report p:has(> strong:first-child) + p:has(> strong:first-child) { margin-top: 0; }
+.ai-intel-report li { margin-bottom: .65em; }
+.ai-intel-report li > ul { margin-top: .4em; }
+.ai-intel-report li > ul li { margin-bottom: .25em; }
+.ai-intel-report a { text-decoration: underline; text-underline-offset: .15em; }
+.ai-intel-report table { display: block; overflow-x: auto; font-size: .9rem; line-height: 1.65; }
+.ai-intel-report td, .ai-intel-report th { min-width: 8em; vertical-align: top; }
+@media (max-width: 600px) {
+  .ai-intel-report { font-size: 16px; line-height: 1.8; }
+  .ai-intel-report h2 { font-size: 1.3rem; }
+  .ai-intel-report h3 { font-size: 1.12rem; }
+  .ai-intel-report h4, .ai-intel-report h5, .ai-intel-report h6 { font-size: 1rem; }
+}
+</style>
+<div class="ai-intel-report">
+  {{ content }}
+</div>
