@@ -30,8 +30,37 @@ class TypographyTests(unittest.TestCase):
         self.assertEqual(out, '[a.example](https://a.example/x) [b.example](https://b.example/y)')
 
     def test_existing_markdown_protected(self):
-        s = '[원문](https://a.example/x) `https://code.example/y` <https://auto.example/z>'
+        s = '[원문](https://a.example/x) <https://auto.example/z>'
         self.assertEqual(link_sources(s), s)
+        self.assertEqual(fmt(s), s)
+
+    def test_inline_exact_user_regression(self):
+        for citation in ('https://a.example/x', '`https://a.example/x`',
+                         '[원문](https://a.example/x)',
+                         r'\[원문\]\(https://a.example/x\)',
+                         r'\[원문\](https://a.example/x)'):
+            for grade in 'ABC':
+                s = f'- 발표다. Evidence {grade}, 조건 미확인 / 출처: {citation} 출처: https://b.example/y'
+                out = fmt(s)
+                self.assertEqual(out.count('<br class="report-field-break" />'), 3)
+                self.assertEqual(semantic_text(s), semantic_text(out))
+                self.assertEqual(fmt(out), out)
+                self.assertNotIn('`https://', out)
+                self.assertIn('(https://a.example/x)', out)
+                self.assertIn('(https://b.example/y)', out)
+
+    def test_every_section_and_table_inline_evidence(self):
+        for s in ('편집 원칙이다. Evidence A는 일차 문서다.',
+                  '| 층 | 투자 발표, Evidence B | 조건 |',
+                  '- 제외: 일차 발표 Evidence A는 인정한다.',
+                  '- 후보: 연구, Evidence C (미확인 / 출처: https://a.example/a_(b)?x=1&y=2)'):
+            out = fmt(s)
+            self.assertIn('<br class="report-field-break" />Evidence', out)
+            self.assertEqual(fmt(out), out)
+            self.assertEqual(semantic_text(s), semantic_text(out))
+
+    def test_code_expressions_and_fences_protected(self):
+        s = '실행 예시 `Evidence A 출처: fetch("https://a.example/x")`\n```text\n내용: Evidence A 출처: https://a.example/x\n```'
         self.assertEqual(fmt(s), s)
 
     def test_balanced_parentheses_and_query(self):

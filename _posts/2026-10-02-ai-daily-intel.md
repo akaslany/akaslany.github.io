@@ -20,26 +20,26 @@ description: "검증 가능한 출처를 바탕으로 AI 산업·모델·인프�
 
 AI의 경쟁축이 모델 자체의 성능에서 에이전트의 실행·검증·기업 업무 통합으로 넓어지고 있지만, 이번 번들이 확인한 것은 주로 발표와 공개 자료이며 독립 재현, 생산성 개선, 매출 효과까지 입증한 사례는 제한적이다.
 
-편집 원칙: 제공된 번들만 사용했다. Evidence A는 공식·정부·원논문 등 일차 문서, B는 실명 발언이나 기업 발표에 귀속되는 보도, C는 본문·조건 검증이 부족한 후보를 뜻한다. A도 성능 주장의 독립 검증을 의미하지 않는다.
+편집 원칙: 제공된 번들만 사용했다. <br class="report-field-break" />Evidence A는 공식·정부·원논문 등 일차 문서, B는 실명 발언이나 기업 발표에 귀속되는 보도, C는 본문·조건 검증이 부족한 후보를 뜻한다. A도 성능 주장의 독립 검증을 의미하지 않는다.
 
 정확한 시각이 있는 자료는 지정된 반개구간으로 판정했다. 10월 1일 날짜만 있는 자료는 번들에 명시된 날짜 중첩 예외를 적용하되, 실제 공개 시각은 미확인으로 남겼다. 10월 2일 날짜만 있는 자료는 06:00 이전 공개를 입증하지 못하므로 보수적으로 제외했다. 논문 제출 시각과 일반 공개 시각도 구분한다.
 
 ## 2 핵심 신호 5
 
-- **제한적 배포가 프런티어 모델 출시의 핵심 조건이 됐다.** Google의 Gemini 4 Argon은 Fairwind를 통한 단계적 접근과 내부·Wiz 사용이 보고됐지만 일반 공개 API, 한국 참여 자격, 독립 성능 검증은 미확인이다. Evidence A, 공식 발표를 확인한 번들 기준.
+- **제한적 배포가 프런티어 모델 출시의 핵심 조건이 됐다.** Google의 Gemini 4 Argon은 Fairwind를 통한 단계적 접근과 내부·Wiz 사용이 보고됐지만 일반 공개 API, 한국 참여 자격, 독립 성능 검증은 미확인이다. <br class="report-field-break" />Evidence A, 공식 발표를 확인한 번들 기준.
   - **출처:** [blog.google](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/)
 
-- **에이전트가 GUI와 코드 기반 오케스트레이션으로 확장됐다.** Copilot의 desktop computer use와 dynamic workflows는 서로 다른 공개 프리뷰다. 앱 제어 승인·운영체제 권한과 단계별 검토 지점이 중요하며, 실제 안정성·비용 절감은 검증되지 않았다. Evidence A.
+- **에이전트가 GUI와 코드 기반 오케스트레이션으로 확장됐다.** Copilot의 desktop computer use와 dynamic workflows는 서로 다른 공개 프리뷰다. 앱 제어 승인·운영체제 권한과 단계별 검토 지점이 중요하며, 실제 안정성·비용 절감은 검증되지 않았다. <br class="report-field-break" />Evidence A.
   - **출처:** [github.blog](https://github.blog/changelog/2026-10-01-github-copilot-can-now-interact-with-desktop-apps)
   - **출처:** [github.blog](https://github.blog/changelog/2026-10-01-dynamic-workflows-in-copilot-cli-and-the-copilot-app)
 
-- **금융권 AI 확장은 기존 운영 사례에 연결되고 있다.** Barclays는 2025년부터 운영한 지식 도우미의 1만6천 명 이상 채택과 하루 약 12만 건 이메일 처리를 공개했다. 그러나 연말 개발자 50%의 Claude Code 채택은 목표이며, 생산성 개선·계약 매출·규제 승인은 별도다. Evidence A.
+- **금융권 AI 확장은 기존 운영 사례에 연결되고 있다.** Barclays는 2025년부터 운영한 지식 도우미의 1만6천 명 이상 채택과 하루 약 12만 건 이메일 처리를 공개했다. 그러나 연말 개발자 50%의 Claude Code 채택은 목표이며, 생산성 개선·계약 매출·규제 승인은 별도다. <br class="report-field-break" />Evidence A.
   - **출처:** [www.anthropic.com](https://www.anthropic.com/news/barclays-scales-claude)
 
-- **공개 학습 인프라의 성능 개선은 모델 지능 개선과 다르다.** Olmo-core 3는 코드가 공개된 MoE 학습 스택이며 B300 기반 처리량·메모리 측정치를 제시한다. 1.2T 구성의 random routing과 2.38T 단기 용량 시험을 학습 완료 모델로 읽어서는 안 된다. Evidence A.
+- **공개 학습 인프라의 성능 개선은 모델 지능 개선과 다르다.** Olmo-core 3는 코드가 공개된 MoE 학습 스택이며 B300 기반 처리량·메모리 측정치를 제시한다. 1.2T 구성의 random routing과 2.38T 단기 용량 시험을 학습 완료 모델로 읽어서는 안 된다. <br class="report-field-break" />Evidence A.
   - **출처:** [huggingface.co](https://huggingface.co/blog/allenai/olmocore3)
 
-- **합법적인 검색 도구와 이미지 반환 자체가 유출 경로가 될 수 있다.** LLMLeak와 멀티모달 RAG 추출 논문은 각각 URL을 통한 비밀 전송과 누적 이미지 회수를 보고했다. 실제 운영 침해가 확인된 것은 아니지만, 도구 승인만으로 충분하다는 가정에 반례를 제시한다. Evidence A, 저자 보고·독립 재현 미확인.
+- **합법적인 검색 도구와 이미지 반환 자체가 유출 경로가 될 수 있다.** LLMLeak와 멀티모달 RAG 추출 논문은 각각 URL을 통한 비밀 전송과 누적 이미지 회수를 보고했다. 실제 운영 침해가 확인된 것은 아니지만, 도구 승인만으로 충분하다는 가정에 반례를 제시한다. <br class="report-field-break" />Evidence A, 저자 보고·독립 재현 미확인.
   - **출처:** [arxiv.org](https://arxiv.org/abs/2610.01768)
   - **출처:** [arxiv.org](https://arxiv.org/abs/2610.01871)
 
@@ -358,16 +358,16 @@ AI의 경쟁축이 모델 자체의 성능에서 에이전트의 실행·검증�
 
 | Stack 층 | 관찰 신호 | 확인된 단계 | 남은 관문 |
 |---|---|---|---|
-| 전력·냉각·시설 | LG 냉각 제조 확대 | 투자 발표, Evidence B | 신규 용량 가동·주문 |
-| 학습 시스템 | Olmo-core 3 | 코드 공개, Evidence A | 버전 고정·지속 학습·외부 측정 |
-| 범용 모델 | Gemini 4 Argon | 제한적 접근·운영 보고, Evidence A | 공개 API·안전 구성·재현 |
-| 결정·라우팅 | Strands Decider 2B | 코드·체크포인트 공개, Evidence A | 교정 수치 정합성·실서비스 평가 |
-| 에이전트 실행 | Copilot GUI·dynamic workflows | 공개 프리뷰, Evidence A | 권한·실패 처리·운영 안정성 |
-| 과학·기억 하네스 | BootLoops·VISTA | 코드 또는 보고서 공개, Evidence A | 개별 결과·미공개 환경 재현 |
+| 전력·냉각·시설 | LG 냉각 제조 확대 | 투자 발표, <br class="report-field-break" />Evidence B | 신규 용량 가동·주문 |
+| 학습 시스템 | Olmo-core 3 | 코드 공개, <br class="report-field-break" />Evidence A | 버전 고정·지속 학습·외부 측정 |
+| 범용 모델 | Gemini 4 Argon | 제한적 접근·운영 보고, <br class="report-field-break" />Evidence A | 공개 API·안전 구성·재현 |
+| 결정·라우팅 | Strands Decider 2B | 코드·체크포인트 공개, <br class="report-field-break" />Evidence A | 교정 수치 정합성·실서비스 평가 |
+| 에이전트 실행 | Copilot GUI·dynamic workflows | 공개 프리뷰, <br class="report-field-break" />Evidence A | 권한·실패 처리·운영 안정성 |
+| 과학·기억 하네스 | BootLoops·VISTA | 코드 또는 보고서 공개, <br class="report-field-break" />Evidence A | 개별 결과·미공개 환경 재현 |
 | 업무·상거래 | Barclays·Canvas·ChatGPT try-on | 기존 운영, 발표 또는 출시 보도 | 달성 채택률·전환·개인정보 통제 |
-| 평가·보안 | ScholarCatalyst·Graphite·유출 연구 | 평가 및 논문 공개, Evidence A | 오염·대조군·독립 검증 |
-| 자금·사업 | Photon·Satlyt | 투자 보도, Evidence B | 거래 확인·절대 매출·고객 성과 |
-| 정책 | 미국 집행·EU 대화·SRIP | 집행 및 문서 공개, Evidence A | 재판·구체적 협력·실제 예산 |
+| 평가·보안 | ScholarCatalyst·Graphite·유출 연구 | 평가 및 논문 공개, <br class="report-field-break" />Evidence A | 오염·대조군·독립 검증 |
+| 자금·사업 | Photon·Satlyt | 투자 보도, <br class="report-field-break" />Evidence B | 거래 확인·절대 매출·고객 성과 |
+| 정책 | 미국 집행·EU 대화·SRIP | 집행 및 문서 공개, <br class="report-field-break" />Evidence A | 재판·구체적 협력·실제 예산 |
 | 한국 단말·엣지 | Tab S12·로봇 ASIC | 제품·개발 발표 | 출시·실리콘·한국어 기능 |
 
 층간 관련성을 표시한 지도이며 별도의 이벤트 원장이 아니다. 인프라 전문 연구자의 검증 0건을 타 영역 신호로 대체해 충족 처리하지 않았다.
@@ -455,7 +455,7 @@ Safety/Evaluation/Security의 편집 포함 4건에는 Frontier Models에서 이
 - Photon: Agents/Developer Tools와 Funding/M&A/Business의 동일 ID를 통합하고 후자에 정본 배치.
 - **Barclays: Frontier Models·Enterprise/Applications의 동일 ID와 Funding/M&A/Business의 다른 ANTHROPIC-EXPANSION ID가 같은 공식 발표를 가리킨다.** CLAUDE-EXPANSION을 정본으로 유지하고 Enterprise/Applications에만 배치했다.
 - Graphite·Strands: 중복을 새 사건으로 만들지 않고 평가와 개발 도구 영역으로 각각 이동했다.
-- AstaBrief·llama.cpp: 일차 발표 Evidence A는 인정하되 10월 2일 날짜만으로 창 안 공개를 확정하지 않아 제외.
+- AstaBrief·llama.cpp: 일차 발표 <br class="report-field-break" />Evidence A는 인정하되 10월 2일 날짜만으로 창 안 공개를 확정하지 않아 제외.
 - Albertsons: 같은 번들 안에서 기존 8월 기능과 10월 사례 글의 신규성 판정이 충돌해 제외.
 - **OpenAI reasoning 추출 캠페인: 9월 30일 날짜만 있는 공개는 창 밖이다.** 명시적 rejected_events를 복구하거나 7월 활동을 새 사건으로 포장하지 않았다.
 - 이전 모델 출시·9월 논문·기존 생산 사례·단순 릴리스 목록·칼럼·행사 홍보는 새 창 안 사건으로 재분류하지 않았다.
@@ -463,14 +463,14 @@ Safety/Evaluation/Security의 편집 포함 4건에는 Frontier Models에서 이
 
 ### Watchlist (미확인 후보)
 
-- 후보: Trillium Labs의 공개 post-training·자기개선 연구 출범, Evidence B (미포함 사유: 10월 2일 기사·출범으로 기록됐으며 창 안 일차 발표가 없음; 공개 실험·코드도 미확인 / 출처: [www.wired.com](https://www.wired.com/story/trillium-labs-wants-to-do-high-risk-ai-research-in-the-open/))
-- 후보: Mid-Harness의 terminal agent 행동 검증 연구, Evidence C (미포함 사유: 9월 30일 15:40:39 UTC 제출은 창 시작 전이며 10월 1일 목록 등재로 재날짜화할 수 없음 / 출처: [arxiv.org](https://arxiv.org/abs/2609.39982))
-- 후보: OpenAI 안전 연구자 3명 이탈 확인 보도, Evidence B (미포함 사유: 시각은 창 안이지만 원 연구자의 bounded category에서 모델 출시·평가·배포 사건이 아니었으며 별도 중대한 안전 사건으로 검증된 내용도 제한적 / 출처: [techcrunch.com](https://techcrunch.com/2026/10/01/openai-cuts-ties-with-three-safety-researchers-wsj-reports/))
-- 후보: Armadin의 2억5,550만 달러 Series B 보도, Evidence B (미포함 사유: 명시 시각은 10월 2일 06:55 KST로 마감 후이며 앞선 일차 발표 미확인 / 출처: [techcrunch.com](https://techcrunch.com/2026/10/01/kevin-mandias-new-agent-swarm-security-startup-armadin-raises-255-5m-at-2-5b-valuation/))
-- 후보: ChatGPT macOS 앱 데이터 접근 취약점 보도, Evidence B (미포함 사유: 10월 2일 기사 시간대 미확인 및 수정 인정은 9월 25일로 새 창 안 사건 입증 불가 / 출처: [www.wired.com](https://www.wired.com/story/a-flaw-in-chatgpts-mac-app-could-have-let-hackers-grab-sensitive-data/))
-- 후보: 한국 정부 AI 조정 42개 기관 확대·입법 틀 논의, Evidence B (미포함 사유: 10월 2일 16:00 KST 보도와 당일 회의는 마감 후이며 초안 논의는 제정이 아님 / 출처: [www.yna.co.kr](https://www.yna.co.kr/view/AKR20261002124200017))
-- 후보: 일본의 Dell·Jera 연계 AI 데이터센터 계획, Evidence C (미포함 사유: FT 본문 구독 장벽으로 자금 구조·정부 약속·기사 귀속 근거를 확인하지 못함 / 출처: [www.ft.com](https://www.ft.com/content/ec55a734-243b-43a2-93ea-8652d6b99309))
-- 후보: Tencent의 Oracle 컴퓨팅 용량 임대 보도, Evidence C (미포함 사유: FT 본문 구독 장벽으로 계약·실제 배포·수출통제 함의 미검증 / 출처: [www.ft.com](https://www.ft.com/content/8799b33d-f07c-4a03-82f0-bf5d3d1d29e9))
+- 후보: Trillium Labs의 공개 post-training·자기개선 연구 출범, <br class="report-field-break" />Evidence B (미포함 사유: 10월 2일 기사·출범으로 기록됐으며 창 안 일차 발표가 없음; 공개 실험·코드도 미확인 / <br class="report-field-break" />출처: [www.wired.com](https://www.wired.com/story/trillium-labs-wants-to-do-high-risk-ai-research-in-the-open/))
+- 후보: Mid-Harness의 terminal agent 행동 검증 연구, <br class="report-field-break" />Evidence C (미포함 사유: 9월 30일 15:40:39 UTC 제출은 창 시작 전이며 10월 1일 목록 등재로 재날짜화할 수 없음 / <br class="report-field-break" />출처: [arxiv.org](https://arxiv.org/abs/2609.39982))
+- 후보: OpenAI 안전 연구자 3명 이탈 확인 보도, <br class="report-field-break" />Evidence B (미포함 사유: 시각은 창 안이지만 원 연구자의 bounded category에서 모델 출시·평가·배포 사건이 아니었으며 별도 중대한 안전 사건으로 검증된 내용도 제한적 / <br class="report-field-break" />출처: [techcrunch.com](https://techcrunch.com/2026/10/01/openai-cuts-ties-with-three-safety-researchers-wsj-reports/))
+- 후보: Armadin의 2억5,550만 달러 Series B 보도, <br class="report-field-break" />Evidence B (미포함 사유: 명시 시각은 10월 2일 06:55 KST로 마감 후이며 앞선 일차 발표 미확인 / <br class="report-field-break" />출처: [techcrunch.com](https://techcrunch.com/2026/10/01/kevin-mandias-new-agent-swarm-security-startup-armadin-raises-255-5m-at-2-5b-valuation/))
+- 후보: ChatGPT macOS 앱 데이터 접근 취약점 보도, <br class="report-field-break" />Evidence B (미포함 사유: 10월 2일 기사 시간대 미확인 및 수정 인정은 9월 25일로 새 창 안 사건 입증 불가 / <br class="report-field-break" />출처: [www.wired.com](https://www.wired.com/story/a-flaw-in-chatgpts-mac-app-could-have-let-hackers-grab-sensitive-data/))
+- 후보: 한국 정부 AI 조정 42개 기관 확대·입법 틀 논의, <br class="report-field-break" />Evidence B (미포함 사유: 10월 2일 16:00 KST 보도와 당일 회의는 마감 후이며 초안 논의는 제정이 아님 / <br class="report-field-break" />출처: [www.yna.co.kr](https://www.yna.co.kr/view/AKR20261002124200017))
+- 후보: 일본의 Dell·Jera 연계 AI 데이터센터 계획, <br class="report-field-break" />Evidence C (미포함 사유: FT 본문 구독 장벽으로 자금 구조·정부 약속·기사 귀속 근거를 확인하지 못함 / <br class="report-field-break" />출처: [www.ft.com](https://www.ft.com/content/ec55a734-243b-43a2-93ea-8652d6b99309))
+- 후보: Tencent의 Oracle 컴퓨팅 용량 임대 보도, <br class="report-field-break" />Evidence C (미포함 사유: FT 본문 구독 장벽으로 계약·실제 배포·수출통제 함의 미검증 / <br class="report-field-break" />출처: [www.ft.com](https://www.ft.com/content/8799b33d-f07c-4a03-82f0-bf5d3d1d29e9))
 
 정본은 Section 3에만 기록했으며 각 사건을 한 번씩 포함했다. C-grade 사건은 핵심 원장에 없다.
 

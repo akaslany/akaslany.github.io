@@ -7,11 +7,18 @@ LABELS = ('내용', 'Evidence', '근거 등급', '출처', '출처 URL', '일차
           '상태', '핵심 내용', '요약', '중요한 이유', '판단', '불확실성')
 FIELD = re.compile(r'^(\s*)([-*]\s+)?(' + '|'.join(map(re.escape, LABELS)) + r'):\s*(.*)$')
 # Existing links, code and HTML autolinks must remain byte-stable.
-PROTECTED = re.compile(r'(`+).*?\1|!?\[[^\]\n]*\]\([^\n]*?\)(?=\s|$|[.,;])|<https?://[^>]+>')
+PROTECTED = re.compile(r'(`+).*?\1|!?\[[^\]\n]*\]\([^\n]*?\)(?=\s|$|[.,;<])|<https?://[^>]+>')
 URL = re.compile(r'https?://[^\s<>]+')
 
 
+def unescape_citation_links(text):
+    # Escaped Markdown copied from chat is presentation syntax, not a URL.
+    text = re.sub(r'\\\[([^\n]*?)\\\]\\\((https?://[^\n]*?)\\\)', r'[\1](\2)', text)
+    return re.sub(r'\\\[([^\n]*?)\\\]\((https?://[^\n]*?)\)', r'[\1](\2)', text)
+
+
 def link_sources(text):
+    text = unescape_citation_links(text)
     def plain(chunk):
         def anchor(m):
             url = m.group()
@@ -27,15 +34,47 @@ def link_sources(text):
         return URL.sub(anchor, chunk)
     result, pos = [], 0
     for m in PROTECTED.finditer(text):
-        result.extend((plain(text[pos:m.start()]), m.group()))
+        protected = m.group()
+        # URL-only inline code is a citation, not executable code. Make it tappable.
+        code_url = re.fullmatch(r'(`+)(https?://[^\s`]+)\1', protected)
+        if code_url:
+            protected = plain(code_url.group(2))
+        result.extend((plain(text[pos:m.start()]), protected))
         pos = m.end()
     result.append(plain(text[pos:]))
     return ''.join(result)
 
 
+BREAK = '<br class="report-field-break" />'
+INLINE_LABEL = re.compile(r'(?<![\w])(?:\*\*)?(?:Evidence(?=\s*(?::|[ABC]))|(?:일차 )?출처(?: URL)?(?=\s*:))')
+
+
+def break_semantic_labels(text):
+    """Break inline evidence/citation fields, including list and table cells.
+
+    Markdown newlines alone collapse in HTML; an explicit BR survives Jekyll.
+    Never split label-like text inside an existing link or code expression.
+    """
+    def plain(chunk, offset):
+        def split(m):
+            prefix = text[:offset + m.start()].rstrip()
+            if not prefix.strip(' -*') or prefix.endswith(BREAK):
+                return m.group()
+            return BREAK + m.group()
+        return INLINE_LABEL.sub(split, chunk)
+    result, pos = [], 0
+    for m in PROTECTED.finditer(text):
+        result.extend((plain(text[pos:m.start()], pos), m.group()))
+        pos = m.end()
+    result.append(plain(text[pos:], pos))
+    return ''.join(result)
+
+
 def semantic_text(text):
     """Comparable public words and exact URLs, ignoring presentation syntax."""
-    text = re.sub(r'\[[^\]\n]*\]\((https?://[^\n]*?)\)(?=\s|$|[.,;)])', r'\1', text)
+    text = unescape_citation_links(text).replace(BREAK, '')
+    text = re.sub(r'(`+)(https?://[^\s`]+)\1', r'\2', text)
+    text = re.sub(r'\[[^\]\n]*\]\((https?://[^\n]*?)\)(?=\s|$|[.,;)<])', r'\1', text)
     text = re.sub(r'(?m)^\s*[-*]\s+', '', text)
     return re.sub(r'\s+', '', text.replace('**', ''))
 
@@ -72,7 +111,15 @@ def normalize_report_typography(body):
                 if sentence:
                     line = f'- **{sentence.group(1)}**{sentence.group(2)}'
             output.append(line)
-    result = '\n'.join(output).strip()
+    # Do not alter examples in fenced code blocks.
+    rendered, fenced = [], False
+    for line in output:
+        if line.lstrip().startswith(('```', '~~~')):
+            fenced = not fenced
+            rendered.append(line)
+        else:
+            rendered.append(line if fenced else break_semantic_labels(line))
+    result = '\n'.join(rendered).strip()
     if semantic_text(body) != semantic_text(result):
         raise RuntimeError('AI presentation changed public words or URLs')
     return result
