@@ -8,12 +8,12 @@ import json
 import re
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from publication_notice import send_publication_notice, verify_public_url
+from publication_notice import send_publication_notice, verify_public_url, _read_ledger
 from ai_report_typography import normalize_report_typography
 
 REPORT_ROOT = Path('/home/kjkim/work/hermes/ai-daily-intel/reports')
@@ -51,6 +51,20 @@ def newest_report() -> Path:
     if not paths:
         raise RuntimeError(f'no AI Daily Intel reports found under {REPORT_ROOT}')
     return paths[0]
+
+
+def current_report() -> Path:
+    """Scheduled fallback uses the runner's previous-KST-day date, never stale latest."""
+    day = datetime.now(ZoneInfo('Asia/Seoul')).date() - timedelta(days=1)
+    return REPORT_ROOT / f'{day.year:04d}' / f'{day.month:02d}' / f'{day.isoformat()}-ai-daily-intel.md'
+
+
+def already_notified(date: str, url: str) -> bool:
+    # A presentation-only report commit must not resend an already-current
+    # completion notice. Keep all existing commit-keyed ledger receipts intact.
+    prefix = f'ai-daily-intel:{date}:'
+    return any(key.startswith(prefix) and item.get('url') == url
+               for key, item in _read_ledger().items())
 
 
 def validate_source(path: Path, text: str) -> str:
@@ -261,10 +275,13 @@ def publish(source: Path, dry_run: bool = False) -> dict:
         'index_url': f'{BASE_URL}/ai-intel/',
     }
     verify_public_url(url, date)
-    result['notification'] = 'sent' if send_publication_notice(
-        report_key='ai-daily-intel', report_name='AI Daily Intel', date=date,
-        commit=commit, url=url,
-    ) else 'already-sent'
+    if not changed and already_notified(date, url):
+        result['notification'] = 'already-sent'
+    else:
+        result['notification'] = 'sent' if send_publication_notice(
+            report_key='ai-daily-intel', report_name='AI Daily Intel', date=date,
+            commit=commit, url=url,
+        ) else 'already-sent'
     log(json.dumps(result, ensure_ascii=False))
     return result
 
@@ -274,8 +291,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('report', nargs='?')
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
-    source = Path(args.report).resolve() if args.report else newest_report()
+    source = Path(args.report).resolve() if args.report else current_report()
     if not source.is_file():
+        if not args.report:
+            print(json.dumps({'status': 'waiting-for-current-report', 'source': str(source)}, ensure_ascii=False))
+            return 0
         raise RuntimeError(f'report not found: {source}')
     LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
     with LOCK_PATH.open('w') as lock:
