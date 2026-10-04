@@ -13,6 +13,15 @@ tags:
 description: "한국시간 기준으로 정리한 미국·한국 증시의 주간 핵심 일정과 변동성 체크포인트"
 ---
 
+<style>
+@media (max-width: 600px) {
+  .post-content table { display: block; width: 100%; max-width: 100%; overflow-x: auto; }
+  .post-content table th, .post-content table td { min-width: 4rem; }
+  .post-content table th:nth-child(3), .post-content table td:nth-child(3) { min-width: 12rem; }
+  .post-content table th:nth-child(6), .post-content table td:nth-child(6) { min-width: 9rem; }
+}
+</style>
+
 > **공개 자료 안내:** 공식 기관·거래소·기업 IR 자료를 우선해 한국시간 기준으로 정리했습니다. 일정은 기관과 기업 사정으로 변경될 수 있으며, 본 자료는 정보 제공 목적이지 투자 권유가 아닙니다.
 
 ## 미국·한국 증시 주간 핵심 일정
