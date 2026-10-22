@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import json
 import statistics as stats
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 SITE = Path('/home/kjkim/dev/akaslany.github.io')
@@ -174,11 +174,11 @@ def main() -> int:
 
     body = f"""---
 layout: post
-title: "미국 국채 수요 4주 리포트 — 경매·포지셔닝·해외 보관·유동성 (2026-10-23)"
-date: 2026-10-23 07:30:00 +0900
+title: "미국 국채 수요 4주 리포트 — 경매·포지셔닝·해외 보관·유동성 ({date.today().isoformat()})"
+date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} +0900
 categories: [us-treasury-demand]
 tags: [미국국채, 재무부경매, TIC, RRP, TGA, CoT, 유동성]
-permalink: /us-treasury-demand/2026-10-23/
+permalink: /us-treasury-demand/{date.today().isoformat()}/
 description: "미국 국채 수요를 발행시장·포지셔닝·해외 공적 보관·단기 유동성 4계층으로 교차 확인한 4주 리포트"
 ---
 

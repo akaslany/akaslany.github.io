@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "미국 국채 수요 4주 리포트 — 경매·포지셔닝·해외 보관·유동성 (2026-10-23)"
-date: 2026-10-23 07:30:00 +0900
+date: 2026-10-23 03:26:39 +0900
 categories: [us-treasury-demand]
 tags: [미국국채, 재무부경매, TIC, RRP, TGA, CoT, 유동성]
 permalink: /us-treasury-demand/2026-10-23/
