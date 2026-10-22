@@ -1,0 +1,3085 @@
+{
+ "generated_at": "2026-10-22T18:17:12.954488+00:00",
+ "window": {
+  "recent_from": "2026-09-25",
+  "prior_from": "2026-08-28",
+  "through": "2026-10-23"
+ },
+ "auctions": [
+  {
+   "date": "2026-08-27",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 90.0,
+   "btc": 2.77,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 55.89,
+   "direct_pct": 3.28,
+   "dealer_pct": 38.31,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-08-27",
+   "security": "7-Year Note",
+   "type": "Note",
+   "term": "7-Year",
+   "offering_bn": 44.0,
+   "btc": 2.5,
+   "high_yield": 4.512,
+   "median_yield": 4.46,
+   "indirect_pct": 60.63,
+   "direct_pct": 26.89,
+   "dealer_pct": 12.23,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-08-31",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 92.0,
+   "btc": 2.77,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 50.53,
+   "direct_pct": 7.3,
+   "dealer_pct": 39.37,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-08-31",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 79.0,
+   "btc": 2.63,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 46.18,
+   "direct_pct": 9.06,
+   "dealer_pct": 42.4,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-01",
+   "security": "52-Week Bill",
+   "type": "Bill",
+   "term": "52-Week",
+   "offering_bn": 52.0,
+   "btc": 3.61,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 73.14,
+   "direct_pct": 3.22,
+   "dealer_pct": 20.84,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-02",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 72.0,
+   "btc": 2.78,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 50.47,
+   "direct_pct": 6.56,
+   "dealer_pct": 41.49,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-03",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 85.0,
+   "btc": 3.02,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 68.31,
+   "direct_pct": 4.49,
+   "dealer_pct": 24.56,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-08",
+   "security": "3-Year Note",
+   "type": "Note",
+   "term": "3-Year",
+   "offering_bn": 58.0,
+   "btc": 2.72,
+   "high_yield": 4.474,
+   "median_yield": 4.43,
+   "indirect_pct": 61.74,
+   "direct_pct": 26.77,
+   "dealer_pct": 10.84,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-08",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 92.0,
+   "btc": 2.61,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 50.59,
+   "direct_pct": 7.86,
+   "dealer_pct": 39.0,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-08",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 79.0,
+   "btc": 2.88,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 62.68,
+   "direct_pct": 8.28,
+   "dealer_pct": 26.32,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-09",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 72.0,
+   "btc": 2.73,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 43.32,
+   "direct_pct": 8.14,
+   "dealer_pct": 47.66,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-09",
+   "security": "9-Year 11-Month Note",
+   "type": "Note",
+   "term": "9-Year 11-Month",
+   "offering_bn": 39.0,
+   "btc": 2.71,
+   "high_yield": 4.834,
+   "median_yield": 4.769,
+   "indirect_pct": 78.98,
+   "direct_pct": 16.46,
+   "dealer_pct": 4.3,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-10",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 85.0,
+   "btc": 2.82,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 64.28,
+   "direct_pct": 5.81,
+   "dealer_pct": 26.87,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-10",
+   "security": "29-Year 11-Month Bond",
+   "type": "Bond",
+   "term": "29-Year 11-Month",
+   "offering_bn": 22.0,
+   "btc": 2.61,
+   "high_yield": 5.308,
+   "median_yield": 5.25,
+   "indirect_pct": 79.33,
+   "direct_pct": 18.27,
+   "dealer_pct": 2.2,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-14",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 92.0,
+   "btc": 2.64,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 53.85,
+   "direct_pct": 6.63,
+   "dealer_pct": 37.2,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-14",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 79.0,
+   "btc": 2.74,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 59.29,
+   "direct_pct": 6.01,
+   "dealer_pct": 32.29,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-15",
+   "security": "19-Year 11-Month Bond",
+   "type": "Bond",
+   "term": "19-Year 11-Month",
+   "offering_bn": 13.0,
+   "btc": 2.57,
+   "high_yield": 5.42,
+   "median_yield": 5.36,
+   "indirect_pct": 52.12,
+   "direct_pct": 30.48,
+   "dealer_pct": 16.74,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-15",
+   "security": "6-Week Bill",
+   "type": "Bill",
+   "term": "6-Week",
+   "offering_bn": 75.0,
+   "btc": 3.16,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 65.77,
+   "direct_pct": 2.98,
+   "dealer_pct": 26.88,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-16",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 72.0,
+   "btc": 2.72,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 52.03,
+   "direct_pct": 5.26,
+   "dealer_pct": 41.95,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-17",
+   "security": "9-Year 10-Month TIPS",
+   "type": "Note",
+   "term": "9-Year 10-Month",
+   "offering_bn": 19.0,
+   "btc": 2.24,
+   "high_yield": 2.653,
+   "median_yield": 2.577,
+   "indirect_pct": 58.76,
+   "direct_pct": 28.52,
+   "dealer_pct": 12.11,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-17",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 85.0,
+   "btc": 2.94,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 60.39,
+   "direct_pct": 4.65,
+   "dealer_pct": 31.7,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-21",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 92.0,
+   "btc": 2.77,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 52.15,
+   "direct_pct": 8.02,
+   "dealer_pct": 36.27,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-21",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 79.0,
+   "btc": 2.62,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 53.48,
+   "direct_pct": 11.41,
+   "dealer_pct": 32.47,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-22",
+   "security": "2-Year Note",
+   "type": "Note",
+   "term": "2-Year",
+   "offering_bn": 69.0,
+   "btc": 2.63,
+   "high_yield": 4.787,
+   "median_yield": 4.738,
+   "indirect_pct": 56.69,
+   "direct_pct": 28.47,
+   "dealer_pct": 12.94,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-22",
+   "security": "6-Week Bill",
+   "type": "Bill",
+   "term": "6-Week",
+   "offering_bn": 75.0,
+   "btc": 3.03,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 63.07,
+   "direct_pct": 5.16,
+   "dealer_pct": 27.4,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-23",
+   "security": "5-Year Note",
+   "type": "Note",
+   "term": "5-Year",
+   "offering_bn": 70.0,
+   "btc": 2.21,
+   "high_yield": 5.033,
+   "median_yield": 4.95,
+   "indirect_pct": 54.05,
+   "direct_pct": 29.77,
+   "dealer_pct": 15.7,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-23",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 72.0,
+   "btc": 2.81,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 54.13,
+   "direct_pct": 9.95,
+   "dealer_pct": 34.08,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-23",
+   "security": "1-Year 10-Month FRN",
+   "type": "Note",
+   "term": "1-Year 10-Month",
+   "offering_bn": 28.0,
+   "btc": 2.63,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 59.06,
+   "direct_pct": 0.0,
+   "dealer_pct": 40.9,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-24",
+   "security": "7-Year Note",
+   "type": "Note",
+   "term": "7-Year",
+   "offering_bn": 44.0,
+   "btc": 2.42,
+   "high_yield": 5.085,
+   "median_yield": 5.019,
+   "indirect_pct": 56.52,
+   "direct_pct": 29.92,
+   "dealer_pct": 12.38,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-24",
+   "security": "4-Week Bill",
+   "type": "Bill",
+   "term": "4-Week",
+   "offering_bn": 90.0,
+   "btc": 2.61,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 42.28,
+   "direct_pct": 3.14,
+   "dealer_pct": 46.11,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-24",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 85.0,
+   "btc": 2.76,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 56.54,
+   "direct_pct": 5.78,
+   "dealer_pct": 33.83,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-28",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 95.0,
+   "btc": 2.99,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 64.2,
+   "direct_pct": 6.89,
+   "dealer_pct": 25.31,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-28",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 82.0,
+   "btc": 2.64,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 58.79,
+   "direct_pct": 9.24,
+   "dealer_pct": 29.48,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-29",
+   "security": "6-Week Bill",
+   "type": "Bill",
+   "term": "6-Week",
+   "offering_bn": 85.0,
+   "btc": 2.82,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 64.56,
+   "direct_pct": 4.86,
+   "dealer_pct": 26.69,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-29",
+   "security": "52-Week Bill",
+   "type": "Bill",
+   "term": "52-Week",
+   "offering_bn": 54.0,
+   "btc": 3.07,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 69.04,
+   "direct_pct": 4.45,
+   "dealer_pct": 23.92,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-09-30",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 75.0,
+   "btc": 2.89,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 56.89,
+   "direct_pct": 5.92,
+   "dealer_pct": 35.69,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-01",
+   "security": "4-Week Bill",
+   "type": "Bill",
+   "term": "4-Week",
+   "offering_bn": 100.0,
+   "btc": 2.83,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 58.94,
+   "direct_pct": 4.41,
+   "dealer_pct": 28.95,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-01",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 95.0,
+   "btc": 2.7,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 54.96,
+   "direct_pct": 6.83,
+   "dealer_pct": 34.96,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-05",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 95.0,
+   "btc": 2.51,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 46.59,
+   "direct_pct": 6.85,
+   "dealer_pct": 42.34,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-05",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 82.0,
+   "btc": 2.79,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 61.04,
+   "direct_pct": 10.2,
+   "dealer_pct": 25.31,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-06",
+   "security": "3-Year Note",
+   "type": "Note",
+   "term": "3-Year",
+   "offering_bn": 58.0,
+   "btc": 2.62,
+   "high_yield": 4.932,
+   "median_yield": 4.88,
+   "indirect_pct": 56.6,
+   "direct_pct": 31.12,
+   "dealer_pct": 10.55,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-06",
+   "security": "6-Week Bill",
+   "type": "Bill",
+   "term": "6-Week",
+   "offering_bn": 95.0,
+   "btc": 2.78,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 63.0,
+   "direct_pct": 3.83,
+   "dealer_pct": 29.51,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-07",
+   "security": "9-Year 10-Month Note",
+   "type": "Note",
+   "term": "9-Year 10-Month",
+   "offering_bn": 39.0,
+   "btc": 2.77,
+   "high_yield": 5.3,
+   "median_yield": 5.255,
+   "indirect_pct": 79.65,
+   "direct_pct": 16.97,
+   "dealer_pct": 2.52,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-07",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 75.0,
+   "btc": 3.1,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 58.05,
+   "direct_pct": 9.87,
+   "dealer_pct": 29.37,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-08",
+   "security": "29-Year 10-Month Bond",
+   "type": "Bond",
+   "term": "29-Year 10-Month",
+   "offering_bn": 22.0,
+   "btc": 2.54,
+   "high_yield": 5.618,
+   "median_yield": 5.567,
+   "indirect_pct": 72.12,
+   "direct_pct": 20.83,
+   "dealer_pct": 6.78,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-08",
+   "security": "4-Week Bill",
+   "type": "Bill",
+   "term": "4-Week",
+   "offering_bn": 110.0,
+   "btc": 2.4,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 53.39,
+   "direct_pct": 5.71,
+   "dealer_pct": 34.08,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-08",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 105.0,
+   "btc": 2.77,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 68.0,
+   "direct_pct": 6.09,
+   "dealer_pct": 22.66,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-13",
+   "security": "6-Week Bill",
+   "type": "Bill",
+   "term": "6-Week",
+   "offering_bn": 95.0,
+   "btc": 2.58,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 62.91,
+   "direct_pct": 3.05,
+   "dealer_pct": 30.59,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-13",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 95.0,
+   "btc": 2.68,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 57.24,
+   "direct_pct": 6.96,
+   "dealer_pct": 31.88,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-13",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 82.0,
+   "btc": 2.76,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 64.25,
+   "direct_pct": 10.17,
+   "dealer_pct": 22.52,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-14",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 75.0,
+   "btc": 2.79,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 53.14,
+   "direct_pct": 7.88,
+   "dealer_pct": 37.04,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-15",
+   "security": "4-Week Bill",
+   "type": "Bill",
+   "term": "4-Week",
+   "offering_bn": 110.0,
+   "btc": 2.56,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 58.98,
+   "direct_pct": 5.4,
+   "dealer_pct": 28.79,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-15",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 105.0,
+   "btc": 2.26,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 45.61,
+   "direct_pct": 5.54,
+   "dealer_pct": 46.04,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-19",
+   "security": "13-Week Bill",
+   "type": "Bill",
+   "term": "13-Week",
+   "offering_bn": 95.0,
+   "btc": 2.77,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 58.1,
+   "direct_pct": 7.72,
+   "dealer_pct": 30.23,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-19",
+   "security": "26-Week Bill",
+   "type": "Bill",
+   "term": "26-Week",
+   "offering_bn": 82.0,
+   "btc": 2.84,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 63.66,
+   "direct_pct": 10.43,
+   "dealer_pct": 22.89,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-20",
+   "security": "6-Week Bill",
+   "type": "Bill",
+   "term": "6-Week",
+   "offering_bn": 95.0,
+   "btc": 2.74,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 63.6,
+   "direct_pct": 5.34,
+   "dealer_pct": 27.52,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-21",
+   "security": "17-Week Bill",
+   "type": "Bill",
+   "term": "17-Week",
+   "offering_bn": 75.0,
+   "btc": 2.76,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 51.69,
+   "direct_pct": 8.1,
+   "dealer_pct": 38.13,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-21",
+   "security": "19-Year 10-Month Bond",
+   "type": "Bond",
+   "term": "19-Year 10-Month",
+   "offering_bn": 13.0,
+   "btc": 2.73,
+   "high_yield": 5.469,
+   "median_yield": 5.415,
+   "indirect_pct": 57.71,
+   "direct_pct": 31.35,
+   "dealer_pct": 10.18,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-22",
+   "security": "5-Year TIPS",
+   "type": "Note",
+   "term": "5-Year",
+   "offering_bn": 26.0,
+   "btc": 2.41,
+   "high_yield": 2.367,
+   "median_yield": 2.3,
+   "indirect_pct": 61.27,
+   "direct_pct": 32.03,
+   "dealer_pct": 5.46,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-22",
+   "security": "4-Week Bill",
+   "type": "Bill",
+   "term": "4-Week",
+   "offering_bn": 110.0,
+   "btc": 2.82,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 63.46,
+   "direct_pct": 6.5,
+   "dealer_pct": 23.2,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-22",
+   "security": "8-Week Bill",
+   "type": "Bill",
+   "term": "8-Week",
+   "offering_bn": 105.0,
+   "btc": 2.57,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 56.01,
+   "direct_pct": 5.31,
+   "dealer_pct": 35.57,
+   "soma_pct": null
+  },
+  {
+   "date": "2026-10-22",
+   "security": "10-Day Cash Management Bill",
+   "type": "Bill",
+   "term": "10-Day",
+   "offering_bn": 25.0,
+   "btc": 3.87,
+   "high_yield": null,
+   "median_yield": null,
+   "indirect_pct": 18.26,
+   "direct_pct": 4.0,
+   "dealer_pct": 77.63,
+   "soma_pct": null
+  }
+ ],
+ "custody": [
+  {
+   "week_ended": "2026-09-17",
+   "level_bn": 2597.8,
+   "wow_change_bn": -0.6
+  },
+  {
+   "week_ended": "2026-09-24",
+   "level_bn": 2610.3,
+   "wow_change_bn": 12.4
+  },
+  {
+   "week_ended": "2026-10-01",
+   "level_bn": 2594.8,
+   "wow_change_bn": -15.5
+  },
+  {
+   "week_ended": "2026-10-08",
+   "level_bn": 2579.1,
+   "wow_change_bn": -15.6
+  },
+  {
+   "week_ended": "2026-10-15",
+   "level_bn": 2549.1,
+   "wow_change_bn": -30.0
+  }
+ ],
+ "tga": [
+  {
+   "date": "2026-09-14",
+   "balance_bn": 871.2
+  },
+  {
+   "date": "2026-09-15",
+   "balance_bn": 991.6
+  },
+  {
+   "date": "2026-09-16",
+   "balance_bn": 991.7
+  },
+  {
+   "date": "2026-09-17",
+   "balance_bn": 972.7
+  },
+  {
+   "date": "2026-09-18",
+   "balance_bn": 985.9
+  },
+  {
+   "date": "2026-09-21",
+   "balance_bn": 1004.4
+  },
+  {
+   "date": "2026-09-22",
+   "balance_bn": 957.4
+  },
+  {
+   "date": "2026-09-23",
+   "balance_bn": 947.3
+  },
+  {
+   "date": "2026-09-24",
+   "balance_bn": 924.6
+  },
+  {
+   "date": "2026-09-25",
+   "balance_bn": 945.3
+  },
+  {
+   "date": "2026-09-28",
+   "balance_bn": 959.6
+  },
+  {
+   "date": "2026-09-29",
+   "balance_bn": 936.6
+  },
+  {
+   "date": "2026-09-30",
+   "balance_bn": 984.0
+  },
+  {
+   "date": "2026-10-01",
+   "balance_bn": 893.7
+  },
+  {
+   "date": "2026-10-02",
+   "balance_bn": 871.2
+  },
+  {
+   "date": "2026-10-05",
+   "balance_bn": 883.3
+  },
+  {
+   "date": "2026-10-06",
+   "balance_bn": 885.4
+  },
+  {
+   "date": "2026-10-07",
+   "balance_bn": 885.8
+  },
+  {
+   "date": "2026-10-08",
+   "balance_bn": 887.5
+  },
+  {
+   "date": "2026-10-09",
+   "balance_bn": 872.5
+  },
+  {
+   "date": "2026-10-13",
+   "balance_bn": 920.2
+  },
+  {
+   "date": "2026-10-14",
+   "balance_bn": 885.8
+  },
+  {
+   "date": "2026-10-15",
+   "balance_bn": 934.7
+  },
+  {
+   "date": "2026-10-16",
+   "balance_bn": 948.5
+  },
+  {
+   "date": "2026-10-19",
+   "balance_bn": 965.0
+  },
+  {
+   "date": "2026-10-20",
+   "balance_bn": 973.7
+  }
+ ],
+ "rrp": [
+  {
+   "date": "2026-09-14",
+   "accepted_bn": 1.4
+  },
+  {
+   "date": "2026-09-15",
+   "accepted_bn": 0.7
+  },
+  {
+   "date": "2026-09-16",
+   "accepted_bn": 5.4
+  },
+  {
+   "date": "2026-09-17",
+   "accepted_bn": 0.3
+  },
+  {
+   "date": "2026-09-18",
+   "accepted_bn": 0.6
+  },
+  {
+   "date": "2026-09-21",
+   "accepted_bn": 0.6
+  },
+  {
+   "date": "2026-09-22",
+   "accepted_bn": 0.5
+  },
+  {
+   "date": "2026-09-23",
+   "accepted_bn": 0.5
+  },
+  {
+   "date": "2026-09-24",
+   "accepted_bn": 0.6
+  },
+  {
+   "date": "2026-09-25",
+   "accepted_bn": 0.6
+  },
+  {
+   "date": "2026-09-28",
+   "accepted_bn": 0.9
+  },
+  {
+   "date": "2026-09-29",
+   "accepted_bn": 11.4
+  },
+  {
+   "date": "2026-09-30",
+   "accepted_bn": 11.5
+  },
+  {
+   "date": "2026-10-01",
+   "accepted_bn": 0.3
+  },
+  {
+   "date": "2026-10-02",
+   "accepted_bn": 1.5
+  },
+  {
+   "date": "2026-10-05",
+   "accepted_bn": 1.0
+  },
+  {
+   "date": "2026-10-06",
+   "accepted_bn": 0.4
+  },
+  {
+   "date": "2026-10-07",
+   "accepted_bn": 2.3
+  },
+  {
+   "date": "2026-10-08",
+   "accepted_bn": 0.3
+  },
+  {
+   "date": "2026-10-09",
+   "accepted_bn": 0.3
+  },
+  {
+   "date": "2026-10-13",
+   "accepted_bn": 0.3
+  },
+  {
+   "date": "2026-10-14",
+   "accepted_bn": 0.2
+  },
+  {
+   "date": "2026-10-15",
+   "accepted_bn": 1.2
+  },
+  {
+   "date": "2026-10-16",
+   "accepted_bn": 0.1
+  },
+  {
+   "date": "2026-10-19",
+   "accepted_bn": 0.3
+  },
+  {
+   "date": "2026-10-20",
+   "accepted_bn": 0.2
+  },
+  {
+   "date": "2026-10-21",
+   "accepted_bn": 0.2
+  },
+  {
+   "date": "2026-10-22",
+   "accepted_bn": 0.4
+  }
+ ],
+ "tic": {
+  "months": [
+   "Dec 2025",
+   "Nov 2025"
+  ],
+  "vintage_note": "TIC MFH is published monthly with a ~2-month lag; the newest file reachable from this host was used and its month is named below.",
+  "rows": [
+   {
+    "country": "Japan",
+    "latest_bn": 1185.5,
+    "prior_bn": 1202.7,
+    "change_bn": -17.2
+   },
+   {
+    "country": "United Kingdom",
+    "latest_bn": 863.1,
+    "prior_bn": 879.8,
+    "change_bn": -16.7
+   },
+   {
+    "country": "China, Mainland",
+    "latest_bn": 684.4,
+    "prior_bn": 683.9,
+    "change_bn": 0.5
+   },
+   {
+    "country": "Belgium",
+    "latest_bn": 477.3,
+    "prior_bn": 481.0,
+    "change_bn": -3.7
+   },
+   {
+    "country": "Canada",
+    "latest_bn": 468.3,
+    "prior_bn": 472.4,
+    "change_bn": -4.1
+   },
+   {
+    "country": "Luxembourg",
+    "latest_bn": 434.0,
+    "prior_bn": 424.7,
+    "change_bn": 9.3
+   },
+   {
+    "country": "Cayman Islands",
+    "latest_bn": 421.6,
+    "prior_bn": 427.6,
+    "change_bn": -6.0
+   },
+   {
+    "country": "France",
+    "latest_bn": 368.9,
+    "prior_bn": 376.1,
+    "change_bn": -7.2
+   },
+   {
+    "country": "Ireland",
+    "latest_bn": 341.0,
+    "prior_bn": 340.3,
+    "change_bn": 0.7
+   },
+   {
+    "country": "Taiwan",
+    "latest_bn": 310.6,
+    "prior_bn": 312.9,
+    "change_bn": -2.3
+   },
+   {
+    "country": "Switzerland",
+    "latest_bn": 294.1,
+    "prior_bn": 300.4,
+    "change_bn": -6.3
+   },
+   {
+    "country": "Singapore",
+    "latest_bn": 278.4,
+    "prior_bn": 272.2,
+    "change_bn": 6.2
+   },
+   {
+    "country": "Hong Kong",
+    "latest_bn": 268.4,
+    "prior_bn": 256.6,
+    "change_bn": 11.8
+   },
+   {
+    "country": "Norway",
+    "latest_bn": 208.1,
+    "prior_bn": 218.9,
+    "change_bn": -10.8
+   },
+   {
+    "country": "India",
+    "latest_bn": 182.9,
+    "prior_bn": 186.5,
+    "change_bn": -3.6
+   },
+   {
+    "country": "Brazil",
+    "latest_bn": 168.7,
+    "prior_bn": 168.2,
+    "change_bn": 0.5
+   },
+   {
+    "country": "Saudi Arabia",
+    "latest_bn": 149.5,
+    "prior_bn": 148.8,
+    "change_bn": 0.7
+   },
+   {
+    "country": "Korea, South",
+    "latest_bn": 140.6,
+    "prior_bn": 145.1,
+    "change_bn": -4.5
+   },
+   {
+    "country": "Israel",
+    "latest_bn": 105.7,
+    "prior_bn": 107.9,
+    "change_bn": -2.2
+   },
+   {
+    "country": "Germany",
+    "latest_bn": 103.1,
+    "prior_bn": 109.1,
+    "change_bn": -6.0
+   }
+  ]
+ },
+ "cot": {
+  "report_dates": [
+   "2026-09-08",
+   "2026-09-15",
+   "2026-09-22",
+   "2026-09-29",
+   "2026-10-06",
+   "2026-10-13"
+  ],
+  "series": {
+   "2Y": [
+    {
+     "market": "2Y",
+     "as_of": "2026-09-08",
+     "open_interest": 4346314,
+     "asset_mgr_net": 1621223,
+     "lev_money_net": -1290479,
+     "dealer_net": -443848
+    },
+    {
+     "market": "2Y",
+     "as_of": "2026-09-15",
+     "open_interest": 4433736,
+     "asset_mgr_net": 1732731,
+     "lev_money_net": -1294575,
+     "dealer_net": -536280
+    },
+    {
+     "market": "2Y",
+     "as_of": "2026-09-22",
+     "open_interest": 4539374,
+     "asset_mgr_net": 1770085,
+     "lev_money_net": -1350740,
+     "dealer_net": -523460
+    },
+    {
+     "market": "2Y",
+     "as_of": "2026-09-29",
+     "open_interest": 4530145,
+     "asset_mgr_net": 1638478,
+     "lev_money_net": -1165980,
+     "dealer_net": -591496
+    },
+    {
+     "market": "2Y",
+     "as_of": "2026-10-06",
+     "open_interest": 4485811,
+     "asset_mgr_net": 1679087,
+     "lev_money_net": -1257484,
+     "dealer_net": -508451
+    },
+    {
+     "market": "2Y",
+     "as_of": "2026-10-13",
+     "open_interest": 4554153,
+     "asset_mgr_net": 1795866,
+     "lev_money_net": -1367408,
+     "dealer_net": -481721
+    }
+   ],
+   "5Y": [
+    {
+     "market": "5Y",
+     "as_of": "2026-09-08",
+     "open_interest": 6309810,
+     "asset_mgr_net": 2847361,
+     "lev_money_net": -2066289,
+     "dealer_net": -855908
+    },
+    {
+     "market": "5Y",
+     "as_of": "2026-09-15",
+     "open_interest": 6364260,
+     "asset_mgr_net": 2788449,
+     "lev_money_net": -1986928,
+     "dealer_net": -855342
+    },
+    {
+     "market": "5Y",
+     "as_of": "2026-09-22",
+     "open_interest": 6599737,
+     "asset_mgr_net": 2716937,
+     "lev_money_net": -1858062,
+     "dealer_net": -933316
+    },
+    {
+     "market": "5Y",
+     "as_of": "2026-09-29",
+     "open_interest": 6789241,
+     "asset_mgr_net": 2851679,
+     "lev_money_net": -1985787,
+     "dealer_net": -980082
+    },
+    {
+     "market": "5Y",
+     "as_of": "2026-10-06",
+     "open_interest": 6758624,
+     "asset_mgr_net": 2914286,
+     "lev_money_net": -2127567,
+     "dealer_net": -835892
+    },
+    {
+     "market": "5Y",
+     "as_of": "2026-10-13",
+     "open_interest": 6874204,
+     "asset_mgr_net": 2984952,
+     "lev_money_net": -2104391,
+     "dealer_net": -918044
+    }
+   ],
+   "10Y": [
+    {
+     "market": "10Y",
+     "as_of": "2026-09-08",
+     "open_interest": 5225295,
+     "asset_mgr_net": 2561681,
+     "lev_money_net": -1938754,
+     "dealer_net": -634446
+    },
+    {
+     "market": "10Y",
+     "as_of": "2026-09-15",
+     "open_interest": 5377777,
+     "asset_mgr_net": 2634980,
+     "lev_money_net": -1868126,
+     "dealer_net": -719408
+    },
+    {
+     "market": "10Y",
+     "as_of": "2026-09-22",
+     "open_interest": 5407726,
+     "asset_mgr_net": 2531384,
+     "lev_money_net": -1926947,
+     "dealer_net": -580674
+    },
+    {
+     "market": "10Y",
+     "as_of": "2026-09-29",
+     "open_interest": 5676556,
+     "asset_mgr_net": 2776531,
+     "lev_money_net": -2036432,
+     "dealer_net": -736585
+    },
+    {
+     "market": "10Y",
+     "as_of": "2026-10-06",
+     "open_interest": 5742990,
+     "asset_mgr_net": 2828139,
+     "lev_money_net": -2139785,
+     "dealer_net": -642033
+    },
+    {
+     "market": "10Y",
+     "as_of": "2026-10-13",
+     "open_interest": 5819512,
+     "asset_mgr_net": 2898562,
+     "lev_money_net": -2205937,
+     "dealer_net": -632813
+    }
+   ],
+   "Bond": [
+    {
+     "market": "Bond",
+     "as_of": "2026-09-08",
+     "open_interest": 1802308,
+     "asset_mgr_net": 532667,
+     "lev_money_net": -276965,
+     "dealer_net": -251880
+    },
+    {
+     "market": "Bond",
+     "as_of": "2026-09-15",
+     "open_interest": 1867442,
+     "asset_mgr_net": 460662,
+     "lev_money_net": -211735,
+     "dealer_net": -241670
+    },
+    {
+     "market": "Bond",
+     "as_of": "2026-09-22",
+     "open_interest": 1887864,
+     "asset_mgr_net": 413616,
+     "lev_money_net": -162052,
+     "dealer_net": -250961
+    },
+    {
+     "market": "Bond",
+     "as_of": "2026-09-29",
+     "open_interest": 1879173,
+     "asset_mgr_net": 436956,
+     "lev_money_net": -251395,
+     "dealer_net": -180799
+    },
+    {
+     "market": "Bond",
+     "as_of": "2026-10-06",
+     "open_interest": 1898067,
+     "asset_mgr_net": 405628,
+     "lev_money_net": -189678,
+     "dealer_net": -192677
+    },
+    {
+     "market": "Bond",
+     "as_of": "2026-10-13",
+     "open_interest": 1849727,
+     "asset_mgr_net": 391534,
+     "lev_money_net": -154020,
+     "dealer_net": -179299
+    }
+   ]
+  },
+  "unit": "futures contracts, net = long - short"
+ },
+ "yields": [
+  {
+   "date": "2026-01-02",
+   "m2": 3.47,
+   "m5": 3.74,
+   "m10": 4.19,
+   "m30": 4.86,
+   "s2s10": 72.0
+  },
+  {
+   "date": "2026-01-05",
+   "m2": 3.46,
+   "m5": 3.71,
+   "m10": 4.17,
+   "m30": 4.85,
+   "s2s10": 71.0
+  },
+  {
+   "date": "2026-01-06",
+   "m2": 3.47,
+   "m5": 3.72,
+   "m10": 4.18,
+   "m30": 4.86,
+   "s2s10": 71.0
+  },
+  {
+   "date": "2026-01-07",
+   "m2": 3.47,
+   "m5": 3.7,
+   "m10": 4.15,
+   "m30": 4.82,
+   "s2s10": 68.0
+  },
+  {
+   "date": "2026-01-08",
+   "m2": 3.49,
+   "m5": 3.74,
+   "m10": 4.19,
+   "m30": 4.85,
+   "s2s10": 70.0
+  },
+  {
+   "date": "2026-01-09",
+   "m2": 3.54,
+   "m5": 3.75,
+   "m10": 4.18,
+   "m30": 4.82,
+   "s2s10": 64.0
+  },
+  {
+   "date": "2026-01-12",
+   "m2": 3.54,
+   "m5": 3.77,
+   "m10": 4.19,
+   "m30": 4.83,
+   "s2s10": 65.0
+  },
+  {
+   "date": "2026-01-13",
+   "m2": 3.53,
+   "m5": 3.75,
+   "m10": 4.18,
+   "m30": 4.83,
+   "s2s10": 65.0
+  },
+  {
+   "date": "2026-01-14",
+   "m2": 3.51,
+   "m5": 3.72,
+   "m10": 4.15,
+   "m30": 4.79,
+   "s2s10": 64.0
+  },
+  {
+   "date": "2026-01-15",
+   "m2": 3.56,
+   "m5": 3.77,
+   "m10": 4.17,
+   "m30": 4.79,
+   "s2s10": 61.0
+  },
+  {
+   "date": "2026-01-16",
+   "m2": 3.59,
+   "m5": 3.82,
+   "m10": 4.24,
+   "m30": 4.83,
+   "s2s10": 65.0
+  },
+  {
+   "date": "2026-01-20",
+   "m2": 3.6,
+   "m5": 3.86,
+   "m10": 4.3,
+   "m30": 4.91,
+   "s2s10": 70.0
+  },
+  {
+   "date": "2026-01-21",
+   "m2": 3.6,
+   "m5": 3.83,
+   "m10": 4.26,
+   "m30": 4.87,
+   "s2s10": 66.0
+  },
+  {
+   "date": "2026-01-22",
+   "m2": 3.61,
+   "m5": 3.85,
+   "m10": 4.26,
+   "m30": 4.84,
+   "s2s10": 65.0
+  },
+  {
+   "date": "2026-01-23",
+   "m2": 3.6,
+   "m5": 3.84,
+   "m10": 4.24,
+   "m30": 4.82,
+   "s2s10": 64.0
+  },
+  {
+   "date": "2026-01-26",
+   "m2": 3.56,
+   "m5": 3.82,
+   "m10": 4.22,
+   "m30": 4.8,
+   "s2s10": 66.0
+  },
+  {
+   "date": "2026-01-27",
+   "m2": 3.53,
+   "m5": 3.81,
+   "m10": 4.24,
+   "m30": 4.83,
+   "s2s10": 71.0
+  },
+  {
+   "date": "2026-01-28",
+   "m2": 3.56,
+   "m5": 3.83,
+   "m10": 4.26,
+   "m30": 4.85,
+   "s2s10": 70.0
+  },
+  {
+   "date": "2026-01-29",
+   "m2": 3.53,
+   "m5": 3.8,
+   "m10": 4.24,
+   "m30": 4.85,
+   "s2s10": 71.0
+  },
+  {
+   "date": "2026-01-30",
+   "m2": 3.52,
+   "m5": 3.79,
+   "m10": 4.26,
+   "m30": 4.87,
+   "s2s10": 74.0
+  },
+  {
+   "date": "2026-02-02",
+   "m2": 3.57,
+   "m5": 3.83,
+   "m10": 4.29,
+   "m30": 4.9,
+   "s2s10": 72.0
+  },
+  {
+   "date": "2026-02-03",
+   "m2": 3.57,
+   "m5": 3.83,
+   "m10": 4.28,
+   "m30": 4.9,
+   "s2s10": 71.0
+  },
+  {
+   "date": "2026-02-04",
+   "m2": 3.57,
+   "m5": 3.83,
+   "m10": 4.29,
+   "m30": 4.91,
+   "s2s10": 72.0
+  },
+  {
+   "date": "2026-02-05",
+   "m2": 3.47,
+   "m5": 3.74,
+   "m10": 4.21,
+   "m30": 4.85,
+   "s2s10": 74.0
+  },
+  {
+   "date": "2026-02-06",
+   "m2": 3.5,
+   "m5": 3.76,
+   "m10": 4.22,
+   "m30": 4.85,
+   "s2s10": 72.0
+  },
+  {
+   "date": "2026-02-09",
+   "m2": 3.48,
+   "m5": 3.75,
+   "m10": 4.22,
+   "m30": 4.85,
+   "s2s10": 74.0
+  },
+  {
+   "date": "2026-02-10",
+   "m2": 3.45,
+   "m5": 3.7,
+   "m10": 4.16,
+   "m30": 4.78,
+   "s2s10": 71.0
+  },
+  {
+   "date": "2026-02-11",
+   "m2": 3.52,
+   "m5": 3.75,
+   "m10": 4.18,
+   "m30": 4.82,
+   "s2s10": 66.0
+  },
+  {
+   "date": "2026-02-12",
+   "m2": 3.47,
+   "m5": 3.67,
+   "m10": 4.09,
+   "m30": 4.72,
+   "s2s10": 62.0
+  },
+  {
+   "date": "2026-02-13",
+   "m2": 3.4,
+   "m5": 3.61,
+   "m10": 4.04,
+   "m30": 4.69,
+   "s2s10": 64.0
+  },
+  {
+   "date": "2026-02-17",
+   "m2": 3.43,
+   "m5": 3.63,
+   "m10": 4.05,
+   "m30": 4.68,
+   "s2s10": 62.0
+  },
+  {
+   "date": "2026-02-18",
+   "m2": 3.47,
+   "m5": 3.66,
+   "m10": 4.09,
+   "m30": 4.71,
+   "s2s10": 62.0
+  },
+  {
+   "date": "2026-02-19",
+   "m2": 3.47,
+   "m5": 3.65,
+   "m10": 4.08,
+   "m30": 4.7,
+   "s2s10": 61.0
+  },
+  {
+   "date": "2026-02-20",
+   "m2": 3.48,
+   "m5": 3.65,
+   "m10": 4.08,
+   "m30": 4.72,
+   "s2s10": 60.0
+  },
+  {
+   "date": "2026-02-23",
+   "m2": 3.43,
+   "m5": 3.59,
+   "m10": 4.03,
+   "m30": 4.7,
+   "s2s10": 60.0
+  },
+  {
+   "date": "2026-02-24",
+   "m2": 3.43,
+   "m5": 3.61,
+   "m10": 4.04,
+   "m30": 4.7,
+   "s2s10": 61.0
+  },
+  {
+   "date": "2026-02-25",
+   "m2": 3.45,
+   "m5": 3.61,
+   "m10": 4.05,
+   "m30": 4.7,
+   "s2s10": 60.0
+  },
+  {
+   "date": "2026-02-26",
+   "m2": 3.42,
+   "m5": 3.57,
+   "m10": 4.02,
+   "m30": 4.67,
+   "s2s10": 60.0
+  },
+  {
+   "date": "2026-02-27",
+   "m2": 3.38,
+   "m5": 3.51,
+   "m10": 3.97,
+   "m30": 4.64,
+   "s2s10": 59.0
+  },
+  {
+   "date": "2026-03-02",
+   "m2": 3.47,
+   "m5": 3.62,
+   "m10": 4.05,
+   "m30": 4.7,
+   "s2s10": 58.0
+  },
+  {
+   "date": "2026-03-03",
+   "m2": 3.51,
+   "m5": 3.63,
+   "m10": 4.06,
+   "m30": 4.7,
+   "s2s10": 55.0
+  },
+  {
+   "date": "2026-03-04",
+   "m2": 3.54,
+   "m5": 3.67,
+   "m10": 4.09,
+   "m30": 4.72,
+   "s2s10": 55.0
+  },
+  {
+   "date": "2026-03-05",
+   "m2": 3.57,
+   "m5": 3.72,
+   "m10": 4.13,
+   "m30": 4.74,
+   "s2s10": 56.0
+  },
+  {
+   "date": "2026-03-06",
+   "m2": 3.56,
+   "m5": 3.72,
+   "m10": 4.15,
+   "m30": 4.77,
+   "s2s10": 59.0
+  },
+  {
+   "date": "2026-03-09",
+   "m2": 3.56,
+   "m5": 3.71,
+   "m10": 4.12,
+   "m30": 4.72,
+   "s2s10": 56.0
+  },
+  {
+   "date": "2026-03-10",
+   "m2": 3.57,
+   "m5": 3.73,
+   "m10": 4.15,
+   "m30": 4.78,
+   "s2s10": 58.0
+  },
+  {
+   "date": "2026-03-11",
+   "m2": 3.64,
+   "m5": 3.79,
+   "m10": 4.21,
+   "m30": 4.86,
+   "s2s10": 57.0
+  },
+  {
+   "date": "2026-03-12",
+   "m2": 3.76,
+   "m5": 3.88,
+   "m10": 4.27,
+   "m30": 4.88,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-03-13",
+   "m2": 3.73,
+   "m5": 3.87,
+   "m10": 4.28,
+   "m30": 4.9,
+   "s2s10": 55.0
+  },
+  {
+   "date": "2026-03-16",
+   "m2": 3.68,
+   "m5": 3.8,
+   "m10": 4.23,
+   "m30": 4.86,
+   "s2s10": 55.0
+  },
+  {
+   "date": "2026-03-17",
+   "m2": 3.68,
+   "m5": 3.79,
+   "m10": 4.2,
+   "m30": 4.85,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-03-18",
+   "m2": 3.76,
+   "m5": 3.87,
+   "m10": 4.26,
+   "m30": 4.88,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-03-19",
+   "m2": 3.79,
+   "m5": 3.88,
+   "m10": 4.25,
+   "m30": 4.83,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-03-20",
+   "m2": 3.88,
+   "m5": 4.01,
+   "m10": 4.39,
+   "m30": 4.96,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-03-23",
+   "m2": 3.83,
+   "m5": 3.95,
+   "m10": 4.34,
+   "m30": 4.91,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-03-24",
+   "m2": 3.9,
+   "m5": 4.03,
+   "m10": 4.39,
+   "m30": 4.94,
+   "s2s10": 49.0
+  },
+  {
+   "date": "2026-03-25",
+   "m2": 3.84,
+   "m5": 3.96,
+   "m10": 4.33,
+   "m30": 4.89,
+   "s2s10": 49.0
+  },
+  {
+   "date": "2026-03-26",
+   "m2": 3.96,
+   "m5": 4.08,
+   "m10": 4.42,
+   "m30": 4.93,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-03-27",
+   "m2": 3.88,
+   "m5": 4.06,
+   "m10": 4.44,
+   "m30": 4.98,
+   "s2s10": 56.0
+  },
+  {
+   "date": "2026-03-30",
+   "m2": 3.82,
+   "m5": 3.97,
+   "m10": 4.35,
+   "m30": 4.91,
+   "s2s10": 53.0
+  },
+  {
+   "date": "2026-03-31",
+   "m2": 3.79,
+   "m5": 3.92,
+   "m10": 4.3,
+   "m30": 4.88,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-04-01",
+   "m2": 3.81,
+   "m5": 3.97,
+   "m10": 4.33,
+   "m30": 4.91,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-04-02",
+   "m2": 3.79,
+   "m5": 3.94,
+   "m10": 4.31,
+   "m30": 4.88,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-04-03",
+   "m2": 3.84,
+   "m5": 3.99,
+   "m10": 4.35,
+   "m30": 4.91,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-04-06",
+   "m2": 3.84,
+   "m5": 3.98,
+   "m10": 4.34,
+   "m30": 4.89,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-04-07",
+   "m2": 3.81,
+   "m5": 3.95,
+   "m10": 4.33,
+   "m30": 4.9,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-04-08",
+   "m2": 3.79,
+   "m5": 3.92,
+   "m10": 4.29,
+   "m30": 4.89,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-04-09",
+   "m2": 3.78,
+   "m5": 3.91,
+   "m10": 4.29,
+   "m30": 4.9,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-04-10",
+   "m2": 3.81,
+   "m5": 3.94,
+   "m10": 4.31,
+   "m30": 4.91,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-04-13",
+   "m2": 3.78,
+   "m5": 3.92,
+   "m10": 4.3,
+   "m30": 4.9,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-04-14",
+   "m2": 3.76,
+   "m5": 3.87,
+   "m10": 4.26,
+   "m30": 4.87,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-04-15",
+   "m2": 3.76,
+   "m5": 3.9,
+   "m10": 4.29,
+   "m30": 4.89,
+   "s2s10": 53.0
+  },
+  {
+   "date": "2026-04-16",
+   "m2": 3.78,
+   "m5": 3.91,
+   "m10": 4.32,
+   "m30": 4.93,
+   "s2s10": 54.0
+  },
+  {
+   "date": "2026-04-17",
+   "m2": 3.71,
+   "m5": 3.84,
+   "m10": 4.26,
+   "m30": 4.88,
+   "s2s10": 55.0
+  },
+  {
+   "date": "2026-04-20",
+   "m2": 3.72,
+   "m5": 3.86,
+   "m10": 4.26,
+   "m30": 4.88,
+   "s2s10": 54.0
+  },
+  {
+   "date": "2026-04-21",
+   "m2": 3.78,
+   "m5": 3.91,
+   "m10": 4.3,
+   "m30": 4.89,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-04-22",
+   "m2": 3.79,
+   "m5": 3.91,
+   "m10": 4.3,
+   "m30": 4.9,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-04-23",
+   "m2": 3.83,
+   "m5": 3.96,
+   "m10": 4.34,
+   "m30": 4.92,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-04-24",
+   "m2": 3.78,
+   "m5": 3.92,
+   "m10": 4.31,
+   "m30": 4.91,
+   "s2s10": 53.0
+  },
+  {
+   "date": "2026-04-27",
+   "m2": 3.78,
+   "m5": 3.94,
+   "m10": 4.35,
+   "m30": 4.94,
+   "s2s10": 57.0
+  },
+  {
+   "date": "2026-04-28",
+   "m2": 3.84,
+   "m5": 3.97,
+   "m10": 4.36,
+   "m30": 4.94,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-04-29",
+   "m2": 3.92,
+   "m5": 4.05,
+   "m10": 4.42,
+   "m30": 4.98,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-04-30",
+   "m2": 3.88,
+   "m5": 4.02,
+   "m10": 4.4,
+   "m30": 4.98,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-05-01",
+   "m2": 3.88,
+   "m5": 4.02,
+   "m10": 4.39,
+   "m30": 4.97,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-05-04",
+   "m2": 3.95,
+   "m5": 4.08,
+   "m10": 4.45,
+   "m30": 5.02,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-05-05",
+   "m2": 3.93,
+   "m5": 4.08,
+   "m10": 4.43,
+   "m30": 4.98,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-05-06",
+   "m2": 3.87,
+   "m5": 3.99,
+   "m10": 4.36,
+   "m30": 4.94,
+   "s2s10": 49.0
+  },
+  {
+   "date": "2026-05-07",
+   "m2": 3.92,
+   "m5": 4.04,
+   "m10": 4.41,
+   "m30": 4.97,
+   "s2s10": 49.0
+  },
+  {
+   "date": "2026-05-08",
+   "m2": 3.9,
+   "m5": 4.02,
+   "m10": 4.38,
+   "m30": 4.95,
+   "s2s10": 48.0
+  },
+  {
+   "date": "2026-05-11",
+   "m2": 3.95,
+   "m5": 4.07,
+   "m10": 4.42,
+   "m30": 4.98,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-05-12",
+   "m2": 4.0,
+   "m5": 4.12,
+   "m10": 4.46,
+   "m30": 5.03,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-05-13",
+   "m2": 3.98,
+   "m5": 4.12,
+   "m10": 4.46,
+   "m30": 5.03,
+   "s2s10": 48.0
+  },
+  {
+   "date": "2026-05-14",
+   "m2": 4.0,
+   "m5": 4.13,
+   "m10": 4.47,
+   "m30": 5.02,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-05-15",
+   "m2": 4.09,
+   "m5": 4.26,
+   "m10": 4.59,
+   "m30": 5.12,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-05-18",
+   "m2": 4.07,
+   "m5": 4.27,
+   "m10": 4.61,
+   "m30": 5.14,
+   "s2s10": 54.0
+  },
+  {
+   "date": "2026-05-19",
+   "m2": 4.13,
+   "m5": 4.32,
+   "m10": 4.67,
+   "m30": 5.18,
+   "s2s10": 54.0
+  },
+  {
+   "date": "2026-05-20",
+   "m2": 4.04,
+   "m5": 4.22,
+   "m10": 4.57,
+   "m30": 5.11,
+   "s2s10": 53.0
+  },
+  {
+   "date": "2026-05-21",
+   "m2": 4.08,
+   "m5": 4.25,
+   "m10": 4.57,
+   "m30": 5.1,
+   "s2s10": 49.0
+  },
+  {
+   "date": "2026-05-22",
+   "m2": 4.13,
+   "m5": 4.27,
+   "m10": 4.56,
+   "m30": 5.07,
+   "s2s10": 43.0
+  },
+  {
+   "date": "2026-05-26",
+   "m2": 4.01,
+   "m5": 4.19,
+   "m10": 4.5,
+   "m30": 5.03,
+   "s2s10": 49.0
+  },
+  {
+   "date": "2026-05-27",
+   "m2": 4.0,
+   "m5": 4.17,
+   "m10": 4.48,
+   "m30": 5.01,
+   "s2s10": 48.0
+  },
+  {
+   "date": "2026-05-28",
+   "m2": 3.99,
+   "m5": 4.15,
+   "m10": 4.45,
+   "m30": 4.98,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-05-29",
+   "m2": 3.98,
+   "m5": 4.13,
+   "m10": 4.45,
+   "m30": 4.99,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-06-01",
+   "m2": 4.05,
+   "m5": 4.18,
+   "m10": 4.47,
+   "m30": 4.99,
+   "s2s10": 42.0
+  },
+  {
+   "date": "2026-06-02",
+   "m2": 4.05,
+   "m5": 4.17,
+   "m10": 4.46,
+   "m30": 4.97,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-06-03",
+   "m2": 4.08,
+   "m5": 4.21,
+   "m10": 4.49,
+   "m30": 4.99,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-06-04",
+   "m2": 4.05,
+   "m5": 4.18,
+   "m10": 4.47,
+   "m30": 4.97,
+   "s2s10": 42.0
+  },
+  {
+   "date": "2026-06-05",
+   "m2": 4.17,
+   "m5": 4.29,
+   "m10": 4.55,
+   "m30": 5.01,
+   "s2s10": 38.0
+  },
+  {
+   "date": "2026-06-08",
+   "m2": 4.15,
+   "m5": 4.29,
+   "m10": 4.56,
+   "m30": 5.03,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-06-09",
+   "m2": 4.13,
+   "m5": 4.26,
+   "m10": 4.53,
+   "m30": 5.01,
+   "s2s10": 40.0
+  },
+  {
+   "date": "2026-06-10",
+   "m2": 4.13,
+   "m5": 4.27,
+   "m10": 4.55,
+   "m30": 5.03,
+   "s2s10": 42.0
+  },
+  {
+   "date": "2026-06-11",
+   "m2": 4.05,
+   "m5": 4.18,
+   "m10": 4.45,
+   "m30": 4.95,
+   "s2s10": 40.0
+  },
+  {
+   "date": "2026-06-12",
+   "m2": 4.09,
+   "m5": 4.21,
+   "m10": 4.48,
+   "m30": 4.97,
+   "s2s10": 39.0
+  },
+  {
+   "date": "2026-06-15",
+   "m2": 4.07,
+   "m5": 4.18,
+   "m10": 4.47,
+   "m30": 4.97,
+   "s2s10": 40.0
+  },
+  {
+   "date": "2026-06-16",
+   "m2": 4.05,
+   "m5": 4.16,
+   "m10": 4.43,
+   "m30": 4.93,
+   "s2s10": 38.0
+  },
+  {
+   "date": "2026-06-17",
+   "m2": 4.2,
+   "m5": 4.27,
+   "m10": 4.49,
+   "m30": 4.93,
+   "s2s10": 29.0
+  },
+  {
+   "date": "2026-06-18",
+   "m2": 4.19,
+   "m5": 4.23,
+   "m10": 4.46,
+   "m30": 4.9,
+   "s2s10": 27.0
+  },
+  {
+   "date": "2026-06-22",
+   "m2": 4.24,
+   "m5": 4.29,
+   "m10": 4.51,
+   "m30": 4.95,
+   "s2s10": 27.0
+  },
+  {
+   "date": "2026-06-23",
+   "m2": 4.16,
+   "m5": 4.27,
+   "m10": 4.5,
+   "m30": 4.94,
+   "s2s10": 34.0
+  },
+  {
+   "date": "2026-06-24",
+   "m2": 4.11,
+   "m5": 4.17,
+   "m10": 4.41,
+   "m30": 4.86,
+   "s2s10": 30.0
+  },
+  {
+   "date": "2026-06-25",
+   "m2": 4.09,
+   "m5": 4.15,
+   "m10": 4.4,
+   "m30": 4.86,
+   "s2s10": 31.0
+  },
+  {
+   "date": "2026-06-26",
+   "m2": 4.07,
+   "m5": 4.12,
+   "m10": 4.38,
+   "m30": 4.87,
+   "s2s10": 31.0
+  },
+  {
+   "date": "2026-06-29",
+   "m2": 4.1,
+   "m5": 4.14,
+   "m10": 4.38,
+   "m30": 4.86,
+   "s2s10": 28.0
+  },
+  {
+   "date": "2026-06-30",
+   "m2": 4.14,
+   "m5": 4.19,
+   "m10": 4.44,
+   "m30": 4.91,
+   "s2s10": 30.0
+  },
+  {
+   "date": "2026-07-01",
+   "m2": 4.17,
+   "m5": 4.24,
+   "m10": 4.48,
+   "m30": 4.97,
+   "s2s10": 31.0
+  },
+  {
+   "date": "2026-07-02",
+   "m2": 4.14,
+   "m5": 4.23,
+   "m10": 4.49,
+   "m30": 4.98,
+   "s2s10": 35.0
+  },
+  {
+   "date": "2026-07-06",
+   "m2": 4.13,
+   "m5": 4.21,
+   "m10": 4.48,
+   "m30": 4.99,
+   "s2s10": 35.0
+  },
+  {
+   "date": "2026-07-07",
+   "m2": 4.19,
+   "m5": 4.27,
+   "m10": 4.55,
+   "m30": 5.05,
+   "s2s10": 36.0
+  },
+  {
+   "date": "2026-07-08",
+   "m2": 4.21,
+   "m5": 4.31,
+   "m10": 4.56,
+   "m30": 5.06,
+   "s2s10": 35.0
+  },
+  {
+   "date": "2026-07-09",
+   "m2": 4.16,
+   "m5": 4.27,
+   "m10": 4.54,
+   "m30": 5.05,
+   "s2s10": 38.0
+  },
+  {
+   "date": "2026-07-10",
+   "m2": 4.21,
+   "m5": 4.3,
+   "m10": 4.56,
+   "m30": 5.06,
+   "s2s10": 35.0
+  },
+  {
+   "date": "2026-07-13",
+   "m2": 4.26,
+   "m5": 4.37,
+   "m10": 4.62,
+   "m30": 5.1,
+   "s2s10": 36.0
+  },
+  {
+   "date": "2026-07-14",
+   "m2": 4.18,
+   "m5": 4.31,
+   "m10": 4.58,
+   "m30": 5.08,
+   "s2s10": 40.0
+  },
+  {
+   "date": "2026-07-15",
+   "m2": 4.13,
+   "m5": 4.26,
+   "m10": 4.55,
+   "m30": 5.08,
+   "s2s10": 42.0
+  },
+  {
+   "date": "2026-07-16",
+   "m2": 4.16,
+   "m5": 4.28,
+   "m10": 4.57,
+   "m30": 5.09,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-07-17",
+   "m2": 4.18,
+   "m5": 4.28,
+   "m10": 4.55,
+   "m30": 5.06,
+   "s2s10": 37.0
+  },
+  {
+   "date": "2026-07-20",
+   "m2": 4.21,
+   "m5": 4.33,
+   "m10": 4.6,
+   "m30": 5.11,
+   "s2s10": 39.0
+  },
+  {
+   "date": "2026-07-21",
+   "m2": 4.26,
+   "m5": 4.37,
+   "m10": 4.63,
+   "m30": 5.13,
+   "s2s10": 37.0
+  },
+  {
+   "date": "2026-07-22",
+   "m2": 4.31,
+   "m5": 4.41,
+   "m10": 4.67,
+   "m30": 5.15,
+   "s2s10": 36.0
+  },
+  {
+   "date": "2026-07-23",
+   "m2": 4.37,
+   "m5": 4.46,
+   "m10": 4.71,
+   "m30": 5.17,
+   "s2s10": 34.0
+  },
+  {
+   "date": "2026-07-24",
+   "m2": 4.33,
+   "m5": 4.43,
+   "m10": 4.69,
+   "m30": 5.16,
+   "s2s10": 36.0
+  },
+  {
+   "date": "2026-07-27",
+   "m2": 4.31,
+   "m5": 4.4,
+   "m10": 4.65,
+   "m30": 5.12,
+   "s2s10": 34.0
+  },
+  {
+   "date": "2026-07-28",
+   "m2": 4.26,
+   "m5": 4.35,
+   "m10": 4.61,
+   "m30": 5.09,
+   "s2s10": 35.0
+  },
+  {
+   "date": "2026-07-29",
+   "m2": 4.22,
+   "m5": 4.37,
+   "m10": 4.67,
+   "m30": 5.2,
+   "s2s10": 45.0
+  },
+  {
+   "date": "2026-07-30",
+   "m2": 4.23,
+   "m5": 4.38,
+   "m10": 4.68,
+   "m30": 5.21,
+   "s2s10": 45.0
+  },
+  {
+   "date": "2026-07-31",
+   "m2": 4.28,
+   "m5": 4.45,
+   "m10": 4.75,
+   "m30": 5.27,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-08-03",
+   "m2": 4.25,
+   "m5": 4.4,
+   "m10": 4.7,
+   "m30": 5.23,
+   "s2s10": 45.0
+  },
+  {
+   "date": "2026-08-04",
+   "m2": 4.2,
+   "m5": 4.33,
+   "m10": 4.63,
+   "m30": 5.18,
+   "s2s10": 43.0
+  },
+  {
+   "date": "2026-08-05",
+   "m2": 4.18,
+   "m5": 4.33,
+   "m10": 4.63,
+   "m30": 5.17,
+   "s2s10": 45.0
+  },
+  {
+   "date": "2026-08-06",
+   "m2": 4.25,
+   "m5": 4.4,
+   "m10": 4.69,
+   "m30": 5.22,
+   "s2s10": 44.0
+  },
+  {
+   "date": "2026-08-07",
+   "m2": 4.19,
+   "m5": 4.35,
+   "m10": 4.65,
+   "m30": 5.19,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-08-10",
+   "m2": 4.25,
+   "m5": 4.41,
+   "m10": 4.72,
+   "m30": 5.25,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-08-11",
+   "m2": 4.22,
+   "m5": 4.39,
+   "m10": 4.7,
+   "m30": 5.24,
+   "s2s10": 48.0
+  },
+  {
+   "date": "2026-08-12",
+   "m2": 4.2,
+   "m5": 4.38,
+   "m10": 4.68,
+   "m30": 5.24,
+   "s2s10": 48.0
+  },
+  {
+   "date": "2026-08-13",
+   "m2": 4.15,
+   "m5": 4.32,
+   "m10": 4.63,
+   "m30": 5.21,
+   "s2s10": 48.0
+  },
+  {
+   "date": "2026-08-14",
+   "m2": 4.17,
+   "m5": 4.36,
+   "m10": 4.68,
+   "m30": 5.25,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-08-17",
+   "m2": 4.19,
+   "m5": 4.38,
+   "m10": 4.72,
+   "m30": 5.31,
+   "s2s10": 53.0
+  },
+  {
+   "date": "2026-08-18",
+   "m2": 4.19,
+   "m5": 4.37,
+   "m10": 4.71,
+   "m30": 5.28,
+   "s2s10": 52.0
+  },
+  {
+   "date": "2026-08-19",
+   "m2": 4.19,
+   "m5": 4.35,
+   "m10": 4.65,
+   "m30": 5.19,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-08-20",
+   "m2": 4.19,
+   "m5": 4.39,
+   "m10": 4.69,
+   "m30": 5.23,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-08-21",
+   "m2": 4.24,
+   "m5": 4.43,
+   "m10": 4.74,
+   "m30": 5.27,
+   "s2s10": 50.0
+  },
+  {
+   "date": "2026-08-24",
+   "m2": 4.24,
+   "m5": 4.41,
+   "m10": 4.7,
+   "m30": 5.23,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-08-25",
+   "m2": 4.17,
+   "m5": 4.35,
+   "m10": 4.64,
+   "m30": 5.17,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-08-26",
+   "m2": 4.19,
+   "m5": 4.37,
+   "m10": 4.66,
+   "m30": 5.18,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-08-27",
+   "m2": 4.2,
+   "m5": 4.38,
+   "m10": 4.67,
+   "m30": 5.19,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-08-28",
+   "m2": 4.34,
+   "m5": 4.48,
+   "m10": 4.73,
+   "m30": 5.22,
+   "s2s10": 39.0
+  },
+  {
+   "date": "2026-08-31",
+   "m2": 4.34,
+   "m5": 4.49,
+   "m10": 4.75,
+   "m30": 5.25,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-09-01",
+   "m2": 4.39,
+   "m5": 4.55,
+   "m10": 4.79,
+   "m30": 5.27,
+   "s2s10": 40.0
+  },
+  {
+   "date": "2026-09-02",
+   "m2": 4.39,
+   "m5": 4.54,
+   "m10": 4.79,
+   "m30": 5.27,
+   "s2s10": 40.0
+  },
+  {
+   "date": "2026-09-03",
+   "m2": 4.34,
+   "m5": 4.52,
+   "m10": 4.77,
+   "m30": 5.25,
+   "s2s10": 43.0
+  },
+  {
+   "date": "2026-09-04",
+   "m2": 4.37,
+   "m5": 4.54,
+   "m10": 4.78,
+   "m30": 5.24,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-09-08",
+   "m2": 4.39,
+   "m5": 4.57,
+   "m10": 4.8,
+   "m30": 5.25,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-09-09",
+   "m2": 4.43,
+   "m5": 4.61,
+   "m10": 4.83,
+   "m30": 5.28,
+   "s2s10": 40.0
+  },
+  {
+   "date": "2026-09-10",
+   "m2": 4.56,
+   "m5": 4.75,
+   "m10": 4.95,
+   "m30": 5.37,
+   "s2s10": 39.0
+  },
+  {
+   "date": "2026-09-11",
+   "m2": 4.63,
+   "m5": 4.78,
+   "m10": 4.96,
+   "m30": 5.35,
+   "s2s10": 33.0
+  },
+  {
+   "date": "2026-09-14",
+   "m2": 4.65,
+   "m5": 4.8,
+   "m10": 4.97,
+   "m30": 5.34,
+   "s2s10": 32.0
+  },
+  {
+   "date": "2026-09-15",
+   "m2": 4.67,
+   "m5": 4.83,
+   "m10": 5.0,
+   "m30": 5.36,
+   "s2s10": 33.0
+  },
+  {
+   "date": "2026-09-16",
+   "m2": 4.74,
+   "m5": 4.86,
+   "m10": 5.01,
+   "m30": 5.35,
+   "s2s10": 27.0
+  },
+  {
+   "date": "2026-09-17",
+   "m2": 4.67,
+   "m5": 4.78,
+   "m10": 4.94,
+   "m30": 5.29,
+   "s2s10": 27.0
+  },
+  {
+   "date": "2026-09-18",
+   "m2": 4.76,
+   "m5": 4.86,
+   "m10": 5.01,
+   "m30": 5.34,
+   "s2s10": 25.0
+  },
+  {
+   "date": "2026-09-21",
+   "m2": 4.76,
+   "m5": 4.83,
+   "m10": 4.96,
+   "m30": 5.29,
+   "s2s10": 20.0
+  },
+  {
+   "date": "2026-09-22",
+   "m2": 4.71,
+   "m5": 4.83,
+   "m10": 4.96,
+   "m30": 5.29,
+   "s2s10": 25.0
+  },
+  {
+   "date": "2026-09-23",
+   "m2": 4.85,
+   "m5": 4.99,
+   "m10": 5.11,
+   "m30": 5.4,
+   "s2s10": 26.0
+  },
+  {
+   "date": "2026-09-24",
+   "m2": 4.87,
+   "m5": 5.03,
+   "m10": 5.18,
+   "m30": 5.47,
+   "s2s10": 31.0
+  },
+  {
+   "date": "2026-09-25",
+   "m2": 4.81,
+   "m5": 4.98,
+   "m10": 5.17,
+   "m30": 5.49,
+   "s2s10": 36.0
+  },
+  {
+   "date": "2026-09-28",
+   "m2": 4.92,
+   "m5": 5.06,
+   "m10": 5.24,
+   "m30": 5.56,
+   "s2s10": 32.0
+  },
+  {
+   "date": "2026-09-29",
+   "m2": 4.89,
+   "m5": 5.06,
+   "m10": 5.26,
+   "m30": 5.59,
+   "s2s10": 37.0
+  },
+  {
+   "date": "2026-09-30",
+   "m2": 4.88,
+   "m5": 5.09,
+   "m10": 5.29,
+   "m30": 5.64,
+   "s2s10": 41.0
+  },
+  {
+   "date": "2026-10-01",
+   "m2": 4.78,
+   "m5": 5.01,
+   "m10": 5.24,
+   "m30": 5.61,
+   "s2s10": 46.0
+  },
+  {
+   "date": "2026-10-02",
+   "m2": 4.83,
+   "m5": 5.06,
+   "m10": 5.28,
+   "m30": 5.63,
+   "s2s10": 45.0
+  },
+  {
+   "date": "2026-10-05",
+   "m2": 4.84,
+   "m5": 5.06,
+   "m10": 5.31,
+   "m30": 5.66,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-10-06",
+   "m2": 4.79,
+   "m5": 5.03,
+   "m10": 5.27,
+   "m30": 5.64,
+   "s2s10": 48.0
+  },
+  {
+   "date": "2026-10-07",
+   "m2": 4.77,
+   "m5": 5.03,
+   "m10": 5.28,
+   "m30": 5.67,
+   "s2s10": 51.0
+  },
+  {
+   "date": "2026-10-08",
+   "m2": 4.75,
+   "m5": 4.99,
+   "m10": 5.22,
+   "m30": 5.6,
+   "s2s10": 47.0
+  },
+  {
+   "date": "2026-10-09",
+   "m2": 4.8,
+   "m5": 5.02,
+   "m10": 5.24,
+   "m30": 5.6,
+   "s2s10": 44.0
+  },
+  {
+   "date": "2026-10-13",
+   "m2": 4.79,
+   "m5": 5.0,
+   "m10": 5.21,
+   "m30": 5.56,
+   "s2s10": 42.0
+  },
+  {
+   "date": "2026-10-14",
+   "m2": 4.82,
+   "m5": 5.0,
+   "m10": 5.19,
+   "m30": 5.52,
+   "s2s10": 37.0
+  },
+  {
+   "date": "2026-10-15",
+   "m2": 4.77,
+   "m5": 4.91,
+   "m10": 5.1,
+   "m30": 5.43,
+   "s2s10": 33.0
+  },
+  {
+   "date": "2026-10-16",
+   "m2": 4.74,
+   "m5": 4.89,
+   "m10": 5.09,
+   "m30": 5.43,
+   "s2s10": 35.0
+  },
+  {
+   "date": "2026-10-19",
+   "m2": 4.77,
+   "m5": 4.94,
+   "m10": 5.15,
+   "m30": 5.48,
+   "s2s10": 38.0
+  },
+  {
+   "date": "2026-10-20",
+   "m2": 4.79,
+   "m5": 4.94,
+   "m10": 5.12,
+   "m30": 5.42,
+   "s2s10": 33.0
+  },
+  {
+   "date": "2026-10-21",
+   "m2": 4.81,
+   "m5": 4.95,
+   "m10": 5.13,
+   "m30": 5.42,
+   "s2s10": 32.0
+  }
+ ]
+}
