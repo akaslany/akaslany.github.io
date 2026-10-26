@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **20:44 KST** — [KRX 트렌드 스크린 — 2026-10-26](/krx-trend/2026-10-26/)
 - **07:13 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-10-26](/2026/10/26/global-economic-risk-briefing/)
 - **02:01 KST** — [한국은행 보도자료 브리핑 — 2026-10-25](/bok-briefing/2026-10-25/)
 - **01:37 KST** — [미국 정책 인텔리전스 데일리 — 2026-10-26](/us-policy-intel/2026-10-26/)
