@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "FED 일일 브리프 — 2026-10-27"
-date: 2026-10-28 12:58:08 +0900
+date: 2026-10-27 08:00:00 +0900
 categories: [fed-daily]
 tags: [연준, FOMC, 지표발표, FRED, GDPNow, 지역연은]
 permalink: /fed-daily/2026-10-27/
