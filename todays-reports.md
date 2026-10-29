@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **18:29 KST** — [미국·한국 증시 주간 핵심 일정 — 2026-10-26~2026-10-30](/2026/10/29/us-korea-market-calendar/)
 - **08:01 KST** — [FED 일일 브리프 — 2026-10-28](/fed-daily/2026-10-28/)
 - **07:10 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-10-29](/2026/10/29/global-economic-risk-briefing/)
 - **02:03 KST** — [한국은행 보도자료 브리핑 — 2026-10-28](/bok-briefing/2026-10-28/)
