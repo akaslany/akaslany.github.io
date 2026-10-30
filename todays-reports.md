@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **08:21 KST** — [미국 유동성·자금시장 인텔리전스 v2 — 2026-10-31](/liquidity/2026-10-31/)
 - **08:01 KST** — [FED 일일 브리프 — 2026-10-30](/fed-daily/2026-10-30/)
 - **07:54 KST** — [Trump Truth Social 발언 요약 — 2026-10-31](/trump-truth/2026-10-31/)
 - **07:10 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-10-31](/2026/10/31/global-economic-risk-briefing/)
