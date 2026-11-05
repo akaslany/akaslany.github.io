@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **20:44 KST** — [KRX 트렌드 스크린 — 2026-11-05](/krx-trend/2026-11-05/)
 - **08:01 KST** — [FED 일일 브리프 — 2026-11-04](/fed-daily/2026-11-04/)
 - **07:32 KST** — [미국 유동성·자금시장 인텔리전스 v2 — 2026-11-05](/liquidity/2026-11-05/)
 - **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-11-05](/trump-truth/2026-11-05/)
