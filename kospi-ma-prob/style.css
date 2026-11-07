@@ -120,3 +120,20 @@ footer{margin:28px 0 10px;color:#64748b;font-size:12px;border-top:1px solid #e2e
 .chips.dir .chip[data-d="turn"].active{background:#e0f2fe;color:#0369a1;border-color:#0369a1;box-shadow:inset 0 0 0 1px #0369a1}
 td.fresh{color:#0369a1;font-weight:700}
 td.muted{color:#94a3b8}
+
+/* ---- 차트 헤더 + 범례 ---- */
+.chartbox{margin-bottom:6px}
+.charthead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.charthead h3{margin:0}
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:11px;color:#64748b}
+.legend .lg{display:inline-flex;align-items:center;gap:5px}
+.legend .scale{gap:4px;color:#94a3b8}
+.legend .sw{width:16px;height:0;border-top:2.4px solid #64748b;display:inline-block}
+.legend .sw.price{border-top:2px solid #1d4ed8}
+.legend .sw.ma{border-top:2px dashed #ea580c}
+.legend .sw.str{border-image:linear-gradient(90deg,#2b838b,#fed976,#1a9850) 1}
+.legend .sw.str{border-top-color:transparent;border-image-slice:1;background:linear-gradient(90deg,#2b838b,#fed976,#1a9850);height:3px;border-top:none}
+.legend .scale .sw{width:12px;height:3px;border:none;border-radius:2px}
+.legend .scale .neg{background:#2b838b}
+.legend .scale .zero{background:#fed976}
+.legend .scale .pos{background:#1a9850}

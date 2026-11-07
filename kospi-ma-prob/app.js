@@ -188,6 +188,32 @@
 
   // -100..100 → 빨강(음) ↔ 노랑(0) ↔ 초록(양). RdYlGn 계열.
   // ±100을 넘는 값은 색만 포화시키고 표시 숫자는 원값을 쓴다.
+  // 차트 범례. 색은 renderChart가 실제로 쓰는 값에서 가져와 어긋나지 않게 한다.
+  function chartLegend() {
+    var wrap = document.createElement('div');
+    wrap.className = 'legend';
+    var items = [
+      { cls: 'sw price', text: '주가' },
+      { cls: 'sw ma', text: '이동평균' },
+      { cls: 'sw str', text: '상승 강도' }
+    ];
+    items.forEach(function (it) {
+      var span = document.createElement('span');
+      span.className = 'lg';
+      var sw = document.createElement('i');
+      sw.className = it.cls;
+      span.appendChild(sw);
+      span.appendChild(document.createTextNode(it.text));
+      wrap.appendChild(span);
+    });
+    // 강도선 색의 의미는 색상 견본으로 보여준다(양수=초록, 0부근=노랑, 음수=청록).
+    var scale = document.createElement('span');
+    scale.className = 'lg scale';
+    scale.innerHTML = '<i class="sw neg"></i>음수<i class="sw zero"></i>0 부근<i class="sw pos"></i>양수';
+    wrap.appendChild(scale);
+    return wrap;
+  }
+
   function probColor(v) {
     var t = Math.max(-1, Math.min(1, v / 100));
     var a = Math.abs(t);
@@ -264,10 +290,17 @@
 
     var chart = $('chart');
     PERIODS.forEach(function (p) {
+      var box = document.createElement('div');
+      box.className = 'chartbox';
+      var head = document.createElement('div');
+      head.className = 'charthead';
       var h = document.createElement('h3');
       h.textContent = 'MA ' + p + '일';
-      chart.appendChild(h);
-      chart.appendChild(renderChart(p));
+      head.appendChild(h);
+      head.appendChild(chartLegend());
+      box.appendChild(head);
+      box.appendChild(renderChart(p));
+      chart.appendChild(box);
     });
     remember(d.ticker);
   }
