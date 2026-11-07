@@ -255,7 +255,7 @@
         state.index.latest_trade_date + '보다 이전 — 거래정지 가능)</strong>' : '') +
       ' · 종가 ' + Number(closes[lastIdx]).toLocaleString('ko-KR') +
       ' (전일 대비 ' + fmtPct(chg) + ') · 표본 ' + shownDates.length + '거래일</p>' +
-      '<p class="meta">가격 기준 ' + escapeHtml(state.index.price_basis) + '</p></header>' +
+      '</header>' +
       '<div class="cards">' + cards + '</div>' +
       '<p class="meta">현재 판독: <strong>' + regime + '</strong></p>' +
       '<div id="chart"></div>' +
@@ -391,7 +391,7 @@
         state.calendar = idx.calendar;
         idx.stocks.forEach(function (s) { state.byTicker[s.t] = s; });
         $('meta').textContent = '기준일 ' + idx.latest_trade_date + ' · ' + idx.stocks.length +
-          '종목 · 가격 기준 ' + idx.price_basis;
+          '종목';
         initSearch();
         try { renderRecent(JSON.parse(localStorage.getItem(STORE_KEY) || '[]')); } catch (e) { $('recent').innerHTML = ''; }
         var params = new URLSearchParams(location.search);

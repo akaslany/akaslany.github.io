@@ -301,7 +301,7 @@
     var d = state.data;
     $('meta').className = 'meta';
     $('meta').textContent = '기준일 ' + d.latest_trade_date + ' · ' + state.rows.length +
-      '종목 · 시가총액 단위 ' + d.market_cap_unit + ' · ' + d.price_basis;
+      '종목 · 시가총액 단위 ' + d.market_cap_unit;
   }
 
   function initDirection() {
