@@ -44,10 +44,11 @@
   // dates/closes: 표시 구간 + 워밍업을 포함한 배열. 워밍업 덕분에 첫 표시일도
   // MA와 확률이 실제 값이다(빈 구간이 생기지 않는다).
   function computeSeries(dates, closes) {
-    var out = { dates: dates, closes: closes, ma: {}, prob: {} };
+    var out = { dates: dates, closes: closes, ma: {}, prob: {}, raw: {} };
     PERIODS.forEach(function (p) {
       out.ma[p] = [];
       out.prob[p] = [];
+      out.raw[p] = [];
     });
     var prefix = [0];
     for (var i = 0; i < closes.length; i++) prefix.push(prefix[i] + closes[i]);
@@ -60,8 +61,13 @@
         var begin = end - N + 1;
         if (begin >= 0 && closes[t] > 0) {
           var sum = prefix[end + 1] - prefix[begin];
-          out.prob[p].push(100 * (1 - sum / (N * closes[t])));
+          // 값 자체는 ±∞까지 가능하다(창 안 평균이 오늘 종가의 배수면 100% 이하로
+          // 내려간다). 표시/색상은 y축 범위인 ±100으로 자르되, 원값은 kept에 둔다.
+          var raw = 100 * (1 - sum / (N * closes[t]));
+          out.raw[p].push(raw);
+          out.prob[p].push(Math.max(-100, Math.min(100, raw)));
         } else {
+          out.raw[p].push(null);
           out.prob[p].push(null);
         }
       });
@@ -175,7 +181,8 @@
 
   // ---- 렌더 -------------------------------------------------------------
   function delta(kind, p, back) {
-    var arr = state.series[kind][p];
+    // 표시 구간 안의 값끼리 비교한다. 워밍업 값과 빼면 의미가 없다.
+    var arr = state.series[kind][p].slice(state.series.firstVisible);
     var lastI = arr.length - 1;
     while (lastI >= 0 && arr[lastI] === null) lastI--;
     if (lastI - back < 0) return null;
@@ -185,6 +192,7 @@
   }
 
   function lastValue(kind, p) {
+    // kind: 'prob'(차트용, ±100 클램프) 또는 'raw'(표시용 원값)
     var arr = state.series[kind][p];
     for (var i = arr.length - 1; i >= 0; i--) if (arr[i] !== null) return { v: arr[i], i: i };
     return { v: null, i: -1 };
@@ -201,22 +209,22 @@
     var chg = prev ? (closes[lastIdx] / prev - 1) * 100 : null;
 
     var cards = PERIODS.map(function (p) {
-      var lv = lastValue('prob', p);
+      var lv = lastValue('raw', p);
       return '<div class="card"><div class="label">MA ' + p + '일 상승확률</div>' +
         '<div class="value ' + signClass(lv.v) + '">' + fmtPct(lv.v) + '</div>' +
-        '<div class="sub">1일 전 ' + fmtPct(delta('prob', p, 1)) +
+        '<div class="sub">1일 전 ' + fmtPct(delta('raw', p, 1)) +
         ' · 5일 전 ' + fmtPct(delta('prob', p, 5)) + '</div></div>';
     }).join('');
 
     var rows = PERIODS.map(function (p) {
-      var lv = lastValue('prob', p);
+      var lv = lastValue('raw', p);
       var mv = lastValue('ma', p).v;
       return '<tr><td>MA ' + p + '</td><td class="' + signClass(lv.v) + '">' + fmtPct(lv.v) +
-        '</td><td>' + fmtPct(delta('prob', p, 1)) + '</td><td>' +
+        '</td><td>' + fmtPct(delta('raw', p, 1)) + '</td><td>' +
         (mv === null ? '—' : mv.toLocaleString('ko-KR', { maximumFractionDigits: 2 })) + '</td></tr>';
     }).join('');
 
-    var allNeg = PERIODS.every(function (p) { return (lastValue('prob', p).v || 0) < 0; });
+    var allNeg = PERIODS.every(function (p) { return (lastValue('raw', p).v || 0) < 0; });
     var regime = allNeg ? '네 축 모두 음수 — 단기 조정이 아니라 하락이 진행 중인 국면'
                         : '축별 혼조 — 단기와 장기가 다른 방향';
 
