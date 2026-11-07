@@ -53,8 +53,8 @@ footer{margin:28px 0 10px;color:#64748b;font-size:12px;border-top:1px solid #e2e
 .intro-note .bands{color:#475569}
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
 .chips{display:flex;gap:6px}
-.chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:3px 12px;cursor:pointer;font-size:13px;color:#94a3b8}
-.chip.active{font-weight:700;color:#0f172a;border-color:#64748b;background:#f1f5f9}
+.chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:3px 13px;cursor:pointer;font-size:13px;color:#64748b}
+.chip.active{font-weight:700;color:#0f172a;border-color:#334155;background:#e2e8f0;box-shadow:inset 0 0 0 1px #334155}
 .chk{font-size:13px;color:#334155;display:flex;gap:5px;align-items:center}
 .chk select{font-size:13px;padding:3px 6px;border:1px solid #cbd5e1;border-radius:4px}
 #search{flex:1;min-width:160px;padding:6px 10px;font-size:13px;border:1px solid #94a3b8;border-radius:6px}
@@ -82,3 +82,11 @@ footer{margin:28px 0 10px;color:#64748b;font-size:12px;border-top:1px solid #e2e
   #grid{font-size:12px}
   #grid th,#grid td{padding:5px 5px}
 }
+
+/* 등급 칩은 라디오처럼 하나만 활성화된다 — 비활성 칩은 눌러도 반응이 보이도록 */
+.chips .chip:not(.active){opacity:.55}
+.chips .chip:not(.active):hover{opacity:.85;background:#f8fafc}
+.chips .chip.active.g-강{background:#dcfce7;color:#15803d;border-color:#15803d;box-shadow:inset 0 0 0 1px #15803d}
+.chips .chip.active.g-중{background:#e0f2fe;color:#0369a1;border-color:#0369a1;box-shadow:inset 0 0 0 1px #0369a1}
+.chips .chip.active.g-약{background:#fef3c7;color:#b45309;border-color:#b45309;box-shadow:inset 0 0 0 1px #b45309}
+.chips .chip.active.g-미미{background:#f1f5f9;color:#475569;border-color:#475569;box-shadow:inset 0 0 0 1px #475569}

@@ -8,12 +8,14 @@
   'use strict';
 
   var GRADES = ['강', '중', '약', '미미'];
+  // '전체'는 등급 필터 해제 상태를 뜻한다(베타적 선택: 한 번에 하나만).
+  var ALL = '전체';
   var state = {
     data: null,
     rows: [],
     sortKey: 'cap',
     sortDir: -1,
-    activeGrades: new Set(GRADES),
+    activeGrade: ALL,
     hideSpac: false,
     capFloor: 0,
     query: ''
@@ -45,7 +47,7 @@
   function filtered() {
     var q = state.query.trim().toLowerCase();
     return state.rows.filter(function (r) {
-      if (!state.activeGrades.has(r.g)) return false;
+      if (state.activeGrade !== ALL && r.g !== state.activeGrade) return false;
       if (state.hideSpac && r.spac) return false;
       if (r.cap < state.capFloor) return false;
       if (q) {
@@ -100,15 +102,18 @@
       tbody.innerHTML = '<tr><td colspan="10" class="empty">조건에 맞는 종목이 없습니다.</td></tr>';
     }
 
-    // 필터별 건수 + 표시 중 개수
+    // 등급 분포는 '전체'일 때만, 특정 등급을 고르면 그 등급 건수만.
     var byGrade = {};
     GRADES.forEach(function (g) { byGrade[g] = 0; });
     state.rows.forEach(function (r) { byGrade[r.g] = (byGrade[r.g] || 0) + 1; });
+    var dist = state.activeGrade === ALL
+      ? GRADES.map(function (g) {
+          return '<span class="grade ' + gradeClass(g) + '">' + g + '</span> ' + (byGrade[g] || 0);
+        }).join(' · ')
+      : '<span class="grade ' + gradeClass(state.activeGrade) + '">' + escapeHtml(state.activeGrade) +
+        '</span> ' + (byGrade[state.activeGrade] || 0) + '종목';
     $('summary').innerHTML = '표시 <strong>' + rows.length + '</strong> / 전체 ' + state.rows.length + '종목 · ' +
-      GRADES.map(function (g) {
-        return '<span class="grade ' + gradeClass(g) + '">' + g + '</span> ' + (byGrade[g] || 0);
-      }).join(' · ') +
-      (state.hideSpac ? ' · 스팩 제외' : '');
+      dist + (state.hideSpac ? ' · 스팩 제외' : '');
 
     document.querySelectorAll('#grid th.sortable').forEach(function (th) {
       var arrow = th.querySelector('.arrow');
@@ -120,17 +125,30 @@
 
   function initChips() {
     var box = $('gradeChips');
-    box.innerHTML = GRADES.map(function (g) {
-      return '<button type="button" class="chip active ' + gradeClass(g) + '" data-g="' + g + '">' +
+    // 전체 + 등급 네 개. 라디오처럼 하나만 활성화된다.
+    box.innerHTML = [ALL].concat(GRADES).map(function (g) {
+      return '<button type="button" role="radio" aria-checked="false" class="chip' +
+        (g === ALL ? '' : ' ' + gradeClass(g)) + '" data-g="' + g + '">' +
         escapeHtml(g) + '</button>';
     }).join('');
+    box.setAttribute('role', 'radiogroup');
     box.addEventListener('click', function (e) {
       var btn = e.target.closest('button[data-g]');
       if (!btn) return;
       var g = btn.getAttribute('data-g');
-      if (state.activeGrades.has(g)) state.activeGrades.delete(g);
-      else state.activeGrades.add(g);
-      if (!state.activeGrades.size) GRADES.forEach(function (x) { state.activeGrades.add(x); });
+      // 이미 선택된 칩을 다시 눌러도 해제하지 않는다 — 항상 하나가 선택된 상태.
+      if (g !== state.activeGrade) {
+        state.activeGrade = g;
+        syncChips();
+        render();
+      }
+    });
+    box.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var order = [ALL].concat(GRADES);
+      var i = order.indexOf(state.activeGrade);
+      var next = order[(i + (e.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
+      state.activeGrade = next;
       syncChips();
       render();
     });
@@ -139,7 +157,9 @@
 
   function syncChips() {
     document.querySelectorAll('#gradeChips button[data-g]').forEach(function (btn) {
-      btn.classList.toggle('active', state.activeGrades.has(btn.getAttribute('data-g')));
+      var on = btn.getAttribute('data-g') === state.activeGrade;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-checked', on ? 'true' : 'false');
     });
   }
 
