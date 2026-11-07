@@ -101,102 +101,116 @@
     var ma = full.ma[p].slice(from);
     if (!dates.length) return document.createElement('div');
 
-    var W = 960, H = 340, padL = 64, padR = 58, padT = 18, padB = 30;
-    var lo = Math.min.apply(null, closes), hi = Math.max.apply(null, closes);
-    if (lo === hi) { lo -= 1; hi += 1; }
+    var W = 960, H = 340, padL = 64, padR = 62, padB = 30;
+    // 위: 주가 / 아래: 강도. 두 패널을 완전히 분리해 선이 서로 겹치지 않는다.
+    var priceTop = 16, priceBot = 176;
+    var stripTop = 200, stripBot = 300;
     var step = (W - padL - padR) / Math.max(1, dates.length - 1);
     function px(i) { return padL + i * step; }
-    function py(v) { return padT + (hi - v) / (hi - lo) * (H - padT - padB); }
-    // 강도 패널 축: 데이터 최소/최대에 0을 포함시키고 여유를 둔다. ±100을 넘는
-    // 값을 잘라내지 않으면서 0선은 항상 보이게 한다.
+
+    var lo = Math.min.apply(null, closes), hi = Math.max.apply(null, closes);
+    if (lo === hi) { lo -= 1; hi += 1; }
+    function py(v) { return priceTop + (hi - v) / (hi - lo) * (priceBot - priceTop); }
+
+    // 강도 막대는 위·아래를 고정 높이로 나눠 쓴다: 0선이 항상 같은 자리에 있고,
+    // 막대 길이가 곧 강도라 가격선과 눈으로 바로 구분된다.
     var pvals = probs.filter(function (v) { return v !== null; });
-    var pLo = Math.min.apply(null, pvals.concat([0]));
-    var pHi = Math.max.apply(null, pvals.concat([0]));
-    var pad = Math.max(5, (pHi - pLo) * 0.08);
-    pLo -= pad;
-    pHi += pad;
-    var pSpan = (pHi - pLo) || 1;
-    function pyp(v) { return padT + (pHi - v) / pSpan * (H - padT - padB); }
+    var maxAbs = Math.max.apply(null, [1].concat(pvals.map(Math.abs)));
+    var zeroY = (stripTop + stripBot) / 2;
+    var half = (stripBot - stripTop) / 2 - 6;
+    function barY(v) { return zeroY - (v / maxAbs) * half; }
 
     var NS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
     svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', 'MA ' + p + '일과 상승 강도 최근 ' + state.years + '년');
-    function el(name, attrs) {
+    svg.setAttribute('aria-label', 'MA ' + p + '일 주가와 상승 강도 막대 최근 ' + state.years + '년');
+    function el(name, attrs, parent) {
       var node = document.createElementNS(NS, name);
       for (var k in attrs) node.setAttribute(k, attrs[k]);
-      svg.appendChild(node);
+      (parent || svg).appendChild(node);
       return node;
     }
 
-    // 0선
-    el('line', { x1: padL, y1: pyp(0), x2: W - padR, y2: pyp(0), stroke: '#94a3b8',
-                 'stroke-dasharray': '4 4', 'stroke-width': 1 });
-    // 종가
+    // ---- 위 패널: 주가 + 이동평균 ----
     var pricePts = closes.map(function (v, i) { return px(i) + ',' + py(v); }).join(' ');
     el('polyline', { fill: 'none', stroke: '#1d4ed8', 'stroke-width': 1.6, points: pricePts });
-    // 이동평균
     var maPairs = [];
     ma.forEach(function (v, i) { if (v !== null) maPairs.push(px(i) + ',' + py(v)); });
     if (maPairs.length > 1) {
       el('polyline', { fill: 'none', stroke: '#ea580c', 'stroke-width': 1.1,
                        'stroke-dasharray': '5 3', points: maPairs.join(' ') });
     }
-    // 강도: 값에 따라 색이 변하는 선분
-    var prev = null;
-    for (var i = 0; i < probs.length; i++) {
-      var v = probs[i];
-      if (v === null) { prev = null; continue; }
-      var cur = [px(i), pyp(v)];
-      if (prev) {
-        // 구간 굵기는 양 끝 값의 평균 — 한 점에서 급변할 때 선이 끊겨 보이지 않게.
-        var rampA = probRamp(probs[i - 1]), rampB = probRamp(v);
-        var midWidth = ((parseFloat(rampA.width) + parseFloat(rampB.width)) / 2).toFixed(2);
-        el('line', { x1: prev[0], y1: prev[1], x2: cur[0], y2: cur[1],
-                     stroke: rampB.stroke, 'stroke-width': midWidth, 'stroke-linecap': 'round' });
-      }
-      prev = cur;
+    // 패널 경계와 라벨
+    el('line', { x1: padL, y1: priceBot + 6, x2: W - padR, y2: priceBot + 6,
+                 stroke: '#e2e8f0', 'stroke-width': 1 });
+    var yTop = el('text', { x: padL - 6, y: priceTop + 4, 'text-anchor': 'end', 'font-size': 10, fill: '#1d4ed8' });
+    yTop.textContent = Math.round(hi).toLocaleString('ko-KR');
+    var yLow = el('text', { x: padL - 6, y: priceBot, 'text-anchor': 'end', 'font-size': 10, fill: '#1d4ed8' });
+    yLow.textContent = Math.round(lo).toLocaleString('ko-KR');
+
+    // ---- 아래 패널: 강도 막대 ----
+    var barW = Math.max(1.2, step * 0.78);
+    for (var j = 0; j < probs.length; j++) {
+      var v = probs[j];
+      if (v === null) continue;
+      var y = barY(v);
+      var ramp = probRamp(v);
+      // 0선에서 뻗는 막대. 위로 솟으면 상승 강도, 아래면 하락 강도.
+      el('rect', {
+        x: (px(j) - barW / 2).toFixed(2), y: Math.min(y, zeroY).toFixed(2),
+        width: barW.toFixed(2), height: Math.max(1, Math.abs(zeroY - y)).toFixed(2),
+        fill: ramp.stroke, opacity: 0.95
+      });
     }
+    el('line', { x1: padL, y1: zeroY, x2: W - padR, y2: zeroY,
+                 stroke: '#64748b', 'stroke-width': 1 });
+    var zLab = el('text', { x: padL - 6, y: zeroY + 4, 'text-anchor': 'end', 'font-size': 10, fill: '#64748b' });
+    zLab.textContent = '0';
+    var maxLab = el('text', { x: padL - 6, y: stripTop + 8, 'text-anchor': 'end',
+                              'font-size': 10, fill: '#b91c1c' });
+    maxLab.textContent = '+' + nice(Math.ceil(maxAbs)) + '%';
+    var minLab = el('text', { x: padL - 6, y: stripBot, 'text-anchor': 'end',
+                              'font-size': 10, fill: '#0c60c6' });
+    minLab.textContent = '−' + nice(Math.ceil(maxAbs)) + '%';
+    // 패널 이름표(왼쪽 위) — 어느 쪽이 가격이고 어느 쪽이 강도인지 바로 보이게.
+    var tagTop = el('text', { x: padL + 4, y: priceTop - 3, 'font-size': 10, fill: '#1d4ed8', opacity: 0.9 });
+    tagTop.textContent = '주가';
+    var tagBot = el('text', { x: padL + 4, y: stripTop - 8, 'font-size': 10, fill: '#0f172a', opacity: 0.75 });
+    tagBot.textContent = '상승 강도 (막대)';
+
     var lastI = probs.length - 1;
     while (lastI >= 0 && probs[lastI] === null) lastI--;
     if (lastI >= 0) {
       el('circle', { cx: px(lastI), cy: py(closes[lastI]), r: 3, fill: '#1d4ed8' });
-      var label = el('text', { x: px(lastI) - 6, y: pyp(probs[lastI]) - 7, 'text-anchor': 'end',
-                               'font-size': 11, 'font-weight': 700, fill: '#0f172a' });
+      var ramp2 = probRamp(probs[lastI]);
+      var label = el('text', {
+        x: W - padR + 4, y: barY(probs[lastI]) + 4, 'font-size': 10.5, 'font-weight': 700,
+        fill: ramp2.stroke, stroke: '#fff', 'stroke-width': 2.6, 'paint-order': 'stroke'
+      });
       label.textContent = fmtPct(probs[lastI]);
     }
-    // 축 라벨
     var t1 = el('text', { x: padL, y: H - 8, 'font-size': 11, fill: '#475569' });
     t1.textContent = dates[0];
     var t2 = el('text', { x: W - padR, y: H - 8, 'text-anchor': 'end', 'font-size': 11, fill: '#475569' });
     t2.textContent = dates[dates.length - 1];
-    var y1 = el('text', { x: padL - 6, y: padT + 4, 'text-anchor': 'end', 'font-size': 10, fill: '#1d4ed8' });
-    y1.textContent = Math.round(hi).toLocaleString('ko-KR');
-    var y2 = el('text', { x: padL - 6, y: H - padB, 'text-anchor': 'end', 'font-size': 10, fill: '#1d4ed8' });
-    y2.textContent = Math.round(lo).toLocaleString('ko-KR');
-    // 축 끝 눈금은 '보기 좋은' 값으로 올림 (예: -133% 대신 -140%)
-    function nice(v) {
-      var a = Math.abs(v);
-      var stepv = a >= 200 ? 50 : (a >= 100 ? 20 : 10);
-      var n = Math.ceil(a / stepv) * stepv;
-      return v < 0 ? -n : n;
-    }
-    [[nice(pHi - pad * 0.5)], [nice(pLo + pad * 0.5)]].forEach(function (tick) {
-      var node = el('text', { x: W - padR + 6, y: pyp(tick[0]) + 4, 'font-size': 10, fill: '#b91c1c' });
-      node.textContent = (tick[0] > 0 ? '+' : '') + tick[0] + '%';
-    });
     return svg;
   }
 
-  // 차트 범례. 색은 renderChart가 실제로 쓰는 값에서 가져와 어긋나지 않게 한다.
+  function nice(v) {
+    var a = Math.abs(v);
+    var stepv = a >= 200 ? 50 : (a >= 100 ? 20 : 10);
+    var n = Math.ceil(a / stepv) * stepv;
+    return n;
+  }
+
+  // 차트 범례. 견본은 probRamp()에서 직접 만들어 차트와 어긋나지 않는다.
   function chartLegend() {
     var wrap = document.createElement('div');
     wrap.className = 'legend';
     var items = [
       { cls: 'sw price', text: '주가' },
-      { cls: 'sw ma', text: '이동평균' },
-      { cls: 'sw str', text: '상승 강도' }
+      { cls: 'sw ma', text: '이동평균' }
     ];
     items.forEach(function (it) {
       var span = document.createElement('span');
@@ -207,28 +221,27 @@
       span.appendChild(document.createTextNode(it.text));
       wrap.appendChild(span);
     });
-    // 강도선 견본: 실제 값 구간(-100 / 0 / +100)에서 채취한 색과 굵기를 그대로 보여준다.
     var scale = document.createElement('span');
     scale.className = 'lg scale';
-    scale.innerHTML =
+    scale.innerHTML = '강도 ' +
       '<i class="sw" style="' + probStyle(-100) + '"></i>−100' +
-      '<i class="sw" style="' + probStyle(-40) + '"></i>' +
+      '<i class="sw" style="' + probStyle(-50) + '"></i>' +
       '<i class="sw" style="' + probStyle(0) + '"></i>0' +
-      '<i class="sw" style="' + probStyle(40) + '"></i>' +
+      '<i class="sw" style="' + probStyle(50) + '"></i>' +
       '<i class="sw" style="' + probStyle(100) + '"></i>+100';
     wrap.appendChild(scale);
     return wrap;
   }
 
-  // 강도선의 시각 인코딩. 색과 굵기가 함께 값에 비례한다.
-  //   -100 진한 파랑 → -40 연한 파랑 → 0 노랑 → +40 연한 초록 → +100 진한 초록
-  //   굵기는 0에서 1.2px, ±100에서 4.2px. ±100을 넘으면 포화(색·굵기 모두 최대).
-  // 색은 두 구간으로 나눠 보간한다. 노랑에서 파랑/초록으로 바로 섞으면 중간값이
-  // 탁한 회색이 되므로, |값| 55%까지는 노랑→중간색(파랑 계열은 보라, 초록 계열은 연두),
-  // 그 뒤는 중간색→극단으로 간다.
+  // 강도 막대의 색 인코딩. 길이가 값을 나타내고, 색은 부호와 크기를 함께 강조한다.
+  //   +100 진홍 → +50 주황 → 0 노랑 → -50 하늘 → -100 진청
+  // ±100을 넘으면 색은 포화되지만 막대 길이는 축이 늘어나 계속 표현된다.
+  // 색은 두 구간으로 나눠 보간한다. 한 번에 섞으면 중간값이 탁해지므로 |값| 55%까지는
+  // 노랑→중간색(음수는 하늘, 양수는 주황), 그 뒤는 중간색→극단(진청/진홍)으로 간다.
+  // 색 자체가 '이동평균/주가/음수'와 겹치지 않게 일부러 대비가 큰 두 계열만 쓴다.
   var RAMP = {
-    neg: { mid: [110, 120, 216], edge: [8, 68, 168] },   // 노랑 → 보라 → 진한 파랑
-    pos: { mid: [120, 200, 70], edge: [4, 140, 60] }     // 노랑 → 연두 → 진한 초록
+    neg: { mid: [0, 170, 214], edge: [10, 34, 120] },    // 노랑 → 하늘 → 진청
+    pos: { mid: [255, 190, 0], edge: [200, 20, 60] }     // 노랑 → 주황 → 진홍
   };
 
   function lerp(a, b, t) {
@@ -252,9 +265,11 @@
   function probColor(v) { return probRamp(v).stroke; }
 
   function probStyle(v) {
+    // 막대 견본: 0선 기준으로 위(양수)/아래(음수)로 뻗는 작은 사각형.
     var r = probRamp(v);
-    return 'display:inline-block;width:18px;height:0;border-top:' + r.width +
-      'px solid ' + r.stroke + ';vertical-align:middle;margin-right:4px';
+    var h = Math.max(2, Math.round(Math.abs(v) / 100 * 16));
+    return 'display:inline-block;width:7px;height:' + h + 'px;background:' + r.stroke +
+      ';vertical-align:middle;margin:0 3px';
   }
 
   // ---- 렌더 -------------------------------------------------------------

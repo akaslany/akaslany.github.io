@@ -138,3 +138,7 @@ td.muted{color:#94a3b8}
 
 /* 범례의 강도 견본은 JS가 인라인 스타일로 그린다(실제 선과 같은 색·굵기). */
 .legend .scale .sw{width:auto;height:auto;border:none;background:none;border-radius:0}
+
+/* 강도 막대·범례가 SVG 안에서 겹치지 않도록 */
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+.chartbox svg rect{shape-rendering:crispEdges}
