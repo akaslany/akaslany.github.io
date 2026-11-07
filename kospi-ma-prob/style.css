@@ -131,9 +131,10 @@ td.muted{color:#94a3b8}
 .legend .sw{width:16px;height:0;border-top:2.4px solid #64748b;display:inline-block}
 .legend .sw.price{border-top:2px solid #1d4ed8}
 .legend .sw.ma{border-top:2px dashed #ea580c}
-.legend .sw.str{border-image:linear-gradient(90deg,#2b838b,#fed976,#1a9850) 1}
-.legend .sw.str{border-top-color:transparent;border-image-slice:1;background:linear-gradient(90deg,#2b838b,#fed976,#1a9850);height:3px;border-top:none}
 .legend .scale .sw{width:12px;height:3px;border:none;border-radius:2px}
 .legend .scale .neg{background:#2b838b}
 .legend .scale .zero{background:#fed976}
 .legend .scale .pos{background:#1a9850}
+
+/* 범례의 강도 견본은 JS가 인라인 스타일로 그린다(실제 선과 같은 색·굵기). */
+.legend .scale .sw{width:auto;height:auto;border:none;background:none;border-radius:0}

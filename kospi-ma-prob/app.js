@@ -150,8 +150,11 @@
       if (v === null) { prev = null; continue; }
       var cur = [px(i), pyp(v)];
       if (prev) {
+        // 구간 굵기는 양 끝 값의 평균 — 한 점에서 급변할 때 선이 끊겨 보이지 않게.
+        var rampA = probRamp(probs[i - 1]), rampB = probRamp(v);
+        var midWidth = ((parseFloat(rampA.width) + parseFloat(rampB.width)) / 2).toFixed(2);
         el('line', { x1: prev[0], y1: prev[1], x2: cur[0], y2: cur[1],
-                     stroke: probColor(v), 'stroke-width': 2.4, 'stroke-linecap': 'round' });
+                     stroke: rampB.stroke, 'stroke-width': midWidth, 'stroke-linecap': 'round' });
       }
       prev = cur;
     }
@@ -186,8 +189,6 @@
     return svg;
   }
 
-  // -100..100 → 빨강(음) ↔ 노랑(0) ↔ 초록(양). RdYlGn 계열.
-  // ±100을 넘는 값은 색만 포화시키고 표시 숫자는 원값을 쓴다.
   // 차트 범례. 색은 renderChart가 실제로 쓰는 값에서 가져와 어긋나지 않게 한다.
   function chartLegend() {
     var wrap = document.createElement('div');
@@ -206,21 +207,54 @@
       span.appendChild(document.createTextNode(it.text));
       wrap.appendChild(span);
     });
-    // 강도선 색의 의미는 색상 견본으로 보여준다(양수=초록, 0부근=노랑, 음수=청록).
+    // 강도선 견본: 실제 값 구간(-100 / 0 / +100)에서 채취한 색과 굵기를 그대로 보여준다.
     var scale = document.createElement('span');
     scale.className = 'lg scale';
-    scale.innerHTML = '<i class="sw neg"></i>음수<i class="sw zero"></i>0 부근<i class="sw pos"></i>양수';
+    scale.innerHTML =
+      '<i class="sw" style="' + probStyle(-100) + '"></i>−100' +
+      '<i class="sw" style="' + probStyle(-40) + '"></i>' +
+      '<i class="sw" style="' + probStyle(0) + '"></i>0' +
+      '<i class="sw" style="' + probStyle(40) + '"></i>' +
+      '<i class="sw" style="' + probStyle(100) + '"></i>+100';
     wrap.appendChild(scale);
     return wrap;
   }
 
-  function probColor(v) {
+  // 강도선의 시각 인코딩. 색과 굵기가 함께 값에 비례한다.
+  //   -100 진한 파랑 → -40 연한 파랑 → 0 노랑 → +40 연한 초록 → +100 진한 초록
+  //   굵기는 0에서 1.2px, ±100에서 4.2px. ±100을 넘으면 포화(색·굵기 모두 최대).
+  // 색은 두 구간으로 나눠 보간한다. 노랑에서 파랑/초록으로 바로 섞으면 중간값이
+  // 탁한 회색이 되므로, |값| 55%까지는 노랑→중간색(파랑 계열은 보라, 초록 계열은 연두),
+  // 그 뒤는 중간색→극단으로 간다.
+  var RAMP = {
+    neg: { mid: [110, 120, 216], edge: [8, 68, 168] },   // 노랑 → 보라 → 진한 파랑
+    pos: { mid: [120, 200, 70], edge: [4, 140, 60] }     // 노랑 → 연두 → 진한 초록
+  };
+
+  function lerp(a, b, t) {
+    return a.map(function (c, i) { return Math.round(c + (b[i] - c) * t); });
+  }
+
+  function probRamp(v) {
     var t = Math.max(-1, Math.min(1, v / 100));
     var a = Math.abs(t);
-    var s = t < 0 ? [43, 131, 139] : [254, 217, 118];
-    var e = t < 0 ? [254, 217, 118] : [26, 152, 80];
-    var rgb = s.map(function (c, i) { return Math.round(c + (e[i] - c) * a); });
-    return 'rgb(' + rgb.join(',') + ')';
+    var pivot = [254, 217, 118];
+    var stops = t < 0 ? RAMP.neg : RAMP.pos;
+    var rgb = a <= 0.55
+      ? lerp(pivot, stops.mid, a / 0.55)
+      : lerp(stops.mid, stops.edge, (a - 0.55) / 0.45);
+    return {
+      stroke: 'rgb(' + rgb.join(',') + ')',
+      width: (1.2 + 3.0 * a).toFixed(2)
+    };
+  }
+
+  function probColor(v) { return probRamp(v).stroke; }
+
+  function probStyle(v) {
+    var r = probRamp(v);
+    return 'display:inline-block;width:18px;height:0;border-top:' + r.width +
+      'px solid ' + r.stroke + ';vertical-align:middle;margin-right:4px';
   }
 
   // ---- 렌더 -------------------------------------------------------------
