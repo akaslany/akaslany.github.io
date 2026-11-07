@@ -10,11 +10,15 @@
   <p class="meta" id="meta">불러오는 중…</p>
 </header>
 
-<p class="intro-note">
-  MA 5·20·60·120일 <strong>상승확률이 모두 양수</strong>인 종목만 모았습니다.
-  등급은 <strong>네 값 중 가장 낮은 것</strong>으로 매깁니다 — 한 축이라도 약하면 등급이 내려갑니다.
-  <span class="bands">강 ≥20% · 중 ≥10% · 약 ≥5% · 미미 &lt;5%</span>
-</p>
+
+
+<div class="dirbar">
+  <div class="chips dir" id="dirChips" role="radiogroup" aria-label="방향 선택">
+    <button type="button" role="radio" aria-checked="true" class="chip active" data-d="up">▲ 양의 방향</button>
+    <button type="button" role="radio" aria-checked="false" class="chip" data-d="down">▼ 음의 방향</button>
+  </div>
+  <p class="dirnote" id="dirNote"></p>
+</div>
 
 <div class="tools">
   <div class="chips" id="gradeChips" role="radiogroup" aria-label="등급 선택"></div>
@@ -22,6 +26,7 @@
   <label class="chk">시가총액
     <select id="capFloor">
       <option value="0">전체</option>
+      <option value="-1">3,000억 미만 제외</option>
       <option value="0.1">1,000억↑</option>
       <option value="0.3">3,000억↑</option>
       <option value="1">1조↑</option>
@@ -45,7 +50,7 @@
     <th class="sortable num" data-k="p20">MA20<span class="arrow"></span></th>
     <th class="sortable num" data-k="p60">MA60<span class="arrow"></span></th>
     <th class="sortable num" data-k="p120">MA120<span class="arrow"></span></th>
-    <th class="num">최저</th>
+    <th class="num sortable" data-k="edge">최저<span class="arrow"></span></th>
     <th class="num sortable" data-k="close">종가<span class="arrow"></span></th>
   </tr></thead>
   <tbody></tbody>
