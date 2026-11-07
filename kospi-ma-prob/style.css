@@ -47,3 +47,38 @@ footer{margin:28px 0 10px;color:#64748b;font-size:12px;border-top:1px solid #e2e
   th,td{padding:5px 4px;font-size:12px}
   #suggestions{right:0}
 }
+
+/* ---- 스크리너 ---- */
+.intro-note{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin:10px 0;font-size:13px}
+.intro-note .bands{color:#475569}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+.chips{display:flex;gap:6px}
+.chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:3px 12px;cursor:pointer;font-size:13px;color:#94a3b8}
+.chip.active{font-weight:700;color:#0f172a;border-color:#64748b;background:#f1f5f9}
+.chk{font-size:13px;color:#334155;display:flex;gap:5px;align-items:center}
+.chk select{font-size:13px;padding:3px 6px;border:1px solid #cbd5e1;border-radius:4px}
+#search{flex:1;min-width:160px;padding:6px 10px;font-size:13px;border:1px solid #94a3b8;border-radius:6px}
+.sortinfo{font-size:12px;color:#64748b}
+.summary{font-size:13px;color:#334155;margin:6px 0 4px}
+.tablewrap{overflow-x:auto;border:1px solid #e2e8f0;border-radius:8px}
+#grid{width:100%;border-collapse:collapse;font-size:13px;margin:0}
+#grid th,#grid td{padding:7px 8px;border-bottom:1px solid #e8edf3;white-space:nowrap}
+#grid thead th{background:#eef2f7;position:sticky;top:0;z-index:1}
+#grid th.num,#grid td.num{text-align:right}
+#grid th.sortable{cursor:pointer;user-select:none}
+#grid th.sortable:hover{background:#e2e8f0}
+#grid tbody tr:hover{background:#f8fafc}
+#grid td.muted{color:#94a3b8}
+#grid td.mono{font-family:ui-monospace,monospace}
+#grid .empty{text-align:center;color:#64748b;padding:22px}
+.grade{display:inline-block;min-width:34px;text-align:center;border-radius:4px;padding:1px 6px;font-size:12px;font-weight:700}
+.grade.g-강,.chip.g-강.active{background:#dcfce7;color:#15803d}
+.grade.g-중,.chip.g-중.active{background:#e0f2fe;color:#0369a1}
+.grade.g-약,.chip.g-약.active{background:#fef3c7;color:#b45309}
+.grade.g-미미,.chip.g-미미.active{background:#f1f5f9;color:#64748b}
+.tag.spac{background:#fde68a;color:#92400e}
+.stale{color:#94a3b8;font-size:11px}
+@media (max-width:640px){
+  #grid{font-size:12px}
+  #grid th,#grid td{padding:5px 5px}
+}

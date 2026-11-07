@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="kospi-ma-prob-page" content="screen">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이평선 확률 스크리너 — 강/중/약/미미</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header class="top">
+  <h1><a href="./">이평선 확률 스크리너</a></h1>
+  <p class="meta" id="meta">불러오는 중…</p>
+</header>
+
+<p class="intro-note">
+  MA 5·20·60·120일 <strong>상승확률이 모두 양수</strong>인 종목만 모았습니다.
+  등급은 <strong>네 값 중 가장 낮은 것</strong>으로 매깁니다 — 한 축이라도 약하면 등급이 내려갑니다.
+  <span class="bands">강 ≥20% · 중 ≥10% · 약 ≥5% · 미미 &lt;5%</span>
+</p>
+
+<div class="tools">
+  <div class="chips" id="gradeChips"></div>
+  <label class="chk"><input type="checkbox" id="hideSpac"> 스팩(SPAC) 숨기기</label>
+  <label class="chk">시가총액
+    <select id="capFloor">
+      <option value="0">전체</option>
+      <option value="0.1">1,000억↑</option>
+      <option value="0.3">3,000억↑</option>
+      <option value="1">1조↑</option>
+      <option value="5">5조↑</option>
+    </select>
+  </label>
+  <input id="search" type="search" placeholder="종목명·코드 검색" spellcheck="false">
+  <span class="sortinfo" id="sortInfo"></span>
+</div>
+
+<p class="summary" id="summary"></p>
+
+<div class="tablewrap">
+<table id="grid">
+  <thead><tr>
+    <th class="num">#</th>
+    <th>종목</th>
+    <th class="sortable" data-k="cap">시가총액<span class="arrow"></span></th>
+    <th class="sortable" data-k="grade">등급<span class="arrow"></span></th>
+    <th class="sortable num" data-k="p5">MA5<span class="arrow"></span></th>
+    <th class="sortable num" data-k="p20">MA20<span class="arrow"></span></th>
+    <th class="sortable num" data-k="p60">MA60<span class="arrow"></span></th>
+    <th class="sortable num" data-k="p120">MA120<span class="arrow"></span></th>
+    <th class="num">최저</th>
+    <th class="num sortable" data-k="close">종가<span class="arrow"></span></th>
+  </tr></thead>
+  <tbody></tbody>
+</table>
+</div>
+
+<footer>
+  <p><a href="stocks-app.html">종목별 페이지</a> · <a href="index.html">KOSPI 지수</a> ·
+  데이터: 키움 REST(수정주가) → DuckDB → 정적 JSON · 매 거래일 갱신 · 개인 연구용, 투자 권유 아님</p>
+</footer>
+<script src="screen.js"></script>
+</body></html>
