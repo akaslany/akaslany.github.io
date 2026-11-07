@@ -87,6 +87,28 @@
     });
   }
 
+  // 도달 예상: 네 축 중 0에 가장 빨리 닿는 축과 그 거래일. 계산이지 예측이 아니다.
+  function reachInfo(r) {
+    var best = null;
+    cols().forEach(function (p) {
+      var ax = (r.a && r.a[p]) || {};
+      if (ax.reach === null || ax.reach === undefined) return;
+      if (!best || ax.reach < best.days) best = { days: ax.reach, axis: p };
+    });
+    return best;
+  }
+
+  function reachCell(r) {
+    var info = reachInfo(r);
+    if (!info) return '<td class="num muted" title="현재 속도로는 0에서 멀어지는 중">—</td>';
+    var cls = info.days <= 3 ? 'soon' : (info.days <= 10 ? 'near' : 'far');
+    var need = (r.a[info.axis] || {}).need;
+    var needTxt = (need === null || need === undefined) ? '' :
+      '<span class="need">' + (need > 0 ? '+' : '') + need.toFixed(1) + '%/일</span>';
+    return '<td class="num ' + cls + '" title="MA' + info.axis + ' 축 · 현재 속도 유지 가정(계산값, 예측 아님)">' +
+      info.days.toFixed(1) + '일' + needTxt + '</td>';
+  }
+
   function sortValue(r, key) {
     switch (key) {
       case 'cap': return r.cap;
@@ -98,6 +120,7 @@
       case 'edge': return isDown() ? r.hi : r.lo;
       case 'k60': return r.k60 === null || r.k60 === undefined ? 999 : r.k60;
       case 'k120': return r.k120 === null || r.k120 === undefined ? 999 : r.k120;
+      case 'reach': var ri = reachInfo(r); return ri ? ri.days : 9999;
       case 'close': return r.c;
       default: return 0;
     }
@@ -114,7 +137,8 @@
       }).join('') +
       (turn ? '<th class="num sortable" data-k="k60">60전환<span class="arrow"></span></th>' +
               '<th class="num sortable" data-k="k120">120전환<span class="arrow"></span></th>'
-            : '<th class="num sortable" data-k="edge" title="가장 낮은 강도 (등급 기준)">최저<span class="arrow"></span></th>') +
+            : '<th class="num sortable" data-k="edge" title="가장 낮은 강도 (등급 기준)">최저<span class="arrow"></span></th>' +
+              '<th class="num sortable" data-k="reach" title="현재 속도가 유지된다고 가정할 때 0에 닿는 예상 거래일(계산값)">도달(추정)<span class="arrow"></span></th>') +
       '<th class="num sortable" data-k="close">종가<span class="arrow"></span></th></tr>';
     var thead = document.querySelector('#grid thead');
     thead.innerHTML = head;
@@ -162,7 +186,28 @@
         (turn ? '' : '<td><span class="grade ' + gradeClass(r.g, state.dir) + '">' +
           escapeHtml(r.g) + '</span></td>');
       cells += cols().map(function (p) {
-        return '<td class="num ' + pctClass(r.p[p]) + '">' + fmtPct(r.p[p]) + '</td>';
+        var ax = (r.a && r.a[p]) || {};
+        var vel = ax.v;
+        // 속도: 5일간 강도 변화(포인트). ±0.5p 미만은 보합으로 본다(백테스트에서 유의미한 구분이 없던 구간).
+        // v > 0 = 0을 향해 움직임(▲), v < 0 = 0에서 멀어짐(▼).
+        var dir = (vel === null || vel === undefined) ? 'flat'
+                : (vel > 0.5 ? 'toward' : (vel < -0.5 ? 'away' : 'flat'));
+        var arrow = dir === 'toward' ? '▲' : (dir === 'away' ? '▼' : '·');
+        var tip = [];
+        if (vel !== null && vel !== undefined) {
+          tip.push('5일 강도 변화 ' + (vel > 0 ? '+' : '') + vel.toFixed(1) + 'p ' +
+                   (vel > 0 ? '(0에 접근)' : '(0에서 이탈)'));
+        }
+        if (ax.reach !== null && ax.reach !== undefined) {
+          tip.push('현재 속도 유지 시 ' + ax.reach.toFixed(1) + '거래일 뒤 0 도달(추정)');
+          if (ax.need !== null && ax.need !== undefined) {
+            tip.push('그러려면 종가가 하루 ' + (ax.need > 0 ? '+' : '') + ax.need.toFixed(2) + '% 필요');
+          }
+        } else if (vel !== null && vel !== undefined) {
+          tip.push('0에서 멀어지는 중');
+        }
+        return '<td class="num ' + pctClass(r.p[p]) + '" title="' + escapeHtml(tip.join(' · ')) + '">' +
+          fmtPct(r.p[p]) + '<span class="vel ' + dir + '">' + arrow + '</span></td>';
       }).join('');
       if (turn) {
         // 전환 후 경과일. 오늘이 전환일이면 0. 흐린 색은 이력 내 계속 양수(None)다.
@@ -176,13 +221,14 @@
         }).join('');
       } else {
         cells += '<td class="num mono">' + fmtPct(down ? r.hi : r.lo) + '</td>';
+        cells += reachCell(r);
       }
       cells += '<td class="num">' + Number(r.c).toLocaleString('ko-KR') + '</td>';
       return '<tr>' + cells + '</tr>';
     }).join('');
 
     if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="' + (turn ? 8 : 10) +
+      tbody.innerHTML = '<tr><td colspan="' + (turn ? 8 : 11) +
         '" class="empty">조건에 맞는 종목이 없습니다.</td></tr>';
     }
 

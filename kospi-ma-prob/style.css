@@ -29,7 +29,7 @@ h2{font-size:18px;margin:0 0 6px}h3{font-size:13px;margin:13px 0 5px;color:#3341
 .card .label{font-size:12px;color:#475569}
 .card .value{font-size:24px;font-weight:700;margin:2px 0}
 .card .sub{font-size:12px;color:#64748b}
-.neg{color:#b91c1c}.pos{color:#15803d}
+.neg{color:#1d4ed8}.pos{color:#dc2626}
 
 svg{width:100%;height:auto;display:block;border:1px solid #e2e8f0;border-radius:8px;background:#fff}
 table{border-collapse:collapse;width:100%;margin-top:14px}
@@ -142,3 +142,14 @@ td.muted{color:#94a3b8}
 /* 강도 막대·범례가 SVG 안에서 겹치지 않도록 */
 .chartbox svg{display:block;width:100%;height:auto;overflow:visible}
 .chartbox svg rect{shape-rendering:crispEdges}
+
+/* 강도 열: 값 + 5일 변화 방향 표시 */
+td .vel{margin-left:3px;font-size:9px;opacity:.85}
+td .vel.toward{color:#dc2626}   /* 0에 접근 — 한국 관례상 상승색 */
+td .vel.away{color:#1d4ed8}
+td .vel.flat{color:#94a3b8}
+/* 도달(추정) 열 */
+td.soon{color:#b91c1c;font-weight:700}
+td.near{color:#0f172a}
+td.far{color:#475569}
+td .need{display:block;font-size:10px;color:#64748b;font-weight:400}
