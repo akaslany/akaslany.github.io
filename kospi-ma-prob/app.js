@@ -25,7 +25,7 @@
     firstIndex: 0,
     current: null,
     series: null,
-    years: 1
+    years: 2
   };
 
   function $(id) { return document.getElementById(id); }
@@ -77,7 +77,7 @@
   }
 
   // 티커 파일을 달력 날짜 배열로 편다. 앞쪽 워밍업은 계산용으로 남기고,
-  // 표시 시작점(firstVisible)만 1년 앞으로 자른다.
+  // 표시 시작점(firstVisible)만 state.years(기본 2년) 앞으로 자른다.
   function displaySlice(tickerData) {
     var cal = state.calendar;
     var dates = [];
@@ -150,7 +150,7 @@
     yLow.textContent = Math.round(lo).toLocaleString('ko-KR');
 
     // ---- 아래 패널: 강도 막대 ----
-    var barW = Math.max(1.2, step * 0.78);
+    var barW = Math.max(1.0, step * 0.8);
     for (var j = 0; j < probs.length; j++) {
       var v = probs[j];
       if (v === null) continue;
