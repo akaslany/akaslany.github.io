@@ -1,6 +1,6 @@
-/* KOSPI 국내주식 이평선 상승확률 — 정적 뷰어
+/* KOSPI 국내주식 이평선 상승 강도 — 정적 뷰어
  *
- * 서버가 없는 GitHub Pages에서 그대로 계산한다. 확률식은 기존 연구
+ * 서버가 없는 GitHub Pages에서 그대로 계산한다. 강도식은 기존 연구
  * 구현(run_ma_prob_chart.py / scv/live/probs.py)과 동일하다:
  *
  *   prob_p(t) = 100 * (1 - Σ close[t-(p-1)-(N-1) .. t-(p-1)] / (N * close[t]))
@@ -8,7 +8,7 @@
  * 데이터는 사전 계산된 정적 JSON이다:
  *   stocks-index.json      코드·이름·시장·기준일 (검색용, 344KB)
  *   stocks/<코드>.json     해당 종목 종가만 (평균 4.5KB)
- * 가격은 키움 upd_stkpc_tp=1 수정주가이므로 액면분할·무상증자가 확률을 왜곡하지 않는다.
+ * 가격은 키움 upd_stkpc_tp=1 수정주가이므로 액면분할·무상증자가 강도를 왜곡하지 않는다.
  */
 (function () {
   'use strict';
@@ -42,7 +42,7 @@
 
   // ---- 계산 -------------------------------------------------------------
   // dates/closes: 표시 구간 + 워밍업을 포함한 배열. 워밍업 덕분에 첫 표시일도
-  // MA와 확률이 실제 값이다(빈 구간이 생기지 않는다).
+  // MA와 강도가 실제 값이다(빈 구간이 생기지 않는다).
   function computeSeries(dates, closes) {
     var out = { dates: dates, closes: closes, ma: {}, prob: {}, raw: {} };
     PERIODS.forEach(function (p) {
@@ -61,11 +61,12 @@
         var begin = end - N + 1;
         if (begin >= 0 && closes[t] > 0) {
           var sum = prefix[end + 1] - prefix[begin];
-          // 값 자체는 ±∞까지 가능하다(창 안 평균이 오늘 종가의 배수면 100% 이하로
-          // 내려간다). 표시/색상은 y축 범위인 ±100으로 자르되, 원값은 kept에 둔다.
+          // 값은 ±100을 넘을 수 있다(창 안 평균가가 오늘 종가의 2배를 넘으면
+          // -100% 아래, 평균이 0에 가까우면 +100% 위). 자르지 않고 그대로 쓴다 —
+          // 자르면 -125%와 -400%가 같은 높이로 보여 심각도를 오해한다.
           var raw = 100 * (1 - sum / (N * closes[t]));
           out.raw[p].push(raw);
-          out.prob[p].push(Math.max(-100, Math.min(100, raw)));
+          out.prob[p].push(raw);
         } else {
           out.raw[p].push(null);
           out.prob[p].push(null);
@@ -106,13 +107,22 @@
     var step = (W - padL - padR) / Math.max(1, dates.length - 1);
     function px(i) { return padL + i * step; }
     function py(v) { return padT + (hi - v) / (hi - lo) * (H - padT - padB); }
-    function pyp(v) { return padT + (100 - v) / 200 * (H - padT - padB); }
+    // 강도 패널 축: 데이터 최소/최대에 0을 포함시키고 여유를 둔다. ±100을 넘는
+    // 값을 잘라내지 않으면서 0선은 항상 보이게 한다.
+    var pvals = probs.filter(function (v) { return v !== null; });
+    var pLo = Math.min.apply(null, pvals.concat([0]));
+    var pHi = Math.max.apply(null, pvals.concat([0]));
+    var pad = Math.max(5, (pHi - pLo) * 0.08);
+    pLo -= pad;
+    pHi += pad;
+    var pSpan = (pHi - pLo) || 1;
+    function pyp(v) { return padT + (pHi - v) / pSpan * (H - padT - padB); }
 
     var NS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
     svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', 'MA ' + p + '일과 상승확률 최근 ' + state.years + '년');
+    svg.setAttribute('aria-label', 'MA ' + p + '일과 상승 강도 최근 ' + state.years + '년');
     function el(name, attrs) {
       var node = document.createElementNS(NS, name);
       for (var k in attrs) node.setAttribute(k, attrs[k]);
@@ -133,7 +143,7 @@
       el('polyline', { fill: 'none', stroke: '#ea580c', 'stroke-width': 1.1,
                        'stroke-dasharray': '5 3', points: maPairs.join(' ') });
     }
-    // 확률: 값에 따라 색이 변하는 선분
+    // 강도: 값에 따라 색이 변하는 선분
     var prev = null;
     for (var i = 0; i < probs.length; i++) {
       var v = probs[i];
@@ -162,14 +172,22 @@
     y1.textContent = Math.round(hi).toLocaleString('ko-KR');
     var y2 = el('text', { x: padL - 6, y: H - padB, 'text-anchor': 'end', 'font-size': 10, fill: '#1d4ed8' });
     y2.textContent = Math.round(lo).toLocaleString('ko-KR');
-    var z1 = el('text', { x: W - padR + 6, y: pyp(100) + 4, 'font-size': 10, fill: '#b91c1c' });
-    z1.textContent = '+100%';
-    var z2 = el('text', { x: W - padR + 6, y: pyp(-100) + 4, 'font-size': 10, fill: '#b91c1c' });
-    z2.textContent = '-100%';
+    // 축 끝 눈금은 '보기 좋은' 값으로 올림 (예: -133% 대신 -140%)
+    function nice(v) {
+      var a = Math.abs(v);
+      var stepv = a >= 200 ? 50 : (a >= 100 ? 20 : 10);
+      var n = Math.ceil(a / stepv) * stepv;
+      return v < 0 ? -n : n;
+    }
+    [[nice(pHi - pad * 0.5)], [nice(pLo + pad * 0.5)]].forEach(function (tick) {
+      var node = el('text', { x: W - padR + 6, y: pyp(tick[0]) + 4, 'font-size': 10, fill: '#b91c1c' });
+      node.textContent = (tick[0] > 0 ? '+' : '') + tick[0] + '%';
+    });
     return svg;
   }
 
   // -100..100 → 빨강(음) ↔ 노랑(0) ↔ 초록(양). RdYlGn 계열.
+  // ±100을 넘는 값은 색만 포화시키고 표시 숫자는 원값을 쓴다.
   function probColor(v) {
     var t = Math.max(-1, Math.min(1, v / 100));
     var a = Math.abs(t);
@@ -192,7 +210,7 @@
   }
 
   function lastValue(kind, p) {
-    // kind: 'prob'(차트용, ±100 클램프) 또는 'raw'(표시용 원값)
+    // kind: 'prob'(차트용) 또는 'raw'(표시용). 이제 둘은 같은 값이다.
     var arr = state.series[kind][p];
     for (var i = arr.length - 1; i >= 0; i--) if (arr[i] !== null) return { v: arr[i], i: i };
     return { v: null, i: -1 };
@@ -210,7 +228,7 @@
 
     var cards = PERIODS.map(function (p) {
       var lv = lastValue('raw', p);
-      return '<div class="card"><div class="label">MA ' + p + '일 상승확률</div>' +
+      return '<div class="card"><div class="label">MA ' + p + '일 상승 강도</div>' +
         '<div class="value ' + signClass(lv.v) + '">' + fmtPct(lv.v) + '</div>' +
         '<div class="sub">1일 전 ' + fmtPct(delta('raw', p, 1)) +
         ' · 5일 전 ' + fmtPct(delta('prob', p, 5)) + '</div></div>';
@@ -241,7 +259,7 @@
       '<div class="cards">' + cards + '</div>' +
       '<p class="meta">현재 판독: <strong>' + regime + '</strong></p>' +
       '<div id="chart"></div>' +
-      '<table><thead><tr><th>기간</th><th>상승확률</th><th>1일 변화</th><th>이동평균</th></tr></thead>' +
+      '<table><thead><tr><th>기간</th><th>상승 강도</th><th>1일 변화</th><th>이동평균</th></tr></thead>' +
       '<tbody>' + rows + '</tbody></table>';
 
     var chart = $('chart');

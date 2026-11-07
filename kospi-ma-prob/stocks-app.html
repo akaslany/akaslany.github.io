@@ -2,11 +2,11 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="kospi-ma-prob-page" content="stock-viewer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>종목별 이평선 상승확률 — KOSPI/KOSDAQ</title>
+<title>종목별 이평선 강도 — KOSPI/KOSDAQ</title>
 <link rel="stylesheet" href="style.css">
 </head><body>
 <header class="top">
-  <h1><a href="./">종목별 이평선 상승확률</a></h1>
+  <h1><a href="./">종목별 이평선 강도</a></h1>
   <p class="meta" id="meta">데이터 불러오는 중…</p>
 </header>
 
@@ -21,12 +21,12 @@
 
 <main id="result">
   <section class="intro">
-    <p>종목코드를 입력하면 그 종목의 <strong>이동평균 상승확률</strong>을 최근 1년 기준으로 계산해 보여줍니다.
+    <p>종목코드를 입력하면 그 종목의 <strong>이동평균 상승 강도</strong>를 최근 1년 기준으로 계산해 보여줍니다.
     값은 브라우저에서 계산되며, 원본은 매일 갱신되는 정적 데이터입니다.</p>
     <p class="formula">prob<sub>p</sub>(t) = 100 × (1 − Σ close[p−9 … p] / (10 × close(t)))</p>
     <p class="meta">0 미만이면 최근 10봉 구간 매입자가 전반적으로 손실인 상태입니다.
-    창 안 평균가가 오늘 종가의 2배를 넘으면 −100% 아래로 내려갈 수 있습니다(차트 축은 ±100에서 자름).
-    가격은 수정주가이므로 액면분할·무상증자가 확률을 왜곡하지 않습니다.
+    창 안 평균가가 오늘 종가의 2배를 넘으면 −100% 아래로도 내려갈 수 있고, 그대로 표시합니다(차트 축은 값 범위에 맞춰 늘어납니다).
+    가격은 수정주가이므로 액면분할·무상증자가 강도를 왜곡하지 않습니다.
     개인 연구용이며 투자 권유가 아닙니다.</p>
   </section>
 </main>

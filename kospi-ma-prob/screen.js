@@ -1,8 +1,8 @@
-/* 이평선 확률 스크리너 — 정적 JSON 렌더
+/* 이평선 강도 스크리너 — 정적 JSON 렌더
  *
  * 매 거래일 배치(export_ma_prob_screen.py)가 두 파일을 만든다:
- *   screen.json       네 확률이 모두 양수인 종목
- *   screen.down.json  네 확률이 모두 음수인 종목
+ *   screen.json       네 강도가 모두 양수인 종목
+ *   screen.down.json  네 강도가 모두 음수인 종목
  * 여기서는 방향 전환·정렬·필터·표시만 한다. 데이터가 없으면 빈 표 대신 오류를
  * 표시하고, 이미 받은 방향은 다시 내려받지 않는다.
  *
@@ -105,7 +105,7 @@
     var edgeTh = document.querySelector('#grid th[data-k="edge"]');
     if (edgeTh) {
       edgeTh.childNodes[0].nodeValue = down ? '최고' : '최저';
-      edgeTh.title = down ? '0에 가장 가까운 확률 (등급 기준)' : '가장 낮은 확률 (등급 기준)';
+      edgeTh.title = down ? '0에 가장 가까운 강도 (등급 기준)' : '가장 낮은 강도 (등급 기준)';
     }
 
     var tbody = document.querySelector('#grid tbody');
@@ -157,12 +157,12 @@
   // 방향에 맞춰 문서 제목·설명·상단 라디오를 갱신한다.
   function updateHead() {
     var down = isDown();
-    document.title = (down ? '음의 방향' : '양의 방향') + ' 이평선 확률 스크리너';
+    document.title = '이평선 강도 스크리너 — ' + (down ? '음의 방향' : '양의 방향');
     $('dirNote').innerHTML = down
-      ? 'MA 5·20·60·120일 <strong>상승확률이 모두 음수</strong>인 종목입니다. 등급은 ' +
+      ? 'MA 5·20·60·120일 <strong>상승 강도가 모두 음수</strong>인 종목입니다. 등급은 ' +
         '<strong>0에 가장 가까운 값</strong>으로 매기므로, <strong>강</strong>은 네 축이 모두 −20% 이하인 ' +
         '완전한 하락 정렬입니다.<span class="bands">강 ≤−20% · 중 ≤−10% · 약 ≤−5% · 미미 &gt;−5%</span>'
-      : 'MA 5·20·60·120일 <strong>상승확률이 모두 양수</strong>인 종목입니다. 등급은 ' +
+      : 'MA 5·20·60·120일 <strong>상승 강도가 모두 양수</strong>인 종목입니다. 등급은 ' +
         '<strong>가장 낮은 값</strong>으로 매기므로, 한 축이라도 약하면 등급이 내려갑니다.' +
         '<span class="bands">강 ≥20% · 중 ≥10% · 약 ≥5% · 미미 &lt;5%</span>';
     document.querySelectorAll('#dirChips button[data-d]').forEach(function (btn) {
