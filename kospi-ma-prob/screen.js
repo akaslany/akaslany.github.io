@@ -16,7 +16,14 @@
   var GRADES = ['강', '중', '약', '미미'];
   // '전체'는 등급 필터를 걸지 않은 상태를 뜻한다(한 번에 하나만 선택).
   var ALL = '전체';
-  var SOURCES = { up: 'screen.json', down: 'screen.down.json' };
+  var SOURCES = { up: 'screen.json', down: 'screen.down.json', turn: 'screen.turn.json' };
+  var DIR_LABEL = { up: '양의 방향', down: '음의 방향', turn: '60·120 전환' };
+  // 전환 화면에는 MA5/MA20 행이 없다 — 두 지평만 본다.
+  var COLS = {
+    up: ['5', '20', '60', '120'],
+    down: ['5', '20', '60', '120'],
+    turn: ['60', '120']
+  };
   var state = {
     data: null,
     rows: [],
@@ -61,6 +68,8 @@
   }
 
   function isDown() { return state.dir === 'down'; }
+  function isTurn() { return state.dir === 'turn'; }
+  function cols() { return COLS[state.dir] || COLS.up; }
 
   function filtered() {
     var q = state.query.trim().toLowerCase();
@@ -87,9 +96,41 @@
       case 'p60': return r.p['60'];
       case 'p120': return r.p['120'];
       case 'edge': return isDown() ? r.hi : r.lo;
+      case 'k60': return r.k60 === null || r.k60 === undefined ? 999 : r.k60;
+      case 'k120': return r.k120 === null || r.k120 === undefined ? 999 : r.k120;
       case 'close': return r.c;
       default: return 0;
     }
+  }
+
+  function buildHead() {
+    var turn = isTurn();
+    var head = '<tr><th class="num">#</th><th>종목</th>' +
+      '<th class="sortable" data-k="cap">시가총액<span class="arrow"></span></th>' +
+      (turn ? '' : '<th class="sortable" data-k="grade">등급<span class="arrow"></span></th>') +
+      cols().map(function (p) {
+        return '<th class="sortable num" data-k="p' + p + '">MA' + p +
+          '<span class="arrow"></span></th>';
+      }).join('') +
+      (turn ? '<th class="num sortable" data-k="k60">60전환<span class="arrow"></span></th>' +
+              '<th class="num sortable" data-k="k120">120전환<span class="arrow"></span></th>'
+            : '<th class="num sortable" data-k="edge" title="가장 낮은 강도 (등급 기준)">최저<span class="arrow"></span></th>') +
+      '<th class="num sortable" data-k="close">종가<span class="arrow"></span></th></tr>';
+    var thead = document.querySelector('#grid thead');
+    thead.innerHTML = head;
+    // 정렬 핸들러는 thead를 다시 그릴 때마다 새로 붙인다.
+    thead.querySelectorAll('th.sortable').forEach(function (th) {
+      th.addEventListener('click', function () {
+        var k = th.getAttribute('data-k');
+        if (state.sortKey === k) {
+          state.sortDir = -state.sortDir;
+        } else {
+          state.sortKey = k;
+          state.sortDir = (k === 'grade' || k === 'k60' || k === 'k120') ? 1 : -1;
+        }
+        render();
+      });
+    });
   }
 
   function render() {
@@ -109,39 +150,66 @@
     }
 
     var tbody = document.querySelector('#grid tbody');
+    var turn = isTurn();
     tbody.innerHTML = rows.map(function (r, i) {
       var stale = r.stale ? ' <span class="stale" title="마지막 거래일 ' + r.d + '">(휴장)</span>' : '';
-      return '<tr>' +
-        '<td class="num muted">' + (i + 1) + '</td>' +
+      var cells = '<td class="num muted">' + (i + 1) + '</td>' +
         '<td><a href="stocks-app.html?code=' + r.t + '">' + escapeHtml(r.n) + '</a>' +
           ' <span class="code">' + r.t + '</span>' +
           ' <span class="tag">' + escapeHtml(r.m || '') + '</span>' +
           (r.spac ? ' <span class="tag spac">스팩</span>' : '') + stale + '</td>' +
         '<td class="num">' + fmtCap(r.cap) + '</td>' +
-        '<td><span class="grade ' + gradeClass(r.g, state.dir) + '">' + escapeHtml(r.g) + '</span></td>' +
-        ['5', '20', '60', '120'].map(function (p) {
-          return '<td class="num ' + pctClass(r.p[p]) + '">' + fmtPct(r.p[p]) + '</td>';
-        }).join('') +
-        '<td class="num mono">' + fmtPct(down ? r.hi : r.lo) + '</td>' +
-        '<td class="num">' + Number(r.c).toLocaleString('ko-KR') + '</td>' +
-        '</tr>';
+        (turn ? '' : '<td><span class="grade ' + gradeClass(r.g, state.dir) + '">' +
+          escapeHtml(r.g) + '</span></td>');
+      cells += cols().map(function (p) {
+        return '<td class="num ' + pctClass(r.p[p]) + '">' + fmtPct(r.p[p]) + '</td>';
+      }).join('');
+      if (turn) {
+        // 전환 후 경과일. 오늘이 전환일이면 0. 흐린 색은 이력 내 계속 양수(None)다.
+        cells += ['k60', 'k120'].map(function (k) {
+          var v = r[k];
+          if (v === null || v === undefined) {
+            return '<td class="num muted" title="최근 15거래일 동안 계속 양수">›15</td>';
+          }
+          var fresh = v <= 5 ? ' fresh' : '';
+          return '<td class="num' + fresh + '">' + v + '일</td>';
+        }).join('');
+      } else {
+        cells += '<td class="num mono">' + fmtPct(down ? r.hi : r.lo) + '</td>';
+      }
+      cells += '<td class="num">' + Number(r.c).toLocaleString('ko-KR') + '</td>';
+      return '<tr>' + cells + '</tr>';
     }).join('');
 
     if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="10" class="empty">조건에 맞는 종목이 없습니다.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="' + (turn ? 8 : 10) +
+        '" class="empty">조건에 맞는 종목이 없습니다.</td></tr>';
     }
 
     var byGrade = {};
     GRADES.forEach(function (g) { byGrade[g] = 0; });
     state.rows.forEach(function (r) { byGrade[r.g] = (byGrade[r.g] || 0) + 1; });
-    var dist = state.activeGrade === ALL
-      ? GRADES.map(function (g) {
-          return '<span class="grade ' + gradeClass(g, state.dir) + '">' + g + '</span> ' +
-            (byGrade[g] || 0);
-        }).join(' · ')
-      : '<span class="grade ' + gradeClass(state.activeGrade, state.dir) + '">' +
+    var dist;
+    if (turn) {
+      var zero = state.rows.filter(function (r) {
+        return r.k60 === 0 || r.k120 === 0;
+      }).length;
+      var both = state.rows.filter(function (r) {
+        return r.k60 !== null && r.k120 !== null;
+      }).length;
+      var stale = state.rows.length - both;
+      dist = (zero ? '오늘 전환 <strong>' + zero + '</strong>종목 · ' : '') +
+        '둘 다 5일 내 ' + both + '종목 · 한 축만 5일 내 ' + stale + '종목(다른 축은 이미 양수) · ' +
+        '기준 ' + (state.data.window_days || 5) + '거래일';
+    } else if (state.activeGrade === ALL) {
+      dist = GRADES.map(function (g) {
+        return '<span class="grade ' + gradeClass(g, state.dir) + '">' + g + '</span> ' + (byGrade[g] || 0);
+      }).join(' · ');
+    } else {
+      dist = '<span class="grade ' + gradeClass(state.activeGrade, state.dir) + '">' +
         escapeHtml(state.activeGrade) + '</span> ' + (byGrade[state.activeGrade] || 0) + '종목';
-    $('summary').innerHTML = (down ? '음의 방향 · ' : '양의 방향 · ') +
+    }
+    $('summary').innerHTML = (turn ? '60·120 전환 · ' : (down ? '음의 방향 · ' : '양의 방향 · ')) +
       '표시 <strong>' + rows.length + '</strong> / 전체 ' + state.rows.length + '종목 · ' + dist +
       (state.hideSpac ? ' · 스팩 제외' : '');
 
@@ -157,8 +225,12 @@
   // 방향에 맞춰 문서 제목·설명·상단 라디오를 갱신한다.
   function updateHead() {
     var down = isDown();
-    document.title = '이평선 강도 스크리너 — ' + (down ? '음의 방향' : '양의 방향');
-    $('dirNote').innerHTML = down
+    document.title = '이평선 강도 스크리너 — ' + DIR_LABEL[state.dir];
+    $('dirNote').innerHTML = isTurn()
+      ? 'MA 60·120일 <strong>상승 강도가 둘 다 양수</strong>이면서, 그중 <strong>하나 이상이 최근 5거래일 안에 ' +
+        '음에서 양으로 전환</strong>한 종목입니다. 전환일은 이 페이지의 강도식 기준 실제 부호 전환일이며 ' +
+        '이동평균선 돌파와는 다릅니다.<span class="bands">등급 없음 · 시가총액순 · 전환일 열은 경과 거래일</span>'
+      : down
       ? 'MA 5·20·60·120일 <strong>상승 강도가 모두 음수</strong>인 종목입니다. 등급은 ' +
         '<strong>0에 가장 가까운 값</strong>으로 매기므로, <strong>강</strong>은 네 축이 모두 −20% 이하인 ' +
         '완전한 하락 정렬입니다.<span class="bands">강 ≤−20% · 중 ≤−10% · 약 ≤−5% · 미미 &gt;−5%</span>'
@@ -176,9 +248,13 @@
   function setDirection(dir) {
     if (state.dir === dir) return;
     state.dir = dir;
-    var gradeFloor = $('capFloor');
-    if (gradeFloor) gradeFloor.value = '0';
     state.capFloor = 0;
+    var capFloor = $('capFloor');
+    if (capFloor) capFloor.value = '0';
+    // 열 구성이 방향마다 다르므로(전환은 60/120만) 헤더를 새로 만든다.
+    if (dir === 'turn') state.sortKey = 'cap';
+    state.sortDir = -1;
+    buildHead();
     load();
   }
 
@@ -238,8 +314,11 @@
     });
     box.addEventListener('keydown', function (e) {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      setDirection(state.dir === 'up' ? 'down' : 'up');
-      document.querySelector('#dirChips button[data-d="' + state.dir + '"]').focus();
+      var order = ['up', 'down', 'turn'];
+      var i = order.indexOf(state.dir);
+      var next = order[(i + (e.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
+      setDirection(next);
+      document.querySelector('#dirChips button[data-d="' + next + '"]').focus();
     });
   }
 
@@ -274,6 +353,9 @@
   }
 
   function syncChips() {
+    var box = $('gradeChips');
+    if (box) box.style.display = isTurn() ? 'none' : '';
+
     document.querySelectorAll('#gradeChips button[data-g]').forEach(function (btn) {
       var on = btn.getAttribute('data-g') === state.activeGrade;
       btn.classList.toggle('active', on);
@@ -300,21 +382,10 @@
       state.query = e.target.value;
       render();
     });
-    document.querySelectorAll('#grid th.sortable').forEach(function (th) {
-      th.addEventListener('click', function () {
-        var k = th.getAttribute('data-k');
-        if (state.sortKey === k) {
-          state.sortDir = -state.sortDir;
-        } else {
-          state.sortKey = k;
-          state.sortDir = k === 'grade' ? 1 : -1;
-        }
-        render();
-      });
-    });
     // URL ?dir=down 으로 음의 방향을 바로 열 수 있게 한다.
+    buildHead();
     var wanted = new URLSearchParams(location.search).get('dir');
-    if (wanted === 'down') setDirection('down');
+    if (wanted === 'down' || wanted === 'turn') setDirection(wanted);
     else load();
   }
 

@@ -16,6 +16,7 @@
   <div class="chips dir" id="dirChips" role="radiogroup" aria-label="방향 선택">
     <button type="button" role="radio" aria-checked="true" class="chip active" data-d="up">▲ 양의 방향</button>
     <button type="button" role="radio" aria-checked="false" class="chip" data-d="down">▼ 음의 방향</button>
+    <button type="button" role="radio" aria-checked="false" class="chip" data-d="turn">↗ 60·120 전환</button>
   </div>
   <p class="dirnote" id="dirNote"></p>
 </div>
@@ -41,18 +42,7 @@
 
 <div class="tablewrap">
 <table id="grid">
-  <thead><tr>
-    <th class="num">#</th>
-    <th>종목</th>
-    <th class="sortable" data-k="cap">시가총액<span class="arrow"></span></th>
-    <th class="sortable" data-k="grade">등급<span class="arrow"></span></th>
-    <th class="sortable num" data-k="p5">MA5<span class="arrow"></span></th>
-    <th class="sortable num" data-k="p20">MA20<span class="arrow"></span></th>
-    <th class="sortable num" data-k="p60">MA60<span class="arrow"></span></th>
-    <th class="sortable num" data-k="p120">MA120<span class="arrow"></span></th>
-    <th class="num sortable" data-k="edge">최저<span class="arrow"></span></th>
-    <th class="num sortable" data-k="close">종가<span class="arrow"></span></th>
-  </tr></thead>
+  <thead></thead>
   <tbody></tbody>
 </table>
 </div>

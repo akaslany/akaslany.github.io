@@ -115,3 +115,8 @@ footer{margin:28px 0 10px;color:#64748b;font-size:12px;border-top:1px solid #e2e
 .chips .chip.g2.down.active{background:#ffedd5;color:#c2410c;border-color:#c2410c;box-shadow:inset 0 0 0 1px #c2410c}
 .chips .chip.g3.down.active{background:#fef3c7;color:#b45309;border-color:#b45309;box-shadow:inset 0 0 0 1px #b45309}
 .chips .chip.g4.down.active{background:#f1f5f9;color:#475569;border-color:#475569;box-shadow:inset 0 0 0 1px #475569}
+
+/* ---- 60·120 전환 ---- */
+.chips.dir .chip[data-d="turn"].active{background:#e0f2fe;color:#0369a1;border-color:#0369a1;box-shadow:inset 0 0 0 1px #0369a1}
+td.fresh{color:#0369a1;font-weight:700}
+td.muted{color:#94a3b8}
