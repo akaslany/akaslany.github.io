@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2024 수상구조활동 위험기준 안전지침 관련 설문 조사</title>
+<meta name="description" content="국립소방연구원 설문 조사입니다. 약 7분 소요됩니다.">
+<meta property="og:title" content="2024 수상구조활동 위험기준 안전지침 관련 설문 조사">
+<meta property="og:description" content="국립소방연구원 설문 조사입니다. 약 7분 소요됩니다.">
+<meta property="og:type" content="website">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: one column survey sheet, navy agency band on top, one section per step, sticky progress */
+:root{
+  --bg:#F2F4F7; --surface:#FFFFFF; --ink:#1B2430; --muted:#5B6677; --line:#D5DCE6;
+  --band:#1F3A5F; --band-ink:#FFFFFF; --band-sub:#B9C8DD;
+  --brand:#1F3A5F; --brand-ink:#FFFFFF; --heading:#1F3A5F; --steel:#4A6FA5;
+  --sel:#E3EAF4; --sel-line:#1F3A5F; --soft:#F6F8FB; --alert:#B3261E; --alert-bg:#FCEEEC; --pin:#F2B705;
+  --f-display:'IBM Plex Sans KR','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --f-body:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F151E; --surface:#172130; --ink:#E5EAF1; --muted:#9AA7B9; --line:#2B3B52;
+  --band:#13233A; --band-ink:#F1F5FA; --band-sub:#8EA4C2;
+  --brand:#3E6BA9; --brand-ink:#FFFFFF; --heading:#C3D4EC; --steel:#8DAEDC;
+  --sel:#203452; --sel-line:#8DAEDC; --soft:#1B2738; --alert:#F2938B; --alert-bg:#3A1F1E; --pin:#F2B705;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F151E; --surface:#172130; --ink:#E5EAF1; --muted:#9AA7B9; --line:#2B3B52;
+  --band:#13233A; --band-ink:#F1F5FA; --band-sub:#8EA4C2;
+  --brand:#3E6BA9; --brand-ink:#FFFFFF; --heading:#C3D4EC; --steel:#8DAEDC;
+  --sel:#203452; --sel-line:#8DAEDC; --soft:#1B2738; --alert:#F2938B; --alert-bg:#3A1F1E; --pin:#F2B705;
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;word-break:keep-all;overflow-wrap:break-word}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--band)}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.band{background:var(--band);color:var(--band-ink)}
+header.band .wrap{padding-block:22px 0;display:grid;gap:4px}
+header.band .hd-text{display:grid;gap:4px;padding-bottom:20px}
+.hero{background:var(--surface);margin-left:calc(-1 * max(16px, env(safe-area-inset-left, 0px)));margin-right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)));padding:18px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));display:flex;justify-content:flex-end;border-bottom:1px solid var(--line)}
+.hero svg{display:block;width:min(66%,290px);height:auto}
+@media (min-width:640px){.hero{margin-left:0;margin-right:0;border-radius:0}}
+.org{font-size:13px;color:var(--band-sub);letter-spacing:.04em}
+.org b{display:inline-block;width:8px;height:8px;background:var(--pin);margin-right:8px;vertical-align:1px}
+h1{font-family:var(--f-display);font-weight:700;font-size:22px;line-height:1.35;margin:0;text-wrap:balance}
+.prog{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.prog .wrap{padding-block:10px;display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--steel);transition:width .3s}
+.prog span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+main .wrap{padding-block:20px 40px;display:grid;gap:16px}
+.sec-title{display:flex;align-items:stretch;border-bottom:3px solid var(--brand);background:var(--surface)}
+.sec-title .no{background:var(--sel);color:var(--heading);font-family:var(--f-display);font-weight:700;font-size:15px;padding:10px 14px;display:flex;align-items:center}
+.sec-title .tx{padding:10px 14px;font-family:var(--f-display);font-weight:600;font-size:17px;color:var(--heading)}
+.note{background:var(--soft);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;font-size:14.5px;color:var(--muted)}
+.note p{margin:0}.note p+p{margin-top:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px;display:grid;gap:14px;scroll-margin-top:80px}
+.card.missing{border-color:var(--alert);box-shadow:0 0 0 1px var(--alert)}
+.q{font-weight:500;font-size:16.5px;margin:0;text-wrap:pretty}
+.q .n{font-family:var(--f-display);font-weight:700;color:var(--heading);margin-right:6px}
+.q .opt{font-size:13px;color:var(--muted);font-weight:400;margin-left:4px}
+.hint{font-size:13.5px;color:var(--muted);margin:-8px 0 0}
+.err{font-size:13.5px;color:var(--alert);margin:0}
+.opts{display:grid;gap:8px}
+.opt-btn{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font:inherit;font-size:15.5px;cursor:pointer;line-height:1.45}
+.opt-btn .mk{flex:none;width:20px;height:20px;border:2px solid var(--line);border-radius:50%;margin-top:1px;display:grid;place-items:center}
+.opt-btn.multi .mk{border-radius:4px}
+.opt-btn[aria-checked="true"]{background:var(--sel);border-color:var(--sel-line)}
+.opt-btn[aria-checked="true"] .mk{border-color:var(--sel-line);background:var(--sel-line)}
+.opt-btn[aria-checked="true"] .mk::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--surface)}
+.opt-btn.multi[aria-checked="true"] .mk::after{width:10px;height:6px;border-radius:0;background:none;border:2px solid var(--surface);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.opt-btn:focus-visible,.sc:focus-visible,.nav button:focus-visible,textarea:focus-visible,input:focus-visible,.grid-btn:focus-visible{outline:3px solid var(--steel);outline-offset:2px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.sc{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 2px 8px;font:inherit;cursor:pointer;display:grid;gap:4px;justify-items:center;min-width:0}
+.sc b{font-family:var(--f-display);font-size:18px;font-variant-numeric:tabular-nums}
+.sc small{font-size:11.5px;line-height:1.25;color:var(--muted);text-align:center;word-break:keep-all}
+.sc[aria-checked="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.sc[aria-checked="true"] small{color:var(--brand-ink)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.grid-btn{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 4px;font:inherit;font-size:15px;cursor:pointer;word-break:keep-all}
+.grid-btn[aria-checked="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+textarea,input[type=text]{width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font:inherit;font-size:15.5px}
+textarea{min-height:110px;resize:vertical}
+.links{display:grid;gap:8px}
+.links a{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:var(--heading);text-decoration:none;font-weight:500}
+.links a span{font-size:13px;color:var(--muted);font-weight:400;overflow-wrap:anywhere}
+.letter{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;display:grid;gap:10px;font-size:15.5px}
+.letter p{margin:0}.letter .sig{color:var(--muted);font-size:14px}
+.nav{display:flex;gap:10px;margin-top:4px}
+.nav button{flex:1;font:inherit;font-weight:700;font-size:16px;padding:14px;border-radius:8px;cursor:pointer;border:1px solid var(--brand)}
+.nav .prev{background:var(--surface);color:var(--heading);border-color:var(--line);flex:0 0 34%}
+.nav .next{background:var(--brand);color:var(--brand-ink)}
+.nav button[disabled]{opacity:.6;cursor:wait}
+.banner{background:var(--alert-bg);color:var(--alert);border-radius:8px;padding:10px 14px;font-size:14px}
+.done{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px 20px;display:grid;gap:10px;justify-items:center;text-align:center}
+.done .ck{width:56px;height:56px;border-radius:50%;background:var(--brand);display:grid;place-items:center}
+.done .ck::after{content:"";width:22px;height:12px;border:4px solid var(--brand-ink);border-top:0;border-right:0;transform:rotate(-45deg) translate(2px,-3px)}
+.done h2{font-family:var(--f-display);margin:6px 0 0;font-size:20px;color:var(--heading)}
+.done p{margin:0;color:var(--muted)}
+.demo{font-size:12.5px;color:var(--muted);text-align:center}
+footer .wrap{padding-block:0 32px;font-size:12.5px;color:var(--muted);text-align:center}
+@media (max-width:380px){.grid{grid-template-columns:repeat(3,1fr)}.sc small{font-size:10.5px}}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<header class="band"><div class="wrap">
+  <div class="hd-text">
+    <div class="org"><b></b><span id="org"></span></div>
+    <h1 id="title"></h1>
+  </div>
+  <div class="hero" id="hero"><svg role="img" aria-label="소방대원 개인 보호장비와 평가 체크리스트 그림" viewBox="0 0 600 590"> <defs> <pattern id="hs" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="5" fill="#1F3A5F"/></pattern> <pattern id="hs2" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="5" fill="#8A96A8"/></pattern> <pattern id="vs" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="3" height="8" fill="#D5DCE6"/></pattern> </defs> <path d="M0 590 V490 A100 100 0 0 1 100 590 Z" fill="#8A96A8"/> <rect x="100" y="490" width="100" height="100" fill="#EEF1F5"/> <rect x="100" y="490" width="100" height="100" fill="url(#vs)"/> <rect x="200" y="290" width="100" height="100" fill="#D5DCE6"/> <path d="M200 290 H300 L200 390 Z" fill="#1F3A5F"/> <rect x="200" y="390" width="100" height="100" fill="url(#hs)"/> <circle cx="250" cy="540" r="50" fill="#4A6FA5"/> <rect x="300" y="190" width="100" height="100" fill="#EEF1F5"/> <path d="M300 290 L400 190 V290 Z" fill="#8A96A8"/> <rect x="300" y="290" width="100" height="200" fill="#1F3A5F"/> <circle cx="350" cy="540" r="50" fill="#D5DCE6"/> <rect x="400" y="90" width="100" height="100" fill="#1F3A5F"/> <path d="M400 90 L500 190 H400 Z" fill="#4A6FA5"/> <rect x="400" y="190" width="100" height="100" fill="#D5DCE6"/> <rect x="400" y="290" width="100" height="100" fill="url(#hs2)"/> <rect x="400" y="390" width="100" height="200" fill="#4A6FA5"/> <rect x="500" y="90" width="100" height="100" fill="#EEF1F5"/> <path d="M500 90 H600 V190 Z" fill="#8A96A8"/> <path d="M500 190 h100 v100 a100 100 0 0 1 -100 -100 Z" fill="#1F3A5F"/> <rect x="500" y="290" width="100" height="100" fill="#EEF1F5"/> <circle cx="550" cy="340" r="32" fill="#fff"/> <rect x="500" y="390" width="100" height="100" fill="#8A96A8"/> <path d="M500 490 H600 V590 Z" fill="#D5DCE6"/> <path d="M500 490 L600 590 H500 Z" fill="#1F3A5F"/> <g transform="translate(0,324) scale(0.8)"> <path d="M28 40 L0 150 L26 160 L50 70 Z" fill="#B8862E"/> <path d="M132 40 L160 150 L134 160 L110 70 Z" fill="#B8862E"/> <rect x="2" y="128" width="26" height="9" transform="rotate(14 15 132)" fill="#F4C542"/> <rect x="132" y="128" width="26" height="9" transform="rotate(-14 145 132)" fill="#F4C542"/> <path d="M28 40 Q50 22 66 20 L80 40 L94 20 Q110 22 132 40 L136 208 H24 Z" fill="#D29A3A"/> <path d="M60 14 L80 40 L100 14 L92 8 L80 26 L68 8 Z" fill="#8F6420"/> <rect x="78" y="40" width="4" height="168" fill="#8F6420"/> <rect x="24" y="150" width="112" height="12" fill="#F4C542"/> <rect x="24" y="152" width="112" height="3" fill="#E3E6EA"/> <rect x="24" y="186" width="112" height="12" fill="#F4C542"/> <rect x="24" y="188" width="112" height="3" fill="#E3E6EA"/> <rect x="36" y="100" width="30" height="34" rx="3" fill="#B8862E"/> <rect x="94" y="100" width="30" height="34" rx="3" fill="#B8862E"/> </g> <g transform="translate(222,120)"> <rect x="20" y="0" width="16" height="16" rx="2" fill="#3F3F46"/> <rect x="14" y="14" width="28" height="10" rx="3" fill="#6B6B74"/> <path d="M8 40 Q8 24 28 24 Q48 24 48 40 V170 H8 Z" fill="#E3E6EA"/> <rect x="8" y="70" width="40" height="12" fill="#1F3A5F"/> <rect x="8" y="140" width="40" height="8" fill="#1F3A5F"/> <path d="M8 40 Q8 24 28 24 V170 H8 Z" fill="#C9CDD2"/> <path d="M42 10 Q70 10 66 40" stroke="#3F3F46" stroke-width="4" fill="none"/> <circle cx="66" cy="50" r="13" fill="#fff" stroke="#3F3F46" stroke-width="4"/> <path d="M66 50 L72 42" stroke="#1F3A5F" stroke-width="3"/> </g> <g transform="translate(316,96)"> <path d="M14 94 L10 46 Q8 30 18 30 Q26 30 26 44 L26 20 Q26 8 36 8 Q46 8 46 20 L46 14 Q46 2 56 2 Q66 2 66 14 V22 Q66 12 76 12 Q86 12 86 24 V62 L92 48 Q98 38 106 44 Q110 50 104 60 L86 94 Z" fill="#2F2F35"/> <rect x="10" y="80" width="80" height="14" rx="2" fill="#F4C542"/> <path d="M26 44 V60 M46 20 V56 M66 22 V56" stroke="#55555E" stroke-width="2"/> </g> <g transform="translate(408,4)"> <path d="M0 78 Q90 92 184 70 L182 86 Q90 104 2 92 Z" fill="#B38600"/> <path d="M20 80 Q20 4 96 2 Q170 4 168 76 Q96 88 20 80 Z" fill="#F2B705"/> <path d="M90 4 Q98 2 104 4 L106 80 Q97 81 88 80 Z" fill="#F7CD4A"/> <path d="M24 62 Q96 74 166 60 L166 70 Q96 84 22 72 Z" fill="#E3E6EA"/> <path d="M84 20 L108 20 L112 44 L96 56 L80 44 Z" fill="#1F3A5F"/> <circle cx="96" cy="36" r="6" fill="#F2B705"/> <path d="M40 40 Q50 18 76 10" stroke="#fff" stroke-opacity=".55" stroke-width="6" fill="none" stroke-linecap="round"/> </g> <g transform="translate(318,238)"> <rect x="0" y="0" width="170" height="226" rx="10" fill="#14243B"/> <rect x="12" y="16" width="146" height="198" rx="4" fill="#fff"/> <rect x="50" y="-10" width="70" height="26" rx="6" fill="#3F3F46"/> <circle cx="85" cy="-2" r="5" fill="#C9CDD2"/> <g font-family="Noto Sans CJK KR" font-weight="700" font-size="15" fill="#1F3A5F"><text x="26" y="44">사용적합성 평가</text></g> <g> <rect x="26" y="62" width="22" height="22" rx="3" fill="none" stroke="#1F3A5F" stroke-width="3"/> <path d="M30 72 L36 79 L48 62" stroke="#1F3A5F" stroke-width="4" fill="none" stroke-linecap="round"/> <rect x="58" y="66" width="86" height="6" rx="3" fill="#D5DCE6"/><rect x="58" y="77" width="56" height="5" rx="2.5" fill="#EEF1F5"/> <rect x="26" y="102" width="22" height="22" rx="3" fill="none" stroke="#1F3A5F" stroke-width="3"/> <path d="M30 112 L36 119 L48 102" stroke="#1F3A5F" stroke-width="4" fill="none" stroke-linecap="round"/> <rect x="58" y="106" width="86" height="6" rx="3" fill="#D5DCE6"/><rect x="58" y="117" width="66" height="5" rx="2.5" fill="#EEF1F5"/> <rect x="26" y="142" width="22" height="22" rx="3" fill="none" stroke="#1F3A5F" stroke-width="3"/> <rect x="58" y="146" width="86" height="6" rx="3" fill="#D5DCE6"/><rect x="58" y="157" width="46" height="5" rx="2.5" fill="#EEF1F5"/> <rect x="30" y="196" width="14" height="10" fill="#D5DCE6"/><rect x="50" y="186" width="14" height="20" fill="#8A96A8"/><rect x="70" y="176" width="14" height="30" fill="#1F3A5F"/><rect x="90" y="190" width="14" height="16" fill="#D5DCE6"/> </g> </g> <g transform="translate(446,392)"> <circle cx="46" cy="46" r="40" fill="#fff" fill-opacity=".85" stroke="#3F3F46" stroke-width="12"/> <path d="M76 76 L118 118" stroke="#3F3F46" stroke-width="18" stroke-linecap="round"/> <path d="M26 34 Q34 18 52 16" stroke="#1F3A5F" stroke-width="5" fill="none" stroke-linecap="round"/> </g> <g transform="translate(128,420) scale(0.8)"> <path d="M14 0 H54 V58 Q86 60 92 78 V86 H6 V0 Z" fill="#2F2F35"/> <rect x="10" y="22" width="44" height="9" fill="#F4C542"/> <rect x="4" y="80" width="90" height="8" rx="2" fill="#55555E"/> </g> </svg></div>
+</div></header>
+<div class="prog" id="prog" hidden><div class="wrap"><div class="bar"><i id="barfill"></i></div><span id="progtx"></span></div></div>
+<main><div class="wrap" id="view"></div></main>
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script>
+window.addEventListener('error', function(e){
+  var v=document.getElementById('view'); if(!v) return;
+  v.innerHTML='<div class="banner">설문 화면을 불러오지 못했습니다. 이 화면을 캡처해 담당자에게 보내 주세요.<br><small>'+String(e.message||'오류').split('<').join('').split('>').join('').split('&').join('')+' (줄 '+(e.lineno||'?')+')</small></div>';
+});
+</script>
+<script>
+/* ================= 설문 내용 (이 부분만 바꾸면 새 설문이 됩니다) ================= */
+const SCALE5 = ['전혀 그렇지 않다','그렇지 않은 편이다','보통이다','그런 편이다','매우 그렇다'];
+const SURVEY = {
+  org: '국립소방연구원',
+  title: '2024 수상구조활동 위험기준 안전지침 관련 설문 조사',
+  intro: {
+    letter: [
+      '안녕하십니까?',
+      '바쁘신 가운데서도 귀한 시간을 내주셔서 감사드립니다.',
+      '국립소방연구원에서는 지난 6월 소방청, 중앙119구조본부, 전국 소방학교, 시도 구조대응 부서에 [수상구조활동 위험기준 안전지침과 교육영상]을 공유하였습니다. 본 설문조사는 배포된 수상구조활동 위험기준 안전지침의 현장 적용성을 높이고자 실시하고 있습니다.',
+      '보다 정확한 연구 결과를 위하여 성실한 응답을 부탁드리며, 본 설문 내용을 포함한 응답자분들의 모든 정보는 통계법 제33조 비밀 보호 조항에 의거 비밀이 보장됨을 약속드립니다.',
+      '본 설문에 관심을 가지고 협조해 주셔서 대단히 감사합니다.'
+    ],
+    sign: '2024년 12월 · 국립소방연구원',
+    notice: '본 설문에 들어가기에 앞서 [수상구조활동 위험기준 안전지침과 교육영상]을 아직 못 보신 구조대원들은 아래 링크를 통해 지침 자료와 동영상을 살펴보시고 설문에 응해 주시기 바랍니다. 특히, 안전지침 자료의 13페이지를 살펴봐 주시기 바랍니다.',
+    links: [
+      {label:'안전지침 자료 보기', url:'https:\/\/url.kr/nyr8ft'},
+      {label:'교육영상 보기', url:'https:\/\/url.kr/s8xzwl'}
+    ],
+    minutes: 7
+  },
+  pages: [
+    { no:'Part 1', title:'안전지침 확인 시점',
+      note:['각 질문에 대해 귀하께서 동의하시는 정도를 5가지 보기 중에서 골라 주십시오. ‘매우 그렇다’ 5점부터 ‘전혀 그렇지 않다’ 1점까지, 귀하의 생각에 가장 가까운 점수를 선택해 주시면 됩니다.'],
+      items:[
+        {id:'Q1', n:'1', type:'single', text:'귀하는 안전지침을 언제 처음 확인하셨습니까?',
+         options:['본 설문에 임하기 전부터 이미 확인하고 알고 있었음','본 설문을 통해 처음 확인함']}
+      ]},
+    { no:'Part 1', title:'안전지침에 대한 이해도 및 만족도', items:[
+        {id:'Q2', n:'2', type:'scale', text:'수상구조활동 위험기준 안전지침 내용을 어려움 없이 이해할 수 있다고 생각한다.'},
+        {id:'Q3', n:'3', type:'scale', text:'지침에서 제시된 위험평가 기준이 현장 상황을 충분히 반영한다고 생각한다.'},
+        {id:'Q4', n:'4', type:'scale', text:'제공된 교육 영상이 지침 이해에 도움이 되었다고 생각한다.'},
+        {id:'Q5', n:'5', type:'scale', text:'지침이 구조대원의 안전 확보에 실질적으로 도움이 된다고 생각한다.'}
+      ]},
+    { no:'Part 1', title:'현장 적용성', items:[
+        {id:'Q6', n:'6', type:'scale', text:'위험평가 기준에 따라 구조 활동 가능 여부를 판단하기 쉽다고 생각한다.'},
+        {id:'Q7', n:'7', type:'scale', text:'유속 및 수심 정보를 활용하여 현장 판단을 내리는 데 도움이 된다고 생각한다.'}
+      ]},
+    { no:'Part 1', title:'교육 및 훈련 관련 피드백', items:[
+        {id:'Q8', n:'8', type:'scale', text:'지침 내용을 기반으로 한 교육/훈련이 충분히 제공되었다고 생각한다.'},
+        {id:'Q9', n:'9', type:'text', required:false, text:'추가로 필요하다고 느끼는 교육 콘텐츠나 훈련 방식이 있다면 적어주세요.'}
+      ]},
+    { no:'Part 1', title:'지침의 실효성', items:[
+        {id:'Q10', n:'10', type:'scale', text:'위험도 곡선을 활용하여 단계별 위험 수준을 직관적으로 이해할 수 있다.'},
+        {id:'Q11', n:'11', type:'scale', text:'근접유속 측정방법이 현장에서 실제로 활용 가능한 수준이라고 생각한다.'}
+      ]},
+    { no:'Part 1', title:'전반적 유용성 및 추가 제안 사항', items:[
+        {id:'Q12', n:'12', type:'text', text:'지침 내용 중 가장 유용하다고 생각한 부분은 무엇입니까?'},
+        {id:'Q13', n:'13', type:'text', text:'지침 내용 중 가장 유용하지 않거나 개선이 필요하다고 생각한 부분은 무엇입니까?'},
+        {id:'Q14', n:'14', type:'text', required:false, text:'추가로 수상구조 현장에서 필요한 안전장비나 지원사항이 있다면 제안해주세요.'}
+      ]},
+    { no:'Part 1', title:'지침 활용 경험 및 의향', items:[
+        {id:'Q15', n:'15', type:'single', text:'귀하는 현행 수상구조활동 위험평가 기준(지침 자료 1페이지)을 활용해 보신 적이 있습니까?',
+         options:['전혀 활용한 적이 없다','거의 활용한 적이 없다','가끔 활용했다 (가끔 필요할 때만 사용)','자주 활용했다 (현장에서 종종 사용)','매우 자주 활용했다 (거의 모든 상황에서 사용)']},
+        {id:'Q16', n:'16', type:'single', text:'귀하는 위험도 곡선에 기반한 위험평가 기준(지침 자료 13페이지)을 활용해 보신 적이 있습니까?',
+         options:['전혀 활용한 적이 없다','거의 활용한 적이 없다','가끔 활용했다 (가끔 필요할 때만 사용)','자주 활용했다 (현장에서 종종 사용)','매우 자주 활용했다 (거의 모든 상황에서 사용)']},
+        {id:'Q17', n:'17', type:'single', text:'귀하는 위험도 곡선에 기반한 위험평가 기준(지침 자료 13페이지)을 활용하실 계획이 있으십니까?',
+         options:['전혀 활용할 계획이 없다','거의 활용하지 않을 것이다','가끔 활용할 수 있을 것 같다 (가끔 필요할 때만 사용 예정)','자주 활용할 것 같다 (현장에서 종종 사용 예정)','앞으로 매우 자주 활용할 예정이다 (거의 모든 상황에서 사용 예정)']},
+        {id:'Q17_1', n:'17-1', type:'multi', showIf:{q:'Q17', in:[1,2]},
+         text:'활용하실 계획이 없다고 응답하셨는데, 활용 의향이 없으신 이유는 무엇일까요?', hint:'해당하는 것을 모두 골라 주세요.',
+         options:['실제 현장에서 시간 제약 및 긴박한 상황 요인으로 유속과 유량 측정이 어렵기 때문에','위험도 곡선 지침 활용을 위한 훈련이나 교육이 아직 미비하기 때문에','위험도 곡선의 실질적인 효과나 안전 확보 방식에 대한 신뢰가 부족하기 때문에','유속과 유량 외에, 수상구조 환경에 영향을 미치는 다른 요인들(예: 장애물, 바닥 상태, 기상 조건)의 영향도가 크기 때문에','기타'],
+         etc:5}
+      ]},
+    { no:'Part 2', title:'응답자 특성', note:['해당하는 항목을 선택해 주십시오.'], items:[
+        {id:'DQ1', n:'DQ1', type:'grid', text:'귀하의 소속지역은 어떻게 되십니까?',
+         options:['중앙','서울','부산','대구','인천','광주','대전','울산','창원','세종','경기 남부','경기 북부','강원','충북','충남','전북','전남','경북','경남','제주']},
+        {id:'DQ2', n:'DQ2', type:'single', text:'귀하의 계급은 어떻게 되십니까?',
+         options:['소방사','소방교','소방장','소방위','소방경 이상']},
+        {id:'DQ3', n:'DQ3', type:'single', text:'귀하의 소방근무 경력은 어떻게 되십니까?',
+         options:['1년 미만','1년 이상 ~ 3년 미만','3년 이상 ~ 5년 미만','5년 이상 ~ 7년 미만','7년 이상 ~ 10년 미만','10년 이상']},
+        {id:'DQ4', n:'DQ4', type:'single', text:'지난 1년 동안 귀하의 수난 구조 활동 경험 횟수는 어떻게 되십니까?',
+         options:['0회 (경험 없음)','1회 ~ 5회','6회 ~ 10회','11회 ~ 20회','21회 ~ 50회','51회 이상']}
+      ]}
+  ],
+  thanks: '설문에 성실하게 임해 주셔서 감사합니다.'
+};
+/* ============================================================================ */
+
+const $ = s => document.querySelector(s);
+const ESC_MAP = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+const esc = s => Array.from(String(s), c => ESC_MAP[c] || c).join('');
+/* 응답 저장 주소: 구글 Apps Script 웹 앱 주소 (Netlify 등 외부에 올릴 때 사용) */
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyKe85VKJ67XqTKNOweT0s_14ULl7YHx0Z4lAEiS_KY4_DOHznCX79Px5teHOtOmi1q/exec';
+const LIVE = typeof google !== 'undefined' && google.script && google.script.run;
+const DEMO = !LIVE && !ENDPOINT;
+const KEY = 'survey-done:' + SURVEY.title;
+const ans = {};            /* id -> number | number[] | string */
+const etcText = {};        /* id -> string */
+let step = -1;             /* -1 = intro, pages.length = done */
+const startedAt = Date.now();
+
+document.title = SURVEY.title;
+$('#org').textContent = SURVEY.org;
+$('#title').textContent = SURVEY.title;
+$('#foot').textContent = '응답 내용은 통계법 제33조에 따라 비밀이 보장되며 통계 목적 외에는 사용하지 않습니다.';
+
+const visible = it => !it.showIf || [].concat(ans[it.showIf.q] ?? []).some(v => it.showIf.in.includes(v));
+const isReq = it => it.required !== false;
+function answered(it){
+  const v = ans[it.id];
+  if (it.type === 'text') return !!(v && v.trim());
+  if (it.type === 'multi') return Array.isArray(v) && v.length > 0 && (!it.etc || !v.includes(it.etc) || !!(etcText[it.id]||'').trim());
+  return v != null;
+}
+
+function render(){
+  const P = SURVEY.pages, v = $('#view');
+  $('#prog').hidden = step < 0 || step >= P.length;
+  $('#hero').hidden = !(step < 0 || step >= P.length);
+  if (step >= 0 && step < P.length){
+    $('#barfill').style.width = ((step + 1) / P.length * 100) + '%';
+    $('#progtx').textContent = (step + 1) + ' / ' + P.length;
+  }
+  if (step < 0){ v.innerHTML = introHTML(); bindNav(); return; }
+  if (step >= P.length){ v.innerHTML = doneHTML(); return; }
+  const pg = P[step];
+  let h = `<div class="sec-title"><div class="no">${esc(pg.no)}</div><div class="tx">${esc(pg.title)}</div></div>`;
+  if (pg.note) h += `<div class="note">${pg.note.map(t=>`<p>${esc(t)}</p>`).join('')}</div>`;
+  pg.items.forEach(it => { if (visible(it)) h += itemHTML(it); });
+  h += `<div id="msg"></div><div class="nav"><button class="prev" id="prev" type="button">이전</button><button class="next" id="next" type="button">${step === P.length-1 ? '제출하기' : '다음'}</button></div>`;
+  v.innerHTML = h;
+  bindItems(pg); bindNav();
+}
+
+function introHTML(){
+  const I = SURVEY.intro;
+  let again = '';
+  try { if (localStorage.getItem(KEY)) again = `<div class="banner">이 기기에서 이미 응답을 제출하셨습니다. 다시 응답하시면 새 응답으로 한 번 더 저장됩니다.</div>`; } catch(e){}
+  return `${again}<div class="letter">${I.letter.map(t=>`<p>${esc(t)}</p>`).join('')}<p class="sig">${esc(I.sign)}</p></div>
+  ${I.notice ? `<div class="note"><p>${esc(I.notice)}</p></div>` : ''}
+  ${I.links && I.links.length ? `<div class="links">${I.links.map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}<span>${esc(l.url.split(':').slice(1).join(':').slice(2))}</span></a>`).join('')}</div>` : ''}
+  <div class="note"><p>총 ${SURVEY.pages.length}단계 · 약 ${I.minutes}분 소요</p></div>
+  <div class="nav"><button class="next" id="next" type="button">설문 시작하기</button></div>
+  ${!DEMO ? '' : '<p class="demo">미리보기 화면입니다. 여기서 제출한 응답은 저장되지 않습니다.</p>'}`;
+}
+
+function itemHTML(it){
+  const req = isReq(it) ? '' : '<span class="opt">(선택)</span>';
+  let h = `<section class="card" id="c-${it.id}"><p class="q"><span class="n">${esc(it.n)}.</span>${esc(it.text)}${req}</p>`;
+  if (it.hint) h += `<p class="hint">${esc(it.hint)}</p>`;
+  const v = ans[it.id];
+  if (it.type === 'scale'){
+    h += `<div class="scale" role="radiogroup" aria-label="${esc(it.text)}">` + SCALE5.map((l,i)=>`<button type="button" class="sc" role="radio" data-id="${it.id}" data-v="${i+1}" aria-checked="${v===i+1}"><b>${i+1}</b><small>${l}</small></button>`).join('') + `</div>`;
+  } else if (it.type === 'single' || it.type === 'multi'){
+    const multi = it.type === 'multi';
+    h += `<div class="opts" role="${multi?'group':'radiogroup'}">` + it.options.map((o,i)=>{
+      const on = multi ? (Array.isArray(v) && v.includes(i+1)) : v === i+1;
+      return `<button type="button" class="opt-btn${multi?' multi':''}" role="${multi?'checkbox':'radio'}" data-id="${it.id}" data-v="${i+1}" aria-checked="${on}"><span class="mk"></span><span>${esc(o)}</span></button>`;
+    }).join('') + `</div>`;
+    if (it.etc) h += `<input type="text" id="etc-${it.id}" placeholder="기타 내용을 적어 주세요" value="${esc(etcText[it.id]||'')}" ${Array.isArray(v)&&v.includes(it.etc)?'':'hidden'}>`;
+  } else if (it.type === 'grid'){
+    h += `<div class="grid" role="radiogroup">` + it.options.map((o,i)=>`<button type="button" class="grid-btn" role="radio" data-id="${it.id}" data-v="${i+1}" aria-checked="${v===i+1}">${esc(o)}</button>`).join('') + `</div>`;
+  } else if (it.type === 'text'){
+    h += `<textarea id="t-${it.id}" data-id="${it.id}" placeholder="자유롭게 적어 주세요">${esc(v||'')}</textarea>`;
+  }
+  return h + `<p class="err" hidden>응답해 주세요.</p></section>`;
+}
+
+function bindItems(pg){
+  document.querySelectorAll('[data-id][data-v]').forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.id, val = +b.dataset.v, it = pg.items.find(x=>x.id===id);
+    if (it.type === 'multi'){
+      const arr = Array.isArray(ans[id]) ? ans[id].slice() : [];
+      const k = arr.indexOf(val); k >= 0 ? arr.splice(k,1) : arr.push(val); arr.sort((a,b)=>a-b);
+      ans[id] = arr; b.setAttribute('aria-checked', arr.includes(val));
+      const e = document.getElementById('etc-'+id); if (e){ e.hidden = !arr.includes(it.etc); if(!e.hidden) e.focus(); }
+    } else {
+      ans[id] = val;
+      b.parentElement.querySelectorAll('[data-v]').forEach(x => x.setAttribute('aria-checked', +x.dataset.v === val));
+      /* 이 문항에 따라 나타나는 문항이 있으면 화면을 다시 그림 */
+      if (pg.items.some(x => x.showIf && x.showIf.q === id)) { keepScroll(render); return; }
+    }
+    clearMiss(id);
+  }));
+  document.querySelectorAll('textarea[data-id]').forEach(t => t.addEventListener('input', () => { ans[t.dataset.id] = t.value; clearMiss(t.dataset.id); }));
+  document.querySelectorAll('input[id^="etc-"]').forEach(t => t.addEventListener('input', () => { etcText[t.id.slice(4)] = t.value; clearMiss(t.id.slice(4)); }));
+}
+function keepScroll(fn){ const y = window.scrollY; fn(); window.scrollTo(0, y); }
+function clearMiss(id){ const c = document.getElementById('c-'+id); if (c){ c.classList.remove('missing'); c.querySelector('.err').hidden = true; } }
+
+function bindNav(){
+  const n = $('#next'), p = $('#prev');
+  if (p) p.onclick = () => { step--; render(); window.scrollTo(0,0); };
+  if (n) n.onclick = () => {
+    if (step < 0){ step = 0; render(); window.scrollTo(0,0); return; }
+    const pg = SURVEY.pages[step];
+    const miss = pg.items.filter(it => visible(it) && isReq(it) && !answered(it));
+    if (miss.length){
+      miss.forEach(it => { const c = document.getElementById('c-'+it.id); c.classList.add('missing'); c.querySelector('.err').hidden = false; });
+      $('#msg').innerHTML = `<div class="banner">응답하지 않은 문항이 ${miss.length}개 있습니다.</div>`;
+      document.getElementById('c-'+miss[0].id).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'});
+      return;
+    }
+    if (step === SURVEY.pages.length - 1){ submit(n); return; }
+    step++; render(); window.scrollTo(0,0);
+  };
+}
+
+function payload(){
+  const cols = ['응답일시','소요시간(초)'], row = [new Date().toLocaleString('ko-KR'), Math.round((Date.now()-startedAt)/1000)];
+  const book = [];
+  SURVEY.pages.forEach(pg => pg.items.forEach(it => {
+    const shown = visible(it);
+    if (it.type === 'multi'){
+      it.options.forEach((o,i) => { cols.push(`${it.id}_${i+1}`); row.push(shown ? ((ans[it.id]||[]).includes(i+1) ? 1 : 0) : ''); book.push([`${it.id}_${i+1}`, `${it.n}. ${it.text}`, `${o} (선택=1, 미선택=0)`]); });
+      if (it.etc){ cols.push(`${it.id}_기타`); row.push(shown ? (etcText[it.id]||'') : ''); book.push([`${it.id}_기타`, `${it.n}. 기타 응답`, '서술형']); }
+    } else {
+      cols.push(it.id); row.push(shown ? (ans[it.id] ?? '') : '');
+      const lab = it.type === 'scale' ? SCALE5.map((l,i)=>`${i+1}=${l}`).join(', ') : it.type === 'text' ? '서술형' : it.options.map((o,i)=>`${i+1}=${o}`).join(', ');
+      book.push([it.id, `${it.n}. ${it.text}`, lab]);
+    }
+  }));
+  return {cols, row, book};
+}
+
+function submit(btn){
+  btn.disabled = true; btn.textContent = '제출하는 중…';
+  const ok = () => { try{ localStorage.setItem(KEY, '1'); }catch(e){}; step = SURVEY.pages.length; render(); window.scrollTo(0,0); };
+  const fail = () => { btn.disabled = false; btn.textContent = '다시 제출하기'; $('#msg').innerHTML = '<div class="banner">제출하지 못했습니다. 인터넷 연결을 확인한 뒤 다시 눌러 주세요. 입력하신 답은 그대로 남아 있습니다.</div>'; };
+  if (LIVE){ google.script.run.withSuccessHandler(ok).withFailureHandler(fail).submit(payload()); }
+  else if (ENDPOINT){
+    fetch(ENDPOINT, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload())})
+      .then(ok).catch(fail);
+  }
+  else { setTimeout(ok, 500); }
+}
+
+function doneHTML(){
+  return `<div class="done"><div class="ck"></div><h2>응답이 제출되었습니다</h2><p>${esc(SURVEY.thanks)}</p></div>
+  ${!DEMO ? '' : '<p class="demo">미리보기 화면이라 응답은 저장되지 않았습니다.</p>'}`;
+}
+
+render();
+</script>
+
+</body>
+</html>
