@@ -51,6 +51,25 @@
   const $ = id => document.getElementById(id);
   const number = value => value.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:4});
   const intensity = value => Number.isFinite(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—';
+
+  // 한국 뷰어와 같은 강도 색 램프. |값| 55%까지는 노랑에서 중간색(양수 주황,
+  // 음수 하늘)으로, 그 뒤는 중간색에서 극단(진빨강/진파랑)으로 간다. ±100을
+  // 넘으면 색은 포화되지만 막대 길이는 축이 늘어나 계속 표현된다.
+  const RAMP = {
+    neg: { mid: [80, 170, 235], edge: [12, 42, 132] },
+    pos: { mid: [255, 170, 80], edge: [186, 16, 40] },
+  };
+  const lerp = (a, b, t) => a.map((c, i) => Math.round(c + (b[i] - c) * t));
+  function strengthColor(value) {
+    const capped = Math.max(-1, Math.min(1, value / 100));
+    const a = Math.abs(capped);
+    const pivot = [254, 217, 118];
+    const stops = capped < 0 ? RAMP.neg : RAMP.pos;
+    const rgb = a <= 0.55
+      ? lerp(pivot, stops.mid, a / 0.55)
+      : lerp(stops.mid, stops.edge, (a - 0.55) / 0.45);
+    return `rgb(${rgb.join(',')})`;
+  }
   let index;
   let request = 0;
 
@@ -88,6 +107,7 @@
     const badge = document.createElement('span');
     badge.className = last > 0 ? 'pos' : last < 0 ? 'neg' : '';
     badge.textContent = intensity(last);
+    if (Number.isFinite(last)) badge.style.color = strengthColor(last);
     heading.appendChild(badge);
     card.appendChild(heading);
     const legend = document.createElement('p');
@@ -130,7 +150,7 @@
     values.forEach((value, i) => {
       if (!Number.isFinite(value)) return;
       const barY = zero - value / maxAbs * half;
-      const rect = el('rect', {x:x(i) - .4, y:Math.min(zero, barY), width:Math.max(.7, 760 / data.dates.length), height:Math.abs(zero - barY), fill:value >= 0 ? '#dc2626' : '#2563eb'});
+      const rect = el('rect', {x:x(i) - .4, y:Math.min(zero, barY), width:Math.max(.7, 760 / data.dates.length), height:Math.abs(zero - barY), fill:strengthColor(value), opacity:0.95});
       const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
       title.textContent = `${data.dates[i]} · 종가 ${number(data.closes[i])} USD · 강도 ${intensity(value)}`;
       rect.appendChild(title);
