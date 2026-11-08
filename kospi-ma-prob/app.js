@@ -234,32 +234,43 @@
   }
 
   // 강도 막대의 색 인코딩. 길이가 값을 나타내고, 색은 부호와 크기를 함께 강조한다.
-  //   +100 진빨강 → +50 주황 → 0 노랑 → -50 하늘 → -100 진파랑  (한국 관례: 상승 빨강 / 하락 파랑)
-  // ±100을 넘으면 색은 포화되지만 막대 길이는 축이 늘어나 계속 표현된다.
-  // 색은 두 구간으로 나눠 보간한다. 한 번에 섞으면 중간값이 탁해지므로 |값| 55%까지는
-  // 노랑→중간색(음수는 하늘, 양수는 주황), 그 뒤는 중간색→극단(진파랑/진빨강)으로 간다.
-  // 색 자체가 '이동평균/주가/음수'와 겹치지 않게 일부러 대비가 큰 두 계열만 쓴다.
-  var RAMP = {
-    // 한국 시장 관례: 상승은 빨강, 하락은 파랑. 색이 짙을수록 강도가 크다.
-    neg: { mid: [80, 170, 235], edge: [12, 42, 132] },    // 노랑 → 하늘 → 진파랑
-    pos: { mid: [255, 170, 80], edge: [186, 16, 40] }     // 노랑 → 주황 → 진빨강
-  };
+  // 한국 관례: 상승은 빨강, 하락은 파랑.
+  //
+  // 색 배분은 실제 분포에 맞춘다. 이 화면의 강도는 중앙값 21, 75% 48, 90% 110 에
+  // 몰려 있어서 ±100 을 고르게 나누면 정작 자주 보는 20~50 구간이 밋밋해진다.
+  // 그래서 값 구간별 앵커를 직접 지정한다.
+  //   +10 옅은 크림 → +25 노랑 → +50 주황 → +90 진한 주황 → +200 진빨강 → 600+ 포화
+  // ±100 을 넘으면 색은 포화되지만 막대 길이는 축이 늘어나 계속 표현된다.
+  // 색상·채도·명도를 함께 천천히 움직여 '질어지는' 느낌을 낸다. 채도를 급히 올리면
+  // 원색으로 튀어 계단처럼 보인다.
+  var KNOTS = [[0, 0], [10, .20], [25, .42], [50, .65], [90, .82], [200, .94], [600, 1]];
 
-  function lerp(a, b, t) {
-    return a.map(function (c, i) { return Math.round(c + (b[i] - c) * t); });
+  function rampPosition(v) {
+    var a = Math.abs(v);
+    for (var i = 0; i < KNOTS.length - 1; i++) {
+      var x0 = KNOTS[i][0], t0 = KNOTS[i][1];
+      var x1 = KNOTS[i + 1][0], t1 = KNOTS[i + 1][1];
+      if (a <= x1) return t0 + (t1 - t0) * (a - x0) / (x1 - x0);
+    }
+    return 1;
   }
 
   function probRamp(v) {
-    var t = Math.max(-1, Math.min(1, v / 100));
-    var a = Math.abs(t);
-    var pivot = [254, 217, 118];
-    var stops = t < 0 ? RAMP.neg : RAMP.pos;
-    var rgb = a <= 0.55
-      ? lerp(pivot, stops.mid, a / 0.55)
-      : lerp(stops.mid, stops.edge, (a - 0.55) / 0.45);
+    var t = rampPosition(v);
+    var h = v >= 0 ? 52 - 50 * t : 192 + 36 * t;
+    var s = (16 + 62 * t) / 100;
+    var l = 0.97 - 0.40 * t;
+    // HSL → RGB. h 는 0..240 범위만 나온다.
+    var c = (1 - Math.abs(2 * l - 1)) * s;
+    var hp = h / 60;
+    var x = c * (1 - Math.abs(hp % 2 - 1));
+    var m = l - c / 2;
+    var sectors = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]];
+    var sec = sectors[Math.floor(hp) % 6];
+    var rgb = sec.map(function (q) { return Math.round((q + m) * 255); });
     return {
       stroke: 'rgb(' + rgb.join(',') + ')',
-      width: (1.2 + 3.0 * a).toFixed(2)
+      width: (1.2 + 3.0 * t).toFixed(2)
     };
   }
 
