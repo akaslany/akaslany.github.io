@@ -33,13 +33,15 @@
 <p id="direction-note" class="meta"></p>
 <div class="tools">
   <label>등급 <select id="grade" aria-label="강도 등급"><option value="">전체</option><option>강</option><option>중</option><option>약</option><option>미미</option></select></label>
+  <label>업종 <select id="sector" aria-label="업종"><option value="">전체</option></select></label>
+  <label>시총 하한 <select id="min-cap" aria-label="시총 하한 (USD)"><option value="0">없음</option><option value="1000000000">10억$</option><option value="10000000000">100억$</option><option value="100000000000">1,000억$</option></select></label>
   <input id="search" type="search" aria-label="티커 또는 종목명 검색" placeholder="티커·종목명 검색" spellcheck="false">
-  <label>정렬 <select id="sort"><option value="strength">최약축 강도순</option><option value="ticker">티커순</option><option value="name">종목명순</option></select></label>
+  <label>정렬 <select id="sort"><option value="strength">최약축 강도순</option><option value="ticker">티커순</option><option value="name">종목명순</option><option value="cap-desc">시총 큰 순</option><option value="cap-asc">시총 작은 순</option></select></label>
 </div>
 <p id="summary" role="status" aria-live="polite"></p>
 <main class="tablewrap">
   <table aria-label="미국 이평선 강도 종목">
-    <thead><tr><th scope="col">티커</th><th scope="col">종목명</th><th scope="col">5축</th><th scope="col">20축</th><th scope="col">60축</th><th scope="col">120축</th><th scope="col">등급</th><th scope="col">전환</th><th scope="col">종목 기준일</th></tr></thead>
+    <thead><tr><th scope="col">티커</th><th scope="col">종목명</th><th scope="col">시총 (USD)</th><th scope="col">5축</th><th scope="col">20축</th><th scope="col">60축</th><th scope="col">120축</th><th scope="col">등급</th><th scope="col">전환</th><th scope="col">종목 기준일</th></tr></thead>
     <tbody id="rows"></tbody>
   </table>
 </main>
@@ -56,15 +58,29 @@
     turn:'상승 목록 중 60·120축이 모두 양수이고, 하나 이상이 최근 5거래일 이내 양전한 종목입니다.'
   };
 
+  function formatCap(value) {
+    if (!Number.isFinite(value)) return '—';
+    const [unit, suffix, digits] = value >= 1e12 ? [1e12, '조', 1] : value >= 1e8 ? [1e8, '억', 0] : value >= 1e4 ? [1e4, '만', 0] : [1, '', 0];
+    return `$${(value / unit).toLocaleString('ko-KR', {maximumFractionDigits:digits})}${suffix}`;
+  }
+
   function render() {
     if (!payload) return;
     const source = direction === 'down' ? payload.down : direction === 'turn' ? payload.up.filter(row => row.turn) : payload.up;
     const query = $('search').value.trim().toLowerCase();
+    const sector = $('sector').value, minCap = Number($('min-cap').value);
     let rows = source.filter(row => (!$('grade').value || row.g === $('grade').value) &&
+      (!sector || row.sc === sector) &&
+      (!minCap || (Number.isFinite(row.mc) && row.mc >= minCap)) &&
       (!query || row.t.toLowerCase().includes(query) || row.n.toLowerCase().includes(query)));
     const sort = $('sort').value;
     if (sort === 'ticker') rows.sort((a, b) => a.t.localeCompare(b.t));
     if (sort === 'name') rows.sort((a, b) => a.n.localeCompare(b.n) || a.t.localeCompare(b.t));
+    if (sort === 'cap-desc' || sort === 'cap-asc') rows.sort((a, b) => {
+      const aKnown = Number.isFinite(a.mc), bKnown = Number.isFinite(b.mc);
+      if (aKnown !== bKnown) return aKnown ? -1 : 1;
+      return (aKnown ? (sort === 'cap-desc' ? b.mc - a.mc : a.mc - b.mc) : 0) || a.t.localeCompare(b.t);
+    });
     $('direction-note').textContent = notes[direction];
     $('summary').textContent = `${labels[direction]} ${source.length.toLocaleString('ko-KR')}종목 중 ${rows.length.toLocaleString('ko-KR')}종목 표시`;
     $('rows').replaceChildren();
@@ -82,7 +98,9 @@
       link.textContent = row.t;
       cell('').appendChild(link);
       const name = cell(row.n, 'name');
-      name.title = `${row.n} · ${row.x || ''}`;
+      name.title = [row.n, row.x, row.sc, row.in].filter(Boolean).join(' · ');
+      const cap = cell(formatCap(row.mc));
+      if (Number.isFinite(row.mc)) cap.title = `$${row.mc.toLocaleString('ko-KR')} USD`;
       row.s.forEach(value => cell(Number.isFinite(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—', value > 0 ? 'pos' : value < 0 ? 'neg' : ''));
       cell(row.g, 'grade');
       cell(row.turn ? '↗' : '—');
@@ -91,7 +109,7 @@
     });
     if (!rows.length) {
       const tr = document.createElement('tr'), td = document.createElement('td');
-      td.colSpan = 9;
+      td.colSpan = 10;
       td.textContent = '조건에 맞는 종목이 없습니다.';
       tr.appendChild(td);
       $('rows').appendChild(tr);
@@ -105,7 +123,7 @@
       render();
     });
   });
-  ['grade', 'sort'].forEach(id => $(id).addEventListener('change', render));
+  ['grade', 'sort', 'sector', 'min-cap'].forEach(id => $(id).addEventListener('change', render));
   $('search').addEventListener('input', render);
   (async () => {
     try {
@@ -113,6 +131,12 @@
       if (!response.ok) throw new Error(`데이터를 불러올 수 없습니다 (${response.status}).`);
       payload = await response.json();
       if (payload.schema !== 'us-ma-strength-screen.v1' || !Array.isArray(payload.up) || !Array.isArray(payload.down)) throw new Error('데이터 형식을 확인해 주세요.');
+      const sectors = [...new Set([...payload.up, ...payload.down].map(row => row.sc).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ko-KR'));
+      sectors.forEach(sector => {
+        const option = document.createElement('option');
+        option.value = option.textContent = sector;
+        $('sector').appendChild(option);
+      });
       $('meta').textContent = `${payload.session} · 미국 정규장 마감 기준 · 상승 ${payload.counts.up.toLocaleString('ko-KR')} / 하락 ${payload.counts.down.toLocaleString('ko-KR')} / 전환 ${payload.counts.turn.toLocaleString('ko-KR')}`;
       ['up', 'down', 'turn'].forEach(id => { $(id).textContent = `${labels[id]} (${payload.counts[id].toLocaleString('ko-KR')})`; });
       render();
