@@ -19,6 +19,12 @@
   .legend{font-size:.85rem;color:#536174}.price{color:#334155}.average{color:#b45309}
   .intro{background:white;border:1px solid #dce3eb;padding:14px 18px;border-radius:10px}
   footer{margin-top:28px}button:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+  .us-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:26px 0 0;padding-top:14px;border-top:1px solid #cbd5e1}
+  .us-nav-label{font-weight:700;color:#64748b;margin-right:2px}
+  .us-nav a{flex:1 1 auto;text-align:center;padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;
+    color:#17212b;text-decoration:none;font-size:.9rem;background:#f8fafc}
+  .us-nav a:hover{background:#e2e8f0}
+  .us-nav a[aria-current]{background:#172f50;color:#fff;border-color:#172f50}
   @media(max-width:760px){body{padding:20px 12px}h1{font-size:1.4rem}}
 </style>
 </head>
@@ -43,6 +49,12 @@
   <p class="legend" id="details"></p>
   <div id="charts" class="charts"></div>
 </main>
+<nav class="us-nav">
+<span class="us-nav-label">미국</span>
+<a href="./dji.html">지수</a>
+<a href="./us-screen.html">이평선 강도 스크리너</a>
+<a href="./us-stocks-app.html" aria-current="page">종목별 이평선 강도</a>
+</nav>
 <footer>미국 정규장 마감 기준 · 종가: 분할 조정, 배당 미포함 · 개인 연구용</footer>
 <script>
 (() => {

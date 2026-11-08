@@ -16,6 +16,12 @@
   a{color:#172f50;text-underline-offset:3px}.pos{color:#dc2626}.neg{color:#2563eb}.grade{font-weight:700}
   footer{margin-top:28px}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
   @media(max-width:600px){body{padding:20px 12px}h1{font-size:1.4rem}.tabs button{flex:1;padding:10px 6px}th,td{padding:11px}}
+  .us-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:26px 0 0;padding-top:14px;border-top:1px solid #cbd5e1}
+  .us-nav-label{font-weight:700;color:#64748b;margin-right:2px}
+  .us-nav a{flex:1 1 auto;text-align:center;padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;
+    color:#17212b;text-decoration:none;font-size:.9rem;background:#f8fafc}
+  .us-nav a:hover{background:#e2e8f0}
+  .us-nav a[aria-current]{background:#172f50;color:#fff;border-color:#172f50}
 </style>
 </head>
 <body>
@@ -45,6 +51,12 @@
     <tbody id="rows"></tbody>
   </table>
 </main>
+<nav class="us-nav">
+<span class="us-nav-label">미국</span>
+<a href="./dji.html">지수</a>
+<a href="./us-screen.html" aria-current="page">이평선 강도 스크리너</a>
+<a href="./us-stocks-app.html">종목별 이평선 강도</a>
+</nav>
 <footer>미국 정규장 마감 기준 · 강 ≥20 / 중 ≥10 / 약 ≥5 / 미미 &lt;5 (네 축의 최약 강도 기준) · 개인 연구용</footer>
 <script>
 (() => {
