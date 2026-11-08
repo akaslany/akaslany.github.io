@@ -32,7 +32,6 @@
     sortKey: 'cap',
     sortDir: -1,
     activeGrade: ALL,
-    hideSpac: false,
     capFloor: 0,
     query: ''
   };
@@ -76,7 +75,6 @@
     var floor = state.capFloor;
     return state.rows.filter(function (r) {
       if (state.activeGrade !== ALL && r.g !== state.activeGrade) return false;
-      if (state.hideSpac && r.spac) return false;
       if (floor === -1 && r.cap < 0.3) return false;      // 3,000억 미만 제외
       if (floor > 0 && r.cap < floor) return false;
       if (q) {
@@ -180,8 +178,7 @@
       var cells = '<td class="num muted">' + (i + 1) + '</td>' +
         '<td><a href="stocks-app.html?code=' + r.t + '">' + escapeHtml(r.n) + '</a>' +
           ' <span class="code">' + r.t + '</span>' +
-          ' <span class="tag">' + escapeHtml(r.m || '') + '</span>' +
-          (r.spac ? ' <span class="tag spac">스팩</span>' : '') + stale + '</td>' +
+          ' <span class="tag">' + escapeHtml(r.m || '') + '</span>' + stale + '</td>' +
         '<td class="num">' + fmtCap(r.cap) + '</td>' +
         (turn ? '' : '<td><span class="grade ' + gradeClass(r.g, state.dir) + '">' +
           escapeHtml(r.g) + '</span></td>');
@@ -256,8 +253,7 @@
         escapeHtml(state.activeGrade) + '</span> ' + (byGrade[state.activeGrade] || 0) + '종목';
     }
     $('summary').innerHTML = (turn ? '60·120 전환 · ' : (down ? '음의 방향 · ' : '양의 방향 · ')) +
-      '표시 <strong>' + rows.length + '</strong> / 전체 ' + state.rows.length + '종목 · ' + dist +
-      (state.hideSpac ? ' · 스팩 제외' : '');
+      '표시 <strong>' + rows.length + '</strong> / 전체 ' + state.rows.length + '종목 · ' + dist;
 
     document.querySelectorAll('#grid th.sortable').forEach(function (th) {
       var arrow = th.querySelector('.arrow');
@@ -416,10 +412,6 @@
   function init() {
     initDirection();
     initChips();
-    $('hideSpac').addEventListener('change', function (e) {
-      state.hideSpac = e.target.checked;
-      render();
-    });
     $('capFloor').addEventListener('change', function (e) {
       state.capFloor = Number(e.target.value);
       render();

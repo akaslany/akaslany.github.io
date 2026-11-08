@@ -1,5 +1,5 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
-<meta name="kospi-ma-prob-page" content="us-indices">
+<meta name="kospi-ma-prob-page" content="index-group">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DOW · S&P500 · NASDAQ 이동평균 상승 강도</title>
 <style>:root{font:14px/1.6 system-ui,sans-serif;color:#17212b;background:#fff}
@@ -29,21 +29,21 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
 .us-nav-label{flex:0 0 auto;align-self:center;font-weight:700;color:#64748b;margin-right:2px}
 @media (max-width:640px){th,td{padding:5px 4px;font-size:12px}}
 
-.us-index-nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 26px}
-.us-index-nav a{flex:1 1 160px;text-align:center;padding:12px 14px;border:1px solid #cbd5e1;
+.index-nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 26px}
+.index-nav a{flex:1 1 160px;text-align:center;padding:12px 14px;border:1px solid #cbd5e1;
   border-radius:8px;color:#17212b;text-decoration:none;font-size:15px;font-weight:600;background:#f8fafc}
-.us-index-nav a:hover{background:#e2e8f0}
-.us-index-nav a[aria-current]{background:#172f50;color:#fff;border-color:#172f50}
+.index-nav a:hover{background:#e2e8f0}
+.index-nav a[aria-current]{background:#172f50;color:#fff;border-color:#172f50}
 .index-panel[hidden]{display:none}
 </style></head><body>
 <header><h1>미국 지수 이동평균 상승 강도</h1>
 <p class="meta">미국 정규장 마감 기준</p></header>
-<nav class="us-index-nav" aria-label="지수 선택"><a href="#DJI" data-code="DJI" aria-current="page">DOW</a><a href="#SPX" data-code="SPX">S&amp;P500</a><a href="#IXIC" data-code="IXIC">NASDAQ</a></nav>
+<nav class="index-nav" aria-label="지수 선택"><a href="#DJI" data-code="DJI" aria-current="page">DOW</a><a href="#SPX" data-code="SPX">S&amp;P500</a><a href="#IXIC" data-code="IXIC">NASDAQ</a></nav>
 <section class="index-panel" id="panel-DJI" data-code="DJI">
 
 <header><h1>DOW 이동평균 상승 강도</h1>
 <p class="meta">기준일: 2026-11-06 · 미국 정규장 마감 기준</p>
-<p class="meta">기준일 2026-11-06 · 생성 2026-11-08 15:14 KST · 데이터 <code>index_daily</code> (DJI 지수 종가)</p>
+<p class="meta">기준일 2026-11-06 · 생성 2026-11-08 15:19 KST · 데이터 <code>index_daily</code> (DJI 지수 종가)</p>
 <p class="meta">종가 <strong>51,285.73</strong> (전일 대비 -0.5%) · 표본 651거래일</p></header>
 <div class="legend"><span class="sw ramp"></span><span>강도 −100%</span><span class="sw down"></span><span>하락</span><span class="sw zero"></span><span>0</span><span class="sw up"></span><span>상승</span><span class="sw ramp"></span><span>+100%</span></div>
 <div class="notice">
@@ -62,7 +62,7 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
 <a href="./stocks-app.html">종목별 이평선 강도</a>
 <a href="./screen.html">이평선 강도 스크리너</a>
 <span class="us-nav-label">미국</span>
-<a href="./dji.html">지수</a>
+<a href="./us-index.html">지수</a>
 <a href="./us-screen.html">이평선 강도 스크리너</a>
 <a href="./us-stocks-app.html">종목별 이평선 강도</a>
 </nav>
@@ -72,7 +72,7 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
 
 <header><h1>S&amp;P500 이동평균 상승 강도</h1>
 <p class="meta">기준일: 2026-11-06 · 미국 정규장 마감 기준</p>
-<p class="meta">기준일 2026-11-06 · 생성 2026-11-08 15:14 KST · 데이터 <code>index_daily</code> (SPX 지수 종가)</p>
+<p class="meta">기준일 2026-11-06 · 생성 2026-11-08 15:19 KST · 데이터 <code>index_daily</code> (SPX 지수 종가)</p>
 <p class="meta">종가 <strong>7,376.86</strong> (전일 대비 +0.3%) · 표본 651거래일</p></header>
 <div class="legend"><span class="sw ramp"></span><span>강도 −100%</span><span class="sw down"></span><span>하락</span><span class="sw zero"></span><span>0</span><span class="sw up"></span><span>상승</span><span class="sw ramp"></span><span>+100%</span></div>
 <div class="notice">
@@ -91,7 +91,7 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
 <a href="./stocks-app.html">종목별 이평선 강도</a>
 <a href="./screen.html">이평선 강도 스크리너</a>
 <span class="us-nav-label">미국</span>
-<a href="./dji.html">지수</a>
+<a href="./us-index.html">지수</a>
 <a href="./us-screen.html">이평선 강도 스크리너</a>
 <a href="./us-stocks-app.html">종목별 이평선 강도</a>
 </nav>
@@ -101,7 +101,7 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
 
 <header><h1>NASDAQ 이동평균 상승 강도</h1>
 <p class="meta">기준일: 2026-11-06 · 미국 정규장 마감 기준</p>
-<p class="meta">기준일 2026-11-06 · 생성 2026-11-08 15:14 KST · 데이터 <code>index_daily</code> (IXIC 지수 종가) · Yahoo 단독</p>
+<p class="meta">기준일 2026-11-06 · 생성 2026-11-08 15:19 KST · 데이터 <code>index_daily</code> (IXIC 지수 종가) · Yahoo 단독</p>
 <p class="meta">종가 <strong>24,579.43</strong> (전일 대비 +1.1%) · 표본 651거래일</p></header>
 <div class="legend"><span class="sw ramp"></span><span>강도 −100%</span><span class="sw down"></span><span>하락</span><span class="sw zero"></span><span>0</span><span class="sw up"></span><span>상승</span><span class="sw ramp"></span><span>+100%</span></div>
 <div class="notice">
@@ -120,7 +120,7 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
 <a href="./stocks-app.html">종목별 이평선 강도</a>
 <a href="./screen.html">이평선 강도 스크리너</a>
 <span class="us-nav-label">미국</span>
-<a href="./dji.html">지수</a>
+<a href="./us-index.html">지수</a>
 <a href="./us-screen.html">이평선 강도 스크리너</a>
 <a href="./us-stocks-app.html">종목별 이평선 강도</a>
 </nav>
@@ -130,16 +130,12 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
 <script>
 (() => {
   'use strict';
-  const links = [...document.querySelectorAll('.us-index-nav a')];
+  const CODES = ['DJI', 'SPX', 'IXIC'];
+  const links = [...document.querySelectorAll('.index-nav a')];
   const panels = [...document.querySelectorAll('.index-panel')];
   function show(code, push) {
-    let matched = false;
-    panels.forEach(panel => {
-      const on = panel.dataset.code === code;
-      panel.hidden = !on;
-      if (on) matched = true;
-    });
-    if (!matched) return false;
+    if (!CODES.includes(code)) return false;
+    panels.forEach(panel => { panel.hidden = panel.dataset.code !== code; });
     links.forEach(link => {
       if (link.dataset.code === code) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
@@ -152,12 +148,12 @@ color:#17212b;text-decoration:none;font-size:13px;background:#f8fafc}
     show(link.dataset.code, true);
     window.scrollTo({top: 0, behavior: 'smooth'});
   }));
-  // 새로 고침이나 공유 링크(#SPX)로 바로 열 수 있게 한다.
+  // 새로 고침이나 공유 링크(#KOSDAQ)로 바로 열 수 있게 한다.
   const initial = location.hash.slice(1).toUpperCase();
-  if (['DJI', 'SPX', 'IXIC'].includes(initial)) show(initial, false);
+  if (CODES.includes(initial)) show(initial, false);
   window.addEventListener('hashchange', () => {
     const code = location.hash.slice(1).toUpperCase();
-    if (['DJI', 'SPX', 'IXIC'].includes(code)) show(code, false);
+    if (CODES.includes(code)) show(code, false);
   });
 })();
 </script>
