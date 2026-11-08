@@ -52,23 +52,44 @@
   const number = value => value.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:4});
   const intensity = value => Number.isFinite(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—';
 
-  // 한국 뷰어와 같은 강도 색 램프. |값| 55%까지는 노랑에서 중간색(양수 주황,
-  // 음수 하늘)으로, 그 뒤는 중간색에서 극단(진빨강/진파랑)으로 간다. ±100을
-  // 넘으면 색은 포화되지만 막대 길이는 축이 늘어나 계속 표현된다.
-  const RAMP = {
-    neg: { mid: [80, 170, 235], edge: [12, 42, 132] },
-    pos: { mid: [255, 170, 80], edge: [186, 16, 40] },
-  };
-  const lerp = (a, b, t) => a.map((c, i) => Math.round(c + (b[i] - c) * t));
+  // 강도 색 램프. 미국은 분포가 극단적으로 치우쳐 있어(중앙값 15, 상위 10% 74,
+  // 최대 1473) 로그 스케일로도 20~40 구간이 밋밋했다. 그래서 매핑을 값 구간별로
+  // 직접 지정한다. 자주 보는 20~40 이 색 공간의 4분의 1을 쓰고, 100을 넘으면
+  // 거의 포화되어 같은 진한 빨강/파랑으로 보인다. 막대 길이는 실제 값에 비례한다.
+  //
+  //   0    거의 무채색(밝은 회색)
+  //   8    옅은 크림
+  //  20    노랑
+  //  40    주황
+  //  70    진한 주황 → 붉은기
+  // 150    진빨강 / 진파랑
+  // 500+   극단, 포화
+  const KNOTS = [[0,0],[8,.22],[20,.45],[40,.68],[70,.84],[150,.95],[500,1]];
+  const lerp = (a, b, t) => a + (b - a) * t;
+  function rampPosition(value) {
+    const v = Math.abs(value);
+    for (let i = 0; i < KNOTS.length - 1; i++) {
+      const [x0, t0] = KNOTS[i], [x1, t1] = KNOTS[i + 1];
+      if (v <= x1) return lerp(t0, t1, (v - x0) / (x1 - x0));
+    }
+    return 1;
+  }
   function strengthColor(value) {
-    const capped = Math.max(-1, Math.min(1, value / 100));
-    const a = Math.abs(capped);
-    const pivot = [254, 217, 118];
-    const stops = capped < 0 ? RAMP.neg : RAMP.pos;
-    const rgb = a <= 0.55
-      ? lerp(pivot, stops.mid, a / 0.55)
-      : lerp(stops.mid, stops.edge, (a - 0.55) / 0.45);
-    return `rgb(${rgb.join(',')})`;
+    if (!Number.isFinite(value)) return '#94a3b8';
+    const t = rampPosition(value);
+    // 색상·채도·명도를 함께 움직여야 '질어지는' 느낌이 난다.
+    // 채도는 천천히 올린다. 급격히 올리면 파랑·빨강이 원색으로 튀어 계단처럼 보인다.
+    // 음수는 하늘(192)에서 남색(228)까지만 쓴다.
+    const h = value >= 0 ? 52 - 50 * t : 192 + 36 * t;
+    const s = 16 + 62 * t;
+    const l = 0.97 - 0.40 * t;
+    // HSL → RGB. h 는 0..240 범위만 나온다.
+    const c = (1 - Math.abs(2 * l - 1)) * s / 100;
+    const hp = h / 60;
+    const x = c * (1 - Math.abs(hp % 2 - 1));
+    const m = l - c / 2;
+    const sector = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]][Math.floor(hp)];
+    return `rgb(${sector.map(v => Math.round((v + m) * 255)).join(',')})`;
   }
   let index;
   let request = 0;
