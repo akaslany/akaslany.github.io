@@ -41,6 +41,23 @@
       <option value="5">5조↑</option>
     </select>
   </label>
+  <label class="chk" id="soonDaysWrap" hidden>예상 기간
+    <select id="soonDays">
+      <option value="3">3거래일 이내</option>
+      <option value="5" selected>5거래일 이내</option>
+      <option value="10">10거래일 이내</option>
+      <option value="99">제한 없음</option>
+    </select>
+  </label>
+  <label class="chk" id="soonMinWrap" hidden>최소 강도
+    <select id="soonMin">
+      <option value="0" selected>전체</option>
+      <option value="1">1 이상</option>
+      <option value="3">3 이상</option>
+      <option value="5">5 이상</option>
+      <option value="10">10 이상</option>
+    </select>
+  </label>
   <input id="search" type="search" placeholder="종목명·코드 검색" spellcheck="false">
   <span class="sortinfo" id="sortInfo"></span>
 </div>

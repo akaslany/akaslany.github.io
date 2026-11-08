@@ -77,6 +77,9 @@ footer{margin:28px 0 10px;color:#64748b;font-size:12px;border-top:1px solid #e2e
 .grade.g3,.chips .chip.g3.active{background:#fef3c7;color:#b45309}
 .grade.g4,.chips .chip.g4.active{background:#f1f5f9;color:#64748b}
 .tag.spac{background:#fde68a;color:#92400e}
+/* 전환 탭 구분: 이미 전환(초록강조) vs 전환 예상(점선성 회색) */
+.tag.turn{background:#dcfce7;color:#166534;font-weight:600}
+.tag.soon{background:#e0e7ff;color:#3730a3;font-weight:600}
 .stale{color:#94a3b8;font-size:11px}
 @media (max-width:640px){
   #grid{font-size:12px}

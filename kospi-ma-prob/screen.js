@@ -33,7 +33,10 @@
     sortDir: -1,
     activeGrade: ALL,
     capFloor: 0,
-    query: ''
+    query: '',
+    // 전환 탭 전용: 예상 후보를 몇 거래일 이내로 볼지, 최소 |강도| 는 얼마인지.
+    soonMax: 5,
+    soonMinStrength: 0
   };
 
   function $(id) { return document.getElementById(id); }
@@ -77,12 +80,36 @@
       if (state.activeGrade !== ALL && r.g !== state.activeGrade) return false;
       if (floor === -1 && r.cap < 0.3) return false;      // 3,000억 미만 제외
       if (floor > 0 && r.cap < floor) return false;
+      if (isTurn() && !passesSoon(r)) return false;
       if (q) {
         var hit = r.t.indexOf(q) === 0 || (r.n && r.n.toLowerCase().indexOf(q) !== -1);
         if (!hit) return false;
       }
       return true;
     });
+  }
+
+  // 전환 탭: 이미 전환(state=turn)은 항상 남기고, 예상(soon)만 사용자가 고른 조건으로 거른다.
+  // 예상은 '지금 속도가 유지되면'이라는 가정이라 |강도| 가 작으면 쉽게 뒤집힌다.
+  function soonDays(r) {
+    var best = null;
+    ['60', '120'].forEach(function (p) {
+      var v = (r.r && r.r[p]);
+      if (v === null || v === undefined) return;
+      if (best === null || v < best) best = v;
+    });
+    return best;
+  }
+
+  function soonStrength(r) {
+    return Math.min(Math.abs(r.p['60']), Math.abs(r.p['120']));
+  }
+
+  function passesSoon(r) {
+    if (r.state === 'turn') return true;      // 이미 전환된 종목은 필터와 무관
+    var days = soonDays(r);
+    if (days === null || days > state.soonMax) return false;
+    return soonStrength(r) >= state.soonMinStrength;
   }
 
   // 도달 예상: 네 축 중 0에 가장 빨리 닿는 축과 그 거래일. 계산이지 예측이 아니다.
@@ -116,6 +143,7 @@
       case 'p60': return r.p['60'];
       case 'p120': return r.p['120'];
       case 'edge': return isDown() ? r.hi : r.lo;
+      case 'state': return r.state === 'turn' ? 0 : 1;
       case 'k60': return r.k60 === null || r.k60 === undefined ? 999 : r.k60;
       case 'k120': return r.k120 === null || r.k120 === undefined ? 999 : r.k120;
       case 'reach': var ri = reachInfo(r); return ri ? ri.days : 9999;
@@ -133,7 +161,8 @@
         return '<th class="sortable num" data-k="p' + p + '">MA' + p +
           '<span class="arrow"></span></th>';
       }).join('') +
-      (turn ? '<th class="num sortable" data-k="k60">60전환<span class="arrow"></span></th>' +
+      (turn ? '<th class="sortable" data-k="state">구분<span class="arrow"></span></th>' +
+              '<th class="num sortable" data-k="k60">60전환<span class="arrow"></span></th>' +
               '<th class="num sortable" data-k="k120">120전환<span class="arrow"></span></th>'
             : '<th class="num sortable" data-k="edge" title="가장 낮은 강도 (등급 기준)">최저<span class="arrow"></span></th>' +
               '<th class="num sortable" data-k="reach" title="현재 속도가 유지된다고 가정할 때 0에 닿는 예상 거래일(계산값)">도달(추정)<span class="arrow"></span></th>') +
@@ -207,11 +236,25 @@
           fmtPct(r.p[p]) + '<span class="vel ' + dir + '">' + arrow + '</span></td>';
       }).join('');
       if (turn) {
+        // 구분: 전환 = 이미 양전, 예상 = 음수지만 5일 내 0 도달(속도 유지 가정).
+        if (r.state === 'turn') {
+          cells += '<td><span class="tag turn">전환</span></td>';
+        } else {
+          var d = soonDays(r);
+          cells += '<td><span class="tag soon" title="현재 속도 유지 가정에서 ' +
+            (d === null ? '—' : d.toFixed(1)) + '거래일 뒤 0 도달(계산값, 예측 아님)">예상</span>' +
+            '<span class="code">' + (d === null ? '' : d.toFixed(1) + '일') + '</span></td>';
+        }
         // 전환 후 경과일. 오늘이 전환일이면 0. 흐린 색은 이력 내 계속 양수(None)다.
         cells += ['k60', 'k120'].map(function (k) {
           var v = r[k];
+          var axis = k === 'k60' ? '60' : '120';
           if (v === null || v === undefined) {
-            return '<td class="num muted" title="최근 15거래일 동안 계속 양수">›15</td>';
+            // 아직 음수인 축이면 '계속 양수'가 아니라 '아직 전환 전'이다.
+            var neg = r.p[axis] <= 0;
+            return neg
+              ? '<td class="num muted" title="MA' + axis + ' 는 아직 음수 — 전환 전">—</td>'
+              : '<td class="num muted" title="최근 15거래일 동안 계속 양수">›15</td>';
           }
           var fresh = v <= 5 ? ' fresh' : '';
           return '<td class="num' + fresh + '">' + v + '일</td>';
@@ -225,7 +268,7 @@
     }).join('');
 
     if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="' + (turn ? 8 : 11) +
+      tbody.innerHTML = '<tr><td colspan="' + (turn ? 9 : 11) +
         '" class="empty">조건에 맞는 종목이 없습니다.</td></tr>';
     }
 
@@ -285,6 +328,12 @@
       btn.setAttribute('aria-checked', on ? 'true' : 'false');
     });
     document.body.classList.toggle('down-mode', down);
+    // 예상 필터는 전환 탭에서만 의미가 있다.
+    var turnOn = isTurn();
+    ['soonDaysWrap', 'soonMinWrap'].forEach(function (id) {
+      var el = $(id);
+      if (el) el.hidden = !turnOn;
+    });
   }
 
   function setDirection(dir) {
@@ -414,6 +463,14 @@
     initChips();
     $('capFloor').addEventListener('change', function (e) {
       state.capFloor = Number(e.target.value);
+      render();
+    });
+    $('soonDays').addEventListener('change', function (e) {
+      state.soonMax = Number(e.target.value);
+      render();
+    });
+    $('soonMin').addEventListener('change', function (e) {
+      state.soonMinStrength = Number(e.target.value);
       render();
     });
     $('search').addEventListener('input', function (e) {
