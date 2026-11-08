@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미국 이평선 강도 스크리너</title>
+<style>
+  :root{font-family:system-ui,-apple-system,sans-serif;color:#172033;background:#f5f7fa}
+  *{box-sizing:border-box}body{max-width:1200px;margin:auto;padding:28px 20px}h1{font-size:1.65rem;margin:0 0 8px}
+  p{line-height:1.65}.meta,footer{color:#536174;font-size:.9rem}.tabs,.tools{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+  button,input,select{font:inherit;border:1px solid #bac5d3;border-radius:6px;padding:10px;background:white}
+  button{cursor:pointer}button[aria-pressed=true]{color:white;background:#172f50;border-color:#172f50}
+  input{flex:1;min-width:180px}.tools label{display:flex;gap:8px;align-items:center}.tablewrap{overflow:auto;border:1px solid #dce3eb;border-radius:8px;background:white}
+  table{border-collapse:collapse;width:100%;white-space:nowrap}th,td{text-align:right;padding:13px;border-bottom:1px solid #e5eaf0}
+  th{font-size:.85rem;background:#edf1f6;color:#415168}th:first-child,td:first-child{text-align:left}td.name{text-align:left;max-width:260px;overflow:hidden;text-overflow:ellipsis}
+  a{color:#172f50;text-underline-offset:3px}.pos{color:#dc2626}.neg{color:#2563eb}.grade{font-weight:700}
+  footer{margin-top:28px}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+  @media(max-width:600px){body{padding:20px 12px}h1{font-size:1.4rem}.tabs button{flex:1;padding:10px 6px}th,td{padding:11px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>미국 이평선 강도 스크리너</h1>
+  <p id="meta" class="meta">미국 정규장 마감 기준 · 데이터를 불러오는 중…</p>
+  <p class="meta">5·20·60·120축이 모두 양수인 종목과 모두 음수인 종목입니다. 등급은 네 축 중 가장 약한 값으로 정합니다.
+    상승은 빨강, 하락은 파랑이며 강도는 −100% 아래도 그대로 표시합니다.</p>
+</header>
+<div class="tabs" role="group" aria-label="방향 선택">
+  <button id="up" type="button" aria-pressed="true">▲ 상승</button>
+  <button id="down" type="button" aria-pressed="false">▼ 하락</button>
+  <button id="turn" type="button" aria-pressed="false">↗ 60·120 전환</button>
+</div>
+<p id="direction-note" class="meta"></p>
+<div class="tools">
+  <label>등급 <select id="grade" aria-label="강도 등급"><option value="">전체</option><option>강</option><option>중</option><option>약</option><option>미미</option></select></label>
+  <input id="search" type="search" aria-label="티커 또는 종목명 검색" placeholder="티커·종목명 검색" spellcheck="false">
+  <label>정렬 <select id="sort"><option value="strength">최약축 강도순</option><option value="ticker">티커순</option><option value="name">종목명순</option></select></label>
+</div>
+<p id="summary" role="status" aria-live="polite"></p>
+<main class="tablewrap">
+  <table aria-label="미국 이평선 강도 종목">
+    <thead><tr><th scope="col">티커</th><th scope="col">종목명</th><th scope="col">5축</th><th scope="col">20축</th><th scope="col">60축</th><th scope="col">120축</th><th scope="col">등급</th><th scope="col">전환</th><th scope="col">종목 기준일</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</main>
+<footer>미국 정규장 마감 기준 · 강 ≥20 / 중 ≥10 / 약 ≥5 / 미미 &lt;5 (네 축의 최약 강도 기준) · 개인 연구용</footer>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  let payload, direction = 'up';
+  const labels = {up:'상승', down:'하락', turn:'60·120 전환'};
+  const notes = {
+    up:'네 축의 강도가 모두 양수인 종목입니다.',
+    down:'네 축의 강도가 모두 음수인 종목입니다.',
+    turn:'상승 목록 중 60·120축이 모두 양수이고, 하나 이상이 최근 5거래일 이내 양전한 종목입니다.'
+  };
+
+  function render() {
+    if (!payload) return;
+    const source = direction === 'down' ? payload.down : direction === 'turn' ? payload.up.filter(row => row.turn) : payload.up;
+    const query = $('search').value.trim().toLowerCase();
+    let rows = source.filter(row => (!$('grade').value || row.g === $('grade').value) &&
+      (!query || row.t.toLowerCase().includes(query) || row.n.toLowerCase().includes(query)));
+    const sort = $('sort').value;
+    if (sort === 'ticker') rows.sort((a, b) => a.t.localeCompare(b.t));
+    if (sort === 'name') rows.sort((a, b) => a.n.localeCompare(b.n) || a.t.localeCompare(b.t));
+    $('direction-note').textContent = notes[direction];
+    $('summary').textContent = `${labels[direction]} ${source.length.toLocaleString('ko-KR')}종목 중 ${rows.length.toLocaleString('ko-KR')}종목 표시`;
+    $('rows').replaceChildren();
+    rows.forEach(row => {
+      const tr = document.createElement('tr');
+      const cell = (value, className = '') => {
+        const td = document.createElement('td');
+        td.textContent = value;
+        td.className = className;
+        tr.appendChild(td);
+        return td;
+      };
+      const link = document.createElement('a');
+      link.href = `us-stocks-app.html?t=${encodeURIComponent(row.t)}`;
+      link.textContent = row.t;
+      cell('').appendChild(link);
+      const name = cell(row.n, 'name');
+      name.title = `${row.n} · ${row.x || ''}`;
+      row.s.forEach(value => cell(Number.isFinite(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—', value > 0 ? 'pos' : value < 0 ? 'neg' : ''));
+      cell(row.g, 'grade');
+      cell(row.turn ? '↗' : '—');
+      cell(row.d || payload.session);
+      $('rows').appendChild(tr);
+    });
+    if (!rows.length) {
+      const tr = document.createElement('tr'), td = document.createElement('td');
+      td.colSpan = 9;
+      td.textContent = '조건에 맞는 종목이 없습니다.';
+      tr.appendChild(td);
+      $('rows').appendChild(tr);
+    }
+  }
+
+  ['up', 'down', 'turn'].forEach(value => {
+    $(value).addEventListener('click', () => {
+      direction = value;
+      ['up', 'down', 'turn'].forEach(id => $(id).setAttribute('aria-pressed', String(id === value)));
+      render();
+    });
+  });
+  ['grade', 'sort'].forEach(id => $(id).addEventListener('change', render));
+  $('search').addEventListener('input', render);
+  (async () => {
+    try {
+      const response = await fetch('us-screen.json', {cache:'no-cache'});
+      if (!response.ok) throw new Error(`데이터를 불러올 수 없습니다 (${response.status}).`);
+      payload = await response.json();
+      if (payload.schema !== 'us-ma-strength-screen.v1' || !Array.isArray(payload.up) || !Array.isArray(payload.down)) throw new Error('데이터 형식을 확인해 주세요.');
+      $('meta').textContent = `${payload.session} · 미국 정규장 마감 기준 · 상승 ${payload.counts.up.toLocaleString('ko-KR')} / 하락 ${payload.counts.down.toLocaleString('ko-KR')} / 전환 ${payload.counts.turn.toLocaleString('ko-KR')}`;
+      ['up', 'down', 'turn'].forEach(id => { $(id).textContent = `${labels[id]} (${payload.counts[id].toLocaleString('ko-KR')})`; });
+      render();
+    } catch (error) { $('summary').textContent = error.message; }
+  })();
+})();
+</script>
+</body>
+</html>

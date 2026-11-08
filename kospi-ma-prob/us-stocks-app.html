@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미국 종목별 이평선 강도</title>
+<style>
+  :root{font-family:system-ui,-apple-system,sans-serif;color:#172033;background:#f5f7fa}
+  *{box-sizing:border-box}body{max-width:1280px;margin:auto;padding:28px 20px}
+  h1{font-size:1.65rem;margin:0 0 8px}p{line-height:1.65}.meta,footer{color:#536174;font-size:.9rem}
+  form{display:flex;gap:10px;margin:24px 0 12px}input,button{font:inherit;padding:12px;border:1px solid #bac5d3;border-radius:6px}
+  input{flex:1;min-width:0;background:white}button{background:#172f50;color:white;cursor:pointer}
+  #status{min-height:1.6em}#stock-name{font-size:1.25rem}.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .card{background:white;border:1px solid #dce3eb;border-radius:10px;padding:16px;min-width:0}
+  .card h3{display:flex;justify-content:space-between;margin:0 0 8px;font-size:1rem}
+  .pos{color:#dc2626}.neg{color:#2563eb}svg{width:100%;height:auto;display:block}
+  .legend{font-size:.85rem;color:#536174}.price{color:#334155}.average{color:#b45309}
+  .intro{background:white;border:1px solid #dce3eb;padding:14px 18px;border-radius:10px}
+  footer{margin-top:28px}button:focus-visible,input:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
+  @media(max-width:760px){body{padding:20px 12px}.charts{grid-template-columns:1fr}h1{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>미국 종목별 이평선 강도</h1>
+  <p class="meta" id="meta">미국 정규장 마감 기준 · 데이터를 불러오는 중…</p>
+</header>
+<form id="lookup" autocomplete="off">
+  <input id="ticker" type="search" list="stocks" aria-label="티커 또는 종목명" placeholder="티커 또는 종목명 (AAPL, Apple)" spellcheck="false" required>
+  <datalist id="stocks"></datalist>
+  <button type="submit">조회</button>
+</form>
+<p id="status" role="status" aria-live="polite"></p>
+<main>
+  <div class="intro">
+    <p>최근 2년의 종가와 이동평균, 5·20·60·120축 강도입니다. 각 차트 위에는 가격과 MA, 아래에는 강도 막대를 표시합니다.</p>
+    <p class="meta">강도가 양수이면 상승, 음수이면 하락입니다. 상승은 빨강, 하락은 파랑이며 값의 범위에 맞춰 축이 늘어납니다.
+      5축은 4봉 전부터 과거 방향의 10봉 창을 사용합니다. 지표는 데이터 생성 시 계산됩니다.</p>
+  </div>
+  <h2 id="stock-name"></h2>
+  <p class="legend" id="details"></p>
+  <div id="charts" class="charts"></div>
+</main>
+<footer>미국 정규장 마감 기준 · 종가: 분할 조정, 배당 미포함 · 개인 연구용</footer>
+<script>
+(() => {
+  'use strict';
+  const periods = [5, 20, 60, 120];
+  const $ = id => document.getElementById(id);
+  const number = value => value.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:4});
+  const intensity = value => Number.isFinite(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—';
+  let index;
+  let request = 0;
+
+  async function readGzipJSON(path) {
+    const response = await fetch(path, {cache:'no-cache'});
+    if (response.status === 404 && path.endsWith('.gz')) return readGzipJSON(path.slice(0, -3));
+    if (!response.ok) throw new Error(`데이터를 불러올 수 없습니다 (${response.status}).`);
+    if (!path.endsWith('.gz')) return response.json();
+    if (typeof DecompressionStream === 'undefined') {
+      throw new Error('브라우저가 gzip 해제를 지원하지 않습니다. 최신 브라우저를 이용해 주세요.');
+    }
+    const stream = response.body.pipeThrough(new DecompressionStream('gzip'));
+    return await new Response(stream).json();
+  }
+
+  function expandDates(d) {
+    if (!d?.length) return [];
+    const out = [d[0]];
+    let cur = new Date(d[0] + 'T00:00:00Z');
+    for (let i = 1; i < d.length; i++) {
+      cur = new Date(cur.getTime() + d[i] * 86400000);
+      out.push(cur.toISOString().slice(0, 10));
+    }
+    return out;
+  }
+
+  function chart(data, period) {
+    const card = document.createElement('section');
+    card.className = 'card';
+    const heading = document.createElement('h3');
+    heading.textContent = `MA ${period} · ${period}축 강도`;
+    const values = data.strength[String(period)];
+    const averages = data.ma[String(period)];
+    const last = values[values.length - 1];
+    const badge = document.createElement('span');
+    badge.className = last > 0 ? 'pos' : last < 0 ? 'neg' : '';
+    badge.textContent = intensity(last);
+    heading.appendChild(badge);
+    card.appendChild(heading);
+    const legend = document.createElement('p');
+    legend.className = 'legend';
+    legend.textContent = `종가 ${number(data.closes[data.closes.length - 1])} USD · MA ${Number.isFinite(averages[averages.length - 1]) ? number(averages[averages.length - 1]) : '—'} USD`;
+    card.appendChild(legend);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 640 360');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', `${period}일 가격·MA와 강도 막대, 최근 2년`);
+    const el = (tag, attrs, content) => {
+      const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+      Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+      if (content !== undefined) node.textContent = content;
+      svg.appendChild(node);
+      return node;
+    };
+    const prices = data.closes.concat(averages.filter(Number.isFinite));
+    let low = Math.min(...prices), high = Math.max(...prices);
+    const padding = high === low ? Math.max(0.01, high * .01) : (high - low) * .04;
+    low -= padding; high += padding;
+    const x = i => 78 + i * 538 / Math.max(1, data.dates.length - 1);
+    const y = value => 24 + (high - value) / (high - low) * 144;
+    for (let i = 0; i < 3; i++) {
+      const value = low + (high - low) * i / 2;
+      el('line', {x1:78, x2:616, y1:y(value), y2:y(value), stroke:'#e2e8f0'});
+      el('text', {x:72, y:y(value) + 4, 'text-anchor':'end', 'font-size':11, fill:'#536174'}, number(value));
+    }
+    el('polyline', {points:data.closes.map((v, i) => `${x(i)},${y(v)}`).join(' '), fill:'none', stroke:'#334155', 'stroke-width':1.6});
+    el('polyline', {points:averages.map((v, i) => Number.isFinite(v) ? `${x(i)},${y(v)}` : '').filter(Boolean).join(' '), fill:'none', stroke:'#b45309', 'stroke-width':1.6, 'stroke-dasharray':'4 2'});
+    el('text', {x:78, y:14, 'font-size':11, fill:'#536174'}, '가격 · MA (USD)');
+    const maxAbs = Math.max(1, ...values.filter(Number.isFinite).map(Math.abs));
+    const zero = 264, half = 55;
+    el('text', {x:78, y:195, 'font-size':11, fill:'#536174'}, '강도 (%)');
+    [maxAbs, 0, -maxAbs].forEach(value => {
+      const lineY = zero - value / maxAbs * half;
+      el('line', {x1:78, x2:616, y1:lineY, y2:lineY, stroke:'#d6dfe9'});
+      el('text', {x:72, y:lineY + 4, 'text-anchor':'end', 'font-size':11, fill:'#536174'}, value.toFixed(1));
+    });
+    values.forEach((value, i) => {
+      if (!Number.isFinite(value)) return;
+      const barY = zero - value / maxAbs * half;
+      const rect = el('rect', {x:x(i) - .4, y:Math.min(zero, barY), width:Math.max(.7, 500 / data.dates.length), height:Math.abs(zero - barY), fill:value >= 0 ? '#dc2626' : '#2563eb'});
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = `${data.dates[i]} · 종가 ${number(data.closes[i])} USD · 강도 ${intensity(value)}`;
+      rect.appendChild(title);
+    });
+    [0, Math.floor((data.dates.length - 1) / 2), data.dates.length - 1].forEach((i, at) => {
+      el('text', {x:x(i), y:346, 'text-anchor':at === 0 ? 'start' : at === 2 ? 'end' : 'middle', 'font-size':11, fill:'#536174'}, data.dates[i]);
+    });
+    card.appendChild(svg);
+    return card;
+  }
+
+  async function show(stock) {
+    const token = ++request;
+    $('status').textContent = `${stock.t} 데이터를 불러오는 중…`;
+    try {
+      if (!/^[A-Za-z0-9][A-Za-z0-9.-]{0,63}$/.test(stock.t)) throw new Error('지원하지 않는 티커입니다.');
+      const payload = await readGzipJSON(`us-stocks/${encodeURIComponent(stock.t)}.json.gz`);
+      if (token !== request) return;
+      const data = payload.v === 2 ? {
+        t:payload.t, session:payload.s, dates:expandDates(payload.d),
+        closes:payload.c, ma:payload.m, strength:payload.g,
+      } : payload;
+      if (!data.dates?.length || data.closes?.length !== data.dates.length ||
+          periods.some(p => data.ma?.[p]?.length !== data.dates.length || data.strength?.[p]?.length !== data.dates.length)) {
+        throw new Error('차트 데이터 형식을 확인해 주세요.');
+      }
+      $('ticker').value = stock.t;
+      $('stock-name').textContent = `${stock.t} · ${stock.n}`;
+      $('details').textContent = `${stock.x} · 종목 기준일 ${data.session} · ${data.dates[0]} ~ ${data.dates[data.dates.length - 1]} · 실선: 종가 / 점선: MA`;
+      $('charts').replaceChildren(...periods.map(period => chart(data, period)));
+      $('status').textContent = data.session === index.session ? '' : `이 종목의 마지막 거래일은 ${data.session}입니다. 시장 기준일 ${index.session}과 다릅니다.`;
+      history.replaceState(null, '', `?t=${encodeURIComponent(stock.t)}`);
+    } catch (error) {
+      if (token !== request) return;
+      $('charts').replaceChildren();
+      $('stock-name').textContent = '';
+      $('details').textContent = '';
+      $('status').textContent = error.message;
+    }
+  }
+
+  $('lookup').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!index) return;
+    const query = $('ticker').value.trim().toLowerCase();
+    const exact = index.stocks.find(stock => stock.t.toLowerCase() === query || stock.n.toLowerCase() === query);
+    const matches = index.stocks.filter(stock => stock.t.toLowerCase().includes(query) || stock.n.toLowerCase().includes(query));
+    if (exact || (query && matches.length === 1)) show(exact || matches[0]);
+    else $('status').textContent = matches.length ? '여러 종목이 검색되었습니다. 티커를 선택해 주세요.' : '일치하는 종목이 없습니다.';
+  });
+
+  (async () => {
+    try {
+      if (typeof DecompressionStream === 'undefined') {
+        $('meta').textContent = '데이터를 불러올 수 없습니다.';
+        $('lookup').querySelectorAll('input, button').forEach(control => control.disabled = true);
+        throw new Error('브라우저가 gzip 해제를 지원하지 않습니다. 최신 브라우저를 이용해 주세요.');
+      }
+      index = await readGzipJSON('us-stocks-index.json.gz');
+      $('meta').textContent = `${index.session} · 미국 정규장 마감 기준 · ${index.count.toLocaleString('ko-KR')}종목`;
+      index.stocks.forEach(stock => {
+        const option = document.createElement('option');
+        option.value = stock.t;
+        option.label = `${stock.n} · ${stock.x}`;
+        $('stocks').appendChild(option);
+      });
+      const requested = new URLSearchParams(location.search).get('t');
+      const first = index.stocks.find(stock => stock.t === requested) || index.stocks.find(stock => stock.t === 'AAPL') || index.stocks[0];
+      if (first) await show(first);
+      else $('status').textContent = '표시할 종목이 없습니다.';
+    } catch (error) { $('status').textContent = error.message; }
+  })();
+})();
+</script>
+</body>
+</html>
