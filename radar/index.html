@@ -16,6 +16,7 @@ p.sub{color:#555;margin:0 0 14px;font-size:13px;line-height:1.6;text-align:cente
 .maintab{border:2px solid #1a1a1a;background:#fff;border-radius:8px;padding:8px 28px;font-size:16px;font-weight:700;cursor:pointer}
 .maintab.on{background:#1a1a1a;color:#fff}
 .mainpane{display:none}
+.tabpane{display:block}
 .wrap{overflow-x:auto;background:#fff}
 table.grid{border-collapse:separate;border-spacing:4px;font-size:12px;white-space:nowrap;margin:0 auto}
 th.yr{font-size:14px;padding:4px 2px;text-align:center}
@@ -85,7 +86,6 @@ function showMain(g){
   var el=document.getElementById('main-'+g); if(el) el.style.display='block';
   document.querySelectorAll('.maintab').forEach(function(b){b.classList.remove('on');});
   var mb=document.getElementById('mtab-'+g); if(mb) mb.classList.add('on');}
-showTab('all-sector'); showTab('all-index');
 showMain('sector');
 </script>
 </body>
