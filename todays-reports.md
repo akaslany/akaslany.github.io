@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **07:32 KST** — [미국 유동성·자금시장 인텔리전스 v2 — 2026-11-11](/liquidity/2026-11-11/)
 - **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-11-11](/trump-truth/2026-11-11/)
 - **07:11 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-11-11](/2026/11/11/global-economic-risk-briefing/)
 - **06:08 KST** — [AI Daily Intel — 2026-11-10](/ai-intel/2026-11-10/)
