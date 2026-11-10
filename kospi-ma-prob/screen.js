@@ -16,6 +16,7 @@
   var GRADES = ['강', '중', '약', '미미'];
   // '전체'는 등급 필터를 걸지 않은 상태를 뜻한다(한 번에 하나만 선택).
   var ALL = '전체';
+  var KINDS = ['all', 'stock', 'etf', 'etn'];
   var SOURCES = { up: 'screen.json', down: 'screen.down.json', turn: 'screen.turn.json' };
   var DIR_LABEL = { up: '양의 방향', down: '음의 방향', turn: '60·120 전환' };
   // 전환 화면에는 MA5/MA20 행이 없다 — 두 지평만 본다.
@@ -32,6 +33,7 @@
     sortKey: 'cap',
     sortDir: -1,
     activeGrade: ALL,
+    activeKind: 'all',
     capFloor: 0,
     query: '',
     // 전환 탭 전용: 예상 후보를 몇 거래일 이내로 볼지, 최소 |강도| 는 얼마인지.
@@ -77,9 +79,11 @@
     var q = state.query.trim().toLowerCase();
     var floor = state.capFloor;
     return state.rows.filter(function (r) {
+      if (state.activeKind !== 'all' && r.k !== state.activeKind) return false;
       if (state.activeGrade !== ALL && r.g !== state.activeGrade) return false;
-      if (floor === -1 && r.cap < 0.3) return false;      // 3,000억 미만 제외
-      if (floor > 0 && r.cap < floor) return false;
+      // 펀드의 시총 0/누락 때문에 유형 필터 결과가 사라지지 않게 종목에만 적용한다.
+      if (r.k === 'stock' && floor === -1 && r.cap < 0.3) return false;
+      if (r.k === 'stock' && floor > 0 && r.cap < floor) return false;
       if (isTurn() && !passesSoon(r)) return false;
       if (q) {
         var hit = r.t.indexOf(q) === 0 || (r.n && r.n.toLowerCase().indexOf(q) !== -1);
@@ -136,7 +140,7 @@
 
   function sortValue(r, key) {
     switch (key) {
-      case 'cap': return r.cap;
+      case 'cap': return r.k === 'stock' ? r.cap : (r.v || 0);
       case 'grade': return GRADES.indexOf(r.g) === -1 ? 99 : GRADES.indexOf(r.g);
       case 'p5': return r.p['5'];
       case 'p20': return r.p['20'];
@@ -152,10 +156,36 @@
     }
   }
 
+  function compareRows(a, b) {
+    // 시총 열 정렬에서는 종목을 먼저, ETF/ETN은 최신 거래대금으로 정렬한다.
+    // 다른 강도·등급 열은 선택한 기준 그대로 전체 유형에 걸쳐 정렬한다.
+    if (state.sortKey === 'cap') {
+      var group = Number(a.k !== 'stock') - Number(b.k !== 'stock');
+      if (group) return group;
+    }
+    var d = sortValue(a, state.sortKey) - sortValue(b, state.sortKey);
+    if (d === 0) d = a.cap - b.cap;
+    if (state.sortKey === 'cap' && a.k !== 'stock' && b.k !== 'stock') {
+      d = (a.v || 0) - (b.v || 0);
+    }
+    return d * state.sortDir || String(a.t).localeCompare(String(b.t));
+  }
+
+  function fundBadge(r) {
+    if (r.k !== 'etf' && r.k !== 'etn') return '';
+    return ' <span class="tag fund-kind ' + r.k + '" title="' +
+      escapeHtml(r.fund_tag || '기타') + '">' + r.k.toUpperCase() + '</span>';
+  }
+
+  function fundCaution(r) {
+    return (r.k === 'etf' || r.k === 'etn') &&
+      ['채권', 'MMF', '금리', 'CD금리'].indexOf(r.fund_tag) !== -1;
+  }
+
   function buildHead() {
     var turn = isTurn();
     var head = '<tr><th class="num">#</th><th>종목</th>' +
-      '<th class="sortable" data-k="cap">시가총액<span class="arrow"></span></th>' +
+      '<th class="sortable" data-k="cap" title="종목은 시가총액, ETF/ETN은 거래대금으로 정렬">시가총액<span class="arrow"></span></th>' +
       (turn ? '' : '<th class="sortable" data-k="grade">등급<span class="arrow"></span></th>') +
       cols().map(function (p) {
         return '<th class="sortable num" data-k="p' + p + '">MA' + p +
@@ -187,11 +217,9 @@
   function render() {
     var down = isDown();
     var rows = filtered();
-    rows.sort(function (a, b) {
-      var d = sortValue(a, state.sortKey) - sortValue(b, state.sortKey);
-      if (d === 0) d = a.cap - b.cap;
-      return d * state.sortDir;
-    });
+    rows.sort(compareRows);
+    $('sortInfo').textContent = state.sortKey === 'cap'
+      ? '종목은 시총순 · ETF/ETN은 거래대금순' : '';
 
     // 방향에 따라 헤더 문구를 바꾼다 (최저 ↔ 최고)
     var edgeTh = document.querySelector('#grid th[data-k="edge"]');
@@ -204,10 +232,13 @@
     var turn = isTurn();
     tbody.innerHTML = rows.map(function (r, i) {
       var stale = r.stale ? ' <span class="stale" title="마지막 거래일 ' + r.d + '">(휴장)</span>' : '';
+      // 마스터의 market도 ETF/ETN인 경우 배지를 두 번 표시하지 않는다.
+      var market = (r.k === 'etf' || r.k === 'etn') && r.m === r.k.toUpperCase() ? '' : r.m;
       var cells = '<td class="num muted">' + (i + 1) + '</td>' +
         '<td><a href="stocks-app.html?code=' + r.t + '">' + escapeHtml(r.n) + '</a>' +
           ' <span class="code">' + r.t + '</span>' +
-          ' <span class="tag">' + escapeHtml(r.m || '') + '</span>' + stale + '</td>' +
+          fundBadge(r) +
+          (market ? ' <span class="tag">' + escapeHtml(market) + '</span>' : '') + stale + '</td>' +
         '<td class="num">' + fmtCap(r.cap) + '</td>' +
         (turn ? '' : '<td><span class="grade ' + gradeClass(r.g, state.dir) + '">' +
           escapeHtml(r.g) + '</span></td>');
@@ -264,7 +295,9 @@
         cells += reachCell(r);
       }
       cells += '<td class="num">' + Number(r.c).toLocaleString('ko-KR') + '</td>';
-      return '<tr>' + cells + '</tr>';
+      return '<tr' + (fundCaution(r)
+        ? ' class="fund-caution" title="이름 분류상 제외 대상입니다. 데이터 확인이 필요합니다."' : '') +
+        '>' + cells + '</tr>';
     }).join('');
 
     if (!rows.length) {
@@ -274,16 +307,16 @@
 
     var byGrade = {};
     GRADES.forEach(function (g) { byGrade[g] = 0; });
-    state.rows.forEach(function (r) { byGrade[r.g] = (byGrade[r.g] || 0) + 1; });
+    rows.forEach(function (r) { byGrade[r.g] = (byGrade[r.g] || 0) + 1; });
     var dist;
     if (turn) {
-      var zero = state.rows.filter(function (r) {
+      var zero = rows.filter(function (r) {
         return r.k60 === 0 || r.k120 === 0;
       }).length;
-      var both = state.rows.filter(function (r) {
+      var both = rows.filter(function (r) {
         return r.k60 !== null && r.k120 !== null;
       }).length;
-      var stale = state.rows.length - both;
+      var stale = rows.length - both;
       dist = (zero ? '오늘 전환 <strong>' + zero + '</strong>종목 · ' : '') +
         '둘 다 5일 내 ' + both + '종목 · 한 축만 5일 내 ' + stale + '종목(다른 축은 이미 양수) · ' +
         '기준 ' + (state.data.window_days || 5) + '거래일';
@@ -314,7 +347,7 @@
     $('dirNote').innerHTML = isTurn()
       ? 'MA 60·120일 <strong>상승 강도가 둘 다 양수</strong>이면서, 그중 <strong>하나 이상이 최근 5거래일 안에 ' +
         '음에서 양으로 전환</strong>한 종목입니다. 전환일은 이 페이지의 강도식 기준 실제 부호 전환일이며 ' +
-        '이동평균선 돌파와는 다릅니다.<span class="bands">등급 없음 · 시가총액순 · 전환일 열은 경과 거래일</span>'
+        '이동평균선 돌파와는 다릅니다.<span class="bands">등급 없음 · 종목은 시총순, ETF/ETN은 거래대금순 · 전환일 열은 경과 거래일</span>'
       : down
       ? 'MA 5·20·60·120일 <strong>상승 강도가 모두 음수</strong>인 종목입니다. 등급은 ' +
         '<strong>0에 가장 가까운 값</strong>으로 매기므로, <strong>강</strong>은 네 축이 모두 −20% 이하인 ' +
@@ -443,6 +476,35 @@
     syncChips();
   }
 
+  function syncKindChips() {
+    document.querySelectorAll('#kindChips button[data-kind]').forEach(function (btn) {
+      var on = btn.getAttribute('data-kind') === state.activeKind;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+  }
+
+  function initKindChips() {
+    var box = $('kindChips');
+    box.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-kind]');
+      if (!btn) return;
+      state.activeKind = btn.getAttribute('data-kind');
+      syncKindChips();
+      render();
+    });
+    box.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var i = KINDS.indexOf(state.activeKind);
+      state.activeKind = KINDS[(i + (e.key === 'ArrowRight' ? 1 : KINDS.length - 1)) % KINDS.length];
+      syncKindChips();
+      render();
+      document.querySelector('#kindChips button[data-kind="' + state.activeKind + '"]').focus();
+    });
+    syncKindChips();
+  }
+
   function syncChips() {
     var box = $('gradeChips');
     if (box) box.style.display = isTurn() ? 'none' : '';
@@ -461,6 +523,7 @@
   function init() {
     initDirection();
     initChips();
+    initKindChips();
     $('capFloor').addEventListener('change', function (e) {
       state.capFloor = Number(e.target.value);
       render();
