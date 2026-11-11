@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-11-12](/trump-truth/2026-11-12/)
 - **07:10 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-11-12](/2026/11/12/global-economic-risk-briefing/)
 - **06:07 KST** — [AI Daily Intel — 2026-11-11](/ai-intel/2026-11-11/)
 - **02:03 KST** — [한국은행 보도자료 브리핑 — 2026-11-11](/bok-briefing/2026-11-11/)
