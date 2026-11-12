@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>2024 수상구조활동 위험기준 안전지침 관련 설문 조사</title>
-<meta name="description" content="국립소방연구원 설문 조사입니다. 약 7분 소요됩니다.">
-<meta property="og:title" content="2024 수상구조활동 위험기준 안전지침 관련 설문 조사">
-<meta property="og:description" content="국립소방연구원 설문 조사입니다. 약 7분 소요됩니다.">
+<title>2026년 소방용 개인보호장비 인체공학적 사용적합성 및 개선수요조사</title>
+<meta name="description" content="국립소방연구원 설문 조사입니다. 약 10분 소요됩니다.">
+<meta property="og:title" content="2026년 소방용 개인보호장비 인체공학적 사용적합성 및 개선수요조사">
+<meta property="og:description" content="국립소방연구원 설문 조사입니다. 약 10분 소요됩니다.">
 <meta property="og:type" content="website">
 <meta name="robots" content="noindex">
 </head>
@@ -89,6 +89,12 @@ main .wrap{padding-block:20px 40px;display:grid;gap:16px}
 textarea,input[type=text]{width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font:inherit;font-size:15.5px}
 textarea{min-height:110px;resize:vertical}
 .links{display:grid;gap:8px}
+.box{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.box div{display:grid;grid-template-columns:7.5em 1fr;border-top:1px solid var(--line)}
+.box div:first-child{border-top:0}
+.box dt{background:var(--soft);color:var(--heading);font-weight:700;font-size:14px;padding:10px 12px}
+.box dd{margin:0;padding:10px 12px;font-size:14.5px;min-width:0}
+.box-note{margin:-6px 0 0;font-size:13.5px;color:var(--muted)}
 .links a{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:var(--heading);text-decoration:none;font-weight:500}
 .links a span{font-size:13px;color:var(--muted);font-weight:400;overflow-wrap:anywhere}
 .letter{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;display:grid;gap:10px;font-size:15.5px}
@@ -106,11 +112,130 @@ textarea{min-height:110px;resize:vertical}
 .done p{margin:0;color:var(--muted)}
 .demo{font-size:12.5px;color:var(--muted);text-align:center}
 footer .wrap{padding-block:0 32px;font-size:12.5px;color:var(--muted);text-align:center}
-@media (max-width:380px){.grid{grid-template-columns:repeat(3,1fr)}.sc small{font-size:10.5px}}
+/* compact rhythm */
+body{line-height:1.5}
+main .wrap{padding-block:12px 28px;gap:12px}
+.card{padding:14px 12px;gap:10px}
+.q{font-size:15.5px;line-height:1.45}
+.hint{margin:-4px 0 0;font-size:13px}
+.opts{gap:6px}
+.opt-btn{padding:10px 12px;font-size:15px;gap:10px}
+.opts.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opts.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.sec-title .no{padding:8px 12px;font-size:14px}
+.sec-title .tx{padding:8px 12px;font-size:16px}
+.note{padding:10px 12px;font-size:14px}
+.letter{padding:16px 14px;gap:8px;font-size:15px}
+.grid{gap:5px}
+.grid-btn{padding:9px 2px;font-size:14.5px}
+.grid.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+body.compact header.band .wrap{padding-block:10px 0}
+body.compact header.band .hd-text{padding-bottom:10px;gap:0}
+body.compact .org{display:none}
+body.compact h1{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+mark.hl{background:linear-gradient(transparent 52%, var(--hl) 52%);color:inherit;font-weight:700;padding:0 1px}
+.alert-note{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:var(--r);padding:10px 12px;font-size:14px;font-weight:500}
+.alert-note p{margin:0}
+/* matrix table */
+.legend{margin:-2px 0 0;font-size:12px;line-height:1.5;color:var(--muted)}
+.legend b{color:var(--heading)}
+.legend span{margin:0 5px;color:var(--line)}
+.mtable{display:grid;margin:0 -4px}
+.mtr{display:grid;grid-template-columns:minmax(0,1fr) repeat(var(--mc),38px);align-items:center;border-top:1px solid var(--line);padding:4px 4px;border-radius:6px;scroll-margin-top:90px}
+.mtable.narrow .mtr{grid-template-columns:2.4em repeat(var(--mc),minmax(0,1fr))}
+.mhead{border-top:0;padding-block:0 4px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 41px);background:var(--surface);z-index:2}
+.mh{text-align:center;display:grid;justify-items:center;align-content:start;gap:2px;line-height:1.15}
+.mh b{font-family:var(--f-display);font-size:14px;color:var(--heading);font-variant-numeric:tabular-nums}
+.mh small{font-size:10.5px;line-height:1.2;color:var(--muted);word-break:keep-all;text-align:center;padding:0 1px}
+.mlab{margin:0;font-size:13px;line-height:1.35;letter-spacing:-0.2px;padding-right:6px;min-width:0}
+.mlab span{color:var(--heading);font-weight:700}
+.mtable.narrow .mlab{font-weight:600;padding-right:2px}
+.mcell{height:40px;width:100%;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;padding:0}
+.mcell i{width:22px;height:22px;border:2px solid var(--line);border-radius:50%;display:block;background:var(--surface)}
+.mcell[aria-checked="true"] i{border-color:var(--brand);background:var(--brand);box-shadow:inset 0 0 0 4px var(--surface)}
+.mcell:focus-visible{outline:3px solid var(--steel);outline-offset:-3px;border-radius:8px}
+.mtr.missing{background:var(--alert-bg)}
+/* header: uniform numbers, anchors on one line */
+.mhead.mtr{grid-template-rows:auto auto;row-gap:2px}
+.mhead.mtr .mlab{grid-row:1 / span 2}
+.mhead.mtr .ancwrap{grid-column:2 / -1;grid-row:1}
+.mhead.mtr .mh{grid-row:2}
+.anc{display:flex;justify-content:space-between;gap:8px;font-size:11px;line-height:1.3;color:var(--muted)}
+.anc span:last-child{text-align:right}
+/* stacked rows for long item text: text on its own line, circles below */
+.mtable.stack .mhead{display:grid;gap:2px;padding:0 4px 4px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 41px);background:var(--surface);z-index:2;border-bottom:1px solid var(--line)}
+.mcells{display:grid;grid-template-columns:repeat(var(--mc),minmax(0,1fr))}
+.mtable.stack .mtr{grid-template-columns:1fr;gap:0;padding:7px 2px 0;border-top:0;border-bottom:1px solid var(--line)}
+.mtable.stack .mtr:last-child{border-bottom:0}
+.mtable.stack .mlab{font-size:13px;line-height:1.35;letter-spacing:-0.4px;padding-right:0;font-weight:700;color:var(--ink)}
+.mtable.stack .mlab span{color:var(--heading)}
+.mtable.stack .mcell{height:34px}
+.mcell i{width:21px;height:21px}
+/* dropdown rows (issuance method) */
+.srows{display:grid}
+.srow.mtr{grid-template-columns:minmax(0,7.4em) minmax(0,1fr);gap:8px;padding:6px 0;border-top:1px solid var(--line)}
+.srow.mtr:first-child{border-top:0}
+.srow select{width:100%;min-width:0;font:inherit;font-size:14.5px;padding:9px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.srow select:focus-visible{outline:3px solid var(--steel);outline-offset:1px}
+
+.mtr:has(.mcell[aria-checked="true"]) .mlab{color:var(--ink)}
+/* number card: question and input on one line */
+.ncard{grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:10px;row-gap:4px}
+.ncard .q{grid-column:1}
+.ncard .numrow{grid-column:2;grid-row:1}
+.ncard .hint,.ncard .err{grid-column:1 / -1;margin:0}
+.numrow{gap:6px}
+.numrow{display:flex;align-items:center;flex-wrap:nowrap}
+.numrow .num{width:4.8em;min-width:0;box-sizing:border-box;font-size:17px;padding:8px 10px;text-align:center}
+.unit{font-size:15px;flex:none;white-space:nowrap}
+.resume{background:var(--sel);border:1px solid var(--sel-line);border-radius:var(--r);padding:12px 14px;display:grid;gap:8px}
+.resume p{margin:0}
+.maxmsg{margin:0;font-size:13px;color:var(--alert)}
+.done{padding:28px 18px}
+
+/* intro: title and illustration in one band, short intro */
+header.band .wrap.hd-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;padding-block:18px}
+header.band .wrap.hd-row .hd-text{padding-bottom:0}
+header.band .wrap.hd-row .hero{margin:0;padding:6px;background:var(--hero-bg);border-radius:14px;border:0;display:block}
+header.band .wrap.hd-row .hero svg{width:118px;height:auto}
+header.band h1{font-size:19px}
+body.compact header.band .wrap.hd-row{grid-template-columns:1fr;padding-block:10px}
+body.compact header.band h1{font-size:14px}
+.intro{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px;display:grid;gap:8px;font-size:15px;line-height:1.55}
+.intro p{margin:0}
+.intro .lead{font-weight:700;color:var(--heading)}
+.facts{margin:4px 0 0;padding-top:10px;border-top:1px solid var(--line);display:grid;gap:5px;font-size:13.5px;letter-spacing:-0.2px}
+.facts div{display:grid;grid-template-columns:6.3em minmax(0,1fr)}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;font-weight:500}
+details.full{font-size:13.5px;color:var(--muted);line-height:1.55}
+details.full summary{cursor:pointer;color:var(--steel);font-weight:500;padding:2px 0}
+details.full p{margin:6px 0 0}
+.consent-line{margin:0;font-size:13px;color:var(--muted);text-align:center;padding:0 6px}
+.nav.col{flex-direction:column;gap:4px}
+.nav .ghost{background:transparent;border:0;color:var(--muted);font-weight:500;font-size:14px;padding:10px}
+.nav .ghost:focus-visible{outline:3px solid var(--steel);outline-offset:2px}
+
+footer .wrap.foot{display:grid;gap:10px;justify-items:center}
+footer #foot{margin:0}
+.maker{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.maker img{height:24px;width:auto}
+@media (prefers-color-scheme:dark){.maker img{background:#FFFFFF;border-radius:4px;padding:3px 6px;box-sizing:content-box}}
+.contact{margin:0;font-size:13px;color:var(--muted)}
+.box-note.contact{margin-top:-4px}
+body.compact .maker{display:none}
+
+.intro .to{font-weight:700;color:var(--kw)}
+b.kw{color:var(--kw);font-weight:800}
+b.eq1{color:#C2410C} b.eq2{color:#0B7285} b.eq3{color:#6741D9} b.eq4{color:#2B8A3E} b.eq5{color:#A61E4D} b.eq6{color:#1864AB}
+:root{--kw:#0047B3}
+@media (prefers-color-scheme:dark){:root{--kw:#74A8FF}
+b.eq1{color:#FF922B} b.eq2{color:#3BC9DB} b.eq3{color:#B197FC} b.eq4{color:#69DB7C} b.eq5{color:#F783AC} b.eq6{color:#74C0FC}}
+@media (max-width:360px){.grid.g5{grid-template-columns:repeat(4,1fr)}.opts.c3{grid-template-columns:repeat(2,1fr)}}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 </style>
 
-<header class="band"><div class="wrap">
+<header class="band"><div class="wrap hd-row">
   <div class="hd-text">
     <div class="org"><b></b><span id="org"></span></div>
     <h1 id="title"></h1>
@@ -119,7 +244,7 @@ footer .wrap{padding-block:0 32px;font-size:12.5px;color:var(--muted);text-align
 </div></header>
 <div class="prog" id="prog" hidden><div class="wrap"><div class="bar"><i id="barfill"></i></div><span id="progtx"></span></div></div>
 <main><div class="wrap" id="view"></div></main>
-<footer><div class="wrap" id="foot"></div></footer>
+<footer><div class="wrap foot"><p id="foot"></p><div class="maker"><img src="data:image/png;base64,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" alt="clevue Reading between the data"><span>조사 수행 ㈜클레뷰</span></div></div></footer>
 
 <script>
 window.addEventListener('error', function(e){
@@ -129,234 +254,505 @@ window.addEventListener('error', function(e){
 </script>
 <script>
 /* ================= 설문 내용 (이 부분만 바꾸면 새 설문이 됩니다) ================= */
-const SCALE5 = ['전혀 그렇지 않다','그렇지 않은 편이다','보통이다','그런 편이다','매우 그렇다'];
+const EQUIP = ['특수방화복(상·하의)','방화헬멧','방화두건','방화신발','방화장갑','공기호흡기(SCBA)'];
+const SATIS = [['매우 만족',5,'매우\n만족'],['만족',4,''],['보통',3,'보통'],['불만족',2,''],['매우 불만족',1,'매우\n불만족']];
+const AGREE5 = [['매우 그렇다',5,'매우\n그렇다'],['그렇다',4,''],['보통이다',3,'보통'],['그렇지 않다',2,''],['매우 그렇지 않다',1,'매우\n아니다']];
+const DISC = [['매우 불편하다',5,'매우\n불편'],['불편한 편이다',4,''],['보통이다',3,'보통'],['불편하지 않은 편이다',2,''],['전혀 불편하지 않다',1,'전혀\n안 불편']];
+const DIFF = [['매우 어렵다',5,'매우\n어려움'],['어려운 편이다',4,''],['보통이다',3,'보통'],['어렵지 않은 편이다',2,''],['전혀 어렵지 않다',1,'전혀\n안 어려움']];
+const FIT = [['매우 작다',1,'매우\n작다'],['약간 작다',2,'약간\n작다'],['잘 맞다',3,'잘\n맞다'],['약간 크다',4,'약간\n크다'],['매우 크다',5,'매우\n크다']];
+const HOW = [['직접 착용해 보고 치수 선택',1,'직접\n착용'],['원하는 치수만 신청',2,'치수\n신청'],['정해진 치수로 일괄 지급',3,'일괄\n지급'],['개인적으로 구매',4,'개인\n구매'],['잘 모르겠음',5,'모름']];
+const C5 = ['착용 상태에서 필요한 동작을 수행하는 데 불편이 없다','무게나 부피로 인한 피로가 크지 않다','착용 중 더위·땀참으로 인한 불쾌감이 크지 않다','긴급 상황에서 신속하게 착용·탈의할 수 있다','사용 기간 동안 성능 저하 없이 유지된다'];
+const MAX2 = '최대 2개까지 선택할 수 있습니다.';
+const SIZE9 = [1,2,3,4,5,6,7,8,9].map(n => [n + '호', n, String(n)]);
+const DNOTE = ['이 부분은 앞 부분과 달리 "불편할수록·어려울수록" 높은 점수(5점)를 선택해 주십시오.'];
+const DNOTE2 = ['※ 5점 = 매우 불편하다(매우 어렵다), 1점 = 전혀 불편하지 않다(전혀 어렵지 않다)'];
+
 const SURVEY = {
-  org: '국립소방연구원',
-  title: '2024 수상구조활동 위험기준 안전지침 관련 설문 조사',
+  org: '소방청 국립소방연구원',
+  title: '2026년 소방용 개인보호장비 인체공학적 사용적합성 및 개선수요조사',
   intro: {
+    short: [
+      '착용하시는 개인보호장비 6종의 착용감과 사용 편의성, 개선이 필요한 점을 여쭙고자 합니다.',
+      '결과는 보호장비 개선과 개발을 위한 연구 자료로만 활용됩니다.'
+    ],
+    facts: [['소요 시간','약 10분'],['응답 방식','익명 · 자율 참여 · 언제든 중단 가능'],['응답 재개','중단 시 동일 기기에서 이어서 응답 가능함'],['답례품','응답 완료 선착순 300분께 소정의 기프티콘 제공'],['문의','이소연 연구관 (041-851-1141)']],
+    consent: '본인은 위의 조사 목적과 내용을 이해하였으며, 자발적으로 설문조사에 참여하는 데 동의합니다.',
     letter: [
-      '안녕하십니까?',
-      '바쁘신 가운데서도 귀한 시간을 내주셔서 감사드립니다.',
-      '국립소방연구원에서는 지난 6월 소방청, 중앙119구조본부, 전국 소방학교, 시도 구조대응 부서에 [수상구조활동 위험기준 안전지침과 교육영상]을 공유하였습니다. 본 설문조사는 배포된 수상구조활동 위험기준 안전지침의 현장 적용성을 높이고자 실시하고 있습니다.',
-      '보다 정확한 연구 결과를 위하여 성실한 응답을 부탁드리며, 본 설문 내용을 포함한 응답자분들의 모든 정보는 통계법 제33조 비밀 보호 조항에 의거 비밀이 보장됨을 약속드립니다.',
-      '본 설문에 관심을 가지고 협조해 주셔서 대단히 감사합니다.'
+      '안녕하십니까? 소방청 국립소방연구원에서는 2026년 소방공무원 현업근무자를 대상으로 소방용 개인보호장비의 인체공학적 사용적합성 및 개선 수요에 관한 설문조사를 실시하고 있습니다.',
+      '이 조사는 우리 소방대원께서 현장에서 사용하는 6종의 개인보호장비(특수방화복, 방화헬멧, 방화두건, 방화신발, 방화장갑, 공기호흡기)에 대해 동작성, 착용 쾌적성, 사용 편의성 등의 측면에서 사용적합성을 평가하고, 실제 사용 과정에서 경험하는 불편사항과 개선 요구를 파악하기 위한 것입니다. 조사 결과는 소방용 개인보호장비의 인체공학적 성능 향상과 향후 제품 개선 및 개발 방향을 수립하기 위한 기초 연구 자료로 활용될 예정입니다.',
+      '설문은 총 28문항(인구통계 문항 별도)으로 구성되어 있으며, 응답에는 약 10분이 소요됩니다.',
+      '이 설문은 익명으로 진행되며, 응답자의 성명 등 개인을 직접 식별할 수 있는 정보는 수집하지 않습니다. 모든 응답 내용은 통계적으로 처리되며, 연구 및 조사 목적 이외의 용도로 사용되지 않습니다. 설문 참여는 전적으로 자발적이며, 참여 여부에 따른 어떠한 불이익도 없습니다. 응답자는 설문 진행 중 언제든지 참여를 중단할 수 있습니다.',
+      '설문과 관련하여 궁금한 사항이 있으시면 담당자(이소연 연구관, 041-851-1141)에게 문의해 주시기 바랍니다.',
+      '바쁘신 현장 업무 중에도 설문에 참여해 주셔서 진심으로 감사드립니다.'
     ],
-    sign: '2024년 12월 · 국립소방연구원',
-    notice: '본 설문에 들어가기에 앞서 [수상구조활동 위험기준 안전지침과 교육영상]을 아직 못 보신 구조대원들은 아래 링크를 통해 지침 자료와 동영상을 살펴보시고 설문에 응해 주시기 바랍니다. 특히, 안전지침 자료의 13페이지를 살펴봐 주시기 바랍니다.',
-    links: [
-      {label:'안전지침 자료 보기', url:'https:\/\/url.kr/nyr8ft'},
-      {label:'교육영상 보기', url:'https:\/\/url.kr/s8xzwl'}
-    ],
-    minutes: 7
+    sign: '소방청 국립소방연구원',
+    minutes: 10
   },
   pages: [
-    { no:'Part 1', title:'안전지침 확인 시점',
-      note:['각 질문에 대해 귀하께서 동의하시는 정도를 5가지 보기 중에서 골라 주십시오. ‘매우 그렇다’ 5점부터 ‘전혀 그렇지 않다’ 1점까지, 귀하의 생각에 가장 가까운 점수를 선택해 주시면 됩니다.'],
+    { no:'Part A', title:'인구통계학적 특성 (1/2)', keep:true, items:[
+        {id:'A1', n:'A1', type:'grid', cols:5, text:'소속', options:['중앙','서울','부산','대구','인천','광주','대전','울산','세종','경기북부','경기남부','강원','충북','충남','전북','전남','경북','경남','창원','제주']},
+        {id:'A2', n:'A2', type:'number', text:'나이 (출생연도)', unit:'년', min:1950, max:2008},
+        {id:'A3', n:'A3', type:'single', text:'성별', options:['남자','여자'], inline:true},
+        {id:'A4', n:'A4', type:'number', text:'근속연수', unit:'년', min:0, max:45, hint:'1년 미만은 0으로 입력'},
+        {id:'A5', n:'A5', type:'single', text:'주 담당업무', options:['화재진압','구조','기타'], etc:3},
+      ]},
+    { no:'Part A', title:'인구통계학적 특성 (2/2)', keep:true, items:[
+        {id:'A6', n:'A6', type:'number', text:'최근 1년 화재현장 출동 횟수 (월평균)', unit:'회', min:0, max:200, hint:'출동하지 않았으면 0으로 입력'},
+        {id:'A7', n:'A7', type:'number', text:'신장', unit:'cm', min:140, max:210},
+        {id:'A8', n:'A8', type:'matrix', cols:SIZE9, rows:['상의','하의'], narrow:true, unitHead:'호', text:'착용하는 특수방화복 사이즈'},
+        {id:'A9', n:'A9', type:'number', text:'평소 신는 신발 사이즈', unit:'mm', min:200, max:330},
+        {id:'A10', n:'A10', type:'number', text:'착용하는 방화신발 사이즈', unit:'mm', min:200, max:330}
+      ]},
+    { no:'Part B', title:'보호장비 6종 공통 평가', items:[
+        {id:'B1', n:'1', em:'개인보호장비 6종', type:'matrix', cols:SATIS, num:true, rows:EQUIP, text:'본인이 착용하는 개인보호장비 6종에 대한 전반적인 만족도는 어느 정도입니까?'},
+        {id:'B2', n:'2', em:'6종 장비', type:'single', text:'6종 장비 중 개선이 가장 시급하다고 생각되는 한 가지를 선택해 주십시오.', options:['특수방화복','방화헬멧','방화두건','방화신발','방화장갑','공기호흡기']}
+      ]},
+    { no:'Part B', title:'보호장비 치수', items:[
+        {id:'B3', n:'3', em:'치수(크기)', type:'matrix', cols:FIT, rows:EQUIP, text:'현재 착용하는 개인보호장비의 치수(크기)는 본인의 몸에 얼마나 맞습니까?'},
+        {id:'B4', n:'4', em:'치수를 정해 지급', type:'matrix', cols:HOW, select:true, rows:EQUIP, text:'현재 착용하는 개인보호장비는 어떤 방식으로 치수를 정해 지급받았습니까?'},
+        {id:'B5', n:'5', em:'치수가 맞지 않아', type:'multi', text:'장비의 치수가 맞지 않아 다음과 같이 대처한 경험이 있습니까?', hint:'해당하는 것을 모두 선택해 주세요.',
+         options:['수선·변형하여 사용(접기, 테이프 고정 등)','다른 대원과 교환','깔창·내피·덧장갑 등 보조품 사용','불편을 감수하고 그대로 사용','작업 중 장비를 잠시 벗고 작업(장갑 등)','기타','해당 없음(치수가 잘 맞음)'],
+         etc:6, exclusive:7}
+      ]},
+    { no:'Part C', title:'보호장비 개별 만족도 평가', items:[
+        {id:'C6', n:'6', em:'특수방화복', type:'matrix', cols:AGREE5, num:true, rows:C5, text:'본인이 착용하는 특수방화복에 대해 각 문항별 해당하는 항목을 골라주세요.'},
+        {id:'C7', n:'7', em:'방화헬멧', type:'matrix', cols:AGREE5, num:true, rows:C5, text:'본인이 착용하는 방화헬멧에 대해 각 문항별 해당하는 항목을 골라주세요.'},
+        {id:'C8', n:'8', em:'방화두건', type:'matrix', cols:AGREE5, num:true, rows:['착용 상태에서 필요한 동작을 수행하는 데 불편이 없다','착용 중 더위·땀참으로 인한 불쾌감이 크지 않다','사용 기간 동안 성능 저하 없이 유지된다'], text:'본인이 착용하는 방화두건에 대해 각 문항별 해당하는 항목을 골라주세요.'}
+      ]},
+    { no:'Part C', title:'보호장비 개별 만족도 평가', items:[
+        {id:'C9', n:'9', em:'방화신발', type:'matrix', cols:AGREE5, num:true, rows:C5, text:'본인이 착용하는 방화신발에 대해 각 문항별 해당하는 항목을 골라주세요.'},
+        {id:'C10', n:'10', em:'방화장갑', type:'matrix', cols:AGREE5, num:true, rows:C5, text:'본인이 착용하는 방화장갑에 대해 각 문항별 해당하는 항목을 골라주세요.'},
+        {id:'C11', n:'11', em:'공기호흡기', type:'matrix', cols:AGREE5, num:true, rows:C5, text:'본인이 착용하는 공기호흡기에 대해 각 문항별 해당하는 항목을 골라주세요.'}
+      ]},
+    { no:'Part D', title:'특수방화복 사용적합성 및 개선사항', alert:DNOTE, items:[
+        {id:'D12', n:'12', em:'특수방화복', type:'matrix', cols:DISC, num:true, rows:['의복의 무게와 뻣뻣함','팔 올리기·쪼그려 앉기 등 동작 제한','특수방화복 내부의 열 축적(더위)','땀과 습기로 인한 불쾌감(수분 축적)'], text:'특수방화복 착용 시 다음 항목으로 인한 불편함은 어느 정도입니까?'},
+        {id:'D13', n:'13', em:'특수방화복', type:'multi', max:2, etc:8, hint:MAX2, text:'특수방화복에서 가장 우선적으로 개선해야 할 부분은 무엇입니까? (최대 2개 선택)',
+         options:['경량화','동작을 고려한 패턴·구조 개선','치수 및 맞음새 개선','통기·냉각 성능 개선','땀·수분 관리 성능 개선','소매·허리·바짓단의 보호성 개선','세탁·건조·유지관리 편의성','기타']}
+      ]},
+    { no:'Part D', title:'방화헬멧 사용적합성 및 개선사항', alert:DNOTE2, items:[
+        {id:'D14', n:'14', em:'방화헬멧', type:'matrix', cols:DISC, num:true, rows:['방화헬멧 중량으로 인한 목·어깨 부담','머리·이마·턱 부위 압박','머리를 숙이거나 회전할 때의 시야 제한','방화헬멧 내부의 열·땀 축적(더위)','바이저 김서림·손상','주변 소리 및 의사소통 인지 저하'], text:'방화헬멧 착용 시 다음 항목으로 인한 불편함은 어느 정도입니까?'},
+        {id:'D15', n:'15', em:'방화헬멧', type:'multi', max:2, etc:8, hint:MAX2, text:'방화헬멧에서 가장 우선적으로 개선해야 할 부분은 무엇입니까? (최대 2개 선택)',
+         options:['경량화','무게중심 및 균형 개선','머리 크기·형상 적합성 개선','시야 확보','청각·의사소통 개선','내부 통기·흡습 성능 개선','턱끈·조절장치의 편의성','기타']}
+      ]},
+    { no:'Part D', title:'방화두건 사용적합성 및 개선사항', alert:DNOTE2, items:[
+        {id:'D16', n:'16', em:'방화두건', type:'matrix', cols:DISC, num:true, rows:['얼굴·턱·목 부위의 압박','열이나 화염으로부터 보호 성능 부족','머리·얼굴·목 부위의 열감(더위)','땀과 습기에 따른 피부 불쾌감','소재의 두께·뻣뻣함으로 인한 가려움이나 피부 마찰'], text:'방화두건 착용 시 다음 항목으로 인한 불편함은 어느 정도입니까?'},
+        {id:'D17', n:'17', em:'방화두건', type:'multi', max:2, etc:8, hint:MAX2, text:'방화두건에서 가장 우선적으로 개선해야 할 부분은 무엇입니까? (최대 2개 선택)',
+         options:['통기·방열 성능','땀 흡수·건조 성능','신축성과 밀착성','얼굴·목 부위의 보호 범위','피부 자극 감소','방화헬멧·면체와의 호환성','착탈 및 세탁 편의성','기타']}
+      ]},
+    { no:'Part D', title:'방화신발 사용적합성 및 개선사항', alert:DNOTE2, items:[
+        {id:'D18', n:'18', em:'방화신발', type:'matrix', cols:DISC, num:true, rows:['방화신발 무게','발가락·발등·발볼 부위의 압박','방화신발 바닥의 미끄러움','방화신발 내부의 열감과 땀(더위 및 습도)','장기간 착용 시 발냄새'], text:'방화신발 착용 시 다음 항목으로 인한 불편함은 어느 정도입니까?'},
+        {id:'D19', n:'19', em:'방화신발', type:'matrix', cols:DIFF, num:true, rows:['빠른 보행(혹은 달리기)','계단 및 사다리 오르내리기','미끄러운 바닥에서 이동하기','진흙 바닥에서 이동하기','방화신발 벗기(벗었다가 다시 신기)'], text:'방화신발을 착용한 상태에서 다음 동작의 수행 용이성은 어느 정도입니까?'},
+        {id:'D20', n:'20', em:'방화신발', type:'multi', max:2, etc:8, hint:MAX2, text:'방화신발에서 가장 우선적으로 개선해야 할 부분은 무엇입니까? (최대 2개 선택)',
+         options:['경량화','발볼·발등·발목 치수 개선','발목 및 발바닥의 유연성','바닥 미끄럼 방지','통기·흡습·건조 성능','충격 흡수 및 밑창의 보호성능','착탈 편의성','기타']}
+      ]},
+    { no:'Part D', title:'방화장갑 사용적합성 및 개선사항', alert:DNOTE2, items:[
+        {id:'D21', n:'21', em:'방화장갑', type:'matrix', cols:DISC, num:true, rows:['손가락 길이와 방화장갑 손가락 길이의 불일치','방화장갑 소재의 뻣뻣함과 두께','방화장갑 내부의 열감과 땀(더위와 습기)'], text:'방화장갑 착용 시 다음 항목으로 인한 불편함은 어느 정도입니까?'},
+        {id:'D22', n:'22', em:'방화장갑', type:'matrix', cols:DIFF, num:true, rows:['작은 물체 집기·버튼 조작','손가락 굽히기·주먹 쥐기','호스·노즐 조작 및 회전','큰 도구의 사용(예: 해머)','젖은 방화장갑의 착용 및 탈의'], text:'방화장갑 착용 상태에서 다음 작업동작의 수행 용이성은 어느 정도입니까?'},
+        {id:'D23', n:'23', em:'방화장갑', type:'multi', max:2, etc:9, hint:MAX2, text:'방화장갑에서 가장 우선적으로 개선해야 할 부분은 무엇입니까? (최대 2개 선택)',
+         options:['손 크기·손가락 길이에 맞는 치수 개선','손가락 기민성 향상','파지력 및 미끄럼 방지 성능','경량화·유연성 향상','통기성 향상·땀 관리','젖은 상태의 착탈 편의성','손목과 소매 연결부 보호성','화염으로부터 보호성능 개선','기타']}
+      ]},
+    { no:'Part D', title:'공기호흡기 사용적합성 및 개선사항', alert:DNOTE2, items:[
+        {id:'D24', n:'24', em:'공기호흡기', type:'matrix', cols:DISC, num:true, rows:['등판 및 어깨끈의 신체 밀착·고정','좁은 공간 통과 시 장비 간섭 정도','면체 착용 상태에서의 시야 확보','전체 중량으로 인한 신체 부담 및 근육 피로'], text:'공기호흡기를 착용한 상태에서 다음 항목의 불편함은 어느 정도입니까?'},
+        {id:'D25', n:'25', em:'공기호흡기', type:'multi', max:2, etc:8, hint:MAX2, text:'공기호흡기에서 가장 우선적으로 개선해야 할 부분은 무엇입니까? (최대 2개 선택)',
+         options:['전체 중량 감소','하중 분산 및 어깨·허리 부담 감소','등판·하네스 신체 적합성','면체의 시야 개선','면체의 압박·열감 개선','착탈·조절 편의성','방화헬멧·특수방화복과의 간섭 감소','기타']}
+      ]},
+    { no:'Part E', title:'종합 개선 수요', items:[
+        {id:'E26', n:'26', em:'동시에 착용할 때', type:'single', etc:7, text:'여러 종류의 보호장비를 동시에 착용할 때 가장 문제가 되는 연결부 또는 간섭 부위는 어디입니까?',
+         options:['특수방화복 바짓단–방화신발','특수방화복 소매–방화장갑','특수방화복–공기호흡기 하네스','방화헬멧–방화두건','방화헬멧–공기호흡기 면체','방화두건–공기호흡기 면체','기타','특별한 문제 없음']},
+        {id:'E27', n:'27', em:'개발 시', type:'multi', max:2, etc:9, hint:MAX2, text:'향후 소방용 개인보호장비 개발 시 가장 중요하게 고려해야 할 개선 방향은 무엇입니까? (최대 2개 선택)',
+         options:['경량화 및 하중 분산','관절 가동성과 동작성 향상','다양한 체형을 고려한 치수 적합성','통기·땀 관리 및 온열 쾌적성(인체 냉각)','착·탈의 편의성','열·화염 보호성 향상','세탁·오염 제거 및 유지 관리','내구성 및 사용수명 연장','기타']},
+        {id:'E28', n:'28', type:'text', required:false, text:'현재 사용하는 소방용 개인보호장비의 불편사항, 실제 현장 작업에서 발생한 문제, 또는 새롭게 개발되기를 희망하는 기능이 있다면 자유롭게 기술해 주십시오.'}
+      ]},
+    { no:'마지막', title:'답례품 발송을 위한 개인정보 수집·이용 동의', keep:true,
+      note:['응답을 완료하신 선착순 300분께 감사의 뜻으로 소정의 답례품(모바일 기프티콘)을 보내 드립니다. 답례품을 받으시려면 아래 내용을 확인하고 동의해 주십시오.'],
+      box:[
+        ['수집 목적','설문 참여 감사 답례품 발송'],
+        ['수집 항목','휴대폰 번호'],
+        ['보유·이용 기간','답례품 발송 후 즉시 파기 (늦어도 2026년 11월 30일까지)'],
+        ['수집 기관','㈜클레뷰 (조사 수행기관)'],
+        ['동의 거부 권리','동의하지 않으셔도 설문 참여에는 불이익이 없습니다. 다만 답례품은 받으실 수 없습니다.']
+      ],
+      boxNote:'입력하신 휴대폰 번호는 설문 응답 내용과 분리하여 따로 보관하며, 답례품은 번호당 1회 발송합니다.',
       items:[
-        {id:'Q1', n:'1', type:'single', text:'귀하는 안전지침을 언제 처음 확인하셨습니까?',
-         options:['본 설문에 임하기 전부터 이미 확인하고 알고 있었음','본 설문을 통해 처음 확인함']}
-      ]},
-    { no:'Part 1', title:'안전지침에 대한 이해도 및 만족도', items:[
-        {id:'Q2', n:'2', type:'scale', text:'수상구조활동 위험기준 안전지침 내용을 어려움 없이 이해할 수 있다고 생각한다.'},
-        {id:'Q3', n:'3', type:'scale', text:'지침에서 제시된 위험평가 기준이 현장 상황을 충분히 반영한다고 생각한다.'},
-        {id:'Q4', n:'4', type:'scale', text:'제공된 교육 영상이 지침 이해에 도움이 되었다고 생각한다.'},
-        {id:'Q5', n:'5', type:'scale', text:'지침이 구조대원의 안전 확보에 실질적으로 도움이 된다고 생각한다.'}
-      ]},
-    { no:'Part 1', title:'현장 적용성', items:[
-        {id:'Q6', n:'6', type:'scale', text:'위험평가 기준에 따라 구조 활동 가능 여부를 판단하기 쉽다고 생각한다.'},
-        {id:'Q7', n:'7', type:'scale', text:'유속 및 수심 정보를 활용하여 현장 판단을 내리는 데 도움이 된다고 생각한다.'}
-      ]},
-    { no:'Part 1', title:'교육 및 훈련 관련 피드백', items:[
-        {id:'Q8', n:'8', type:'scale', text:'지침 내용을 기반으로 한 교육/훈련이 충분히 제공되었다고 생각한다.'},
-        {id:'Q9', n:'9', type:'text', required:false, text:'추가로 필요하다고 느끼는 교육 콘텐츠나 훈련 방식이 있다면 적어주세요.'}
-      ]},
-    { no:'Part 1', title:'지침의 실효성', items:[
-        {id:'Q10', n:'10', type:'scale', text:'위험도 곡선을 활용하여 단계별 위험 수준을 직관적으로 이해할 수 있다.'},
-        {id:'Q11', n:'11', type:'scale', text:'근접유속 측정방법이 현장에서 실제로 활용 가능한 수준이라고 생각한다.'}
-      ]},
-    { no:'Part 1', title:'전반적 유용성 및 추가 제안 사항', items:[
-        {id:'Q12', n:'12', type:'text', text:'지침 내용 중 가장 유용하다고 생각한 부분은 무엇입니까?'},
-        {id:'Q13', n:'13', type:'text', text:'지침 내용 중 가장 유용하지 않거나 개선이 필요하다고 생각한 부분은 무엇입니까?'},
-        {id:'Q14', n:'14', type:'text', required:false, text:'추가로 수상구조 현장에서 필요한 안전장비나 지원사항이 있다면 제안해주세요.'}
-      ]},
-    { no:'Part 1', title:'지침 활용 경험 및 의향', items:[
-        {id:'Q15', n:'15', type:'single', text:'귀하는 현행 수상구조활동 위험평가 기준(지침 자료 1페이지)을 활용해 보신 적이 있습니까?',
-         options:['전혀 활용한 적이 없다','거의 활용한 적이 없다','가끔 활용했다 (가끔 필요할 때만 사용)','자주 활용했다 (현장에서 종종 사용)','매우 자주 활용했다 (거의 모든 상황에서 사용)']},
-        {id:'Q16', n:'16', type:'single', text:'귀하는 위험도 곡선에 기반한 위험평가 기준(지침 자료 13페이지)을 활용해 보신 적이 있습니까?',
-         options:['전혀 활용한 적이 없다','거의 활용한 적이 없다','가끔 활용했다 (가끔 필요할 때만 사용)','자주 활용했다 (현장에서 종종 사용)','매우 자주 활용했다 (거의 모든 상황에서 사용)']},
-        {id:'Q17', n:'17', type:'single', text:'귀하는 위험도 곡선에 기반한 위험평가 기준(지침 자료 13페이지)을 활용하실 계획이 있으십니까?',
-         options:['전혀 활용할 계획이 없다','거의 활용하지 않을 것이다','가끔 활용할 수 있을 것 같다 (가끔 필요할 때만 사용 예정)','자주 활용할 것 같다 (현장에서 종종 사용 예정)','앞으로 매우 자주 활용할 예정이다 (거의 모든 상황에서 사용 예정)']},
-        {id:'Q17_1', n:'17-1', type:'multi', showIf:{q:'Q17', in:[1,2]},
-         text:'활용하실 계획이 없다고 응답하셨는데, 활용 의향이 없으신 이유는 무엇일까요?', hint:'해당하는 것을 모두 골라 주세요.',
-         options:['실제 현장에서 시간 제약 및 긴박한 상황 요인으로 유속과 유량 측정이 어렵기 때문에','위험도 곡선 지침 활용을 위한 훈련이나 교육이 아직 미비하기 때문에','위험도 곡선의 실질적인 효과나 안전 확보 방식에 대한 신뢰가 부족하기 때문에','유속과 유량 외에, 수상구조 환경에 영향을 미치는 다른 요인들(예: 장애물, 바닥 상태, 기상 조건)의 영향도가 크기 때문에','기타'],
-         etc:5}
-      ]},
-    { no:'Part 2', title:'응답자 특성', note:['해당하는 항목을 선택해 주십시오.'], items:[
-        {id:'DQ1', n:'DQ1', type:'grid', text:'귀하의 소속지역은 어떻게 되십니까?',
-         options:['중앙','서울','부산','대구','인천','광주','대전','울산','창원','세종','경기 남부','경기 북부','강원','충북','충남','전북','전남','경북','경남','제주']},
-        {id:'DQ2', n:'DQ2', type:'single', text:'귀하의 계급은 어떻게 되십니까?',
-         options:['소방사','소방교','소방장','소방위','소방경 이상']},
-        {id:'DQ3', n:'DQ3', type:'single', text:'귀하의 소방근무 경력은 어떻게 되십니까?',
-         options:['1년 미만','1년 이상 ~ 3년 미만','3년 이상 ~ 5년 미만','5년 이상 ~ 7년 미만','7년 이상 ~ 10년 미만','10년 이상']},
-        {id:'DQ4', n:'DQ4', type:'single', text:'지난 1년 동안 귀하의 수난 구조 활동 경험 횟수는 어떻게 되십니까?',
-         options:['0회 (경험 없음)','1회 ~ 5회','6회 ~ 10회','11회 ~ 20회','21회 ~ 50회','51회 이상']}
+        {id:'AGREE', n:'', type:'single', text:'위와 같이 개인정보를 수집·이용하는 데 동의하십니까?', options:['동의합니다','동의하지 않습니다']},
+        {id:'PHONE', n:'', type:'phone', private:true, showIf:{q:'AGREE', in:[1]}, text:'답례품을 받으실 휴대폰 번호를 입력해 주세요.', hint:'숫자만 입력하셔도 됩니다. 예) 01012345678'}
       ]}
   ],
-  thanks: '설문에 성실하게 임해 주셔서 감사합니다.'
+  thanks: '설문에 참여해 주셔서 감사합니다. 응답이 정상적으로 제출되었습니다.',
+  contact: '설문 화면·답례품 문의: ㈜클레뷰 hanmh@clevue.com',
+  declined: '설문 참여에 동의하지 않으셔서 설문을 종료합니다. 감사합니다.'
 };
 /* ============================================================================ */
+
+/* 문항 하나씩 한 화면에 보이도록 화면 나누기 (keep 표시 화면은 그대로) */
+(function splitPages(){
+  const out = [];
+  SURVEY.pages.forEach(pg => {
+    if (pg.keep){ out.push(pg); return; }
+    pg.items.forEach((it, i) => {
+      const sub = {no: pg.no, title: pg.title, items: [it]};
+      if (pg.note && i === 0) sub.note = pg.note;
+      if (pg.alert && it.type === 'matrix') sub.alert = (pg.alert === DNOTE && i === 0) ? DNOTE : DNOTE2;
+      out.push(sub);
+    });
+  });
+  SURVEY.pages = out;
+})();
+
+/* 응답 저장 주소: 구글 Apps Script 웹 앱 주소 (외부 서버에 올릴 때 사용) */
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyKe85VKJ67XqTKNOweT0s_14ULl7YHx0Z4lAEiS_KY4_DOHznCX79Px5teHOtOmi1q/exec';
+const LIVE = typeof google !== 'undefined' && google.script && google.script.run;
+const DEMO = !LIVE && !ENDPOINT;
 
 const $ = s => document.querySelector(s);
 const ESC_MAP = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
 const esc = s => Array.from(String(s), c => ESC_MAP[c] || c).join('');
-/* 응답 저장 주소: 구글 Apps Script 웹 앱 주소 (Netlify 등 외부에 올릴 때 사용) */
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyKe85VKJ67XqTKNOweT0s_14ULl7YHx0Z4lAEiS_KY4_DOHznCX79Px5teHOtOmi1q/exec';
-const LIVE = typeof google !== 'undefined' && google.script && google.script.run;
-const DEMO = !LIVE && !ENDPOINT;
-const KEY = 'survey-done:' + SURVEY.title;
-const ans = {};            /* id -> number | number[] | string */
-const etcText = {};        /* id -> string */
-let step = -1;             /* -1 = intro, pages.length = done */
-const startedAt = Date.now();
+const KEY = 'survey-draft:' + SURVEY.title;
+const DONEKEY = 'survey-done:' + SURVEY.title;
+const reduceMotion = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e) { return true; } };
+
+let ans = {};
+let etcText = {};
+let step = -1;
+let startedAt = Date.now();
+let finished = '';
 
 document.title = SURVEY.title;
 $('#org').textContent = SURVEY.org;
 $('#title').textContent = SURVEY.title;
-$('#foot').textContent = '응답 내용은 통계법 제33조에 따라 비밀이 보장되며 통계 목적 외에는 사용하지 않습니다.';
+$('#foot').textContent = '모든 응답 내용은 통계적으로 처리되며, 연구 및 조사 목적 이외의 용도로 사용되지 않습니다.';
 
-const visible = it => !it.showIf || [].concat(ans[it.showIf.q] ?? []).some(v => it.showIf.in.includes(v));
+const digitsOf = v => Array.from(String(v == null ? '' : v)).filter(c => c >= '0' && c <= '9').join('');
+const phoneOk = v => { const d = digitsOf(v); return d.length >= 10 && d.length <= 11 && d.slice(0,2) === '01'; };
+const phoneFmt = v => { const d = digitsOf(v); return d.length === 11 ? d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7) : d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6); };
+const numOk = (it, v) => { const d = digitsOf(v); if (!d.length || d.length > 4) return false; const n = Number(d); return n >= it.min && n <= it.max; };
+
+/* 주관식 성의 확인: 자음·모음만, 같은 글자 반복, 숫자·기호만, 키보드 연타, 너무 짧은 입력을 막음 */
+const OKWORDS = ['없음','없습니다','없어요','특별히없음','해당없음','없다','모름','잘모르겠음'];
+const MASH = ['qwer','asdf','zxcv','wert','sdfg','xcvb','qwert','asdfg','zxcvb','abcd','aaaa'];
+function textOk(v, minLen){
+  const chars = Array.from(String(v || '')).filter(c => c !== ' ' && c !== '\n' && c !== '\t');
+  const flat = chars.join('');
+  if (OKWORDS.includes(flat)) return true;
+  if (chars.length < minLen) return false;
+  let jamo = 0, syl = 0, lat = 0;
+  chars.forEach(c => { const k = c.charCodeAt(0);
+    if (k >= 0x3131 && k <= 0x318E) jamo++;
+    else if (k >= 0xAC00 && k <= 0xD7A3) syl++;
+    else if ((k >= 65 && k <= 90) || (k >= 97 && k <= 122)) lat++; });
+  if (syl + lat === 0) return false;
+  if (jamo * 2 > chars.length) return false;
+  if (new Set(chars).size === 1) return false;
+  if (syl === 0 && MASH.some(m => flat.toLowerCase().includes(m))) return false;
+  if (chars.length >= 4 && new Set(chars).size * 4 < chars.length) return false;
+  return true;
+}
+const visible = it => !it.showIf || [].concat(ans[it.showIf.q] == null ? [] : ans[it.showIf.q]).some(v => it.showIf.in.includes(v));
 const isReq = it => it.required !== false;
+const rowKey = (it, r) => it.id + '_' + (r + 1);
+const hasVal = it => { const v = ans[it.id]; return v != null && String(v).trim() !== ''; };
+const invalid = it => isReq(it) ? !answered(it) : (it.type === 'text' && hasVal(it) && !textOk(ans[it.id], 2));
+const JUNK = '알아볼 수 있는 내용으로 적어 주세요. (자음·모음만 입력하거나 같은 글자를 반복하면 넘어가지 않습니다)';
+function errMsg(it){
+  const v = ans[it.id];
+  if (it.type === 'text' && hasVal(it)) return JUNK + (isReq(it) ? '' : ' 의견이 없으시면 빈칸으로 두셔도 됩니다.');
+  if (it.etc && (it.type === 'multi' ? (Array.isArray(v) && v.includes(it.etc)) : v === it.etc) && String(etcText[it.id]||'').trim()) return '기타 내용을 ' + JUNK;
+  return null;
+}
+
 function answered(it){
   const v = ans[it.id];
-  if (it.type === 'text') return !!(v && v.trim());
-  if (it.type === 'multi') return Array.isArray(v) && v.length > 0 && (!it.etc || !v.includes(it.etc) || !!(etcText[it.id]||'').trim());
+  if (it.type === 'matrix') return it.rows.every((r, i) => ans[rowKey(it, i)] != null);
+  if (it.type === 'text') return !!(v && String(v).trim()) && textOk(v, 2);
+  if (it.type === 'phone') return phoneOk(v);
+  if (it.type === 'number') return numOk(it, v);
+  if (it.type === 'multi') return Array.isArray(v) && v.length > 0 && (!it.etc || !v.includes(it.etc) || textOk(etcText[it.id], 2));
+  if (it.type === 'single' && it.etc && v === it.etc) return textOk(etcText[it.id], 2);
   return v != null;
 }
 
+/* 남은 시간 계산: 입력 단위당 약 6초, 서술형 40초 */
+function unitsOf(it){ if (it.type === 'matrix') return it.rows.length; if (it.type === 'text') return 7; return 1; }
+function remainMin(){
+  let u = 0;
+  SURVEY.pages.forEach((pg, i) => { if (i < step) return; pg.items.forEach(it => { if (!visible(it)) return; if (i === step && answered(it)) return; u += unitsOf(it); }); });
+  return Math.max(1, Math.round(u * 6 / 60));
+}
+
+function saveDraft(){
+  try { localStorage.setItem(KEY, JSON.stringify({ans, etcText, step, startedAt, t: Date.now()})); } catch(e) {}
+}
+function loadDraft(){
+  try { const s = localStorage.getItem(KEY); if (!s) return null; const d = JSON.parse(s); if (Date.now() - d.t > 1000*60*60*24*7) return null; return d; } catch(e) { return null; }
+}
+function clearDraft(){ try { localStorage.removeItem(KEY); } catch(e) {} }
+
 function render(){
   const P = SURVEY.pages, v = $('#view');
-  $('#prog').hidden = step < 0 || step >= P.length;
-  $('#hero').hidden = !(step < 0 || step >= P.length);
-  if (step >= 0 && step < P.length){
+  const inPages = step >= 0 && step < P.length && !finished;
+  $('#prog').hidden = !inPages;
+  $('#hero').hidden = inPages;
+  document.body.classList.toggle('compact', inPages);
+  if (inPages){
     $('#barfill').style.width = ((step + 1) / P.length * 100) + '%';
-    $('#progtx').textContent = (step + 1) + ' / ' + P.length;
+    $('#progtx').textContent = '약 ' + remainMin() + '분 남음';
   }
-  if (step < 0){ v.innerHTML = introHTML(); bindNav(); return; }
-  if (step >= P.length){ v.innerHTML = doneHTML(); return; }
+  if (finished){ v.innerHTML = doneHTML(); return; }
+  if (step < 0){ v.innerHTML = introHTML(); bindIntro(); return; }
   const pg = P[step];
   let h = `<div class="sec-title"><div class="no">${esc(pg.no)}</div><div class="tx">${esc(pg.title)}</div></div>`;
+  if (pg.alert) h += `<div class="alert-note">${pg.alert.map(t=>`<p>${esc(t)}</p>`).join('')}</div>`;
   if (pg.note) h += `<div class="note">${pg.note.map(t=>`<p>${esc(t)}</p>`).join('')}</div>`;
+  if (pg.box) h += `<dl class="box">${pg.box.map(r=>`<div><dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd></div>`).join('')}</dl>` + (pg.boxNote ? `<p class="box-note">${esc(pg.boxNote)}</p>` : '') + (pg.box && SURVEY.contact ? `<p class="box-note contact">${esc(SURVEY.contact)}</p>` : '');
   pg.items.forEach(it => { if (visible(it)) h += itemHTML(it); });
-  h += `<div id="msg"></div><div class="nav"><button class="prev" id="prev" type="button">이전</button><button class="next" id="next" type="button">${step === P.length-1 ? '제출하기' : '다음'}</button></div>`;
+  const last = step === P.length - 1;
+  h += `<div id="msg"></div><div class="nav"><button class="prev" id="prev" type="button">이전</button><button class="next" id="next" type="button">${last ? '제출하기' : '다음'}</button></div>`;
   v.innerHTML = h;
   bindItems(pg); bindNav();
 }
 
 function introHTML(){
   const I = SURVEY.intro;
-  let again = '';
-  try { if (localStorage.getItem(KEY)) again = `<div class="banner">이 기기에서 이미 응답을 제출하셨습니다. 다시 응답하시면 새 응답으로 한 번 더 저장됩니다.</div>`; } catch(e){}
-  return `${again}<div class="letter">${I.letter.map(t=>`<p>${esc(t)}</p>`).join('')}<p class="sig">${esc(I.sign)}</p></div>
-  ${I.notice ? `<div class="note"><p>${esc(I.notice)}</p></div>` : ''}
-  ${I.links && I.links.length ? `<div class="links">${I.links.map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}<span>${esc(l.url.split(':').slice(1).join(':').slice(2))}</span></a>`).join('')}</div>` : ''}
-  <div class="note"><p>총 ${SURVEY.pages.length}단계 · 약 ${I.minutes}분 소요</p></div>
-  <div class="nav"><button class="next" id="next" type="button">설문 시작하기</button></div>
+  const d = loadDraft();
+  let resume = '';
+  if (d && d.step >= 0) resume = `<div class="resume"><p><b>작성하던 설문이 있습니다.</b> 이어서 응답하시겠습니까?</p><div class="nav"><button class="prev" id="fresh" type="button">처음부터</button><button class="next" id="resume" type="button">이어서 하기</button></div></div>`;
+  else { try { if (localStorage.getItem(DONEKEY)) resume = `<div class="banner">이 기기에서 이미 응답을 제출하셨습니다. 다시 응답하시면 새 응답으로 한 번 더 저장됩니다.</div>`; } catch(e) {} }
+  return `${resume}<div class="intro">
+    <p class="lead">안녕하십니까? 국립소방연구원입니다.</p>
+    ${I.short.map((t,i)=>`<p>${i===0 ? '<b class="to">현재 화재현장에서 활동하시는 소방대원께</b> ' : ''}${esc(t)}</p>`).join('')}
+    <dl class="facts">${I.facts.map(f=>`<div><dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd></div>`).join('')}</dl>
+    <details class="full"><summary>조사 안내 전문 보기</summary>${I.letter.map(t=>`<p>${esc(t)}</p>`).join('')}</details>
+  </div>
+  <p class="consent-line">${esc(I.consent)}</p>
+  <div id="msg"></div>
+  <div class="nav col"><button class="next" id="start" type="button">동의하고 시작하기</button><button class="ghost" id="decline" type="button">참여하지 않겠습니다</button></div>
   ${!DEMO ? '' : '<p class="demo">미리보기 화면입니다. 여기서 제출한 응답은 저장되지 않습니다.</p>'}`;
+}
+
+function bindIntro(){
+  const go = () => { step = 0; render(); window.scrollTo(0,0); };
+  $('#start').onclick = () => { if (!loadDraft()) startedAt = Date.now(); ans.CONSENT = 1; go(); };
+  $('#decline').onclick = () => { ans.CONSENT = 2; submit($('#decline'), 'declined'); };
+  const r = $('#resume'), f = $('#fresh');
+  if (r) r.onclick = () => { const d = loadDraft(); if (d){ ans = d.ans || {}; etcText = d.etcText || {}; startedAt = d.startedAt || Date.now(); step = Math.min(d.step, SURVEY.pages.length - 1); } ans.CONSENT = 1; render(); window.scrollTo(0,0); };
+  if (f) f.onclick = () => { clearDraft(); ans = {}; etcText = {}; startedAt = Date.now(); render(); };
+}
+
+const EQC = [['특수방화복','eq1'],['방화헬멧','eq2'],['방화두건','eq3'],['방화신발','eq4'],['방화장갑','eq5'],['공기호흡기','eq6']];
+function eqCls(t){ for (const e of EQC){ if (String(t).indexOf(e[0]) === 0) return e[1]; } return ''; }
+function eqLab(t){ const c = eqCls(t); return c ? '<b class="' + c + '">' + esc(t) + '</b>' : esc(t); }
+function qText(it){
+  const t = String(it.text);
+  if (!it.em || t.indexOf(it.em) < 0) return esc(t);
+  const i = t.indexOf(it.em);
+  return esc(t.slice(0, i)) + '<b class="kw ' + eqCls(it.em) + '">' + esc(it.em) + '</b>' + esc(t.slice(i + it.em.length));
+}
+function optCols(it){
+  const m = Math.max.apply(null, it.options.map(o => String(o).length));
+  if (it.options.length === 2 && m <= 8) return 2;
+  if (m <= 4) return 3;
+  if (m <= 11) return 2;
+  return 1;
+}
+function matrixHTML(it){
+  const n = it.cols.length;
+  if (it.select){
+    return `<div class="srows">` + it.rows.map((r, i) => { const k = rowKey(it, i); const cur = ans[k];
+      return `<div class="srow mtr" id="r-${k}"><label class="mlab" for="s-${k}"><span>${i+1})</span> ${esc(r)}</label><select id="s-${k}" data-sk="${k}"><option value="">선택해 주세요</option>` +
+        it.cols.map(c => `<option value="${c[1]}"${cur===c[1] ? ' selected' : ''}>${esc(c[0])}</option>`).join('') + `</select></div>`; }).join('') + `</div>`;
+  }
+  const stack = !it.narrow;
+  let h = `<div class="mtable${it.narrow ? ' narrow' : ''}${stack ? ' stack' : ''}" style="--mc:${n}" role="table">`;
+  const head = it.cols.map(c => `<div class="mh" role="columnheader">${it.num || it.narrow ? `<b>${c[1]}</b>` : ''}${it.narrow ? '' : `<small>${esc(c[0])}</small>`}</div>`).join('');
+  const anchors = '';
+  if (stack) h += `<div class="mhead" role="row">${anchors}<div class="mcells">${head}</div></div>`;
+  else h += `<div class="mhead mtr" role="row"><div class="mlab">${it.unitHead ? esc(it.unitHead) : ''}</div>${anchors ? `<div class="ancwrap">${anchors}</div>` : ''}${head}</div>`;
+  h += it.rows.map((r, i) => { const k = rowKey(it, i); const cur = ans[k];
+    const cells = it.cols.map(c => `<button type="button" class="mcell" role="radio" data-k="${k}" data-v="${c[1]}" aria-checked="${cur===c[1]}" aria-label="${esc(r)}: ${esc(c[0])}"><i></i></button>`).join('');
+    const lab = `<div class="mlab">${it.rows.length > 2 ? `<span>${i+1})</span> ` : ''}${esc(r)}</div>`;
+    return stack ? `<div class="mtr" id="r-${k}" role="radiogroup" aria-label="${esc(r)}">${lab}<div class="mcells">${cells}</div></div>`
+                 : `<div class="mtr" id="r-${k}" role="radiogroup" aria-label="${esc(r)}">${lab}${cells}</div>`; }).join('');
+  return h + `</div>`;
+}
+function scaleBtns(it, key, cur){
+  if (it.chips){
+    return `<div class="chips" role="radiogroup">` + it.cols.map(c => `<button type="button" class="chip" role="radio" data-k="${key}" data-v="${c[1]}" aria-checked="${cur===c[1]}">${esc(c[0])}</button>`).join('') + `</div>`;
+  }
+  return `<div class="scale" role="radiogroup">` + it.cols.map(c => `<button type="button" class="sc" role="radio" data-k="${key}" data-v="${c[1]}" aria-checked="${cur===c[1]}">${it.num ? `<b>${c[1]}</b>` : ''}<small>${esc(c[0])}</small></button>`).join('') + `</div>`;
 }
 
 function itemHTML(it){
   const req = isReq(it) ? '' : '<span class="opt">(선택)</span>';
-  let h = `<section class="card" id="c-${it.id}"><p class="q"><span class="n">${esc(it.n)}.</span>${esc(it.text)}${req}</p>`;
+  let h = `<section class="card${it.type === 'number' ? ' ncard' : ''}${it.type === 'matrix' ? ' mcard' : ''}" id="c-${it.id}"><p class="q">${it.n ? `<span class="n">${esc(it.n)}.</span>` : ''}${qText(it)}${req}</p>`;
   if (it.hint) h += `<p class="hint">${esc(it.hint)}</p>`;
   const v = ans[it.id];
-  if (it.type === 'scale'){
-    h += `<div class="scale" role="radiogroup" aria-label="${esc(it.text)}">` + SCALE5.map((l,i)=>`<button type="button" class="sc" role="radio" data-id="${it.id}" data-v="${i+1}" aria-checked="${v===i+1}"><b>${i+1}</b><small>${l}</small></button>`).join('') + `</div>`;
+  if (it.type === 'matrix'){
+    h += matrixHTML(it);
   } else if (it.type === 'single' || it.type === 'multi'){
     const multi = it.type === 'multi';
-    h += `<div class="opts" role="${multi?'group':'radiogroup'}">` + it.options.map((o,i)=>{
+    h += `<div class="opts c${optCols(it)}" role="${multi?'group':'radiogroup'}">` + it.options.map((o,i)=>{
       const on = multi ? (Array.isArray(v) && v.includes(i+1)) : v === i+1;
       return `<button type="button" class="opt-btn${multi?' multi':''}" role="${multi?'checkbox':'radio'}" data-id="${it.id}" data-v="${i+1}" aria-checked="${on}"><span class="mk"></span><span>${esc(o)}</span></button>`;
     }).join('') + `</div>`;
-    if (it.etc) h += `<input type="text" id="etc-${it.id}" placeholder="기타 내용을 적어 주세요" value="${esc(etcText[it.id]||'')}" ${Array.isArray(v)&&v.includes(it.etc)?'':'hidden'}>`;
+    if (it.etc){ const showEtc = multi ? (Array.isArray(v) && v.includes(it.etc)) : v === it.etc; h += `<input type="text" id="etc-${it.id}" maxlength="200" placeholder="기타 내용을 적어 주세요" value="${esc(etcText[it.id]||'')}" ${showEtc?'':'hidden'}>`; }
   } else if (it.type === 'grid'){
-    h += `<div class="grid" role="radiogroup">` + it.options.map((o,i)=>`<button type="button" class="grid-btn" role="radio" data-id="${it.id}" data-v="${i+1}" aria-checked="${v===i+1}">${esc(o)}</button>`).join('') + `</div>`;
+    h += `<div class="grid${it.cols === 5 ? ' g5' : ''}" role="radiogroup">` + it.options.map((o,i)=>`<button type="button" class="grid-btn" role="radio" data-id="${it.id}" data-v="${i+1}" aria-checked="${v===i+1}">${esc(o)}</button>`).join('') + `</div>`;
+  } else if (it.type === 'number'){
+    h += `<div class="numrow"><input type="text" id="t-${it.id}" data-id="${it.id}" class="num" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="${esc(it.ph||'')}" value="${esc(v||'')}" aria-label="${esc(it.text)}"><span class="unit">${esc(it.unit)}</span></div>`;
+  } else if (it.type === 'phone'){
+    h += `<input type="tel" id="t-${it.id}" data-id="${it.id}" inputmode="numeric" autocomplete="off" maxlength="13" placeholder="010-0000-0000" value="${esc(v||'')}">`;
   } else if (it.type === 'text'){
-    h += `<textarea id="t-${it.id}" data-id="${it.id}" placeholder="자유롭게 적어 주세요">${esc(v||'')}</textarea>`;
+    h += `<textarea id="t-${it.id}" data-id="${it.id}" maxlength="2000" placeholder="자유롭게 적어 주세요">${esc(v||'')}</textarea>`;
   }
-  return h + `<p class="err" hidden>응답해 주세요.</p></section>`;
+  let err = '응답해 주세요.';
+  if (it.type === 'matrix') err = '모든 항목에 응답해 주세요.';
+  if (it.type === 'phone') err = '휴대폰 번호를 정확히 입력해 주세요. (예: 010-1234-5678)';
+  if (it.type === 'number') err = `${it.min}~${it.max} 사이의 숫자로 입력해 주세요.`;
+  if (it.etc) err = '응답해 주세요. 기타를 선택하셨다면 내용을 적어 주세요.';
+  return h + `<p class="err" hidden>${esc(err)}</p></section>`;
 }
 
+let advTimer = null;
+function autoAdvance(it){
+  return; /* 자동 넘김 끔: 다음 버튼으로만 이동 */
+  const pg = SURVEY.pages[step];
+  if (!pg || pg.keep || pg.items.length !== 1 || !answered(it)) return;
+  const here = step;
+  clearTimeout(advTimer);
+  advTimer = setTimeout(() => { if (step === here && !finished){ const n = $('#next'); if (n && !n.disabled) n.click(); } }, 400);
+}
+function smoothTo(el){ if (el) el.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block: el.classList && el.classList.contains('card') ? 'start' : 'center'}); }
+function nextTarget(fromCard){
+  const cards = Array.from(document.querySelectorAll('#view .card'));
+  const i = cards.indexOf(fromCard);
+  for (let j = i + 1; j < cards.length; j++){ const id = cards[j].id.slice(2); const it = curItems().find(x => x.id === id); if (it && !answered(it)) return cards[j]; }
+  return $('#next');
+}
+function curItems(){ return SURVEY.pages[step].items; }
+
 function bindItems(pg){
+  document.querySelectorAll('[data-k][data-v]').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.k, val = +b.dataset.v;
+    ans[k] = val;
+    b.parentElement.querySelectorAll('[data-v]').forEach(x => x.setAttribute('aria-checked', +x.dataset.v === val));
+    const row = document.getElementById('r-' + k); if (row) row.classList.remove('missing');
+    const card = b.closest('.card'); const it = pg.items.find(x => x.id === card.id.slice(2));
+    clearMiss(it.id); saveDraft(); updateRemain();
+    if (answered(it)){ if (SURVEY.pages[step].items.length === 1) autoAdvance(it); else setTimeout(() => smoothTo(nextTarget(card)), 150); }
+  }));
+  document.querySelectorAll('select[data-sk]').forEach(sel => sel.addEventListener('change', () => {
+    const k = sel.dataset.sk; ans[k] = sel.value === '' ? null : +sel.value;
+    const row = document.getElementById('r-' + k); if (row && ans[k] != null) row.classList.remove('missing');
+    const card = sel.closest('.card'); const it = pg.items.find(x => x.id === card.id.slice(2));
+    clearMiss(it.id); saveDraft(); updateRemain();
+    if (answered(it)) autoAdvance(it);
+  }));
   document.querySelectorAll('[data-id][data-v]').forEach(b => b.addEventListener('click', () => {
     const id = b.dataset.id, val = +b.dataset.v, it = pg.items.find(x=>x.id===id);
+    const card = document.getElementById('c-' + id);
     if (it.type === 'multi'){
-      const arr = Array.isArray(ans[id]) ? ans[id].slice() : [];
-      const k = arr.indexOf(val); k >= 0 ? arr.splice(k,1) : arr.push(val); arr.sort((a,b)=>a-b);
-      ans[id] = arr; b.setAttribute('aria-checked', arr.includes(val));
-      const e = document.getElementById('etc-'+id); if (e){ e.hidden = !arr.includes(it.etc); if(!e.hidden) e.focus(); }
+      let arr = Array.isArray(ans[id]) ? ans[id].slice() : [];
+      const k = arr.indexOf(val);
+      if (k >= 0) arr.splice(k,1);
+      else {
+        if (it.exclusive && val === it.exclusive) arr = [];
+        else if (it.exclusive) arr = arr.filter(x => x !== it.exclusive);
+        if (it.max && arr.length >= it.max){ showMax(card, it.max); return; }
+        arr.push(val);
+      }
+      arr.sort((a,b)=>a-b); ans[id] = arr;
+      card.querySelectorAll('[data-v]').forEach(x => x.setAttribute('aria-checked', arr.includes(+x.dataset.v)));
+      const e = document.getElementById('etc-'+id); if (e){ e.hidden = !arr.includes(it.etc); if(!e.hidden && val === it.etc) e.focus(); }
+      hideMax(card);
     } else {
       ans[id] = val;
       b.parentElement.querySelectorAll('[data-v]').forEach(x => x.setAttribute('aria-checked', +x.dataset.v === val));
-      /* 이 문항에 따라 나타나는 문항이 있으면 화면을 다시 그림 */
-      if (pg.items.some(x => x.showIf && x.showIf.q === id)) { keepScroll(render); return; }
+      const e = document.getElementById('etc-'+id); if (e){ e.hidden = val !== it.etc; if(!e.hidden) e.focus(); }
+      if (pg.items.some(x => x.showIf && x.showIf.q === id)) { clearMiss(id); saveDraft(); keepScroll(render); return; }
+      if (!(it.etc && val === it.etc)){ if (SURVEY.pages[step].items.length === 1) autoAdvance(it); else setTimeout(() => smoothTo(nextTarget(card)), 120); }
     }
-    clearMiss(id);
+    clearMiss(id); saveDraft(); updateRemain();
   }));
-  document.querySelectorAll('textarea[data-id]').forEach(t => t.addEventListener('input', () => { ans[t.dataset.id] = t.value; clearMiss(t.dataset.id); }));
-  document.querySelectorAll('input[id^="etc-"]').forEach(t => t.addEventListener('input', () => { etcText[t.id.slice(4)] = t.value; clearMiss(t.id.slice(4)); }));
+  document.querySelectorAll('input.num[data-id]').forEach(t => {
+    t.addEventListener('input', () => { const d = digitsOf(t.value); if (d !== t.value) t.value = d; ans[t.dataset.id] = d; clearMiss(t.dataset.id); saveDraft(); });
+    t.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); smoothTo(nextTarget(t.closest('.card'))); } });
+  });
+  document.querySelectorAll('input[type=tel][data-id]').forEach(t => t.addEventListener('input', () => { ans[t.dataset.id] = t.value; clearMiss(t.dataset.id); saveDraft(); }));
+  document.querySelectorAll('textarea[data-id]').forEach(t => t.addEventListener('input', () => { ans[t.dataset.id] = t.value; clearMiss(t.dataset.id); saveDraft(); }));
+  document.querySelectorAll('input[id^="etc-"]').forEach(t => t.addEventListener('input', () => { etcText[t.id.slice(4)] = t.value; clearMiss(t.id.slice(4)); saveDraft(); }));
 }
+function showMax(card, n){ let m = card.querySelector('.maxmsg'); if (!m){ m = document.createElement('p'); m.className = 'maxmsg'; card.appendChild(m); } m.textContent = `최대 ${n}개까지 선택할 수 있습니다. 다른 항목을 고르려면 선택한 항목을 먼저 해제해 주세요.`; }
+function hideMax(card){ const m = card.querySelector('.maxmsg'); if (m) m.remove(); }
+function updateRemain(){ if (step >= 0 && step < SURVEY.pages.length) $('#progtx').textContent = '약 ' + remainMin() + '분 남음'; }
 function keepScroll(fn){ const y = window.scrollY; fn(); window.scrollTo(0, y); }
-function clearMiss(id){ const c = document.getElementById('c-'+id); if (c){ c.classList.remove('missing'); c.querySelector('.err').hidden = true; } }
+function clearMiss(id){ const c = document.getElementById('c-'+id); if (c){ const it = curItems().find(x => x.id === id); if (!it || !invalid(it)){ c.classList.remove('missing'); c.querySelector('.err').hidden = true; } } const m = document.getElementById('msg'); if (m && !document.querySelector('.card.missing')) m.innerHTML = ''; }
 
 function bindNav(){
   const n = $('#next'), p = $('#prev');
-  if (p) p.onclick = () => { step--; render(); window.scrollTo(0,0); };
-  if (n) n.onclick = () => {
-    if (step < 0){ step = 0; render(); window.scrollTo(0,0); return; }
+  if (p) p.onclick = () => { clearTimeout(advTimer); if (step === 0){ step = -1; } else step--; render(); window.scrollTo(0,0); };
+  n.onclick = () => {
     const pg = SURVEY.pages[step];
-    const miss = pg.items.filter(it => visible(it) && isReq(it) && !answered(it));
+    const miss = pg.items.filter(it => visible(it) && invalid(it));
     if (miss.length){
-      miss.forEach(it => { const c = document.getElementById('c-'+it.id); c.classList.add('missing'); c.querySelector('.err').hidden = false; });
+      miss.forEach(it => {
+        const c = document.getElementById('c-'+it.id); c.classList.add('missing'); const er = c.querySelector('.err'); if (!er.dataset.base) er.dataset.base = er.textContent; er.textContent = errMsg(it) || er.dataset.base; er.hidden = false;
+        if (it.type === 'matrix') it.rows.forEach((r, i) => { const k = rowKey(it, i); if (ans[k] == null) document.getElementById('r-'+k).classList.add('missing'); });
+      });
       $('#msg').innerHTML = `<div class="banner">응답하지 않은 문항이 ${miss.length}개 있습니다.</div>`;
-      document.getElementById('c-'+miss[0].id).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'});
+      const first = document.getElementById('c-'+miss[0].id);
+      const firstRow = first.querySelector('.mtr.missing');
+      (firstRow || first).scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block: firstRow ? 'center' : 'start'});
       return;
     }
-    if (step === SURVEY.pages.length - 1){ submit(n); return; }
-    step++; render(); window.scrollTo(0,0);
+    if (pg.endIf && pg.endIf.in.includes(ans[pg.endIf.q])){ submit(n, 'declined'); return; }
+    if (step === SURVEY.pages.length - 1){ submit(n, 'done'); return; }
+    step++; saveDraft(); render(); window.scrollTo(0,0);
   };
 }
 
 function payload(){
   const cols = ['응답일시','소요시간(초)'], row = [new Date().toLocaleString('ko-KR'), Math.round((Date.now()-startedAt)/1000)];
   const book = [];
+  cols.push('CONSENT'); row.push(ans.CONSENT == null ? '' : ans.CONSENT); book.push(['CONSENT', '설문 참여 동의', '1=동의, 2=비동의']);
+  if (ans.CONSENT === 2){ return {cols, row, book, prize: null}; }
   SURVEY.pages.forEach(pg => pg.items.forEach(it => {
+    if (it.private) return;
     const shown = visible(it);
-    if (it.type === 'multi'){
-      it.options.forEach((o,i) => { cols.push(`${it.id}_${i+1}`); row.push(shown ? ((ans[it.id]||[]).includes(i+1) ? 1 : 0) : ''); book.push([`${it.id}_${i+1}`, `${it.n}. ${it.text}`, `${o} (선택=1, 미선택=0)`]); });
-      if (it.etc){ cols.push(`${it.id}_기타`); row.push(shown ? (etcText[it.id]||'') : ''); book.push([`${it.id}_기타`, `${it.n}. 기타 응답`, '서술형']); }
+    const title = (it.n ? it.n + '. ' : '') + it.text;
+    if (it.type === 'matrix'){
+      const lab = it.cols.map(c => `${c[1]}=${c[0]}`).join(', ');
+      it.rows.forEach((r, i) => { const k = rowKey(it, i); cols.push(k); row.push(shown && ans[k] != null ? ans[k] : ''); book.push([k, `${title} - ${i+1}) ${r}`, lab]); });
+    } else if (it.type === 'multi'){
+      it.options.forEach((o,i) => { cols.push(`${it.id}_${i+1}`); row.push(shown ? ((ans[it.id]||[]).includes(i+1) ? 1 : 0) : ''); book.push([`${it.id}_${i+1}`, title, `${o} (선택=1, 미선택=0)`]); });
+      if (it.etc){ cols.push(`${it.id}_기타`); row.push(shown ? (etcText[it.id]||'') : ''); book.push([`${it.id}_기타`, `${title} - 기타 응답`, '서술형']); }
     } else {
-      cols.push(it.id); row.push(shown ? (ans[it.id] ?? '') : '');
-      const lab = it.type === 'scale' ? SCALE5.map((l,i)=>`${i+1}=${l}`).join(', ') : it.type === 'text' ? '서술형' : it.options.map((o,i)=>`${i+1}=${o}`).join(', ');
-      book.push([it.id, `${it.n}. ${it.text}`, lab]);
+      let val = shown ? (ans[it.id] == null ? '' : ans[it.id]) : '';
+      if (it.type === 'number' && val !== '') val = Number(digitsOf(val));
+      cols.push(it.id); row.push(val);
+      const lab = it.type === 'text' ? '서술형' : it.type === 'number' ? `숫자(${it.unit})` : it.options.map((o,i)=>`${i+1}=${o}`).join(', ');
+      book.push([it.id, title, lab]);
+      if (it.type === 'single' && it.etc){ cols.push(`${it.id}_기타`); row.push(shown && ans[it.id] === it.etc ? (etcText[it.id]||'') : ''); book.push([`${it.id}_기타`, `${title} - 기타 응답`, '서술형']); }
     }
   }));
-  return {cols, row, book};
+  const prize = (ans.AGREE === 1 && phoneOk(ans.PHONE)) ? {phone: phoneFmt(ans.PHONE)} : null;
+  return {cols, row, book, prize};
 }
 
-function submit(btn){
+function submit(btn, kind){
   btn.disabled = true; btn.textContent = '제출하는 중…';
-  const ok = () => { try{ localStorage.setItem(KEY, '1'); }catch(e){}; step = SURVEY.pages.length; render(); window.scrollTo(0,0); };
+  const ok = () => { clearDraft(); try{ if (kind === 'done') localStorage.setItem(DONEKEY, '1'); }catch(e){}; finished = kind; render(); window.scrollTo(0,0); };
   const fail = () => { btn.disabled = false; btn.textContent = '다시 제출하기'; $('#msg').innerHTML = '<div class="banner">제출하지 못했습니다. 인터넷 연결을 확인한 뒤 다시 눌러 주세요. 입력하신 답은 그대로 남아 있습니다.</div>'; };
-  if (LIVE){ google.script.run.withSuccessHandler(ok).withFailureHandler(fail).submit(payload()); }
+  const data = payload();
+  if (LIVE){ google.script.run.withSuccessHandler(ok).withFailureHandler(fail).submit(data); }
   else if (ENDPOINT){
-    fetch(ENDPOINT, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload())})
-      .then(ok).catch(fail);
+    fetch(ENDPOINT, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(data)}).then(ok).catch(fail);
   }
-  else { setTimeout(ok, 500); }
+  else { setTimeout(ok, 400); }
 }
 
 function doneHTML(){
-  return `<div class="done"><div class="ck"></div><h2>응답이 제출되었습니다</h2><p>${esc(SURVEY.thanks)}</p></div>
+  const msg = finished === 'declined' ? SURVEY.declined : SURVEY.thanks;
+  return `<div class="done"><div class="ck"></div><h2>${finished === 'declined' ? '설문을 종료합니다' : '응답이 제출되었습니다'}</h2><p>${esc(msg)}</p>${finished === 'done' && SURVEY.contact ? `<p class="contact">${esc(SURVEY.contact)}</p>` : ''}</div>
   ${!DEMO ? '' : '<p class="demo">미리보기 화면이라 응답은 저장되지 않았습니다.</p>'}`;
 }
 
