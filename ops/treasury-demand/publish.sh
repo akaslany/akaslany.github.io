@@ -2,7 +2,9 @@
 # Publish the weekly US Treasury demand edition: collect -> render -> commit -> push -> verify.
 # Designed to run unattended (Hermes cron, Saturday 07:00 KST). Stdout is the notification body.
 set -euo pipefail
-trap 'rc=$?; echo "국채 수급 주간호 발행 실패 (exit $rc, line $LINENO). 위 로그를 확인하세요."; exit $rc' ERR
+# stdout = the Telegram notification body (Hermes cron sends stdout verbatim).
+# Progress logs and step receipts go to stderr: they are dropped on success and shown on failure.
+trap 'rc=$?; echo "국채 수급 주간호 발행 실패 (exit $rc, line $LINENO). 위 로그를 확인하세요." >&2; exit $rc' ERR
 
 REPO="/home/kjkim/dev/akaslany.github.io"
 PY=/usr/bin/python3
@@ -11,11 +13,11 @@ DRY_RUN=0
 
 cd "$REPO"
 
-echo "== 1/4 수집"
-"$PY" ops/treasury-demand/collect.py
+echo "== 1/4 수집" >&2
+"$PY" ops/treasury-demand/collect.py >&2
 
-echo "== 2/4 렌더"
-"$PY" ops/treasury-demand/build_report.py
+echo "== 2/4 렌더" >&2
+"$PY" ops/treasury-demand/build_report.py >&2
 
 DATE_KST=$(TZ=Asia/Seoul date +%F)
 POST="_posts/${DATE_KST}-us-treasury-demand-4week.md"
@@ -26,20 +28,20 @@ match = re.search(r'^permalink:\s*(\S+)\s*$', text, re.M)
 print(match.group(1) if match else '')
 PY
 )
-[[ -n "$PERMALINK" ]] || { echo "permalink를 찾지 못했습니다: $POST"; exit 1; }
+[[ -n "$PERMALINK" ]] || { echo "permalink를 찾지 못했습니다: $POST" >&2; exit 1; }
 
 if [[ $DRY_RUN -eq 0 ]]; then
-  echo "== 3/4 커밋·푸시"
+  echo "== 3/4 커밋·푸시" >&2
   git add -A _posts assets/data/treasury-demand treasury-demand.md _config.yml ops/treasury-demand
   if git diff --cached --quiet; then
-    echo "(변경 없음 — 커밋 생략)"
+    echo "(변경 없음 — 커밋 생략)" >&2
   else
     git commit -q -m "Publish US Treasury demand report ${DATE_KST}"
     git push -q origin HEAD
   fi
 fi
 
-echo "== 4/4 공개 확인"
+echo "== 4/4 공개 확인" >&2
 BASE="https://akaslany.github.io"
 LANDING="${BASE}/treasury-demand/"
 POST_URL="${BASE}${PERMALINK}"
