@@ -1,0 +1,4097 @@
+<!DOCTYPE html>
+<!--
+  데이터 출처: CFTC Commitments of Traders — TFF (financials) / legacy futures-only (commodities)
+  포지션 정의: net = long − short; financials use leveraged funds (TFF), commodities use non-commercial (COT)
+  기준일: 2026-11-17 (화요일 스냅샷)
+  공표 지연: 화요일 스냅샷, 금요일 15:30 ET 공개 (3영업일 지연)
+  수집 시각(UTC): 2026-11-21T01:11:45+00:00
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>CTA·헤지펀드 포지셔닝 — CFTC 선물 + BofA 펀드매니저 설문</title>
+<meta name="description" content="CFTC COT/TFF 12개 선물 시장의 헤지펀드·CTA 순포지션(%OI) 주간 변화·14주 추이와 BofA 펀드매니저 설문(FMS) 자산 배분·꼬리 위험·붐비는 트레이드를 한 화면에서 비교.">
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #f5f7f5;
+  --surface: #ffffff;
+  --surface-2: #eef2ef;
+  --ink: #16201c;
+  --muted: #5a6862;
+  --line: #d9e1dc;
+  --line-strong: #bcc8c1;
+  --pos: #0f766e;
+  --pos-bg: #e6f6f3;
+  --pos-fill: rgba(15, 118, 110, 0.16);
+  --neg: #be123c;
+  --neg-bg: #fdecef;
+  --neg-fill: rgba(190, 18, 60, 0.14);
+  --amber: #9a5b04;
+  --amber-bg: #fef3c7;
+  --amber-line: #f59e0b;
+  --focus: #2563eb;
+  --shadow: 0 1px 2px rgba(16, 24, 20, 0.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1211;
+    --surface: #151c1a;
+    --surface-2: #1c2623;
+    --ink: #edf3f0;
+    --muted: #93a49d;
+    --line: #27332f;
+    --line-strong: #394a44;
+    --pos: #34d399;
+    --pos-bg: rgba(52, 211, 153, 0.14);
+    --pos-fill: rgba(52, 211, 153, 0.18);
+    --neg: #fb7185;
+    --neg-bg: rgba(251, 113, 133, 0.15);
+    --neg-fill: rgba(251, 113, 133, 0.18);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251, 191, 36, 0.16);
+    --amber-line: rgba(251, 191, 36, 0.55);
+    --focus: #60a5fa;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+button, select {
+  font: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible, select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.num { font-variant-numeric: tabular-nums; }
+.strong { font-weight: 700; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 12px 48px;
+}
+@media (min-width: 720px) {
+  .page { padding: 28px 24px 64px; }
+}
+
+/* Masthead */
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+@media (min-width: 720px) {
+  .masthead {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+}
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+@media (min-width: 720px) {
+  h1 { font-size: 28px; }
+}
+.sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.asof-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+@media (min-width: 720px) {
+  .asof-pill { align-self: flex-end; }
+}
+.asof-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pos);
+  flex-shrink: 0;
+}
+
+/* Top Summary Bar */
+.summary-bar {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+@media (min-width: 720px) {
+  .summary-bar { padding: 14px 16px; margin-bottom: 26px; }
+}
+.summary-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+}
+.summary-meta strong { color: var(--ink); }
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (min-width: 720px) {
+  .summary-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+.sum-tile {
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+}
+.sum-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.sum-group {
+  font-size: 13px;
+  font-weight: 700;
+}
+.stance-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.stance-pill.pos { background: var(--pos-bg); color: var(--pos); }
+.stance-pill.neg { background: var(--neg-bg); color: var(--neg); }
+.sum-val {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+@media (min-width: 720px) {
+  .sum-val { font-size: 22px; }
+}
+.sum-dir {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 6px;
+  margin-top: 6px;
+  font-size: 11px;
+}
+.dir-arrow { font-weight: 700; }
+.sum-prev { color: var(--muted); }
+
+/* Diverging 0-centered bar */
+.div-bar {
+  position: relative;
+  height: 7px;
+  width: 100%;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.div-zero {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--line-strong);
+  z-index: 2;
+}
+.div-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 2px;
+  z-index: 1;
+}
+.div-fill.pos { background: var(--pos); }
+.div-fill.neg { background: var(--neg); }
+
+/* Sections */
+.sec { margin-bottom: 28px; }
+@media (min-width: 720px) { .sec { margin-bottom: 34px; } }
+.sec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 12px;
+}
+h2 {
+  margin: 0;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+@media (min-width: 720px) { h2 { font-size: 19px; } }
+.sec-sub {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Top 3 Movers */
+.movers-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+@media (min-width: 760px) {
+  .movers-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+.mover-card {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow);
+}
+.mover-card.pos { border-top-color: var(--pos); }
+.mover-card.neg { border-top-color: var(--neg); }
+.mover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 22px;
+}
+.mover-rank {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.ext-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber-line);
+  white-space: nowrap;
+}
+.mover-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.mover-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.mover-delta {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.mover-delta .arrow {
+  font-size: 14px;
+  margin-right: 2px;
+  vertical-align: 1px;
+}
+.mover-shift {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.shift-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+}
+.shift-strip {
+  position: relative;
+  height: 14px;
+  background: var(--surface-2);
+  border-radius: 7px;
+}
+.shift-zero {
+  position: absolute;
+  left: 50%;
+  top: 1px;
+  bottom: 1px;
+  width: 1px;
+  background: var(--line-strong);
+}
+.shift-seg {
+  position: absolute;
+  top: 5px;
+  height: 4px;
+  border-radius: 2px;
+  opacity: 0.75;
+}
+.shift-seg.pos { background: var(--pos); }
+.shift-seg.neg { background: var(--neg); }
+.shift-prev {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--muted);
+}
+.shift-cur {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  border-radius: 50%;
+}
+.shift-cur.pos { background: var(--pos); }
+.shift-cur.neg { background: var(--neg); }
+.mover-desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  flex: 1;
+}
+.mover-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.chip:hover { border-color: var(--line-strong); }
+.chip span {
+  color: var(--muted);
+  font-weight: 500;
+  margin-left: 3px;
+}
+.chip.on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+.chip.on span { color: inherit; opacity: 0.78; }
+.sort-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.sort-select {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.leg-item { display: inline-flex; align-items: center; gap: 5px; }
+.leg-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.leg-swatch.pos { background: var(--pos); }
+.leg-swatch.neg { background: var(--neg); }
+.leg-swatch.ext { background: var(--amber); }
+
+/* Responsive 12-Market Grid Table (Cards on 360px, Table on >=820px) */
+.mkt-board {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mkt-head {
+  display: none;
+}
+.mkt-row {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 10px;
+  box-shadow: var(--shadow);
+}
+.mkt-row.is-extreme {
+  border-color: var(--amber-line);
+}
+.mkt-row[hidden] { display: none; }
+.mkt-cell { min-width: 0; }
+.mkt-name-col {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.mkt-title-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+.grp-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.mkt-label {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.rank-tag {
+  font-size: 11px;
+  color: var(--muted);
+}
+.mkt-ext-desktop { display: none; }
+.m-k {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.pct-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pct-val {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.mkt-wow-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+.wow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.wow-pill.pos { background: var(--pos-bg); color: var(--pos); }
+.wow-pill.neg { background: var(--neg-bg); color: var(--neg); }
+.mkt-spark-col {
+  grid-column: 1 / -1;
+}
+.spark-wrap { width: 100%; }
+.spark {
+  display: block;
+  width: 100%;
+  height: 44px;
+  overflow: visible;
+}
+.spark-dates {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.mkt-net-col {
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+}
+.mkt-z-col {
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+  text-align: right;
+}
+.net-main {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.net-sub {
+  font-size: 11px;
+  color: var(--muted);
+}
+.z-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.z-val.is-ext { color: var(--amber); }
+
+/* Sparkline SVG styling */
+.sp-zero { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 2.5 2.5; }
+.sp-area-pos { fill: var(--pos-fill); }
+.sp-area-neg { fill: var(--neg-fill); }
+.sp-line-pos { fill: none; stroke: var(--pos); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.sp-line-neg { fill: none; stroke: var(--neg); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.sp-dot.pos { fill: var(--pos); stroke: var(--surface); stroke-width: 1.2; }
+.sp-dot.neg { fill: var(--neg); stroke: var(--surface); stroke-width: 1.2; }
+
+@media (min-width: 880px) {
+  .mkt-board {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    gap: 0;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .mkt-head {
+    display: grid;
+    grid-template-columns: minmax(150px, 1.35fr) minmax(120px, 1.05fr) minmax(96px, 0.8fr) minmax(105px, 0.9fr) minmax(86px, 0.72fr) minmax(150px, 1.18fr);
+    gap: 12px;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .mkt-head .r { text-align: right; }
+  .mkt-row {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 11px 16px;
+    grid-template-columns: minmax(150px, 1.35fr) minmax(120px, 1.05fr) minmax(96px, 0.8fr) minmax(105px, 0.9fr) minmax(86px, 0.72fr) minmax(150px, 1.18fr);
+    gap: 12px;
+    align-items: center;
+  }
+  .mkt-row:last-child { border-bottom: none; }
+  .mkt-row.is-extreme {
+    border-color: var(--line);
+    box-shadow: inset 3px 0 0 var(--amber-line);
+  }
+  .mkt-row:hover { background: var(--bg); }
+  .mkt-name-col {
+    grid-column: auto;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .mkt-ext-mobile { display: none; }
+  .mkt-ext-desktop { display: inline-flex; }
+  .m-k { display: none; }
+  .mkt-label { font-size: 14px; }
+  .pct-val { font-size: 14px; }
+  .mkt-wow-col { align-items: flex-end; }
+  .wow-pill { font-size: 12px; }
+  .mkt-net-col {
+    border-top: none;
+    padding-top: 0;
+    text-align: right;
+  }
+  .mkt-z-col {
+    border-top: none;
+    padding-top: 0;
+    text-align: right;
+  }
+  .z-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+  }
+  .mkt-spark-col { grid-column: auto; }
+  .spark { height: 36px; }
+  .spark-dates { display: none; }
+}
+
+/* Group 14-week Charts */
+.axis-toggle {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+.axis-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+}
+.axis-btn.on {
+  background: var(--ink);
+  color: var(--bg);
+}
+.grp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+@media (min-width: 720px) {
+  .grp-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+.grp-card {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+.grp-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.grp-card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+.grp-card-sub {
+  font-size: 11px;
+  color: var(--muted);
+}
+.grp-card-stat { text-align: right; }
+.grp-card-val {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.grp-card-dir {
+  font-size: 11px;
+  font-weight: 600;
+}
+.gc-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.gc-grid { stroke: var(--line); stroke-width: 0.8; }
+.gc-zero { stroke: var(--line-strong); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.gc-ylabel, .gc-xlabel {
+  fill: var(--muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.gc-ylabel.is-zero { fill: var(--ink); font-weight: 700; }
+.gc-area-pos { fill: var(--pos-fill); }
+.gc-area-neg { fill: var(--neg-fill); }
+.gc-line-pos { fill: none; stroke: var(--pos); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.gc-line-neg { fill: none; stroke: var(--neg); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.gc-dot.pos { fill: var(--pos); stroke: var(--surface); stroke-width: 1.2; }
+.gc-dot.neg { fill: var(--neg); stroke: var(--surface); stroke-width: 1.2; }
+.gc-dot.is-active { stroke-width: 2; }
+.gc-hit { cursor: crosshair; }
+.grp-readout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 8px;
+  margin-top: 6px;
+  padding-top: 7px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Guide / Limitations */
+.guide-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+@media (min-width: 720px) {
+  .guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+.guide-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+}
+.guide-card h3 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.guide-card p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.guide-card strong { color: var(--ink); }
+
+.err-banner {
+  background: var(--neg-bg);
+  color: var(--neg);
+  border: 1px solid var(--neg);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+.err-banner ul { margin: 4px 0 0 18px; padding: 0; }
+
+.foot {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* BofA FMS Section */
+.sec-note {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.fms-shell {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+@media (min-width: 720px) {
+  .fms-shell { padding: 14px 16px; }
+}
+.fms-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+}
+.fms-meta-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+.fms-meta strong { color: var(--ink); }
+.fms-verdict {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--focus);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+@media (min-width: 720px) {
+  .fms-verdict {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 10px;
+  }
+}
+.fms-verdict-tag {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.fms-verdict-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+  min-width: 0;
+}
+.fms-block { margin-bottom: 14px; }
+.fms-block:last-child { margin-bottom: 0; }
+.fms-subhead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 10px;
+  margin: 18px 0 8px;
+}
+.fms-subhead h3 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+.fms-subhead-note {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.fms-na {
+  color: var(--muted);
+  font-weight: 500;
+}
+.fms-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.fms-pill-flat {
+  background: var(--surface-2);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+.fms-pill-new, .fms-pill-up {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber-line);
+}
+.fms-pill-match {
+  background: var(--pos-bg);
+  color: var(--pos);
+}
+.fms-pill-div {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber-line);
+}
+
+/* FMS Asset Allocation (Cards on 360px, Table on >=720px) */
+.fms-asset-board {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fms-asset-head { display: none; }
+.fms-asset-row {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 10px;
+  box-shadow: var(--shadow);
+}
+.fms-asset-cell { min-width: 0; }
+.fms-asset-name {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 700;
+}
+.fms-asset-cur {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fms-asset-val {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.fms-asset-delta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+.fms-asset-prev, .fms-asset-prev2 {
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.fms-asset-prev2 { text-align: right; }
+@media (min-width: 720px) {
+  .fms-asset-board {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    gap: 0;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .fms-asset-head {
+    display: grid;
+    grid-template-columns: minmax(120px, 1.25fr) minmax(150px, 1.45fr) minmax(96px, 0.85fr) minmax(72px, 0.65fr) minmax(72px, 0.65fr);
+    gap: 12px;
+    align-items: center;
+    padding: 9px 14px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .fms-asset-head .r { text-align: right; }
+  .fms-asset-row {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 10px 14px;
+    grid-template-columns: minmax(120px, 1.25fr) minmax(150px, 1.45fr) minmax(96px, 0.85fr) minmax(72px, 0.65fr) minmax(72px, 0.65fr);
+    gap: 12px;
+    align-items: center;
+  }
+  .fms-asset-row:last-child { border-bottom: none; }
+  .fms-asset-row:hover { background: var(--bg); }
+  .fms-asset-name {
+    grid-column: auto;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .fms-asset-val { font-size: 14px; }
+  .fms-asset-prev, .fms-asset-prev2 {
+    border-top: none;
+    padding-top: 0;
+    text-align: right;
+  }
+  .fms-asset-board .m-k { display: none; }
+}
+
+/* FMS Cash / Growth / Inflation 3 Cards */
+.fms-macro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+@media (min-width: 760px) {
+  .fms-macro-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+.fms-macro-card {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow);
+}
+.fms-macro-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.fms-macro-title {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.fms-macro-unit {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.fms-macro-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.fms-macro-val {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.fms-macro-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.fms-svg-zero { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 2.5 2.5; }
+.fms-svg-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fms-svg-line.pos { stroke: var(--pos); }
+.fms-svg-line.neg { stroke: var(--neg); }
+.fms-svg-dot { stroke: var(--surface); stroke-width: 1.5; fill: var(--ink); }
+.fms-svg-dot.pos { fill: var(--pos); }
+.fms-svg-dot.neg { fill: var(--neg); }
+.fms-svg-lbl {
+  fill: var(--ink);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.fms-svg-tick {
+  fill: var(--muted);
+  font-size: 9.5px;
+}
+.fms-macro-foot {
+  padding-top: 7px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 3px 8px;
+}
+
+/* FMS Regional Equities */
+.fms-region-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 13px 14px;
+  box-shadow: var(--shadow);
+}
+.fms-region-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.fms-region-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.fms-region-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.fms-region-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+}
+.fms-region-name {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.fms-region-nums {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.fms-region-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.fms-rbar-line {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.fms-rbar-track {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.fms-rbar-track.is-prev { height: 5px; }
+.fms-rbar-zero {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--line-strong);
+  z-index: 2;
+}
+.fms-rbar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 2px;
+  z-index: 1;
+}
+.fms-rbar-fill.pos { background: var(--pos); }
+.fms-rbar-fill.neg { background: var(--neg); }
+.fms-rbar-fill.flat { background: var(--muted); }
+.fms-rbar-fill.prev { background: var(--line-strong); }
+.fms-region-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* FMS Tail Risks & Crowded Trades */
+.fms-two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+@media (min-width: 760px) {
+  .fms-two-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+.fms-rank-card {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow);
+}
+.fms-rank-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.fms-rank-head h3 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+}
+.fms-rank-sub {
+  font-size: 11px;
+  color: var(--muted);
+}
+.fms-rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.fms-rank-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.fms-rank-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.fms-rank-title {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.fms-rank-no {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.fms-rank-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.fms-rank-pct {
+  font-size: 14px;
+  font-weight: 800;
+}
+.fms-rank-bar {
+  height: 8px;
+  width: 100%;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.fms-rank-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+.fms-rank-fill.risk { background: var(--neg); }
+.fms-rank-fill.crowd { background: var(--focus); }
+.fms-rank-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+.fms-rank-drop {
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* FMS 2027 Targets */
+.fms-targets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (min-width: 720px) {
+  .fms-targets-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+.fms-target-tile {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+.fms-target-k {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.fms-target-v {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.fms-target-u {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* FMS vs CTA Comparison Box */
+.fms-compare-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--focus);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+.fms-compare-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 6px;
+}
+.fms-compare-head h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+.fms-compare-note {
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.fms-compare-note strong { color: var(--ink); }
+.fms-compare-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+@media (min-width: 760px) {
+  .fms-compare-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+.fms-compare-card {
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fms-compare-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.fms-compare-asset {
+  font-size: 13.5px;
+  font-weight: 800;
+}
+.fms-compare-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+.fms-compare-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.fms-compare-src { color: var(--muted); font-weight: 600; }
+.fms-compare-desc {
+  margin: 0;
+  padding-top: 7px;
+  border-top: 1px dashed var(--line);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">CFTC COT / TFF · BofA FMS · CTA · 헤지펀드 포지셔닝</p>
+      <h1>선물 포지셔닝 + 펀드매니저 설문</h1>
+      <p class="sub">이번 주 헤지펀드·CTA의 <strong>실제 선물 포지션</strong>(미결제약정 대비 순포지션, %OI)과 펀드매니저 <strong>설문상 배분 의향</strong>(BofA FMS)을 나란히 놓고, 어디서 줄이고 어디서 늘렸는지 비교합니다.</p>
+    </div>
+    <div class="asof-pill num">
+      <span class="asof-dot" aria-hidden="true"></span>
+      <span>기준일 2026-11-17 (화) · 3영업일 지연</span>
+    </div>
+  </header>
+
+  
+
+  <section class="summary-bar" aria-label="자산군별 요약">
+    <div class="summary-meta num">
+      <span><strong>기준일 2026-11-17</strong> (2026-08-18 ~ 2026-11-17, 14주)</span>
+      <span>주 비교축: <strong>%OI</strong> (음수=순숏, 양수=순롱)</span>
+    </div>
+    <div class="summary-grid" id="summary-grid">
+      <div class="sum-tile" data-group="주식"><div class="sum-top"><span class="sum-group">주식</span><span class="stance-pill neg">순숏</span></div><div class="sum-val num neg">-8.03%</div><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:41.07%;width:8.93%"></span></div><div class="sum-dir num"><span class="dir-arrow neg">▼ 매도/롱축소</span><span class="sum-prev">직전 -6.76%</span></div></div><div class="sum-tile" data-group="금리"><div class="sum-top"><span class="sum-group">금리</span><span class="stance-pill neg">순숏</span></div><div class="sum-val num neg">-34.71%</div><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:11.44%;width:38.56%"></span></div><div class="sum-dir num"><span class="dir-arrow pos">▲ 매수/숏축소</span><span class="sum-prev">직전 -35.07%</span></div></div><div class="sum-tile" data-group="FX"><div class="sum-top"><span class="sum-group">FX</span><span class="stance-pill neg">순숏</span></div><div class="sum-val num neg">-5.73%</div><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:43.64%;width:6.36%"></span></div><div class="sum-dir num"><span class="dir-arrow neg">▼ 매도/롱축소</span><span class="sum-prev">직전 -2.39%</span></div></div><div class="sum-tile" data-group="원자재"><div class="sum-top"><span class="sum-group">원자재</span><span class="stance-pill pos">순롱</span></div><div class="sum-val num pos">+22.31%</div><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill pos" style="left:50%;width:24.79%"></span></div><div class="sum-dir num"><span class="dir-arrow neg">▼ 매도/롱축소</span><span class="sum-prev">직전 +25.75%</span></div></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-movers">
+    <div class="sec-head">
+      <h2 id="sec-movers">이번 주 가장 크게 바뀐 시장 TOP 3</h2>
+      <p class="sec-sub">주간 %OI 변화(|Δ%p|) 절대값 기준 상위 3개</p>
+    </div>
+    <div class="movers-grid" id="movers-grid">
+      <article class="mover-card neg" data-market="nq"><div class="mover-head"><span class="mover-rank">변화 1위 · 주식</span></div><div class="mover-main"><h3 class="mover-name">NASDAQ-100</h3><div class="mover-delta num neg"><span class="arrow">▼</span>-8.52%p</div></div><div class="mover-shift"><div class="shift-labels num"><span>직전 +4.84%</span><span class="neg strong">현재 -3.69%</span></div><div class="shift-strip" aria-hidden="true"><span class="shift-zero"></span><span class="shift-seg neg" style="left:46.61%;width:7.84%"></span><span class="shift-prev" style="left:54.45%"></span><span class="shift-cur neg" style="left:46.61%"></span></div></div><p class="mover-desc">직전 주 순롱(+4.84%)에서 순숏(-3.69%)으로 전환하며 매도 방향으로 8.52%p 이동했습니다 (-24,895계약).</p><div class="mover-foot num"><span>Net -10,928 (Δ -24,895)</span><span>z13 +0.27</span></div></article><article class="mover-card neg" data-market="dx"><div class="mover-head"><span class="mover-rank">변화 2위 · FX</span></div><div class="mover-main"><h3 class="mover-name">달러인덱스</h3><div class="mover-delta num neg"><span class="arrow">▼</span>-7.78%p</div></div><div class="mover-shift"><div class="shift-labels num"><span>직전 +5.54%</span><span class="neg strong">현재 -2.24%</span></div><div class="shift-strip" aria-hidden="true"><span class="shift-zero"></span><span class="shift-seg neg" style="left:47.94%;width:7.16%"></span><span class="shift-prev" style="left:55.10%"></span><span class="shift-cur neg" style="left:47.94%"></span></div></div><p class="mover-desc">직전 주 순롱(+5.54%)에서 순숏(-2.24%)으로 전환하며 매도 방향으로 7.78%p 이동했습니다 (-4,101계약).</p><div class="mover-foot num"><span>Net -1,251 (Δ -4,101)</span><span>z13 -0.99</span></div></article><article class="mover-card neg" data-market="gc"><div class="mover-head"><span class="mover-rank">변화 3위 · 원자재</span><span class="ext-badge">극단 z13 -2.50</span></div><div class="mover-main"><h3 class="mover-name">금</h3><div class="mover-delta num neg"><span class="arrow">▼</span>-6.24%p</div></div><div class="mover-shift"><div class="shift-labels num"><span>직전 +46.97%</span><span class="pos strong">현재 +40.74%</span></div><div class="shift-strip" aria-hidden="true"><span class="shift-zero"></span><span class="shift-seg neg" style="left:87.48%;width:5.74%"></span><span class="shift-prev" style="left:93.21%"></span><span class="shift-cur pos" style="left:87.48%"></span></div></div><p class="mover-desc">순롱 비중이 +46.97%에서 +40.74%로 6.24%p 줄며 롱 포지션을 축소했습니다 (-23,975계약).</p><div class="mover-foot num"><span>Net +166,132 (Δ -23,975)</span><span>z13 -2.50</span></div></article>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-markets">
+    <div class="sec-head">
+      <h2 id="sec-markets">12개 시장 전체 포지셔닝</h2>
+      <p class="sec-sub">계약 규모가 달라 <strong>%OI</strong>를 주 비교축으로, 순계약수(Net)를 보조 수치로 표시합니다.</p>
+    </div>
+    <div class="controls">
+      <div class="chips" id="group-filters" role="group" aria-label="자산군 필터">
+        <button type="button" class="chip on" data-filter="all" aria-pressed="true">전체 <span class="num">12</span></button><button type="button" class="chip" data-filter="주식" aria-pressed="false">주식 <span class="num">3</span></button><button type="button" class="chip" data-filter="금리" aria-pressed="false">금리 <span class="num">3</span></button><button type="button" class="chip" data-filter="FX" aria-pressed="false">FX <span class="num">3</span></button><button type="button" class="chip" data-filter="원자재" aria-pressed="false">원자재 <span class="num">3</span></button>
+      </div>
+      <label class="sort-wrap">
+        <span>정렬</span>
+        <select id="market-sort" class="sort-select" aria-label="시장 정렬 기준">
+          <option value="abs_wow" selected>주간 변화 폭 큰 순 (|Δ%p|)</option>
+          <option value="rank">%OI 순위 순 (순롱 → 순숏)</option>
+          <option value="abs_z">극단도 순 (|z13|)</option>
+          <option value="default">자산군별 기본 순서</option>
+        </select>
+      </label>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span class="leg-item"><span class="leg-swatch pos"></span>순롱(+) · 매수/숏축소 방향</span>
+      <span class="leg-item"><span class="leg-swatch neg"></span>순숏(-) · 매도/롱축소 방향</span>
+      <span class="leg-item"><span class="leg-swatch ext"></span>극단 (|z13| ≥ 2)</span>
+    </div>
+    <div class="mkt-board" id="market-board">
+      <div class="mkt-head" aria-hidden="true">
+        <span>시장 · %OI 순위</span>
+        <span>최신 %OI (0선 기준)</span>
+        <span class="r">주간 Δ(%p)</span>
+        <span class="r">최신 Net (보조)</span>
+        <span class="r">z13</span>
+        <span>14주 %OI 추이 (08.18→11.17)</span>
+      </div>
+      <div id="market-rows">
+        <div class="mkt-row" data-id="nq" data-group="주식"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">주식</span><span class="mkt-label">NASDAQ-100</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#5</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-3.69%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:46.31%;width:3.69%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -8.52%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-10,928</div><div class="net-sub num">주간 -24,895</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">+0.27</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="NASDAQ-100 14주 %OI: 2026-08-18 -20.73% → 2026-11-17 -3.69%"><title>NASDAQ-100 14주 %OI: 2026-08-18 -20.73% → 2026-11-17 -3.69%</title><defs><clipPath id="sp-pos-nq"><rect x="0" y="0" width="180" height="13.99"/></clipPath><clipPath id="sp-neg-nq"><rect x="0" y="13.99" width="180" height="30.01"/></clipPath></defs><line class="sp-zero" x1="5" y1="14.0" x2="175" y2="14.0"/><path class="sp-area-pos" d="M 5.0,14.0 L 5.0,34.9 L 18.1,27.7 L 31.2,18.7 L 44.2,24.9 L 57.3,16.0 L 70.4,24.8 L 83.5,23.2 L 96.5,20.8 L 109.6,18.2 L 122.7,13.6 L 135.8,13.1 L 148.8,10.5 L 161.9,9.1 L 175.0,17.7 L 175.0,14.0 Z" clip-path="url(#sp-pos-nq)"/><path class="sp-area-neg" d="M 5.0,14.0 L 5.0,34.9 L 18.1,27.7 L 31.2,18.7 L 44.2,24.9 L 57.3,16.0 L 70.4,24.8 L 83.5,23.2 L 96.5,20.8 L 109.6,18.2 L 122.7,13.6 L 135.8,13.1 L 148.8,10.5 L 161.9,9.1 L 175.0,17.7 L 175.0,14.0 Z" clip-path="url(#sp-neg-nq)"/><path class="sp-line-pos" d="M 5.0,34.9 L 18.1,27.7 L 31.2,18.7 L 44.2,24.9 L 57.3,16.0 L 70.4,24.8 L 83.5,23.2 L 96.5,20.8 L 109.6,18.2 L 122.7,13.6 L 135.8,13.1 L 148.8,10.5 L 161.9,9.1 L 175.0,17.7" clip-path="url(#sp-pos-nq)"/><path class="sp-line-neg" d="M 5.0,34.9 L 18.1,27.7 L 31.2,18.7 L 44.2,24.9 L 57.3,16.0 L 70.4,24.8 L 83.5,23.2 L 96.5,20.8 L 109.6,18.2 L 122.7,13.6 L 135.8,13.1 L 148.8,10.5 L 161.9,9.1 L 175.0,17.7" clip-path="url(#sp-neg-nq)"/><circle class="sp-dot neg" cx="175.0" cy="17.7" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row" data-id="dx" data-group="FX"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">FX</span><span class="mkt-label">달러인덱스</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#4</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-2.24%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:47.76%;width:2.24%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -7.78%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-1,251</div><div class="net-sub num">주간 -4,101</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">-0.99</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="달러인덱스 14주 %OI: 2026-08-18 +16.93% → 2026-11-17 -2.24%"><title>달러인덱스 14주 %OI: 2026-08-18 +16.93% → 2026-11-17 -2.24%</title><defs><clipPath id="sp-pos-dx"><rect x="0" y="0" width="180" height="25.37"/></clipPath><clipPath id="sp-neg-dx"><rect x="0" y="25.37" width="180" height="18.63"/></clipPath></defs><line class="sp-zero" x1="5" y1="25.4" x2="175" y2="25.4"/><path class="sp-area-pos" d="M 5.0,25.4 L 5.0,11.0 L 18.1,9.1 L 31.2,13.3 L 44.2,16.3 L 57.3,34.9 L 70.4,33.6 L 83.5,24.7 L 96.5,23.9 L 109.6,22.0 L 122.7,19.9 L 135.8,19.8 L 148.8,19.6 L 161.9,20.7 L 175.0,27.3 L 175.0,25.4 Z" clip-path="url(#sp-pos-dx)"/><path class="sp-area-neg" d="M 5.0,25.4 L 5.0,11.0 L 18.1,9.1 L 31.2,13.3 L 44.2,16.3 L 57.3,34.9 L 70.4,33.6 L 83.5,24.7 L 96.5,23.9 L 109.6,22.0 L 122.7,19.9 L 135.8,19.8 L 148.8,19.6 L 161.9,20.7 L 175.0,27.3 L 175.0,25.4 Z" clip-path="url(#sp-neg-dx)"/><path class="sp-line-pos" d="M 5.0,11.0 L 18.1,9.1 L 31.2,13.3 L 44.2,16.3 L 57.3,34.9 L 70.4,33.6 L 83.5,24.7 L 96.5,23.9 L 109.6,22.0 L 122.7,19.9 L 135.8,19.8 L 148.8,19.6 L 161.9,20.7 L 175.0,27.3" clip-path="url(#sp-pos-dx)"/><path class="sp-line-neg" d="M 5.0,11.0 L 18.1,9.1 L 31.2,13.3 L 44.2,16.3 L 57.3,34.9 L 70.4,33.6 L 83.5,24.7 L 96.5,23.9 L 109.6,22.0 L 122.7,19.9 L 135.8,19.8 L 148.8,19.6 L 161.9,20.7 L 175.0,27.3" clip-path="url(#sp-neg-dx)"/><circle class="sp-dot neg" cx="175.0" cy="27.3" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row is-extreme" data-id="gc" data-group="원자재"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">원자재</span><span class="mkt-label">금</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#1</span></div><div class="mkt-ext-mobile"><span class="ext-badge">극단</span></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num pos">+40.74%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill pos" style="left:50%;width:40.74%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -6.24%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">+166,132</div><div class="net-sub num">주간 -23,975</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num is-ext">-2.50</span><span class="mkt-ext-desktop"><span class="ext-badge">극단</span></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="금 14주 %OI: 2026-08-18 +54.69% → 2026-11-17 +40.74%"><title>금 14주 %OI: 2026-08-18 +54.69% → 2026-11-17 +40.74%</title><defs><clipPath id="sp-pos-gc"><rect x="0" y="0" width="180" height="34.88"/></clipPath><clipPath id="sp-neg-gc"><rect x="0" y="34.88" width="180" height="9.12"/></clipPath></defs><line class="sp-zero" x1="5" y1="34.9" x2="175" y2="34.9"/><path class="sp-area-pos" d="M 5.0,34.9 L 5.0,10.1 L 18.1,9.1 L 31.2,10.0 L 44.2,9.3 L 57.3,9.4 L 70.4,10.1 L 83.5,10.5 L 96.5,10.8 L 109.6,11.1 L 122.7,12.4 L 135.8,13.6 L 148.8,14.5 L 161.9,13.6 L 175.0,16.4 L 175.0,34.9 Z" clip-path="url(#sp-pos-gc)"/><path class="sp-area-neg" d="M 5.0,34.9 L 5.0,10.1 L 18.1,9.1 L 31.2,10.0 L 44.2,9.3 L 57.3,9.4 L 70.4,10.1 L 83.5,10.5 L 96.5,10.8 L 109.6,11.1 L 122.7,12.4 L 135.8,13.6 L 148.8,14.5 L 161.9,13.6 L 175.0,16.4 L 175.0,34.9 Z" clip-path="url(#sp-neg-gc)"/><path class="sp-line-pos" d="M 5.0,10.1 L 18.1,9.1 L 31.2,10.0 L 44.2,9.3 L 57.3,9.4 L 70.4,10.1 L 83.5,10.5 L 96.5,10.8 L 109.6,11.1 L 122.7,12.4 L 135.8,13.6 L 148.8,14.5 L 161.9,13.6 L 175.0,16.4" clip-path="url(#sp-pos-gc)"/><path class="sp-line-neg" d="M 5.0,10.1 L 18.1,9.1 L 31.2,10.0 L 44.2,9.3 L 57.3,9.4 L 70.4,10.1 L 83.5,10.5 L 96.5,10.8 L 109.6,11.1 L 122.7,12.4 L 135.8,13.6 L 148.8,14.5 L 161.9,13.6 L 175.0,16.4" clip-path="url(#sp-neg-gc)"/><circle class="sp-dot pos" cx="175.0" cy="16.4" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row" data-id="tu" data-group="금리"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">금리</span><span class="mkt-label">미 2년 국채</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#10</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-28.85%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:21.15%;width:28.85%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num pos">▲ +4.68%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-1,288,895</div><div class="net-sub num">주간 +216,309</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">+0.27</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="미 2년 국채 14주 %OI: 2026-08-18 -28.04% → 2026-11-17 -28.85%"><title>미 2년 국채 14주 %OI: 2026-08-18 -28.04% → 2026-11-17 -28.85%</title><defs><clipPath id="sp-pos-tu"><rect x="0" y="0" width="180" height="9.12"/></clipPath><clipPath id="sp-neg-tu"><rect x="0" y="9.12" width="180" height="34.88"/></clipPath></defs><line class="sp-zero" x1="5" y1="9.1" x2="175" y2="9.1"/><path class="sp-area-pos" d="M 5.0,9.1 L 5.0,30.7 L 18.1,29.4 L 31.2,31.5 L 44.2,31.9 L 57.3,31.6 L 70.4,32.0 L 83.5,28.9 L 96.5,30.7 L 109.6,32.2 L 122.7,30.9 L 135.8,32.2 L 148.8,34.1 L 161.9,34.9 L 175.0,31.3 L 175.0,9.1 Z" clip-path="url(#sp-pos-tu)"/><path class="sp-area-neg" d="M 5.0,9.1 L 5.0,30.7 L 18.1,29.4 L 31.2,31.5 L 44.2,31.9 L 57.3,31.6 L 70.4,32.0 L 83.5,28.9 L 96.5,30.7 L 109.6,32.2 L 122.7,30.9 L 135.8,32.2 L 148.8,34.1 L 161.9,34.9 L 175.0,31.3 L 175.0,9.1 Z" clip-path="url(#sp-neg-tu)"/><path class="sp-line-pos" d="M 5.0,30.7 L 18.1,29.4 L 31.2,31.5 L 44.2,31.9 L 57.3,31.6 L 70.4,32.0 L 83.5,28.9 L 96.5,30.7 L 109.6,32.2 L 122.7,30.9 L 135.8,32.2 L 148.8,34.1 L 161.9,34.9 L 175.0,31.3" clip-path="url(#sp-pos-tu)"/><path class="sp-line-neg" d="M 5.0,30.7 L 18.1,29.4 L 31.2,31.5 L 44.2,31.9 L 57.3,31.6 L 70.4,32.0 L 83.5,28.9 L 96.5,30.7 L 109.6,32.2 L 122.7,30.9 L 135.8,32.2 L 148.8,34.1 L 161.9,34.9 L 175.0,31.3" clip-path="url(#sp-neg-tu)"/><circle class="sp-dot neg" cx="175.0" cy="31.3" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row is-extreme" data-id="es" data-group="주식"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">주식</span><span class="mkt-label">E-mini S&amp;P500</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#9</span></div><div class="mkt-ext-mobile"><span class="ext-badge">극단</span></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-11.21%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:38.79%;width:11.21%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num pos">▲ +3.81%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-234,978</div><div class="net-sub num">주간 +68,082</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num is-ext">+2.66</span><span class="mkt-ext-desktop"><span class="ext-badge">극단</span></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="E-mini S&amp;P500 14주 %OI: 2026-08-18 -13.58% → 2026-11-17 -11.21%"><title>E-mini S&amp;P500 14주 %OI: 2026-08-18 -13.58% → 2026-11-17 -11.21%</title><defs><clipPath id="sp-pos-es"><rect x="0" y="0" width="180" height="9.12"/></clipPath><clipPath id="sp-neg-es"><rect x="0" y="9.12" width="180" height="34.88"/></clipPath></defs><line class="sp-zero" x1="5" y1="9.1" x2="175" y2="9.1"/><path class="sp-area-pos" d="M 5.0,9.1 L 5.0,25.4 L 18.1,27.6 L 31.2,27.7 L 44.2,28.9 L 57.3,23.5 L 70.4,32.9 L 83.5,32.7 L 96.5,34.9 L 109.6,34.5 L 122.7,32.1 L 135.8,33.7 L 148.8,31.6 L 161.9,27.1 L 175.0,22.6 L 175.0,9.1 Z" clip-path="url(#sp-pos-es)"/><path class="sp-area-neg" d="M 5.0,9.1 L 5.0,25.4 L 18.1,27.6 L 31.2,27.7 L 44.2,28.9 L 57.3,23.5 L 70.4,32.9 L 83.5,32.7 L 96.5,34.9 L 109.6,34.5 L 122.7,32.1 L 135.8,33.7 L 148.8,31.6 L 161.9,27.1 L 175.0,22.6 L 175.0,9.1 Z" clip-path="url(#sp-neg-es)"/><path class="sp-line-pos" d="M 5.0,25.4 L 18.1,27.6 L 31.2,27.7 L 44.2,28.9 L 57.3,23.5 L 70.4,32.9 L 83.5,32.7 L 96.5,34.9 L 109.6,34.5 L 122.7,32.1 L 135.8,33.7 L 148.8,31.6 L 161.9,27.1 L 175.0,22.6" clip-path="url(#sp-pos-es)"/><path class="sp-line-neg" d="M 5.0,25.4 L 18.1,27.6 L 31.2,27.7 L 44.2,28.9 L 57.3,23.5 L 70.4,32.9 L 83.5,32.7 L 96.5,34.9 L 109.6,34.5 L 122.7,32.1 L 135.8,33.7 L 148.8,31.6 L 161.9,27.1 L 175.0,22.6" clip-path="url(#sp-neg-es)"/><circle class="sp-dot neg" cx="175.0" cy="22.6" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row is-extreme" data-id="hg" data-group="원자재"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">원자재</span><span class="mkt-label">구리</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#3</span></div><div class="mkt-ext-mobile"><span class="ext-badge">극단</span></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num pos">+5.64%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill pos" style="left:50%;width:5.64%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -3.56%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">+17,777</div><div class="net-sub num">주간 -11,127</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num is-ext">-2.62</span><span class="mkt-ext-desktop"><span class="ext-badge">극단</span></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="구리 14주 %OI: 2026-08-18 +28.32% → 2026-11-17 +5.64%"><title>구리 14주 %OI: 2026-08-18 +28.32% → 2026-11-17 +5.64%</title><defs><clipPath id="sp-pos-hg"><rect x="0" y="0" width="180" height="34.88"/></clipPath><clipPath id="sp-neg-hg"><rect x="0" y="34.88" width="180" height="9.12"/></clipPath></defs><line class="sp-zero" x1="5" y1="34.9" x2="175" y2="34.9"/><path class="sp-area-pos" d="M 5.0,34.9 L 5.0,11.4 L 18.1,9.9 L 31.2,11.2 L 44.2,9.1 L 57.3,13.4 L 70.4,10.0 L 83.5,11.4 L 96.5,16.0 L 109.6,16.8 L 122.7,20.3 L 135.8,23.0 L 148.8,25.3 L 161.9,27.3 L 175.0,30.2 L 175.0,34.9 Z" clip-path="url(#sp-pos-hg)"/><path class="sp-area-neg" d="M 5.0,34.9 L 5.0,11.4 L 18.1,9.9 L 31.2,11.2 L 44.2,9.1 L 57.3,13.4 L 70.4,10.0 L 83.5,11.4 L 96.5,16.0 L 109.6,16.8 L 122.7,20.3 L 135.8,23.0 L 148.8,25.3 L 161.9,27.3 L 175.0,30.2 L 175.0,34.9 Z" clip-path="url(#sp-neg-hg)"/><path class="sp-line-pos" d="M 5.0,11.4 L 18.1,9.9 L 31.2,11.2 L 44.2,9.1 L 57.3,13.4 L 70.4,10.0 L 83.5,11.4 L 96.5,16.0 L 109.6,16.8 L 122.7,20.3 L 135.8,23.0 L 148.8,25.3 L 161.9,27.3 L 175.0,30.2" clip-path="url(#sp-pos-hg)"/><path class="sp-line-neg" d="M 5.0,11.4 L 18.1,9.9 L 31.2,11.2 L 44.2,9.1 L 57.3,13.4 L 70.4,10.0 L 83.5,11.4 L 96.5,16.0 L 109.6,16.8 L 122.7,20.3 L 135.8,23.0 L 148.8,25.3 L 161.9,27.3 L 175.0,30.2" clip-path="url(#sp-neg-hg)"/><circle class="sp-dot pos" cx="175.0" cy="30.2" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row is-extreme" data-id="ty" data-group="금리"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">금리</span><span class="mkt-label">미 10년 국채</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#12</span></div><div class="mkt-ext-mobile"><span class="ext-badge">극단</span></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-39.74%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:10.26%;width:39.74%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -1.98%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-2,482,443</div><div class="net-sub num">주간 -181,116</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num is-ext">-2.81</span><span class="mkt-ext-desktop"><span class="ext-badge">극단</span></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="미 10년 국채 14주 %OI: 2026-08-18 -39.83% → 2026-11-17 -39.74%"><title>미 10년 국채 14주 %OI: 2026-08-18 -39.83% → 2026-11-17 -39.74%</title><defs><clipPath id="sp-pos-ty"><rect x="0" y="0" width="180" height="9.12"/></clipPath><clipPath id="sp-neg-ty"><rect x="0" y="9.12" width="180" height="34.88"/></clipPath></defs><line class="sp-zero" x1="5" y1="9.1" x2="175" y2="9.1"/><path class="sp-area-pos" d="M 5.0,9.1 L 5.0,34.9 L 18.1,31.4 L 31.2,34.4 L 44.2,33.1 L 57.3,31.6 L 70.4,32.2 L 83.5,32.3 L 96.5,33.2 L 109.6,33.6 L 122.7,32.3 L 135.8,33.6 L 148.8,33.7 L 161.9,33.5 L 175.0,34.8 L 175.0,9.1 Z" clip-path="url(#sp-pos-ty)"/><path class="sp-area-neg" d="M 5.0,9.1 L 5.0,34.9 L 18.1,31.4 L 31.2,34.4 L 44.2,33.1 L 57.3,31.6 L 70.4,32.2 L 83.5,32.3 L 96.5,33.2 L 109.6,33.6 L 122.7,32.3 L 135.8,33.6 L 148.8,33.7 L 161.9,33.5 L 175.0,34.8 L 175.0,9.1 Z" clip-path="url(#sp-neg-ty)"/><path class="sp-line-pos" d="M 5.0,34.9 L 18.1,31.4 L 31.2,34.4 L 44.2,33.1 L 57.3,31.6 L 70.4,32.2 L 83.5,32.3 L 96.5,33.2 L 109.6,33.6 L 122.7,32.3 L 135.8,33.6 L 148.8,33.7 L 161.9,33.5 L 175.0,34.8" clip-path="url(#sp-pos-ty)"/><path class="sp-line-neg" d="M 5.0,34.9 L 18.1,31.4 L 31.2,34.4 L 44.2,33.1 L 57.3,31.6 L 70.4,32.2 L 83.5,32.3 L 96.5,33.2 L 109.6,33.6 L 122.7,32.3 L 135.8,33.6 L 148.8,33.7 L 161.9,33.5 L 175.0,34.8" clip-path="url(#sp-neg-ty)"/><circle class="sp-dot neg" cx="175.0" cy="34.8" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row" data-id="j6" data-group="FX"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">FX</span><span class="mkt-label">엔</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#6</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-6.09%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:43.91%;width:6.09%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -1.76%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-23,790</div><div class="net-sub num">주간 -6,935</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">+0.23</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="엔 14주 %OI: 2026-08-18 -17.85% → 2026-11-17 -6.09%"><title>엔 14주 %OI: 2026-08-18 -17.85% → 2026-11-17 -6.09%</title><defs><clipPath id="sp-pos-j6"><rect x="0" y="0" width="180" height="12.90"/></clipPath><clipPath id="sp-neg-j6"><rect x="0" y="12.90" width="180" height="31.10"/></clipPath></defs><line class="sp-zero" x1="5" y1="12.9" x2="175" y2="12.9"/><path class="sp-area-pos" d="M 5.0,12.9 L 5.0,28.7 L 18.1,30.7 L 31.2,34.9 L 44.2,21.6 L 57.3,9.1 L 70.4,11.2 L 83.5,16.4 L 96.5,18.9 L 109.6,20.9 L 122.7,18.3 L 135.8,16.4 L 148.8,16.4 L 161.9,16.7 L 175.0,18.3 L 175.0,12.9 Z" clip-path="url(#sp-pos-j6)"/><path class="sp-area-neg" d="M 5.0,12.9 L 5.0,28.7 L 18.1,30.7 L 31.2,34.9 L 44.2,21.6 L 57.3,9.1 L 70.4,11.2 L 83.5,16.4 L 96.5,18.9 L 109.6,20.9 L 122.7,18.3 L 135.8,16.4 L 148.8,16.4 L 161.9,16.7 L 175.0,18.3 L 175.0,12.9 Z" clip-path="url(#sp-neg-j6)"/><path class="sp-line-pos" d="M 5.0,28.7 L 18.1,30.7 L 31.2,34.9 L 44.2,21.6 L 57.3,9.1 L 70.4,11.2 L 83.5,16.4 L 96.5,18.9 L 109.6,20.9 L 122.7,18.3 L 135.8,16.4 L 148.8,16.4 L 161.9,16.7 L 175.0,18.3" clip-path="url(#sp-pos-j6)"/><path class="sp-line-neg" d="M 5.0,28.7 L 18.1,30.7 L 31.2,34.9 L 44.2,21.6 L 57.3,9.1 L 70.4,11.2 L 83.5,16.4 L 96.5,18.9 L 109.6,20.9 L 122.7,18.3 L 135.8,16.4 L 148.8,16.4 L 161.9,16.7 L 175.0,18.3" clip-path="url(#sp-neg-j6)"/><circle class="sp-dot neg" cx="175.0" cy="18.3" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row" data-id="ub" data-group="금리"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">금리</span><span class="mkt-label">미 초장기채</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#11</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-35.54%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:14.46%;width:35.54%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -1.61%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-868,604</div><div class="net-sub num">주간 -52,916</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">-1.20</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="미 초장기채 14주 %OI: 2026-08-18 -34.55% → 2026-11-17 -35.54%"><title>미 초장기채 14주 %OI: 2026-08-18 -34.55% → 2026-11-17 -35.54%</title><defs><clipPath id="sp-pos-ub"><rect x="0" y="0" width="180" height="9.12"/></clipPath><clipPath id="sp-neg-ub"><rect x="0" y="9.12" width="180" height="34.88"/></clipPath></defs><line class="sp-zero" x1="5" y1="9.1" x2="175" y2="9.1"/><path class="sp-area-pos" d="M 5.0,9.1 L 5.0,33.4 L 18.1,29.2 L 31.2,34.9 L 44.2,34.5 L 57.3,32.3 L 70.4,32.5 L 83.5,31.8 L 96.5,30.4 L 109.6,30.1 L 122.7,33.1 L 135.8,33.3 L 148.8,32.5 L 161.9,33.0 L 175.0,34.1 L 175.0,9.1 Z" clip-path="url(#sp-pos-ub)"/><path class="sp-area-neg" d="M 5.0,9.1 L 5.0,33.4 L 18.1,29.2 L 31.2,34.9 L 44.2,34.5 L 57.3,32.3 L 70.4,32.5 L 83.5,31.8 L 96.5,30.4 L 109.6,30.1 L 122.7,33.1 L 135.8,33.3 L 148.8,32.5 L 161.9,33.0 L 175.0,34.1 L 175.0,9.1 Z" clip-path="url(#sp-neg-ub)"/><path class="sp-line-pos" d="M 5.0,33.4 L 18.1,29.2 L 31.2,34.9 L 44.2,34.5 L 57.3,32.3 L 70.4,32.5 L 83.5,31.8 L 96.5,30.4 L 109.6,30.1 L 122.7,33.1 L 135.8,33.3 L 148.8,32.5 L 161.9,33.0 L 175.0,34.1" clip-path="url(#sp-pos-ub)"/><path class="sp-line-neg" d="M 5.0,33.4 L 18.1,29.2 L 31.2,34.9 L 44.2,34.5 L 57.3,32.3 L 70.4,32.5 L 83.5,31.8 L 96.5,30.4 L 109.6,30.1 L 122.7,33.1 L 135.8,33.3 L 148.8,32.5 L 161.9,33.0 L 175.0,34.1" clip-path="url(#sp-neg-ub)"/><circle class="sp-dot neg" cx="175.0" cy="34.1" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row" data-id="rty" data-group="주식"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">주식</span><span class="mkt-label">Russell 2000</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#8</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-9.21%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:40.79%;width:9.21%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num pos">▲ +0.87%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-42,353</div><div class="net-sub num">주간 +2,076</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">+1.76</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="Russell 2000 14주 %OI: 2026-08-18 -23.48% → 2026-11-17 -9.21%"><title>Russell 2000 14주 %OI: 2026-08-18 -23.48% → 2026-11-17 -9.21%</title><defs><clipPath id="sp-pos-rty"><rect x="0" y="0" width="180" height="9.12"/></clipPath><clipPath id="sp-neg-rty"><rect x="0" y="9.12" width="180" height="34.88"/></clipPath></defs><line class="sp-zero" x1="5" y1="9.1" x2="175" y2="9.1"/><path class="sp-area-pos" d="M 5.0,9.1 L 5.0,31.7 L 18.1,31.9 L 31.2,33.9 L 44.2,33.7 L 57.3,28.0 L 70.4,34.2 L 83.5,34.9 L 96.5,33.0 L 109.6,29.0 L 122.7,20.1 L 135.8,19.2 L 148.8,20.9 L 161.9,18.8 L 175.0,18.0 L 175.0,9.1 Z" clip-path="url(#sp-pos-rty)"/><path class="sp-area-neg" d="M 5.0,9.1 L 5.0,31.7 L 18.1,31.9 L 31.2,33.9 L 44.2,33.7 L 57.3,28.0 L 70.4,34.2 L 83.5,34.9 L 96.5,33.0 L 109.6,29.0 L 122.7,20.1 L 135.8,19.2 L 148.8,20.9 L 161.9,18.8 L 175.0,18.0 L 175.0,9.1 Z" clip-path="url(#sp-neg-rty)"/><path class="sp-line-pos" d="M 5.0,31.7 L 18.1,31.9 L 31.2,33.9 L 44.2,33.7 L 57.3,28.0 L 70.4,34.2 L 83.5,34.9 L 96.5,33.0 L 109.6,29.0 L 122.7,20.1 L 135.8,19.2 L 148.8,20.9 L 161.9,18.8 L 175.0,18.0" clip-path="url(#sp-pos-rty)"/><path class="sp-line-neg" d="M 5.0,31.7 L 18.1,31.9 L 31.2,33.9 L 44.2,33.7 L 57.3,28.0 L 70.4,34.2 L 83.5,34.9 L 96.5,33.0 L 109.6,29.0 L 122.7,20.1 L 135.8,19.2 L 148.8,20.9 L 161.9,18.8 L 175.0,18.0" clip-path="url(#sp-neg-rty)"/><circle class="sp-dot neg" cx="175.0" cy="18.0" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row" data-id="cl" data-group="원자재"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">원자재</span><span class="mkt-label">WTI 원유</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#2</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num pos">+20.56%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill pos" style="left:50%;width:20.56%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -0.51%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">+41,742</div><div class="net-sub num">주간 -218</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">+0.39</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="WTI 원유 14주 %OI: 2026-08-18 +14.42% → 2026-11-17 +20.56%"><title>WTI 원유 14주 %OI: 2026-08-18 +14.42% → 2026-11-17 +20.56%</title><defs><clipPath id="sp-pos-cl"><rect x="0" y="0" width="180" height="34.88"/></clipPath><clipPath id="sp-neg-cl"><rect x="0" y="34.88" width="180" height="9.12"/></clipPath></defs><line class="sp-zero" x1="5" y1="34.9" x2="175" y2="34.9"/><path class="sp-area-pos" d="M 5.0,34.9 L 5.0,18.6 L 18.1,18.0 L 31.2,13.5 L 44.2,14.1 L 57.3,14.4 L 70.4,14.8 L 83.5,13.3 L 96.5,9.4 L 109.6,11.4 L 122.7,10.6 L 135.8,9.1 L 148.8,10.0 L 161.9,11.1 L 175.0,11.7 L 175.0,34.9 Z" clip-path="url(#sp-pos-cl)"/><path class="sp-area-neg" d="M 5.0,34.9 L 5.0,18.6 L 18.1,18.0 L 31.2,13.5 L 44.2,14.1 L 57.3,14.4 L 70.4,14.8 L 83.5,13.3 L 96.5,9.4 L 109.6,11.4 L 122.7,10.6 L 135.8,9.1 L 148.8,10.0 L 161.9,11.1 L 175.0,11.7 L 175.0,34.9 Z" clip-path="url(#sp-neg-cl)"/><path class="sp-line-pos" d="M 5.0,18.6 L 18.1,18.0 L 31.2,13.5 L 44.2,14.1 L 57.3,14.4 L 70.4,14.8 L 83.5,13.3 L 96.5,9.4 L 109.6,11.4 L 122.7,10.6 L 135.8,9.1 L 148.8,10.0 L 161.9,11.1 L 175.0,11.7" clip-path="url(#sp-pos-cl)"/><path class="sp-line-neg" d="M 5.0,18.6 L 18.1,18.0 L 31.2,13.5 L 44.2,14.1 L 57.3,14.4 L 70.4,14.8 L 83.5,13.3 L 96.5,9.4 L 109.6,11.4 L 122.7,10.6 L 135.8,9.1 L 148.8,10.0 L 161.9,11.1 L 175.0,11.7" clip-path="url(#sp-neg-cl)"/><circle class="sp-dot pos" cx="175.0" cy="11.7" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div><div class="mkt-row" data-id="ec" data-group="FX"><div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">FX</span><span class="mkt-label">유로</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#7</span></div><div class="mkt-ext-mobile"></div></div><div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num neg">-8.84%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:41.16%;width:8.84%"></span></div></div></div><div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num neg">▼ -0.46%p</span></div><div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">-76,587</div><div class="net-sub num">주간 -4,911</div></div><div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ">-1.42</span><span class="mkt-ext-desktop"></span></div></div><div class="mkt-cell mkt-spark-col"><div class="spark-wrap"><svg class="spark" viewBox="0 0 180 44" role="img" aria-label="유로 14주 %OI: 2026-08-18 -7.17% → 2026-11-17 -8.84%"><title>유로 14주 %OI: 2026-08-18 -7.17% → 2026-11-17 -8.84%</title><defs><clipPath id="sp-pos-ec"><rect x="0" y="0" width="180" height="9.26"/></clipPath><clipPath id="sp-neg-ec"><rect x="0" y="9.26" width="180" height="34.74"/></clipPath></defs><line class="sp-zero" x1="5" y1="9.3" x2="175" y2="9.3"/><path class="sp-area-pos" d="M 5.0,9.3 L 5.0,29.6 L 18.1,22.6 L 31.2,21.8 L 44.2,19.3 L 57.3,18.0 L 70.4,18.5 L 83.5,22.3 L 96.5,23.7 L 109.6,31.4 L 122.7,31.5 L 135.8,32.7 L 148.8,34.7 L 161.9,33.1 L 175.0,34.4 L 175.0,9.3 Z" clip-path="url(#sp-pos-ec)"/><path class="sp-area-neg" d="M 5.0,9.3 L 5.0,29.6 L 18.1,22.6 L 31.2,21.8 L 44.2,19.3 L 57.3,18.0 L 70.4,18.5 L 83.5,22.3 L 96.5,23.7 L 109.6,31.4 L 122.7,31.5 L 135.8,32.7 L 148.8,34.7 L 161.9,33.1 L 175.0,34.4 L 175.0,9.3 Z" clip-path="url(#sp-neg-ec)"/><path class="sp-line-pos" d="M 5.0,29.6 L 18.1,22.6 L 31.2,21.8 L 44.2,19.3 L 57.3,18.0 L 70.4,18.5 L 83.5,22.3 L 96.5,23.7 L 109.6,31.4 L 122.7,31.5 L 135.8,32.7 L 148.8,34.7 L 161.9,33.1 L 175.0,34.4" clip-path="url(#sp-pos-ec)"/><path class="sp-line-neg" d="M 5.0,29.6 L 18.1,22.6 L 31.2,21.8 L 44.2,19.3 L 57.3,18.0 L 70.4,18.5 L 83.5,22.3 L 96.5,23.7 L 109.6,31.4 L 122.7,31.5 L 135.8,32.7 L 148.8,34.7 L 161.9,33.1 L 175.0,34.4" clip-path="url(#sp-neg-ec)"/><circle class="sp-dot neg" cx="175.0" cy="34.4" r="3"/></svg><div class="spark-dates num"><span>08.18</span><span>0%</span><span>11.17</span></div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-groups">
+    <div class="sec-head">
+      <div>
+        <h2 id="sec-groups">자산군별 14주 평균 %OI 추이</h2>
+        <p class="sec-sub">각 자산군 내 3개 시장의 평균 %OI 흐름 (차트 위 포인트를 짚으면 주별 수치를 확인합니다)</p>
+      </div>
+      <div class="axis-toggle" role="group" aria-label="세로축 범위 선택">
+        <button type="button" class="axis-btn on" data-axis="shared" aria-pressed="true">공통 축</button>
+        <button type="button" class="axis-btn" data-axis="auto" aria-pressed="false">개별 축</button>
+      </div>
+    </div>
+    <div class="grp-grid" id="group-charts">
+      <article class="grp-card" data-gidx="0"><div class="grp-card-head"><div><h3 class="grp-card-title">주식</h3><span class="grp-card-sub">3개 시장 평균 %OI</span></div><div class="grp-card-stat num"><div class="grp-card-val neg">-8.03%</div><div class="grp-card-dir neg">▼ 직전 -6.76%</div></div></div><div class="grp-chart-box" data-gidx="0"><svg class="gc-svg" viewBox="0 0 360 134" role="img" aria-label="주식 14주 평균 %OI 추이 (2026-08-18~2026-11-17)"><title>주식 14주 평균 %OI 추이 (2026-08-18~2026-11-17)</title><defs><clipPath id="gc-pos-0"><rect x="40" y="0" width="308" height="60.00"/></clipPath><clipPath id="gc-neg-0"><rect x="40" y="60.00" width="308" height="74.00"/></clipPath></defs><line class="gc-grid" x1="40" y1="16.4" x2="348" y2="16.4"/><text class="gc-ylabel" x="34" y="19.9" text-anchor="end">+40%</text><line class="gc-grid" x1="40" y1="38.2" x2="348" y2="38.2"/><text class="gc-ylabel" x="34" y="41.7" text-anchor="end">+20%</text><line class="gc-zero" x1="40" y1="60.0" x2="348" y2="60.0"/><text class="gc-ylabel is-zero" x="34" y="63.5" text-anchor="end">0%</text><line class="gc-grid" x1="40" y1="81.8" x2="348" y2="81.8"/><text class="gc-ylabel" x="34" y="85.3" text-anchor="end">-20%</text><line class="gc-grid" x1="40" y1="103.6" x2="348" y2="103.6"/><text class="gc-ylabel" x="34" y="107.1" text-anchor="end">-40%</text><path class="gc-area-pos" d="M 40.0,60.0 L 40.0,81.0 L 63.7,79.2 L 87.4,76.7 L 111.1,79.2 L 134.8,72.2 L 158.5,80.6 L 182.2,80.2 L 205.8,79.3 L 229.5,76.7 L 253.2,71.0 L 276.9,70.9 L 300.6,70.0 L 324.3,67.4 L 348.0,68.8 L 348.0,60.0 Z" clip-path="url(#gc-pos-0)"/><path class="gc-area-neg" d="M 40.0,60.0 L 40.0,81.0 L 63.7,79.2 L 87.4,76.7 L 111.1,79.2 L 134.8,72.2 L 158.5,80.6 L 182.2,80.2 L 205.8,79.3 L 229.5,76.7 L 253.2,71.0 L 276.9,70.9 L 300.6,70.0 L 324.3,67.4 L 348.0,68.8 L 348.0,60.0 Z" clip-path="url(#gc-neg-0)"/><path class="gc-line-pos" d="M 40.0,81.0 L 63.7,79.2 L 87.4,76.7 L 111.1,79.2 L 134.8,72.2 L 158.5,80.6 L 182.2,80.2 L 205.8,79.3 L 229.5,76.7 L 253.2,71.0 L 276.9,70.9 L 300.6,70.0 L 324.3,67.4 L 348.0,68.8" clip-path="url(#gc-pos-0)"/><path class="gc-line-neg" d="M 40.0,81.0 L 63.7,79.2 L 87.4,76.7 L 111.1,79.2 L 134.8,72.2 L 158.5,80.6 L 182.2,80.2 L 205.8,79.3 L 229.5,76.7 L 253.2,71.0 L 276.9,70.9 L 300.6,70.0 L 324.3,67.4 L 348.0,68.8" clip-path="url(#gc-neg-0)"/><circle class="gc-dot neg" data-idx="0" cx="40.0" cy="81.0" r="2.2"/><circle class="gc-dot neg" data-idx="1" cx="63.7" cy="79.2" r="2.2"/><circle class="gc-dot neg" data-idx="2" cx="87.4" cy="76.7" r="2.2"/><circle class="gc-dot neg" data-idx="3" cx="111.1" cy="79.2" r="2.2"/><circle class="gc-dot neg" data-idx="4" cx="134.8" cy="72.2" r="2.2"/><circle class="gc-dot neg" data-idx="5" cx="158.5" cy="80.6" r="2.2"/><circle class="gc-dot neg" data-idx="6" cx="182.2" cy="80.2" r="2.2"/><circle class="gc-dot neg" data-idx="7" cx="205.8" cy="79.3" r="2.2"/><circle class="gc-dot neg" data-idx="8" cx="229.5" cy="76.7" r="2.2"/><circle class="gc-dot neg" data-idx="9" cx="253.2" cy="71.0" r="2.2"/><circle class="gc-dot neg" data-idx="10" cx="276.9" cy="70.9" r="2.2"/><circle class="gc-dot neg" data-idx="11" cx="300.6" cy="70.0" r="2.2"/><circle class="gc-dot neg" data-idx="12" cx="324.3" cy="67.4" r="2.2"/><circle class="gc-dot neg is-active" data-idx="13" cx="348.0" cy="68.8" r="4"/><text class="gc-xlabel" x="40.0" y="130" text-anchor="start">08.18</text><text class="gc-xlabel" x="182.2" y="130" text-anchor="middle">09.29</text><text class="gc-xlabel" x="348.0" y="130" text-anchor="end">11.17</text><rect class="gc-hit" data-gidx="0" data-pidx="0" x="36.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="1" x="51.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="2" x="75.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="3" x="99.2" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="4" x="122.9" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="5" x="146.6" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="6" x="170.3" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="7" x="194.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="8" x="217.7" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="9" x="241.4" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="10" x="265.1" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="11" x="288.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="12" x="312.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="0" data-pidx="13" x="336.2" y="12" width="23.7" height="96" fill="transparent"/></svg></div><div class="grp-readout num" data-readout="0"><span>2026-11-17 기준</span><span>평균 -8.03% · 합계 Net -288,259</span></div></article><article class="grp-card" data-gidx="1"><div class="grp-card-head"><div><h3 class="grp-card-title">금리</h3><span class="grp-card-sub">3개 시장 평균 %OI</span></div><div class="grp-card-stat num"><div class="grp-card-val neg">-34.71%</div><div class="grp-card-dir pos">▲ 직전 -35.07%</div></div></div><div class="grp-chart-box" data-gidx="1"><svg class="gc-svg" viewBox="0 0 360 134" role="img" aria-label="금리 14주 평균 %OI 추이 (2026-08-18~2026-11-17)"><title>금리 14주 평균 %OI 추이 (2026-08-18~2026-11-17)</title><defs><clipPath id="gc-pos-1"><rect x="40" y="0" width="308" height="60.00"/></clipPath><clipPath id="gc-neg-1"><rect x="40" y="60.00" width="308" height="74.00"/></clipPath></defs><line class="gc-grid" x1="40" y1="16.4" x2="348" y2="16.4"/><text class="gc-ylabel" x="34" y="19.9" text-anchor="end">+40%</text><line class="gc-grid" x1="40" y1="38.2" x2="348" y2="38.2"/><text class="gc-ylabel" x="34" y="41.7" text-anchor="end">+20%</text><line class="gc-zero" x1="40" y1="60.0" x2="348" y2="60.0"/><text class="gc-ylabel is-zero" x="34" y="63.5" text-anchor="end">0%</text><line class="gc-grid" x1="40" y1="81.8" x2="348" y2="81.8"/><text class="gc-ylabel" x="34" y="85.3" text-anchor="end">-20%</text><line class="gc-grid" x1="40" y1="103.6" x2="348" y2="103.6"/><text class="gc-ylabel" x="34" y="107.1" text-anchor="end">-40%</text><path class="gc-area-pos" d="M 40.0,60.0 L 40.0,97.2 L 63.7,92.5 L 87.4,98.1 L 111.1,97.4 L 134.8,95.2 L 158.5,95.9 L 182.2,94.1 L 205.8,94.7 L 229.5,95.6 L 253.2,95.7 L 276.9,97.2 L 300.6,97.7 L 324.3,98.3 L 348.0,97.9 L 348.0,60.0 Z" clip-path="url(#gc-pos-1)"/><path class="gc-area-neg" d="M 40.0,60.0 L 40.0,97.2 L 63.7,92.5 L 87.4,98.1 L 111.1,97.4 L 134.8,95.2 L 158.5,95.9 L 182.2,94.1 L 205.8,94.7 L 229.5,95.6 L 253.2,95.7 L 276.9,97.2 L 300.6,97.7 L 324.3,98.3 L 348.0,97.9 L 348.0,60.0 Z" clip-path="url(#gc-neg-1)"/><path class="gc-line-pos" d="M 40.0,97.2 L 63.7,92.5 L 87.4,98.1 L 111.1,97.4 L 134.8,95.2 L 158.5,95.9 L 182.2,94.1 L 205.8,94.7 L 229.5,95.6 L 253.2,95.7 L 276.9,97.2 L 300.6,97.7 L 324.3,98.3 L 348.0,97.9" clip-path="url(#gc-pos-1)"/><path class="gc-line-neg" d="M 40.0,97.2 L 63.7,92.5 L 87.4,98.1 L 111.1,97.4 L 134.8,95.2 L 158.5,95.9 L 182.2,94.1 L 205.8,94.7 L 229.5,95.6 L 253.2,95.7 L 276.9,97.2 L 300.6,97.7 L 324.3,98.3 L 348.0,97.9" clip-path="url(#gc-neg-1)"/><circle class="gc-dot neg" data-idx="0" cx="40.0" cy="97.2" r="2.2"/><circle class="gc-dot neg" data-idx="1" cx="63.7" cy="92.5" r="2.2"/><circle class="gc-dot neg" data-idx="2" cx="87.4" cy="98.1" r="2.2"/><circle class="gc-dot neg" data-idx="3" cx="111.1" cy="97.4" r="2.2"/><circle class="gc-dot neg" data-idx="4" cx="134.8" cy="95.2" r="2.2"/><circle class="gc-dot neg" data-idx="5" cx="158.5" cy="95.9" r="2.2"/><circle class="gc-dot neg" data-idx="6" cx="182.2" cy="94.1" r="2.2"/><circle class="gc-dot neg" data-idx="7" cx="205.8" cy="94.7" r="2.2"/><circle class="gc-dot neg" data-idx="8" cx="229.5" cy="95.6" r="2.2"/><circle class="gc-dot neg" data-idx="9" cx="253.2" cy="95.7" r="2.2"/><circle class="gc-dot neg" data-idx="10" cx="276.9" cy="97.2" r="2.2"/><circle class="gc-dot neg" data-idx="11" cx="300.6" cy="97.7" r="2.2"/><circle class="gc-dot neg" data-idx="12" cx="324.3" cy="98.3" r="2.2"/><circle class="gc-dot neg is-active" data-idx="13" cx="348.0" cy="97.9" r="4"/><text class="gc-xlabel" x="40.0" y="130" text-anchor="start">08.18</text><text class="gc-xlabel" x="182.2" y="130" text-anchor="middle">09.29</text><text class="gc-xlabel" x="348.0" y="130" text-anchor="end">11.17</text><rect class="gc-hit" data-gidx="1" data-pidx="0" x="36.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="1" x="51.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="2" x="75.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="3" x="99.2" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="4" x="122.9" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="5" x="146.6" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="6" x="170.3" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="7" x="194.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="8" x="217.7" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="9" x="241.4" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="10" x="265.1" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="11" x="288.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="12" x="312.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="1" data-pidx="13" x="336.2" y="12" width="23.7" height="96" fill="transparent"/></svg></div><div class="grp-readout num" data-readout="1"><span>2026-11-17 기준</span><span>평균 -34.71% · 합계 Net -4,639,942</span></div></article><article class="grp-card" data-gidx="2"><div class="grp-card-head"><div><h3 class="grp-card-title">FX</h3><span class="grp-card-sub">3개 시장 평균 %OI</span></div><div class="grp-card-stat num"><div class="grp-card-val neg">-5.73%</div><div class="grp-card-dir neg">▼ 직전 -2.39%</div></div></div><div class="grp-chart-box" data-gidx="2"><svg class="gc-svg" viewBox="0 0 360 134" role="img" aria-label="FX 14주 평균 %OI 추이 (2026-08-18~2026-11-17)"><title>FX 14주 평균 %OI 추이 (2026-08-18~2026-11-17)</title><defs><clipPath id="gc-pos-2"><rect x="40" y="0" width="308" height="60.00"/></clipPath><clipPath id="gc-neg-2"><rect x="40" y="60.00" width="308" height="74.00"/></clipPath></defs><line class="gc-grid" x1="40" y1="16.4" x2="348" y2="16.4"/><text class="gc-ylabel" x="34" y="19.9" text-anchor="end">+40%</text><line class="gc-grid" x1="40" y1="38.2" x2="348" y2="38.2"/><text class="gc-ylabel" x="34" y="41.7" text-anchor="end">+20%</text><line class="gc-zero" x1="40" y1="60.0" x2="348" y2="60.0"/><text class="gc-ylabel is-zero" x="34" y="63.5" text-anchor="end">0%</text><line class="gc-grid" x1="40" y1="81.8" x2="348" y2="81.8"/><text class="gc-ylabel" x="34" y="85.3" text-anchor="end">-20%</text><line class="gc-grid" x1="40" y1="103.6" x2="348" y2="103.6"/><text class="gc-ylabel" x="34" y="107.1" text-anchor="end">-40%</text><path class="gc-area-pos" d="M 40.0,60.0 L 40.0,62.9 L 63.7,62.0 L 87.4,65.4 L 111.1,61.0 L 134.8,63.6 L 158.5,64.0 L 182.2,62.8 L 205.8,63.7 L 229.5,64.6 L 253.2,62.7 L 276.9,62.0 L 300.6,62.2 L 324.3,62.6 L 348.0,66.2 L 348.0,60.0 Z" clip-path="url(#gc-pos-2)"/><path class="gc-area-neg" d="M 40.0,60.0 L 40.0,62.9 L 63.7,62.0 L 87.4,65.4 L 111.1,61.0 L 134.8,63.6 L 158.5,64.0 L 182.2,62.8 L 205.8,63.7 L 229.5,64.6 L 253.2,62.7 L 276.9,62.0 L 300.6,62.2 L 324.3,62.6 L 348.0,66.2 L 348.0,60.0 Z" clip-path="url(#gc-neg-2)"/><path class="gc-line-pos" d="M 40.0,62.9 L 63.7,62.0 L 87.4,65.4 L 111.1,61.0 L 134.8,63.6 L 158.5,64.0 L 182.2,62.8 L 205.8,63.7 L 229.5,64.6 L 253.2,62.7 L 276.9,62.0 L 300.6,62.2 L 324.3,62.6 L 348.0,66.2" clip-path="url(#gc-pos-2)"/><path class="gc-line-neg" d="M 40.0,62.9 L 63.7,62.0 L 87.4,65.4 L 111.1,61.0 L 134.8,63.6 L 158.5,64.0 L 182.2,62.8 L 205.8,63.7 L 229.5,64.6 L 253.2,62.7 L 276.9,62.0 L 300.6,62.2 L 324.3,62.6 L 348.0,66.2" clip-path="url(#gc-neg-2)"/><circle class="gc-dot neg" data-idx="0" cx="40.0" cy="62.9" r="2.2"/><circle class="gc-dot neg" data-idx="1" cx="63.7" cy="62.0" r="2.2"/><circle class="gc-dot neg" data-idx="2" cx="87.4" cy="65.4" r="2.2"/><circle class="gc-dot neg" data-idx="3" cx="111.1" cy="61.0" r="2.2"/><circle class="gc-dot neg" data-idx="4" cx="134.8" cy="63.6" r="2.2"/><circle class="gc-dot neg" data-idx="5" cx="158.5" cy="64.0" r="2.2"/><circle class="gc-dot neg" data-idx="6" cx="182.2" cy="62.8" r="2.2"/><circle class="gc-dot neg" data-idx="7" cx="205.8" cy="63.7" r="2.2"/><circle class="gc-dot neg" data-idx="8" cx="229.5" cy="64.6" r="2.2"/><circle class="gc-dot neg" data-idx="9" cx="253.2" cy="62.7" r="2.2"/><circle class="gc-dot neg" data-idx="10" cx="276.9" cy="62.0" r="2.2"/><circle class="gc-dot neg" data-idx="11" cx="300.6" cy="62.2" r="2.2"/><circle class="gc-dot neg" data-idx="12" cx="324.3" cy="62.6" r="2.2"/><circle class="gc-dot neg is-active" data-idx="13" cx="348.0" cy="66.2" r="4"/><text class="gc-xlabel" x="40.0" y="130" text-anchor="start">08.18</text><text class="gc-xlabel" x="182.2" y="130" text-anchor="middle">09.29</text><text class="gc-xlabel" x="348.0" y="130" text-anchor="end">11.17</text><rect class="gc-hit" data-gidx="2" data-pidx="0" x="36.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="1" x="51.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="2" x="75.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="3" x="99.2" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="4" x="122.9" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="5" x="146.6" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="6" x="170.3" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="7" x="194.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="8" x="217.7" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="9" x="241.4" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="10" x="265.1" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="11" x="288.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="12" x="312.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="2" data-pidx="13" x="336.2" y="12" width="23.7" height="96" fill="transparent"/></svg></div><div class="grp-readout num" data-readout="2"><span>2026-11-17 기준</span><span>평균 -5.73% · 합계 Net -101,628</span></div></article><article class="grp-card" data-gidx="3"><div class="grp-card-head"><div><h3 class="grp-card-title">원자재</h3><span class="grp-card-sub">3개 시장 평균 %OI</span></div><div class="grp-card-stat num"><div class="grp-card-val pos">+22.31%</div><div class="grp-card-dir neg">▼ 직전 +25.75%</div></div></div><div class="grp-chart-box" data-gidx="3"><svg class="gc-svg" viewBox="0 0 360 134" role="img" aria-label="원자재 14주 평균 %OI 추이 (2026-08-18~2026-11-17)"><title>원자재 14주 평균 %OI 추이 (2026-08-18~2026-11-17)</title><defs><clipPath id="gc-pos-3"><rect x="40" y="0" width="308" height="60.00"/></clipPath><clipPath id="gc-neg-3"><rect x="40" y="60.00" width="308" height="74.00"/></clipPath></defs><line class="gc-grid" x1="40" y1="16.4" x2="348" y2="16.4"/><text class="gc-ylabel" x="34" y="19.9" text-anchor="end">+40%</text><line class="gc-grid" x1="40" y1="38.2" x2="348" y2="38.2"/><text class="gc-ylabel" x="34" y="41.7" text-anchor="end">+20%</text><line class="gc-zero" x1="40" y1="60.0" x2="348" y2="60.0"/><text class="gc-ylabel is-zero" x="34" y="63.5" text-anchor="end">0%</text><line class="gc-grid" x1="40" y1="81.8" x2="348" y2="81.8"/><text class="gc-ylabel" x="34" y="85.3" text-anchor="end">-20%</text><line class="gc-grid" x1="40" y1="103.6" x2="348" y2="103.6"/><text class="gc-ylabel" x="34" y="107.1" text-anchor="end">-40%</text><path class="gc-area-pos" d="M 40.0,60.0 L 40.0,24.6 L 63.7,22.9 L 87.4,22.7 L 111.1,21.5 L 134.8,23.5 L 158.5,22.7 L 182.2,23.2 L 205.8,24.2 L 229.5,25.4 L 253.2,27.7 L 276.9,29.4 L 300.6,31.4 L 324.3,31.9 L 348.0,35.7 L 348.0,60.0 Z" clip-path="url(#gc-pos-3)"/><path class="gc-area-neg" d="M 40.0,60.0 L 40.0,24.6 L 63.7,22.9 L 87.4,22.7 L 111.1,21.5 L 134.8,23.5 L 158.5,22.7 L 182.2,23.2 L 205.8,24.2 L 229.5,25.4 L 253.2,27.7 L 276.9,29.4 L 300.6,31.4 L 324.3,31.9 L 348.0,35.7 L 348.0,60.0 Z" clip-path="url(#gc-neg-3)"/><path class="gc-line-pos" d="M 40.0,24.6 L 63.7,22.9 L 87.4,22.7 L 111.1,21.5 L 134.8,23.5 L 158.5,22.7 L 182.2,23.2 L 205.8,24.2 L 229.5,25.4 L 253.2,27.7 L 276.9,29.4 L 300.6,31.4 L 324.3,31.9 L 348.0,35.7" clip-path="url(#gc-pos-3)"/><path class="gc-line-neg" d="M 40.0,24.6 L 63.7,22.9 L 87.4,22.7 L 111.1,21.5 L 134.8,23.5 L 158.5,22.7 L 182.2,23.2 L 205.8,24.2 L 229.5,25.4 L 253.2,27.7 L 276.9,29.4 L 300.6,31.4 L 324.3,31.9 L 348.0,35.7" clip-path="url(#gc-neg-3)"/><circle class="gc-dot pos" data-idx="0" cx="40.0" cy="24.6" r="2.2"/><circle class="gc-dot pos" data-idx="1" cx="63.7" cy="22.9" r="2.2"/><circle class="gc-dot pos" data-idx="2" cx="87.4" cy="22.7" r="2.2"/><circle class="gc-dot pos" data-idx="3" cx="111.1" cy="21.5" r="2.2"/><circle class="gc-dot pos" data-idx="4" cx="134.8" cy="23.5" r="2.2"/><circle class="gc-dot pos" data-idx="5" cx="158.5" cy="22.7" r="2.2"/><circle class="gc-dot pos" data-idx="6" cx="182.2" cy="23.2" r="2.2"/><circle class="gc-dot pos" data-idx="7" cx="205.8" cy="24.2" r="2.2"/><circle class="gc-dot pos" data-idx="8" cx="229.5" cy="25.4" r="2.2"/><circle class="gc-dot pos" data-idx="9" cx="253.2" cy="27.7" r="2.2"/><circle class="gc-dot pos" data-idx="10" cx="276.9" cy="29.4" r="2.2"/><circle class="gc-dot pos" data-idx="11" cx="300.6" cy="31.4" r="2.2"/><circle class="gc-dot pos" data-idx="12" cx="324.3" cy="31.9" r="2.2"/><circle class="gc-dot pos is-active" data-idx="13" cx="348.0" cy="35.7" r="4"/><text class="gc-xlabel" x="40.0" y="130" text-anchor="start">08.18</text><text class="gc-xlabel" x="182.2" y="130" text-anchor="middle">09.29</text><text class="gc-xlabel" x="348.0" y="130" text-anchor="end">11.17</text><rect class="gc-hit" data-gidx="3" data-pidx="0" x="36.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="1" x="51.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="2" x="75.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="3" x="99.2" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="4" x="122.9" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="5" x="146.6" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="6" x="170.3" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="7" x="194.0" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="8" x="217.7" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="9" x="241.4" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="10" x="265.1" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="11" x="288.8" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="12" x="312.5" y="12" width="23.7" height="96" fill="transparent"/><rect class="gc-hit" data-gidx="3" data-pidx="13" x="336.2" y="12" width="23.7" height="96" fill="transparent"/></svg></div><div class="grp-readout num" data-readout="3"><span>2026-11-17 기준</span><span>평균 +22.31% · 합계 Net +225,651</span></div></article>
+    </div>
+  </section>
+
+  <section class="sec" id="sec-fms-wrap" aria-labelledby="sec-fms"><span id="fms" aria-hidden="true"></span>
+    <div class="sec-head">
+      <h2 id="sec-fms">펀드매니저 설문 (BofA FMS)</h2>
+      <p class="sec-sub">글로벌 기관 펀드매니저의 자산 배분·심리(월간 설문)를 위 CFTC 실제 선물 포지션과 대조합니다.</p>
+      <p class="sec-note">표본 193명 · 운용자산 $526bn · 조사 November 6 to November 12, 2026 · 발표 Tue, 17 Nov 2026. 수치는 보도문에 인쇄된 값만 사용하고, 인쇄되지 않은 값은 추정하지 않고 '확인 불가'로 표시합니다.</p>
+    </div>
+
+    <div class="fms-shell">
+      <div class="fms-meta num" id="fms-header-line">
+        <div class="fms-meta-items">
+          <span>기준 월 <strong>2026-11</strong></span>
+          <span>조사 기간 <strong>2026-11-06 ~ 2026-11-12</strong></span>
+          <span>참가자 <strong>193명 · $526bn AUM</strong></span>
+        </div>
+        <span>발표일 <strong>2026-11-17</strong></span>
+      </div>
+      <div class="fms-verdict" id="fms-verdict" aria-live="polite"></div>
+    </div>
+
+    <div class="fms-block">
+      <div class="fms-subhead">
+        <h3>자산 배분 (순비중 %)</h3>
+        <p class="fms-subhead-note">양수(+)=비중확대(OW), 음수(-)=비중축소(UW) · 변화폭은 전월 대비 %p</p>
+      </div>
+      <div class="fms-asset-board" id="fms-assets">
+        <div class="fms-asset-head" aria-hidden="true">
+          <span>자산군</span>
+          <span>이번 달 순비중 (0선 기준)</span>
+          <span class="r">전월 대비 Δ</span>
+          <span class="r">지난달</span>
+          <span class="r">두 달 전</span>
+        </div>
+        <div class="fms-asset-row" data-key="equities"><div class="fms-asset-cell fms-asset-name"><span>주식 비중(순)</span><span class="stance-pill pos">OW</span></div><div class="fms-asset-cell fms-asset-cur"><span class="m-k">이번 달 순비중</span><span class="fms-asset-val num pos">+41%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill pos" style="left:50%;width:34.17%"></span></div></div><div class="fms-asset-cell fms-asset-delta"><span class="m-k">전월 대비 Δ</span><span class="wow-pill num neg">▼ -3%p</span></div><div class="fms-asset-cell fms-asset-prev num"><span class="m-k">지난달</span><span>+44%</span></div><div class="fms-asset-cell fms-asset-prev2 num"><span class="m-k">두 달 전</span><span>+49%</span></div></div>
+        <div class="fms-asset-row" data-key="bonds"><div class="fms-asset-cell fms-asset-name"><span>채권 비중(순)</span><span class="stance-pill neg">UW</span></div><div class="fms-asset-cell fms-asset-cur"><span class="m-k">이번 달 순비중</span><span class="fms-asset-val num neg">-23%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:30.83%;width:19.17%"></span></div></div><div class="fms-asset-cell fms-asset-delta"><span class="m-k">전월 대비 Δ</span><span class="wow-pill num pos">▲ +14%p</span></div><div class="fms-asset-cell fms-asset-prev num"><span class="m-k">지난달</span><span>-37%</span></div><div class="fms-asset-cell fms-asset-prev2 num"><span class="m-k">두 달 전</span><span>-48%</span></div></div>
+        <div class="fms-asset-row" data-key="realestate"><div class="fms-asset-cell fms-asset-name"><span>부동산 비중(순)</span><span class="stance-pill neg">UW</span></div><div class="fms-asset-cell fms-asset-cur"><span class="m-k">이번 달 순비중</span><span class="fms-asset-val num neg">-23%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill neg" style="left:30.83%;width:19.17%"></span></div></div><div class="fms-asset-cell fms-asset-delta"><span class="m-k">전월 대비 Δ</span><span class="wow-pill num neg">▼ -1%p</span></div><div class="fms-asset-cell fms-asset-prev num"><span class="m-k">지난달</span><span>-22%</span></div><div class="fms-asset-cell fms-asset-prev2 num"><span class="m-k">두 달 전</span><span>-21%</span></div></div>
+        <div class="fms-asset-row" data-key="commodities"><div class="fms-asset-cell fms-asset-name"><span>원자재 비중(순)</span><span class="stance-pill pos">OW</span></div><div class="fms-asset-cell fms-asset-cur"><span class="m-k">이번 달 순비중</span><span class="fms-asset-val num pos">+15%</span><div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill pos" style="left:50%;width:12.50%"></span></div></div><div class="fms-asset-cell fms-asset-delta"><span class="m-k">전월 대비 Δ</span><span class="wow-pill num neg">▼ -6%p</span></div><div class="fms-asset-cell fms-asset-prev num"><span class="m-k">지난달</span><span>+21%</span></div><div class="fms-asset-cell fms-asset-prev2 num"><span class="m-k">두 달 전</span><span>+19%</span></div></div>
+      </div>
+    </div>
+
+    <div class="fms-block">
+      <div class="fms-subhead">
+        <h3>현금 · 성장 기대 · 인플레 전망 (3개월 추이)</h3>
+        <p class="fms-subhead-note">두 달 전 → 지난달 → 이번 달 흐름</p>
+      </div>
+      <div class="fms-macro-grid" id="fms-macro-cards">
+        <article class="fms-macro-card" data-key="cash"><div class="fms-macro-top"><h4 class="fms-macro-title">현금 비중</h4><span class="fms-macro-unit">% 자산</span></div><div class="fms-macro-main num"><span class="fms-macro-val">3.6%</span><span class="wow-pill neg">▼ -0.3%p</span></div><div class="fms-macro-foot num"><span>2개월 전 3.9% → 지난달 3.9%</span><span>순비중 -9%</span></div></article>
+        <article class="fms-macro-card" data-key="growth"><div class="fms-macro-top"><h4 class="fms-macro-title">성장 기대(순)</h4><span class="fms-macro-unit">% 순응답</span></div><div class="fms-macro-main num"><span class="fms-macro-val neg">-14%</span><span class="wow-pill neg">▼ -10%p</span></div><div class="fms-macro-foot num"><span>2개월 전 +8% → 지난달 -4%</span></div></article>
+        <article class="fms-macro-card" data-key="inflation"><div class="fms-macro-top"><h4 class="fms-macro-title">인플레 전망(순, 낮아질 것)</h4><span class="fms-macro-unit">% 순응답</span></div><div class="fms-macro-main num"><span class="fms-macro-val pos">+32%</span><span class="wow-pill pos">▲ +27%p</span></div><div class="fms-macro-foot num"><span>2개월 전 +4% → 지난달 +5%</span></div></article>
+      </div>
+    </div>
+
+    <div class="fms-block">
+      <div class="fms-subhead">
+        <h3>지역별 주식 비중 (이번 달 vs 지난달)</h3>
+        <p class="fms-subhead-note">음수(-)=언더웨이트, 양수(+)=오버웨이트 · 누락 값은 '확인 불가'</p>
+      </div>
+      <div class="fms-region-card" id="fms-regions"></div>
+    </div>
+
+    <div class="fms-block">
+      <div class="fms-two-col">
+        <article class="fms-rank-card" id="fms-tail-risks"></article>
+        <article class="fms-rank-card" id="fms-crowded"></article>
+      </div>
+    </div>
+
+    <div class="fms-block">
+      <div class="fms-subhead">
+        <h3>2027년 말 전망 (특별 질문)</h3>
+        <p class="fms-subhead-note">설문 응답자 컨센서스 목표치</p>
+      </div>
+      <div class="fms-targets-grid" id="fms-targets"></div>
+    </div>
+
+    <div class="fms-block">
+      <div class="fms-compare-box" id="fms-compare"></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-guide">
+    <div class="sec-head">
+      <h2 id="sec-guide">읽는 법 · 해석 시 한계</h2>
+      <p class="sec-sub">CFTC 포지셔닝 지표를 볼 때 반드시 함께 고려해야 할 구조적 제약</p>
+    </div>
+    <div class="guide-grid">
+      <article class="guide-card">
+        <h3>1. %OI의 의미 (주 비교축)</h3>
+        <p><strong>%OI = 순포지션(net) ÷ 총 미결제약정(OI) × 100</strong>입니다. 선물 시장마다 계약 단위와 유동성이 크게 달라 순계약수를 직접 비교하면 왜곡됩니다. 부호가 있으며 <strong>음수(-)는 순숏(순매도), 양수(+)는 순롱(순매수)</strong> 비중을 뜻합니다.</p>
+      </article>
+      <article class="guide-card">
+        <h3>2. 순포지션(net) ≠ 시장 방향</h3>
+        <p>순숏이 크다고 반드시 하락장, 순롱이 크다고 상승장을 뜻하지 않습니다. 특히 미 국채 선물은 현물 매수와 선물 매도를 동시에 잡는 <strong>베이시스 트레이드</strong> 때문에 구조적 순숏이 깊게 유지됩니다. 절대 수준보다 <strong>주간 변화(Δ%p)</strong>와 13주 대비 <strong>극단치(|z13| ≥ 2)</strong>를 함께 읽어야 합니다.</p>
+      </article>
+      <article class="guide-card">
+        <h3>3. TFF(금융) vs COT(원자재) 구분</h3>
+        <p>주식·금리·FX(금융선물)는 CFTC <strong>TFF 리포트의 레버리지 펀드(헤지펀드·CTA)</strong> 기준이며, 금·구리·WTI 원유(원자재)는 <strong>Legacy COT 선물 전용 리포트의 비상업(투기적 거래자)</strong> 기준입니다. 두 집단의 포괄 범위가 완전히 일치하지는 않습니다.</p>
+      </article>
+      <article class="guide-card">
+        <h3>4. 3영업일 공표 지연</h3>
+        <p>데이터는 매주 <strong>화요일 장 마감 기준 스냅샷</strong>을 집계해 <strong>금요일 15:30 ET</strong>에 공개됩니다. 수~금요일 사이에 일어난 급격한 포지션 청산이나 방향 전환은 아직 반영되지 않았으므로 최신 현물·선물 가격 흐름과 구분해 해석해야 합니다.</p>
+      </article>
+      <article class="guide-card">
+        <h3>5. BofA FMS 순비중(% Net)의 의미</h3>
+        <p>FMS 순비중은 <strong>비중확대(OW) 응답 비율 − 비중축소(UW) 응답 비율</strong>입니다. 따라서 <strong>주식 순비중이 감소(+44%→+41%, -3%p)했다고 해서 곧 약세 베팅(순숏)을 뜻하지는 않습니다.</strong> 양수(+) 영역에 있는 한 다수 매니저는 여전히 오버웨이트를 유지하며 비중만 일부 줄인 것입니다. 마찬가지로 채권의 반등(-37%→-23%)도 언더웨이트 폭을 축소한 변화입니다.</p>
+      </article>
+      <article class="guide-card">
+        <h3>6. 설문(FMS) vs 실제 포지션(CFTC) 구분</h3>
+        <p><strong>BofA FMS는 기관 펀드매니저의 월간 설문(배분 의향)</strong>이고, <strong>CFTC는 미국 선물시장의 주간 실제 포지션(%OI)</strong>입니다. 표본 집단(장기 기관투자자 vs 레버리지 펀드·비상업 투기 계정), 집계 주기(월간 vs 주간), 수단(포트폴리오 비중 vs 선물 계약)이 다르므로 두 지표의 일치·괴리를 인과 추론 없이 데이터 자체로 대조해야 합니다.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer class="foot num">
+    <div>출처: CFTC Commitments of Traders — TFF (financials) / legacy futures-only (commodities)</div>
+    <div>지연: 화요일 스냅샷, 금요일 15:30 ET 공개 (Tuesday snapshot, released Friday 15:30 ET) · 수집 시각(UTC): 2026-11-21T01:11:45+00:00</div>
+    <div>참고: pct_oi = net ÷ total open interest. z13 = latest net vs mean/stdev of the prior 13 weeks.</div>
+    <div>설문 출처: <a href="https://www.tradingview.com/news/macenews:a6b54b6f7094b:0-bofa-global-research-fund-manager-survey-fading-inflation-jitters-prompt-shift-out-of-cash-into-fixed-income" rel="noopener">BofA Global Research Fund Manager Survey (2026-11)</a> · 현금·성장·인플레·꼬리위험·지역배분·2027 전망 · 수집 시각(UTC): 2026-11-21T01:33:19+00:00</div>
+  </footer>
+</main>
+
+<script id="cta-history-data" type="application/json">
+{
+  "asof": "2026-11-17",
+  "weeks": [
+    "2026-11-17",
+    "2026-11-10",
+    "2026-11-03",
+    "2026-10-27",
+    "2026-10-20",
+    "2026-10-13",
+    "2026-10-06",
+    "2026-09-29",
+    "2026-09-22",
+    "2026-09-15",
+    "2026-09-08",
+    "2026-09-01",
+    "2026-08-25",
+    "2026-08-18"
+  ],
+  "markets": [
+    {
+      "id": "es",
+      "label": "E-mini S&P500",
+      "group": "주식",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -234978.0,
+          "oi": 2096958.0,
+          "pct_oi": -11.205660771460373
+        },
+        {
+          "date": "2026-11-10",
+          "net": -303060.0,
+          "oi": 2017687.0,
+          "pct_oi": -15.02016913426116
+        },
+        {
+          "date": "2026-11-03",
+          "net": -372318.0,
+          "oi": 1986532.0,
+          "pct_oi": -18.742109364460273
+        },
+        {
+          "date": "2026-10-27",
+          "net": -400604.0,
+          "oi": 1955711.0,
+          "pct_oi": -20.483803588567024
+        },
+        {
+          "date": "2026-10-20",
+          "net": -371245.0,
+          "oi": 1935470.0,
+          "pct_oi": -19.181129131425443
+        },
+        {
+          "date": "2026-10-13",
+          "net": -408726.0,
+          "oi": 1931607.0,
+          "pct_oi": -21.159894326330356
+        },
+        {
+          "date": "2026-10-06",
+          "net": -415087.0,
+          "oi": 1932227.0,
+          "pct_oi": -21.48231030826088
+        },
+        {
+          "date": "2026-09-29",
+          "net": -372489.0,
+          "oi": 1895922.0,
+          "pct_oi": -19.646852560390144
+        },
+        {
+          "date": "2026-09-22",
+          "net": -375574.0,
+          "oi": 1890653.0,
+          "pct_oi": -19.86477687867631
+        },
+        {
+          "date": "2026-09-15",
+          "net": -293143.0,
+          "oi": 2446519.0,
+          "pct_oi": -11.98204469288814
+        },
+        {
+          "date": "2026-09-08",
+          "net": -341104.0,
+          "oi": 2071836.0,
+          "pct_oi": -16.46385138592051
+        },
+        {
+          "date": "2026-09-01",
+          "net": -317564.0,
+          "oi": 2046914.0,
+          "pct_oi": -15.514281498880756
+        },
+        {
+          "date": "2026-08-25",
+          "net": -315204.0,
+          "oi": 2045669.0,
+          "pct_oi": -15.408357852614474
+        },
+        {
+          "date": "2026-08-18",
+          "net": -281402.0,
+          "oi": 2072358.0,
+          "pct_oi": -13.578831456727073
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -234978.0,
+        "oi": 2096958.0,
+        "long": 197833.0,
+        "short": 432811.0,
+        "pct_oi": -11.205660771460373
+      },
+      "wow": 68082.0,
+      "wow_pct_oi": 3.8145083628007868,
+      "z13": 2.6634996181255532,
+      "pct_oi_rank": 9
+    },
+    {
+      "id": "nq",
+      "label": "NASDAQ-100",
+      "group": "주식",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -10928.0,
+          "oi": 296423.0,
+          "pct_oi": -3.686623507622553
+        },
+        {
+          "date": "2026-11-10",
+          "net": 13967.0,
+          "oi": 288717.0,
+          "pct_oi": 4.8376091466730395
+        },
+        {
+          "date": "2026-11-03",
+          "net": 10073.0,
+          "oi": 292587.0,
+          "pct_oi": 3.442736690283574
+        },
+        {
+          "date": "2026-10-27",
+          "net": 2301.0,
+          "oi": 268508.0,
+          "pct_oi": 0.8569577070329376
+        },
+        {
+          "date": "2026-10-20",
+          "net": 950.0,
+          "oi": 272462.0,
+          "pct_oi": 0.3486724754277661
+        },
+        {
+          "date": "2026-10-13",
+          "net": -11593.0,
+          "oi": 279515.0,
+          "pct_oi": -4.147541276854551
+        },
+        {
+          "date": "2026-10-06",
+          "net": -19212.0,
+          "oi": 283586.0,
+          "pct_oi": -6.7746644756793355
+        },
+        {
+          "date": "2026-09-29",
+          "net": -24723.0,
+          "oi": 270554.0,
+          "pct_oi": -9.13791701471795
+        },
+        {
+          "date": "2026-09-22",
+          "net": -30683.0,
+          "oi": 286321.0,
+          "pct_oi": -10.716293949797604
+        },
+        {
+          "date": "2026-09-15",
+          "net": -6387.0,
+          "oi": 325784.0,
+          "pct_oi": -1.9605014365346365
+        },
+        {
+          "date": "2026-09-08",
+          "net": -31872.0,
+          "oi": 295151.0,
+          "pct_oi": -10.798540408130076
+        },
+        {
+          "date": "2026-09-01",
+          "net": -14092.0,
+          "oi": 300140.0,
+          "pct_oi": -4.695142266942094
+        },
+        {
+          "date": "2026-08-25",
+          "net": -41232.0,
+          "oi": 301987.0,
+          "pct_oi": -13.653567868815545
+        },
+        {
+          "date": "2026-08-18",
+          "net": -61771.0,
+          "oi": 297931.0,
+          "pct_oi": -20.733324158949557
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -10928.0,
+        "oi": 296423.0,
+        "long": 53394.0,
+        "short": 64322.0,
+        "pct_oi": -3.686623507622553
+      },
+      "wow": -24895.0,
+      "wow_pct_oi": -8.524232654295592,
+      "z13": 0.26767461932749503,
+      "pct_oi_rank": 5
+    },
+    {
+      "id": "rty",
+      "label": "Russell 2000",
+      "group": "주식",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -42353.0,
+          "oi": 459730.0,
+          "pct_oi": -9.212581297718225
+        },
+        {
+          "date": "2026-11-10",
+          "net": -44429.0,
+          "oi": 440576.0,
+          "pct_oi": -10.084298736199884
+        },
+        {
+          "date": "2026-11-03",
+          "net": -55080.0,
+          "oi": 449399.0,
+          "pct_oi": -12.256369061791416
+        },
+        {
+          "date": "2026-10-27",
+          "net": -48081.0,
+          "oi": 458959.0,
+          "pct_oi": -10.476099172257216
+        },
+        {
+          "date": "2026-10-20",
+          "net": -53035.0,
+          "oi": 466789.0,
+          "pct_oi": -11.361664477954708
+        },
+        {
+          "date": "2026-10-13",
+          "net": -91647.0,
+          "oi": 444784.0,
+          "pct_oi": -20.604832907658547
+        },
+        {
+          "date": "2026-10-06",
+          "net": -105317.0,
+          "oi": 425152.0,
+          "pct_oi": -24.77161109438507
+        },
+        {
+          "date": "2026-09-29",
+          "net": -114554.0,
+          "oi": 428048.0,
+          "pct_oi": -26.7619519306246
+        },
+        {
+          "date": "2026-09-22",
+          "net": -107982.0,
+          "oi": 415047.0,
+          "pct_oi": -26.01681255375897
+        },
+        {
+          "date": "2026-09-15",
+          "net": -97203.0,
+          "oi": 496762.0,
+          "pct_oi": -19.567317951051006
+        },
+        {
+          "date": "2026-09-08",
+          "net": -110147.0,
+          "oi": 431147.0,
+          "pct_oi": -25.547435097542138
+        },
+        {
+          "date": "2026-09-01",
+          "net": -109499.0,
+          "oi": 424663.0,
+          "pct_oi": -25.78491651026814
+        },
+        {
+          "date": "2026-08-25",
+          "net": -97700.0,
+          "oi": 413000.0,
+          "pct_oi": -23.656174334140438
+        },
+        {
+          "date": "2026-08-18",
+          "net": -99786.0,
+          "oi": 424956.0,
+          "pct_oi": -23.48148984836077
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -42353.0,
+        "oi": 459730.0,
+        "long": 101204.0,
+        "short": 143557.0,
+        "pct_oi": -9.212581297718225
+      },
+      "wow": 2076.0,
+      "wow_pct_oi": 0.8717174384816584,
+      "z13": 1.7586027839274152,
+      "pct_oi_rank": 8
+    },
+    {
+      "id": "tu",
+      "label": "미 2년 국채",
+      "group": "금리",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -1288895.0,
+          "oi": 4467824.0,
+          "pct_oi": -28.84838346362793
+        },
+        {
+          "date": "2026-11-10",
+          "net": -1505204.0,
+          "oi": 4489282.0,
+          "pct_oi": -33.528836014311416
+        },
+        {
+          "date": "2026-11-03",
+          "net": -1450892.0,
+          "oi": 4464182.0,
+          "pct_oi": -32.50073585709543
+        },
+        {
+          "date": "2026-10-27",
+          "net": -1357658.0,
+          "oi": 4524447.0,
+          "pct_oi": -30.00715888593678
+        },
+        {
+          "date": "2026-10-20",
+          "net": -1285548.0,
+          "oi": 4533571.0,
+          "pct_oi": -28.356189855634774
+        },
+        {
+          "date": "2026-10-13",
+          "net": -1367408.0,
+          "oi": 4554153.0,
+          "pct_oi": -30.025517368432723
+        },
+        {
+          "date": "2026-10-06",
+          "net": -1257484.0,
+          "oi": 4485811.0,
+          "pct_oi": -28.032478408029228
+        },
+        {
+          "date": "2026-09-29",
+          "net": -1165980.0,
+          "oi": 4530145.0,
+          "pct_oi": -25.738248996444923
+        },
+        {
+          "date": "2026-09-22",
+          "net": -1350740.0,
+          "oi": 4539374.0,
+          "pct_oi": -29.75608531044148
+        },
+        {
+          "date": "2026-09-15",
+          "net": -1294575.0,
+          "oi": 4433736.0,
+          "pct_oi": -29.198287854757254
+        },
+        {
+          "date": "2026-09-08",
+          "net": -1290479.0,
+          "oi": 4346314.0,
+          "pct_oi": -29.691343055287767
+        },
+        {
+          "date": "2026-09-01",
+          "net": -1268034.0,
+          "oi": 4348838.0,
+          "pct_oi": -29.157995768064943
+        },
+        {
+          "date": "2026-08-25",
+          "net": -1232753.0,
+          "oi": 4678195.0,
+          "pct_oi": -26.351039236286645
+        },
+        {
+          "date": "2026-08-18",
+          "net": -1243004.0,
+          "oi": 4432451.0,
+          "pct_oi": -28.0432654529063
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -1288895.0,
+        "oi": 4467824.0,
+        "long": 629142.0,
+        "short": 1918037.0,
+        "pct_oi": -28.84838346362793
+      },
+      "wow": 216309.0,
+      "wow_pct_oi": 4.680452550683487,
+      "z13": 0.27279917207490817,
+      "pct_oi_rank": 10
+    },
+    {
+      "id": "ty",
+      "label": "미 10년 국채",
+      "group": "금리",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -2482443.0,
+          "oi": 6247430.0,
+          "pct_oi": -39.7354272076678
+        },
+        {
+          "date": "2026-11-10",
+          "net": -2301327.0,
+          "oi": 6095194.0,
+          "pct_oi": -37.75641923784542
+        },
+        {
+          "date": "2026-11-03",
+          "net": -2262310.0,
+          "oi": 5947433.0,
+          "pct_oi": -38.03842767123228
+        },
+        {
+          "date": "2026-10-27",
+          "net": -2227275.0,
+          "oi": 5881588.0,
+          "pct_oi": -37.86859943267022
+        },
+        {
+          "date": "2026-10-20",
+          "net": -2107224.0,
+          "oi": 5868295.0,
+          "pct_oi": -35.908624225605564
+        },
+        {
+          "date": "2026-10-13",
+          "net": -2205937.0,
+          "oi": 5819512.0,
+          "pct_oi": -37.90587595660942
+        },
+        {
+          "date": "2026-10-06",
+          "net": -2139785.0,
+          "oi": 5742990.0,
+          "pct_oi": -37.2590758472503
+        },
+        {
+          "date": "2026-09-29",
+          "net": -2036432.0,
+          "oi": 5676556.0,
+          "pct_oi": -35.87442808632558
+        },
+        {
+          "date": "2026-09-22",
+          "net": -1926947.0,
+          "oi": 5407726.0,
+          "pct_oi": -35.63322180154837
+        },
+        {
+          "date": "2026-09-15",
+          "net": -1868126.0,
+          "oi": 5377777.0,
+          "pct_oi": -34.73788518936356
+        },
+        {
+          "date": "2026-09-08",
+          "net": -1938754.0,
+          "oi": 5225295.0,
+          "pct_oi": -37.1032448885661
+        },
+        {
+          "date": "2026-09-01",
+          "net": -2062502.0,
+          "oi": 5276634.0,
+          "pct_oi": -39.08745613207208
+        },
+        {
+          "date": "2026-08-25",
+          "net": -2134339.0,
+          "oi": 6208739.0,
+          "pct_oi": -34.37636853473789
+        },
+        {
+          "date": "2026-08-18",
+          "net": -2229013.0,
+          "oi": 5596739.0,
+          "pct_oi": -39.82699568445125
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -2482443.0,
+        "oi": 6247430.0,
+        "long": 539725.0,
+        "short": 3022168.0,
+        "pct_oi": -39.7354272076678
+      },
+      "wow": -181116.0,
+      "wow_pct_oi": -1.9790079698223764,
+      "z13": -2.8101604518059595,
+      "pct_oi_rank": 12
+    },
+    {
+      "id": "ub",
+      "label": "미 초장기채",
+      "group": "금리",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -868604.0,
+          "oi": 2444093.0,
+          "pct_oi": -35.53890952594684
+        },
+        {
+          "date": "2026-11-10",
+          "net": -815688.0,
+          "oi": 2403991.0,
+          "pct_oi": -33.930576279195726
+        },
+        {
+          "date": "2026-11-03",
+          "net": -796229.0,
+          "oi": 2394358.0,
+          "pct_oi": -33.254383847361176
+        },
+        {
+          "date": "2026-10-27",
+          "net": -805828.0,
+          "oi": 2347429.0,
+          "pct_oi": -34.32810960416694
+        },
+        {
+          "date": "2026-10-20",
+          "net": -804808.0,
+          "oi": 2364949.0,
+          "pct_oi": -34.03067042883377
+        },
+        {
+          "date": "2026-10-13",
+          "net": -715729.0,
+          "oi": 2397995.0,
+          "pct_oi": -29.8469763281408
+        },
+        {
+          "date": "2026-10-06",
+          "net": -726257.0,
+          "oi": 2404377.0,
+          "pct_oi": -30.20562083234035
+        },
+        {
+          "date": "2026-09-29",
+          "net": -808870.0,
+          "oi": 2507580.0,
+          "pct_oi": -32.25699678574562
+        },
+        {
+          "date": "2026-09-22",
+          "net": -824343.0,
+          "oi": 2476197.0,
+          "pct_oi": -33.2906872918431
+        },
+        {
+          "date": "2026-09-15",
+          "net": -813426.0,
+          "oi": 2470471.0,
+          "pct_oi": -32.92594812891954
+        },
+        {
+          "date": "2026-09-08",
+          "net": -864271.0,
+          "oi": 2399505.0,
+          "pct_oi": -36.01872052777552
+        },
+        {
+          "date": "2026-09-01",
+          "net": -878489.0,
+          "oi": 2398572.0,
+          "pct_oi": -36.625500506134486
+        },
+        {
+          "date": "2026-08-25",
+          "net": -848988.0,
+          "oi": 2968853.0,
+          "pct_oi": -28.596498378329947
+        },
+        {
+          "date": "2026-08-18",
+          "net": -861357.0,
+          "oi": 2493394.0,
+          "pct_oi": -34.54556319618961
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -868604.0,
+        "oi": 2444093.0,
+        "long": 84368.0,
+        "short": 952972.0,
+        "pct_oi": -35.53890952594684
+      },
+      "wow": -52916.0,
+      "wow_pct_oi": -1.6083332467511156,
+      "z13": -1.2040371963316343,
+      "pct_oi_rank": 11
+    },
+    {
+      "id": "ec",
+      "label": "유로",
+      "group": "FX",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -76587.0,
+          "oi": 866032.0,
+          "pct_oi": -8.843437655883385
+        },
+        {
+          "date": "2026-11-10",
+          "net": -71676.0,
+          "oi": 854705.0,
+          "pct_oi": -8.38605132765106
+        },
+        {
+          "date": "2026-11-03",
+          "net": -78559.0,
+          "oi": 876122.0,
+          "pct_oi": -8.966673591120871
+        },
+        {
+          "date": "2026-10-27",
+          "net": -71574.0,
+          "oi": 868188.0,
+          "pct_oi": -8.244066953240543
+        },
+        {
+          "date": "2026-10-20",
+          "net": -68840.0,
+          "oi": 877940.0,
+          "pct_oi": -7.841082534113948
+        },
+        {
+          "date": "2026-10-13",
+          "net": -68001.0,
+          "oi": 874541.0,
+          "pct_oi": -7.77562172613977
+        },
+        {
+          "date": "2026-10-06",
+          "net": -44261.0,
+          "oi": 870291.0,
+          "pct_oi": -5.085770161934342
+        },
+        {
+          "date": "2026-09-29",
+          "net": -39265.0,
+          "oi": 853959.0,
+          "pct_oi": -4.59799592252087
+        },
+        {
+          "date": "2026-09-22",
+          "net": -26694.0,
+          "oi": 821689.0,
+          "pct_oi": -3.2486743768019286
+        },
+        {
+          "date": "2026-09-15",
+          "net": -28156.0,
+          "oi": 920035.0,
+          "pct_oi": -3.060318357453793
+        },
+        {
+          "date": "2026-09-08",
+          "net": -33285.0,
+          "oi": 942464.0,
+          "pct_oi": -3.531699884557925
+        },
+        {
+          "date": "2026-09-01",
+          "net": -38173.0,
+          "oi": 865412.0,
+          "pct_oi": -4.4109626397600215
+        },
+        {
+          "date": "2026-08-25",
+          "net": -38359.0,
+          "oi": 818524.0,
+          "pct_oi": -4.686362281374768
+        },
+        {
+          "date": "2026-08-18",
+          "net": -57716.0,
+          "oi": 804940.0,
+          "pct_oi": -7.170223867617461
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -76587.0,
+        "oi": 866032.0,
+        "long": 116493.0,
+        "short": 193080.0,
+        "pct_oi": -8.843437655883385
+      },
+      "wow": -4911.0,
+      "wow_pct_oi": -0.4573863282323245,
+      "z13": -1.4174642029750748,
+      "pct_oi_rank": 7
+    },
+    {
+      "id": "j6",
+      "label": "엔",
+      "group": "FX",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -23790.0,
+          "oi": 390361.0,
+          "pct_oi": -6.094358811459136
+        },
+        {
+          "date": "2026-11-10",
+          "net": -16855.0,
+          "oi": 388875.0,
+          "pct_oi": -4.334297653487624
+        },
+        {
+          "date": "2026-11-03",
+          "net": -14817.0,
+          "oi": 380641.0,
+          "pct_oi": -3.8926442500939205
+        },
+        {
+          "date": "2026-10-27",
+          "net": -14630.0,
+          "oi": 374026.0,
+          "pct_oi": -3.9114927839241123
+        },
+        {
+          "date": "2026-10-20",
+          "net": -22890.0,
+          "oi": 379141.0,
+          "pct_oi": -6.03733175784207
+        },
+        {
+          "date": "2026-10-13",
+          "net": -33673.0,
+          "oi": 373502.0,
+          "pct_oi": -9.015480506128482
+        },
+        {
+          "date": "2026-10-06",
+          "net": -25043.0,
+          "oi": 368138.0,
+          "pct_oi": -6.802612063954277
+        },
+        {
+          "date": "2026-09-29",
+          "net": -14161.0,
+          "oi": 360720.0,
+          "pct_oi": -3.9257595919272568
+        },
+        {
+          "date": "2026-09-22",
+          "net": 7423.0,
+          "oi": 378701.0,
+          "pct_oi": 1.9601215734840944
+        },
+        {
+          "date": "2026-09-15",
+          "net": 23170.0,
+          "oi": 542802.0,
+          "pct_oi": 4.2685914937675244
+        },
+        {
+          "date": "2026-09-08",
+          "net": -49098.0,
+          "oi": 499635.0,
+          "pct_oi": -9.826773544687622
+        },
+        {
+          "date": "2026-09-01",
+          "net": -102188.0,
+          "oi": 411882.0,
+          "pct_oi": -24.81001840332911
+        },
+        {
+          "date": "2026-08-25",
+          "net": -77042.0,
+          "oi": 384216.0,
+          "pct_oi": -20.05174172861099
+        },
+        {
+          "date": "2026-08-18",
+          "net": -67971.0,
+          "oi": 380811.0,
+          "pct_oi": -17.849011714472535
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -23790.0,
+        "oi": 390361.0,
+        "long": 93108.0,
+        "short": 116898.0,
+        "pct_oi": -6.094358811459136
+      },
+      "wow": -6935.0,
+      "wow_pct_oi": -1.7600611579715117,
+      "z13": 0.22756821868642765,
+      "pct_oi_rank": 6
+    },
+    {
+      "id": "dx",
+      "label": "달러인덱스",
+      "group": "FX",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": -1251.0,
+          "oi": 55775.0,
+          "pct_oi": -2.2429403854773646
+        },
+        {
+          "date": "2026-11-10",
+          "net": 2850.0,
+          "oi": 51440.0,
+          "pct_oi": 5.540435458786936
+        },
+        {
+          "date": "2026-11-03",
+          "net": 3311.0,
+          "oi": 49091.0,
+          "pct_oi": 6.74461713959789
+        },
+        {
+          "date": "2026-10-27",
+          "net": 3158.0,
+          "oi": 48263.0,
+          "pct_oi": 6.543314754573896
+        },
+        {
+          "date": "2026-10-20",
+          "net": 3183.0,
+          "oi": 49382.0,
+          "pct_oi": 6.445668462192702
+        },
+        {
+          "date": "2026-10-13",
+          "net": 2076.0,
+          "oi": 51816.0,
+          "pct_oi": 4.006484483557203
+        },
+        {
+          "date": "2026-10-06",
+          "net": 864.0,
+          "oi": 51095.0,
+          "pct_oi": 1.6909678050689891
+        },
+        {
+          "date": "2026-09-29",
+          "net": 361.0,
+          "oi": 48342.0,
+          "pct_oi": 0.7467626494559596
+        },
+        {
+          "date": "2026-09-22",
+          "net": -4495.0,
+          "oi": 46328.0,
+          "pct_oi": -9.702555689863582
+        },
+        {
+          "date": "2026-09-15",
+          "net": -4909.0,
+          "oi": 43744.0,
+          "pct_oi": -11.222110460863204
+        },
+        {
+          "date": "2026-09-08",
+          "net": 6186.0,
+          "oi": 57858.0,
+          "pct_oi": 10.691693456393239
+        },
+        {
+          "date": "2026-09-01",
+          "net": 7133.0,
+          "oi": 50020.0,
+          "pct_oi": 14.260295881647341
+        },
+        {
+          "date": "2026-08-25",
+          "net": 9189.0,
+          "oi": 47953.0,
+          "pct_oi": 19.162513294267303
+        },
+        {
+          "date": "2026-08-18",
+          "net": 8112.0,
+          "oi": 47928.0,
+          "pct_oi": 16.925388082123185
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": -1251.0,
+        "oi": 55775.0,
+        "long": 21235.0,
+        "short": 22486.0,
+        "pct_oi": -2.2429403854773646
+      },
+      "wow": -4101.0,
+      "wow_pct_oi": -7.783375844264301,
+      "z13": -0.9903650343742624,
+      "pct_oi_rank": 4
+    },
+    {
+      "id": "gc",
+      "label": "금",
+      "group": "원자재",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": 166132.0,
+          "oi": 407834.0,
+          "pct_oi": 40.73520108671666
+        },
+        {
+          "date": "2026-11-10",
+          "net": 190107.0,
+          "oi": 404725.0,
+          "pct_oi": 46.9718944962629
+        },
+        {
+          "date": "2026-11-03",
+          "net": 179548.0,
+          "oi": 399169.0,
+          "pct_oi": 44.980446878389856
+        },
+        {
+          "date": "2026-10-27",
+          "net": 186451.0,
+          "oi": 396810.0,
+          "pct_oi": 46.987475114034424
+        },
+        {
+          "date": "2026-10-20",
+          "net": 199865.0,
+          "oi": 402279.0,
+          "pct_oi": 49.68318008148573
+        },
+        {
+          "date": "2026-10-13",
+          "net": 207879.0,
+          "oi": 396345.0,
+          "pct_oi": 52.44900276274458
+        },
+        {
+          "date": "2026-10-06",
+          "net": 210335.0,
+          "oi": 396109.0,
+          "pct_oi": 53.10028300291082
+        },
+        {
+          "date": "2026-09-29",
+          "net": 218632.0,
+          "oi": 406456.0,
+          "pct_oi": 53.78983210974866
+        },
+        {
+          "date": "2026-09-22",
+          "net": 225853.0,
+          "oi": 412800.0,
+          "pct_oi": 54.7124515503876
+        },
+        {
+          "date": "2026-09-15",
+          "net": 230338.0,
+          "oi": 409899.0,
+          "pct_oi": 56.19384287348834
+        },
+        {
+          "date": "2026-09-08",
+          "net": 231960.0,
+          "oi": 411227.0,
+          "pct_oi": 56.40680208254808
+        },
+        {
+          "date": "2026-09-01",
+          "net": 228124.0,
+          "oi": 415196.0,
+          "pct_oi": 54.94368924556113
+        },
+        {
+          "date": "2026-08-25",
+          "net": 243334.0,
+          "oi": 427957.0,
+          "pct_oi": 56.85945083267712
+        },
+        {
+          "date": "2026-08-18",
+          "net": 222189.0,
+          "oi": 406260.0,
+          "pct_oi": 54.691330674937234
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": 166132.0,
+        "oi": 407834.0,
+        "long": 210051.0,
+        "short": 43919.0,
+        "pct_oi": 40.73520108671666
+      },
+      "wow": -23975.0,
+      "wow_pct_oi": -6.236693409546241,
+      "z13": -2.503178776020999,
+      "pct_oi_rank": 1
+    },
+    {
+      "id": "hg",
+      "label": "구리",
+      "group": "원자재",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": 17777.0,
+          "oi": 314991.0,
+          "pct_oi": 5.643653310729513
+        },
+        {
+          "date": "2026-11-10",
+          "net": 28904.0,
+          "oi": 314115.0,
+          "pct_oi": 9.201725482705378
+        },
+        {
+          "date": "2026-11-03",
+          "net": 37710.0,
+          "oi": 327850.0,
+          "pct_oi": 11.502211377154186
+        },
+        {
+          "date": "2026-10-27",
+          "net": 48317.0,
+          "oi": 337019.0,
+          "pct_oi": 14.336580430183462
+        },
+        {
+          "date": "2026-10-20",
+          "net": 57397.0,
+          "oi": 327119.0,
+          "pct_oi": 17.546214068886247
+        },
+        {
+          "date": "2026-10-13",
+          "net": 68520.0,
+          "oi": 313832.0,
+          "pct_oi": 21.833337581890948
+        },
+        {
+          "date": "2026-10-06",
+          "net": 69434.0,
+          "oi": 304033.0,
+          "pct_oi": 22.837652491670312
+        },
+        {
+          "date": "2026-09-29",
+          "net": 85411.0,
+          "oi": 301201.0,
+          "pct_oi": 28.356811564370638
+        },
+        {
+          "date": "2026-09-22",
+          "net": 90522.0,
+          "oi": 301657.0,
+          "pct_oi": 30.008254408152307
+        },
+        {
+          "date": "2026-09-15",
+          "net": 75134.0,
+          "oi": 289463.0,
+          "pct_oi": 25.956339843088756
+        },
+        {
+          "date": "2026-09-08",
+          "net": 92476.0,
+          "oi": 297491.0,
+          "pct_oi": 31.08531014383629
+        },
+        {
+          "date": "2026-09-01",
+          "net": 80869.0,
+          "oi": 282640.0,
+          "pct_oi": 28.612015284460796
+        },
+        {
+          "date": "2026-08-25",
+          "net": 85266.0,
+          "oi": 283299.0,
+          "pct_oi": 30.09752946533521
+        },
+        {
+          "date": "2026-08-18",
+          "net": 79748.0,
+          "oi": 281563.0,
+          "pct_oi": 28.32332373216651
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": 17777.0,
+        "oi": 314991.0,
+        "long": 76467.0,
+        "short": 58690.0,
+        "pct_oi": 5.643653310729513
+      },
+      "wow": -11127.0,
+      "wow_pct_oi": -3.558072171975865,
+      "z13": -2.6247860550136477,
+      "pct_oi_rank": 3
+    },
+    {
+      "id": "cl",
+      "label": "WTI 원유",
+      "group": "원자재",
+      "unit": "contracts",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "net": 41742.0,
+          "oi": 203072.0,
+          "pct_oi": 20.55527103687362
+        },
+        {
+          "date": "2026-11-10",
+          "net": 41960.0,
+          "oi": 199226.0,
+          "pct_oi": 21.061508036099706
+        },
+        {
+          "date": "2026-11-03",
+          "net": 42317.0,
+          "oi": 191710.0,
+          "pct_oi": 22.07344426477492
+        },
+        {
+          "date": "2026-10-27",
+          "net": 49095.0,
+          "oi": 214869.0,
+          "pct_oi": 22.848805551289388
+        },
+        {
+          "date": "2026-10-20",
+          "net": 45252.0,
+          "oi": 210374.0,
+          "pct_oi": 21.510262675045393
+        },
+        {
+          "date": "2026-10-13",
+          "net": 43110.0,
+          "oi": 206605.0,
+          "pct_oi": 20.865903535732436
+        },
+        {
+          "date": "2026-10-06",
+          "net": 45149.0,
+          "oi": 199984.0,
+          "pct_oi": 22.57630610448836
+        },
+        {
+          "date": "2026-09-29",
+          "net": 42049.0,
+          "oi": 219675.0,
+          "pct_oi": 19.141458973483555
+        },
+        {
+          "date": "2026-09-22",
+          "net": 37349.0,
+          "oi": 209462.0,
+          "pct_oi": 17.830919212076655
+        },
+        {
+          "date": "2026-09-15",
+          "net": 36740.0,
+          "oi": 202164.0,
+          "pct_oi": 18.173364199362894
+        },
+        {
+          "date": "2026-09-08",
+          "net": 35358.0,
+          "oi": 192025.0,
+          "pct_oi": 18.413227444343182
+        },
+        {
+          "date": "2026-09-01",
+          "net": 35574.0,
+          "oi": 187259.0,
+          "pct_oi": 18.997217757223954
+        },
+        {
+          "date": "2026-08-25",
+          "net": 31099.0,
+          "oi": 207513.0,
+          "pct_oi": 14.986530964325127
+        },
+        {
+          "date": "2026-08-18",
+          "net": 29164.0,
+          "oi": 202276.0,
+          "pct_oi": 14.417924024600051
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "net": 41742.0,
+        "oi": 203072.0,
+        "long": 64876.0,
+        "short": 23134.0,
+        "pct_oi": 20.55527103687362
+      },
+      "wow": -218.0,
+      "wow_pct_oi": -0.5062369992260862,
+      "z13": 0.3881106210758983,
+      "pct_oi_rank": 2
+    }
+  ],
+  "groups": [
+    {
+      "group": "주식",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "mean_pct_oi": -8.03495519226705,
+          "sum_net": -288259.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-10",
+          "mean_pct_oi": -6.755619574596001,
+          "sum_net": -333522.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-03",
+          "mean_pct_oi": -9.185247245322705,
+          "sum_net": -417325.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-27",
+          "mean_pct_oi": -10.034315017930433,
+          "sum_net": -446384.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-20",
+          "mean_pct_oi": -10.064707044650795,
+          "sum_net": -423330.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-13",
+          "mean_pct_oi": -15.304089503614485,
+          "sum_net": -511966.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-06",
+          "mean_pct_oi": -17.676195292775095,
+          "sum_net": -539616.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-29",
+          "mean_pct_oi": -18.51557383524423,
+          "sum_net": -511766.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-22",
+          "mean_pct_oi": -18.865961127410962,
+          "sum_net": -514239.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-15",
+          "mean_pct_oi": -11.169954693491261,
+          "sum_net": -396733.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-08",
+          "mean_pct_oi": -17.603275630530906,
+          "sum_net": -483123.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-01",
+          "mean_pct_oi": -15.331446758696996,
+          "sum_net": -441155.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-25",
+          "mean_pct_oi": -17.572700018523488,
+          "sum_net": -454136.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-18",
+          "mean_pct_oi": -19.264548488012466,
+          "sum_net": -442959.0,
+          "n": 3
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "mean_pct_oi": -8.03495519226705,
+        "sum_net": -288259.0,
+        "n": 3
+      }
+    },
+    {
+      "group": "금리",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "mean_pct_oi": -34.70757339908086,
+          "sum_net": -4639942.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-10",
+          "mean_pct_oi": -35.07194384378419,
+          "sum_net": -4622219.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-03",
+          "mean_pct_oi": -34.59784912522963,
+          "sum_net": -4509431.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-27",
+          "mean_pct_oi": -34.06795597425798,
+          "sum_net": -4390761.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-20",
+          "mean_pct_oi": -32.76516150335804,
+          "sum_net": -4197580.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-13",
+          "mean_pct_oi": -32.592789884394314,
+          "sum_net": -4289074.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-06",
+          "mean_pct_oi": -31.832391695873294,
+          "sum_net": -4123526.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-29",
+          "mean_pct_oi": -31.289891289505373,
+          "sum_net": -4011282.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-22",
+          "mean_pct_oi": -32.893331467944314,
+          "sum_net": -4102030.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-15",
+          "mean_pct_oi": -32.287373724346786,
+          "sum_net": -3976127.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-08",
+          "mean_pct_oi": -34.27110282387647,
+          "sum_net": -4093504.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-01",
+          "mean_pct_oi": -34.95698413542383,
+          "sum_net": -4209025.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-25",
+          "mean_pct_oi": -29.774635383118163,
+          "sum_net": -4216080.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-18",
+          "mean_pct_oi": -34.138608111182386,
+          "sum_net": -4333374.0,
+          "n": 3
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "mean_pct_oi": -34.70757339908086,
+        "sum_net": -4639942.0,
+        "n": 3
+      }
+    },
+    {
+      "group": "FX",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "mean_pct_oi": -5.726912284273294,
+          "sum_net": -101628.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-10",
+          "mean_pct_oi": -2.393304507450583,
+          "sum_net": -85681.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-03",
+          "mean_pct_oi": -2.038233567205634,
+          "sum_net": -90065.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-27",
+          "mean_pct_oi": -1.8707483275302528,
+          "sum_net": -83046.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-20",
+          "mean_pct_oi": -2.4775819432544384,
+          "sum_net": -88547.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-13",
+          "mean_pct_oi": -4.26153924957035,
+          "sum_net": -99598.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-06",
+          "mean_pct_oi": -3.39913814027321,
+          "sum_net": -68440.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-29",
+          "mean_pct_oi": -2.592330954997389,
+          "sum_net": -53065.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-22",
+          "mean_pct_oi": -3.6637028310604722,
+          "sum_net": -23766.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-15",
+          "mean_pct_oi": -3.3379457748498242,
+          "sum_net": -9895.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-08",
+          "mean_pct_oi": -0.8889266576174362,
+          "sum_net": -76197.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-01",
+          "mean_pct_oi": -4.986895053813931,
+          "sum_net": -133228.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-25",
+          "mean_pct_oi": -1.8585302385728177,
+          "sum_net": -106212.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-18",
+          "mean_pct_oi": -2.6979491666556044,
+          "sum_net": -117575.0,
+          "n": 3
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "mean_pct_oi": -5.726912284273294,
+        "sum_net": -101628.0,
+        "n": 3
+      }
+    },
+    {
+      "group": "원자재",
+      "series": [
+        {
+          "date": "2026-11-17",
+          "mean_pct_oi": 22.311375144773265,
+          "sum_net": 225651.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-10",
+          "mean_pct_oi": 25.74504267168933,
+          "sum_net": 260971.0,
+          "n": 3
+        },
+        {
+          "date": "2026-11-03",
+          "mean_pct_oi": 26.185367506772987,
+          "sum_net": 259575.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-27",
+          "mean_pct_oi": 28.05762036516909,
+          "sum_net": 283863.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-20",
+          "mean_pct_oi": 29.579885608472456,
+          "sum_net": 302514.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-13",
+          "mean_pct_oi": 31.716081293455986,
+          "sum_net": 319509.0,
+          "n": 3
+        },
+        {
+          "date": "2026-10-06",
+          "mean_pct_oi": 32.83808053302317,
+          "sum_net": 324918.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-29",
+          "mean_pct_oi": 33.76270088253428,
+          "sum_net": 346092.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-22",
+          "mean_pct_oi": 34.18387505687219,
+          "sum_net": 353724.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-15",
+          "mean_pct_oi": 33.44118230531333,
+          "sum_net": 342212.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-08",
+          "mean_pct_oi": 35.30177989024252,
+          "sum_net": 359794.0,
+          "n": 3
+        },
+        {
+          "date": "2026-09-01",
+          "mean_pct_oi": 34.18430742908196,
+          "sum_net": 344567.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-25",
+          "mean_pct_oi": 33.98117042077915,
+          "sum_net": 359699.0,
+          "n": 3
+        },
+        {
+          "date": "2026-08-18",
+          "mean_pct_oi": 32.477526143901265,
+          "sum_net": 331101.0,
+          "n": 3
+        }
+      ],
+      "latest": {
+        "date": "2026-11-17",
+        "mean_pct_oi": 22.311375144773265,
+        "sum_net": 225651.0,
+        "n": 3
+      }
+    }
+  ],
+  "errors": [],
+  "meta": {
+    "source": "CFTC Commitments of Traders — TFF (financials) / legacy futures-only (commodities)",
+    "definition": "net = long − short; financials use leveraged funds (TFF), commodities use non-commercial (COT)",
+    "lag": "Tuesday snapshot, released Friday 15:30 ET",
+    "retrieved_at_utc": "2026-11-21T01:11:45+00:00",
+    "notes": "pct_oi = net ÷ total open interest. z13 = latest net vs mean/stdev of the prior 13 weeks."
+  }
+}
+
+</script>
+<script>
+(() => {
+  const rawEl = document.getElementById("cta-history-data");
+  if (!rawEl) return;
+  const DATA = JSON.parse(rawEl.textContent);
+
+  const fmtPct = (v) => (v > 0 ? "+" : "") + v.toFixed(2) + "%";
+  const fmtPp = (v) => (v > 0 ? "+" : "") + v.toFixed(2) + "%p";
+  const fmtInt = (v) => {
+    const n = Math.round(v);
+    return (n > 0 ? "+" : "") + n.toLocaleString("en-US");
+  };
+  const fmtZ = (v) => (v > 0 ? "+" : "") + v.toFixed(2);
+  const shortDate = (d) => d.slice(5, 7) + "." + d.slice(8, 10);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const divergingBar = (pctOi, maxAbs) => {
+    const clamped = Math.max(-maxAbs, Math.min(maxAbs, pctOi));
+    const w = (Math.abs(clamped) / maxAbs) * 50;
+    const cls = clamped >= 0 ? "pos" : "neg";
+    const left = clamped >= 0 ? 50 : 50 - w;
+    return `<div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill ${cls}" style="left:${left.toFixed(2)}%;width:${w.toFixed(2)}%"></span></div>`;
+  };
+
+  const sparklineSvg = (m) => {
+    const chron = m.series.slice().reverse();
+    const vals = chron.map((p) => p.pct_oi);
+    const minV = Math.min(0, ...vals);
+    const maxV = Math.max(0, ...vals);
+    const span = Math.max(maxV - minV, 4);
+    const pad = Math.max(span * 0.16, 1.5);
+    const yMin = minV - pad;
+    const yMax = maxV + pad;
+    const W = 180, H = 44, xL = 5, xR = 175, yT = 5, yB = 39;
+    const mapX = (i) => xL + (i / (chron.length - 1)) * (xR - xL);
+    const mapY = (v) => yT + ((yMax - v) / (yMax - yMin)) * (yB - yT);
+    const y0 = mapY(0);
+    const pts = chron.map((p, i) => [mapX(i), mapY(p.pct_oi)]);
+    const lineD = "M " + pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" L ");
+    const areaD = `M ${pts[0][0].toFixed(1)},${y0.toFixed(1)} L ` + pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" L ") + ` L ${pts[pts.length - 1][0].toFixed(1)},${y0.toFixed(1)} Z`;
+    const cidPos = `sp-pos-${m.id}`;
+    const cidNeg = `sp-neg-${m.id}`;
+    const [lx, ly] = pts[pts.length - 1];
+    const lCls = vals[vals.length - 1] >= 0 ? "pos" : "neg";
+    const title = `${m.label} 14주 %OI: ${chron[0].date} ${fmtPct(vals[0])} → ${chron[chron.length - 1].date} ${fmtPct(vals[vals.length - 1])}`;
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">` +
+      `<title>${esc(title)}</title>` +
+      `<defs><clipPath id="${cidPos}"><rect x="0" y="0" width="${W}" height="${Math.max(y0, 0).toFixed(2)}"/></clipPath>` +
+      `<clipPath id="${cidNeg}"><rect x="0" y="${y0.toFixed(2)}" width="${W}" height="${Math.max(H - y0, 0).toFixed(2)}"/></clipPath></defs>` +
+      `<line class="sp-zero" x1="${xL}" y1="${y0.toFixed(1)}" x2="${xR}" y2="${y0.toFixed(1)}"/>` +
+      `<path class="sp-area-pos" d="${areaD}" clip-path="url(#${cidPos})"/>` +
+      `<path class="sp-area-neg" d="${areaD}" clip-path="url(#${cidNeg})"/>` +
+      `<path class="sp-line-pos" d="${lineD}" clip-path="url(#${cidPos})"/>` +
+      `<path class="sp-line-neg" d="${lineD}" clip-path="url(#${cidNeg})"/>` +
+      `<circle class="sp-dot ${lCls}" cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="3"/>` +
+      `</svg>`;
+  };
+
+  // 12-Market filter & sort (re-renders directly from inline DATA)
+  let activeGroup = "all";
+  let activeSort = "abs_wow";
+  const rowsHost = document.getElementById("market-rows");
+  const filterWrap = document.getElementById("group-filters");
+  const sortSelect = document.getElementById("market-sort");
+  const wStart = shortDate(DATA.weeks[DATA.weeks.length - 1]);
+  const wEnd = shortDate(DATA.weeks[0]);
+
+  const sortMarkets = (list) => {
+    const arr = list.slice();
+    if (activeSort === "abs_wow") arr.sort((a, b) => Math.abs(b.wow_pct_oi) - Math.abs(a.wow_pct_oi));
+    else if (activeSort === "rank") arr.sort((a, b) => a.pct_oi_rank - b.pct_oi_rank);
+    else if (activeSort === "abs_z") arr.sort((a, b) => Math.abs(b.z13) - Math.abs(a.z13));
+    return arr;
+  };
+
+  const renderMarkets = () => {
+    if (!rowsHost) return;
+    const filtered = activeGroup === "all"
+      ? DATA.markets
+      : DATA.markets.filter((m) => m.group === activeGroup);
+    const ordered = sortMarkets(filtered);
+    rowsHost.innerHTML = ordered.map((m) => {
+      const cur = m.latest.pct_oi;
+      const curCls = cur >= 0 ? "pos" : "neg";
+      const dpp = m.wow_pct_oi;
+      const dCls = dpp >= 0 ? "pos" : "neg";
+      const arrow = dpp >= 0 ? "▲" : "▼";
+      const isExt = Math.abs(m.z13) >= 2;
+      const extHtml = isExt ? '<span class="ext-badge">극단</span>' : "";
+      return `<div class="mkt-row${isExt ? " is-extreme" : ""}" data-id="${esc(m.id)}" data-group="${esc(m.group)}">` +
+        `<div class="mkt-cell mkt-name-col"><div class="mkt-title-line"><span class="grp-tag">${esc(m.group)}</span><span class="mkt-label">${esc(m.label)}</span><span class="rank-tag num" title="%OI 기준 순위 (1=가장 큰 순롱 비중)">#${m.pct_oi_rank}</span></div><div class="mkt-ext-mobile">${extHtml}</div></div>` +
+        `<div class="mkt-cell mkt-pct-col"><span class="m-k">최신 %OI</span><div class="pct-box"><span class="pct-val num ${curCls}">${fmtPct(cur)}</span>${divergingBar(cur, 50)}</div></div>` +
+        `<div class="mkt-cell mkt-wow-col"><span class="m-k">주간 Δ(%p)</span><span class="wow-pill num ${dCls}">${arrow} ${fmtPp(dpp)}</span></div>` +
+        `<div class="mkt-cell mkt-net-col"><span class="m-k">최신 Net (계약)</span><div class="net-main num">${fmtInt(m.latest.net)}</div><div class="net-sub num">주간 ${fmtInt(m.wow)}</div></div>` +
+        `<div class="mkt-cell mkt-z-col"><span class="m-k">z13</span><div class="z-box"><span class="z-val num ${isExt ? "is-ext" : ""}">${fmtZ(m.z13)}</span><span class="mkt-ext-desktop">${extHtml}</span></div></div>` +
+        `<div class="mkt-cell mkt-spark-col"><div class="spark-wrap">${sparklineSvg(m)}<div class="spark-dates num"><span>${wStart}</span><span>0%</span><span>${wEnd}</span></div></div></div>` +
+        `</div>`;
+    }).join("");
+  };
+
+  if (filterWrap) {
+    filterWrap.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-filter]");
+      if (!btn) return;
+      activeGroup = btn.dataset.filter;
+      filterWrap.querySelectorAll("button[data-filter]").forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+      renderMarkets();
+    });
+  }
+  if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+      activeSort = sortSelect.value;
+      renderMarkets();
+    });
+  }
+
+  // Group 14-week charts: axis mode toggle + hover/tap readout
+  let sharedAxis = true;
+  const renderGroupSvg = (g, idx) => {
+    const chron = g.series.slice().reverse();
+    const vals = chron.map((p) => p.mean_pct_oi);
+    let yMin, yMax, ticks;
+    if (sharedAxis) {
+      yMin = -44; yMax = 44; ticks = [40, 20, 0, -20, -40];
+    } else {
+      const lo = Math.min(0, ...vals);
+      const hi = Math.max(0, ...vals);
+      const span = Math.max(hi - lo, 6);
+      const pad = span * 0.18;
+      yMin = Math.floor((lo - pad) / 5) * 5;
+      yMax = Math.ceil((hi + pad) / 5) * 5;
+      const step = (yMax - yMin) > 25 ? 10 : 5;
+      ticks = [];
+      for (let t = Math.ceil(yMin / step) * step; t <= yMax + 0.01; t += step) ticks.push(Math.round(t));
+      if (!ticks.includes(0)) { ticks.push(0); ticks.sort((a, b) => b - a); }
+    }
+    const W = 360, H = 134, xL = 40, xR = 348, yT = 12, yB = 108;
+    const mapX = (i) => xL + (i / (chron.length - 1)) * (xR - xL);
+    const mapY = (v) => yT + ((yMax - v) / (yMax - yMin)) * (yB - yT);
+    const y0 = mapY(0);
+    const pts = chron.map((p, i) => [mapX(i), mapY(p.mean_pct_oi)]);
+    const lineD = "M " + pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" L ");
+    const areaD = `M ${pts[0][0].toFixed(1)},${y0.toFixed(1)} L ` + pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" L ") + ` L ${pts[pts.length - 1][0].toFixed(1)},${y0.toFixed(1)} Z`;
+    const cidPos = `gc-pos-${idx}`;
+    const cidNeg = `gc-neg-${idx}`;
+    const grid = ticks.map((t) => {
+      const yt = mapY(t);
+      if (yt < yT - 2 || yt > yB + 2) return "";
+      const lbl = (t > 0 ? "+" : "") + t + "%";
+      return `<line class="${t === 0 ? "gc-zero" : "gc-grid"}" x1="${xL}" y1="${yt.toFixed(1)}" x2="${xR}" y2="${yt.toFixed(1)}"/>` +
+        `<text class="gc-ylabel${t === 0 ? " is-zero" : ""}" x="${xL - 6}" y="${(yt + 3.5).toFixed(1)}" text-anchor="end">${lbl}</text>`;
+    }).join("");
+    const xLbls = [0, 6, chron.length - 1].map((xi) => {
+      const anchor = xi === 0 ? "start" : (xi === chron.length - 1 ? "end" : "middle");
+      return `<text class="gc-xlabel" x="${mapX(xi).toFixed(1)}" y="${H - 4}" text-anchor="${anchor}">${shortDate(chron[xi].date)}</text>`;
+    }).join("");
+    const colW = (xR - xL) / (chron.length - 1);
+    const dots = pts.map(([px, py], i) => {
+      const dCls = chron[i].mean_pct_oi >= 0 ? "pos" : "neg";
+      const isLast = i === pts.length - 1;
+      return `<circle class="gc-dot ${dCls}${isLast ? " is-active" : ""}" data-idx="${i}" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${isLast ? 4 : 2.2}"/>`;
+    }).join("");
+    const hits = pts.map(([px], i) => `<rect class="gc-hit" data-gidx="${idx}" data-pidx="${i}" x="${Math.max(xL - 4, px - colW / 2).toFixed(1)}" y="${yT}" width="${colW.toFixed(1)}" height="${yB - yT}" fill="transparent"/>`).join("");
+    const title = `${g.group} 14주 평균 %OI 추이 (${chron[0].date}~${chron[chron.length - 1].date})`;
+    return `<svg class="gc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">` +
+      `<title>${esc(title)}</title>` +
+      `<defs><clipPath id="${cidPos}"><rect x="${xL}" y="0" width="${xR - xL}" height="${Math.max(y0, 0).toFixed(2)}"/></clipPath>` +
+      `<clipPath id="${cidNeg}"><rect x="${xL}" y="${y0.toFixed(2)}" width="${xR - xL}" height="${Math.max(H - y0, 0).toFixed(2)}"/></clipPath></defs>` +
+      grid +
+      `<path class="gc-area-pos" d="${areaD}" clip-path="url(#${cidPos})"/>` +
+      `<path class="gc-area-neg" d="${areaD}" clip-path="url(#${cidNeg})"/>` +
+      `<path class="gc-line-pos" d="${lineD}" clip-path="url(#${cidPos})"/>` +
+      `<path class="gc-line-neg" d="${lineD}" clip-path="url(#${cidNeg})"/>` +
+      dots + xLbls + hits + `</svg>`;
+  };
+
+  const groupChartsEl = document.getElementById("group-charts");
+  const updateReadout = (gIdx, pIdx) => {
+    const g = DATA.groups[gIdx];
+    const chron = g.series.slice().reverse();
+    const p = chron[pIdx];
+    const readout = document.querySelector(`[data-readout="${gIdx}"]`);
+    const box = document.querySelector(`.grp-chart-box[data-gidx="${gIdx}"]`);
+    if (readout && p) {
+      readout.innerHTML = `<span>${esc(p.date)} 기준</span><span>평균 ${fmtPct(p.mean_pct_oi)} · 합계 Net ${fmtInt(p.sum_net)}</span>`;
+    }
+    if (box) {
+      box.querySelectorAll(".gc-dot").forEach((c) => {
+        const active = Number(c.dataset.idx) === pIdx;
+        c.classList.toggle("is-active", active);
+        c.setAttribute("r", active ? "4.2" : "2.2");
+      });
+    }
+  };
+
+  if (groupChartsEl) {
+    const handlePoint = (e) => {
+      const hit = e.target.closest(".gc-hit");
+      if (!hit) return;
+      updateReadout(Number(hit.dataset.gidx), Number(hit.dataset.pidx));
+    };
+    groupChartsEl.addEventListener("pointermove", handlePoint);
+    groupChartsEl.addEventListener("click", handlePoint);
+    groupChartsEl.addEventListener("pointerleave", () => {
+      DATA.groups.forEach((g, idx) => updateReadout(idx, g.series.length - 1));
+    });
+  }
+
+  document.querySelectorAll(".axis-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sharedAxis = btn.dataset.axis === "shared";
+      document.querySelectorAll(".axis-btn").forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+      DATA.groups.forEach((g, idx) => {
+        const box = document.querySelector(`.grp-chart-box[data-gidx="${idx}"]`);
+        if (box) box.innerHTML = renderGroupSvg(g, idx);
+        updateReadout(idx, g.series.length - 1);
+      });
+    });
+  });
+})();
+</script>
+<script id="fms-history-data" type="application/json">{"editions":[{"month":"2026-11","fieldwork":"November 6 to November 12, 2026","panelists":193,"aum_bn":526.0,"released":"Tuesday","allocations":[{"key":"cash","label":"현금 비중","group":"cash","this":3.6,"prev":3.9,"prev2":3.9},{"key":"cash_alloc","label":"현금 비중(순)","group":"cash","this":-9.0,"prev":0.0,"prev2":0.0},{"key":"equities","label":"주식 비중(순)","group":"asset","this":41.0,"prev":44.0,"prev2":49.0},{"key":"bonds","label":"채권 비중(순)","group":"asset","this":-23.0,"prev":-37.0,"prev2":-48.0},{"key":"realestate","label":"부동산 비중(순)","group":"asset","this":-23.0,"prev":-22.0,"prev2":-21.0},{"key":"commodities","label":"원자재 비중(순)","group":"asset","this":15.0,"prev":21.0,"prev2":19.0},{"key":"us_equities","label":"미국 주식(순)","group":"region","this":13.0,"prev":11.0,"prev2":25.0},{"key":"eurozone","label":"유로존 주식(순)","group":"region","this":-5.0,"prev":-8.0,"prev2":-8.0},{"key":"gem","label":"신흥국 주식(순)","group":"region","this":28.0,"prev":34.0,"prev2":38.0},{"key":"japan","label":"일본 주식(순)","group":"region","this":0.0,"prev":9.0,"prev2":-1.0},{"key":"uk","label":"영국 주식(순)","group":"region","this":-21.0,"prev":-26.0,"prev2":-35.0},{"key":"growth","label":"성장 기대(순)","group":"macro","this":-14.0,"prev":-4.0,"prev2":8.0},{"key":"inflation","label":"인플레 전망(순, 낮아질 것)","group":"macro","this":32.0,"prev":5.0,"prev2":4.0}],"tail_risks":{"current":[{"label":"AI bubble","pct":34},{"label":"AI byperscaler credit event","pct":31},{"label":"2nd wave of inflation","pct":14}],"previous":[{"label":"Disorderly rise in bond yields","pct":31},{"label":"AI bubble","pct":23},{"label":"2nd wave of inflation","pct":20}]},"crowded":{"current":[{"label":"Long global semiconductors","pct":39},{"label":"Short China stocks","pct":14},{"label":"Long Magnificent 7","pct":12}],"previous":[{"label":"Long global semiconductors","pct":45},{"label":"Short Treasuries","pct":27},{"label":"Long Magnificent 7","pct":16}]},"targets_2027":{"ust10y":4.9,"eurusd":1.12,"spx":7926.0,"gold":4341.0},"url":"https://www.tradingview.com/news/macenews:a6b54b6f7094b:0-bofa-global-research-fund-manager-survey-fading-inflation-jitters-prompt-shift-out-of-cash-into-fixed-income","title":"BofA Global Research Fund Manager Survey: Fading Inflation Jitters Prompt Shift out of Cash into Fixed Income — TradingView News","published":"Tue, 17 Nov 2026 16:00:00 GMT","retrieved_at_utc":"2026-11-21T01:33:19+00:00"}],"latest":"2026-11"}</script>
+<script>
+(() => {
+  const fmsRawEl = document.getElementById("fms-history-data");
+  if (!fmsRawEl) return;
+  const FMS = JSON.parse(fmsRawEl.textContent);
+  const ctaRawEl = document.querySelector('script[type="application/json"]:not(#fms-history-data)');
+  const CTA = ctaRawEl ? JSON.parse(ctaRawEl.textContent) : null;
+
+  const NA = "확인 불가";
+  const isNum = (v) => typeof v === "number" && Number.isFinite(v);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const fmtNum = (v, minDec, maxDec) => {
+    if (!isNum(v)) return NA;
+    return v.toLocaleString("en-US", { minimumFractionDigits: minDec, maximumFractionDigits: maxDec });
+  };
+  const fmtAuto = (v, forceDec) => {
+    if (!isNum(v)) return NA;
+    if (typeof forceDec === "number") return fmtNum(v, forceDec, forceDec);
+    const isInt = Math.abs(v - Math.round(v)) < 1e-9;
+    return fmtNum(v, isInt ? 0 : 1, isInt ? 0 : 1);
+  };
+  const fmtSignedPct = (v, forceDec) => {
+    if (!isNum(v)) return NA;
+    const sign = v > 0 ? "+" : (v < 0 ? "-" : "");
+    return sign + fmtAuto(Math.abs(v), forceDec) + "%";
+  };
+  const fmtUnsignedPct = (v, forceDec) => {
+    if (!isNum(v)) return NA;
+    return fmtAuto(v, forceDec) + "%";
+  };
+  const fmtDeltaPp = (cur, prev, forceDec) => {
+    if (!isNum(cur) || !isNum(prev)) return { text: NA, cls: "flat", arrow: "", val: null };
+    const d = Number((cur - prev).toFixed(4));
+    if (Math.abs(d) < 1e-9) return { text: "0%p", cls: "flat", arrow: "–", val: 0 };
+    const sign = d > 0 ? "+" : "-";
+    const cls = d > 0 ? "pos" : "neg";
+    const arrow = d > 0 ? "▲" : "▼";
+    return { text: sign + fmtAuto(Math.abs(d), forceDec) + "%p", cls, arrow, val: d };
+  };
+  const valClass = (v) => (!isNum(v) || Math.abs(v) < 1e-9 ? "" : (v > 0 ? "pos" : "neg"));
+
+  const MONTHS = {
+    january: "01", february: "02", march: "03", april: "04", may: "05", june: "06",
+    july: "07", august: "08", september: "09", october: "10", november: "11", december: "12",
+    jan: "01", feb: "02", mar: "03", apr: "04", jun: "06", jul: "07", aug: "08", sep: "09", oct: "10", nov: "11", dec: "12"
+  };
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const fmtFieldwork = (raw) => {
+    if (!raw || typeof raw !== "string") return NA;
+    const m = raw.match(/^([A-Za-z]+)\s+(\d{1,2})\s+to\s+([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/);
+    if (!m) return raw;
+    const m1 = MONTHS[m[1].toLowerCase()];
+    const m2 = MONTHS[m[3].toLowerCase()];
+    if (!m1 || !m2) return raw;
+    return `${m[5]}-${m1}-${pad2(m[2])} ~ ${m[5]}-${m2}-${pad2(m[4])}`;
+  };
+  const fmtPublished = (raw) => {
+    if (!raw || typeof raw !== "string") return NA;
+    const m = raw.match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/);
+    if (!m) return raw;
+    const mo = MONTHS[m[2].toLowerCase()];
+    if (!mo) return raw;
+    return `${m[3]}-${mo}-${pad2(m[1])}`;
+  };
+
+  const editions = Array.isArray(FMS.editions) ? FMS.editions : [];
+  const ed = editions.find((e) => e.month === FMS.latest) || editions[0];
+  if (!ed) return;
+
+  const allocs = Array.isArray(ed.allocations) ? ed.allocations : [];
+  const byKey = (k) => allocs.find((a) => a.key === k) || null;
+
+  const LABEL_KO = {
+    "ai bubble": "AI 버블",
+    "ai byperscaler credit event": "AI 하이퍼스케일러 신용 이벤트",
+    "ai hyperscaler credit event": "AI 하이퍼스케일러 신용 이벤트",
+    "2nd wave of inflation": "인플레이션 2차 파동",
+    "disorderly rise in bond yields": "채권금리 무질서한 급등",
+    "long global semiconductors": "글로벌 반도체 롱",
+    "short china stocks": "중국 주식 숏",
+    "long magnificent 7": "매그니피센트 7 롱",
+    "short treasuries": "미 국채 숏"
+  };
+  const normKey = (s) => String(s || "").trim().toLowerCase();
+  const koLabel = (raw) => LABEL_KO[normKey(raw)] || (raw ? String(raw) : NA);
+
+  // 1. Header line
+  const headerEl = document.getElementById("fms-header-line");
+  if (headerEl) {
+    const panelistsTxt = isNum(ed.panelists) ? fmtNum(ed.panelists, 0, 0) + "명" : NA;
+    const aumTxt = isNum(ed.aum_bn) ? "$" + fmtAuto(ed.aum_bn) + "bn AUM" : NA;
+    headerEl.innerHTML =
+      `<div class="fms-meta-items">` +
+      `<span>기준 월 <strong>${esc(ed.month || NA)}</strong></span>` +
+      `<span>조사 기간 <strong>${esc(fmtFieldwork(ed.fieldwork))}</strong></span>` +
+      `<span>참가자 <strong>${esc(panelistsTxt)} · ${esc(aumTxt)}</strong></span>` +
+      `</div>` +
+      `<span>발표일 <strong>${esc(fmtPublished(ed.published))}</strong></span>`;
+  }
+
+  // 2. One-line verdict (fully computed from data)
+  const describeSignedFlow = (item) => {
+    if (!item || !isNum(item.this) || !isNum(item.prev)) return NA;
+    const cur = item.this, prev = item.prev, d = cur - prev;
+    const trans = `${fmtSignedPct(prev)}→${fmtSignedPct(cur)}`;
+    const dp = fmtDeltaPp(cur, prev);
+    let verb = "유지";
+    if (Math.abs(d) >= 1e-9) {
+      if (prev < 0 && cur < 0) verb = d > 0 ? "언더웨이트 축소" : "언더웨이트 확대";
+      else if (prev > 0 && cur > 0) verb = d > 0 ? "오버웨이트 확대" : "오버웨이트 축소";
+      else if (prev <= 0 && cur > 0) verb = "오버웨이트 전환";
+      else if (prev >= 0 && cur < 0) verb = "언더웨이트 전환";
+      else verb = "중립 전환";
+    }
+    return `${trans}(${dp.text}, ${verb})`;
+  };
+
+  const verdictEl = document.getElementById("fms-verdict");
+  if (verdictEl) {
+    const cash = byKey("cash");
+    const eq = byKey("equities");
+    const bd = byKey("bonds");
+    const cm = byKey("commodities");
+    const parts = [];
+    if (cash && isNum(cash.this) && isNum(cash.prev)) {
+      const dc = fmtDeltaPp(cash.this, cash.prev, 1);
+      const cashMove = dc.val < 0 ? "낮아졌고" : (dc.val > 0 ? "높아졌고" : "유지됐고");
+      parts.push(`현금 비중은 ${fmtUnsignedPct(cash.prev, 1)}→${fmtUnsignedPct(cash.this, 1)}(${dc.text})로 ${cashMove}`);
+    }
+    const flowItems = [
+      eq ? `주식 ${describeSignedFlow(eq)}` : null,
+      bd ? `채권 ${describeSignedFlow(bd)}` : null,
+      cm ? `원자재 ${describeSignedFlow(cm)}` : null
+    ].filter(Boolean);
+    const sentence = parts.length
+      ? `${parts[0]}, ${flowItems.join(" · ")} 흐름을 보였습니다.`
+      : `${flowItems.join(" · ")} 흐름을 보였습니다.`;
+    verdictEl.innerHTML =
+      `<span class="fms-verdict-tag">한 줄 판정</span>` +
+      `<p class="fms-verdict-text num">${esc(sentence)}</p>`;
+  }
+
+  // 3. Asset allocation table/cards
+  const divBar = (v, maxAbs) => {
+    if (!isNum(v)) return `<div class="div-bar" aria-hidden="true"><span class="div-zero"></span></div>`;
+    const clamped = Math.max(-maxAbs, Math.min(maxAbs, v));
+    const w = (Math.abs(clamped) / maxAbs) * 50;
+    const cls = clamped >= 0 ? "pos" : "neg";
+    const left = clamped >= 0 ? 50 : 50 - w;
+    return `<div class="div-bar" aria-hidden="true"><span class="div-zero"></span><span class="div-fill ${cls}" style="left:${left.toFixed(2)}%;width:${w.toFixed(2)}%"></span></div>`;
+  };
+
+  const assetsEl = document.getElementById("fms-assets");
+  if (assetsEl) {
+    const assetItems = allocs.filter((a) => a.group === "asset");
+    const maxAbs = Math.max(60, ...assetItems.map((a) => (isNum(a.this) ? Math.abs(a.this) : 0)));
+    const headHtml =
+      `<div class="fms-asset-head" aria-hidden="true">` +
+      `<span>자산군</span><span>이번 달 순비중 (0선 기준)</span><span class="r">전월 대비 Δ</span><span class="r">지난달</span><span class="r">두 달 전</span>` +
+      `</div>`;
+    const rowsHtml = assetItems.map((a) => {
+      const curTxt = fmtSignedPct(a.this);
+      const prevTxt = fmtSignedPct(a.prev);
+      const prev2Txt = fmtSignedPct(a.prev2);
+      const dp = fmtDeltaPp(a.this, a.prev);
+      const stanceHtml = !isNum(a.this)
+        ? `<span class="fms-pill fms-pill-flat">${NA}</span>`
+        : (a.this > 0 ? `<span class="stance-pill pos">OW</span>` : (a.this < 0 ? `<span class="stance-pill neg">UW</span>` : `<span class="fms-pill fms-pill-flat">중립</span>`));
+      const deltaHtml = dp.val === null
+        ? `<span class="fms-pill fms-pill-flat">${NA}</span>`
+        : (dp.cls === "flat"
+          ? `<span class="fms-pill fms-pill-flat num">– 0%p</span>`
+          : `<span class="wow-pill num ${dp.cls}">${dp.arrow} ${esc(dp.text)}</span>`);
+      return `<div class="fms-asset-row" data-key="${esc(a.key)}">` +
+        `<div class="fms-asset-cell fms-asset-name"><span>${esc(a.label || a.key)}</span>${stanceHtml}</div>` +
+        `<div class="fms-asset-cell fms-asset-cur"><span class="m-k">이번 달 순비중</span><span class="fms-asset-val num ${valClass(a.this)}">${esc(curTxt)}</span>${divBar(a.this, maxAbs)}</div>` +
+        `<div class="fms-asset-cell fms-asset-delta"><span class="m-k">전월 대비 Δ</span>${deltaHtml}</div>` +
+        `<div class="fms-asset-cell fms-asset-prev num"><span class="m-k">지난달</span><span class="${isNum(a.prev) ? "" : "fms-na"}">${esc(prevTxt)}</span></div>` +
+        `<div class="fms-asset-cell fms-asset-prev2 num"><span class="m-k">두 달 전</span><span class="${isNum(a.prev2) ? "" : "fms-na"}">${esc(prev2Txt)}</span></div>` +
+        `</div>`;
+    }).join("");
+    assetsEl.innerHTML = headHtml + rowsHtml;
+  }
+
+  // 4. Cash / Growth / Inflation 3 indicator cards with 3-month inline SVG
+  const trendSvg3 = (item, isCash) => {
+    const ptsRaw = [
+      { lbl: "2개월 전", v: item.prev2 },
+      { lbl: "지난달", v: item.prev },
+      { lbl: "이번 달", v: item.this }
+    ];
+    const valid = ptsRaw.filter((p) => isNum(p.v)).map((p) => p.v);
+    const W = 220, H = 84, xs = [36, 110, 184], yT = 22, yB = 60;
+    if (!valid.length) {
+      return `<svg class="fms-macro-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(item.label)} ${NA}"><text class="fms-svg-tick" x="${W / 2}" y="${H / 2}" text-anchor="middle">${NA}</text></svg>`;
+    }
+    let yMin = isCash ? Math.min(...valid) - 0.5 : Math.min(0, ...valid);
+    let yMax = isCash ? Math.max(...valid) + 0.5 : Math.max(0, ...valid);
+    const span = Math.max(yMax - yMin, isCash ? 1.0 : 12);
+    const pad = span * 0.22;
+    yMin -= pad;
+    yMax += pad;
+    const mapY = (v) => yT + ((yMax - v) / (yMax - yMin)) * (yB - yT);
+    const zeroLine = !isCash && yMin <= 0 && yMax >= 0
+      ? `<line class="fms-svg-zero" x1="16" y1="${mapY(0).toFixed(1)}" x2="${W - 16}" y2="${mapY(0).toFixed(1)}"/>`
+      : "";
+    const coords = ptsRaw.map((p, i) => (isNum(p.v) ? { x: xs[i], y: mapY(p.v), v: p.v, lbl: p.lbl } : null));
+    const linePts = coords.filter(Boolean);
+    const lineCls = isCash ? "" : valClass(item.this);
+    const pathD = linePts.length >= 2
+      ? "M " + linePts.map((c) => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" L ")
+      : "";
+    const nodes = ptsRaw.map((p, i) => {
+      const x = xs[i];
+      const tick = `<text class="fms-svg-tick" x="${x}" y="${H - 5}" text-anchor="middle">${esc(p.lbl)}</text>`;
+      if (!isNum(p.v)) {
+        return `<text class="fms-svg-tick" x="${x}" y="${((yT + yB) / 2).toFixed(1)}" text-anchor="middle">${NA}</text>` + tick;
+      }
+      const y = mapY(p.v);
+      const txt = isCash ? fmtUnsignedPct(p.v, 1) : fmtSignedPct(p.v);
+      const dotCls = isCash ? "" : valClass(p.v);
+      const lblY = Math.max(12, y - 8);
+      return `<circle class="fms-svg-dot ${dotCls}" cx="${x}" cy="${y.toFixed(1)}" r="${i === 2 ? 4.2 : 3.2}"/>` +
+        `<text class="fms-svg-lbl" x="${x}" y="${lblY.toFixed(1)}" text-anchor="middle">${esc(txt)}</text>` +
+        tick;
+    }).join("");
+    const title = `${item.label} 3개월 추이`;
+    return `<svg class="fms-macro-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">` +
+      `<title>${esc(title)}</title>` +
+      zeroLine +
+      (pathD ? `<path class="fms-svg-line ${lineCls}" d="${pathD}"/>` : "") +
+      nodes + `</svg>`;
+  };
+
+  const macroEl = document.getElementById("fms-macro-cards");
+  if (macroEl) {
+    const cashAlloc = byKey("cash_alloc");
+    const specs = [
+      { key: "cash", unit: "% 자산", isCash: true },
+      { key: "growth", unit: "% 순응답", isCash: false },
+      { key: "inflation", unit: "% 순응답", isCash: false }
+    ];
+    macroEl.innerHTML = specs.map((sp) => {
+      const item = byKey(sp.key);
+      if (!item) return "";
+      const curTxt = sp.isCash ? fmtUnsignedPct(item.this, 1) : fmtSignedPct(item.this);
+      const prevTxt = sp.isCash ? fmtUnsignedPct(item.prev, 1) : fmtSignedPct(item.prev);
+      const prev2Txt = sp.isCash ? fmtUnsignedPct(item.prev2, 1) : fmtSignedPct(item.prev2);
+      const dp = fmtDeltaPp(item.this, item.prev, sp.isCash ? 1 : undefined);
+      const deltaHtml = dp.val === null
+        ? `<span class="fms-pill fms-pill-flat">${NA}</span>`
+        : (dp.cls === "flat"
+          ? `<span class="fms-pill fms-pill-flat num">– 0%p</span>`
+          : `<span class="wow-pill num ${dp.cls}">${dp.arrow} ${esc(dp.text)}</span>`);
+      const extraFoot = sp.isCash && cashAlloc
+        ? `<span>현금 순비중 ${esc(fmtSignedPct(cashAlloc.this))} (지난달 ${esc(fmtSignedPct(cashAlloc.prev))})</span>`
+        : "";
+      return `<article class="fms-macro-card" data-key="${esc(item.key)}">` +
+        `<div class="fms-macro-top"><h4 class="fms-macro-title">${esc(item.label || item.key)}</h4><span class="fms-macro-unit">${esc(sp.unit)}</span></div>` +
+        `<div class="fms-macro-main num"><span class="fms-macro-val ${sp.isCash ? "" : valClass(item.this)}">${esc(curTxt)}</span>${deltaHtml}</div>` +
+        trendSvg3(item, sp.isCash) +
+        `<div class="fms-macro-foot num"><span>${esc(prev2Txt)} → ${esc(prevTxt)} → ${esc(curTxt)}</span>${extraFoot}</div>` +
+        `</article>`;
+    }).join("");
+  }
+
+  // 5. Regional equities (this vs prev diverging bars)
+  const regionEl = document.getElementById("fms-regions");
+  if (regionEl) {
+    const regions = allocs.filter((a) => a.group === "region");
+    const allRegionVals = regions.flatMap((r) => [r.this, r.prev]).filter(isNum).map(Math.abs);
+    const maxReg = Math.max(40, ...allRegionVals);
+    const rBar = (v, isPrev) => {
+      if (!isNum(v)) return `<span class="fms-na">${NA}</span>`;
+      const clamped = Math.max(-maxReg, Math.min(maxReg, v));
+      const w = (Math.abs(clamped) / maxReg) * 50;
+      let fill = "";
+      if (Math.abs(clamped) < 1e-9) {
+        fill = `<span class="fms-rbar-fill flat" style="left:49.5%;width:1%"></span>`;
+      } else {
+        const cls = isPrev ? "prev" : (clamped > 0 ? "pos" : "neg");
+        const left = clamped > 0 ? 50 : 50 - w;
+        fill = `<span class="fms-rbar-fill ${cls}" style="left:${left.toFixed(2)}%;width:${w.toFixed(2)}%"></span>`;
+      }
+      return `<div class="fms-rbar-track${isPrev ? " is-prev" : ""}" aria-hidden="true"><span class="fms-rbar-zero"></span>${fill}</div>`;
+    };
+    const legendHtml =
+      `<div class="legend" aria-hidden="true" style="margin-bottom:10px">` +
+      `<span class="leg-item"><span class="leg-swatch pos"></span>이번 달 오버웨이트(+)</span>` +
+      `<span class="leg-item"><span class="leg-swatch neg"></span>이번 달 언더웨이트(-)</span>` +
+      `<span class="leg-item"><span class="leg-swatch" style="background:var(--line-strong)"></span>지난달</span>` +
+      `</div>`;
+    const listHtml = regions.map((r) => {
+      const curTxt = fmtSignedPct(r.this);
+      const prevTxt = fmtSignedPct(r.prev);
+      const prev2Txt = fmtSignedPct(r.prev2);
+      const dp = fmtDeltaPp(r.this, r.prev);
+      const deltaHtml = dp.val === null
+        ? `<span class="fms-pill fms-pill-flat">${NA}</span>`
+        : (dp.cls === "flat"
+          ? `<span class="fms-pill fms-pill-flat num">– 0%p</span>`
+          : `<span class="wow-pill num ${dp.cls}">${dp.arrow} ${esc(dp.text)}</span>`);
+      return `<div class="fms-region-row" data-key="${esc(r.key)}">` +
+        `<div class="fms-region-top">` +
+        `<span class="fms-region-name">${esc(r.label || r.key)}</span>` +
+        `<span class="fms-region-nums num"><span class="${valClass(r.this)}">${esc(curTxt)}</span>${deltaHtml}</span>` +
+        `</div>` +
+        `<div class="fms-region-bars">` +
+        `<div class="fms-rbar-line"><span>이번 달</span>${rBar(r.this, false)}</div>` +
+        `<div class="fms-rbar-line"><span>지난달</span>${rBar(r.prev, true)}</div>` +
+        `</div>` +
+        `<div class="fms-region-foot num"><span>지난달 ${esc(prevTxt)}</span><span>2개월 전 <span class="${isNum(r.prev2) ? "" : "fms-na"}">${esc(prev2Txt)}</span></span></div>` +
+        `</div>`;
+    }).join("");
+    regionEl.innerHTML = legendHtml + `<div class="fms-region-list">${listHtml}</div>`;
+  }
+
+  // 6. Tail Risks Top 3 & 7. Most Crowded Trades Top 3
+  const renderRanked = (el, title, sub, block, barCls, mode) => {
+    if (!el) return;
+    const curList = block && Array.isArray(block.current) ? block.current.slice(0, 3) : [];
+    const prevList = block && Array.isArray(block.previous) ? block.previous : [];
+    const prevMap = new Map();
+    prevList.forEach((p, idx) => prevMap.set(normKey(p.label), { rank: idx + 1, pct: p.pct, label: p.label }));
+    const curKeys = new Set(curList.map((c) => normKey(c.label)));
+    const maxPct = Math.max(50, ...curList.map((c) => (isNum(c.pct) ? c.pct : 0)));
+
+    const itemsHtml = curList.map((c, idx) => {
+      const rank = idx + 1;
+      const pct = c.pct;
+      const w = isNum(pct) ? Math.min(100, (pct / maxPct) * 100) : 0;
+      const prevInfo = prevMap.get(normKey(c.label));
+      let badgeHtml = "";
+      let metaTxt = "";
+      if (!prevInfo) {
+        badgeHtml = `<span class="fms-pill fms-pill-new">신규</span>`;
+        metaTxt = "지난달 TOP 3 밖에서 신규 진입";
+      } else {
+        const dp = fmtDeltaPp(pct, prevInfo.pct);
+        const rankTxt = prevInfo.rank === rank ? `${rank}위 유지` : `${prevInfo.rank}위→${rank}위`;
+        if (mode === "tail") {
+          const rCls = prevInfo.rank > rank ? "fms-pill-up" : "fms-pill-flat";
+          badgeHtml = `<span class="fms-pill ${rCls} num">${esc(rankTxt)}</span>`;
+          metaTxt = `지난달 ${prevInfo.rank}위 (${fmtUnsignedPct(prevInfo.pct)}) · ${dp.text}`;
+        } else {
+          badgeHtml = dp.val === null
+            ? `<span class="fms-pill fms-pill-flat">${NA}</span>`
+            : (dp.cls === "flat"
+              ? `<span class="fms-pill fms-pill-flat num">0%p</span>`
+              : `<span class="wow-pill num ${dp.cls}">${dp.arrow} ${esc(dp.text)}</span>`);
+          metaTxt = `지난달 ${prevInfo.rank}위 (${fmtUnsignedPct(prevInfo.pct)}) · ${rankTxt}`;
+        }
+      }
+      return `<div class="fms-rank-item">` +
+        `<div class="fms-rank-top">` +
+        `<div class="fms-rank-title"><span class="fms-rank-no num">${rank}위</span><span>${esc(koLabel(c.label))}</span></div>` +
+        `<div class="fms-rank-right num">${badgeHtml}<span class="fms-rank-pct">${esc(fmtUnsignedPct(pct))}</span></div>` +
+        `</div>` +
+        `<div class="fms-rank-bar" aria-hidden="true"><div class="fms-rank-fill ${barCls}" style="width:${w.toFixed(1)}%"></div></div>` +
+        `<div class="fms-rank-meta num">${esc(metaTxt)}</div>` +
+        `</div>`;
+    }).join("");
+
+    const dropped = prevList
+      .map((p, idx) => ({ rank: idx + 1, pct: p.pct, label: p.label }))
+      .filter((p) => !curKeys.has(normKey(p.label)));
+    const dropHtml = dropped.length
+      ? `<div class="fms-rank-drop num">TOP 3 이탈: ${dropped.map((d) => `${esc(koLabel(d.label))} (지난달 ${d.rank}위 · ${esc(fmtUnsignedPct(d.pct))})`).join(", ")}</div>`
+      : "";
+
+    el.innerHTML =
+      `<div class="fms-rank-head"><h3>${esc(title)}</h3><span class="fms-rank-sub">${esc(sub)}</span></div>` +
+      `<div class="fms-rank-list">${itemsHtml || `<span class="fms-na">${NA}</span>`}</div>` +
+      dropHtml;
+  };
+
+  renderRanked(
+    document.getElementById("fms-tail-risks"),
+    "꼬리 위험 TOP 3",
+    "응답 비율 · 전월 대비 순위 변화",
+    ed.tail_risks,
+    "risk",
+    "tail"
+  );
+  renderRanked(
+    document.getElementById("fms-crowded"),
+    "가장 붐비는 트레이드 TOP 3",
+    "응답 비율 · 전월 대비 %p 변화",
+    ed.crowded,
+    "crowd",
+    "crowded"
+  );
+
+  // 8. 2027 Year-end targets
+  const targetsEl = document.getElementById("fms-targets");
+  if (targetsEl) {
+    const t = ed.targets_2027 || {};
+    const tiles = [
+      { k: "미 10년물 국채금리", v: isNum(t.ust10y) ? fmtNum(t.ust10y, 2, 2) + "%" : NA, u: "UST 10Y 금리" },
+      { k: "EUR/USD", v: isNum(t.eurusd) ? fmtNum(t.eurusd, 2, 2) : NA, u: "유로/달러 환율" },
+      { k: "S&P 500", v: isNum(t.spx) ? fmtNum(t.spx, 0, 0) : NA, u: "지수 포인트" },
+      { k: "금 (Gold)", v: isNum(t.gold) ? "$" + fmtNum(t.gold, 0, 0) : NA, u: "달러 / 온스 ($/oz)" }
+    ];
+    targetsEl.innerHTML = tiles.map((tile) =>
+      `<div class="fms-target-tile">` +
+      `<div class="fms-target-k">${esc(tile.k)}</div>` +
+      `<div class="fms-target-v num ${tile.v === NA ? "fms-na" : ""}">${esc(tile.v)}</div>` +
+      `<div class="fms-target-u">${esc(tile.u)}</div>` +
+      `</div>`
+    ).join("");
+  }
+
+  // 9. CTA vs FMS comparison box (strictly data-driven, no causal interpretation)
+  const compareEl = document.getElementById("fms-compare");
+  if (compareEl) {
+    const ctaGroups = CTA && Array.isArray(CTA.groups) ? CTA.groups : [];
+    const findCtaGroup = (name) => ctaGroups.find((g) => g.group === name) || null;
+    const ctaAsof = CTA && CTA.asof ? CTA.asof : NA;
+
+    const pairs = [
+      { title: "주식", fmsKey: "equities", ctaGroup: "주식" },
+      { title: "채권 · 금리", fmsKey: "bonds", ctaGroup: "금리" },
+      { title: "원자재", fmsKey: "commodities", ctaGroup: "원자재" }
+    ];
+
+    const cardsHtml = pairs.map((p) => {
+      const f = byKey(p.fmsKey);
+      const g = findCtaGroup(p.ctaGroup);
+      const fCur = f && isNum(f.this) ? f.this : null;
+      const fPrev = f && isNum(f.prev) ? f.prev : null;
+      const fDelta = fmtDeltaPp(fCur, fPrev);
+
+      const gSeries = g && Array.isArray(g.series) ? g.series : [];
+      const cCur = gSeries[0] && isNum(gSeries[0].mean_pct_oi) ? gSeries[0].mean_pct_oi : null;
+      const cPrev = gSeries[1] && isNum(gSeries[1].mean_pct_oi) ? gSeries[1].mean_pct_oi : null;
+      const cDelta = fmtDeltaPp(cCur, cPrev, 2);
+
+      let badgeHtml = `<span class="fms-pill fms-pill-flat">${NA}</span>`;
+      let desc = "비교 가능한 데이터가 부족합니다.";
+      if (fDelta.val !== null && cDelta.val !== null) {
+        const fDir = fDelta.val > 0 ? 1 : (fDelta.val < 0 ? -1 : 0);
+        const cDir = cDelta.val > 0 ? 1 : (cDelta.val < 0 ? -1 : 0);
+        const fStance = fCur > 0 ? "순오버웨이트" : (fCur < 0 ? "순언더웨이트" : "중립");
+        const cStance = cCur > 0 ? "순롱" : (cCur < 0 ? "순숏" : "중립");
+        const fAct = fDir > 0 ? (fCur < 0 ? "언더웨이트 축소" : "비중 확대") : (fDir < 0 ? (fCur < 0 ? "언더웨이트 확대" : "비중 축소") : "변화 없음");
+        const cAct = cDir > 0 ? (cCur < 0 ? "순숏 축소" : "순롱 확대") : (cDir < 0 ? (cCur < 0 ? "순숏 확대" : "순롱 축소") : "변화 없음");
+
+        if (fDir !== 0 && fDir === cDir) {
+          badgeHtml = `<span class="fms-pill fms-pill-match">동일 방향</span>`;
+          const levelNote = (fCur > 0 && cCur < 0) || (fCur < 0 && cCur > 0)
+            ? ` 다만 절대 수준은 FMS ${fStance}(${fmtSignedPct(fCur)})와 CFTC ${cStance}(${fmtSignedPct(cCur, 2)})로 부호가 다릅니다.`
+            : ` 절대 수준도 모두 ${fStance}/${cStance} 영역입니다.`;
+          desc = `FMS ${fAct}(${fDelta.text})와 CFTC ${cAct}(${cDelta.text})로 최근 변화 방향이 같습니다.${levelNote}`;
+        } else if (fDir === 0 || cDir === 0) {
+          badgeHtml = `<span class="fms-pill fms-pill-flat">한쪽 보합</span>`;
+          desc = `FMS ${fAct}(${fDelta.text}), CFTC ${cAct}(${cDelta.text})입니다.`;
+        } else {
+          badgeHtml = `<span class="fms-pill fms-pill-div">방향 엇갈림</span>`;
+          desc = `FMS는 ${fAct}(${fDelta.text})인 반면 CFTC는 ${cAct}(${cDelta.text})로 최근 변화 방향이 엇갈렸습니다.`;
+        }
+      }
+
+      const fLine = fCur !== null ? `${fmtSignedPct(fCur)} (${fDelta.arrow ? fDelta.arrow + " " : ""}${fDelta.text})` : NA;
+      const cLine = cCur !== null ? `${fmtSignedPct(cCur, 2)} (${cDelta.arrow ? cDelta.arrow + " " : ""}${cDelta.text})` : NA;
+
+      return `<div class="fms-compare-card">` +
+        `<div class="fms-compare-top"><span class="fms-compare-asset">${esc(p.title)}</span>${badgeHtml}</div>` +
+        `<div class="fms-compare-rows num">` +
+        `<div class="fms-compare-line"><span class="fms-compare-src">FMS 설문 (월간)</span><span class="${valClass(fCur)} strong">${esc(fLine)}</span></div>` +
+        `<div class="fms-compare-line"><span class="fms-compare-src">CFTC 실제 (주간)</span><span class="${valClass(cCur)} strong">${esc(cLine)}</span></div>` +
+        `</div>` +
+        `<p class="fms-compare-desc num">${esc(desc)}</p>` +
+        `</div>`;
+    }).join("");
+
+    compareEl.innerHTML =
+      `<div class="fms-compare-head">` +
+      `<h3>CFTC 실제 포지션 vs BofA FMS 설문 대조</h3>` +
+      `<span class="fms-subhead-note num">FMS ${esc(ed.month || NA)} vs CFTC ${esc(ctaAsof)}</span>` +
+      `</div>` +
+      `<p class="fms-compare-note"><strong>설문(FMS)은 펀드매니저의 배분·의향</strong>이고, <strong>CFTC는 선물시장의 실제 포지션(%OI)</strong>입니다. 아래는 같은 자산군에서 두 지표의 최신 변화 방향과 수준만 데이터로 대조한 결과입니다.</p>` +
+      `<div class="fms-compare-grid">${cardsHtml}</div>`;
+  }
+})();
+</script>
+</body>
+</html>

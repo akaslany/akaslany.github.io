@@ -9,4 +9,5 @@ AI, 데이터, 투자와 서버 운영 과정에서 얻은 기술 기록을 정�
 
 - [오늘의 보고서](/todays-report/) — 당일 게시된 리포트 모음
 - [KRX Autopilot 상태](/krx-autopilot/) — 장마감 시그널 전체 목록(EXIT/WARNING/TRIGGERED/SETUP/HOLD/WATCH), 매 거래일 갱신
+- [CTA·헤지펀드 포지셔닝](/cta-positioning/) — CFTC 선물 순포지션과 BofA 펀드매니저 설문, 매주 갱신
 

@@ -1,0 +1,188 @@
+{
+  "editions": [
+    {
+      "month": "2026-11",
+      "fieldwork": "November 6 to November 12, 2026",
+      "panelists": 193,
+      "aum_bn": 526.0,
+      "released": "Tuesday",
+      "allocations": [
+        {
+          "key": "cash",
+          "label": "현금 비중",
+          "group": "cash",
+          "this": 3.6,
+          "prev": 3.9,
+          "prev2": 3.9
+        },
+        {
+          "key": "cash_alloc",
+          "label": "현금 비중(순)",
+          "group": "cash",
+          "this": -9.0,
+          "prev": 0.0,
+          "prev2": 0.0
+        },
+        {
+          "key": "equities",
+          "label": "주식 비중(순)",
+          "group": "asset",
+          "this": 41.0,
+          "prev": 44.0,
+          "prev2": 49.0
+        },
+        {
+          "key": "bonds",
+          "label": "채권 비중(순)",
+          "group": "asset",
+          "this": -23.0,
+          "prev": -37.0,
+          "prev2": -48.0
+        },
+        {
+          "key": "realestate",
+          "label": "부동산 비중(순)",
+          "group": "asset",
+          "this": -23.0,
+          "prev": -22.0,
+          "prev2": -21.0
+        },
+        {
+          "key": "commodities",
+          "label": "원자재 비중(순)",
+          "group": "asset",
+          "this": 15.0,
+          "prev": 21.0,
+          "prev2": 19.0
+        },
+        {
+          "key": "us_equities",
+          "label": "미국 주식(순)",
+          "group": "region",
+          "this": 13.0,
+          "prev": 11.0,
+          "prev2": 25.0
+        },
+        {
+          "key": "eurozone",
+          "label": "유로존 주식(순)",
+          "group": "region",
+          "this": -5.0,
+          "prev": -8.0,
+          "prev2": -8.0
+        },
+        {
+          "key": "gem",
+          "label": "신흥국 주식(순)",
+          "group": "region",
+          "this": 28.0,
+          "prev": 34.0,
+          "prev2": 38.0
+        },
+        {
+          "key": "japan",
+          "label": "일본 주식(순)",
+          "group": "region",
+          "this": 0.0,
+          "prev": 9.0,
+          "prev2": -1.0
+        },
+        {
+          "key": "uk",
+          "label": "영국 주식(순)",
+          "group": "region",
+          "this": -21.0,
+          "prev": -26.0,
+          "prev2": -35.0
+        },
+        {
+          "key": "growth",
+          "label": "성장 기대(순)",
+          "group": "macro",
+          "this": -14.0,
+          "prev": -4.0,
+          "prev2": 8.0
+        },
+        {
+          "key": "inflation",
+          "label": "인플레 전망(순, 낮아질 것)",
+          "group": "macro",
+          "this": 32.0,
+          "prev": 5.0,
+          "prev2": 4.0
+        }
+      ],
+      "tail_risks": {
+        "current": [
+          {
+            "label": "AI bubble",
+            "pct": 34
+          },
+          {
+            "label": "AI byperscaler credit event",
+            "pct": 31
+          },
+          {
+            "label": "2nd wave of inflation",
+            "pct": 14
+          }
+        ],
+        "previous": [
+          {
+            "label": "Disorderly rise in bond yields",
+            "pct": 31
+          },
+          {
+            "label": "AI bubble",
+            "pct": 23
+          },
+          {
+            "label": "2nd wave of inflation",
+            "pct": 20
+          }
+        ]
+      },
+      "crowded": {
+        "current": [
+          {
+            "label": "Long global semiconductors",
+            "pct": 39
+          },
+          {
+            "label": "Short China stocks",
+            "pct": 14
+          },
+          {
+            "label": "Long Magnificent 7",
+            "pct": 12
+          }
+        ],
+        "previous": [
+          {
+            "label": "Long global semiconductors",
+            "pct": 45
+          },
+          {
+            "label": "Short Treasuries",
+            "pct": 27
+          },
+          {
+            "label": "Long Magnificent 7",
+            "pct": 16
+          }
+        ]
+      },
+      "targets_2027": {
+        "ust10y": 4.9,
+        "eurusd": 1.12,
+        "spx": 7926.0,
+        "gold": 4341.0
+      },
+      "url": "https://www.tradingview.com/news/macenews:a6b54b6f7094b:0-bofa-global-research-fund-manager-survey-fading-inflation-jitters-prompt-shift-out-of-cash-into-fixed-income",
+      "title": "BofA Global Research Fund Manager Survey: Fading Inflation Jitters Prompt Shift out of Cash into Fixed Income — TradingView News",
+      "published": "Tue, 17 Nov 2026 16:00:00 GMT",
+      "retrieved_at_utc": "2026-11-21T01:33:19+00:00"
+    }
+  ],
+  "latest": "2026-11"
+}
