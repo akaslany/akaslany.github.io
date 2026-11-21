@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **08:04 KST** — [미국·한국 증시 주간 핵심 일정 — 2026-11-23~2026-11-27](/2026/11/22/us-korea-market-calendar/)
 - **08:00 KST** — [FED 일일 브리프 — 2026-11-21](/fed-daily/2026-11-21/)
 - **07:32 KST** — [미국 유동성·자금시장 인텔리전스 v2 — 2026-11-22](/liquidity/2026-11-22/)
 - **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-11-22](/trump-truth/2026-11-22/)
