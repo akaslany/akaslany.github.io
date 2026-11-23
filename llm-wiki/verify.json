@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 24498048,
+  "dist_bytes": 24498140,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -87,9 +87,9 @@
       "changed_files": 0,
       "changed_paths": [],
       "compared_files": 999,
-      "first_sec": 10.159,
+      "first_sec": 9.424,
       "ok": true,
-      "second_sec": 9.297
+      "second_sec": 10.743
     },
     "schema": {
       "checked": 995,

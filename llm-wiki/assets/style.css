@@ -23,7 +23,7 @@ body { margin: 0; background: var(--paper); color: var(--text); line-height: 1.6
 a { color: var(--accent); text-underline-offset: .18em; }
 a:hover { text-decoration-thickness: .15em; }
 .site-header { border-bottom: 1px solid var(--line); }
-nav, main { max-width: 68rem; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 3rem); }
+nav, main { max-width: 980px; margin: 0 auto; padding: 0 24px; }
 nav { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; padding-block: .85rem; }
 nav a { text-decoration: none; }
 nav a:hover, nav [aria-current] { text-decoration: underline; }
@@ -41,7 +41,7 @@ pre, .search {
   background: var(--panel);
   padding: 1rem;
 }
-pre { white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 4; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: auto; tab-size: 4; }
 code { font-family: ui-monospace, monospace; font-size: .92em; }
 .backlinks { border-top: 1px solid var(--line); margin-top: 2rem; }
 .search { margin-top: 2rem; }
@@ -50,8 +50,11 @@ code { font-family: ui-monospace, monospace; font-size: .92em; }
 .search input { width: min(35rem, 100%); padding: .45rem; font: inherit; }
 .search small { color: var(--muted); display: block; }
 summary { cursor: pointer; }
-table { border-collapse: collapse; }
+table { display: block; border-collapse: collapse; overflow-x: auto; }
 td, th { border: 1px solid var(--line); padding: .3rem .6rem; text-align: start; }
+@media (max-width: 640px) {
+  nav, main { padding-inline: 16px; }
+}
 @media print {
   .site-header, .search { display: none; }
   main { max-width: none; padding: 0; }
