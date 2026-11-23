@@ -182,10 +182,10 @@
 </table>
 <h4 id="4-기술적-보안-경계-및-통제-메커니즘-분석">4. 기술적 보안 경계 및 통제 메커니즘 분석</h4>
 <ul>
-<li><strong>Cloud Browser 격리 및 Takeover:</strong> 사용자의 로컬 환경과 분리된 원격 샌드박스에서 실행됩니다. 사용자는 필요한 로그인·인증 단계에서 **인간 개입(Takeover)**을 수행할 수 있지만 이것이 모든 비정상 행위 차단을 보장하지는 않습니다.</li>
+<li><strong>Cloud Browser 격리 및 Takeover:</strong> 사용자의 로컬 환경과 분리된 원격 샌드박스에서 실행됩니다. 사용자는 필요한 로그인·인증 단계에서 인간 개입(Takeover)을 수행할 수 있지만 이것이 모든 비정상 행위 차단을 보장하지는 않습니다.</li>
 <li><strong>'Sites' 데이터 구조:</strong> 관계형 데이터베이스(D1, 10GB 제한)와 오브젝트 스토리지(R2)를 활용하며 저장(Save)과 배포(Deploy) 단계가 분리되어 있습니다. Simon의 관찰에 따르면 Cloudflare Workers 기반 인프라로 보이나, OpenAI는 이를 공식적으로 명시하지 않았습니다.</li>
 <li><strong>인증 정보 관리의 한계:</strong> 모델이 사용자의 비밀번호를 직접 보지 못하도록 설계되었으나, 브라우저 세션 쿠키, 네트워크 로그, 혹은 브라우저 확장 프로그램 상태를 통한 <strong>간접적 노출 가능성</strong>은 여전히 존재합니다. &quot;모델이 보지 못한다&quot;는 것이 &quot;시스템 전체에서 안전하다&quot;는 것을 보장하지 않습니다.</li>
-<li><strong>Auto-review 시스템의 불확실성:</strong> 샌드박스 내 위협 행위를 자동 감지하는 Auto-review 시스템은 **결정론적 보안 보장(Deterministic guarantee)**이 아닙니다. 샌드박스의 접근 권한(writable roots)과 네트워크 범위가 넓어질수록, 자동 리뷰는 결정론적 보안 보장이 아니므로 사람의 검토와 최소 권한을 대체할 수 없습니다.</li>
+<li><strong>Auto-review 시스템의 불확실성:</strong> 샌드박스 내 위협 행위를 자동 감지하는 Auto-review 시스템은 결정론적 보안 보장(Deterministic guarantee)이 아닙니다. 샌드박스의 접근 권한(writable roots)과 네트워크 범위가 넓어질수록, 자동 리뷰는 결정론적 보안 보장이 아니므로 사람의 검토와 최소 권한을 대체할 수 없습니다.</li>
 </ul>
 <h4 id="5-위협-모델링-the-lethal-trifecta-및-9대-위협">5. 위협 모델링: The Lethal Trifecta 및 9대 위협</h4>
 <p>보안 전문가 Simon Willison은 (1) 개인 데이터 접근권, (2) 신뢰할 수 없는 외부 콘텐츠 노출, (3) 외부 데이터 유출 채널의 결합을 가장 치명적인 위협(<strong>Lethal Trifecta</strong>)으로 정의했습니다. 이는 Work 환경이 가질 수 있는 잠재적 공격 표면에 대한 분석입니다.</p>
@@ -252,7 +252,7 @@
 <li><strong>개인 문서 작업 (외부 액션 없음):</strong> 데이터 학습 제외 설정을 확인하고 휘발성 워크스페이스를 사용합니다.</li>
 <li><strong>인증된 브라우징 (Authenticated Browsing):</strong> <strong>별도의 저권한 계정</strong>을 사용하며, Takeover 기능을 통해 제출 내용을 상시 모니터링합니다.</li>
 <li><strong>소스/종속성 실행:</strong> Lockfile 사용, 버전 고정, 네트워크 허용 리스트가 설정된 격리 환경에서만 수행합니다.</li>
-<li><strong>운영/금융/관리자 액션:</strong> 원칙적으로 지양해야 합니다. 불가피한 경우 **별도의 서비스 계정(Service Account)**을 사용하고, 실행 전 Preview/Diff 검토 및 롤백 대책을 반드시 수립해야 합니다.</li>
+<li><strong>운영/금융/관리자 액션:</strong> 원칙적으로 지양해야 합니다. 불가피한 경우 별도의 서비스 계정(Service Account)을 사용하고, 실행 전 Preview/Diff 검토 및 롤백 대책을 반드시 수립해야 합니다.</li>
 </ol>
 <h4 id="7-미해결-과제-및-모니터링-체크리스트">7. 미해결 과제 및 모니터링 체크리스트</h4>
 <h5 id="현재-공식-문서로-확인되지-않는-불확실한-지점">현재 공식 문서로 확인되지 않는 불확실한 지점</h5>

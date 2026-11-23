@@ -27,7 +27,7 @@
 <h3 id="카르테시아-cartesia-계층적-네트워크-h-net-분석-해설-보고서">카르테시아(Cartesia) 계층적 네트워크(H-Net) 분석 해설 보고서</h3>
 <h4 id="1-개요-overview">1. 개요 (Overview)</h4>
 <p>인공지능(AI) 연구에서 리처드 서튼(Richard Sutton)이 2019년에 제안한 '쓴 교훈(Bitter Lesson)' 철학은 인간이 수공업적으로 설계한 사전 지식(Priors)을 배제하고, 대규모 연산 자원을 활용해 로우 데이터(Raw data)로부터 직접 학습하는 일반화된 방법론이 AI의 장기적 발전을 이끈다는 핵심 메시지를 담고 있습니다. 현재의 언어 모델은 트랜스포머 아키텍처와 다음 토큰 예측 알고리즘 등을 통해 커다란 성공을 거두었으나, 여전히 바이트(Byte) 레벨의 로우 데이터를 직접 처리하지 못하고 수작업으로 정의된 토큰화(Tokenization) 및 사전 토큰화(Pretokenization) 정규식에 의존하고 있습니다. 이러한 인위적 인코딩 단계는 모델이 데이터 본연의 구조로부터 엔드투엔드(End-to-end)로 학습하는 능력을 근본적으로 제약합니다. [출처: <code>web-www-cartesia-ai-blog-from-tokens-to-bytes-part-1-29f0d4517b8b</code> (https://www.cartesia.ai/blog/from-tokens-to-bytes-part-1)]</p>
-<p>기존 BPE(Byte Pair Encoding) 방식 및 정규식 기반 사전 토큰화가 지닌 구조적 한계를 극복하기 위해, 카르테시아 연구진(Cartesia Research)은 **계층적 네트워크(Hierarchical Networks, H-Net)**를 제안했습니다. H-Net은 데이터를 정적으로 사전 처리하는 대신, 모델 내부에서 데이터 의존적(Data-dependent)이고 동적인 청킹(Dynamic chunking)을 엔드투엔드로 수행하여 문자에서 단어, 단어에서 구문, 구문에서 개념으로 이어지는 다단계 추상화 구조를 직접 학습합니다. 이를 통해 인위적 편향을 제거하고 로우 데이터로부터 직접 의미를 추출하여 데이터 및 연산 효율성을 극대화하는 것을 목표로 합니다. [출처: <code>web-www-cartesia-ai-blog-from-tokens-to-bytes-part-1-29f0d4517b8b</code> (https://www.cartesia.ai/blog/from-tokens-to-bytes-part-1)]</p>
+<p>기존 BPE(Byte Pair Encoding) 방식 및 정규식 기반 사전 토큰화가 지닌 구조적 한계를 극복하기 위해, 카르테시아 연구진(Cartesia Research)은 계층적 네트워크(Hierarchical Networks, H-Net)를 제안했습니다. H-Net은 데이터를 정적으로 사전 처리하는 대신, 모델 내부에서 데이터 의존적(Data-dependent)이고 동적인 청킹(Dynamic chunking)을 엔드투엔드로 수행하여 문자에서 단어, 단어에서 구문, 구문에서 개념으로 이어지는 다단계 추상화 구조를 직접 학습합니다. 이를 통해 인위적 편향을 제거하고 로우 데이터로부터 직접 의미를 추출하여 데이터 및 연산 효율성을 극대화하는 것을 목표로 합니다. [출처: <code>web-www-cartesia-ai-blog-from-tokens-to-bytes-part-1-29f0d4517b8b</code> (https://www.cartesia.ai/blog/from-tokens-to-bytes-part-1)]</p>
 <p>본 분석 해설 보고서는 카르테시아 연구진이 공개한 기술 보고서 Part I과 Part II의 핵심 내용을 종합 정리합니다. Part I에서는 BPE 트랜스포머와 비교한 H-Net의 스케일링 사다리(Scaling ladder), 대규모 SmolLM3 레시피 대조군에서의 10배 이상 효율성 달성, 추상화 행동에 대한 질적 분석, DNA 및 컴퓨터 비전으로의 확장성을 다룹니다. Part II에서는 사전학습 검증 손실과 다운스트림 평가 손실 간의 손실 대 손실(Loss-to-Loss) 스케일링 법칙, 사전 토큰화 정규식의 영향력, 그리고 프록시 기반 청킹 대비 엔드투엔드 동적 학습이 제공하는 우수성을 체계적으로 분석합니다. [출처: <code>web-www-cartesia-ai-blog-from-tokens-to-bytes-part-1-29f0d4517b8b</code> (https://www.cartesia.ai/blog/from-tokens-to-bytes-part-1), <code>web-www-cartesia-ai-blog-from-tokens-to-bytes-part-2-28bdc2ff50de</code> (https://www.cartesia.ai/blog/from-tokens-to-bytes-part-2)]</p>
 <hr />
 <h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
@@ -59,13 +59,13 @@
 </tr>
 <tr>
 <td style="text-align:left"><strong>DeepSeek-V3</strong> (2024)</td>
-<td style="text-align:left"><code>\p{N}{1,3}</code> 이후 <code>[\u4E00-\u9FA5\u3040-\u309F\u30A0-\u30FF]+</code> 이후 `[!&quot;#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_{</td>
-<td style="text-align:left">}~][A-Za-z]+|[^\r\n\p{L}\p{P}\p{S}]?[\p{L}\p{M}]+| ?[\p{P}\p{S}]+[\r\n]<em>|\s</em>[\r\n]+|\s+(?!\S)|\s+`</td>
+<td style="text-align:left"><code>\p{N}{1,3}</code> 이후 <code>[\u4E00-\u9FA5\u3040-\u309F\u30A0-\u30FF]+</code> 이후 [!&quot;#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_{</td>
+<td style="text-align:left">}~][A-Za-z]+|[^\r\n\p{L}\p{P}\p{S}]?[\p{L}\p{M}]+| ?[\p{P}\p{S}]+[\r\n]<em>|\s</em>[\r\n]+|\s+(?!\S)|\s+</td>
 </tr>
 </tbody>
 </table>
 <p>사전 토큰화 규칙 없이 바이트 단위에서 직접 BPE를 학습하는 BPE-NP(No Pretokenization)는 압축률 측면에서 6.03 바이트/토큰을 기록하여 일반 BPE(4.57 바이트/토큰)보다 높지만, 공백을 넘나들며 의미적 경계와 무관하게 텍스트가 잘려 다운스트림 전이 성능이 심각하게 저하되는 성능 역전 현상이 발생합니다.</p>
-<p>또한, 기존 토큰화 방식은 **프롬프트 경계 문제(Prompt boundary problem / Marginalization problem)**를 유발합니다. 하나의 텍스트 표현이 여러 토큰 분할 시퀀스로 표현될 수 있음에도 표준 모델은 단일 정규 분할(Canonical tokenization)만을 평가하므로, 프롬프트가 단어 중간이나 공백에서 끝날 경우 모델이 올바른 다음 토큰 확률을 할당하지 못하는 구조적 오류를 범합니다.</p>
+<p>또한, 기존 토큰화 방식은 프롬프트 경계 문제(Prompt boundary problem / Marginalization problem)를 유발합니다. 하나의 텍스트 표현이 여러 토큰 분할 시퀀스로 표현될 수 있음에도 표준 모델은 단일 정규 분할(Canonical tokenization)만을 평가하므로, 프롬프트가 단어 중간이나 공백에서 끝날 경우 모델이 올바른 다음 토큰 확률을 할당하지 못하는 구조적 오류를 범합니다.</p>
 <h5 id="2-2-계층적-네트워크-h-net-의-아키텍처-및-동작-원리">2.2 계층적 네트워크(H-Net)의 아키텍처 및 동작 원리</h5>
 <p>H-Net은 데이터를 고정된 offline 토큰으로 분할하지 않고, 모델 내부에서 엔드투엔드로 dynamic chunking을 실행하는 5개 핵심 모듈 구조로 이루어져 있습니다.</p>
 <pre><code>[입력 (Raw Bytes)] 

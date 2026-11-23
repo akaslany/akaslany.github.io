@@ -44,7 +44,7 @@
 <p>본 해설 보고서는 메릴랜드 대학교(University of Maryland)의 맷 랜드레만(Matt Landreman) 수석 연구원이 발표한 논문을 바탕으로, 3차원 자기유체역학(MHD) 평형 방정식의 명시적 해석적 해(explicit analytic solutions)에 대한 수학적·물리적 구조와 그 학술적 의의를 정밀하게 분석합니다. 본 연구는 정상 비압축성 오일러 흐름(steady incompressible Euler flow)과 이상적 MHD 평형 간의 수학적 동형성(isomorphism)을 기반으로, 역연사비(inverse aspect ratio) 확장이나 축대칭으로부터의 미소 섭동(perturbation)과 같은 근사적 가정 없이 정밀하게 중첩된 토로이달 자속면(nested toroidal flux surfaces)을 갖는 완전한 3차원 해석적 해를 초등함수로 명시적으로 도출하였습니다.</p>
 <p>오랫동안 플라즈마 물리학계에서는 축대칭과 같은 연속적 공간 대칭성이 존재하지 않을 경우, 매끄러운 스칼라 압력 분포($p$)를 가지는 3차원 토로이달 평형 상태가 존재하는가에 대해 심대한 의문을 제기해 왔습니다. 기존 Garren &amp; Boozer 등의 소반경/고연사비 확장법(near-axis expansion)은 자기축 인근에서만 유효한 국소적 근사해를 제공하는 데 그쳤으며, 축에서 멀어질수록 수학적 특이성(singularity)이나 수렴 발산 문제가 발생하는 구조적 한계를 안고 있었습니다. 반면, 본 논문에서 제시된 해는 토로이달 실효 영역 $\Omega_\delta$ 전체 부피(full toroidal volume) 상에서 매끄럽고(smooth) 발산하지 않는 초등함수로 엄밀하게 표현되어, 스텔라레이터 자속면의 정규성(regularity)에 대한 이론적 보장을 최초로 완벽하게 제시하였습니다.</p>
 <p>제시된 해는 두 가지 주요 계열로 나뉩니다. 첫 번째 계열은 모든 자속면에서 회전 변환비가 정수인 $\iota = 2$의 고정값을 가지며 닫힌 자기선(closed field lines)을 형성합니다. 두 번째 계열은 자기면에 따라 회전 변환비가 연속적으로 변하는 자기 시어(sheared $\iota$) 특성을 가집니다. 두 해 계열 모두 스텔라레이터(Stellarator) 대칭성(x축 기준 $\pi$ 회전 대칭) 및 2-장 주기성(field period $N=2$)을 만족하며, 스텔라레이터 및 토카막(Tokamak)과 같은 자기 갇힘 핵융합 장치의 3차원 평형 존재성을 규명함은 물론, VMEC 등 3차원 수치 평형 코드의 정밀도를 검증하는 절대적 기준(benchmark)으로 활용될 핵심적 가치를 가집니다.</p>
-<p>본 보고서에 인용된 시각 자료 중 **[SOURCE_IMAGE_1]**은 정수 회전 변환비($\iota = 2$) 계열에서 매개변수 $\epsilon = 0.5$, $\psi = 1/64$ 조건일 때의 3차원 자속면(flux surface), 비평면 자기축(magnetic axis), 자기선(field lines)의 3차원 형상과 함께, 토로이달 단면 각도($\phi = 0, \pi/4, \pi/2$) 및 자속면 단면 비율($\psi = \delta, 4\delta/9, \delta/9$)에 따른 중첩 자속면 구조를 시각화하고 있습니다. 반면 **[SOURCE_IMAGE_2]**는 자기 시어(sheared $\iota$) 계열의 3차원 입체 형상(Case B)과 함께 매개변수 조합(Case A, B, C)의 변화에 따라 자속면의 타원성 및 비축대칭 왜곡(distortion)이 심화되는 폴로이달 단면 특성을 대조하여 보여줍니다.</p>
+<p>본 보고서에 인용된 시각 자료 중 [SOURCE_IMAGE_1]은 정수 회전 변환비($\iota = 2$) 계열에서 매개변수 $\epsilon = 0.5$, $\psi = 1/64$ 조건일 때의 3차원 자속면(flux surface), 비평면 자기축(magnetic axis), 자기선(field lines)의 3차원 형상과 함께, 토로이달 단면 각도($\phi = 0, \pi/4, \pi/2$) 및 자속면 단면 비율($\psi = \delta, 4\delta/9, \delta/9$)에 따른 중첩 자속면 구조를 시각화하고 있습니다. 반면 [SOURCE_IMAGE_2]는 자기 시어(sheared $\iota$) 계열의 3차원 입체 형상(Case B)과 함께 매개변수 조합(Case A, B, C)의 변화에 따라 자속면의 타원성 및 비축대칭 왜곡(distortion)이 심화되는 폴로이달 단면 특성을 대조하여 보여줍니다.</p>
 <hr />
 <h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
 <h5 id="2-1-그라드-추측-grad-s-conjecture-의-학술적-배경-및-반증">2.1. 그라드 추측(Grad's Conjecture)의 학술적 배경 및 반증</h5>
@@ -107,7 +107,7 @@ $$\psi = \frac{x^2 + y^2 + 4z^2 + |\mathbf{B}|^2 - 2 + \epsilon^2}{4}, \quad p =
 <p><strong>부피 평균 베타 $\beta_V$ 및 시각 자료 분석:</strong></p>
 <ul>
 <li><strong>[사실]</strong> 경계면 압력 $p(\delta) = 0$ ($p_a = 2\delta$)을 가정할 때, 부피 평균 플라즈마 베타 $\beta_V$의 해석적 수식은 $\beta_V = \frac{2\langle p \rangle_V}{\langle |\mathbf{B}|^2 \rangle_V} = \frac{2\delta}{1 - \epsilon^2/2 + \delta}$ 입니다. $\epsilon = 0.5, \delta = 1/64$ 조건에서 $\beta_V = \frac{2}{57} \approx 3.51%$ 입니다.</li>
-<li><strong>[작성자 해석]</strong> **[SOURCE_IMAGE_1]**은 단면 비율 $\psi = \delta, 4\delta/9, \delta/9$에 해당하는 3개의 중첩 자속면과 단면 각도 $\phi = 0, \pi/4, \pi/2$에서의 단면 형상을 보여주며, 자속면들이 상호 교차하거나 겹침 없이 정교하게 중첩된 솔리드 토러스 구조를 형성함을 입증합니다.</li>
+<li><strong>[작성자 해석]</strong> [SOURCE_IMAGE_1]은 단면 비율 $\psi = \delta, 4\delta/9, \delta/9$에 해당하는 3개의 중첩 자속면과 단면 각도 $\phi = 0, \pi/4, \pi/2$에서의 단면 형상을 보여주며, 자속면들이 상호 교차하거나 겹침 없이 정교하게 중첩된 솔리드 토러스 구조를 형성함을 입증합니다.</li>
 </ul>
 </li>
 </ul>
@@ -151,7 +151,7 @@ $$\iota(0) = h_0 H(\epsilon), \quad H(\epsilon) = \frac{1}{2\pi}\int_0^{2\pi} \t
 <li>
 <p><strong>[SOURCE_IMAGE_2] 매개변수 조합에 따른 형상 왜곡 대조:</strong></p>
 <ul>
-<li><strong>[사실]</strong> **[SOURCE_IMAGE_2]**의 세 가지 케이스별 매개변수 및 단면 특성은 다음과 같습니다:
+<li><strong>[사실]</strong> [SOURCE_IMAGE_2]의 세 가지 케이스별 매개변수 및 단면 특성은 다음과 같습니다:
 <ul>
 <li><strong>Case A:</strong> $\epsilon = 1.08,; S = 3,; \delta = 0.245,; \lambda = 3.5$ (낮은 타원성 및 완만한 자속면 변형)</li>
 <li><strong>Case B:</strong> $\epsilon = 4,; S = 3.5,; \delta = 0.245,; \lambda = 3.5$ (강한 자기장 꼬임 및 3D 상공 입체 구조 제시)</li>
@@ -186,7 +186,7 @@ $$(\nabla \times \mathbf{B}) \times \mathbf{B} = -\nabla Q - \nabla \frac{|\math
 <hr />
 <h5 id="2-5-인공지능-ai-활용-연구-방법론">2.5. 인공지능(AI) 활용 연구 방법론</h5>
 <ul>
-<li><strong>[사실]</strong> 본 연구 논문의 해석적 해 발견 및 원고 초안 작성 과정에 인공지능 모델인 **'GPT-6 Astra Pro'**가 활용되었습니다.</li>
+<li><strong>[사실]</strong> 본 연구 논문의 해석적 해 발견 및 원고 초안 작성 과정에 인공지능 모델인 'GPT-6 Astra Pro'가 활용되었습니다.</li>
 <li><strong>[사실]</strong> 수록된 모든 수식, 유도 과정, 검증 수치 및 정밀성 체크는 저자인 맷 랜드레만(Matt Landreman)이 수동(manually)으로 엄밀하게 확인하고 검증하였습니다.</li>
 </ul>
 <hr />

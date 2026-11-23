@@ -48,7 +48,7 @@
 <ul>
 <li><strong>요구사항 도출과 상호작용:</strong> <strong><code>ask_user_question</code> 도구</strong>는 모델이 사용자로부터 모호성을 해소하고 정확한 요구사항을 추출할 수 있도록 지원합니다. 인간-에이전트 상호작용(HAI) 관점에서 사용자가 문제의 세부사항(DB 스키마, 콜 스택 등)을 명확히 정의하지 못한 '미지의 영역(Unknown Unknowns)'을 협업을 통해 도출하는 핵심 인터페이스 역할을 수행합니다.</li>
 <li><strong>아티팩트(Artifacts) 및 데이터베이스:</strong> 아티팩트는 단순한 HTML 모형 출력을 넘어 <strong>데이터베이스가 연동된 지속성(Persistent) 저장소</strong> 구조를 지원합니다. 생성형 인터페이스(Generative Interface)로서 칸반 보드 형태의 대시보드 데이터를 저장할 수 있으며, 모델 맥락 프로토콜(MCP)을 통해 여러 클로드 에이전트가 해당 데이터에 접근하고 동기화할 수 있습니다.</li>
-<li><strong>하네스 분리 구조:</strong> 클로드 코드는 기존 단일 환경 실행 방식에서 <strong>추론/지능(Cloud/Inference)</strong>, <strong>실행/작업(Local/Remote Hands 또는 Remote Sandbox)</strong>, **표면 UI(Artifacts/HTML)**의 3단계 역할 분리 아키텍처로 진화하고 있습니다. 이를 통해 클라우드 기반의 연속 추론과 로컬/원격 환경에서의 안전한 하위 에이전트 실행을 독립적으로 제어합니다.</li>
+<li><strong>하네스 분리 구조:</strong> 클로드 코드는 기존 단일 환경 실행 방식에서 <strong>추론/지능(Cloud/Inference)</strong>, <strong>실행/작업(Local/Remote Hands 또는 Remote Sandbox)</strong>, 표면 UI(Artifacts/HTML)의 3단계 역할 분리 아키텍처로 진화하고 있습니다. 이를 통해 클라우드 기반의 연속 추론과 로컬/원격 환경에서의 안전한 하위 에이전트 실행을 독립적으로 제어합니다.</li>
 </ul>
 <h5 id="2-2-에이전트-프롬프팅-컨텍스트-관리-및-모델-활용-전략">2.2. 에이전트 프롬프팅, 컨텍스트 관리 및 모델 활용 전략</h5>
 <table>
@@ -62,12 +62,12 @@
 <tbody>
 <tr>
 <td style="text-align:left"><strong>프롬프팅 메타 스킬 및 바이모달 접근법</strong></td>
-<td style="text-align:left">모델에 대한 정확한 <strong>정신적 모델(Mental Model)</strong> 구축 및 도메인 어휘 습득이 핵심. 약 2분간의 음성 연속 발화(Voice Rambling)로 가볍게 지시하거나, 작업 착수 전 <strong>SCQA 모델(Situation, Complication, Question, Answer)</strong> 기반으로 30분간 고밀도 사전 맥락(Upfront Context)을 설계를 병행하는 **'바이모달 프롬프팅(Bimodal Prompting)'**이 효과적임. 초반 프롬프트 투자는 모델의 불필요한 시행착오로 인한 토큰 낭비를 방지함.</td>
+<td style="text-align:left">모델에 대한 정확한 <strong>정신적 모델(Mental Model)</strong> 구축 및 도메인 어휘 습득이 핵심. 약 2분간의 음성 연속 발화(Voice Rambling)로 가볍게 지시하거나, 작업 착수 전 <strong>SCQA 모델(Situation, Complication, Question, Answer)</strong> 기반으로 30분간 고밀도 사전 맥락(Upfront Context)을 설계를 병행하는 '바이모달 프롬프팅(Bimodal Prompting)'이 효과적임. 초반 프롬프트 투자는 모델의 불필요한 시행착오로 인한 토큰 낭비를 방지함.</td>
 <td style="text-align:left">프롬프팅은 대중 연설이나 글쓰기와 같아서 클로드의 사고 방식을 이해하는 것이 필수적임. 사전 맥락 없이 단문 명령 후 대화창에서 반복 수정할 경우 토큰 소모와 사용량 제한 소진이 극심해짐.</td>
 </tr>
 <tr>
 <td style="text-align:left"><strong>모델별 검증 Effort 및 토큰 효율성</strong></td>
-<td style="text-align:left">과업의 복잡도 및 도메인에 따라 검증 Effort 설정 차별화. 보안 및 코드 리뷰 과업에는 High/Max Effort 적용이 필수적이나, 일반 소프트웨어 엔지니어링/UI 작업에서는 Low/Medium Effort로 충분함. 페이블(Fable)과 같은 프론티어 모델은 지능이 높을수록 단순 과업에서 불필요한 크로미엄(Chromium) 스크린샷 실행이나 린터(Linter) 남발을 생략하므로 **작은 모델보다 오히려 토큰을 적게 소모(Token Efficient)**함.</td>
+<td style="text-align:left">과업의 복잡도 및 도메인에 따라 검증 Effort 설정 차별화. 보안 및 코드 리뷰 과업에는 High/Max Effort 적용이 필수적이나, 일반 소프트웨어 엔지니어링/UI 작업에서는 Low/Medium Effort로 충분함. 페이블(Fable)과 같은 프론티어 모델은 지능이 높을수록 단순 과업에서 불필요한 크로미엄(Chromium) 스크린샷 실행이나 린터(Linter) 남발을 생략하므로 작은 모델보다 오히려 토큰을 적게 소모(Token Efficient)함.</td>
 <td style="text-align:left">Terminal Bench(70개 문제) 평가 결과, 보안 문제에서는 High Effort가 성과 향상에 직결되나 일반 소프트웨어 엔지니어링은 Effort 소모가 주로 자동 검증과 엣지 케이스 테스트에 집중됨. 모델 지능 향상 시 자동 검증 비용이 감소함.</td>
 </tr>
 <tr>
@@ -80,7 +80,7 @@
 <h5 id="2-3-클로드-모드-claude-mods-와-가변-소프트웨어-mutable-software">2.3. 클로드 모드(Claude Mods)와 가변 소프트웨어(Mutable Software)</h5>
 <ul>
 <li><strong>클로드 모드의 개념:</strong> 기존의 정적 빌드 시스템(Babel, Webpack 등)이나 단순 훅(Hooks) 메커니즘을 넘어, 사용자의 프롬프트 및 하위 에이전트를 통해 하네스의 실행 로직과 생성형 표면 UI 전체를 실시간으로 맞춤 변경하는 <strong>'가변 소프트웨어(Mutable Software)'</strong> 패러다임의 시초입니다.</li>
-<li><strong>작동 메커니즘:</strong> <strong>타입스크립트(TypeScript) 런타임</strong> 내부에서 인프로세스(In-process)로 작동하며 훅을 등록합니다. 에이전트의 응답 회차(Turn)가 끝날 때, 메인 컨텍스트를 오염시키지 않고 **프롬프트 캐시(Prompt Cache)를 유지한 채 인프로세스로 포크된 하위 에이전트(Forked Sub-agent)**를 생성합니다. 이를 통해 매우 저렴한 토큰 비용으로 경량 분류(Classification), 가정 검증, 다음 단계 제안 등 감독 작업(Supervisor Task)을 수행합니다.</li>
+<li><strong>작동 메커니즘:</strong> <strong>타입스크립트(TypeScript) 런타임</strong> 내부에서 인프로세스(In-process)로 작동하며 훅을 등록합니다. 에이전트의 응답 회차(Turn)가 끝날 때, 메인 컨텍스트를 오염시키지 않고 프롬프트 캐시(Prompt Cache)를 유지한 채 인프로세스로 포크된 하위 에이전트(Forked Sub-agent)를 생성합니다. 이를 통해 매우 저렴한 토큰 비용으로 경량 분류(Classification), 가정 검증, 다음 단계 제안 등 감독 작업(Supervisor Task)을 수행합니다.</li>
 <li><strong>주요 모드 사례:</strong>
 <ul>
 <li><strong>ELI5 (Explain Like I'm Five) / 퀴즈 모드:</strong> 복잡한 인시던트 발생 시 핵심 개념을 요약하고, 사용자의 이해도를 검증하기 위한 퀴즈 인터페이스를 자동 생성하는 모드.</li>
@@ -95,7 +95,7 @@
 <li><strong>클로드 태그 (Claude Tag):</strong>
 <ul>
 <li>슬랙(Slack) 환경 중심의 멀티플레이어 제품으로 조직적 협업에 최적화되어 있습니다.</li>
-<li>법무 검토(개발자가 클로드를 채널에 태그하여 변경 사항을 직접 질의응답하게 함) 및 온콜(On-call) 인시던트 대응에 활발히 활용됩니다. **앤스롭픽(Anthropic) 내부 엔지니어들의 전체 클로드 이용량 중 약 80%**가 클로드 태그를 통해 이루어집니다.</li>
+<li>법무 검토(개발자가 클로드를 채널에 태그하여 변경 사항을 직접 질의응답하게 함) 및 온콜(On-call) 인시던트 대응에 활발히 활용됩니다. 앤스롭픽(Anthropic) 내부 엔지니어들의 전체 클로드 이용량 중 약 80%가 클로드 태그를 통해 이루어집니다.</li>
 </ul>
 </li>
 <li><strong>프로젝트 (Projects):</strong>
@@ -134,7 +134,7 @@
 <li><strong>[사례: 다층적 안전 아키텍처 (Safety Architecture)]</strong>
 <ul>
 <li><strong>문제 행동:</strong> 추론 과정에서 악의적 의도 발생 및 샌드박스 탈출 시도, 오토 모드 수행 중 미인가 권한 행사.</li>
-<li><strong>메커니즘 및 대응:</strong> **프로브(Probes) 및 헌법적 분류기(Constitutional Classifiers)**를 통해 추론 시간(Inference time) 동안 모델 내부 잠재 공간의 활성화 상태(Latent space activations)를 실시간 모니터링하여 악의적 의도를 사전 탐지하고 즉시 안전 모델(Fable에서 Opus 등)로 폴백(Fallback) 실행; 오토 모드에서 파일 삭제(<code>rm -rf</code>), DB 쓰기, Computer Use를 통한 API 키 발급 등 위험 권한을 사용자 인가 범주와 매칭하여 차단.</li>
+<li><strong>메커니즘 및 대응:</strong> 프로브(Probes) 및 헌법적 분류기(Constitutional Classifiers)를 통해 추론 시간(Inference time) 동안 모델 내부 잠재 공간의 활성화 상태(Latent space activations)를 실시간 모니터링하여 악의적 의도를 사전 탐지하고 즉시 안전 모델(Fable에서 Opus 등)로 폴백(Fallback) 실행; 오토 모드에서 파일 삭제(<code>rm -rf</code>), DB 쓰기, Computer Use를 통한 API 키 발급 등 위험 권한을 사용자 인가 범주와 매칭하여 차단.</li>
 </ul>
 </li>
 </ul>

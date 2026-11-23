@@ -72,7 +72,7 @@
 $$\tau_m = \mathbb{E}[Y \mid M = m] - \mathbb{E}[Y]$$
 (여기서 $Y$는 평가 신호, $M$은 사용자 세션에서 무작위 추출된 모델, $\mathbb{E}[Y]$는 모든 활성 모델에 대한 균등 분포 상의 기댓값임)</li>
 <li><strong>표본 추정량 및 전처리 수식:</strong>
-점수 추정에 앞서 모든 신호 결과 $Y$에는 **z-스코어 정규화(z-score normalization)**가 적용된다. 이후 모델 $m$의 모든 세션에 대해 <strong>역확률 가중(Inverse-Probability-Weighted, IPW)</strong> 신호값을 평균화한 **자체 정규화 추정량(self-normalized estimator) $\hat \tau_m$**을 사용하여 theoretical parameter $\tau_m$을 추정한다.</li>
+점수 추정에 앞서 모든 신호 결과 $Y$에는 z-스코어 정규화(z-score normalization)가 적용된다. 이후 모델 $m$의 모든 세션에 대해 <strong>역확률 가중(Inverse-Probability-Weighted, IPW)</strong> 신호값을 평균화한 자체 정규화 추정량(self-normalized estimator) $\hat \tau_m$을 사용하여 theoretical parameter $\tau_m$을 추정한다.</li>
 <li><strong>신규 점수 스케일링 수식:</strong>
 $$\hat \tau_m^{\mathrm{new}} = 1000 \cdot \hat \tau_m + \Delta$$</li>
 <li><strong>상수 1000의 의미:</strong> 점수의 가독성을 향상시키기 위해 선택된 곱셈 상수(multiplicative constant)로, 지수 점수 1포인트는 신호 표준편차(Standard Deviation)의 1/1000에 해당한다. 점수 체계는 7월 기준 평균 모델 점수가 약 1000점이 되도록 초기화되었다.</li>

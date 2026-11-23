@@ -91,7 +91,7 @@
 <ol>
 <li><strong>압축 (Compression):</strong> 토큰 인코더의 출력 $h_t$를 <strong>평균 풀링(Mean pooling)</strong> 하여 $k=4$ 비율로 압축된 연속적 개념 표현($c_m$)을 생성합니다.</li>
 <li><strong>곱 양자화 (Product Quantization, PQ):</strong> 개념 공간의 표현력을 극대화하기 위해 각 개념 벡터를 <strong>$S=32$개의 피처 세그먼트</strong>로 분할합니다. 각 세그먼트는 128개의 엔트리를 가진 독립적인 코드북을 참조하며, 이를 통해 $128^{32}$라는 방대한 조합의 잠재 어휘집을 형성합니다.</li>
-<li><strong>최적화 안정성:</strong> 코드북 학습 시 **Stop-gradient ($sg$)**를 타겟 개념($c_m$)에 적용하여, VQ 손실 함수가 토큰 인코더의 표현을 직접 흔들지 않고 코드북 엔트리만이 잠재 분포를 추적하도록 설계했습니다.</li>
+<li><strong>최적화 안정성:</strong> 코드북 학습 시 Stop-gradient ($sg$)를 타겟 개념($c_m$)에 적용하여, VQ 손실 함수가 토큰 인코더의 표현을 직접 흔들지 않고 코드북 엔트리만이 잠재 분포를 추적하도록 설계했습니다.</li>
 </ol>
 <hr />
 <h4 id="4-ncp-메커니즘-및-통합-최적화">4. NCP 메커니즘 및 통합 최적화</h4>
@@ -102,13 +102,13 @@
 $$L_{total} = L_{NTP} + \alpha L_{NCP} + \beta L_{VQ}$$</p>
 <ul>
 <li>특히 <strong>$L_{NCP}$ 학습 시 타겟 $c_m$을 분리(Detach)</strong> 함으로써, 인코더가 미래 예측에 유리한 정보만을 보존하도록 유도합니다.</li>
-<li><strong>Moonlight Muon 최적화:</strong> 행렬 값 매개변수(Matrix-valued parameters)에 대해 Muon 옵티마이저를 적용했습니다. 실험 과정에서 기존 OLMo-3의 레이어 단위 Q/K 정규화가 Muon과 결합할 때 수치적 불안정성(Gradient-norm spikes)을 유발함을 확인했으며, 이를 해결하기 위해 **헤드 단위 Q/K 정규화(Per-head Q/K normalization)**가 더 효과적인 안정화 방안임을 규명했습니다.</li>
+<li><strong>Moonlight Muon 최적화:</strong> 행렬 값 매개변수(Matrix-valued parameters)에 대해 Muon 옵티마이저를 적용했습니다. 실험 과정에서 기존 OLMo-3의 레이어 단위 Q/K 정규화가 Muon과 결합할 때 수치적 불안정성(Gradient-norm spikes)을 유발함을 확인했으며, 이를 해결하기 위해 헤드 단위 Q/K 정규화(Per-head Q/K normalization)가 더 효과적인 안정화 방안임을 규명했습니다.</li>
 </ul>
 <hr />
 <h4 id="5-학습-효율성-및-벤치마크-성능-분석">5. 학습 효율성 및 벤치마크 성능 분석</h4>
 <p>NCP-ArchPreview는 대규모 학습 실험에서 압도적인 효율성을 증명했습니다.</p>
 <ul>
-<li><strong>수렴 가속:</strong> OLMo-3-7B의 최종 pre-training loss에 도달하는 데 전체 토큰의 **51.3%**만 사용하여 <strong>1.95배 빠른 수렴</strong>을 기록했습니다. (Stage-2에서는 1.51배 가속)</li>
+<li><strong>수렴 가속:</strong> OLMo-3-7B의 최종 pre-training loss에 도달하는 데 전체 토큰의 51.3%만 사용하여 <strong>1.95배 빠른 수렴</strong>을 기록했습니다. (Stage-2에서는 1.51배 가속)</li>
 <li><strong>Pareto 연산 효율성:</strong> Scaling Law 실험 결과, 동일한 검증 손실 도달을 위한 연산 효율성이 <strong>1.74배 개선</strong>되었습니다. 이는 단순 파라미터 증가가 아닌 아키텍처적 우위임을 입증합니다.</li>
 <li><strong>다운스트림 성능 향상:</strong>
 <ul>

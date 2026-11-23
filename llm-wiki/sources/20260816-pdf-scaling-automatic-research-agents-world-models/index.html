@@ -47,7 +47,7 @@
 <li><strong>효율성 원리:</strong> 비싼 실행 과정을 모델의 순전파(Forward pass) 예측으로 전환함으로써, 보상 부여 과정 역시 생성 단계와 마찬가지로 자원 배치가 가능해져 전체 학습 효율을 극대화합니다.</li>
 </ul>
 <h4 id="4-신뢰도-유지를-위한-앵커-그룹-10-real-execution-anchor">4. 신뢰도 유지를 위한 앵커 그룹 (10% Real-Execution Anchor)</h4>
-<p>월드 모델의 예측치는 필연적으로 편향(Bias)이나 노이즈를 포함할 수밖에 없습니다. 이를 방지하기 위해 WMRL은 전체 데이터의 **약 10%(매 단계 최소 1/8 그룹)**를 실제 환경에서 실행하여 채점하는 '앵커(Anchor)' 시스템을 운영합니다. 이 소량의 실제 실행 데이터는 학습 과정에서 월드 모델의 예측을 교정하기 위한 절대적인 기준점(Ground Truth) 역할을 수행합니다.</p>
+<p>월드 모델의 예측치는 필연적으로 편향(Bias)이나 노이즈를 포함할 수밖에 없습니다. 이를 방지하기 위해 WMRL은 전체 데이터의 약 10%(매 단계 최소 1/8 그룹)를 실제 환경에서 실행하여 채점하는 '앵커(Anchor)' 시스템을 운영합니다. 이 소량의 실제 실행 데이터는 학습 과정에서 월드 모델의 예측을 교정하기 위한 절대적인 기준점(Ground Truth) 역할을 수행합니다.</p>
 <h4 id="5-보정-메커니즘-1-온라인-편향-제거-online-debiasing">5. 보정 메커니즘 1: 온라인 편향 제거 (Online Debiasing)</h4>
 <p>월드 모델의 예측치($\hat{r}$)와 앵커 그룹의 실측치($r$) 사이의 체계적인 오차를 실시간으로 보정하는 단계입니다.</p>
 <ul>
@@ -104,8 +104,8 @@ $$\rho = 1 + c\sigma^2$$
 <ul>
 <li><strong>$L$-매끄러움($L$-smoothness)</strong> 및 <strong>$\mu$-그래디언트 지배성($\mu$-gradient domination)</strong></li>
 <li><strong>로그 그래디언트 유계성(Bounded log-gradient)</strong></li>
-<li>월드 모델의 편향이 실측치의 **단조 왜곡(Monotone-bias)**일 것</li>
-<li>노이즈가 궤적 사이에서 **독립적이며 유계(Independent-bounded noise)**일 것</li>
+<li>월드 모델의 편향이 실측치의 단조 왜곡(Monotone-bias)일 것</li>
+<li>노이즈가 궤적 사이에서 독립적이며 유계(Independent-bounded noise)일 것</li>
 </ul>
 <h5 id="8-2-검증-범위-및-실험의-한계">8.2. 검증 범위 및 실험의 한계</h5>
 <ul>

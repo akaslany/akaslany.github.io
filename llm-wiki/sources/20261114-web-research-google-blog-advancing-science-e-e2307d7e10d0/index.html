@@ -108,7 +108,7 @@
 <li><strong>[근거 및 메커니즘]</strong>
 <ul>
 <li><strong>검증기(Falsifiers/Verifiers) 연동:</strong> 단일 생성 시도와 엄밀한 정답 간의 격차를 줄이기 위해 병렬 탐색 체계에 전용 검증기를 결합함. Lean 4 증명 검증기, 수정되지 않은 소프트웨어 테스트 수트, 실행 시뮬레이터, 웹 검색, 하드웨어 카운터를 활용하여 에이전트가 제안한 솔루션을 자동 검증함. <code>[사실]</code></li>
-<li><strong>문맥 분할 및 에이전트 역할 분담:</strong> 멀티데이(Multi-day) 작업 시 문맥 창(Context window) 비대화로 인한 주의력(Attention) 분산을 방지하기 위해 문맥을 구조적으로 격리(Context isolation)함. 각 전문 에이전트는 해당 단계에 필요한 파일과 도구만 수신함. **코디네이터(Coordinator)**는 컨텍스트가 비대해지기 전에 깨끗한 상태의 후속 에이전트(Fresh successor)에게 최소한의 필수 파일과 도구만 전달하여 작업 핸드오프를 수행함. **크리틱(Critic)**과 **오디터(Auditor)**는 생성 에이전트의 내부 추론 과정(Reasoning chain)이 완전히 제거된 **클린 컨텍스트(Clean context)**에서 결과를 검증하여 편향과 확증 편향을 차단함. <code>[사실]</code></li>
+<li><strong>문맥 분할 및 에이전트 역할 분담:</strong> 멀티데이(Multi-day) 작업 시 문맥 창(Context window) 비대화로 인한 주의력(Attention) 분산을 방지하기 위해 문맥을 구조적으로 격리(Context isolation)함. 각 전문 에이전트는 해당 단계에 필요한 파일과 도구만 수신함. 코디네이터(Coordinator)는 컨텍스트가 비대해지기 전에 깨끗한 상태의 후속 에이전트(Fresh successor)에게 최소한의 필수 파일과 도구만 전달하여 작업 핸드오프를 수행함. 크리틱(Critic)과 오디터(Auditor)는 생성 에이전트의 내부 추론 과정(Reasoning chain)이 완전히 제거된 클린 컨텍스트(Clean context)에서 결과를 검증하여 편향과 확증 편향을 차단함. <code>[사실]</code></li>
 <li><strong>선언적 패턴 및 하네스 자율 최적화:</strong> 자연어 기반의 자가 개선 패턴을 활용하며 프롬프트에 따라 동적 라우팅됨. 특히 standalone 복잡 코딩 패턴인 <code>/boost</code>는 정적 알고리즘이 아니라, 과거 실행 궤적(Trajectories) 분석을 통해 밀접하게 결합된 코드 작업의 경우 병렬 분동보다 순차적 구현·수정 단계를 택하도록 하네스가 자율 정제(Harness optimizing harness)된 토큰 효율적 구조를 가짐. <code>[사실]</code></li>
 </ul>
 </li>
@@ -168,7 +168,7 @@
 <li><strong>[근거 및 메커니즘]</strong> 물리 기반 스펙트럼 시뮬레이터와 자가 수정 루프를 결합한 에이전트 앙상블 구성, 그리고 multi-round 감사 워크플로우를 통한 데이터 검증 메커니즘을 적용함. <code>[사실]</code></li>
 <li><strong>[구체적 사례/성과]</strong>
 <ul>
-<li><strong>NMR 스펙트럼 분석:</strong> 30개 전문 에이전트를 자가 수정 루프로 구성하고 물리 기반 스펙트럼 시뮬레이터와 연동함. 복잡 벤치마크 분자의 NMR 데이터 구조 해석에서 Top-1 95%, Top-3 100% 정확도를 달성하여 단일 에이전트 대비 성능을 2배 높임. <code>[사실]</code> 특히 화학 분야에서 **HIV 프로테아제 억제제(HIV protease inhibitors)**의 경우 단 하나의 결합(Bond) 위치 차이로 비활성 유사체와 실제 약물이 갈라지는 물리 화학적 난제 구조를 정밀하게 분별해냄. <code>[사실]</code></li>
+<li><strong>NMR 스펙트럼 분석:</strong> 30개 전문 에이전트를 자가 수정 루프로 구성하고 물리 기반 스펙트럼 시뮬레이터와 연동함. 복잡 벤치마크 분자의 NMR 데이터 구조 해석에서 Top-1 95%, Top-3 100% 정확도를 달성하여 단일 에이전트 대비 성능을 2배 높임. <code>[사실]</code> 특히 화학 분야에서 HIV 프로테아제 억제제(HIV protease inhibitors)의 경우 단 하나의 결합(Bond) 위치 차이로 비활성 유사체와 실제 약물이 갈라지는 물리 화학적 난제 구조를 정밀하게 분별해냄. <code>[사실]</code></li>
 <li><strong>인과 추론 벤치마크 생성:</strong> Argon 기반 29개 에이전트가 11.5시간 동안 13개 공공 데이터 테이블을 처리하여 50개 과제 규모의 인과 추론 벤치마크를 자동 생성함. 리뷰어 및 오디터 에이전트가 지름길(Shortcuts), 텍스트 힌트, 환각 스크립트를 거부 및 차단하여 신뢰할 수 있는 영구 테스트 세트를 구축함. <code>[사실]</code></li>
 </ul>
 </li>

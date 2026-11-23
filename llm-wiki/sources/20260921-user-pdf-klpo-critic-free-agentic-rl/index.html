@@ -53,7 +53,7 @@ $$\delta_u = \frac{A_u - c_{\theta,u}}{\beta} - \ell_{\theta,u}$$
 <hr />
 <h5 id="3-critic-free-학습-구조-토큰-및-시퀀스-회귀">3. Critic-Free 학습 구조: 토큰 및 시퀀스 회귀</h5>
 <p><strong>3.1. KLPO 토큰 회귀 (Token Regression, TR)</strong><br />
-저자들이 제시하는 기본 경로로, **터미널 리턴(Terminal reward) $R$**과 스코어 센터링(Score centering)을 결합한다.</p>
+저자들이 제시하는 기본 경로로, 터미널 리턴(Terminal reward) $R$과 스코어 센터링(Score centering)을 결합한다.</p>
 <ul>
 <li><strong>리턴 계수 정의:</strong> $h_{\theta,u} = R - \beta \ell_{\theta,u}$</li>
 <li>이 계수는 샘플러 어드밴티지($A_u$)를 대체하며, 스코어 센터링 $z_{\theta,u}$를 통해 모집단 그래디언트를 정확히 복구한다. 여기서 $z_{\theta,u}$는 다음과 같이 정의된다.

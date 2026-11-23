@@ -105,7 +105,7 @@
 <p><strong>Doc-to-LoRA 기반 장문 맥락 적응 개선</strong></p>
 <ul>
 <li><code>[사실/Fact]</code> <strong>기초 메커니즘 및 문제 발견</strong>: Doc-to-LoRA 공개 저장소에서 출발하여, 동결된 언어 모델(Frozen model)을 위해 문서 청크(Document chunks)를 저차원 어댑터(LoRA)로 인코딩하는 기존 방식의 병목을 분석했습니다. 질의를 확인하기 전에 어댑터들을 미리 결합하면 사실 간섭(Interference)이 발생하는 현상을 규명했습니다.</li>
-<li><code>[사실/Fact]</code> <strong>개선 및 성과</strong>: 질문 입력 시점에 관련 어댑터를 동적으로 선택하는 **쿼리 기반 어댑터 선택 방식(Query-Conditioned Merge-Time Selection)**과 텍스트 선택/청크 경계 정제 기법을 개발했습니다. 그 결과 합성 데이터셋(Multi-needle in-a-haystack) 기준 정확도를 <strong>52%에서 98%로 향상</strong>시켰으며, 추가 학습 파라미터나 재학습 과정이 필요하지 않았습니다.</li>
+<li><code>[사실/Fact]</code> <strong>개선 및 성과</strong>: 질문 입력 시점에 관련 어댑터를 동적으로 선택하는 쿼리 기반 어댑터 선택 방식(Query-Conditioned Merge-Time Selection)과 텍스트 선택/청크 경계 정제 기법을 개발했습니다. 그 결과 합성 데이터셋(Multi-needle in-a-haystack) 기준 정확도를 <strong>52%에서 98%로 향상</strong>시켰으며, 추가 학습 파라미터나 재학습 과정이 필요하지 않았습니다.</li>
 <li><code>[소스의 주장/Claim]</code> 연구 진입 장벽을 낮추는 성공적 사례이나, 자연어 문서 및 복잡한 질문으로의 일반화 여부는 미검증 상태입니다.</li>
 </ul>
 </li>
@@ -153,7 +153,7 @@
 <li><strong>기존 방식 대 AutoIllustrate 방식의 비교</strong>:
 <ul>
 <li><em>기존 픽셀/벡터 방식</em>: 픽셀 기반(Raster) 이미지 생성 방식은 세부 수정이 불가능하며, 기존 벡터 기반 생성 방식은 시각적 레이아웃 검증이 결여되어 도면이 겹치는 오류가 발생함.</li>
-<li><em>AutoIllustrate의 벡터 우선(Vector-first) 방식</em>: 수정 가능한 **draw.io 벡터 다이어그램을 진실의 출처(Source of truth)**로 설정합니다. 기하학적 결정론적 검증기(Deterministic checker)가 도형 겹침 및 화살표 오기재를 사전 차단하며, 이후 이미지 생성 모델이 스타일과 세부 디테일을 향상시킵니다.</li>
+<li><em>AutoIllustrate의 벡터 우선(Vector-first) 방식</em>: 수정 가능한 draw.io 벡터 다이어그램을 진실의 출처(Source of truth)로 설정합니다. 기하학적 결정론적 검증기(Deterministic checker)가 도형 겹침 및 화살표 오기재를 사전 차단하며, 이후 이미지 생성 모델이 스타일과 세부 디테일을 향상시킵니다.</li>
 </ul>
 </li>
 <li><strong>평가 성과</strong>: PaperBananaBench 평가 결과, 기존 래스터 베이스라인인 PaperBanana 대비 신뢰성(Faithfulness)과 미적 요소(Aesthetics) 모두에서 향상된 성능을 기록했습니다.</li>

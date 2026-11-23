@@ -38,11 +38,11 @@
 <h4 id="1-보고서-개요-및-문서-성격-규정-executive-notice-overview">1. 보고서 개요 및 문서 성격 규정 (Executive Notice &amp; Overview)</h4>
 <blockquote>
 <p><strong>[필독 공지] 본 보고서의 성격</strong><br />
-본 보고서는 2026년 9월, 연구자 Akshay Vegesna와 Samip Dahal이 Q의 공식 웹사이트(<code>qlabs.sh</code>)를 통해 공개한 연구 아티클 *&quot;Computational depth is all you need: Towards $10^7$-layer neural nets&quot;*의 내용을 학술적으로 심층 분석한 상세 해설서입니다. 본 원문은 동료 심사(Peer-review)를 거친 정식 학술 논문이 아니며, Q 연구팀의 가설, 신규 아키텍처 제안 및 실증적 실험 결과를 공유하기 위해 작성된 **비공식 연구 포스트(Research Blog Post)**임을 명백히 밝힙니다.</p>
+본 보고서는 2026년 9월, 연구자 Akshay Vegesna와 Samip Dahal이 Q의 공식 웹사이트(<code>qlabs.sh</code>)를 통해 공개한 연구 아티클 *&quot;Computational depth is all you need: Towards $10^7$-layer neural nets&quot;*의 내용을 학술적으로 심층 분석한 상세 해설서입니다. 본 원문은 동료 심사(Peer-review)를 거친 정식 학술 논문이 아니며, Q 연구팀의 가설, 신규 아키텍처 제안 및 실증적 실험 결과를 공유하기 위해 작성된 비공식 연구 포스트(Research Blog Post)임을 명백히 밝힙니다.</p>
 </blockquote>
 <h5 id="문제-배경-및-핵심-문제-의식">문제 배경 및 핵심 문제 의식</h5>
 <p>2020년 GPT-3가 등장한 이래 지난 6년 동안, 인공지능 연구 생태계는 테스트 타임 추론 연산량(10,000배 증가), 파라미터 수, 데이터셋 규모, 그리고 MoE(Mixture of Experts) 기반 희소성(Sparsity) 등 거의 모든 차원에서 기하급수적인 스케일링을 달성했습니다. 그러나 모델의 '깊이(Depth)' 축은 이상하리만치 완전한 정체 상태에 빠져 있습니다. Epoch AI(2026)의 최신 데이터에 따르면, 최첨단(Frontier) 언어 모델들의 깊이는 여전히 6년 전 GPT-3 수준인 <strong>100층(Layer) 안팎</strong>에 고착되어 있습니다.</p>
-<p>Q 연구진은 이러한 패러다임적 기형성을 가리켜 **&quot;우리는 딥러닝(Deep Learning)을 수행하는 것을 중단했다&quot;**라는 근본적인 화두를 던집니다. 현존하는 트랜스포머 아키텍처가 극단적인 깊이 확장을 수용하지 못하도록 설계적 한계를 안고 있으며, 이로 인해 인공지능 모델의 표현력(Expressive Power) 상한선이 인위적으로 억제되고 있다는 것이 본 연구의 핵심 출발점입니다.</p>
+<p>Q 연구진은 이러한 패러다임적 기형성을 가리켜 &quot;우리는 딥러닝(Deep Learning)을 수행하는 것을 중단했다&quot;라는 근본적인 화두를 던집니다. 현존하는 트랜스포머 아키텍처가 극단적인 깊이 확장을 수용하지 못하도록 설계적 한계를 안고 있으며, 이로 인해 인공지능 모델의 표현력(Expressive Power) 상한선이 인위적으로 억제되고 있다는 것이 본 연구의 핵심 출발점입니다.</p>
 <hr />
 <h4 id="2-핵심-요약-tl-dr-4-key-takeaways">2. 핵심 요약 (TL;DR: 4 Key Takeaways)</h4>
 <p>원문의 핵심 주장 및 실험적 성과를 세부 범주별로 정리한 요약표는 다음과 같습니다.</p>
@@ -80,7 +80,7 @@
 <hr />
 <h4 id="3-연산-깊이-computational-depth-개념-및-측정-프록시">3. 연산 깊이(Computational Depth) 개념 및 측정 프록시</h4>
 <h5 id="물리적-층-수-raw-layer-count-vs-연산-깊이-computational-depth">물리적 층 수(Raw Layer Count) vs. 연산 깊이(Computational Depth)</h5>
-<p>트랜스포머 모델에서 단순 레이어 개수를 의미하는 '물리적 층 수'와 실제 최종 예측 확률 분포 계산에 실질적으로 기여하는 **'연산 깊이'**를 엄밀히 구분해야 합니다. 기존 트랜스포머 아키텍처는 레이어를 무작정 깊게 쌓을 경우, 상위 블록들이 어떠한 유용한 연산도 수행하지 않고 입력을 그대로 통과시키는 항등 함수(Identity Function)처럼 작동하는 <strong>'깊이의 저주(Curse of Depth)'</strong> 현상에 직면합니다(Sun et al., 2025). 따라서 단순 층 수 증설이 아닌, 연산에 실질적으로 참여하는 레이어의 절대적 깊이를 직접적으로 확장하는 아키텍처적 전환이 필수적입니다.</p>
+<p>트랜스포머 모델에서 단순 레이어 개수를 의미하는 '물리적 층 수'와 실제 최종 예측 확률 분포 계산에 실질적으로 기여하는 '연산 깊이'를 엄밀히 구분해야 합니다. 기존 트랜스포머 아키텍처는 레이어를 무작정 깊게 쌓을 경우, 상위 블록들이 어떠한 유용한 연산도 수행하지 않고 입력을 그대로 통과시키는 항등 함수(Identity Function)처럼 작동하는 <strong>'깊이의 저주(Curse of Depth)'</strong> 현상에 직면합니다(Sun et al., 2025). 따라서 단순 층 수 증설이 아닌, 연산에 실질적으로 참여하는 레이어의 절대적 깊이를 직접적으로 확장하는 아키텍처적 전환이 필수적입니다.</p>
 <h5 id="logit-lens-기반-측정-프록시-d_-text-lens">Logit Lens 기반 측정 프록시 ($d_{\text{lens}}$)</h5>
 <p>특정 레이어가 최종 예측 분포에 미치는 정밀한 기여도를 측정하는 것은 수학적으로 매우 까다롭습니다. 연구진은 nostalgebraist(2020)가 제안한 Logit Lens 개념을 확장하여, 연산 깊이를 측정하기 위한 경험적 프록시 $d_{\text{lens}}$를 다음과 같이 수학적으로 정의합니다.</p>
 <p>총 $L$개의 블록으로 구성된 트랜스포머에서 $\ell$번째 블록을 거친 잔차 스트림(Residual Stream) 상태를 $h_\ell$이라 할 때, 언임베딩 행렬(Unembedding Matrix) $W_U$를 통해 디코딩된 중간 상태 예측 분포 $q_\ell$과 최종 출력 분포 $p$는 다음과 같이 표기됩니다.</p>
@@ -103,7 +103,7 @@ CoT는 모델의 탐색 공간을 인간이 사용하는 '자연어'라는 제�
 [Depth 방식]: 잠재 상태 ───────────────────(연속 유지 및 합성)───────────────────&gt; 잠재 상태 (최적 표현 창출)
 </code></pre>
 <h5 id="모니터링-가능성-monitorability-과의-조화-및-스케일링-축">모니터링 가능성(Monitorability)과의 조화 및 스케일링 축</h5>
-<p>연속 잠재 공간 내부 확장이 뛰어난 표현력을 보임에도 불구하고, 모델의 추론 과정을 사람이 감사(Audit)하고 통제하기 위해서는 외부 텍스트 형태의 CoT 역시 필수적입니다. 따라서 연구진은 **'토큰당 연산 깊이(Depth per token)'**와 **'토큰 간 추론 단계(CoT across tokens)'**를 상호 배제적인 관계가 아닌, <strong>독립적으로 동시에 확장해야 할 두 개의 스케일링 축</strong>으로 규정합니다. 또한 깊이 확장을 통해 확보된 일반화 능력은 모델의 얼라인먼트(Alignment) 성능을 향상시키고 환각(Hallucination) 현상을 근본적으로 줄이는 데 기여합니다(OpenAI, 2026).</p>
+<p>연속 잠재 공간 내부 확장이 뛰어난 표현력을 보임에도 불구하고, 모델의 추론 과정을 사람이 감사(Audit)하고 통제하기 위해서는 외부 텍스트 형태의 CoT 역시 필수적입니다. 따라서 연구진은 '토큰당 연산 깊이(Depth per token)'와 '토큰 간 추론 단계(CoT across tokens)'를 상호 배제적인 관계가 아닌, <strong>독립적으로 동시에 확장해야 할 두 개의 스케일링 축</strong>으로 규정합니다. 또한 깊이 확장을 통해 확보된 일반화 능력은 모델의 얼라인먼트(Alignment) 성능을 향상시키고 환각(Hallucination) 현상을 근본적으로 줄이는 데 기여합니다(OpenAI, 2026).</p>
 <hr />
 <h4 id="5-아키텍처-혁신-및-scaling-law-exponent-수식-분석">5. 아키텍처 혁신 및 Scaling Law Exponent 수식 분석</h4>
 <p>극단적인 연산 깊이를 확보하고 깊이의 저주 현상을 해결하기 위해 연구진은 두 가지 핵심 아키텍처 기법을 제시합니다.</p>
@@ -120,7 +120,7 @@ CoT는 모델의 탐색 공간을 인간이 사용하는 '자연어'라는 제�
 <li>$C_0$: 스케일링 상수 (Scaling constant)</li>
 <li>$\gamma$: 스케일링 지수 (Scaling exponent)</li>
 </ul>
-<p>FineWeb 데이터셋 기반 스케일링 실험 결과(Chen et al., 2026), 표준 트랜스포머의 지수는 $\gamma_{\text{vanilla}} = 0.1112$인 반면, Model Growth와 Boundary Operator를 결합한 신규 아키텍처의 지수는 **$\gamma_{\text{growth}} = 0.1168$**로 대폭 개선되었습니다.</p>
+<p>FineWeb 데이터셋 기반 스케일링 실험 결과(Chen et al., 2026), 표준 트랜스포머의 지수는 $\gamma_{\text{vanilla}} = 0.1112$인 반면, Model Growth와 Boundary Operator를 결합한 신규 아키텍처의 지수는 $\gamma_{\text{growth}} = 0.1168$로 대폭 개선되었습니다.</p>
 <p>동일한 검증 손실을 달성하기 위해 표준 모델 대비 필요한 연산량의 절감 비율을 나타내는 연산 승수(Compute Multiplier) $M(C)$는 다음과 같이 유도됩니다.</p>
 <p>$$M(C) \propto C^{1 - \gamma_{\text{vanilla}}/\gamma_{\text{growth}}} = C^{1 - 0.1112 / 0.1168} \approx C^{0.048}$$</p>
 <p>이 수식에 따라 연산량이 1 Order of Magnitude(10배) 증가할 때마다 연산 승수는 $10^{0.048} \approx 1.12\times$ 배씩 지수적으로 누적 증가합니다. 그 결과, 연산 효율성 격차는 <strong>$10^{20}$ FLOPs 구간에서 1.6배</strong>, <strong>$10^{26}$ FLOPs 구간에서는 3.1배</strong>까지 기하급수적으로 벌어지게 됩니다.</p>

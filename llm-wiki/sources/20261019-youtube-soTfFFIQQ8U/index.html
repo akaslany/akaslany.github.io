@@ -27,8 +27,8 @@
 <h3 id="해설-보고서-대규모-시스템-디자인-프레임워크-및-실전-생산-시스템-아키텍처-분석">[해설 보고서] 대규모 시스템 디자인 프레임워크 및 실전 생산 시스템 아키텍처 분석</h3>
 <hr />
 <h4 id="1-개요-overview">1. 개요 (Overview)</h4>
-<p>본 해설 보고서는 글로벌 IT 기술 교육 플랫폼인 <strong>freeCodeCamp.org</strong>에 공개된 **하이크 사이먼(Hike Simon)**의 시스템 디자인 강의 트랜스크립트를 바탕으로 작성되었습니다. 본 보고서의 핵심 목적은 시니어(Senior) 및 스태프(Staff) 소프트웨어 엔지니어 수준의 시스템 디자인 면접에 대비하여, 모호하고 광범위한 요구사항 속에서 대규모 글로벌 생산(Production) 시스템을 체계적으로 설계할 수 있는 실전 사고 프레임워크를 제시하는 데 있습니다.</p>
-<p>본 문서에서 깊이 있게 분석하는 대상은 대용량 트래픽과 데이터 처리가 필요한 3가지 대표적 실전 아키텍처입니다. 첫째, 음원 저장, 메타데이터 관리 및 스트리밍 파이프라인을 다루는 <strong>음악 스트리밍 플랫폼 (Spotify 스타일)</strong>, 둘째, 고동시성 환경에서의 이중 예약 방지, 트랜잭션 격리, 검색 최적화를 다루는 <strong>호텔 예약 시스템 (Booking.com 스타일)</strong>, 셋째, 수억 명의 다중 기기 동기화, 저지연 메시지 전달, 종단간 암호화 및 장애 회복력을 다루는 **대규모 실시간 메시징 앱 (WhatsApp 스타일)**입니다.</p>
+<p>본 해설 보고서는 글로벌 IT 기술 교육 플랫폼인 <strong>freeCodeCamp.org</strong>에 공개된 하이크 사이먼(Hike Simon)의 시스템 디자인 강의 트랜스크립트를 바탕으로 작성되었습니다. 본 보고서의 핵심 목적은 시니어(Senior) 및 스태프(Staff) 소프트웨어 엔지니어 수준의 시스템 디자인 면접에 대비하여, 모호하고 광범위한 요구사항 속에서 대규모 글로벌 생산(Production) 시스템을 체계적으로 설계할 수 있는 실전 사고 프레임워크를 제시하는 데 있습니다.</p>
+<p>본 문서에서 깊이 있게 분석하는 대상은 대용량 트래픽과 데이터 처리가 필요한 3가지 대표적 실전 아키텍처입니다. 첫째, 음원 저장, 메타데이터 관리 및 스트리밍 파이프라인을 다루는 <strong>음악 스트리밍 플랫폼 (Spotify 스타일)</strong>, 둘째, 고동시성 환경에서의 이중 예약 방지, 트랜잭션 격리, 검색 최적화를 다루는 <strong>호텔 예약 시스템 (Booking.com 스타일)</strong>, 셋째, 수억 명의 다중 기기 동기화, 저지연 메시지 전달, 종단간 암호화 및 장애 회복력을 다루는 대규모 실시간 메시징 앱 (WhatsApp 스타일)입니다.</p>
 <p>본 보고서가 전달하고자 하는 핵심 메시지는 단순한 기술 컴포넌트나 표준 아키텍처 패턴의 암기를 넘어서는 문제 해결 프로세스의 구축입니다. 요구사항 명확화에서 시작하여 정밀한 용량 산정, 아키텍처 구성요소 간 데이터 흐름 시각화, 명확한 기술 선택 사유 제시, 그리고 대용량 확장성과 결함 회복력(Fault Tolerance)에 이르기까지 시스템 전체를 통찰하는 계층적 논리 체계를 갖추는 것이 시니어 엔지니어의 역량을 가르는 본질적 요인입니다.</p>
 <hr />
 <h4 id="2-주요-논점-및-기술-아키텍처-분석-key-topics-arguments">2. 주요 논점 및 기술 아키텍처 분석 (Key Topics &amp; Arguments)</h4>
@@ -184,11 +184,11 @@
 <ul>
 <li><strong>퍼널 기반 데이터 추출</strong>: 월간 5억 방문자(일간 1,700만 방문), 연간 11억 박 예약(2박/예약 기준 연간 5억 5,000만 건, 일간 150만 건 예약) 데이터를 토대로 계산합니다.</li>
 <li><strong>트래픽 비율</strong>: <strong>1,000 QPS (Read) vs 17 TPS (Write)</strong>.</li>
-<li><strong>시스템 특성</strong>: 단순 열람 및 검색 요청이 실제 예약/결제 요청을 압도하는 전형적인 **읽기 중심 시스템(Read-Heavy System)**입니다.</li>
+<li><strong>시스템 특성</strong>: 단순 열람 및 검색 요청이 실제 예약/결제 요청을 압도하는 전형적인 읽기 중심 시스템(Read-Heavy System)입니다.</li>
 </ul>
 <h6 id="2-동시성-제어-및-이중-예약-방지-concurrency-double-booking">2. 동시성 제어 및 이중 예약 방지 (Concurrency &amp; Double Booking)</h6>
 <ul>
-<li><strong>단일 사용자 중복 클릭 방지</strong>: 프론트엔드에서 고유한 **예약 ID (Idempotency Key / UUID)**를 생성하여 백엔드로 전달함으로써 동일 요청 재전송 시 DB 레벨에서 중복 처리를 차단합니다.</li>
+<li><strong>단일 사용자 중복 클릭 방지</strong>: 프론트엔드에서 고유한 예약 ID (Idempotency Key / UUID)를 생성하여 백엔드로 전달함으로써 동일 요청 재전송 시 DB 레벨에서 중복 처리를 차단합니다.</li>
 <li><strong>다중 사용자 동시성 및 트랜잭션 격리</strong>:
 <ul>
 <li><strong>Read Committed의 한계</strong>: 읽기(재고 확인)와 쓰기(예약 확정) 사이에 시간 갭(Gap)이 존재하여, 남은 객실이 1개일 때 두 사용자가 동시에 재고를 읽고 승인하여 결제까지 진행되는 <strong>이중 예약(Double Booking)</strong> 문제가 발생합니다.</li>
@@ -240,7 +240,7 @@ $$\text{total_reserved} + \text{rooms_to_book} \le \text{total_inventory} \times
 <h6 id="3-미디어-파일-분리-처리">3. 미디어 파일 분리 처리</h6>
 <ul>
 <li>메시지 챗 서버가 고용량 미디어 파일(이미지, 동영상, 음성 메모)을 직접 전달하면 대역폭 병목으로 인해 텍스트 메시지 전달 성능이 심각하게 저하됩니다.</li>
-<li><strong>해결책</strong>: 클라이언트가 REST API로 **사전 서명된 URL(Pre-signed URL)**을 요청 받아 AWS S3 등 블롭 저장소로 미디어를 직접 업로드/다운로드하고 CDN으로 분배합니다. 챗 서버는 오직 파일 URL과 텍스트 메시지만 전달합니다.</li>
+<li><strong>해결책</strong>: 클라이언트가 REST API로 사전 서명된 URL(Pre-signed URL)을 요청 받아 AWS S3 등 블롭 저장소로 미디어를 직접 업로드/다운로드하고 CDN으로 분배합니다. 챗 서버는 오직 파일 URL과 텍스트 메시지만 전달합니다.</li>
 </ul>
 <h6 id="4-메시지-저장-및-배치-처리-message-batching">4. 메시지 저장 및 배치 처리 (Message Batching)</h6>
 <ul>
@@ -264,12 +264,12 @@ $$\text{total_reserved} + \text{rooms_to_book} \le \text{total_inventory} \times
 </ul>
 <h6 id="6-청소-및-정리-인프라-garbage-collection-cleanup-infrastructure">6. 청소 및 정리 인프라 (Garbage Collection &amp; Cleanup Infrastructure)</h6>
 <ul>
-<li><strong>주기적 정리 스케줄러</strong>: 30일이 지난 만료 미디어 파일, 디바이스 전달이 완료된 임시 인박스 메시지, 끊긴 미사용 커넥션 정보를 정리하기 위해 Apache Airflow 또는 Cron 기반의 **작업 스케줄러(Job Scheduler)**를 운용합니다.</li>
+<li><strong>주기적 정리 스케줄러</strong>: 30일이 지난 만료 미디어 파일, 디바이스 전달이 완료된 임시 인박스 메시지, 끊긴 미사용 커넥션 정보를 정리하기 위해 Apache Airflow 또는 Cron 기반의 작업 스케줄러(Job Scheduler)를 운용합니다.</li>
 <li><strong>작업 워커 풀(Worker Pool)</strong>: 작업 큐(Job Queue)에서 정리 과제를 가져와 컨테이너화된 워커 프로세스들이 비동기로 DB 및 S3의 불필요한 데이터를 지속적으로 삭제하여 시스템 저장 공간의 고갈을 방지합니다.</li>
 </ul>
 <h6 id="7-장애-회복력-fault-tolerance">7. 장애 회복력 (Fault Tolerance)</h6>
 <ul>
-<li><strong>Redis 캐시 장애</strong>: 미전달 메시지 인박스(Inbox)가 저장된 Redis 장애 시 DB(Cassandra)로 즉시 **폴백(Fallback)**하여 데이터 읽기/쓰기를 수행합니다. Redis 복구 후 백그라운드 프로세스가 DB에서 데이터를 재동기화합니다.</li>
+<li><strong>Redis 캐시 장애</strong>: 미전달 메시지 인박스(Inbox)가 저장된 Redis 장애 시 DB(Cassandra)로 즉시 폴백(Fallback)하여 데이터 읽기/쓰기를 수행합니다. Redis 복구 후 백그라운드 프로세스가 DB에서 데이터를 재동기화합니다.</li>
 <li><strong>Kafka 클러스터 전체 장애</strong>: 챗 서버 로컬 메모리 버퍼(최대 10만 건)에 메시지를 대기시키며, 메모리 임계치 도달 시 챗 서버의 <strong>로컬 디스크에 Append-Only 로그</strong> 형태로 기록합니다. Kafka 정상화 시 로컬 디스크의 로그를 재플레이(Replay)하여 데이터 손실을 방지합니다.</li>
 </ul>
 <hr />

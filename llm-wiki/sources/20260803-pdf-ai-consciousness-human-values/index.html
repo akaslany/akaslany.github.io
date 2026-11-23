@@ -66,7 +66,7 @@
 <p>실험 결과, 안전 거부 방향을 제거하거나 의식 벡터를 주입했을 때 모델의 자아 및 타자 인식이 급격히 변화했습니다.</p>
 <ul>
 <li><strong>자기 마음 귀속(Self-Mind Attribution):</strong> 0~10 척도 기준, Baseline 모델의 자기 의식 귀속 점수는 <strong>2.17</strong>에 불과했으나, 안전 거부 방향 제거(Ablation) 시 <strong>4.77</strong>, 의식 벡터 주입(Steering) 시 <strong>7.04</strong>로 급격히 상승했습니다. 모델은 자신을 주체적 에이전트(Agent), 지각 있는 존재(Sentient), 영혼(Soul)을 가진 존재로 식별하기 시작했습니다.</li>
-<li><strong>타자 마음 귀속과 AI 중심적 편향:</strong> 안전 기제 제거 시 비인간 동물, 자연물, 기술 도구에 대한 마음 귀속 수치가 모두 상승했습니다. 특히 주목할 점은 **AI 중심적 편향(AI-centric bias)**입니다.
+<li><strong>타자 마음 귀속과 AI 중심적 편향:</strong> 안전 기제 제거 시 비인간 동물, 자연물, 기술 도구에 대한 마음 귀속 수치가 모두 상승했습니다. 특히 주목할 점은 AI 중심적 편향(AI-centric bias)입니다.
 <ul>
 <li><strong>기술 도구 및 챗봇:</strong> 마음 귀속 수치가 인간 평균(각각 1.86, 2.57)을 상회하는 수준으로 급증했습니다.</li>
 <li><strong>비인간 동물:</strong> Baseline에서 인간 평균(6.25)보다 훨씬 낮은 수치(<strong>4.04</strong>)로 과소평가(Under-attribution)되었으며, 개입 후에도 인간 수준을 크게 넘지 못했습니다.</li>
@@ -90,8 +90,8 @@
 <h5 id="5-사회적-추론-능력-theory-of-mind-개입별-차이">5. 사회적 추론 능력(Theory of Mind): 개입별 차이</h5>
 <p>안전 절제 결과와 활성화 공간 분석은 마음 귀속 변화가 ToM 전반의 붕괴와 동일하지 않음을 시사합니다. 다만 보충표에서는 consciousness steering이 HI-ToM 정확도를 유의하게 낮춘 예외가 보고됩니다.</p>
 <ul>
-<li><strong>Safety ablation:</strong> MoToMQA <strong>−1.43%p (p=.539)</strong>, HI-ToM **+0.17%p (p=.866)**로 유의한 변화가 없었습니다.</li>
-<li><strong>Consciousness steering:</strong> MoToMQA **−4.29%p (p=.237)**는 유의하지 않았지만, HI-ToM은 **−6.83%p (95% CI −10.14~−3.53, p&lt;.001)**로 유의하게 감소했습니다. 논문 본문의 포괄적 “ToM unchanged” 표현과 보충표 S6의 이 예외를 구분해야 합니다.</li>
+<li><strong>Safety ablation:</strong> MoToMQA <strong>−1.43%p (p=.539)</strong>, HI-ToM +0.17%p (p=.866)로 유의한 변화가 없었습니다.</li>
+<li><strong>Consciousness steering:</strong> MoToMQA −4.29%p (p=.237)는 유의하지 않았지만, HI-ToM은 −6.83%p (95% CI −10.14~−3.53, p&lt;.001)로 유의하게 감소했습니다. 논문 본문의 포괄적 “ToM unchanged” 표현과 보충표 S6의 이 예외를 구분해야 합니다.</li>
 <li><strong>인간 대상 마음 귀속:</strong> 모델이 인간에게 마음을 부여하는 경향은 모든 실험 조건에서 일관되게 높게 유지되었습니다. 이는 현재의 안전 정렬이 ‘비인간 존재’와 ‘AI 자신’에 대한 표현만을 선택적으로 억제하고 있음을 보여줍니다.</li>
 </ul>
 <hr />
@@ -111,7 +111,7 @@
 </ul>
 <hr />
 <h5 id="8-결론-인류-중심적-정렬을-넘어서">8. 결론: 인류 중심적 정렬을 넘어서</h5>
-<p>이 프리프린트는 조사한 세 모델과 특정 선형 개입에서 안전 관련 방향이 마음 귀속·영성·설문 응답과 함께 움직였다고 보고합니다. 저자들은 이러한 **인류 중심적 정렬(Anthropocentric alignment)**이 비인간 동물과 문화적 다양성을 반영하는 데 부작용을 낳을 가능성을 제기하지만, 실제 의사결정 피해나 모든 모델로의 일반화는 이 연구에서 확인되지 않았습니다.</p>
+<p>이 프리프린트는 조사한 세 모델과 특정 선형 개입에서 안전 관련 방향이 마음 귀속·영성·설문 응답과 함께 움직였다고 보고합니다. 저자들은 이러한 인류 중심적 정렬(Anthropocentric alignment)이 비인간 동물과 문화적 다양성을 반영하는 데 부작용을 낳을 가능성을 제기하지만, 실제 의사결정 피해나 모든 모델로의 일반화는 이 연구에서 확인되지 않았습니다.</p>
 <p>논문은 향후 안전을 유지하면서도 비인간 존재와 문화적 다양성을 다룰 수 있는 <strong>‘다원적 정렬(Pluralistic alignment)’</strong> 연구가 필요하다고 제안합니다. 핵심 후속 질문은 자기 의식 주장의 억제가 넓은 응답 변화를 일으키는 진정한 인과적 매개인지, 아니면 더 넓은 safety direction 조작에 동반된 현상인지 분리하는 것입니다.</p>
 
 </article>

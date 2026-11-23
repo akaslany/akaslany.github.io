@@ -44,10 +44,10 @@
 <li><strong>[소스의 주장] 로컬 AI의 제약 요인 및 3대 설계 축(Fit, Orchestrate, Stream):</strong>
 <ul>
 <li>로컬 AI 개발 현장에서 겪는 주요 제약은 연산 성능(Compute)의 부족이 아닌 <strong>메모리 용량(Memory)의 한계</strong>입니다.</li>
-<li>본 플랫폼은 <strong>Fit(메모리 용량 적합성)</strong>, <strong>Orchestrate(CPU 중심의 오케스트레이션)</strong>, **Stream(GPU/NPU 연산 스트리밍)**이라는 3대 시스템 균형 축을 바탕으로 설계되었습니다. 기존 AI 연산이 GPU 위주였던 것과 달리, 멀티 에이전틱 환경에서는 CPU가 툴 호출(Tool calls) 및 인코드/디코드 작업을 오케스트레이션하고, GPU와 소형 모델 구동에 특화된 NPU가 실제 연산 스트리밍을 나누어 담당하는 구조적 균형을 이룹니다.</li>
+<li>본 플랫폼은 <strong>Fit(메모리 용량 적합성)</strong>, <strong>Orchestrate(CPU 중심의 오케스트레이션)</strong>, Stream(GPU/NPU 연산 스트리밍)이라는 3대 시스템 균형 축을 바탕으로 설계되었습니다. 기존 AI 연산이 GPU 위주였던 것과 달리, 멀티 에이전틱 환경에서는 CPU가 툴 호출(Tool calls) 및 인코드/디코드 작업을 오케스트레이션하고, GPU와 소형 모델 구동에 특화된 NPU가 실제 연산 스트리밍을 나누어 담당하는 구조적 균형을 이룹니다.</li>
 </ul>
 </li>
-<li><strong>[소스의 주장] 300B 모델 구동 지원:</strong> 160GB GPU VRAM 할당 능력을 통해 **'GLM 5.3 플래시(GLM 5.3 Flash)'**와 같은 <strong>3000억 개(300B) 파라미터</strong> 규모의 프론티어급 대형 모델을 단일 소형 박스에서 직접 구동할 수 있습니다.</li>
+<li><strong>[소스의 주장] 300B 모델 구동 지원:</strong> 160GB GPU VRAM 할당 능력을 통해 'GLM 5.3 플래시(GLM 5.3 Flash)'와 같은 <strong>3000억 개(300B) 파라미터</strong> 규모의 프론티어급 대형 모델을 단일 소형 박스에서 직접 구동할 수 있습니다.</li>
 <li><strong>[작성자의 해석] 과거 제품 대비 성능 비약:</strong> 과거 컨퍼런스(지나간 7월 Advancing AI)에서 공개되었던 이전 세대(395 버전, 128GB 탑재)의 물리적 메모리 한계를 극복함으로써, 별도의 대형 서버 장비 없이도 초대형 모델을 구동할 수 있는 독보적인 공간/전력 대 메모리 효율성을 확보한 것으로 해석됩니다.</li>
 </ul>
 <h6 id="2-2-개발자-환경-및-소프트웨어-생태계-developer-environment-rocm-stack">2.2 개발자 환경 및 소프트웨어 생태계 (Developer Environment &amp; ROCm Stack)</h6>
@@ -107,7 +107,7 @@
 <ul>
 <li><strong>시장 패러다임의 3단계 전환 맥락:</strong>
 <ul>
-<li>회의론이 지배적이었던 **2년 전(&quot;믿지 않는다&quot;)**을 지나, 구체적 도입 방법을 찾던 **1년 전(&quot;어떻게 얻나?&quot;)**을 거쳐, <strong>현재</strong>는 장벽이 완전히 제거되어 인프라를 대량 확보하고자 하는 폭발적 수요 진입 단계로 진화했습니다.</li>
+<li>회의론이 지배적이었던 2년 전(&quot;믿지 않는다&quot;)을 지나, 구체적 도입 방법을 찾던 1년 전(&quot;어떻게 얻나?&quot;)을 거쳐, <strong>현재</strong>는 장벽이 완전히 제거되어 인프라를 대량 확보하고자 하는 폭발적 수요 진입 단계로 진화했습니다.</li>
 </ul>
 </li>
 <li><strong>인터넷 비연결(Air-gapped) 환경에서의 실행성:</strong>
@@ -122,7 +122,7 @@
 </li>
 <li><strong>하이브리드 라우팅 및 토큰 비용 절감:</strong>
 <ul>
-<li><strong>[사실]</strong> AMD의 레모네이드(Lemonade) 소프트웨어 스택에는 **시맨틱 라우터(Semantic Router)**가 내장되어 있습니다.</li>
+<li><strong>[사실]</strong> AMD의 레모네이드(Lemonade) 소프트웨어 스택에는 시맨틱 라우터(Semantic Router)가 내장되어 있습니다.</li>
 <li><strong>[소스의 주장]</strong> 일반적인 사무 업무 연산 시험 결과, <strong>전체 작업의 70%는 로컬 하드웨어에서 처리</strong>하고, 고도의 추론이 필요한 <strong>30%의 작업만 클라우드 프론티어 모델로 이관</strong>시킴으로써 데이터 보안 유지 및 외부 토큰 비용을 대폭 절감하는 하이브리드 워크플로우가 가능해집니다.</li>
 </ul>
 </li>

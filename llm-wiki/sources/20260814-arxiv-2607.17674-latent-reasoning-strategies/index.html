@@ -52,7 +52,7 @@
 <ul>
 <li><strong>Router ($r_\phi$):</strong> 입력 프롬프트를 읽고 잠재 전략 $z$의 분포(Diagonal Gaussian)로 매핑합니다.</li>
 <li><strong>Generator ($g_\phi$):</strong> 입력 $x$와 샘플링된 $z$를 결합하여 답변을 생성합니다. 이때 $z$는 임베딩 $E(z)$로 투영되어 <strong>의사 토큰(Pseudo-token)</strong> 형태로 임베딩 레이어에 삽입되며, Generator는 이를 어텐션 메커니즘을 통해 참조합니다.</li>
-<li><strong>Training-only Posterior ($q_\xi$):</strong> 학습 시에만 사용되는 변분 가교입니다. 전체 입력-출력 쌍 $(x, y)$을 읽어 최종 레이어 표현으로부터 $z$의 분포를 추론하며, **재파라미터화 기술(Reparameterization Trick)**을 통해 Generator에 변분 신호를 제공합니다.</li>
+<li><strong>Training-only Posterior ($q_\xi$):</strong> 학습 시에만 사용되는 변분 가교입니다. 전체 입력-출력 쌍 $(x, y)$을 읽어 최종 레이어 표현으로부터 $z$의 분포를 추론하며, 재파라미터화 기술(Reparameterization Trick)을 통해 Generator에 변분 신호를 제공합니다.</li>
 </ul>
 <h5 id="4-핵심-방법론-기초-모델-상대적-고-경악도-high-surprisal-재구성">4. 핵심 방법론: 기초 모델 상대적 고-경악도(High-Surprisal) 재구성</h5>
 <p>연구진은 단순 주변 분포 일치가 아닌 '모델 주도 재구성(Model-Directed Reconstruction)' 목적 함수를 제안합니다.</p>
@@ -99,7 +99,7 @@
 <h5 id="6-핵심-평가-지표">6. 핵심 평가 지표</h5>
 <ul>
 <li><strong>분포 충실도(Distributional Fidelity):</strong> 요인화된 모델이 기초 모델의 유효한 답변 생성 능력을 얼마나 보존하는가.</li>
-<li><strong>유추 일관성(Analogical Consistency):</strong> 본 연구의 핵심 지표로, **'교차 입력 의미론적 일관성(Cross-input semantic consistency)'**을 측정합니다. 동일한 잠재 변수 $z$가 서로 다른 입력 $x, x'$에 적용되었을 때 동일한 추론 전략 $strat(Y) = strat(Y')$을 유도하는지 확인하며, 이는 단순한 해독 가능성(Decodability)보다 강력한 제어 지표입니다.</li>
+<li><strong>유추 일관성(Analogical Consistency):</strong> 본 연구의 핵심 지표로, '교차 입력 의미론적 일관성(Cross-input semantic consistency)'을 측정합니다. 동일한 잠재 변수 $z$가 서로 다른 입력 $x, x'$에 적용되었을 때 동일한 추론 전략 $strat(Y) = strat(Y')$을 유도하는지 확인하며, 이는 단순한 해독 가능성(Decodability)보다 강력한 제어 지표입니다.</li>
 </ul>
 <h5 id="7-실험-결과-및-분석">7. 실험 결과 및 분석</h5>
 <ul>
@@ -109,7 +109,7 @@
 </ul>
 <h5 id="8-연구의-한계-및-해석상의-주의사항">8. 연구의 한계 및 해석상의 주의사항</h5>
 <ul>
-<li><strong>진단 도구로서의 성격:</strong> 본 연구의 선형 탐색 및 PCA 클러스터링 결과는 모델 내부 구조를 파악하기 위한 **진단적 분석(Diagnostics)**일 뿐, 이를 'Chain-of-Thought의 완벽한 충실도'나 '범용적인 전략 코드북'으로 확대 해석해서는 안 됩니다.</li>
+<li><strong>진단 도구로서의 성격:</strong> 본 연구의 선형 탐색 및 PCA 클러스터링 결과는 모델 내부 구조를 파악하기 위한 진단적 분석(Diagnostics)일 뿐, 이를 'Chain-of-Thought의 완벽한 충실도'나 '범용적인 전략 코드북'으로 확대 해석해서는 안 됩니다.</li>
 <li><strong>일반화의 한계:</strong> 실험이 합성 알고리즘 작업에 국한되었으므로, <strong>개방형 추론(Open-ended reasoning)</strong>, <strong>프런티어 모델(Frontier model)</strong>, <strong>검증 가능한 보상 강화학습(RLVR)</strong>, 혹은 <strong>실제 세계 에이전트</strong> 환경으로의 일반화 가능성은 향후 과제로 남겨두어야 합니다.</li>
 <li><strong>이론의 범위:</strong> 저자들은 이론 분석을 preliminary라고 규정하며, oracle selection criterion과 실제 training dynamics의 연결은 아직 formal하게 규명되지 않았다고 밝힙니다.</li>
 </ul>

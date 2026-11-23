@@ -28,7 +28,7 @@
 <p><strong>1. OpenAI Astra의 재귀적 깊이(Recurrent Depth) 루머</strong>
 IT 전문 매체 'The Information'은 OpenAI가 곧 출시할 신규 모델 'Astra'에 '재귀적 깊이(Recurrent Depth)' 또는 '루프형 트랜스포머(Looped Transformers)' 아키텍처를 도입했다는 루머를 보도했습니다. 해당 기술의 핵심은 동일한 가중치 블록을 반복 사용하여 모델의 추론 성능을 최적화(Optimization of Inference Performance)하는 데 있습니다. 다만, 본 기술은 OpenAI가 공식적으로 확인한 사안이 아니며, 현재로서는 아키텍처 전문가들 사이에서 논의되는 기술적 가능성에 기반한 분석 대상임을 분명히 합니다.</p>
 <p><strong>2. 기술적 정정: '텍스트'가 아닌 '중간 표현'의 반복 처리</strong>
-초기 루머에서는 모델이 '동일한 텍스트를 여러 번 처리한다'고 표현했으나, 이는 기술적으로 엄밀하지 않은 설명입니다. 정확한 메커니즘은 입력 데이터가 모델 내부의 특정 레이어 블록을 통과하며 생성되는 **'중간 표현(Intermediate Representations)'**을 다시 동일한 레이어에 재투입하여 연산을 심화하는 구조입니다. 즉, 텍스트 자체를 재독하는 것이 아니라, 이미 연산된 데이터를 더 깊은 수준에서 반복 가공하여 추론의 밀도를 높이는 방식입니다.</p>
+초기 루머에서는 모델이 '동일한 텍스트를 여러 번 처리한다'고 표현했으나, 이는 기술적으로 엄밀하지 않은 설명입니다. 정확한 메커니즘은 입력 데이터가 모델 내부의 특정 레이어 블록을 통과하며 생성되는 '중간 표현(Intermediate Representations)'을 다시 동일한 레이어에 재투입하여 연산을 심화하는 구조입니다. 즉, 텍스트 자체를 재독하는 것이 아니라, 이미 연산된 데이터를 더 깊은 수준에서 반복 가공하여 추론의 밀도를 높이는 방식입니다.</p>
 <p><strong>3. Nanbeige 4.2-3B: 루프형 트랜스포머의 실증적 사례</strong>
 루프형 아키텍처의 대표적인 사례로 중국의 'Nanbeige LLM Lab'과 'Boss Zhipin'이 공동 개발한 <strong>Nanbeige 4.2-3B</strong> 모델을 들 수 있습니다.</p>
 <ul>
@@ -85,7 +85,7 @@ Vanilla Transformer, Recursive Transformer, Mixture of Recursions 간의 검증 
 <li><strong>산업적 대안:</strong> 최신 아키텍처인 <strong>DeepSeek</strong>의 Sparse Attention이나 슬라이딩 윈도우(Sliding Window) 방식을 활용하여, 필수적인 정보에만 어텐션을 집중함으로써 성능 손실을 최소화하면서도 계산 효율을 극대화할 수 있습니다.</li>
 </ul>
 <p><strong>11. 재귀적 깊이와 잠재 추론(Latent Reasoning): '숨겨진 CoT'에 대한 반론</strong>
-루프형 구조가 인간이 읽을 수 있는 생각의 사슬(CoT)을 은폐한다는 주장에 대해, 발표자는 이를 '은폐'가 아닌 **'컴팩트한 추론(Compact Reasoning)'**으로 해석해야 한다고 반박합니다.</p>
+루프형 구조가 인간이 읽을 수 있는 생각의 사슬(CoT)을 은폐한다는 주장에 대해, 발표자는 이를 '은폐'가 아닌 '컴팩트한 추론(Compact Reasoning)'으로 해석해야 한다고 반박합니다.</p>
 <ul>
 <li><strong>숙련된 수학자 비유:</strong> 초보자는 수학 문제를 풀 때 모든 단계를 종이에 적어야 하지만(Visible CoT), 숙련된 전문가는 내부적인 사고 과정을 통해 더 적은 기록만으로도 정확한 결론에 도달합니다.</li>
 <li>내부 연산(Latent Reasoning)이 강화된 모델은 겉으로 드러나는 토큰 수는 적을지언정 더 지능적인 결과를 내놓는 것이며, 이는 모델의 투명성을 고의로 낮추는 행위와는 무관합니다.</li>
@@ -93,9 +93,9 @@ Vanilla Transformer, Recursive Transformer, Mixture of Recursions 간의 검증 
 <p><strong>12. 재귀적 자기 개선(Recursive Self-improvement)과의 명확한 구분</strong>
 본 보고서의 기술은 '재귀적 자기 개선' 패러다임과 혼동되어서는 안 됩니다. 재귀적 자기 개선은 모델이 스스로를 개선하여 능력을 진화시키는 개념인 반면, 루프형 트랜스포머는 가중치를 효율적으로 재사용하여 모델의 논리적 깊이를 늘리는 <strong>아키텍처 확장(Scaling) 기술</strong>의 변주입니다.</p>
 <p><strong>13. 기술적 근간: Universal Transformers (2018)</strong>
-현재의 Nanbeige나 Mixture of Recursions 논의는 사실 2018년 발표된 **'Universal Transformers'**에 그 뿌리를 두고 있습니다. 최근의 시도들은 이 원천적인 아이디어를 현대의 대규모 언어 모델(LLM) 환경에 맞춰 단순화하거나(Nanbeige), 동적 라우팅을 결합하여(Mixture of Recursions) 실용화한 형태입니다.</p>
+현재의 Nanbeige나 Mixture of Recursions 논의는 사실 2018년 발표된 'Universal Transformers'에 그 뿌리를 두고 있습니다. 최근의 시도들은 이 원천적인 아이디어를 현대의 대규모 언어 모델(LLM) 환경에 맞춰 단순화하거나(Nanbeige), 동적 라우팅을 결합하여(Mixture of Recursions) 실용화한 형태입니다.</p>
 <p><strong>14. 2025년의 진화: 고정 입력 재주입(Fixed Input Re-injection)</strong>
-2025년 논문 'Scaling up test time compute with latent reasoning'은 한 단계 더 나아간 구조를 제시합니다. 루프 과정에서 단순히 이전 레이어의 출력값만 넘기는 것이 아니라, **초기 입력값(Fixed Input)을 중간 상태에 지속적으로 재주입(Re-injection)**합니다. 이는 강력한 잔차 연결(Residual Connections) 구조를 형성하여 모델이 반복 연산 과정에서 초기 정보를 잃지 않고 더 깊은 잠재 추론을 수행할 수 있게 합니다.</p>
+2025년 논문 'Scaling up test time compute with latent reasoning'은 한 단계 더 나아간 구조를 제시합니다. 루프 과정에서 단순히 이전 레이어의 출력값만 넘기는 것이 아니라, 초기 입력값(Fixed Input)을 중간 상태에 지속적으로 재주입(Re-injection)합니다. 이는 강력한 잔차 연결(Residual Connections) 구조를 형성하여 모델이 반복 연산 과정에서 초기 정보를 잃지 않고 더 깊은 잠재 추론을 수행할 수 있게 합니다.</p>
 <p><strong>15. 요약 및 결론</strong></p>
 <ul>
 <li>OpenAI Astra의 재귀적 깊이 채택설은 여전히 루머에 기반하나, 이는 추론 성능과 자원 효율성 사이의 전략적 선택지로서 기술적 타당성이 매우 높습니다.</li>

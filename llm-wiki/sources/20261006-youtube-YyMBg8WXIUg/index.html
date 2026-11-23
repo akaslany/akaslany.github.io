@@ -31,7 +31,7 @@
 <hr />
 <h4 id="1-서론-및-화자-귀속-구조-정의">1. 서론 및 화자 귀속 구조 정의</h4>
 <h5 id="1-1-보고서-개요-및-목적">1.1 보고서 개요 및 목적</h5>
-<p>본 보고서는 팟캐스트 채널 *'Deep Learning with Yacine'*의 기술 대담 영상 **'RLMs are Compositional Generalizers with Alex Zhang from MIT'**의 원문 트랜스크립트만을 근거로 작성된 심층 학술 분석 보고서이다. 본 보고서의 핵심 목적은 재귀 언어 모델(Recursive Language Model, 이하 RLM)의 구조적 메커니즘, 강화학습(RL)을 통한 조합적 일반화(Compositional Generalization)의 성과, 그리고 하네스(Harness) 설계가 대형 언어 모델(LLM)의 시스템 아키텍처와 지능 정의에 미치는 파급력을 기술적으로 정밀하게 해설하는 데 있다.</p>
+<p>본 보고서는 팟캐스트 채널 *'Deep Learning with Yacine'*의 기술 대담 영상 'RLMs are Compositional Generalizers with Alex Zhang from MIT'의 원문 트랜스크립트만을 근거로 작성된 심층 학술 분석 보고서이다. 본 보고서의 핵심 목적은 재귀 언어 모델(Recursive Language Model, 이하 RLM)의 구조적 메커니즘, 강화학습(RL)을 통한 조합적 일반화(Compositional Generalization)의 성과, 그리고 하네스(Harness) 설계가 대형 언어 모델(LLM)의 시스템 아키텍처와 지능 정의에 미치는 파급력을 기술적으로 정밀하게 해설하는 데 있다.</p>
 <h5 id="1-2-화자-귀속-명시">1.2 화자 귀속 명시</h5>
 <p>보고서 내 기술적 내용의 엄밀성과 책임 소재를 명확히 하기 위해 화자의 역할과 발언 범위를 다음과 같이 분리 귀속한다.</p>
 <ul>
@@ -115,7 +115,7 @@
        └───&gt; [Tool Call / Shadow REPL Execution] ────────────┘
 </code></pre>
 <h5 id="4-1-컨텍스트-변수화-context-offloading">4.1 컨텍스트 변수화 (Context Offloading)</h5>
-<p>수백만 토큰에 달하는 대용량 컨텍스트를 모델의 어텐션 윈도우에 직접 주입(Shove)하지 않는다. 대신 데이터를 **파이썬 실행 환경(Python REPL) 내부의 변수(Variable)**로 탑재(Offloading)한다. 이를 통해 컨텍스트는 수동적으로 읽는 대상이 아니라, 모델이 접근하고 조작할 수 있는 외부 '환경(Environment)'으로 변환된다.</p>
+<p>수백만 토큰에 달하는 대용량 컨텍스트를 모델의 어텐션 윈도우에 직접 주입(Shove)하지 않는다. 대신 데이터를 파이썬 실행 환경(Python REPL) 내부의 변수(Variable)로 탑재(Offloading)한다. 이를 통해 컨텍스트는 수동적으로 읽는 대상이 아니라, 모델이 접근하고 조작할 수 있는 외부 '환경(Environment)'으로 변환된다.</p>
 <h5 id="4-2-재귀적-탐색-과제-분해-및-깊이-depth-제약">4.2 재귀적 탐색, 과제 분해 및 깊이(Depth) 제약</h5>
 <p>모델은 REPL 환경 내 데이터를 훑어보고(Peek), 필요한 단위로 쪼개며(Chop), 프로그램 방식으로 자기 자신을 재귀적으로 호출(Programmatic Sub-agent Call)하거나 도구를 호출한다.</p>
 <ul>
@@ -126,13 +126,13 @@
 <hr />
 <h4 id="5-국소적-분포-내-locally-in-distribution-개념과-기존-컨텍스트-압축의-한계">5. '국소적 분포 내(Locally In-Distribution)' 개념과 기존 컨텍스트 압축의 한계</h4>
 <h5 id="5-1-학술적-해설-국소적-분포-내-locally-in-distribution">5.1 학술적 해설: 국소적 분포 내 (Locally In-Distribution)</h5>
-<p>전체 입력 및 과제 시퀀스 $X_{\text{long}}$이 모델의 사전 학습 데이터 분포 바깥에 존재하는 아웃 오브 분포(Out-of-Distribution, $X_{\text{long}} \notin \mathcal{D}<em>{\text{train}}$)일지라도, RLM 하네스가 이를 적절히 분해함(Decomposition)으로써 **개별 LLM 호출이 직면하는 서브 쿼리 $x_i$는 항상 모델이 가장 잘 알고 있는 분포 내(In-Distribution, $x_i \in \mathcal{D}</em>{\text{train}}$) 상태에 머물게 만드는 메커니즘**을 의미한다.</p>
+<p>전체 입력 및 과제 시퀀스 $X_{\text{long}}$이 모델의 사전 학습 데이터 분포 바깥에 존재하는 아웃 오브 분포(Out-of-Distribution, $X_{\text{long}} \notin \mathcal{D}<em>{\text{train}}$)일지라도, RLM 하네스가 이를 적절히 분해함(Decomposition)으로써 개별 LLM 호출이 직면하는 서브 쿼리 $x_i$는 항상 모델이 가장 잘 알고 있는 분포 내(In-Distribution, $x_i \in \mathcal{D}</em>{\text{train}}$) 상태에 머물게 만드는 메커니즘을 의미한다.</p>
 <p>$$\text{Global Task: } X_{\text{long}} \notin \mathcal{D}<em>{\text{train}} \quad \xrightarrow{\text{RLM Decomposition}} \quad \forall i, \text{ Local Sub-call: } x_i \in \mathcal{D}</em>{\text{train}}$$</p>
 <p>이는 전체 장기 과제 수행의 성패를 &quot;모델이 모르는 영역을 억지로 추론하게 만드는가&quot;에서 &quot;모델이 아는 국소적 과제들의 조합으로 환원할 수 있는가&quot;의 문제로 전환시킨다.</p>
 <h5 id="5-2-기존-컨텍스트-압축-compaction-방식과의-대조">5.2 기존 컨텍스트 압축(Compaction) 방식과의 대조</h5>
 <ul>
 <li><strong>기존 하네스 방식 (예: Claude Code 등):</strong> 컨텍스트가 한계에 도달할 때까지 지속적으로 토큰을 채워 넣은 후, 사후에 이를 요약·압축(Compaction)하는 버퍼 관리 전략을 취함.</li>
-<li><strong>알렉스 장의 비판:</strong> 이러한 압축 방식은 압축 과정에서 과제 해결에 치명적인 정보가 손실되지 않는다는 **정량적 보장(Quantitative Guarantees)**을 전혀 제공하지 못한다. 결과적으로 모델을 Out-of-Distribution 영역으로 몰아넣어 중반 이후 오작동을 유발한다. 반면 RLM의 국소적 분포 내 유지 메커니즘은 변수 오프로딩을 통해 정보 손실 없이 정밀한 일반화를 가능하게 한다.</li>
+<li><strong>알렉스 장의 비판:</strong> 이러한 압축 방식은 압축 과정에서 과제 해결에 치명적인 정보가 손실되지 않는다는 정량적 보장(Quantitative Guarantees)을 전혀 제공하지 못한다. 결과적으로 모델을 Out-of-Distribution 영역으로 몰아넣어 중반 이후 오작동을 유발한다. 반면 RLM의 국소적 분포 내 유지 메커니즘은 변수 오프로딩을 통해 정보 손실 없이 정밀한 일반화를 가능하게 한다.</li>
 </ul>
 <hr />
 <h4 id="6-갱신된-실험-결과-강화학습을-통한-조합적-일반화-검증">6. 갱신된 실험 결과: 강화학습을 통한 조합적 일반화 검증</h4>
@@ -143,7 +143,7 @@
 <h5 id="6-1-길이-일반화-length-generalization">6.1 길이 일반화 (Length Generalization)</h5>
 <ul>
 <li><strong>실험 조건:</strong> 모델에게 짧은 길이의 과제(Short Task)만을 제시하고 이에 대한 처리 로직만을 강화학습(RL)으로 훈련함.</li>
-<li><strong>결과:</strong> RLM 결합 모델은 학습 과정에서 본 적 없는 **8배~32배 긴 길이의 과제(Long Task)**에서도 완벽한 성과 향상 및 길이 일반화를 달성함.</li>
+<li><strong>결과:</strong> RLM 결합 모델은 학습 과정에서 본 적 없는 8배~32배 긴 길이의 과제(Long Task)에서도 완벽한 성과 향상 및 길이 일반화를 달성함.</li>
 <li><strong>대비점:</strong> 동일한 강화학습 알고리즘으로 짧은 과제에서 훈련된 베이스라인 트랜스포머(Vanilla Transformer)는 장문 평가 시 성공률 곡선이 완전한 평행선(Flat)을 그리며 일반화에 전면 실패함.</li>
 </ul>
 <h5 id="6-2-도메인-간-일반화-cross-domain-transfer">6.2 도메인 간 일반화 (Cross-Domain Transfer)</h5>
@@ -152,7 +152,7 @@
 <li><strong>결과:</strong> 완전히 무관한 타 도메인 과제(WildChat 오류 분석, 수학 코스 질의응답, 스팸 분류)에 투입했을 때, 베이스라인을 압도하는 도메인 전이 성능을 기록함.</li>
 </ul>
 <h5 id="6-3-강화학습-일반화의-원천-메커니즘">6.3 강화학습 일반화의 원천 메커니즘</h5>
-<p>알렉스 장은 이 실험의 핵심 혁신성을 다음과 같이 해석한다. 강화학습을 통한 성능 향상의 원천은 <strong>가중치 내부 직접적인 도메인 지식의 추가 인코딩이 아니다.</strong> 모델이 가중치에 인코딩한 것은 **&quot;하네스를 활용하여 과제를 분해하는 메타 로직(파이썬 REPL 변수 할당, 서브 쿼리 생성, 도구 호출 제어)&quot;**이다.</p>
+<p>알렉스 장은 이 실험의 핵심 혁신성을 다음과 같이 해석한다. 강화학습을 통한 성능 향상의 원천은 <strong>가중치 내부 직접적인 도메인 지식의 추가 인코딩이 아니다.</strong> 모델이 가중치에 인코딩한 것은 &quot;하네스를 활용하여 과제를 분해하는 메타 로직(파이썬 REPL 변수 할당, 서브 쿼리 생성, 도구 호출 제어)&quot;이다.</p>
 <p>베이스 트랜스포머는 긴 시퀀스 데이터를 직접 접해야만 긴 과제를 수행할 수 있지만, RLM은 짧은 과제에서 과제 분해 메타 구조만 학습하면 이를 기반으로 수십 배 긴 과제와 타 도메인 과제로 스스로 일반화한다.</p>
 <hr />
 <h4 id="7-관리되지-않은-천재-mismanaged-genius-가설과-시스템-계층-구조">7. '관리되지 않은 천재(Mismanaged Genius)' 가설과 시스템 계층 구조</h4>
@@ -171,7 +171,7 @@
 <h5 id="7-3-컴포넌트-발전-격차-및-단계적-해결-순서-정밀화">7.3 컴포넌트 발전 격차 및 단계적 해결 순서 정밀화</h5>
 <p>알렉스 장은 현재 AI 기술 생태계의 컴포넌트 성숙도 격차 상황을 다음과 같이 진단한다.</p>
 <p>$$\text{[현재 기술 성숙도 격차]} \quad \text{데이터 및 환경 (Data &amp; Environment)} &gt; \text{아키텍처 (Architecture)} &gt; \text{하네스 (Harness)}$$</p>
-<p>현재 데이터와 환경 발전 속도에 비해 하네스의 연구 수준이 가장 뒤처져 있다. 따라서 연구 커뮤니티가 문제를 해결해 나가야 하는 **단계적 우선순위 순서(역순)**는 다음과 같다.</p>
+<p>현재 데이터와 환경 발전 속도에 비해 하네스의 연구 수준이 가장 뒤처져 있다. 따라서 연구 커뮤니티가 문제를 해결해 나가야 하는 단계적 우선순위 순서(역순)는 다음과 같다.</p>
 <p>$$\text{[연구 및 문제 해결 단계 순서]} \quad \mathbf{1.\text{ 하네스 수정}} \longrightarrow \mathbf{2.\text{ 아키텍처 수정}} \longrightarrow \mathbf{3.\text{ 데이터 수정}}$$</p>
 <p>즉, 가장 낙후되어 있으면서도 적은 비용으로 큰 성능 도약을 끌어낼 수 있는 하네스 설계를 먼저 완벽히 해결한 후, 이를 아키텍처에 내재화하고, 최종적으로 데이터를 수정해야 한다.</p>
 <hr />
@@ -227,7 +227,7 @@ LM 토큰 생성 중 ──&gt; [Shadow REPL / AST Tracking]
 <li><strong>궤적 유사성(Trajectory Similarity) 정량화:</strong> 에이전트 실행 궤적과 과제 동등성(Task Equivalence)을 정량적으로 특성화하는 학술적 프레임워크 정립.</li>
 </ol>
 <h5 id="10-3-최종-결론-하네스-설계-패러다임의-근본적-전환">10.3 최종 결론: 하네스 설계 패러다임의 근본적 전환</h5>
-<p>본 연구의 최종 메시지는 단순히 *&quot;RLM 하네스가 가장 우수하다&quot;*는 주장이 아니다. 핵심은 **&quot;하네스를 단순 배관으로 취급하던 기존 관점에서 벗어나, 조합적 일반화를 유도할 수 있는 학술적 하네스 설계 방식 자체를 근본적으로 다시 생각하자(Rethink Harness Design)&quot;**는 패러다임 전환 선언에 있다.</p>
+<p>본 연구의 최종 메시지는 단순히 *&quot;RLM 하네스가 가장 우수하다&quot;*는 주장이 아니다. 핵심은 &quot;하네스를 단순 배관으로 취급하던 기존 관점에서 벗어나, 조합적 일반화를 유도할 수 있는 학술적 하네스 설계 방식 자체를 근본적으로 다시 생각하자(Rethink Harness Design)&quot;는 패러다임 전환 선언에 있다.</p>
 <hr />
 <h4 id="11-출처-및-연구적-한계-disclaimer">11. 출처 및 연구적 한계 (Disclaimer)</h4>
 <blockquote>

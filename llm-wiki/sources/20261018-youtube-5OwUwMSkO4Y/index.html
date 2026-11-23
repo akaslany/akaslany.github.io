@@ -147,7 +147,7 @@
 <li><strong>극단적 저지연 에이전트용 특수 서빙 (TileRT 추론 엔진):</strong>
 <ul>
 <li>메모리 바운드 디코딩(Memory-Bound Decoding) 한계를 극복하기 위해 메가 커널(Mega kernel) 기술을 적용, 커널 호출 오버헤드(Launch overhead)를 제거함.</li>
-<li>단일 배치(Batch size = 1) 조건에서 최대 **초당 470 토큰(470 tokens/s)**이라는 압도적 디코딩 속도를 기록함.</li>
+<li>단일 배치(Batch size = 1) 조건에서 최대 초당 470 토큰(470 tokens/s)이라는 압도적 디코딩 속도를 기록함.</li>
 <li>그러나 배치 크기 확장이 불가능하여 단위 토큰당 서빙 비용이 매우 높게 형성되며, 극단적 저지연을 요구하는 전문 에이전트 작업(Jane Street 등 금융/코딩 에이전트)에 특화된 트레이드오프를 가짐.</li>
 </ul>
 </li>
@@ -169,13 +169,13 @@
 <li><strong>Slime 프레임워크 및 자가 개선 인프라 루프 (Self-Improvement Loop):</strong>
 <ul>
 <li>Z.ai는 분산 사후 학습 프레임워크인 <strong>Slime</strong>을 오픈소스로 구축하여 분산 시스템 환경에서의 학습 효율을 극대화함.</li>
-<li>특히 **&quot;자사 AI 모델을 활용해 미지의 국산 하드웨어 GPU 커널을 자동 검증하고 시스템 모니터링 작업을 자동화하여 인프라 효율성을 스스로 극대화하는 자가 개선 루프(Self-improvement loop)&quot;**를 운용하여 시스템 엔지니어링 오버헤드를 획기적으로 낮춤.</li>
+<li>특히 &quot;자사 AI 모델을 활용해 미지의 국산 하드웨어 GPU 커널을 자동 검증하고 시스템 모니터링 작업을 자동화하여 인프라 효율성을 스스로 극대화하는 자가 개선 루프(Self-improvement loop)&quot;를 운용하여 시스템 엔지니어링 오버헤드를 획기적으로 낮춤.</li>
 </ul>
 </li>
 <li><strong>역량 변화 (Pre-training 동결 기준):</strong>
 <ul>
 <li>사전 학습 weights를 동결한 상태에서 사후 학습만으로 벤치마크상 에이전트 추론 능력을 <strong>2% 이상 향상</strong>시킴.</li>
-<li>사이버 보안 역량이 급격히 상승하여 Anthropic의 레드팀 평가 기준 **Fable 수준(Near-Fable level)**의 프론티어급 공격/방어 역량 확보.</li>
+<li>사이버 보안 역량이 급격히 상승하여 Anthropic의 레드팀 평가 기준 Fable 수준(Near-Fable level)의 프론티어급 공격/방어 역량 확보.</li>
 </ul>
 </li>
 <li><strong>데이터 및 인간의 개입 (Human Effort):</strong>
@@ -195,7 +195,7 @@
 <li><strong>GLM 5.3 Flash (Aux Alpha) 서빙 사례 및 하이브리드 아키텍처:</strong>
 <ul>
 <li>OpenRouter에서 스텔스 서비스 'Aux Alpha'로 공개된 GLM 5.3 Flash 모델은 완전히 중국 자체 국산 하드웨어만으로 서빙되었음이 실증됨.</li>
-<li>GLM 5.3 Flash의 주의집중 메커니즘은 DeepSeek의 DSA(DeepSeek Sparse Attention)와 Kimi의 KDA(Kimi Delta Attention)를 접목한 **하이브리드 아키텍처(일명 프랑켄슈타인 아키텍처)**로 구성되어 고성능과 극단적 서빙 효율을 동시 달성함.</li>
+<li>GLM 5.3 Flash의 주의집중 메커니즘은 DeepSeek의 DSA(DeepSeek Sparse Attention)와 Kimi의 KDA(Kimi Delta Attention)를 접목한 하이브리드 아키텍처(일명 프랑켄슈타인 아키텍처)로 구성되어 고성능과 극단적 서빙 효율을 동시 달성함.</li>
 </ul>
 </li>
 <li><strong>연산 강도(Arithmetic Intensity)와 하드웨어 Co-design 해석:</strong>

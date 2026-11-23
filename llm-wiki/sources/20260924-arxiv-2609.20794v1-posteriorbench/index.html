@@ -90,8 +90,8 @@
 <li><strong>Posterior-Mean Error:</strong> 참조 평균($\mu_{ref}$)과 생성 평균($\mu_{gen}$) 간의 상대 오차를 통해 점진적 재구성의 중심 성향을 측정한다.</li>
 <li><strong>Posterior-Standard-Deviation Error:</strong> 주변부 불확실성(Marginal uncertainty)의 크기를 비교하여 모델의 과신 또는 과소 신뢰 여부를 판별한다.</li>
 <li><strong>Maximum Mean Discrepancy (MMD):</strong> 멀티스케일 RBF 커널을 사용하여 고차원 공간에서의 통계적 모멘트 일치도를 평가한다.</li>
-<li><strong>Sliced Wasserstein Distance (SWD):</strong> 기하학적 분포 정렬도를 측정한다. 특히 pixel-wise 가우시안 투영이 아닌, **GRF 기반의 매끄러운 무작위 방향(Smooth random directions)**으로 투영하여 물리적 필드의 공간적 일관성을 보존하며 거리를 계산한다.</li>
-<li><strong>Radially Averaged Power-Spectrum Error (RAPS):</strong> 전역적 주파수 충실도를 평가한다. 저전력 고주파수 대역의 과도한 영향을 방지하기 위해 **각 빈(bin)별 상대 오차의 기하 평균(Geometric mean)**을 사용하여 에너지 캐스케이드 보존력을 정밀 측정한다.</li>
+<li><strong>Sliced Wasserstein Distance (SWD):</strong> 기하학적 분포 정렬도를 측정한다. 특히 pixel-wise 가우시안 투영이 아닌, GRF 기반의 매끄러운 무작위 방향(Smooth random directions)으로 투영하여 물리적 필드의 공간적 일관성을 보존하며 거리를 계산한다.</li>
+<li><strong>Radially Averaged Power-Spectrum Error (RAPS):</strong> 전역적 주파수 충실도를 평가한다. 저전력 고주파수 대역의 과도한 영향을 방지하기 위해 각 빈(bin)별 상대 오차의 기하 평균(Geometric mean)을 사용하여 에너지 캐스케이드 보존력을 정밀 측정한다.</li>
 </ul>
 <h4 id="4-실험-결과-분석-experimental-results">4. 실험 결과 분석 (Experimental Results)</h4>
 <h5 id="4-1-주요-해결기-성능-비교">4.1. 주요 해결기 성능 비교</h5>
@@ -102,14 +102,14 @@
 <li><strong>LTMI:</strong> 전통적인 앙상블 방법론인 ES-MDA(Mean Error 0.1250)가 여전히 강력한 성능을 유지하는 가운데, FunDPS 등이 경쟁력 있는 지표를 나타냈다.</li>
 </ul>
 <h5 id="4-2-점추정-vs-분포-매칭의-상충-관계-v-shaped-relationship">4.2. 점추정 vs 분포 매칭의 상충 관계 (V-shaped relationship)</h5>
-<p>실험 결과, 단일 참조 샘플에 대한 $L_2$ 오차와 분포 지표들 사이에는 **V자형 관계(V-shaped relationship)**가 관찰되었다. $L_2$ 오차를 극단적으로 낮추려는 시도는 종종 **모드 붕괴나 사후 분산의 파괴(Variance destruction)**를 초래하여 MMD나 SWD 지표를 악화시킨다. 이는 단순히 단일 재구성 성능이 좋다고 해서 해당 모델이 우수한 사후분포 샘플러임을 보장하지 않음을 시사한다.</p>
+<p>실험 결과, 단일 참조 샘플에 대한 $L_2$ 오차와 분포 지표들 사이에는 V자형 관계(V-shaped relationship)가 관찰되었다. $L_2$ 오차를 극단적으로 낮추려는 시도는 종종 모드 붕괴나 사후 분산의 파괴(Variance destruction)를 초래하여 MMD나 SWD 지표를 악화시킨다. 이는 단순히 단일 재구성 성능이 좋다고 해서 해당 모델이 우수한 사후분포 샘플러임을 보장하지 않음을 시사한다.</p>
 <h5 id="4-3-해결기-메커니즘의-차이-hard-vs-soft-guidance">4.3. 해결기 메커니즘의 차이: Hard vs Soft Guidance</h5>
 <p>ECI와 같은 'Hard Replacement' 방식은 관측 데이터가 존재하는 지점을 강제로 대체함으로써 사전 분포 매니폴드(Prior manifold)를 파괴하는 경향이 있다. 반면, 확산 모델 기반의 해결기들은 'Soft Likelihood Guidance'를 통해 사전 확률과 데이터 일관성을 동적으로 균형 잡음으로써, 물리적으로 타당하면서도 다양한 앙상블을 생성하는 데 우위를 점했다. 특히 신경 연산자(Neural Operators)를 활용한 함수 공간(Function-space) 모델들은 해상도 강건성과 스펙트럼 보존력이 탁월했다.</p>
 <h4 id="5-주요-분석-및-시사점-ablation-insights">5. 주요 분석 및 시사점 (Ablation &amp; Insights)</h4>
 <h5 id="5-1-가이드라인-가중치와-평균-분산-트레이드오프">5.1. 가이드라인 가중치와 평균-분산 트레이드오프</h5>
 <p>가이드 가중치($\lambda$)는 이론적으로 우도 정밀도($\sigma^{-2}$)에 비례하여 스케일링되어야 한다. 실험 결과, 강한 가이드는 관측치와의 일관성을 높이지만 사후 분산을 체계적으로 과소평가하게 만드는 <strong>과신(Overconfidence) 문제</strong>를 야기한다. 이는 평균의 정확도와 분산의 보정(Calibration) 사이의 근본적인 트레이드오프를 보여주며, 이를 동시에 최적화할 수 있는 조건화 메커니즘의 필요성을 뒷받침한다.</p>
 <h5 id="5-2-분포-외-out-of-distribution-일반화와-매끄러움-편향">5.2. 분포 외(Out-of-Distribution) 일반화와 매끄러움 편향</h5>
-<p>Poisson 과제에서 사전 분포의 매끄러움($\alpha$) 범위를 넓혀 학습한 결과(OOD), 픽셀 공간에서는 그럴듯한 샘플이 생성됨에도 불구하고 **실제 잠재 파라미터 구조($\alpha$)는 참조값보다 낮게 추론되는 편향(Bias toward lower $\alpha$)**이 발견되었다. 이 과정에서 PDE 잔차(Residual)가 증가하는 등 물리적 일관성이 훼손되었으며, 이는 분포 지표(MMD, SWD)가 단순 점추정 오차보다 모델의 물리적 결함을 더 민감하게 탐지함을 입증한다.</p>
+<p>Poisson 과제에서 사전 분포의 매끄러움($\alpha$) 범위를 넓혀 학습한 결과(OOD), 픽셀 공간에서는 그럴듯한 샘플이 생성됨에도 불구하고 실제 잠재 파라미터 구조($\alpha$)는 참조값보다 낮게 추론되는 편향(Bias toward lower $\alpha$)이 발견되었다. 이 과정에서 PDE 잔차(Residual)가 증가하는 등 물리적 일관성이 훼손되었으며, 이는 분포 지표(MMD, SWD)가 단순 점추정 오차보다 모델의 물리적 결함을 더 민감하게 탐지함을 입증한다.</p>
 <h4 id="6-결론">6. 결론</h4>
 <p>PosteriorBench는 생성형 역문제 해결기가 단순히 시각적으로 그럴듯한 결과를 내는 것을 넘어, 과학적 의사결정에 필요한 신뢰할 수 있는 사후분포를 생성하는지 평가하는 엄밀한 체계를 확립하였다. 본 벤치마크는 점추정 위주의 평가에서 탈피하여 모멘트 일치도, 기하학적 정렬, 주파수 도메인의 에너지 보존력을 종합적으로 고려할 것을 제안한다.</p>
 <p><strong>주의 사항:</strong> 본 기술 보고서는 arXiv:2609.20794v1 사전 인쇄본에 근거하며, 독립적인 재현 결과가 아닌 해당 문헌의 실험 데이터를 바탕으로 작성되었습니다. 상세 사양 및 소스 코드는 공식 저장소(neuraloperator/PosteriorBench)를 통해 확인할 수 있습니다.</p>

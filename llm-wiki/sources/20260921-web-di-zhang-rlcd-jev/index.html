@@ -47,7 +47,7 @@
 <p>$$P(a_1 \succ a_2|x) = \frac{\exp u_\theta(x, a_1)}{\exp u_\theta(x, a_1) + \exp u_\theta(x, a_2)} = \sigma(u_\theta(x, a_1) - u_\theta(x, a_2))$$</p>
 <p>이 방식은 Yes/No 토큰을 활용한 제약된 언어 모델 결정 방식을 사용하며, 보상 모델링의 본질을 '선호 확률 모델링'으로 재정의한다.</p>
 <h5 id="2-3-데이터-및-학습의-맥락">2.3. 데이터 및 학습의 맥락</h5>
-<p>PPRM은 약 780만 개의 수학 해법 쌍을 통해 학습되며, DPO(Direct Preference Optimization)를 통해 선호도 예측 성능을 극대화한다. 여기서 저자는 **EBC(Enhanced Borda Count)**가 MCTS 내부의 집계 및 검색을 위한 '다운스트림 검색 기계(Downstream search machinery)'일 뿐이며, RLCD로의 직접적인 기술적 가교 역할을 하는 것이 아니라는 점을 강조한다. <a href="https://aclanthology.org/2025.naacl-long.375.pdf">관련 문헌: LLaMA-Berry</a></p>
+<p>PPRM은 약 780만 개의 수학 해법 쌍을 통해 학습되며, DPO(Direct Preference Optimization)를 통해 선호도 예측 성능을 극대화한다. 여기서 저자는 EBC(Enhanced Borda Count)가 MCTS 내부의 집계 및 검색을 위한 '다운스트림 검색 기계(Downstream search machinery)'일 뿐이며, RLCD로의 직접적인 기술적 가교 역할을 하는 것이 아니라는 점을 강조한다. <a href="https://aclanthology.org/2025.naacl-long.375.pdf">관련 문헌: LLaMA-Berry</a></p>
 <h4 id="3-plackett-luce-다중-선택-multiway-으로의-확장">3. Plackett–Luce: 다중 선택(Multiway)으로의 확장</h4>
 <h5 id="3-1-luce-choice-모델과-다항-로짓">3.1. Luce Choice 모델과 다항 로짓</h5>
 <p>실제 의사결정 환경에서는 두 개 이상의 후보군($A = {a_1, a_2, \dots, a_K}$)이 존재한다. RLCD는 각 후보의 유틸리티($u_i$)를 기반으로 <strong>Luce Choice 모델</strong>을 사용하여 확률 분포를 정규화한다.</p>
@@ -56,7 +56,7 @@
 <h5 id="3-2-전체-순위-우도-및-손실-함수">3.2. 전체 순위 우도 및 손실 함수</h5>
 <p>전체 순위($\pi$)가 주어질 경우, Plackett–Luce 라이클리후드는 다음과 같이 정의된다.</p>
 <p>$$P(\pi|x) = \prod_{t=1}^{K} \frac{\exp u_{\pi_t}}{\sum_{j=t}^{K} \exp u_{\pi_j}}$$</p>
-<p>분모인 $\sum_{j=t}^{K} \exp u_{\pi_j}$는 순위 지정 과정에서 선택되지 않고 **남아 있는 후보들(remaining candidates)**의 유틸리티 합을 의미한다. 이에 따른 손실 함수 $\mathcal{L}<em>{PL}$과 단일 정답($y$) 케이스의 $\mathcal{L}</em>{choice}$는 다음과 같다.</p>
+<p>분모인 $\sum_{j=t}^{K} \exp u_{\pi_j}$는 순위 지정 과정에서 선택되지 않고 남아 있는 후보들(remaining candidates)의 유틸리티 합을 의미한다. 이에 따른 손실 함수 $\mathcal{L}<em>{PL}$과 단일 정답($y$) 케이스의 $\mathcal{L}</em>{choice}$는 다음과 같다.</p>
 <p>$$\mathcal{L}_{choice} = -\log \frac{\exp u_y}{\sum_j \exp u_j}$$</p>
 <p>저자는 이러한 Plackett–Luce 라이클리후드 구조가 RLCD의 수학적 중심축임을 명시한다.</p>
 <h5 id="3-3-시각적-이해-figure-2-내용-통합">3.3. 시각적 이해 (Figure 2 내용 통합)</h5>
@@ -80,7 +80,7 @@
 <h5 id="4-4-온도-t-최적화와-목적의-분리">4.4. 온도($T^*$) 최적화와 목적의 분리</h5>
 <p>실제 구현에서 보정은 온도 스케일링($T^*$)을 통해 최적화된다.</p>
 <p>$$T^* = \arg\min_{T&gt;0} \sum BS(\mathbf{p}^{(T)}(x_n), y_n)$$</p>
-<p>이는 **랭킹(어느 것이 1등인가)**과 **보정(그 선택이 맞을 확률이 얼마인가)**이라는 두 가지 목적을 분리한다. Figure 4가 시사하듯, 신뢰도 곡선(Reliability curve)은 단순한 벤치마크가 아니라 자동화 정책 수립을 위한 핵심 도구다. 랭킹은 '행동'을 결정하고, 보정은 그 행동을 소프트웨어가 '자동 집행'할지 아니면 사람에게 '에스컬레이션'할지를 결정한다.</p>
+<p>이는 랭킹(어느 것이 1등인가)과 보정(그 선택이 맞을 확률이 얼마인가)이라는 두 가지 목적을 분리한다. Figure 4가 시사하듯, 신뢰도 곡선(Reliability curve)은 단순한 벤치마크가 아니라 자동화 정책 수립을 위한 핵심 도구다. 랭킹은 '행동'을 결정하고, 보정은 그 행동을 소프트웨어가 '자동 집행'할지 아니면 사람에게 '에스컬레이션'할지를 결정한다.</p>
 <h4 id="5-jev의-아키텍처-보상-모델의-제품화">5. Jev의 아키텍처: 보상 모델의 제품화</h4>
 <h5 id="5-1-rlhf-스택-vs-jev-스택-비교">5.1. RLHF 스택 vs Jev 스택 비교</h5>
 <p>기존의 RLHF 방식이 <code>프롬프트 → 생성 → 응답 → 보상 모델</code>의 순차적 구조였다면, Jev는 생성과 파싱 단계를 생략하고 평가기 자체를 사용자 인터페이스로 승격시켰다.</p>
@@ -119,7 +119,7 @@
 <p>Figure 1, 3, 5를 종합하면 Jev의 핵심은 명확하다. 학습 대상이 '스칼라 보상'에서 '보정된 의사결정 인터페이스'로 변화한 것이다. Jev는 상태와 스키마를 입력받아 유형화된 확률 분포를 즉시 출력하며, 이 과정에서 보정된 신뢰도를 함께 제공함으로써 실질적인 '제품'으로서의 가치를 갖는다.</p>
 <h4 id="6-jev-병렬-샘플러의-비밀-메커니즘-분석">6. Jev 병렬 샘플러의 '비밀': 메커니즘 분석</h4>
 <h5 id="6-1-저자의-핵심-비판-새로운-것은-없다">6.1. 저자의 핵심 비판: &quot;새로운 것은 없다&quot;</h5>
-<p>Di Zhang은 Jev의 '병렬 샘플러'가 완전히 새로운 샘플링 법칙이나 아키텍처가 아니라는 점을 강력하게 명시한다. 저자의 해석에 따르면 이는 사실 **&quot;패킹(Packing) + 어텐션 마스크(Attention masks) + 유형화된 의사결정 헤드(Typed decision heads)&quot;**라는 기존 트랜스포머 엔지니어링의 조합일 뿐이다. 공식 발표에서 새로운 어텐션 연산자나 복잡도 결과, 또는 혁신적인 샘플러 알고리즘이 제시되지 않았다는 점이 이러한 비판을 뒷받침한다.</p>
+<p>Di Zhang은 Jev의 '병렬 샘플러'가 완전히 새로운 샘플링 법칙이나 아키텍처가 아니라는 점을 강력하게 명시한다. 저자의 해석에 따르면 이는 사실 &quot;패킹(Packing) + 어텐션 마스크(Attention masks) + 유형화된 의사결정 헤드(Typed decision heads)&quot;라는 기존 트랜스포머 엔지니어링의 조합일 뿐이다. 공식 발표에서 새로운 어텐션 연산자나 복잡도 결과, 또는 혁신적인 샘플러 알고리즘이 제시되지 않았다는 점이 이러한 비판을 뒷받침한다.</p>
 <h5 id="6-2-기술적-구현-tree-attention-mask">6.2. 기술적 구현: Tree Attention Mask</h5>
 <p>자기회귀 모델($P(y|x) = \prod P(y_t|x, y_{&lt;t})$)과 달리, 의사결정 모델은 모든 후보의 유틸리티를 동시에 추정할 수 있다.</p>
 <ul>
@@ -133,7 +133,7 @@ $$M^{tree}_{ij} = \begin{cases} 0, &amp; v(j) \preceq v(i) \ -\infty, &amp; \tex
 <p>결국 Jev의 성능은 새로운 샘플링 법칙이 아니라, 여러 후보의 점수를 단 한 번의 포워드 패스(Forward pass)로 계산해내는 트랜스포머 엔지니어링의 결과물이다. Jev는 RLCD와 이러한 효율적 서빙 기술을 결합하여 제품화한 '보상 모델 서비스'인 셈이다.</p>
 <h4 id="7-rlcd의-분류-및-테스트-가능한-예측">7. RLCD의 분류 및 테스트 가능한 예측</h4>
 <h5 id="7-1-보상-소스로서의-rlcd-분류">7.1. 보상 소스로서의 RLCD 분류</h5>
-<p>RLCD는 RLHF나 RLVR과 상호 배타적인 경쟁 관계가 아니다. 저자는 RLCD를 다음과 같이 분류하며, 이것이 특정 보상 소스가 아닌 **출력 계약(Output Contract)**에 의해 정의됨을 강조한다.</p>
+<p>RLCD는 RLHF나 RLVR과 상호 배타적인 경쟁 관계가 아니다. 저자는 RLCD를 다음과 같이 분류하며, 이것이 특정 보상 소스가 아닌 출력 계약(Output Contract)에 의해 정의됨을 강조한다.</p>
 <table>
 <thead>
 <tr>

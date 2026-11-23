@@ -42,7 +42,7 @@
 <li><strong>CPU:</strong> 연산 능력과 메모리 대역폭이 GPU에 비해 낮아 단독 추론 시 속도가 크게 저하됨.</li>
 </ul>
 <h5 id="2-4-에이전트-워크로드의-특수성">2.4 에이전트 워크로드의 특수성</h5>
-<p>에이전트가 도구를 호출하거나 문맥을 편집(thinking block 삭제 등)할 때마다 **반복적인 프리필(Repeated Prefill)**이 발생한다. 이는 초기 응답 시간(TTFT)을 급격히 증가시키고 전체 시스템의 가용성을 떨어뜨린다.</p>
+<p>에이전트가 도구를 호출하거나 문맥을 편집(thinking block 삭제 등)할 때마다 반복적인 프리필(Repeated Prefill)이 발생한다. 이는 초기 응답 시간(TTFT)을 급격히 증가시키고 전체 시스템의 가용성을 떨어뜨린다.</p>
 <h4 id="3-freetoken의-핵심-기술-분석">3. FreeToken의 핵심 기술 분석</h4>
 <p>FreeToken은 세 가지 주요 메커니즘을 통해 위 병목을 해결한다.</p>
 <h5 id="3-1-대역폭-적응형-실행-bandwidth-adaptive-execution">3.1 대역폭 적응형 실행 (Bandwidth-Adaptive Execution)</h5>

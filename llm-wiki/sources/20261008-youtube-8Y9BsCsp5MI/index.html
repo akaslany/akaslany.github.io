@@ -196,7 +196,7 @@
 <h5 id="3-3-생성형-ai의-근본-문제와-인과적-신경-커넥터-fundamental-problem-of-gen-ai">3.3. 생성형 AI의 근본 문제와 인과적 신경 커넥터 (Fundamental Problem of Gen AI)</h5>
 <ul>
 <li><strong>[사실]</strong> 발표자는 요슈아 벤지오, 케빈, 카이잔 리와 수행한 공동 연구를 통해 '인과적 신경 커넥터(Causal Neural Connector)' 프레임워크를 제안했습니다.</li>
-<li><strong>[소사의 주장]</strong> 데이터 클러스터에서 수개월간 모델을 경험적 위험 최소화(ERM) 방식으로 학습시켜 관찰 분포(Layer 1의 $P$)를 완벽하게 재현하는 학습 모델 $\hat{M}$을 완성했다 하더라도, 이 $\hat{M}$이 우리가 직접 관찰할 수 없는 실제 세계 $M^*$의 잠재적 개입(Layer 2) 및 반사실(Layer 3) 인과 분포를 복원(Recover)할 수 있는 수학적 조건과 한계를 규명해야 합니다. 발표자는 이를 **'생성 AI의 근본 문제(Fundamental Problem of Gen AI)'**로 정의합니다.</li>
+<li><strong>[소사의 주장]</strong> 데이터 클러스터에서 수개월간 모델을 경험적 위험 최소화(ERM) 방식으로 학습시켜 관찰 분포(Layer 1의 $P$)를 완벽하게 재현하는 학습 모델 $\hat{M}$을 완성했다 하더라도, 이 $\hat{M}$이 우리가 직접 관찰할 수 없는 실제 세계 $M^*$의 잠재적 개입(Layer 2) 및 반사실(Layer 3) 인과 분포를 복원(Recover)할 수 있는 수학적 조건과 한계를 규명해야 합니다. 발표자는 이를 '생성 AI의 근본 문제(Fundamental Problem of Gen AI)'로 정의합니다.</li>
 <li><strong>[작성자의 해석]</strong>
 <ul>
 <li><strong>불가능성 증명 및 수학적 엄밀성:</strong> 순수한 ERM 스케일링을 통해 $P_{\hat{M}}(Y \mid X) = P_{M^<em>}(Y \mid X)$를 달성했다 하더라도, 이는 $P_{\hat{M}}(Y \mid do(X))$ 또는 $P_{\hat{M}}(Y_x \mid x', y')$에 대한 수학적 경계(Bound)나 보장을 전혀 제공하지 못합니다. 서로 전혀 다른 인과 메커니즘을 가진 복수의 실제 세계 모델 $M_1^</em>, M_2^<em>$가 Layer 1에서는 완전히 동일한 관찰 분포를 출력할 수 있기 때문입니다. 앞서 살펴본 고양이/화병 이미지 생성 오류나 전등 스위치 오류는 학습된 모델 $\hat{M}$이 Layer 1 표면 상관관계만 맞추고 실제 세계 $M^</em>$의 인과 메커니즘 복원에 실패했음을 보여주는 수학적 증거입니다.</li>
@@ -226,7 +226,7 @@
 <h5 id="3-5-유연성-fluidity-과-이해-understanding-의-통합-causal-ai">3.5. 유연성(Fluidity)과 이해(Understanding)의 통합: Causal AI</h5>
 <ul>
 <li><strong>[사실]</strong> 현재 글로벌 AI 산업계(OpenAI, Anthropic, Google 등)는 언어와 이미지, 비디오 생성의 자연스러움을 극대화하는 '유연성(Fluidity)' 축을 최적화하는 데 거대한 자본과 연구력을 집중하고 있습니다. 반면 인과론 연구자들은 엄밀한 수학적 모델을 다루는 '이해(Understanding)' 축에 머물러 있습니다.</li>
-<li><strong>[소사의 주장]</strong> 현재 AI 연구진이 직면한 세대적 과제(Generational Challenge)는 유연성 축과 이해 축을 통합하여, 언어적으로 자연스러우면서도 세계에 대한 인과적 이해 능력을 갖춘 **'인과적 AI(Causal AI)'**를 구축하는 것입니다. 현재 대규모 언어 모델(LLM)이 사용하는 언어와 인과론의 수학적 언어는 상호 결합되지 못하고 겉돌고 있습니다.</li>
+<li><strong>[소사의 주장]</strong> 현재 AI 연구진이 직면한 세대적 과제(Generational Challenge)는 유연성 축과 이해 축을 통합하여, 언어적으로 자연스러우면서도 세계에 대한 인과적 이해 능력을 갖춘 '인과적 AI(Causal AI)'를 구축하는 것입니다. 현재 대규모 언어 모델(LLM)이 사용하는 언어와 인과론의 수학적 언어는 상호 결합되지 못하고 겉돌고 있습니다.</li>
 <li><strong>[작성자의 해석]</strong> 발표자가 제시한 인과적 지능을 갖춘 AI가 완수해야 할 5가지 핵심 요구 역량(Causal AI Desiderata)은 다음과 같습니다.
 <ol>
 <li><strong>인과적 및 반사실적 생성 능력 (Causal &amp; Counterfactual Generation):</strong> 물리적·인과적 법칙에 위배되지 않는 이미지, 텍스트, 비디오 생성.</li>

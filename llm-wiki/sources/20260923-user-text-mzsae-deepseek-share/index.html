@@ -42,11 +42,11 @@
 <li><strong>검증의 한계:</strong> 분석 과정에서 포함된 외부 공유 링크(DeepSeek)가 HTTP 403 오류로 인해 접근이 불가능하였습니다. 이에 따라 보고서에 포함된 모든 수치와 수식은 제공된 텍스트의 무결성을 전제로 하며, 독립적인 데이터 교차 검증은 수행되지 않았음을 명시합니다.</li>
 </ul>
 <h4 id="3-문제-진단-메모리-벽과-자기회귀-디코딩의-병목-problem-diagnosis">3. 문제 진단: 메모리 벽과 자기회귀 디코딩의 병목 (Problem Diagnosis)</h4>
-<p>자기회귀(Autoregressive) 디코딩의 성능 정체는 연산 장치(ALU)의 처리 속도가 부족해서가 아니라, 데이터를 연산 장치로 전달하는 **메모리 버스(Memory Bus)**의 대역폭 한계 때문입니다.</p>
+<p>자기회귀(Autoregressive) 디코딩의 성능 정체는 연산 장치(ALU)의 처리 속도가 부족해서가 아니라, 데이터를 연산 장치로 전달하는 메모리 버스(Memory Bus)의 대역폭 한계 때문입니다.</p>
 <ol>
 <li><strong>낮은 산술 연산 밀도(Arithmetic Intensity):</strong> Batch size 1 조건에서 Attention 연산의 산술 연산 밀도는 약 <strong>1~2 FLOPs/byte</strong> 수준입니다. 이는 데이터 1바이트를 읽어올 때 수행되는 연산이 극히 적어, 연산 장치는 대부분의 시간을 데이터 전송을 기다리는 유휴(Idle) 상태로 보냄을 의미합니다.</li>
 <li><strong>기존 양자화의 딜레마:</strong> KV 캐시를 양자화하여 대역폭을 절약하더라도, 연산 전 이를 복원하는 역양자화(Dequantization) 과정에서 발생하는 ALU 오버헤드가 대역폭 절감 효과를 상쇄하는 역효과를 낳습니다.</li>
-<li><strong>패러다임의 전환:</strong> MZSAE는 &quot;어떻게 더 빠르게 데이터를 읽을까&quot;라는 기존의 읽기 최적화 관점을 버리고, **&quot;어떻게 하면 불필요한 데이터를 읽지 않을 것인가(Refusing the Read)&quot;**라는 근본적인 질문에 집중하여 병목을 돌파합니다.</li>
+<li><strong>패러다임의 전환:</strong> MZSAE는 &quot;어떻게 더 빠르게 데이터를 읽을까&quot;라는 기존의 읽기 최적화 관점을 버리고, &quot;어떻게 하면 불필요한 데이터를 읽지 않을 것인가(Refusing the Read)&quot;라는 근본적인 질문에 집중하여 병목을 돌파합니다.</li>
 </ol>
 <h4 id="4-mzsae-3대-핵심-구성-요소-core-components-of-mzsae">4. MZSAE 3대 핵심 구성 요소 (Core Components of MZSAE)</h4>
 <h5 id="a-plane-2-sentinels">(a) Plane-2 Sentinels</h5>
@@ -61,7 +61,7 @@
 <li><strong>아키텍처적 의의:</strong> L2 캐시에서 센티넬을 평가하는 비용은 DRAM 라인 필(Line fill) 비용에 비해 무시할 수 있는 수준입니다. $U_b$가 임계치를 넘지 못할 경우 DRAM Fetch를 사전에 차단(Branch out)함으로써 메모리 대역폭 소모를 원천 봉쇄합니다.</li>
 </ul>
 <h5 id="b-dual-plane-cache">(b) Dual-plane Cache</h5>
-<p>KV 블록을 **Centroid(μ, FP16)**와 **2-bit Residual(Δ)**의 하이브리드 구조로 저장합니다. 이는 NVFP4와 유사한 coarse-anchor 및 fine-detail 구조를 가집니다.</p>
+<p>KV 블록을 Centroid(μ, FP16)와 2-bit Residual(Δ)의 하이브리드 구조로 저장합니다. 이는 NVFP4와 유사한 coarse-anchor 및 fine-detail 구조를 가집니다.</p>
 <ul>
 <li><strong>연산 효율성:</strong> $K ≈ μ + Δ$ 관계를 활용하며, 가장 중요한 점은 <strong>역양자화(Dequantization)가 연산 단계의 레지스터 수준에서 즉시 수행</strong>된다는 것입니다. 이를 통해 기존 양자화 기법의 고질적 병목이었던 ALU 오버헤드 문제를 해결합니다.</li>
 </ul>
@@ -70,7 +70,7 @@
 <ul>
 <li><strong>Orbitofrontal value MLP:</strong> 각 데이터 블록의 생존 가치를 실시간으로 스코어링합니다.</li>
 <li><strong>ACC-style directional veto:</strong> 의미적으로 정렬된 블록(cos θ_slow &gt; 0.40)이 탐욕적 알고리즘에 의해 강제 퇴출되지 않도록 보호(Veto)합니다.</li>
-<li><strong>Hippocampal ring buffer:</strong> 추론 경로의 지연 시간에 영향을 주지 않도록, 시스템의 <strong>유휴 사이클(Idle cycle)</strong> 동안 **오프라인 리플레이(Offline replay)**를 수행합니다. 이때 TD(0) 강화학습 알고리즘($V(s) ← r + γ·V(s′)$)을 사용하여 퇴출 정책을 정교하게 고도화합니다.</li>
+<li><strong>Hippocampal ring buffer:</strong> 추론 경로의 지연 시간에 영향을 주지 않도록, 시스템의 <strong>유휴 사이클(Idle cycle)</strong> 동안 오프라인 리플레이(Offline replay)를 수행합니다. 이때 TD(0) 강화학습 알고리즘($V(s) ← r + γ·V(s′)$)을 사용하여 퇴출 정책을 정교하게 고도화합니다.</li>
 </ul>
 <h4 id="5-실측-성능-보고-및-검증-조건-performance-results-conditions">5. 실측 성능 보고 및 검증 조건 (Performance Results &amp; Conditions)</h4>
 <p>원문에서 보고된 MZSAE의 성능 지표는 다음과 같은 특정 하드웨어 및 모델 환경에서 도출되었습니다.</p>
@@ -98,7 +98,7 @@
 <p><strong>기존 Sparse 기법과의 대조:</strong></p>
 <ul>
 <li><strong>H2O:</strong> Attention 계산 후 중요도를 판단하는 사후(Post-hoc) 퇴출인 반면, MZSAE는 센티넬 평가를 통한 <strong>사전(Pre-fetch) 판단</strong>입니다.</li>
-<li><strong>StreamingLLM:</strong> 위치 기반(Position-based) 고정 윈도우를 사용하지만, MZSAE는 **의미 기반(Semantic)**으로 중요 정보를 판별하여 위치와 관계없이 보존합니다.</li>
+<li><strong>StreamingLLM:</strong> 위치 기반(Position-based) 고정 윈도우를 사용하지만, MZSAE는 의미 기반(Semantic)으로 중요 정보를 판별하여 위치와 관계없이 보존합니다.</li>
 <li><strong>Longformer/BigBird:</strong> 학습 시점에 Sparsity 패턴이 고정되나, MZSAE는 쿼리에 따라 실시간으로 변화하는 <strong>입력 의존적(Input-dependent) 동적 Sparsity</strong>를 제공합니다.</li>
 <li><strong>Performer/Reformer:</strong> 근사(Approximation)를 통해 정확도 손실이 발생할 수 있으나, MZSAE는 특정 시나리오에서 <strong>Bit-exact</strong>한 정확성을 유지합니다.</li>
 </ul>

@@ -134,7 +134,7 @@
 <h6 id="핵심-발견-key-findings">핵심 발견 (Key Findings)</h6>
 <ol>
 <li><strong>압축 메커니즘과 주기의 일치:</strong> 풀 어텐션(Full attention) 베이스라인 모델들은 위상 간 정확도 격차가 최대 6.1%p 이하로 평탄한 성능을 유지한 반면, 청크 압축을 적용한 모든 모델은 압축 보폭 $S$에 정확히 비례하는 주기적 성능 변동을 보였다. (Prefix Padding 기준 최대 정확도 격차 <strong>최대 78%p</strong> 발생)</li>
-<li><strong>평균 수치의 은폐성:</strong> 8개의 KV 헤드를 가진 W8/S8 압축 모델은 풀 어텐션 베이스라인과 유사한 검증 손실(Validation loss) 및 높은 평균 정확도를 달성했으나, 최악의 위상 정확도(Worst residue)는 풀 어텐션이 58.4%인 반면 압축 모델은 **9.9%**에 불과했다.</li>
+<li><strong>평균 수치의 은폐성:</strong> 8개의 KV 헤드를 가진 W8/S8 압축 모델은 풀 어텐션 베이스라인과 유사한 검증 손실(Validation loss) 및 높은 평균 정확도를 달성했으나, 최악의 위상 정확도(Worst residue)는 풀 어텐션이 58.4%인 반면 압축 모델은 9.9%에 불과했다.</li>
 <li><strong>창 내부(Within-window) 불균형:</strong> Key와 Value가 압축 창 경계에 걸쳐 분할(Straddling)되는 현상 외에도, Key와 Value가 동일한 하나의 창 내부(Phase 0~6)에 완벽히 포함되는 위상 간에서도 <strong>50%p 이상의 정확도 격차</strong>가 발생하였다. 이는 위상 민감도가 단순히 창 경계 손상 때문만이 아니라, 메모리에 정보를 쓰고 읽는 신경망 내부의 정적 게이트 집중 메커니즘에 근본적으로 기인함을 보여준다.</li>
 </ol>
 <h5 id="2-4-메커니즘-분석-위상-특화-phase-specialization-와-게이트-선호도">2.4 메커니즘 분석: 위상 특화(Phase Specialization)와 게이트 선호도</h5>

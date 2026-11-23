@@ -66,7 +66,7 @@
 <p>무한대의 자유도를 지닌 양자장(Quantum Field)을 수학적으로 엄밀하게 정의하기 위해 수리물리학에서는 서로 상호 보완적인 두 공리 체계를 채택합니다.</p>
 <ul>
 <li><strong>Wightman 공리계 (실시간/Minkowski 시공간)</strong>: 우리가 서 있는 실제 시공간(실수 시간 $t$)에서 장 연산자 및 힐베르트 공간이 준수해야 할 물리적 법칙입니다. Poincaré 동변성(상대성 이론의 시공간 대칭성), 에너지-모멘텀 스펙트럼 조건(모든 물리 상태의 에너지가 0 이상임), 진공 상태의 존재, 인과율을 보장하는 국소 가환성(spacelike 떨어진 장 연산자 간 가환성), 그리고 장의 정규화 조건을 규정합니다.</li>
-<li><strong>Osterwalder–Schrader (OS) 공리계 (허수시간/Euclidean 공간)</strong>: 시간에 허수 단위 $i$를 곱하는 윅 회전(Wick Rotation)을 통해 복소 허수 시간으로 전환된 4차원 유클리드 공간에서 상관함수(Schwinger 함수)들이 갖춰야 할 수학적 조건입니다. 유클리드 회전 대칭성, 대칭성, 클러스터 분해, 그리고 복소 시간 영역에서 역으로 양자 힐베르트 공간의 긍정적 내적 구조를 복원해내는 **반사 정합성(Reflection Positivity)**을 핵심 요구 조건으로 갖습니다.</li>
+<li><strong>Osterwalder–Schrader (OS) 공리계 (허수시간/Euclidean 공간)</strong>: 시간에 허수 단위 $i$를 곱하는 윅 회전(Wick Rotation)을 통해 복소 허수 시간으로 전환된 4차원 유클리드 공간에서 상관함수(Schwinger 함수)들이 갖춰야 할 수학적 조건입니다. 유클리드 회전 대칭성, 대칭성, 클러스터 분해, 그리고 복소 시간 영역에서 역으로 양자 힐베르트 공간의 긍정적 내적 구조를 복원해내는 반사 정합성(Reflection Positivity)을 핵심 요구 조건으로 갖습니다.</li>
 </ul>
 <p>비유하자면 OS 공리계는 4차원 고정 공간에 찍힌 미시 입자들의 정적 격자 사진(통계역학적 상관관계)이 수학적으로 올바른지 판정하는 기준이며, Wightman 공리계는 이 사진을 연속적인 시간 축으로 영사하여 동역학적 양자 상태의 시간 진화(상대론적 동역학)가 인과율과 양자역학적 확률 해석을 위배하지 않는지 검증하는 틀입니다.</p>
 <h6 id="2-2-격자-게이지-이론과-자외선-uv-스케일링-극한">2.2 격자 게이지 이론과 자외선(UV) 스케일링 극한</h6>
@@ -94,7 +94,7 @@
 <p>$$\lim_{N\to\infty} \sup_p \left| \frac{\beta_{N,p}}{\log(a_N^{-1})} - b^* \right| = 0, \quad b^* = 2 b_0 = \frac{11 C_g}{24 \pi^2}$$</p>
 <p>여기서 $b_0 = \frac{11 C_g}{48 \pi^2}$이며, $C_g$는 게이지 군 $G$의 Lie 알제브라 $\mathfrak{g}$에 대응하는 Casimir 상수입니다. 이로써 고정 체적 $L_p$에서의 연속체 상관함수 $S_p(v; f) = \lim_{N\to\infty} C_{N,p}(v; f)$의 존재성을 완전히 확립했습니다.</p>
 <h6 id="3-2-부분수열-무한-체적-극한과-arzelà-ascoli-적용의-물리적-원리">3.2 부분수열 무한 체적 극한과 Arzelà–Ascoli 적용의 물리적 원리</h6>
-<p>고정 체적 연속체 상관함수 $S_p$를 확보한 후, 공간 크기 $L_p \to \infty$ ($p \to \infty$) 무한 체적 극한을 취하게 됩니다. OpenAI 제출물은 무한 체적에서의 전역적 직접 수렴을 증명하지 못하고, <strong>Arzelà–Ascoli 정리</strong>를 적용하여 **부분수열 극한(subsequential limit, $S^{\text{mix}}$)**만을 추출했습니다.</p>
+<p>고정 체적 연속체 상관함수 $S_p$를 확보한 후, 공간 크기 $L_p \to \infty$ ($p \to \infty$) 무한 체적 극한을 취하게 됩니다. OpenAI 제출물은 무한 체적에서의 전역적 직접 수렴을 증명하지 못하고, <strong>Arzelà–Ascoli 정리</strong>를 적용하여 부분수열 극한(subsequential limit, $S^{\text{mix}}$)만을 추출했습니다.</p>
 <p>이 과정에서 Arzelà–Ascoli 정리의 전제 조건인 균일 유계성(uniform boundedness)과 등가연속성(equicontinuity)을 확보하기 위해 단순 수학적 추정을 넘어선 물리적 통정 메커니즘을 동원했습니다:</p>
 <ol>
 <li><strong>반사 정합성 (Reflection Positivity)</strong>: 유클리드 공간의 긍정적 내적 구조를 통해 상관함수의 상한을 물리적으로 제어.</li>
@@ -167,8 +167,8 @@ $$|R_{D,s}| \le r^{D+1-w-\varepsilon}$$</li>
 </li>
 </ul>
 <h6 id="4-3-자동-검증-도구-kernel-checker-의-한계와-사람-검토-human-review-의-역할">4.3 자동 검증 도구(Kernel Checker)의 한계와 사람 검토(Human Review)의 역할</h6>
-<p>자동화된 Lean 커널 검사는 명시된 형식적 공리로부터 논리적 증명이 올바르게 도출되었는가(<strong>Formal Verification</strong>)만을 판정할 뿐, 그 형식적 정의가 **실제 자연어로 쓰인 물리적·수학적 의도와 일치하는가(Validation)**는 판별하지 못합니다.</p>
-<p>이러한 도구적 한계를 극복하기 위해 <strong>Yang-Mills group</strong> 연구진은 용어집(Glossary)과 주석 코드 전반에 대해 정밀한 **사람 검토(Human Review)**를 수행하여 물리적 데이터 사슬의 일치성을 직접 검증했습니다.</p>
+<p>자동화된 Lean 커널 검사는 명시된 형식적 공리로부터 논리적 증명이 올바르게 도출되었는가(<strong>Formal Verification</strong>)만을 판정할 뿐, 그 형식적 정의가 실제 자연어로 쓰인 물리적·수학적 의도와 일치하는가(Validation)는 판별하지 못합니다.</p>
+<p>이러한 도구적 한계를 극복하기 위해 <strong>Yang-Mills group</strong> 연구진은 용어집(Glossary)과 주석 코드 전반에 대해 정밀한 사람 검토(Human Review)를 수행하여 물리적 데이터 사슬의 일치성을 직접 검증했습니다.</p>
 <h6 id="4-4-외부-검증-어댑터-adapters-를-통한-독립-공리계-비교">4.4 외부 검증 어댑터(Adapters)를 통한 독립 공리계 비교</h6>
 <p><strong>Yang-Mills group</strong>은 기존 수리물리학계에 확립된 외부 형식화 라이브러리와의 교차 검증 어댑터를 직접 작성했습니다:</p>
 <ul>

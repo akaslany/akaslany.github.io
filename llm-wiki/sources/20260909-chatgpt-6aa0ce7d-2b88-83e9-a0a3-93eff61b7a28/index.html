@@ -31,21 +31,21 @@
 <p>본 분석은 수학 인지 경제학(Mathematical Epistemic Economics)의 관점에서 테렌스 타오(Terence Tao)가 제기한 '수학적 난제의 비재생 자원설'을 고찰한다. AI가 수학적 해답을 대량 생산하는 시대에 우리가 직면한 본질적 위기는 문제의 수량이 아니라, 지식 생산 과정에서 파생되는 인지적 가치와 '무지의 상태(State of Ignorance)'라는 자원의 고갈에 있다.</p>
 <hr />
 <h4 id="1-좋은-문제-의-정의와-품질-조정된-희소성-quality-adjusted-scarcity">1. ‘좋은 문제’의 정의와 품질 조정된 희소성 (Quality-Adjusted Scarcity)</h4>
-<p>수학에서 명제의 개수는 칸토어적 의미에서 무한하지만, 연구할 가치가 있는 ‘좋은 문제’는 경제학적으로 **품질 조정된 희소성(Quality-Adjusted Scarcity)**을 갖는 비재생 자원이다. 타오는 문제의 가치를 단순히 '정답($V_{answer}$)'에 국한하지 않고, 문제를 탐색하는 과정에서 확보되는 **'에피스테믹 옵션 가치(Epistemic Option Value)'**의 총합으로 정의한다.</p>
+<p>수학에서 명제의 개수는 칸토어적 의미에서 무한하지만, 연구할 가치가 있는 ‘좋은 문제’는 경제학적으로 품질 조정된 희소성(Quality-Adjusted Scarcity)을 갖는 비재생 자원이다. 타오는 문제의 가치를 단순히 '정답($V_{answer}$)'에 국한하지 않고, 문제를 탐색하는 과정에서 확보되는 '에피스테믹 옵션 가치(Epistemic Option Value)'의 총합으로 정의한다.</p>
 <blockquote>
 <p><strong>좋은 문제의 가치 구성 함수 (Value of a Problem)</strong>
 $$V(P) = V_{answer} + V_{methods} + V_{difficulty_map} + V_{connections} + V_{new_questions} + V_{training}$$
-여기서 **$V_{difficulty_map}$**은 에피스테믹 옵션 가치의 핵심으로, 어떤 접근법이 왜 실패하는지, 현 기술의 한계 지점이 어디인지 파악하는 '지적 지도'의 가치를 의미한다.</p>
+여기서 $V_{difficulty_map}$은 에피스테믹 옵션 가치의 핵심으로, 어떤 접근법이 왜 실패하는지, 현 기술의 한계 지점이 어디인지 파악하는 '지적 지도'의 가치를 의미한다.</p>
 </blockquote>
-<p>타오의 논지에 따르면, 과거에는 해답의 획득(Solution acquisition)과 이해의 습득(Understanding acquisition)이 강력하게 결합되어 있었으나, AI 시대에는 이 둘의 상관관계가 소멸하거나 심지어 **음의 상관관계(Negative correlation)**를 가질 위험이 크다.</p>
+<p>타오의 논지에 따르면, 과거에는 해답의 획득(Solution acquisition)과 이해의 습득(Understanding acquisition)이 강력하게 결합되어 있었으나, AI 시대에는 이 둘의 상관관계가 소멸하거나 심지어 음의 상관관계(Negative correlation)를 가질 위험이 크다.</p>
 <hr />
 <h4 id="2-식수-바다-비유를-통한-난이도-지형-difficulty-landscape-의-시각화">2. 식수-바다 비유를 통한 난이도 지형(Difficulty Landscape)의 시각화</h4>
-<p>타오는 수학적 문제의 바다에서 가치 있는 난제를 선별하는 과정을 **'식수와 바닷물'**에 비유한다.</p>
+<p>타오는 수학적 문제의 바다에서 가치 있는 난제를 선별하는 과정을 '식수와 바닷물'에 비유한다.</p>
 <ul>
 <li><strong>바닷물 (가치 없는 무한성):</strong> $\pi$의 $10^{10^{10}}$번째 자리를 구하는 것과 같은 문제. 기계적으로 생성 가능하나 지적 수익(Intellectual yield)이 거의 없다.</li>
 <li><strong>식수 (가치 있는 희소성):</strong> 리만 제타 함수와 $\pi$의 자릿수 사이의 예상치 못한 연결성을 찾는 것과 같은 문제. 해결 과정에서 새로운 기법과 구조적 통찰을 제공한다.</li>
 </ul>
-<p>기술적 진보는 **'난이도 지형(Difficulty Landscape)'**을 평탄하게(flattening) 만든다. 과거의 도구(망원경, 현미경 등)는 기존 문제를 평탄화함과 동시에 '도달 가능한 반경(Reachable radius)'을 확장하여 새로운 경계(Frontier)를 창출했으나, AI는 지형을 평탄화하면서도 새로운 경계를 불투명하게 만든다.</p>
+<p>기술적 진보는 '난이도 지형(Difficulty Landscape)'을 평탄하게(flattening) 만든다. 과거의 도구(망원경, 현미경 등)는 기존 문제를 평탄화함과 동시에 '도달 가능한 반경(Reachable radius)'을 확장하여 새로운 경계(Frontier)를 창출했으나, AI는 지형을 평탄화하면서도 새로운 경계를 불투명하게 만든다.</p>
 <table>
 <thead>
 <tr>
@@ -84,12 +84,12 @@ $$V(P) = V_{answer} + V_{methods} + V_{difficulty_map} + V_{connections} + V_{ne
 <p><strong>AI 난이도 함수: $D_{AI}(P, t, C)$</strong>
 여기서 $C$는 프롬프팅, 스캐폴딩(scaffolding), 에이전트 수, 탐색 예산(search budget) 및 테스트 시점 연산량을 포함하는 변수다.</p>
 </blockquote>
-<p>AI 기업들이 실패 결과(Negative results)를 공개하지 않기 때문에, 연구자들은 어떤 문제가 'AI-feasible'한지 혹은 'AI-hard'한지 알 수 없는 **'경계의 불투명성'**에 직면한다. 이는 지능적 탐사를 방해하고, 결과물에만 최적화된 '블랙박스 증명'을 양산하여 수학적 지형도를 소멸시킨다.</p>
+<p>AI 기업들이 실패 결과(Negative results)를 공개하지 않기 때문에, 연구자들은 어떤 문제가 'AI-feasible'한지 혹은 'AI-hard'한지 알 수 없는 '경계의 불투명성'에 직면한다. 이는 지능적 탐사를 방해하고, 결과물에만 최적화된 '블랙박스 증명'을 양산하여 수학적 지형도를 소멸시킨다.</p>
 <hr />
 <h4 id="4-수학-공동체의-보상-체계와-지식-공유지의-위기">4. 수학 공동체의 보상 체계와 지식 공유지의 위기</h4>
-<p>AI 시대에는 **굿하트의 법칙(Goodhart’s Law)**이 작동한다. 과거에는 '해결된 문제의 수($M$)'가 '수학적 진보($G$)'의 훌륭한 대리 지표($M \sim G$)였으나, AI 랩이 $M$ 자체를 최적화 타겟으로 삼으면서 이 관계는 붕괴된다.</p>
+<p>AI 시대에는 굿하트의 법칙(Goodhart’s Law)이 작동한다. 과거에는 '해결된 문제의 수($M$)'가 '수학적 진보($G$)'의 훌륭한 대리 지표($M \sim G$)였으나, AI 랩이 $M$ 자체를 최적화 타겟으로 삼으면서 이 관계는 붕괴된다.</p>
 <ul>
-<li><strong>인센티브의 비대칭:</strong> AI 기업은 '유명 난제 해결'이라는 **헤드라인 신호 가치(Headline Signaling Value)**를 추구한다. Navier-Stokes 사례에서 보듯, 해결 루머만으로도 $10^3 \sim 10^4$개의 에이전트와 대규모 컴퓨팅이 투입되는 'AI 컴퓨팅 러시'가 발생하며, 이는 인간 수학자의 개념적 진보(Conceptual Progress)를 압살한다.</li>
+<li><strong>인센티브의 비대칭:</strong> AI 기업은 '유명 난제 해결'이라는 헤드라인 신호 가치(Headline Signaling Value)를 추구한다. Navier-Stokes 사례에서 보듯, 해결 루머만으로도 $10^3 \sim 10^4$개의 에이전트와 대규모 컴퓨팅이 투입되는 'AI 컴퓨팅 러시'가 발생하며, 이는 인간 수학자의 개념적 진보(Conceptual Progress)를 압살한다.</li>
 <li><strong>정보 공유지의 고갈:</strong> 연구 방향을 공유하는 순간 AI에 의해 '우선권(Priority)'을 박탈당할 수 있다는 우려로 인해, 수 세기 동안 유지된 오픈 사이언스의 전통이 '폐쇄적 과학'으로 퇴행할 위기에 처해 있다.</li>
 </ul>
 <blockquote>
@@ -101,15 +101,15 @@ $$V(P) = V_{answer} + V_{methods} + V_{difficulty_map} + V_{connections} + V_{ne
 </blockquote>
 <hr />
 <h4 id="5-반론과-한계-비재생-자원설의-정교화">5. 반론과 한계: 비재생 자원설의 정교화</h4>
-<p>타오의 논지에 대해 문제 해결이 새로운 문제($G_t$)를 생성한다는 반론이 가능하지만($S_{t+1} = S_t - D_t + G_t$), 핵심은 문제의 개수가 아니라 **'경로 의존성(Path Dependence)'**에 있다.</p>
-<p>어떤 문제의 답($S$)이 공개되는 순간, 인류의 사후 확률(Posterior)은 강하게 조건화된다($P(A_i | S)$). 즉, 답을 모르는 상태에서 수많은 대안적 경로($A_i$)를 탐색하며 얻을 수 있었던 '실패의 지혜'와 '대안적 구조'를 발견할 기회는 영원히 상실된다. 소모되는 진짜 자원은 문제가 아니라 **'무지의 상태(State of Ignorance)'**인 것이다.</p>
+<p>타오의 논지에 대해 문제 해결이 새로운 문제($G_t$)를 생성한다는 반론이 가능하지만($S_{t+1} = S_t - D_t + G_t$), 핵심은 문제의 개수가 아니라 '경로 의존성(Path Dependence)'에 있다.</p>
+<p>어떤 문제의 답($S$)이 공개되는 순간, 인류의 사후 확률(Posterior)은 강하게 조건화된다($P(A_i | S)$). 즉, 답을 모르는 상태에서 수많은 대안적 경로($A_i$)를 탐색하며 얻을 수 있었던 '실패의 지혜'와 '대안적 구조'를 발견할 기회는 영원히 상실된다. 소모되는 진짜 자원은 문제가 아니라 '무지의 상태(State of Ignorance)'인 것이다.</p>
 <blockquote>
 <p><strong>강조: 실패의 가치(Value of Failure)</strong>
 AI는 수백만 번의 내부 실패 끝에 최종 성공값만을 출력한다. 그러나 인간 수학자에게는 '왜 이 방법이 안 되는가'를 진단하는 <strong>실패 지형(Failure landscape)</strong> 자체가 핵심 자산이다. 이 지형이 생략된 해답은 생태계의 토양을 사막화한다.</p>
 </blockquote>
 <hr />
 <h4 id="6-장기적-함의-연구-설계자-research-architect-로서의-수학자">6. 장기적 함의: 연구 설계자(Research Architect)로서의 수학자</h4>
-<p>미래 수학자의 역할은 증명 수행자(Solver)에서 가치를 판단하고 방향을 설정하는 **연구 설계자(Research Architect)**로 전이될 것이다. 타오는 이를 소수 간격(Prime Gaps) 연구 사례로 설명한다. Yitang Zhang의 7천만 바운드($V_{answer}$)보다 중요한 것은 James Maynard가 고안한 개념적 체(Conceptual Sieve)와 같은 기법의 진보($V_{methods}$)였다. AI가 숫자만 빨리 낮추는 경쟁에 매몰될 경우, 이러한 개념적 도약은 묻힐 수 있다.</p>
+<p>미래 수학자의 역할은 증명 수행자(Solver)에서 가치를 판단하고 방향을 설정하는 연구 설계자(Research Architect)로 전이될 것이다. 타오는 이를 소수 간격(Prime Gaps) 연구 사례로 설명한다. Yitang Zhang의 7천만 바운드($V_{answer}$)보다 중요한 것은 James Maynard가 고안한 개념적 체(Conceptual Sieve)와 같은 기법의 진보($V_{methods}$)였다. AI가 숫자만 빨리 낮추는 경쟁에 매몰될 경우, 이러한 개념적 도약은 묻힐 수 있다.</p>
 <p>타오는 <strong>'음식 기부 드라이브(Food donation drive)'</strong> 비유를 통해 새로운 학문적 표준을 역설한다. 단순히 '먹을 수 있는(식별 가능한) 해답'을 던지는 것이 아니라, '사회적으로 수용되는 영양 표준(인간이 이해하고 소화할 수 있는 통찰)'을 갖춘 기여만이 가치를 인정받아야 한다는 것이다.</p>
 <p><strong>[AI 시대 수학 논문의 7가지 핵심 구성 요소]</strong></p>
 <ol>

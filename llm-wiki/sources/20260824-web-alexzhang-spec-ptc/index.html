@@ -53,7 +53,7 @@
 <hr />
 <h4 id="2-sptc의-개념-정의-및-시간축-분석">2. sPTC의 개념 정의 및 시간축 분석</h4>
 <h5 id="2-1-sptc의-정의와-목적">2.1 sPTC의 정의와 목적</h5>
-<p>**Speculative Programmatic Tool Calling(sPTC)**은 LLM이 생성하는 REPL(Read-Eval-Print Loop) 코드 스트림을 실시간으로 관찰하여, 문장이 완성되기 전이라도 실행 가능한 도구 호출을 추측(Speculate)하여 디스패치하는 기술이다. 이는 모델의 내부 로직이나 지능(Weights)을 개선하는 것이 아니라, 실행 레이어에서의 <strong>하네스 스케줄링(Harness Scheduling)</strong> 최적화를 통해 전체 벽시계 시간(Wall-clock time)을 단축하는 것을 목적으로 한다. 특히 sub-LLM 호출이나 복잡한 검색 작업과 같이 지연 시간이 긴 도구가 병목이 되는 Recursive Language Models(RLM) 환경에서 제한적인 효과를 발휘한다.</p>
+<p>Speculative Programmatic Tool Calling(sPTC)은 LLM이 생성하는 REPL(Read-Eval-Print Loop) 코드 스트림을 실시간으로 관찰하여, 문장이 완성되기 전이라도 실행 가능한 도구 호출을 추측(Speculate)하여 디스패치하는 기술이다. 이는 모델의 내부 로직이나 지능(Weights)을 개선하는 것이 아니라, 실행 레이어에서의 <strong>하네스 스케줄링(Harness Scheduling)</strong> 최적화를 통해 전체 벽시계 시간(Wall-clock time)을 단축하는 것을 목적으로 한다. 특히 sub-LLM 호출이나 복잡한 검색 작업과 같이 지연 시간이 긴 도구가 병목이 되는 Recursive Language Models(RLM) 환경에서 제한적인 효과를 발휘한다.</p>
 <h5 id="2-2-speculative-decoding과의-차별점">2.2 Speculative Decoding과의 차별점</h5>
 <p>Leviathan 등이 제안한 <strong>Speculative Decoding</strong>은 작은 모델(Draft Model)이 생성한 토큰 시퀀스를 타겟 모델이 검증하여 한 번에 여러 토큰을 승인하는 '토큰 디코딩 알고리즘'이다. 반면, <strong>sPTC</strong>는 토큰 자체의 확률 분포를 검증하는 것이 아니라, 생성된 코드 내의 <strong>외부 도구 호출(External Tool Computation) 시작 시점</strong>을 앞당기는 데 집중한다. 즉, sPTC는 언어 모델링의 확률적 최적화가 아닌, 분산 컴퓨팅의 파이프라이닝(Pipelining) 기법을 LLM 하네스에 적용한 사례이다.</p>
 <h5 id="2-3-직렬-방식-vs-sptc-방식-시간축-비교">2.3 직렬 방식 vs sPTC 방식 시간축 비교</h5>
@@ -73,7 +73,7 @@
 <h5 id="3-2-핵심-데이터-구조-identity-관리의-필연성">3.2 핵심 데이터 구조: Identity 관리의 필연성</h5>
 <p>단순 캐싱과 달리 sPTC는 다음과 같은 정교한 데이터 구조를 요구한다:</p>
 <ul>
-<li><strong>Call Identity &amp; Occurrence</strong>: 도구 이름과 인자의 해시값뿐만 아니라, 동일한 인자로 여러 번 호출되는 비결정적(Non-deterministic) 호출을 구분하기 위한 **발생 순서(Occurrence)**를 추적한다. 이를 통해 FIFO(First-In-First-Out) 방식으로 정확한 결과를 매칭한다.</li>
+<li><strong>Call Identity &amp; Occurrence</strong>: 도구 이름과 인자의 해시값뿐만 아니라, 동일한 인자로 여러 번 호출되는 비결정적(Non-deterministic) 호출을 구분하기 위한 발생 순서(Occurrence)를 추적한다. 이를 통해 FIFO(First-In-First-Out) 방식으로 정확한 결과를 매칭한다.</li>
 <li><strong>Future Store</strong>: 백그라운드에서 실행 중이거나 완료된 도구 호출의 결과값(Promise)을 관리하는 전역 저장소이다.</li>
 <li><strong>Shadow Namespace</strong>: 실제 실행(Real Namespace)에 영향을 주지 않고 가상 실행을 수행하는 격리 환경이다.</li>
 </ul>

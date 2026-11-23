@@ -145,14 +145,14 @@
 <h5 id="제1장-고차원-구-충진-high-dimensional-sphere-packing">제1장. 고차원 구 충진 (High-dimensional sphere packing)</h5>
 <ul>
 <li><strong>핵심 주장:</strong> 고차원에서의 구 충진 밀도 상한을 결정하는 Cohn–Elkies 선형 계획법(LP)의 지수적 감쇠율을 $\alpha^* = \frac{1}{2} \log_2(2\pi/e) \approx 0.6044$로 확정했다고 주장한다.</li>
-<li><strong>증명 아키텍처 및 Saddle Point 기하학:</strong> 본 문서는 멜린-푸리에(Mellin–Fourier) 함수 방정식을 활용한다. 특히 §4.3에서 제시된 **안장점 기하학(Saddle Point Geometry)**은 멜린 피적분 함수가 정체되는 반지름 $r = e^{v(u)}$를 핵심 변수로 삼는다.</li>
-<li><strong>함수 구성 및 섭동 기법:</strong> 가우시안 분포의 멜린 변환을 변형하여 푸리에 쌍을 구성한다. 이때 $[a_0, A]$ 구간에서 작동하는 **음의 쉘(Negative shell, $w_s$)**을 통해 부호 변화 반지름을 안쪽으로 이동시키고, $[B, B+1]$ 구간의 **양의 쉘(Positive shell, $w_B$)**을 통해 멜린 주파수에서의 감쇠를 회복한다.</li>
+<li><strong>증명 아키텍처 및 Saddle Point 기하학:</strong> 본 문서는 멜린-푸리에(Mellin–Fourier) 함수 방정식을 활용한다. 특히 §4.3에서 제시된 안장점 기하학(Saddle Point Geometry)은 멜린 피적분 함수가 정체되는 반지름 $r = e^{v(u)}$를 핵심 변수로 삼는다.</li>
+<li><strong>함수 구성 및 섭동 기법:</strong> 가우시안 분포의 멜린 변환을 변형하여 푸리에 쌍을 구성한다. 이때 $[a_0, A]$ 구간에서 작동하는 음의 쉘(Negative shell, $w_s$)을 통해 부호 변화 반지름을 안쪽으로 이동시키고, $[B, B+1]$ 구간의 양의 쉘(Positive shell, $w_B$)을 통해 멜린 주파수에서의 감쇠를 회복한다.</li>
 <li><strong>부호 불확정성 상수의 특이점:</strong> 부호 불확정성 반지름 상수가 $(1/\pi + o(1))\sqrt{d}$로 수렴함을 입증했다고 주장하나, Appendix A에서는 $A^+(d) &lt; A^-(d)$라는 미세한 불균형을 지적하고 있어 전문가 검증 시 이 불평등의 정량적 타당성 확인이 필수적이다.</li>
 </ul>
 <h5 id="제2장-이진-및-구면-코드-binary-and-spherical-codes">제2장. 이진 및 구면 코드 (Binary and spherical codes)</h5>
 <ul>
 <li><strong>핵심 주장:</strong> MRRW 및 Kabatianskii–Levenshtein(KL) 지수를 모든 파라미터에서 지수적 요인으로 개선했다고 주장한다.</li>
-<li><strong>기술적 혁신:</strong> 고전적인 스펙트럼 구성이 단일 벡터(1D line)를 사용한 것과 달리, 각 코드 포인트에 **$dE$ 차원의 부분공간(Subspace)**을 할당하고 이들의 중첩(Overlap)을 분석하는 방식을 채택한다.</li>
+<li><strong>기술적 혁신:</strong> 고전적인 스펙트럼 구성이 단일 벡터(1D line)를 사용한 것과 달리, 각 코드 포인트에 $dE$ 차원의 부분공간(Subspace)을 할당하고 이들의 중첩(Overlap)을 분석하는 방식을 채택한다.</li>
 <li><strong>수식적 근거:</strong> $2\Gamma_{row}(a, b) &gt; s$ 조건에서 $A(n, s) \le 2^{(\Phi_r(a,b)+o(1))n}$ 상한을 유도하며, $s \to 1$ 극한에서 제1장의 구 충진 지수를 회복하는 논리적 완결성을 보여준다.</li>
 </ul>
 <h5 id="제8장-ehrhart의-부피-추측-ehrhart-s-volume-conjecture">제8장. Ehrhart의 부피 추측 (Ehrhart’s volume conjecture)</h5>
@@ -170,7 +170,7 @@
 <h5 id="제4장-connes의-강성-추측-connes-s-rigidity-conjecture">제4장. Connes의 강성 추측 (Connes’s rigidity conjecture)</h5>
 <ul>
 <li><strong>핵심 주장:</strong> 동일한 군 폰 노이만 대수를 가지면서도 서로 비동형인 Property-(T) 군들의 가산 무한 가족을 구성했다고 주장한다.</li>
-<li><strong>기법:</strong> <strong>이진 캐리(Binary carry)</strong> 연산과 **하르 측도(Haar measure)**의 상호작용을 분석하여 대수적 동형성이 군의 구조적 차이를 해소하지 못함을 입증하는 아키텍처를 제시한다.</li>
+<li><strong>기법:</strong> <strong>이진 캐리(Binary carry)</strong> 연산과 하르 측도(Haar measure)의 상호작용을 분석하여 대수적 동형성이 군의 구조적 차이를 해소하지 못함을 입증하는 아키텍처를 제시한다.</li>
 </ul>
 <hr />
 <h4 id="5-분야별-상세-분석-분야-c-계산-복잡도-및-양자-정보">5. 분야별 상세 분석: [분야 C] 계산 복잡도 및 양자 정보</h4>
@@ -203,7 +203,7 @@
 <h5 id="기술적-패턴-추출">기술적 패턴 추출</h5>
 <p>모든 장을 관통하는 모델의 공통적 방법론은 다음과 같다.</p>
 <ul>
-<li><strong>표현 공간의 전이(Representation Change):</strong> 유클리드 공간의 문제를 **멜린 도메인(Mellin domain)**으로, 또는 군의 문제를 <strong>표현 그래프(Representation graphs)</strong> 및 Specht modules로 전이시켜 분석의 복잡도를 해소한다.</li>
+<li><strong>표현 공간의 전이(Representation Change):</strong> 유클리드 공간의 문제를 멜린 도메인(Mellin domain)으로, 또는 군의 문제를 <strong>표현 그래프(Representation graphs)</strong> 및 Specht modules로 전이시켜 분석의 복잡도를 해소한다.</li>
 <li><strong>Gelfand Pairs와 스칼라 전이:</strong> 특히 구면 코드 분석에서 강한 겔판드 쌍(Strong Gelfand pairs) 성질을 활용하여 행렬 기반의 전이를 스칼라 함수로 단순화하는 고도의 수리적 기교를 보여준다.</li>
 <li><strong>국소-전역 전이(Local-to-global transition):</strong> 국소적인 미분 계수나 쉘(Shell) 단위의 섭동을 전체 구조의 하한으로 확장하는 논리를 일관되게 사용한다.</li>
 </ul>
@@ -218,7 +218,7 @@
 <ol>
 <li><strong>분석/기하:</strong> <strong>Lemma 3.2 (Mellin-strip obstruction)</strong>. 멜린 변환의 스트립 내 홀로모픽 연속성과 하단 경계 메이저런트 $h_\lambda(y)$의 정밀도 확인.</li>
 <li><strong>구 충진:</strong> 부호 불확정성 상수 비교 시 <strong>$A^+(d) &lt; A^-(d)$</strong> 불평등의 유도 과정 및 안장점 근사 오차 $O(\epsilon)$의 정량적 타당성.</li>
-<li><strong>군론:</strong> 제3장의 non-sofic 군 구성 중 **중앙화 장벽(Centralizer obstruction)**의 엄밀성.</li>
+<li><strong>군론:</strong> 제3장의 non-sofic 군 구성 중 중앙화 장벽(Centralizer obstruction)의 엄밀성.</li>
 </ol>
 <h5 id="잠재적-위험-및-주의사항">잠재적 위험 및 주의사항</h5>
 <ul>

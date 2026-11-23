@@ -25,7 +25,7 @@
 <h2 id="원문">원문</h2>
 <h3 id="hysparse2-2단계-kv-공유를-통한-하이브리드-희소-주의-집중-구조-분석-보고서">HySparse2: 2단계 KV 공유를 통한 하이브리드 희소 주의 집중 구조 분석 보고서</h3>
 <h4 id="1-문서-개요-및-주의사항">1. 문서 개요 및 주의사항</h4>
-<p>본 보고서는 기술 논문 **&quot;HySparse2: Hybrid Sparse Attention with Two-Level KV Sharing (2609.26368v1)&quot;**의 아키텍처 혁신과 성능 지표를 분석한 결과입니다.</p>
+<p>본 보고서는 기술 논문 &quot;HySparse2: Hybrid Sparse Attention with Two-Level KV Sharing (2609.26368v1)&quot;의 아키텍처 혁신과 성능 지표를 분석한 결과입니다.</p>
 <ul>
 <li><strong>출처 신뢰성:</strong> 모든 데이터는 원문 저자가 보고한 실험 결과를 기반으로 합니다.</li>
 <li><strong>문서 상태:</strong> 본 논문은 사전 인쇄본(Pre-print)으로, 학계의 동료 평가(Peer-review)나 독립적인 재현 실험을 통해 검증되지 않았음을 인지하고 기술적 참고 자료로 활용하시기 바랍니다.</li>
@@ -52,13 +52,13 @@
 <li><strong>최근 슬라이딩 윈도우 강제 포함(Forced SWA)과 병목 제거:</strong> 별도의 SWA 브랜치를 제거하고 희소 선택 시 최근 토큰(128개 등)을 강제로 포함하도록 설계했습니다. 이는 기존 구조의 <strong>'계층별 SWA 의존성(Cascading SWA dependency)'</strong> 문제를 해결합니다. 별도 브랜치가 존재할 경우 이전 층의 모든 은닉 상태가 필요해져 Cross-decoder 전체를 실행해야 하지만, Forced SWA는 이 의존성을 끊어 Prefill 조기 종료를 가능하게 합니다.</li>
 </ul>
 <h4 id="5-추론-최적화-cross-decoder-prefill-생략-및-인프라-이점">5. 추론 최적화: Cross-decoder Prefill 생략 및 인프라 이점</h4>
-<p>HySparse2 아키텍처의 핵심은 Prefill 단계의 **조기 종료(Early Exit)**를 통한 운영 효율 극대화에 있습니다.</p>
+<p>HySparse2 아키텍처의 핵심은 Prefill 단계의 조기 종료(Early Exit)를 통한 운영 효율 극대화에 있습니다.</p>
 <ul>
 <li><strong>메커니즘:</strong> 2단계 KV 공유 설계 덕분에 Cross-decoder에 필요한 모든 정보는 Self-decoder 통과 시점에 이미 결정됩니다. 따라서 Prefill 단계에서 Cross-decoder의 모든 연산을 건너뛸 수 있습니다.</li>
 <li><strong>인프라 실무 가치:</strong> Prefill-Decode 분리(Disaggregation) 환경에서 매우 강력한 이점을 제공합니다. 49층 모델 기준, <strong>Prefill 노드는 모델의 절반 수준인 약 25층 정도만 호스팅</strong>해도 운영이 가능합니다. 이는 Prefill 노드의 메모리 요구사항을 <strong>약 50% 절감</strong>할 수 있음을 의미하며, 리소스 배분 최적화에 기여합니다.</li>
 </ul>
 <h4 id="6-성능-비교-및-분석-80b-a3b-moe-모델">6. 성능 비교 및 분석: 80B-A3B MoE 모델</h4>
-<p>저자는 **MQA(Multi-Query Attention)**를 채택하여 KV 캐시 압축률과 커널 효율을 높인 HySparse2의 성능을 기존 하이브리드 모델들과 비교했습니다.</p>
+<p>저자는 MQA(Multi-Query Attention)를 채택하여 KV 캐시 압축률과 커널 효율을 높인 HySparse2의 성능을 기존 하이브리드 모델들과 비교했습니다.</p>
 <h5 id="주요-지표-비교-저자-보고-결과">주요 지표 비교 (저자 보고 결과)</h5>
 <table>
 <thead>
@@ -106,7 +106,7 @@
 <li><strong>검색 성능 최적화:</strong> 토큰 단위 선택 방식은 동일한 연산 예산 내에서 RULER-v2 스코어를 6.57포인트 향상시키며, 복잡한 그래프 추론(GraphWalks) 성능 또한 개선함을 입증했습니다.</li>
 </ul>
 <h4 id="8-결론">8. 결론</h4>
-<p>HySparse2는 **2단계 KV 공유(Bridging &amp; Reuse)**를 통해 장기 문맥 처리의 고질적인 문제인 Prefill 연산량과 메모리 점유율을 동시에 해결했습니다. 특히 <strong>Forced SWA 설계</strong>를 통해 계층간 의존성을 제거하고 Prefill 단계를 모델 절반 지점에서 종료시킨 점은 인프라 운영 측면에서 획기적인 진전입니다. 비록 일부 일반 추론 지표에서 하락세가 관찰되었으나, 대규모 에이전트 시스템을 구축하려는 조직에게 HySparse2는 매우 경제적이고 성능 지향적인 아키텍처 대안이 될 것입니다.</p>
+<p>HySparse2는 2단계 KV 공유(Bridging &amp; Reuse)를 통해 장기 문맥 처리의 고질적인 문제인 Prefill 연산량과 메모리 점유율을 동시에 해결했습니다. 특히 <strong>Forced SWA 설계</strong>를 통해 계층간 의존성을 제거하고 Prefill 단계를 모델 절반 지점에서 종료시킨 점은 인프라 운영 측면에서 획기적인 진전입니다. 비록 일부 일반 추론 지표에서 하락세가 관찰되었으나, 대규모 에이전트 시스템을 구축하려는 조직에게 HySparse2는 매우 경제적이고 성능 지향적인 아키텍처 대안이 될 것입니다.</p>
 
 </article>
 <section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>

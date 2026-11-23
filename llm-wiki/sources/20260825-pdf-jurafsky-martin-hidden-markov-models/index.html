@@ -56,7 +56,7 @@
 <hr />
 <h4 id="2-hmm의-직관적-이해-관측-이면의-숨겨진-세계">2. HMM의 직관적 이해: 관측 이면의 숨겨진 세계</h4>
 <p>은닉 마르코프 모델(Hidden Markov Model, HMM)은 직접적으로 관찰 가능한 데이터 시퀀스(Observation sequence)와, 이를 생성해 냈다고 가정되는 '보이지 않는 은닉 상태'의 시퀀스(Hidden-state sequence) 사이의 확률적 관계를 규명하는 모델입니다.</p>
-<p>이 모델의 핵심은 **관측(Observation)**의 연속을, 배후에 있다고 가정한 **은닉 상태(Hidden State)**의 연속과 확률적으로 연결한다는 점입니다. 숨은 상태를 실제 인과 원인이라고 자동 해석할 수는 없지만, 모델 안에서는 각 상태가 해당 시점의 관측 분포를 정합니다. 이는 누군가가 먹은 아이스크림 개수만 보고 그날의 날씨 상태를 추론하는 과정과 같습니다.</p>
+<p>이 모델의 핵심은 관측(Observation)의 연속을, 배후에 있다고 가정한 은닉 상태(Hidden State)의 연속과 확률적으로 연결한다는 점입니다. 숨은 상태를 실제 인과 원인이라고 자동 해석할 수는 없지만, 모델 안에서는 각 상태가 해당 시점의 관측 분포를 정합니다. 이는 누군가가 먹은 아이스크림 개수만 보고 그날의 날씨 상태를 추론하는 과정과 같습니다.</p>
 <hr />
 <h4 id="3-모델-구성-요소-날씨-아이스크림-예제-분석">3. 모델 구성 요소: 날씨-아이스크림 예제 분석</h4>
 <p>HMM을 정의하기 위해서는 Jason Eisner(2002)의 고전적 예제인 '날씨와 아이스크림'을 통해 다음의 5가지 매개변수($Q, V, A, B, \pi$)를 명확히 정의해야 합니다.</p>
@@ -206,7 +206,7 @@ $\quad \alpha_t(j) = \sum_{i=1}^{N} \alpha_{t-1}(i) a_{ij} b_j(o_t)$</li>
 <tr>
 <td style="text-align:left">Fig. A.5 캡션</td>
 <td style="text-align:left">특정 경로(H-H-C) 계산 묘사</td>
-<td style="text-align:left">**&quot;모든 가능한 경로의 확률 합&quot;**으로 수정. 알고리즘의 본질 반영.</td>
+<td style="text-align:left">&quot;모든 가능한 경로의 확률 합&quot;으로 수정. 알고리즘의 본질 반영.</td>
 </tr>
 <tr>
 <td style="text-align:left">p.8 본문</td>
@@ -221,12 +221,12 @@ $\quad \alpha_t(j) = \sum_{i=1}^{N} \alpha_{t-1}(i) a_{ij} b_j(o_t)$</li>
 <tr>
 <td style="text-align:left">Fig. A.8 수식</td>
 <td style="text-align:left">$\max_{1 \le i \le N-1}$</td>
-<td style="text-align:left">**$\max_{1 \le i \le N}$**으로 수정. 모든 상태를 탐색 범위에 포함해야 함.</td>
+<td style="text-align:left">$\max_{1 \le i \le N}$으로 수정. 모든 상태를 탐색 범위에 포함해야 함.</td>
 </tr>
 <tr>
 <td style="text-align:left">Fig. A.8 캡션</td>
 <td style="text-align:left">$q_0, q_1, \dots$</td>
-<td style="text-align:left">**$q_1, \dots$**로 수정. 식 A.13과 인덱스 체계 통일.</td>
+<td style="text-align:left">$q_1, \dots$로 수정. 식 A.13과 인덱스 체계 통일.</td>
 </tr>
 <tr>
 <td style="text-align:left">Eq. A.22 분모</td>

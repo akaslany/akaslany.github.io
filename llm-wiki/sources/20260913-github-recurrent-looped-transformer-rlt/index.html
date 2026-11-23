@@ -83,7 +83,7 @@
 <li><strong>메모리 상주성:</strong> 인코더 메모리가 불변이므로 가중치와 KV 데이터의 빈번한 이동을 최소화하는 최적화가 가능합니다.</li>
 </ul>
 <h5 id="5-2-rl-알고리즘-및-정밀-재현-exact-replay">5.2 RL 알고리즘 및 정밀 재현 (Exact Replay)</h5>
-<p>RLT의 강화학습은 **재현 정밀도(Replay Fidelity)**를 엄격히 준수합니다.</p>
+<p>RLT의 강화학습은 재현 정밀도(Replay Fidelity)를 엄격히 준수합니다.</p>
 <ul>
 <li><strong>정밀 재현(Exact Replay):</strong> RL 학습 시 샘플러에서 생성된 오래된 상태(Stale states)를 재사용하지 않습니다. 현재 업데이트된 파라미터 하에서 프롬프트부터 응답까지의 모든 상태($s_t, C^D_t$)를 처음부터 재구축(Reconstruct)합니다.</li>
 <li><strong>Full BPTT (Backpropagation Through Time):</strong> 손실(Loss)은 응답 토큰에만 적용되더라도, 그래디언트는 프롬프트 구간의 인코더 메모리와 디코더 상태 전이 과정을 모두 통과합니다. 이는 프롬프트 문맥이 정책 결정에 미치는 영향을 정확히 역전파하기 위함입니다.</li>

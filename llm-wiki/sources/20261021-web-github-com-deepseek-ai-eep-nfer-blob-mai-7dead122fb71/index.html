@@ -205,14 +205,14 @@
 <p><strong>Entrypoint 매칭 및 GDR 기반 Block KV Swap-in 메커니즘:</strong></p>
 <ul>
 <li><strong>매칭(Matching):</strong> Entrypoint가 CHECK 역할로서 로컬 <code>kvcache-store</code>에 대해 메타데이터 해시 체인 접두사 매칭을 수행합니다. 히트 길이는 라우팅 전 계산되어야 하므로 숨겨지지 않습니다.</li>
-<li><strong>인출(Fetching) 및 스왑인(Swap-in):</strong> 비동기 별도 프로세스가 3FS에서 호스트 공유 메모리로 KV 캐시를 이동시킵니다. 이후 호스트 메모리에서 HBM으로 스왑인할 때 CUDA 복사 엔진의 미세 블록 복사 효율 저하를 극복하기 위해 **GDR(GPU Direct RDMA)**을 활용하여 SM(Streaming Multiprocessor) 소모 없이 PCIe 대역폭을 완전히 포화시킵니다.</li>
+<li><strong>인출(Fetching) 및 스왑인(Swap-in):</strong> 비동기 별도 프로세스가 3FS에서 호스트 공유 메모리로 KV 캐시를 이동시킵니다. 이후 호스트 메모리에서 HBM으로 스왑인할 때 CUDA 복사 엔진의 미세 블록 복사 효율 저하를 극복하기 위해 GDR(GPU Direct RDMA)을 활용하여 SM(Streaming Multiprocessor) 소모 없이 PCIe 대역폭을 완전히 포화시킵니다.</li>
 </ul>
 </li>
 <li>
 <p><strong>SWA KV 캐시 영역 분할 및 저장 메커니즘:</strong></p>
 <ul>
 <li><code>StateBlock</code> 내부 구조: 각 시퀀스별 슬롯은 <code>[stored region: SWA]</code>와 <code>[dropped region: YOCO consumer SWA]</code>로 분할됩니다. dropped 영역에는 prefill 재연산에 의존하는 YOCO consumer 레이어 및 C2 압축 경계 어큐뮬레이터(<code>ca_state</code>/<code>ica_state</code>)가 위치하며, C2 경계는 128 토큰 저장 단위에 자연 정렬되어 경계 간 의존성이 없습니다. V4.1에서는 상위 20개 레이어만 저장 대상(<code>state_size_to_disk</code>)입니다.</li>
-<li>디코드 단계 복제 및 overshoot 흡수: 디코드 중 GPU 메모리 내 별도 복제 영역을 두고 128 토큰 경과 시마다 복사합니다. 요청 종료 시 마지막 복제본에서 디스크로 저장되며, 복사 위치가 경계를 최대 5토큰 초과(overshoot)하더라도 슬롯 링 버퍼(Ring Buffer)가 보유한 윈도우 외 **6개의 추가 슬롯(extra 6 positions)**이 이를 흡수합니다.</li>
+<li>디코드 단계 복제 및 overshoot 흡수: 디코드 중 GPU 메모리 내 별도 복제 영역을 두고 128 토큰 경과 시마다 복사합니다. 요청 종료 시 마지막 복제본에서 디스크로 저장되며, 복사 위치가 경계를 최대 5토큰 초과(overshoot)하더라도 슬롯 링 버퍼(Ring Buffer)가 보유한 윈도우 외 6개의 추가 슬롯(extra 6 positions)이 이를 흡수합니다.</li>
 </ul>
 </li>
 <li>

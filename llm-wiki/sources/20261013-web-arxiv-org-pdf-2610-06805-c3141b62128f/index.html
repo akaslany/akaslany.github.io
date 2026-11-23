@@ -35,7 +35,7 @@
 <h3 id="h-jepa-계층적-공동-임베딩-예측-아키텍처-기술-해설-보고서">H-JEPA(계층적 공동 임베딩 예측 아키텍처) 기술 해설 보고서</h3>
 <hr />
 <h4 id="1-개요-overview">1. 개요 (Overview)</h4>
-<p>본 보고서는 시각적 플래닝을 위한 엔드투엔드(End-to-End) 계층적 월드 모델 아키텍처인 **H-JEPA(Hierarchical Joint-Embedding Predictive Architecture)**의 기술적 구조, 수학적 정리, 작동 메커니즘 및 실증 성과를 다루는 전문 해설서이다. 복잡하고 장기적인 목표(Long-horizon)를 달성하기 위한 잠재 월드 모델(Latent World Model)은 서로 다른 시간적 보폭(Timescale)과 추상화 수준에서 동역학을 추론해야 한다.</p>
+<p>본 보고서는 시각적 플래닝을 위한 엔드투엔드(End-to-End) 계층적 월드 모델 아키텍처인 H-JEPA(Hierarchical Joint-Embedding Predictive Architecture)의 기술적 구조, 수학적 정리, 작동 메커니즘 및 실증 성과를 다루는 전문 해설서이다. 복잡하고 장기적인 목표(Long-horizon)를 달성하기 위한 잠재 월드 모델(Latent World Model)은 서로 다른 시간적 보폭(Timescale)과 추상화 수준에서 동역학을 추론해야 한다.</p>
 <p>기존의 단일 타임스케일 기반 단일 계층(Flat) JEPA 월드 모델(예: LeWM)은 두 가지 근본적인 한계점에 직면한다.</p>
 <ol>
 <li><strong>복리 예측 오차 및 탐색 공간 폭발:</strong> 먼 미래의 상태를 예측하기 위해 단일 저수준 타임스케일에서 미세 스텝을 순차적으로 전개해야 하며, 이 과정에서 예측 오차가 복리로 누적되고 연산 시 탐색해야 할 행동 공간(Action Search Space)이 폭발적으로 증가한다.</li>
@@ -66,7 +66,7 @@
 <ul>
 <li><strong>선택적 추상화의 메커니즘:</strong> 빠른 시간 주기로 진동하지만 장기 예측이 불가능한 미세 정보(예: 개미 로봇의 다리 관절 자세, 무작위 텔레포트 방해물의 위치)는 예측 손실(Prediction Loss)을 줄이는 과정에서 상위 인코더에 의해 차단(Discard)된다. 반면 천천히 변하며 과제 수행에 필수적인 저주파 상태(예: 에이전트의 전체 위치 궤적)는 상위 잠재 공간까지 성공적으로 유지(Retain)된다.</li>
 <li><strong>실증적 프로빙(Probing) 평가 (2계층 MLP 프로브 NMSE):</strong>
-동결된 잠재 표현 위에 **2계층 MLP 프로브(Two-layer MLP Probes)**를 학습시켜 분산 정규화 MSE(NMSE)를 측정한 결과, Visual AntMaze의 관절 상태 및 FourRoomDistractors의 방해물(Distractor) 위치는 계층이 깊어질수록 NMSE가 1.0(평균 예측 수준, 복원 불가)에 수렴했다. 반면 에이전트의 위치 NMSE는 상위 레벨에서도 0에 가깝게 유지되었다.</li>
+동결된 잠재 표현 위에 2계층 MLP 프로브(Two-layer MLP Probes)를 학습시켜 분산 정규화 MSE(NMSE)를 측정한 결과, Visual AntMaze의 관절 상태 및 FourRoomDistractors의 방해물(Distractor) 위치는 계층이 깊어질수록 NMSE가 1.0(평균 예측 수준, 복원 불가)에 수렴했다. 반면 에이전트의 위치 NMSE는 상위 레벨에서도 0에 가깝게 유지되었다.</li>
 <li><strong>주파수 격차 비대칭성:</strong> 가장 빠른 상태 성분과 가장 느린 상태 성분의 스펙트럼 중심(Spectral Centroid) 비율인 주파수 격차가 큰 환경(AntMaze, Humanoid, FourRoom)에서는 선택적 추상화가 뚜렷하게 발현된다. 반면 주파수 격차가 2배 미만인 조작 데이터셋(Push-T, Cube)에서는 상위 레벨에서의 정보 삭제 현상이 미미하다.</li>
 </ul>
 <hr />
@@ -116,14 +116,14 @@
 </tbody>
 </table>
 <h6 id="코스트-지형-재형성-및-투영-연구-cost-geometry-projection-ablation">코스트 지형 재형성 및 투영 연구 (Cost Geometry &amp; Projection Ablation)</h6>
-<p>계층적 표현이 플래닝 코스트 지형을 어떻게 개선하는지 검증하기 위해, 상위 레벨 서브골 생성 없이 **단일 레벨(Level 1) 플래너의 목표 코스트 계산을 상위 인코더 공간으로 투영($E^{(2)} \circ \dots \circ E^{(k)}$)**하는 아블레이션 실험을 수행하였다.</p>
+<p>계층적 표현이 플래닝 코스트 지형을 어떻게 개선하는지 검증하기 위해, 상위 레벨 서브골 생성 없이 단일 레벨(Level 1) 플래너의 목표 코스트 계산을 상위 인코더 공간으로 투영($E^{(2)} \circ \dots \circ E^{(k)}$)하는 아블레이션 실험을 수행하였다.</p>
 <ul>
-<li><strong>코스트 지형 개선 (Table 1):</strong> Visual AntMaze에서 레벨 1의 자체 코스트(Native L1)를 사용할 때의 성공률은 $18.0%$~ $23.3%$에 불과했으나, 동일한 레벨 1 동역학 모델에서 코스트 측정 공간만 레벨 2 상위 공간으로 투영(L2 Projection)하는 것만으로 성공률이 **$31.3 \pm 2.7%$**로 급증하였다. 상위 잠재 공간은 복도 경로를 따라 목표점까지 매끄럽고 경사도가 명확한 코스트 지형(Cost Geometry)을 형성한다.</li>
-<li><strong>비용 단조성(Cost Monotonicity) 단조 증가:</strong> 전문가 궤적을 따라 단일 레벨의 전체 목표 코스트(Full-horizon Goal Cost)를 계산할 경우 코스트가 정체되거나 요동쳐 스피어만 단조성 상관계수(Spearman Correlation)가 $0.48 \sim 0.75$에 그쳤다. 반면 H-JEPA의 계층적 서브골 추적 코스트는 **$0.89 \sim 1.00$**의 완벽에 가까운 단조 감소 특성을 보여 경사하강법 기반 플래너의 수렴 안정성을 보장한다.</li>
+<li><strong>코스트 지형 개선 (Table 1):</strong> Visual AntMaze에서 레벨 1의 자체 코스트(Native L1)를 사용할 때의 성공률은 $18.0%$~ $23.3%$에 불과했으나, 동일한 레벨 1 동역학 모델에서 코스트 측정 공간만 레벨 2 상위 공간으로 투영(L2 Projection)하는 것만으로 성공률이 $31.3 \pm 2.7%$로 급증하였다. 상위 잠재 공간은 복도 경로를 따라 목표점까지 매끄럽고 경사도가 명확한 코스트 지형(Cost Geometry)을 형성한다.</li>
+<li><strong>비용 단조성(Cost Monotonicity) 단조 증가:</strong> 전문가 궤적을 따라 단일 레벨의 전체 목표 코스트(Full-horizon Goal Cost)를 계산할 경우 코스트가 정체되거나 요동쳐 스피어만 단조성 상관계수(Spearman Correlation)가 $0.48 \sim 0.75$에 그쳤다. 반면 H-JEPA의 계층적 서브골 추적 코스트는 $0.89 \sim 1.00$의 완벽에 가까운 단조 감소 특성을 보여 경사하강법 기반 플래너의 수렴 안정성을 보장한다.</li>
 </ul>
 <hr />
 <h5 id="2-4-논점-4-역동역학-inverse-dynamics-손실을-통한-실제-로봇-영상-droid-확장-및-느린-특징-붕괴-방지">2.4. 논점 4: 역동역학(Inverse-Dynamics) 손실을 통한 실제 로봇 영상(DROID) 확장 및 느린 특징 붕괴 방지</h5>
-<p>에피소드마다 배경, 조명, 카메라이 위치, 대상 물체가 변화하는 복잡한 실제 로봇 데이터셋(DROID)에 H-JEPA를 적용할 경우, 순수 예측 목적 함수만으로는 **느린 특징 붕괴(Slow-Feature Collapse)**가 발생한다.</p>
+<p>에피소드마다 배경, 조명, 카메라이 위치, 대상 물체가 변화하는 복잡한 실제 로봇 데이터셋(DROID)에 H-JEPA를 적용할 경우, 순수 예측 목적 함수만으로는 느린 특징 붕괴(Slow-Feature Collapse)가 발생한다.</p>
 <ul>
 <li><strong>붕괴 원인 및 수학적 매커니즘:</strong> 비정상(Non-stationary) 자연 배경 환경에서는 이동하는 로봇 팔보다 정지된 배경의 정체성이 장기적으로 훨씬 예측하기 쉽다. 따라서 인코더는 로봇의 움직임을 버리고 배경 정보만 유지하려는 성향을 보인다.</li>
 <li><strong>역동역학 모델(IDM) 손실 추가 (Equation 8):</strong> 인접한 두 잠재 상태로부터 실행된 행동을 역추정하는 IDM 헤드 $I^{(\ell)}$ 및 손실 함수 $L_{\text{idm}}^{(\ell)}$를 도입하여 로봇 제어와 관련된 동적 정보의 손실을 방지한다. ($d_a$: 행동 차원, $\text{sg}[\cdot]$: Stop-gradient)</li>
@@ -132,7 +132,7 @@
 <ul>
 <li><strong>DROID 실증 데이터:</strong>
 <ul>
-<li>IDM 손실이 없는 단순 예측 모델은 Fréchet fidelity 평가에서 **0%**를 기록하며 완전한 특징 붕괴를 일으켰다.</li>
+<li>IDM 손실이 없는 단순 예측 모델은 Fréchet fidelity 평가에서 0%를 기록하며 완전한 특징 붕괴를 일으켰다.</li>
 <li>IDM 손실을 적용한 2단계 H-JEPA는 단일 레벨(LeWM+IDM) 대비 오프라인 플래닝 피델리티(Fréchet Fidelity)를 <strong>+34% ~ +40%</strong> 향상시켰으며, HWM 대비로도 유의미한 우위를 점하였다.</li>
 </ul>
 </li>

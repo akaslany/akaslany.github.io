@@ -34,24 +34,24 @@
 <p><strong>1. 서론: 연구의 범위 및 수치적 배경</strong></p>
 <p>본 연구는 무한 영역($\mathbb{R}^3$)에서의 3차원 비압축성 오일러 방정식이 유한 시간 내에 특이점(Finite-time singularity)을 형성할 수 있는지에 대한 수학적 및 수치적 분석을 수행합니다. 수리물리학적 엄밀성을 확보하기 위해 연구팀은 다음과 같은 전제를 설정하였습니다.</p>
 <ul>
-<li><strong>시스템 정의 및 차원 축소:</strong> 외력이 없는 무한 영역($\mathbb{R}^3$)의 방정식을 대상으로 하며, **축대칭성(Axisymmetry)과 스월(Swirl)**을 포함하는 시스템을 분석합니다. 연구팀은 $(r, z)$ 좌표계로의 변환 과정에서 발생하는 <strong>$1/\mathring{r}$ 특이점을 제거</strong>하여 수치 해석에 적합한 정칙성을 확보하였습니다.</li>
+<li><strong>시스템 정의 및 차원 축소:</strong> 외력이 없는 무한 영역($\mathbb{R}^3$)의 방정식을 대상으로 하며, 축대칭성(Axisymmetry)과 스월(Swirl)을 포함하는 시스템을 분석합니다. 연구팀은 $(r, z)$ 좌표계로의 변환 과정에서 발생하는 <strong>$1/\mathring{r}$ 특이점을 제거</strong>하여 수치 해석에 적합한 정칙성을 확보하였습니다.</li>
 <li><strong>Traveling-wave 자기유사 Ansatz:</strong> 특이점의 중심이 고정되지 않고 축 방향으로 이동하는 <strong>Traveling-wave</strong> 형태의 해를 가정합니다. 이는 특이점 형성 시 유동 구조가 공간적으로 수축함과 동시에 축 방향으로 표류하는 물리적 실재를 반영합니다.</li>
-<li><strong>임계 스케일링 지수 ($\lambda = 0.5$):</strong> 수치적으로 도출된 $\lambda = 1/2$은 공간의 수축 속도와 유체의 속도 증가가 완벽한 평형을 이루는 <strong>임계 스케일링</strong> 지점입니다. 이 지점에서 진폭 지수 간의 관계는 $c_\omega = c_u - 1/2$로 고정되며, 이는 시스템의 물리적 보존 법칙을 만족하는 **허용 가능한 해(Admissible solution)**의 기초가 됩니다.</li>
+<li><strong>임계 스케일링 지수 ($\lambda = 0.5$):</strong> 수치적으로 도출된 $\lambda = 1/2$은 공간의 수축 속도와 유체의 속도 증가가 완벽한 평형을 이루는 <strong>임계 스케일링</strong> 지점입니다. 이 지점에서 진폭 지수 간의 관계는 $c_\omega = c_u - 1/2$로 고정되며, 이는 시스템의 물리적 보존 법칙을 만족하는 허용 가능한 해(Admissible solution)의 기초가 됩니다.</li>
 </ul>
 <p><strong>2. 저자팀의 핵심 계산적 기여 및 방법론</strong></p>
 <p>특이점 후보의 발견과 엄밀한 수학적 증명 사이의 간극을 메우기 위해 저자팀은 고도의 계산 과학적 도구를 결합하였습니다.</p>
 <ul>
 <li><strong>PINN(Physics-Informed Neural Networks)의 역할:</strong> PINN은 복잡한 비선형 편미분 방정식(PDE)의 해 공간에서 고정밀 근사 프로파일을 탐색하는 <strong>수치적 발견 도구</strong>로 활용되었습니다. 이는 기존의 기저 함수 확장법으로 접근하기 어려운 영역에서 효율적인 후보해를 제시합니다.</li>
-<li><strong>스플라인(Spline) 변환의 필연성:</strong> 신경망의 '블랙박스'적 특성은 수학적 증명에 부적합하므로, 연구팀은 PINN 결과를 **조각별 다항식 형태인 스플라인(Spline)**으로 변환하였습니다. 스플라인 표현은 구간별로 명시적인 다항식을 제공하여 <strong>구간별 엄밀 미분</strong> 및 잔차(Residual)의 상한선을 정확히 계산할 수 있게 합니다.</li>
+<li><strong>스플라인(Spline) 변환의 필연성:</strong> 신경망의 '블랙박스'적 특성은 수학적 증명에 부적합하므로, 연구팀은 PINN 결과를 조각별 다항식 형태인 스플라인(Spline)으로 변환하였습니다. 스플라인 표현은 구간별로 명시적인 다항식을 제공하여 <strong>구간별 엄밀 미분</strong> 및 잔차(Residual)의 상한선을 정확히 계산할 수 있게 합니다.</li>
 <li><strong>Arb 라이브러리를 이용한 구간 산술(Interval Arithmetic):</strong> 수치적 오차와 반올림 오차를 완전히 배제하기 위해 <strong>Arb 라이브러리</strong> 기반의 임의 정밀도 구간 산술을 적용하였습니다. 이를 통해 $L^2$ 규범에서 $O(10^{-5})$, $L^\infty$ 규범에서 $O(10^{-3})$의 잔차를 엄밀하게 통제하며, <strong>100개 이상의 명시적 상수</strong>에 대한 엄밀한 인증(Rigorous certification)을 가능케 했습니다.</li>
 </ul>
 <p><strong>3. 안정성 분석의 메커니즘과 수학적 의미</strong></p>
-<p>본 연구에서의 '안정성'은 수치적으로 발견된 특이점 형성 과정이 외부의 작은 교란(Perturbation)에도 파괴되지 않는 **견고함(Robustness)**을 의미합니다.</p>
+<p>본 연구에서의 '안정성'은 수치적으로 발견된 특이점 형성 과정이 외부의 작은 교란(Perturbation)에도 파괴되지 않는 견고함(Robustness)을 의미합니다.</p>
 <ul>
-<li><strong>스케일 일관 변수(Scale-consistent variables):</strong> 분석의 엄밀성을 위해 $\omega$와 $\nabla u$를 **'자연스러운 쌍(Natural pair)'**으로 설정하였습니다. 이들은 동일한 스케일링 지수($\eta^{\alpha+2}$)를 공유하므로, 서로 다른 미분 차수의 물리량이 혼합되는 것을 방지하고 일관된 안정성 분석을 가능하게 합니다. 따라서 분석 대상인 섭동 벡터는 $\delta v = (\delta \omega, \partial_r \delta u, \partial_z \delta u)$로 정의됩니다.</li>
-<li><strong>에너지 구조 및 가중 함수:</strong> 원점 부근에서의 미분 손실을 제어하기 위해 <strong>고차 가중 에너지 $\Phi_{i,k} = 1 + \rho^k\Phi_i$</strong> 구조를 도입하였습니다. 이는 **소볼레프 임베딩(Sobolev embeddings)**과 결합하여 섭동의 고주파 모드까지 통제합니다.</li>
-<li><strong>로컬 아웃고잉(Local-outgoing) 구조와 'Headaches' 해결:</strong> Constantin et al. (2026)이 지적했듯, 자오선 유동(Meridional flow)의 비자명한 고정점은 안정성 분석에서 **'엄청난 골칫거리(Tremendous headaches)'**가 됩니다. 본 연구는 강한 전역 조건을 대체하는 <strong>로컬 아웃고잉 구조</strong>를 통해 섭동이 고정점에 집중되는 것을 방지하고 <strong>가중 에너지 감쇠</strong>를 유도하는 구조적 안정성을 확보하였습니다.</li>
-<li><strong>선형 및 비선형 안정성:</strong> 선형 안정성은 $\delta v$의 감쇠를 증명하며, 비선형 안정성은 에너지 볼 $E_k &lt; \delta^*$의 **전방 불변성(Forward invariance)**을 통해 특이점 형성 시나리오의 최종적인 성립을 보장합니다. 이때 스트림 함수 연산자 $E$는 5차원 유클리드 공간의 **5차원 라플라시안(Five-dimensional Laplacian)**으로 해석되며, 이는 **뉴턴 커널 $\Gamma_5$**를 이용한 엄밀 추정의 근거가 됩니다.</li>
+<li><strong>스케일 일관 변수(Scale-consistent variables):</strong> 분석의 엄밀성을 위해 $\omega$와 $\nabla u$를 '자연스러운 쌍(Natural pair)'으로 설정하였습니다. 이들은 동일한 스케일링 지수($\eta^{\alpha+2}$)를 공유하므로, 서로 다른 미분 차수의 물리량이 혼합되는 것을 방지하고 일관된 안정성 분석을 가능하게 합니다. 따라서 분석 대상인 섭동 벡터는 $\delta v = (\delta \omega, \partial_r \delta u, \partial_z \delta u)$로 정의됩니다.</li>
+<li><strong>에너지 구조 및 가중 함수:</strong> 원점 부근에서의 미분 손실을 제어하기 위해 <strong>고차 가중 에너지 $\Phi_{i,k} = 1 + \rho^k\Phi_i$</strong> 구조를 도입하였습니다. 이는 소볼레프 임베딩(Sobolev embeddings)과 결합하여 섭동의 고주파 모드까지 통제합니다.</li>
+<li><strong>로컬 아웃고잉(Local-outgoing) 구조와 'Headaches' 해결:</strong> Constantin et al. (2026)이 지적했듯, 자오선 유동(Meridional flow)의 비자명한 고정점은 안정성 분석에서 '엄청난 골칫거리(Tremendous headaches)'가 됩니다. 본 연구는 강한 전역 조건을 대체하는 <strong>로컬 아웃고잉 구조</strong>를 통해 섭동이 고정점에 집중되는 것을 방지하고 <strong>가중 에너지 감쇠</strong>를 유도하는 구조적 안정성을 확보하였습니다.</li>
+<li><strong>선형 및 비선형 안정성:</strong> 선형 안정성은 $\delta v$의 감쇠를 증명하며, 비선형 안정성은 에너지 볼 $E_k &lt; \delta^*$의 전방 불변성(Forward invariance)을 통해 특이점 형성 시나리오의 최종적인 성립을 보장합니다. 이때 스트림 함수 연산자 $E$는 5차원 유클리드 공간의 5차원 라플라시안(Five-dimensional Laplacian)으로 해석되며, 이는 뉴턴 커널 $\Gamma_5$를 이용한 엄밀 추정의 근거가 됩니다.</li>
 </ul>
 <p><strong>4. 인공지능(AI)과 인간 연구자의 역할 분담</strong></p>
 <p>본 연구는 AI의 계산 능력과 인간의 전략적 통찰이 결합된 '컴퓨터 보조 증명(Computer-assisted proof)'의 전형을 제시합니다.</p>

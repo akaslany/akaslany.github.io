@@ -101,7 +101,7 @@
 <blockquote>
 <p><strong>Theorem 1.1 (메인 정리).</strong>
 고정된 각 $k \ge 2$에 대해, $m$개의 절과 $n \ge 20$개의 선언된 변수를 갖는 임의의 $k$-CNF 논리식 $F$가 주어졌을 때, 만족 할당 개수 $#F = |{x \in {0,1}^n : F(x) = 1}|$를 정확히 계산하는 결정적(deterministic) 알고리즘이 존재한다.
-이 알고리즘은 **$\text{poly}_k(n, m)$ 공간 (즉, $(n+m)^{O_k(1)}$ 비트)**을 사용하며, 다항식 공간 상한 내에서의 핵심 복잡도 및 비트 연산 실행 시간은 다음과 같다:</p>
+이 알고리즘은 $\text{poly}_k(n, m)$ 공간 (즉, $(n+m)^{O_k(1)}$ 비트)을 사용하며, 다항식 공간 상한 내에서의 핵심 복잡도 및 비트 연산 실행 시간은 다음과 같다:</p>
 <p>$$\text{Primary Complexity Bound: } (n+m)^{O_k(1)} 2^{n/(\log n)^{1+o(1)}}$$</p>
 <p>$$\text{Bit-Operation Square-Root Bound: } \sqrt{(n + m)^{O_k(1)} 2^{O_k(n \log \log n / \log n)}}$$</p>
 <p>고정된 절 밀도 $m \le Dn$ (상수 $D &gt; 0$) 조건에서 실행 시간은 다음과 같이 서술된다:</p>
@@ -119,7 +119,7 @@
 <li><strong>확률적 변형 가설 반박:</strong> 본 알고리즘은 완전한 결정적(deterministic) 알고리즘이므로, ETH, SETH, Gap-ETH의 확률적(randomized, bounded-error) 변형 가설들까지 완전히 반박한다.</li>
 </ol>
 <ul>
-<li><strong>개념적 패러다임 전환 (Theoretical Synthesis):</strong> 기존 알고리즘(Schöning의 국소 탐색, PPSZ 등)이 변수 공간의 직접적인 트리를 탐색하거나 분기(branching)하는 방식에 의존하여 $2^n$ 전수 조사의 지수적 장벽을 완전히 넘어서지 못했던 반면, OpenAI의 접근법은 **저차 대체 형식(Low-Degree Replacement Forms)**과 **공유 선형 요약(Shared Linear Summaries)**을 도입하였다. 이를 통해 변수 간 결합성을 정수 선형 측정값으로 분리하고, 대수적 보간법을 통해 전체 할당을 직접 탐색하지 않고도 테일러 계수를 복원함으로써 전통적인 $2^n$ 지수 하한 장벽을 무력화시켰다.</li>
+<li><strong>개념적 패러다임 전환 (Theoretical Synthesis):</strong> 기존 알고리즘(Schöning의 국소 탐색, PPSZ 등)이 변수 공간의 직접적인 트리를 탐색하거나 분기(branching)하는 방식에 의존하여 $2^n$ 전수 조사의 지수적 장벽을 완전히 넘어서지 못했던 반면, OpenAI의 접근법은 저차 대체 형식(Low-Degree Replacement Forms)과 공유 선형 요약(Shared Linear Summaries)을 도입하였다. 이를 통해 변수 간 결합성을 정수 선형 측정값으로 분리하고, 대수적 보간법을 통해 전체 할당을 직접 탐색하지 않고도 테일러 계수를 복원함으로써 전통적인 $2^n$ 지수 하한 장벽을 무력화시켰다.</li>
 </ul>
 <h6 id="2-3-부수적-결과-corollaries-1-2-1-4">2.3 부수적 결과 (Corollaries 1.2 ~ 1.4)</h6>
 <blockquote>
@@ -175,7 +175,7 @@ $E^{\text{NP}}$(결정적 지수 시간 $2^{O(n)}$ 내에서 NP 오라클을 사
 <p>$\mathbb{F}_2$ 상의 저차 희소 다항식 연립방정식의 공통 영점을 효율적으로 카운팅하는 기법(<strong>Theorem 2.2</strong>)이다.</p>
 <ol>
 <li><strong>Beigel-Tarui 다항식 변환:</strong> $\mathbb{F}<em>2$ 상의 각 방정식을 정수 합 $L_i(x)$로 변환한 후, 짝수 판별 인디케이터인 보완된 Beigel-Tarui 다항식 $p</em>\ell(L_i(x)) \equiv 1_{{2 | L_i(x)}} \pmod{2^\ell}$를 적용한다 ($\ell = n+1$).</li>
-<li><strong>잘린 곱 (Truncated Product) 기법:</strong> $p_\ell(Y) = \sum_{j=0}^{\ell-1} e_j(Y) h(Y)^j$ 식 표현을 바탕으로, 대수 $A_\ell = \mathbb{Q}[V]/(V^\ell)$ 상에서 전체 식의 곱을 구한다. 이때 변수 $V$는 **모든 결합된 패리티 방정식 전체에 걸쳐 $h(Y) = Y(Y-1)$의 누적 지수(global power)**를 추적한다.</li>
+<li><strong>잘린 곱 (Truncated Product) 기법:</strong> $p_\ell(Y) = \sum_{j=0}^{\ell-1} e_j(Y) h(Y)^j$ 식 표현을 바탕으로, 대수 $A_\ell = \mathbb{Q}[V]/(V^\ell)$ 상에서 전체 식의 곱을 구한다. 이때 변수 $V$는 모든 결합된 패리티 방정식 전체에 걸쳐 $h(Y) = Y(Y-1)$의 누적 지수(global power)를 추적한다.</li>
 <li><strong>차수 한계 제어:</strong> $h(Y)$의 전체 곱해진 개수가 $\ell$ 이상인 항은 $V^\ell \equiv 0 \pmod{2^\ell}$에 의해 모듈로 $2^\ell$ 상에서 버려진다. 이를 통해 전체 방정식들의 곱 다항식의 입력 차수를 $O(n)$으로 완벽히 통제한다.</li>
 <li><strong>분기 및 카운팅:</strong> 가장 자주 출현하는 변수들을 브랜칭(branching)하여 분리한 후, 저차 다항식 연립방정식의 공통 영점 수를 $2^{O_{k,c}(n(\log \log n)^2/\log n)}$ 시간 및 다항식 공간에서 결정적으로 계산한다.</li>
 </ol>

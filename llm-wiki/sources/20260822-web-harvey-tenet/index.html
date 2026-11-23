@@ -68,7 +68,7 @@
 <h4 id="6-독립적-역량-연구-specific-capability-studies">6. 독립적 역량 연구 (Specific Capability Studies)</h4>
 <p>Harvey는 Tenet(Kimi K3)과는 별도로, 특정 법률 기능을 강화하기 위한 연구를 진행했습니다. <strong>이 연구들은 Tenet 모델과 독립적인 별도의 모델(GLM-5.2, Qwen3.8)을 사용한 결과입니다.</strong></p>
 <h5 id="6-1-m-a-diligence-glm-5-2-기반">6.1 M&amp;A Diligence (GLM-5.2 기반)</h5>
-<p>수천만 토큰의 데이터룸을 분석하는 M&amp;A 실사 업무를 위해 Recursive Language Models(RLM) 하네스를 도입했습니다. GLM-5.2 모델을 루트 에이전트로 설정했을 때, 기준 통과율이 46.1%였으나 자기 증류 SFT(self-distillation SFT) 포스트 트레이닝을 거친 후 **60.1%**로 개선되었습니다. 이는 모델이 하위 에이전트에게 업무를 위임하는 능력이 크게 향상되었기 때문입니다.</p>
+<p>수천만 토큰의 데이터룸을 분석하는 M&amp;A 실사 업무를 위해 Recursive Language Models(RLM) 하네스를 도입했습니다. GLM-5.2 모델을 루트 에이전트로 설정했을 때, 기준 통과율이 46.1%였으나 자기 증류 SFT(self-distillation SFT) 포스트 트레이닝을 거친 후 60.1%로 개선되었습니다. 이는 모델이 하위 에이전트에게 업무를 위임하는 능력이 크게 향상되었기 때문입니다.</p>
 <h5 id="6-2-review-table-glm-5-2-기반">6.2 Review Table (GLM-5.2 기반)</h5>
 <p>구조화된 데이터 추출 작업을 위해 포스트 트레이닝된 GLM-5.2 모델은 최강의 베이스라인 모델 대비 답변 품질 <strong>+3.6 points</strong>, 인용 품질 <strong>+12.1 points</strong> 향상을 기록했습니다(0-1 척도 기준). 또한 학습 시 정확한 증거 인용과 간결한 답변을 유도하는 리워드 셰이핑(reward shaping)을 통해 셀당 비용을 베이스라인의 <strong>1/10 수준</strong>으로 낮추었습니다.</p>
 <h5 id="6-3-firm-knowledge-qwen3-8-27b-기반">6.3 Firm Knowledge (Qwen3.8-27B 기반)</h5>

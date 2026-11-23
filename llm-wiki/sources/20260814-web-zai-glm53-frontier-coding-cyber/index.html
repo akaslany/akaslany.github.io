@@ -97,7 +97,7 @@ GLM-5.3은 전작 대비 큰 향상을 보였다고 Z.ai가 보고하지만, Ter
 <p><strong>4. 창발적 사이버 보안 역량 (Emergent Cyber Capability)</strong>
 Z.ai는 post-training 규모가 확장되면서 모델이 단순한 코드 결함 식별을 넘어 다단계 exploitation benchmark에서 향상됐다고 보고하고 이를 ‘창발적 사이버 역량’이라고 부릅니다. ‘창발적’은 회사의 해석이며 독립적으로 성립이 확인된 과학적 분류가 아닙니다.</p>
 <ul>
-<li><strong>CyberGym (Vulnerability Discovery):</strong> 회사 표에서 GLM-5.3은 **84.5%**로 비교군 중 가장 높습니다. 이는 1,507 tasks, single-run Pass@1, max reasoning, no web, domain whitelist를 포함한 Z.ai의 평가 조건에 묶인 결과입니다.</li>
+<li><strong>CyberGym (Vulnerability Discovery):</strong> 회사 표에서 GLM-5.3은 84.5%로 비교군 중 가장 높습니다. 이는 1,507 tasks, single-run Pass@1, max reasoning, no web, domain whitelist를 포함한 Z.ai의 평가 조건에 묶인 결과입니다.</li>
 <li><strong>ExploitBench:</strong> 54.4% (GLM-5.2 대비 2배 이상 향상되었으나, Fable 5의 78.0%에는 미치지 못함)</li>
 <li><strong>ExploitGym:</strong> 2시간 예산 내 105개, 6시간 내 130개 과제 수행.
 <ul>
@@ -115,13 +115,13 @@ Z.ai는 실제 코드베이스 분석에서 발견했다고 주장하는 보안 
 <p><strong>6. slime 프레임워크와 시스템 효율성</strong>
 훈련 프레임워크인 <strong>slime</strong>은 학습 측면에서 <strong>Megatron</strong>을, 롤아웃(Rollout) 측면에서 <strong>SGLang</strong>을 통합하여 설계되었습니다.</p>
 <ul>
-<li><strong>효율성 지표:</strong> 특정 **장기 코딩 RL 학습 작업(Long-horizon coding RL tasks)**에서 End-to-end RL 학습 처리량이 2.3배 이상 향상되었습니다.</li>
-<li><strong>최적화 메커니즘:</strong> 이러한 성능 향상은 로컬 스토리지에 모델 상태를 계층적으로 저장하는 **'Hierarchical Caching'**과 환경별 특성을 고려한 <strong>'Workload-aware heuristics'</strong>(Prefill/Decode 비율 및 동시성 설정 최적화)를 통해 달성되었습니다.</li>
+<li><strong>효율성 지표:</strong> 특정 장기 코딩 RL 학습 작업(Long-horizon coding RL tasks)에서 End-to-end RL 학습 처리량이 2.3배 이상 향상되었습니다.</li>
+<li><strong>최적화 메커니즘:</strong> 이러한 성능 향상은 로컬 스토리지에 모델 상태를 계층적으로 저장하는 'Hierarchical Caching'과 환경별 특성을 고려한 <strong>'Workload-aware heuristics'</strong>(Prefill/Decode 비율 및 동시성 설정 최적화)를 통해 달성되었습니다.</li>
 <li><strong>주의 사항:</strong> 해당 2.3배 수치는 특정 RL 워크로드에 국한된 시스템 최적화 결과이며, 모델 전체의 추론 속도나 일반적인 훈련 비용 절감을 의미하는 범용 지표가 아닙니다.</li>
 </ul>
 <p><strong>7. 가중치 공개 계획 및 안전성 정책</strong>
 Z.ai는 발표 시점에 weights가 아직 공개되지 않았으며, 안전성 평가와 hardening 완료 후 <strong>2주 뒤 공개할 계획</strong>이라고 밝혔습니다. 따라서 ‘open weights model’이라는 홍보 문구와 현재 실제 다운로드 가능 상태를 구분해야 합니다.</p>
-<p>**보안 역량(Capability)**과 **안전성(Safety)**은 분리해서 평가해야 합니다. 취약점을 찾아내는 능력은 그 자체로 안전한 사용을 보장하지 않습니다. 이 보고서는 공격 재현 절차나 payload를 제공하지 않으며, target 정보, 명령, credential, 탐지 우회 방법도 제공하지 않습니다.</p>
+<p>보안 역량(Capability)과 안전성(Safety)은 분리해서 평가해야 합니다. 취약점을 찾아내는 능력은 그 자체로 안전한 사용을 보장하지 않습니다. 이 보고서는 공격 재현 절차나 payload를 제공하지 않으며, target 정보, 명령, credential, 탐지 우회 방법도 제공하지 않습니다.</p>
 <p><strong>8. 향후 검증 요구 사항 및 결론</strong>
 GLM-5.3의 기술적 주장을 최종 확립하기 위해 다음과 같은 독립적 검증 절차가 요구됩니다:</p>
 <ul>

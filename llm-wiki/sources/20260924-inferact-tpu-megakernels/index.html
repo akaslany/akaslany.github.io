@@ -26,7 +26,7 @@
 <h2 id="원문">원문</h2>
 <h3 id="700-tps-on-kimi-k3-a-case-for-tpu-megakernels">700 TPS on Kimi K3: A Case for TPU Megakernels</h3>
 <h4 id="1-문서-개요-및-출처-명시">1. 문서 개요 및 출처 명시</h4>
-<p>본 보고서는 Inferact의 기술 블로그인 **「700 TPS on Kimi K3: A Case for TPU Megakernels」(2026-09-23)**를 유일한 근거로 작성된 기술 분석서입니다.</p>
+<p>본 보고서는 Inferact의 기술 블로그인 「700 TPS on Kimi K3: A Case for TPU Megakernels」(2026-09-23)를 유일한 근거로 작성된 기술 분석서입니다.</p>
 <ul>
 <li><strong>출처:</strong> <a href="https://inferact.ai/blog/tpu-megakernels">https://inferact.ai/blog/tpu-megakernels</a></li>
 <li><strong>성능 지표 관련 고지:</strong> 본문에 기술된 700+ TPS 및 기타 벤치마크 결과는 Inferact 연구진이 보고한 특정 실험 환경(하드웨어 구성, 소프트웨어 스택 및 모델 설정)에서의 데이터입니다. 이는 독립적으로 검증된 보편적 성능 우위가 아니며, 사용 환경에 따라 결과가 상이할 수 있음을 명시합니다.</li>
@@ -35,7 +35,7 @@
 <h4 id="2-하드웨어-소프트웨어-공동-설계-tpu-메가커널의-아키텍처적-근거">2. 하드웨어-소프트웨어 공동 설계: TPU 메가커널의 아키텍처적 근거</h4>
 <h5 id="2-1-하드웨어-제약과-sram-용량의-결정적-차이">2.1 하드웨어 제약과 SRAM 용량의 결정적 차이</h5>
 <p>시스템 아키텍트의 관점에서 TPU 메가커널이 유효한 이유는 하드웨어의 메모리 계층 구조에 있습니다. NVIDIA GB200 GPU는 하드웨어가 관리하는 L1/L2 캐시와 프로그램이 관리하는 공유 메모리(Shared Memory)를 혼용하며, 칩당 전체 SRAM 용량은 약 <strong>38 MiB</strong>(152개의 SM으로 분할) 수준입니다.</p>
-<p>반면, **TPU v7(Ironwood)**은 소프트웨어가 직접 관리하는 <strong>Vector Memory(VMEM)</strong> 구조를 채택하고 있습니다.</p>
+<p>반면, TPU v7(Ironwood)은 소프트웨어가 직접 관리하는 <strong>Vector Memory(VMEM)</strong> 구조를 채택하고 있습니다.</p>
 <ul>
 <li><strong>SRAM 용량 우위:</strong> TPU v7은 칩당 총 <strong>128 MiB</strong>의 SRAM을 보유하며, 이는 두 개의 64 MiB VMEM 풀(TensorCore당 하나)로 주소 지정됩니다.</li>
 <li><strong>소프트웨어 관리 방식:</strong> 하드웨어 캐시와 달리 데이터의 수명(Lifespan)을 프로그램이 완전히 제어합니다. 이러한 대용량 SRAM은 모델 가중치를 미리 스테이징(Staging)하기에 충분한 공간을 제공하여 메가커널 설계의 핵심 기반이 됩니다.</li>

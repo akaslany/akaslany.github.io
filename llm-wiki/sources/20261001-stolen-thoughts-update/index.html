@@ -87,7 +87,7 @@
 <p>연구진은 GPT-6 Astra(낮은 추론 노력/low effort 조건, 152개 HLE 문항)를 대상으로 두 공격 방식을 통해 추출된 추론 트레이스의 품질과 실질적 동등성을 정량 분석하였다.</p>
 <ul>
 <li><strong>수량 및 길이에 대한 정량적 수치:</strong> 두 방식으로 추출된 추론 트레이스의 문제당 중앙값(median) 토큰 길이는 <strong>128토큰</strong>으로 완전히 동일하였으며, 문제당 길이 비율은 <strong>1.07</strong>로 집계되었다. 문제별 토큰 길이에 대한 Spearman 상관계수는 <strong>0.89</strong>를 기록하여 두 방식 간 높은 정량적 연관성을 입증하였다. 두 표본 간 Kolmogorov-Smirnov(KS) 통계량은 <strong>0.13</strong>으로 나타나 전체적인 분포 차이가 매우 미미함을 확인하였다.</li>
-<li><strong>스타일 및 텍스트 유사성 분석:</strong> 토큰 길이에 영향을 받지 않는 **'길이 비의존적 문자 3–5-gram 분류기(length-blind character 3–5-gram classifier, problem-grouped 5-fold cross-validation)'**를 적용하여 분석한 결과, 스크래치패드 트레이스와 복호화 트레이스를 구분하는 분류기의 AUC 수치는 <strong>0.64</strong>에 불과하였다.</li>
+<li><strong>스타일 및 텍스트 유사성 분석:</strong> 토큰 길이에 영향을 받지 않는 '길이 비의존적 문자 3–5-gram 분류기(length-blind character 3–5-gram classifier, problem-grouped 5-fold cross-validation)'를 적용하여 분석한 결과, 스크래치패드 트레이스와 복호화 트레이스를 구분하는 분류기의 AUC 수치는 <strong>0.64</strong>에 불과하였다.</li>
 <li><strong>대조군과의 통계적 비교:</strong>
 <ul>
 <li>동일 모델 내 추론 노력 수준 차이(low effort vs medium effort)를 구분하는 기회 통제군(positive control)의 AUC 수치는 <strong>0.80</strong>으로 명확히 구별되었다.</li>
@@ -136,7 +136,7 @@
 <ul>
 <li><strong>OpenAI 계열 (Direct 및 Azure/Bedrock 전체):</strong> GPT-6 Astra, GPT-5.6 Sol, GPT-5.6 Terra, GPT-5.5 등 모든 프론티어 모델에서 스크래치패드를 통한 추론 트레이스 추출이 지속적으로 성공함(<code>✓</code>).</li>
 <li><strong>Anthropic 계열:</strong> Opus 4.8 및 Sonnet 5 모델은 주요 호스트 경로에서 스크래치패드를 통한 추론 노출이 여전히 유효함(<code>✓</code>).</li>
-<li><strong><code>(✗)</code> 상태의 정밀 정의 및 차단 한계:</strong> 표 및 감사 결과에서 <strong>Opus 5</strong> 모델 등에 표시된 <code>(✗)</code> 상태는 완전한 차단을 의미하지 않는다. 이는 **&quot;스크래치패드 추론 과정의 일부 또는 전체가 클라이언트로 출력된 후, 별도의 최종 답변 없이 거부(refusal) 메시지로 이어지는 불완전한 방어 상태&quot;**를 뜻한다. 즉, 거부 반응이 발생하더라도 추론 트레이스는 이미 탈취되는 한계가 존재한다.</li>
+<li><strong><code>(✗)</code> 상태의 정밀 정의 및 차단 한계:</strong> 표 및 감사 결과에서 <strong>Opus 5</strong> 모델 등에 표시된 <code>(✗)</code> 상태는 완전한 차단을 의미하지 않는다. 이는 &quot;스크래치패드 추론 과정의 일부 또는 전체가 클라이언트로 출력된 후, 별도의 최종 답변 없이 거부(refusal) 메시지로 이어지는 불완전한 방어 상태&quot;를 뜻한다. 즉, 거부 반응이 발생하더라도 추론 트레이스는 이미 탈취되는 한계가 존재한다.</li>
 <li><strong>차단 일자(Timeline) 및 유효 모델:</strong> 2026년 9월 13일 기준, 스크래치패드 공격으로부터 추론 과정이 완벽히 보호되는 모델은 <strong>Fable 5, Fable 5.1</strong> 등 일부에 불과하다. Anthropic은 8월 16일 엔드포인트에서 Fable 5의 스크래치패드 공격 경로를 차단하였으며, Azure, Vertex, Claude on AWS 경로에서는 9월 12일에 이르러서야 해당 공격 벡터의 차단이 확인되었다.</li>
 </ul>
 <h5 id="4-2-보안-아키텍처-및-방어-시사점">4.2 보안 아키텍처 및 방어 시사점</h5>

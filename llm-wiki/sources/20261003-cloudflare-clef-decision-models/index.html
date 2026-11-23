@@ -68,7 +68,7 @@
 <tbody>
 <tr>
 <td style="text-align:left"><strong>시각 입력 처리 (Vision Encoder)</strong></td>
-<td style="text-align:left">텍스트 분류만 지원하던 기존 의사결정 모델(Jev 등)과 달리 **시각 인코더(Vision Encoder)**를 기본 탑재하여, 이미지 입력 수용 및 시각적 콘텐츠 분류가 가능함.</td>
+<td style="text-align:left">텍스트 분류만 지원하던 기존 의사결정 모델(Jev 등)과 달리 시각 인코더(Vision Encoder)를 기본 탑재하여, 이미지 입력 수용 및 시각적 콘텐츠 분류가 가능함.</td>
 </tr>
 <tr>
 <td style="text-align:left"><strong>문맥 창 (Context Window)</strong></td>
@@ -95,14 +95,14 @@
 </li>
 <li><strong>병렬 스키마 점수화 (비자기회귀 추론)</strong>
 <ul>
-<li>중간 텍스트나 토큰을 순차적으로 생성하지 않고, 백본의 내부 표현 상태에서 직접 유효한 스키마 선택지들을 **병렬로 점수화(Scoring)**하여 추론 지연 시간을 대폭 단축합니다.</li>
+<li>중간 텍스트나 토큰을 순차적으로 생성하지 않고, 백본의 내부 표현 상태에서 직접 유효한 스키마 선택지들을 병렬로 점수화(Scoring)하여 추론 지연 시간을 대폭 단축합니다.</li>
 </ul>
 </li>
 <li><strong>2단계 어텐션 라우팅 (Two-stage Attention Routing) 및 의미 보존</strong>
 <ul>
 <li><strong>선택지별 증거 라우팅 (Option-specific evidence routing):</strong> 유효한 모든 스키마 선택지가 프롬프트 내부에서 각 항목과 직접적으로 연관된 컨텍스트 증거를 추출합니다.</li>
 <li><strong>교차 필드 어텐션 (Joint cross-field attention):</strong> 개별 필드 매개변수가 다른 필드 및 원본 페이로드와 상호 교차 어텐션을 수행하여, 필드 간의 복잡한 문맥 종속성(Contextual dependencies)을 정밀하게 파악합니다.</li>
-<li><strong>스키마 구속 점수화 (Schema-bound scoring):</strong> **어휘적 사전 분포(Lexical prior)**를 적용하여 다양한 선택지 사이에서 입력의 의미적 의도(Semantic intent)를 보존하는 동시에, 지정된 스키마 제약 조건에 맞춰 엄격하게 최종 확률을 도출합니다.</li>
+<li><strong>스키마 구속 점수화 (Schema-bound scoring):</strong> 어휘적 사전 분포(Lexical prior)를 적용하여 다양한 선택지 사이에서 입력의 의미적 의도(Semantic intent)를 보존하는 동시에, 지정된 스키마 제약 조건에 맞춰 엄격하게 최종 확률을 도출합니다.</li>
 </ul>
 </li>
 </ol>
@@ -110,11 +110,11 @@
 <h4 id="4-모델-학습-방식-및-강화학습-rlcd-미세조정-기법">4. 모델 학습 방식 및 강화학습(RLCD) 미세조정 기법</h4>
 <p>Clef 모델은 사전 학습된 백본을 동결(Freeze)한 상태에서 라우팅 헤드를 최적화하고, 확률 보정을 위한 손실 함수와 전용 강화학습 기법을 결합하여 학습되었습니다.</p>
 <h5 id="기반-모델-및-파라미터-동결-parameter-freezing">기반 모델 및 파라미터 동결 (Parameter Freezing)</h5>
-<p>Clef는 <strong>Qwen3.8-27B</strong>를, Clef-flash는 <strong>Qwen3.5-9B</strong>를 기반 백본으로 채택했습니다. 백본 모델 자체의 파라미터는 완전히 동결(Freeze)한 상태에서 <strong>랭크-256(Rank-256) 저순위 적응형(LoRA) 어댑터</strong>와 **라우팅 헤드(Routing head)**를 함께 공동 최적화(Joint optimization)하여 학습 효율성과 표현력을 동시에 확보했습니다.</p>
+<p>Clef는 <strong>Qwen3.8-27B</strong>를, Clef-flash는 <strong>Qwen3.5-9B</strong>를 기반 백본으로 채택했습니다. 백본 모델 자체의 파라미터는 완전히 동결(Freeze)한 상태에서 <strong>랭크-256(Rank-256) 저순위 적응형(LoRA) 어댑터</strong>와 라우팅 헤드(Routing head)를 함께 공동 최적화(Joint optimization)하여 학습 효율성과 표현력을 동시에 확보했습니다.</p>
 <h5 id="손실-함수-loss-functions-및-확률-보정">손실 함수 (Loss Functions) 및 확률 보정</h5>
-<p>유효한 스키마 구조의 출력을 정형화하기 위해 **라벨 평활화 교차 엔트로피(Label-smoothed cross-entropy)**를 적용하고, 모델이 출력하는 확률 수치의 정밀도를 정밀하게 보정하기 위해 **브라이어 손실(Brier loss)**을 조합했습니다. 두 손실 함수의 결합을 통해 스키마의 구조적 유효성 보장과 출력 확률의 예측 정밀도 보정을 동시에 달성합니다.</p>
+<p>유효한 스키마 구조의 출력을 정형화하기 위해 라벨 평활화 교차 엔트로피(Label-smoothed cross-entropy)를 적용하고, 모델이 출력하는 확률 수치의 정밀도를 정밀하게 보정하기 위해 브라이어 손실(Brier loss)을 조합했습니다. 두 손실 함수의 결합을 통해 스키마의 구조적 유효성 보장과 출력 확률의 예측 정밀도 보정을 동시에 달성합니다.</p>
 <h5 id="학습-데이터셋-구성">학습 데이터셋 구성</h5>
-<p>필드 순서, 프롬프트 형태, 스키마 구조를 무작위로 치환하고 무작위 변형을 가한 **내부 합성 데이터셋(Internal synthetic datasets)**을 구축하여 모델의 일반화 성능을 극대화했습니다.</p>
+<p>필드 순서, 프롬프트 형태, 스키마 구조를 무작위로 치환하고 무작위 변형을 가한 내부 합성 데이터셋(Internal synthetic datasets)을 구축하여 모델의 일반화 성능을 극대화했습니다.</p>
 <h5 id="rlcd-reinforcement-learning-for-calibrated-decisions">RLCD (Reinforcement Learning for Calibrated Decisions)</h5>
 <p>보정된 의사결정을 도출하기 위해 RLCD 기법을 보조 최적화 목표로 도입했습니다.</p>
 <ul>

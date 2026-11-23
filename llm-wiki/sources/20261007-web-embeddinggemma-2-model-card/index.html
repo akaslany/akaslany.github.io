@@ -31,7 +31,7 @@
 </blockquote>
 <hr />
 <h4 id="2-모델-개요-및-핵심-정체성">2. 모델 개요 및 핵심 정체성</h4>
-<p>임베딩젬마 2(EmbeddingGemma 2)는 구글 딥마인드(Google DeepMind)가 개발한 오픈 멀티모달 임베딩 모델로, 텍스트(소프트웨어 코드 포함), 이미지, 비디오, 오디오 및 이들의 복합 조합(Interleaved Inputs)을 단일한 **768차원 통합 벡터 공간(Unified Vector Space)**으로 매핑하는 네이티브 멀티모달(Native Multimodal) 표현 학습 시스템입니다.</p>
+<p>임베딩젬마 2(EmbeddingGemma 2)는 구글 딥마인드(Google DeepMind)가 개발한 오픈 멀티모달 임베딩 모델로, 텍스트(소프트웨어 코드 포함), 이미지, 비디오, 오디오 및 이들의 복합 조합(Interleaved Inputs)을 단일한 768차원 통합 벡터 공간(Unified Vector Space)으로 매핑하는 네이티브 멀티모달(Native Multimodal) 표현 학습 시스템입니다.</p>
 <p>모바일 기기, 노트북 등 사용자용 단말 및 엣지(Edge) 환경에서 최적화되어 동작하도록 설계되었으며, 저전력·저지연 의미론적 표현(Semantic Representation)을 제공하여 온디바이스(On-device) 검색, RAG(검색 증강 생성), 텍스트 및 미디어 분류, 클러스터링 등의 하류(Downstream) 과제를 강력하게 지원합니다.</p>
 <h5 id="주요-사양-요약">주요 사양 요약</h5>
 <ul>
@@ -439,8 +439,8 @@ query_emb_128 = model.encode(
 <blockquote>
 <p><strong>경고: float16 연산 엄격 금지 (Do NOT Use float16)</strong><br />
 임베딩젬마 2 모델 추론 시 <code>float16</code> 정밀도를 절대 사용하지 마십시오.<br />
-<strong>구조적 사유</strong>: 임베딩젬마 2의 기반인 젬마 4 아키텍처는 내부 트랜스포머 레이어의 활성화 값 범위(Activation Range)가 <code>float16</code>의 표현 한계(최대 약 $65,504$)를 빈번하게 초과합니다. <code>float16</code>으로 추론할 경우 언더플로우/오버플로우가 발생하여, 예외 에러 메시지 출력 없이 **<code>NaN</code> 벡터를 반환하거나 임베딩 표현력이 소리 없이 붕괴(Silent degradation)**됩니다.</p>
-<p>반면 **<code>bfloat16</code>**은 <code>float32</code>와 동일한 8비트 지수부(Exponent)를 갖고 있어 동일한 동적 범위를 안전하게 표현합니다. GPU 메모리를 <code>float32</code> 대비 절반으로 줄이면서도 연산 안정성을 제공하므로 <code>bfloat16</code> 또는 <code>float32</code>만 사용해야 합니다.</p>
+<strong>구조적 사유</strong>: 임베딩젬마 2의 기반인 젬마 4 아키텍처는 내부 트랜스포머 레이어의 활성화 값 범위(Activation Range)가 <code>float16</code>의 표현 한계(최대 약 $65,504$)를 빈번하게 초과합니다. <code>float16</code>으로 추론할 경우 언더플로우/오버플로우가 발생하여, 예외 에러 메시지 출력 없이 <code>NaN</code> 벡터를 반환하거나 임베딩 표현력이 소리 없이 붕괴(Silent degradation)됩니다.</p>
+<p>반면 <code>bfloat16</code>은 <code>float32</code>와 동일한 8비트 지수부(Exponent)를 갖고 있어 동일한 동적 범위를 안전하게 표현합니다. GPU 메모리를 <code>float32</code> 대비 절반으로 줄이면서도 연산 안정성을 제공하므로 <code>bfloat16</code> 또는 <code>float32</code>만 사용해야 합니다.</p>
 </blockquote>
 <h6 id="동적-정밀도-설정-및-모델-로딩-코드">동적 정밀도 설정 및 모델 로딩 코드</h6>
 <pre><code class="language-python">import torch
@@ -456,7 +456,7 @@ model = SentenceTransformer(
 )
 </code></pre>
 <h5 id="7-5-멀티모달-입력-인터리빙-및-토큰-예산-관리-multimodal-interleaving-vision-budget">7.5. 멀티모달 입력 인터리빙 및 토큰 예산 관리 (Multimodal Interleaving &amp; Vision Budget)</h5>
-<p>단일 8,192 토큰 컨텍스트 창 안에서 텍스트와 이미지, 비디오, 오디오를 자유롭게 시퀀스로 배치하는 **인터리빙(Interleaving)**을 지원합니다. 미디어 요소의 위치는 플레이스홀더 토큰(<code>&lt;|image|&gt;</code>, <code>&lt;|video|&gt;</code>, <code>&lt;|audio|&gt;</code>)을 텍스트 내에 배치하여 매핑합니다.</p>
+<p>단일 8,192 토큰 컨텍스트 창 안에서 텍스트와 이미지, 비디오, 오디오를 자유롭게 시퀀스로 배치하는 인터리빙(Interleaving)을 지원합니다. 미디어 요소의 위치는 플레이스홀더 토큰(<code>&lt;|image|&gt;</code>, <code>&lt;|video|&gt;</code>, <code>&lt;|audio|&gt;</code>)을 텍스트 내에 배치하여 매핑합니다.</p>
 <h6 id="멀티모달-인터리빙-구현-코드">멀티모달 인터리빙 구현 코드</h6>
 <pre><code class="language-python"># 텍스트, 이미지, 비디오가 혼합된 인터리빙 데이터 임베딩 생성
 emb_interleaved = model.encode({
@@ -505,7 +505,7 @@ emb_interleaved = model.encode({
 </ul>
 <h5 id="7-6-입력-샘플링-기본값">7.6. 입력 샘플링 기본값</h5>
 <ul>
-<li><strong>비디오 샘플링</strong>: 비전 인코더를 통과하는 비디오는 기본 **초당 1프레임(1 FPS)**으로 샘플링되며, FPS 비율은 애플리케이션 요구사항에 맞춰 수정 가능합니다.</li>
+<li><strong>비디오 샘플링</strong>: 비전 인코더를 통과하는 비디오는 기본 초당 1프레임(1 FPS)으로 샘플링되며, FPS 비율은 애플리케이션 요구사항에 맞춰 수정 가능합니다.</li>
 <li><strong>오디오 샘플링</strong>: 오디오 인코더 파이프라인에는 <strong>16 kHz 모노(mono)</strong> 음원을 기본 형식으로 공급해야 합니다.</li>
 </ul>
 <hr />

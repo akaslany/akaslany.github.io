@@ -41,7 +41,7 @@
 <hr />
 <h4 id="1-개요-overview">1. 개요 (Overview)</h4>
 <p>본 분석 보고서는 Hoover 등(2026)이 제안한 <strong>CRAM(Compact Reasoning Associative Memory)</strong> 모델을 중심으로, 고전적 에너지 기반 아키텍처를 현대적으로 재구성하여 제약 조건 추론(Constraint Reasoning) 문제에서의 성과 및 계산 효율성을 정밀 검증한 결과를 담고 있다. (출처: Abstract, Section 1)</p>
-<p>최근 심층 인공지능 추론 연구 분야에서는 동일한 신경망 레이어 또는 블록을 반복 적용하는 **반복 모델(Looped models: HRM, TRM, GRAM, EqR, FRM, TRMP, EBR 등)**이 주요 패러다임으로 부상하였다. 그러나 기존의 반복 모델들은 고정점 수렴 안정성, 조기 종료(Halting head), 고전적 연상 기억 특성 등을 확보하기 위해 고전적 딥러닝 아키텍처 위에 보조 덧붙이기(Ad-hoc) 방식으로 별도의 헤드, 모듈, loss 함수를 하나씩 '덧붙이는(rebuilding)' 비효율적 구조를 취해 왔다. 이로 인해 BPTT(Backpropagation-through-time, 시간 역전파) 과정에서 극심한 훈련 지연, 과도한 파라미터 및 추론 연산량(FLOPs) 소비, 수렴 불안정성이라는 구조적 한계에 봉착하였다. (출처: Section 1, Section 2)</p>
+<p>최근 심층 인공지능 추론 연구 분야에서는 동일한 신경망 레이어 또는 블록을 반복 적용하는 반복 모델(Looped models: HRM, TRM, GRAM, EqR, FRM, TRMP, EBR 등)이 주요 패러다임으로 부상하였다. 그러나 기존의 반복 모델들은 고정점 수렴 안정성, 조기 종료(Halting head), 고전적 연상 기억 특성 등을 확보하기 위해 고전적 딥러닝 아키텍처 위에 보조 덧붙이기(Ad-hoc) 방식으로 별도의 헤드, 모듈, loss 함수를 하나씩 '덧붙이는(rebuilding)' 비효율적 구조를 취해 왔다. 이로 인해 BPTT(Backpropagation-through-time, 시간 역전파) 과정에서 극심한 훈련 지연, 과도한 파라미터 및 추론 연산량(FLOPs) 소비, 수렴 불안정성이라는 구조적 한계에 봉착하였다. (출처: Section 1, Section 2)</p>
 <p>CRAM은 1980년대 Hopfield &amp; Tank가 제시했던 고전적 연상 기억 에너지를 확장하고 현대적 Modern Hopfield Network [40, 41] 및 연속 다중 상태($C$-state) 평균장 자유 에너지(Mean-field free energy) 형태 [33, 47]의 직접 학습 가능 아키텍처로 변환함으로써 이러한 땜빵식 확장의 한계를 원천적으로 극복한다. CRAM은 명시적 에너지 함수 $E_{\theta}(p)$를 직접 정의하고, 추론 시 해당 에너지 표면상에서 미분 없이 경하향 완화(Relaxation)를 수행한다. 셀 간 상호작용 비용(Pairwise costs)과 입력 바이어스를 학습하여 제약 조건을 내재화하며, 훈련 시 완화 궤적 전체를 미분할 필요 없이 국소 학습 목표(Local Objectives)를 활용해 데이터의 에너지 수준을 낮추고 오답(Negative samples)의 에너지를 높인다. (출처: Section 1, Section 2, Section 3)</p>
 <p>단 1대의 NVIDIA H200 GPU 환경에서 진행된 실증 평가 결과, CRAM은 Sudoku-Extreme 퍼즐의 99.996%를 단 42 ms 만에, Maze-Unique 퍼즐의 100%를 132 ms 만에 학습 완료하였다. 이는 기존 최고 성능의 반복 모델 대비 <strong>훈련 속도를 1,000배 이상 단축</strong>시킨 성과이다. 또한 동등하거나 뛰어난 추론 정확도를 유지하면서 기존 반복 모델 대비 <strong>추론 연산량(FLOPs)을 최소 282배(EBR 대비)에서 최대 128,000배(EqR 대비) 절감</strong>하였다. (출처: Abstract, Section 4.1, Table 2)</p>
 <hr />
@@ -53,7 +53,7 @@
 <li>CRAM은 $M$개 셀과 각 셀당 최대 $C$개 후보값을 갖는 추론 문제를 $M \times C$ 연속 확률 배열 $\mathbf{p}$로 표현하며, 연속 다중 상태($C$-state) 평균장 자유 에너지(Mean-field free energy) 수식을 따른다. (Section 3, Eq. 1)
 $$E_{\theta}(\mathbf{p}) = \beta^{-1} \sum_i \mathbf{p}_i^\top \log \mathbf{p}<em>i + \frac{1}{2} \sum</em>{i \neq j} \mathbf{p}<em>i^\top \mathbf{K}</em>{ij} \mathbf{p}_j + \sum_i \mathbf{B}_i^\top \mathbf{p}_i$$</li>
 <li>여기서 $\mathbf{K}_{ij} \in \mathbb{R}^{C \times C}$는 셀 간 제약 비용 행렬, $\mathbf{B}_i \in \mathbb{R}^C$는 셀별 바이어스 벡터, $\beta &gt; 0$는 역온도(Inverse temperature) 파라미터이다.</li>
-<li>추론(Relaxation)은 연속 시간 미분 방정식 $\tau_i \frac{d\mathbf{v}<em>i}{dt} = -\mathbf{v}<em>i - \sum_j \mathbf{W}</em>{ij} \mathbf{p}<em>j - \mathbf{B}<em>i \simeq -\nabla</em>{\mathbf{p}<em>i} E</em>{\theta}(\mathbf{p})$에 기반한 오일러 단계(Euler step)로 수행된다. 이때 $\mathbf{W}</em>{ij} = (\mathbf{K}</em>{ij} + \mathbf{K}<em>{ji}^\top)/2$ (단, $i \neq j$)이며, 자기 상호작용을 배제하므로 **$\mathbf{W}</em>{ii} = \mathbf{0}$**으로 고정된다. (Section 3, Eq. 2-3)</li>
+<li>추론(Relaxation)은 연속 시간 미분 방정식 $\tau_i \frac{d\mathbf{v}<em>i}{dt} = -\mathbf{v}<em>i - \sum_j \mathbf{W}</em>{ij} \mathbf{p}<em>j - \mathbf{B}<em>i \simeq -\nabla</em>{\mathbf{p}<em>i} E</em>{\theta}(\mathbf{p})$에 기반한 오일러 단계(Euler step)로 수행된다. 이때 $\mathbf{W}</em>{ij} = (\mathbf{K}</em>{ij} + \mathbf{K}<em>{ji}^\top)/2$ (단, $i \neq j$)이며, 자기 상호작용을 배제하므로 $\mathbf{W}</em>{ii} = \mathbf{0}$으로 고정된다. (Section 3, Eq. 2-3)</li>
 <li>$\mathbf{L}(\mathbf{v}<em>i) = \beta^{-1} \log \sum_a \exp(\beta v</em>{ia})$의 헤시안(Hessian) 행렬 $\mathbf{H}_i = \beta [\text{diag}(\mathbf{p}_i) - \mathbf{p}_i \mathbf{p}<em>i^\top] \succeq 0$이 양의 준정부호(Positive semi-definite)이므로, 연속 시간 dynamic 상에서 에너지의 시간 미분값은 아래 수식과 같이 항상 0 이하임이 증명된다. (Appendix E, Eq. 9-10)
 $$\frac{dE}{dt} = -\sum</em>{i \in F} \tau_i \dot{\mathbf{v}}_i^\top \mathbf{H}_i \dot{\mathbf{v}}_i \le 0$$</li>
 <li>지역적 극솟값 탈출을 위해 집중 깁스 탐색(Focused Gibbs search)을 적용한다. 이 기법은 국소 에너지가 훈련 솔루션 평균 대비 $0.45\bar{h}$ 이상 높은 제약 위반 셀(Free cell)을 우선 선택해 업데이트하며, 온도 $T$를 $0.40\bar{h} \rightarrow 0.31\bar{h}$로 기하학적으로 낮추는 결정론적/확률적 탐색 방식이다. (Section 3, Appendix C.3)</li>
@@ -75,7 +75,7 @@ $$\frac{dE}{dt} = -\sum</em>{i \in F} \tau_i \dot{\mathbf{v}}_i^\top \mathbf{H}_
 <li><strong>[사실 (Fact)]</strong>
 <ul>
 <li>Sudoku-Extreme 및 Maze-Unique 벤치마크에서 CRAM과 기존 7개 반복 모델(HRM, TRM, GRAM, EqR, FRM, TRMP, EBR)을 동일 하드웨어(단일 H200 GPU) 및 동일 테스트 세트 조건에서 평가한 결과는 아래 마크다운 표들과 같다. (Section 4.1, Table 2, Figure 2a)</li>
-<li><em>측정 조건 미세 구분:</em> CRAM의 Fit time(42 ms, 132 ms)은 커널 로딩 및 compilation 등 일회성 스타트업 비용(0.2~0.9초)을 제외한 **Warm Fit Time (7회 측정 중 median)**인 반면, 베이스라인 모델들은 단일 실행 <strong>Cold Fit Time</strong>으로 측정되었다. (Section 5, Appendix C.2)</li>
+<li><em>측정 조건 미세 구분:</em> CRAM의 Fit time(42 ms, 132 ms)은 커널 로딩 및 compilation 등 일회성 스타트업 비용(0.2~0.9초)을 제외한 Warm Fit Time (7회 측정 중 median)인 반면, 베이스라인 모델들은 단일 실행 <strong>Cold Fit Time</strong>으로 측정되었다. (Section 5, Appendix C.2)</li>
 </ul>
 </li>
 </ul>
@@ -252,7 +252,7 @@ $$\frac{dE}{dt} = -\sum</em>{i \in F} \tau_i \dot{\mathbf{v}}_i^\top \mathbf{H}_
 <ul>
 <li>CRAM은 훈련 솔루션들의 최고 에너지 수준에 미세 공차를 더한 문턱값($\tau = \text{max } E_{\text{train}} + 10^{-3}$) 이하로 보드의 에너지가 떨어지면 탐색을 즉시 중단하는 명시적 에너지 종료 규칙을 사용한다. (Section 3, Appendix C.3)</li>
 <li>난이도 구간별 평가 시 CRAM의 중앙값 연산량은 가장 쉬운 난이도 구간에서 가장 어려운 난이도 구간으로 갈수록 22배 증가하며 적응적 연산 할당 특성을 보였다. (Section 4.2, Figure 3a)</li>
-<li>기존 반복 모델의 종료 규칙(Halting head, Gradient norm stop)은 오답 상태에서 정지하는 오류 비율(Wrong halts)이 0.05%~3.54%에 달한 반면, CRAM은 **오답 조기 종료율 0.00%**를 기록했다. (Section 4.2, Table 4)</li>
+<li>기존 반복 모델의 종료 규칙(Halting head, Gradient norm stop)은 오답 상태에서 정지하는 오류 비율(Wrong halts)이 0.05%~3.54%에 달한 반면, CRAM은 오답 조기 종료율 0.00%를 기록했다. (Section 4.2, Table 4)</li>
 </ul>
 </li>
 <li><strong>[주장 (Claim)]</strong>

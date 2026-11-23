@@ -132,8 +132,8 @@
 <li>
 <p><strong>시간 지평 배가 주기 및 외삽 예측 (Time Horizon Trends)</strong></p>
 <ul>
-<li><strong>통합 수기 (TH1.1 + TH2 전체):</strong> 시간 지평이 50% 성공률 기준으로 두 배 증가하는 데 걸리는 기간은 **약 3.61개월 (약 110일, 95% CI 2.08–4.94)**로 측정됨[[Section 3.C.1]].</li>
-<li><strong>TH2 검증 가능 과제 단독 (TH2 Verifiable Subset):</strong> 검증 가능한 최적화 과제만을 대상으로 단독 분석 시 배가 주기는 **약 1.65개월 (95% CI 0.79–3.99)**로 급격히 단축됨[[Section 3.C.1]].</li>
+<li><strong>통합 수기 (TH1.1 + TH2 전체):</strong> 시간 지평이 50% 성공률 기준으로 두 배 증가하는 데 걸리는 기간은 약 3.61개월 (약 110일, 95% CI 2.08–4.94)로 측정됨[[Section 3.C.1]].</li>
+<li><strong>TH2 검증 가능 과제 단독 (TH2 Verifiable Subset):</strong> 검증 가능한 최적화 과제만을 대상으로 단독 분석 시 배가 주기는 약 1.65개월 (95% CI 0.79–3.99)로 급격히 단축됨[[Section 3.C.1]].</li>
 <li><strong>미래 외삽 예측 시점:</strong> 통합 수기 기준 단순 외삽을 적용할 경우, 모델이 200시간 시간 지평(50% 성공률)에 도달하는 예상 시점은 <strong>2027년 7월</strong>로 분석됨[[Section 3.C.1]].</li>
 <li><strong>외부 지표 비교:</strong> OpenAI가 자사 내부 연구 과제 수행 능력을 기준으로 발표한 역량 배가 주기(약 3.8개월)는 METR의 통합 수기 배가 주기(3.61개월)와 매우 유사한 추세를 보임[[Section 3.C.1]].</li>
 </ul>
@@ -147,7 +147,7 @@ $$p_{mt} = \sigma(\alpha_t(\theta_m - \beta_t)), \quad \sigma(x) = \frac{1}{1 + 
 <li><strong>과제 분산(Dispersion) 매개변수:</strong>
 $$\phi_t = \frac{\sum_{m,r} d_{mtr}}{N_t - 2}, \quad d_{mtr} = 2 \left[ y_{mtr} \log \frac{y_{mtr}}{p_{mt}} + (1 - y_{mtr}) \log \frac{1 - y_{mtr}}{1 - p_{mt}} \right]$$
 실행 레벨 편차(Deviance)에 기반해 분산 $\phi_t$를 산출하고 $1/\phi_t$로 노이즈가 심한 과제에 가중치를 낮추며, 분수 로짓 로그-라이클리후드(Fractional-logit log-likelihood) 최대화를 통해 파라미터를 추정함[[Appendix C]]. Anchor 모델로 GPT-4o를 -1(0 MCI), Opus 4.6을 0(633 MCI)으로 설정함[[Appendix C]].</li>
-<li><strong>전체 분석 규모 데이터:</strong> 총 **113개 과제 패밀리(Families), 333개 세부 과제(Tasks), 38,180개 평가 실행 건(Scored run-level observations)**이 MCI 모델 구축에 반영됨[[Appendix C]].</li>
+<li><strong>전체 분석 규모 데이터:</strong> 총 113개 과제 패밀리(Families), 333개 세부 과제(Tasks), 38,180개 평가 실행 건(Scored run-level observations)이 MCI 모델 구축에 반영됨[[Appendix C]].</li>
 <li><strong>MCI 추세 결과:</strong> 전체 공개 프론티어 모델을 대상으로 분석 시 급격한 가속이나 감속 없이 지속적인 성장세를 보였으나, 개발사별(Developer-specific) 분리 분석 시 일부 조건에서 기울기 변화(가속) 불확실성이 관찰됨[[Section 3.C.2], [Appendix H]].</li>
 </ul>
 </li>

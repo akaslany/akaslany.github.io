@@ -336,8 +336,8 @@ $$L_{\text{conv}}(Z, y) = \text{BCE}\left(p_n, \mathbf{1}[\hat{y}_\theta(z_n) = 
 </tr>
 </tbody>
 </table>
-<p>* <strong>Maze-Hard 평가 지표 보충 (Exact Match vs. Any-Shortest-Path):</strong> 표의 Maze-Hard 정확도(Single 87.4%, Multi 88.3%)는 단일 라벨링 최단 경로와의 정확한 일치(Exact Match) 기준이다. 라벨링 경로와 일치하지 않더라도 모든 유효한 최단 경로를 정답으로 인정하는 Any-Shortest-Path 지표 적용 시 EBR의 정확도는 **Single 94.07±0.91%, Multi(Pass@5) 94.77±0.59%**에 달한다 (Section D, Table D.1).<br />
-‡ <strong>Graph Coloring Cov@20 지표 분모 캡핑(Capping) 규격:</strong> 표의 수치는 기존 GRAM 코드가 8-vertex 및 10-vertex Graph Coloring에 분모 캡핑을 적용하지 않은 수식에 맞춘 비교치이다(이로 인해 기존 GRAM 수식은 8-vertex 최대 이론 커버리지가 99.6%로 제한되는 오류가 있음). EBR이 제안한 규격화된 분모 캡핑(Cov@20 수식 9)을 적용할 경우 EBR의 커버리지는 **8-vertex 89.0±0.1%, 10-vertex 85.3±0.8%**이다 (Section C).</p>
+<p>* <strong>Maze-Hard 평가 지표 보충 (Exact Match vs. Any-Shortest-Path):</strong> 표의 Maze-Hard 정확도(Single 87.4%, Multi 88.3%)는 단일 라벨링 최단 경로와의 정확한 일치(Exact Match) 기준이다. 라벨링 경로와 일치하지 않더라도 모든 유효한 최단 경로를 정답으로 인정하는 Any-Shortest-Path 지표 적용 시 EBR의 정확도는 Single 94.07±0.91%, Multi(Pass@5) 94.77±0.59%에 달한다 (Section D, Table D.1).<br />
+‡ <strong>Graph Coloring Cov@20 지표 분모 캡핑(Capping) 규격:</strong> 표의 수치는 기존 GRAM 코드가 8-vertex 및 10-vertex Graph Coloring에 분모 캡핑을 적용하지 않은 수식에 맞춘 비교치이다(이로 인해 기존 GRAM 수식은 8-vertex 최대 이론 커버리지가 99.6%로 제한되는 오류가 있음). EBR이 제안한 규격화된 분모 캡핑(Cov@20 수식 9)을 적용할 경우 EBR의 커버리지는 8-vertex 89.0±0.1%, 10-vertex 85.3±0.8%이다 (Section C).</p>
 <h6 id="5-2-태스크별-하이퍼파라미터-및-아키텍처-설정-task-specific-settings">5.2. 태스크별 하이퍼파라미터 및 아키텍처 설정 (Task-Specific Settings)</h6>
 <table>
 <thead>

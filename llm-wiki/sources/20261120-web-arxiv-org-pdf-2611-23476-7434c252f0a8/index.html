@@ -35,7 +35,7 @@
 <hr />
 <h4 id="1-개요-overview">1. 개요 (Overview)</h4>
 <p>[사실] 자율 인공지능 에이전트 시스템은 가중치가 동결된 백본 언어 모델(Frozen Base Model, 예: 제미나이 4)과 시스템 프롬프트, 재사용 가능한 스킬(SKILL.md), 메모리(MEMORY.md), 도구 인터페이스 스키마 및 제어 로직으로 구성된 수정 가능한 '하네스(Harness)'를 결합하여 구동됩니다. [소스 주장] 구글 클라우드(Google Cloud) 연구진은 에이전트 성능 향상의 상당 부분이 하네스 엔지니어링에서 기인하지만, 사람이 수동으로 하네스를 튜닝하는 방식은 확장성이 떨어지고 도구, 스키마, 사용자 워크플로 변경 시 쉽게 무력화된다고 지적합니다. 이에 따라 에이전트의 과거 실행 경험을 지속적인 텍스트 하네스 수정으로 전환하는 재귀적 자기 개선(Recursive Self-Improvement, RSI)이 핵심 대안으로 등장하였습니다.</p>
-<p>[사실] 외부 평가자(Grader)나 정답(Ground-truth)이 제공되지 않는 환경에서 에이전트 하네스를 재귀적으로 지속 업데이트할 때, 기존의 자유 형식 반추(Reflection) 및 단일 스칼라 점수 방식은 3가지 핵심 실패 모드를 야기합니다. 첫째, 최근 실패를 해결하기 위해 작성된 광범위한 규칙이 기존에 성공하던 작업을 깨뜨리는 <strong>국소 오버피팅(Local Overfitting/Over-triggering)</strong>, 둘째, 워크플로나 도메인이 전환될 때 이전 스킬을 덮어써 버리는 <strong>재앙적 망각(Catastrophic Forgetting)</strong>, 셋째, 검증되지 않은 규칙이 누적되어 프롬프트를 비대하게 만드는 **메모리 오염(Memory Pollution)**입니다. [작성자 해석] 이러한 실패 모드는 기존 스칼라 평가 방식이 '최근 수정으로 인해 새롭게 깨진 동작(What an edit newly broke)'과 '여전히 미해결 상태인 기능 갭(What remains unsolved)'을 구별하지 못하고 단일 점수로 혼재시켜 피드백을 제공하기 때문에 발생합니다.</p>
+<p>[사실] 외부 평가자(Grader)나 정답(Ground-truth)이 제공되지 않는 환경에서 에이전트 하네스를 재귀적으로 지속 업데이트할 때, 기존의 자유 형식 반추(Reflection) 및 단일 스칼라 점수 방식은 3가지 핵심 실패 모드를 야기합니다. 첫째, 최근 실패를 해결하기 위해 작성된 광범위한 규칙이 기존에 성공하던 작업을 깨뜨리는 <strong>국소 오버피팅(Local Overfitting/Over-triggering)</strong>, 둘째, 워크플로나 도메인이 전환될 때 이전 스킬을 덮어써 버리는 <strong>재앙적 망각(Catastrophic Forgetting)</strong>, 셋째, 검증되지 않은 규칙이 누적되어 프롬프트를 비대하게 만드는 메모리 오염(Memory Pollution)입니다. [작성자 해석] 이러한 실패 모드는 기존 스칼라 평가 방식이 '최근 수정으로 인해 새롭게 깨진 동작(What an edit newly broke)'과 '여전히 미해결 상태인 기능 갭(What remains unsolved)'을 구별하지 못하고 단일 점수로 혼재시켜 피드백을 제공하기 때문에 발생합니다.</p>
 <p>[소스 주장] 이러한 한계를 극복하기 위해 구글 클라우드 연구진은 <strong>GUARD(Grader-free UED with Adaptive Rule Distillation)</strong> 프레임워크를 제안합니다. GUARD는 비지도 환경 설계(UED)의 향수 및 후회(Regret) 개념과 집단 상대적 정책 최적화(GRPO)의 비평가 없는(Critic-free) 집단 점수 산정 방식을 텍스트 하네스 최적화에 이식한 폐루프 시스템입니다. [사실] GUARD는 작업을 실행하기 전 원자적 이분형 체크리스트를 도출하는 자가 검토 메커니즘, 이전 하네스 간의 이행도 차이를 추적하는 방향성 후회(Directional Regret) 분석, 비평가 없는 GRPO 기반 집단 상대적 후보 풀링, 그리고 유발된 후회보다 이득이 클 때만 수정을 승인하는 Soft-HURT 게이트로 구성됩니다.</p>
 <p>[작성자 해석] GUARD 프레임워크는 백본 모델의 가중치를 직접 업데이트하지 않는 비파라미터적(Non-parametric) 정책 최적화 구조를 취함으로써, 흑색상자(Black-box) API 환경에서도 안전하고 검증 가능한 재귀적 자기 개선을 실현합니다. 적응(Adaptation) 단계에서는 동적 자가 검토와 풀링을 수행하지만, 배포(Test-time) 시에는 단일 동결 하네스($W_T$)만을 사용하여 $O(1)$ 컨텍스트 비용과 $pass@1$ 1회 실행을 달성함으로써 실무 토큰 절감과 안정성을 동시에 확보하는 구조적 기틀을 제공합니다.</p>
 <hr />
@@ -43,7 +43,7 @@
 <h5 id="2-1-논점-1-실행-전-체크리스트-기반-자가-검토-및-비대칭-검증-reference-free-self-review">2.1. 논점 1: 실행 전 체크리스트 기반 자가 검토 및 비대칭 검증 (Reference-Free Self-Review)</h5>
 <ul>
 <li><code>[사실]</code> 외부 정답이나 외부 평가자 없이 에이전트 스스로 복잡한 다중 턴 도구 워크플로의 수행 여부를 검증하기 위해, GUARD는 에이전트가 첫 번째 행동을 실행하기 전(Turn-0) 오직 작업 프롬프트와 도구 스키마만을 읽고 원자적 이분형 조건(Atomic Binary Predicates)으로 구성된 체크리스트 $C(q)$를 도출하여 캐싱합니다. [소스 근거: Section 4.1]</li>
-<li><code>[소스 주장]</code> 이는 생성 과정에서 $N$개의 제약조건을 동시에 유지해야 하는 에이전트의 생성 부담과 달리, 완료된 궤적(Trace)에서 단일 조건을 검증하는 평가가 구조적으로 훨씬 용이하다는 **생성-검증 비대칭성(Generation-Verification Asymmetry)**에 기초합니다. [소스 근거: Section 4.1]</li>
+<li><code>[소스 주장]</code> 이는 생성 과정에서 $N$개의 제약조건을 동시에 유지해야 하는 에이전트의 생성 부담과 달리, 완료된 궤적(Trace)에서 단일 조건을 검증하는 평가가 구조적으로 훨씬 용이하다는 생성-검증 비대칭성(Generation-Verification Asymmetry)에 기초합니다. [소스 근거: Section 4.1]</li>
 <li><code>[사실]</code> 검증 체계는 샌드박스 상태 및 의미론적 추적을 분리하여 평가하는 2계층 구조로 구동되며, 궤적 $\tau$의 연속 점수 $S(\tau)$ 및 엄격 점수 $S_{strict}(\tau)$는 아래 수식에 따라 산출됩니다. [소스 근거: Section 4.1, Eq. 2]</li>
 </ul>
 <p>$$S(\tau) = 100 \cdot \frac{1}{|C_{gr}(\tau)|} \sum_{c \in C_{gr}(\tau)} r(\tau, c)$$</p>

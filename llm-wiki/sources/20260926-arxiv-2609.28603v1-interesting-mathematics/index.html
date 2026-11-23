@@ -65,24 +65,24 @@
 <h4 id="3-방법론-및-수학적-정의-methodology-mathematical-definitions">3. 방법론 및 수학적 정의 (Methodology &amp; Mathematical Definitions)</h4>
 <h5 id="3-1-내재적-흥미성-intrinsic-interestingness-의-정밀-정의">3.1 내재적 흥미성(Intrinsic Interestingness)의 정밀 정의</h5>
 <p>논문에서는 수학적 정리 $T$가 주어진 전제 집합 $P$ 하에서 &quot;명제는 간결하지만 증명은 복잡하고 길다&quot;면 내재적으로 흥미롭다고 정의한다.</p>
-<p>Lean 4 형식 언어 환경에서 정리 $T$의 명제를 기술하는 데 필요한 어휘 및 정의들의 문자 수 합을 **조건부 기술 길이 $L(T|P)$**라 하고, 전제 $P$를 활용해 $T$를 증명하는 데 필요한 코드 줄 수를 **조건부 증명 난도 $V(T|P)$**라 할 때, **조건부 내재적 흥미성 $I(T|P)$**는 다음과 같이 정의된다:</p>
+<p>Lean 4 형식 언어 환경에서 정리 $T$의 명제를 기술하는 데 필요한 어휘 및 정의들의 문자 수 합을 조건부 기술 길이 $L(T|P)$라 하고, 전제 $P$를 활용해 $T$를 증명하는 데 필요한 코드 줄 수를 조건부 증명 난도 $V(T|P)$라 할 때, 조건부 내재적 흥미성 $I(T|P)$는 다음과 같이 정의된다:</p>
 <p>$$I(T | P) = 100 \times \frac{V(T | P)}{L(T | P)}$$</p>
 <ul>
 <li><strong>$V(T | P)$</strong>: 전제 $P$를 사용하여 정리 $T$를 증명하는 데 필요한 Lean 4 코드의 물리적 줄 수 (Ground-truth 또는 추정값).</li>
 <li><strong>$L(T | P)$</strong>: 전제 $P$에 이미 포함된 정의들을 제외하고, 정리 $T$를 명시(State)하는 데 추가로 필요한 모든 직·간접적 정의들의 문자(Character) 수 합. 즉, $L(T|P) = S(T) + \sum_{d \in C(T)\setminus C(P)} S(d)$ (여기서 $S(X)$는 선언 $X$의 문자 수, $C(X)$는 $X$의 기술에 필요한 공리까지의 재귀적 정의 집합).</li>
 </ul>
 <p>이 정의는 수학자 조지 폴리아(George Pólya)가 제시한 &quot;수학적 정리의 우아함은 그 안에 담긴 독립적인 아이디어의 수에 비례하고, 이를 이해하는 데 드는 노력에 반비례한다&quot;는 심미적 직관을 엄밀히 수식화한 것이다. 단순히 명제 자체가 길어서 증명이 길어지는 합성 명제($T_1 \land T_2 \land \dots \land T_n$)의 경우 분모 $L(T|P)$가 함께 증가하여 흥미성 점수가 $O(1)$로 억제된다. 반면 페르마의 마지막 정리처럼 명제는 매우 간결하면서도 증명이 극도로 복잡한 정리는 높은 흥미성 점수를 얻게 된다.</p>
-<p>전제 집합이 공집합일 때의 **절대적 내재적 흥미성 $I_0(T) = I(T|\emptyset)$**는 $L(T|\emptyset) = S(T) + \sum_{d \in C(T)} S(d)$를 분모로 사용하며, Mathlib 내 전체 정리들에 대해 결정론적으로 계산 가능하다.</p>
+<p>전제 집합이 공집합일 때의 절대적 내재적 흥미성 $I_0(T) = I(T|\emptyset)$는 $L(T|\emptyset) = S(T) + \sum_{d \in C(T)} S(d)$를 분모로 사용하며, Mathlib 내 전체 정리들에 대해 결정론적으로 계산 가능하다.</p>
 <hr />
 <h5 id="3-2-외재적-유용성-extrinsic-utility-과의-관계-및-정보이론적-해석">3.2 외재적 유용성(Extrinsic Utility)과의 관계 및 정보이론적 해석</h5>
-<p>수학적 정리의 가치는 다른 정리들을 증명할 때 얼마나 효율적으로 재사용되어 전체 이론 체계를 압축할 수 있는지에 의해서도 결정된다. 이를 **외재적 유용성 $U_0(T)$**라 정의하며, 정리 $T$를 직접 인용하는 후속 정리들의 집합을 $D(T)$라 할 때 다음과 같이 계산된다:</p>
+<p>수학적 정리의 가치는 다른 정리들을 증명할 때 얼마나 효율적으로 재사용되어 전체 이론 체계를 압축할 수 있는지에 의해서도 결정된다. 이를 외재적 유용성 $U_0(T)$라 정의하며, 정리 $T$를 직접 인용하는 후속 정리들의 집합을 $D(T)$라 할 때 다음과 같이 계산된다:</p>
 <p>$$U_0(T) = |D(T)| \cdot V(T | \emptyset)$$</p>
 <p>즉, $U_0(T)$는 정리 $T$를 라이브러리에 전제로 승인함으로써 전체 수학 라이브러리에서 절약할 수 있는 증명 코드 줄 수의 총합이다.</p>
 <h6 id="정보이론-및-하이퍼그래프-압축-관점에서의-해석">정보이론 및 하이퍼그래프 압축 관점에서의 해석</h6>
 <p>정보이론적 관점에서 유용한 정리는 수학 라이브러리 전체의 증명 하이퍼그래프(Proof Hypergraph)를 압축하는 재사용 가능한 추상화(Reusable Abstraction) 노드로 기능한다.</p>
 <ul>
-<li><strong>$U_0(T)$</strong>: 정리가 수많은 후속 정리 $D(T)$에 인용될 때 라이브러리 전역에서 발생하는 **전역적 압축량(Global Compression)**을 후행적으로 측정한다.</li>
-<li><strong>$I_0(T)$</strong>: 아직 후속 인용 그래프가 존재하지 않는 명제 제안 시점(Proposal Time)에서, 해당 명제 단독의 **기술 길이 대비 국소적 비압축성(Local Incompressibility per Statement Length)**을 즉시 측정한다.</li>
+<li><strong>$U_0(T)$</strong>: 정리가 수많은 후속 정리 $D(T)$에 인용될 때 라이브러리 전역에서 발생하는 전역적 압축량(Global Compression)을 후행적으로 측정한다.</li>
+<li><strong>$I_0(T)$</strong>: 아직 후속 인용 그래프가 존재하지 않는 명제 제안 시점(Proposal Time)에서, 해당 명제 단독의 기술 길이 대비 국소적 비압축성(Local Incompressibility per Statement Length)을 즉시 측정한다.</li>
 </ul>
 <p>Mathlib 데이터셋을 분석한 결과, 후속 이용자가 없는 정리들을 제외했을 때 절대적 내재적 흥미성 $I_0$와 외재적 유용성 $U_0$ 사이에는 높은 양의 상관관계(<strong>Spearman $\rho = 0.756$</strong>)가 관찰되었다. 이는 흥미성이 인용 그래프 형성 전에도 유용성을 효과적으로 선행 추정하는 대리 지표(Surrogate Metric)임을 증명한다.</p>
 <blockquote>
@@ -158,7 +158,7 @@ $$L_{\text{drop}} = -\max{0, \log V_\theta(T|P) - \log V_\theta(T|P\setminus Q)}
 <li><strong>자명한 명제 처벌</strong>: 단일 기본 자동화 택틱(<code>simp</code>, <code>tauto</code>, <code>rfl</code>, <code>assumption</code>, <code>simp_all</code>)으로 증명되는 자명한 명제는 <strong>$0$점</strong> 처리하여 보상을 억제.</li>
 </ul>
 <h6 id="평가-분모-및-분야별-흥미성-상승">평가 분모 및 분야별 흥미성 상승</h6>
-<p>수학의 8개 주요 분야(대수학, 해석학, 수론, 측도/확률론, 기하/위상수학, 조합론, 범주론/대수기하학, 수리논리/기초론)에서 각 모델당 분야별 20개씩, **총 160개의 Lean 4 검증 및 증명이 완료된 정리(Proven Statements)**를 엄격한 평가 분모(Denominator)로 지정했다.</p>
+<p>수학의 8개 주요 분야(대수학, 해석학, 수론, 측도/확률론, 기하/위상수학, 조합론, 범주론/대수기하학, 수리논리/기초론)에서 각 모델당 분야별 20개씩, 총 160개의 Lean 4 검증 및 증명이 완료된 정리(Proven Statements)를 엄격한 평가 분모(Denominator)로 지정했다.</p>
 <p>검증된 실제 평균 흥미성 점수 $I(\cdot|P)$는 Base 모델의 <strong>1.76</strong>에서 학습된 모델(Trained)의 <strong>7.58</strong>로 대폭 상승(4배 이상)했다. 분야별 상승 폭은 <strong>조합론(Combinatorics)에서의 2.10배</strong>부터 <strong>수론(Number Theory)에서의 8.72배</strong>까지 전 영역에서 비약적인 증가를 기록했다.</p>
 <h6 id="mathlib-중복도-비교-분석-substantial-or-full-overlap">Mathlib 중복도 비교 분석 (Substantial or Full Overlap)</h6>
 <p>LLM-as-a-Judge (Claude Opus 4.6) 기반 5단계 블라인드 루브릭 평가를 통해 기존 Mathlib과의 중복도를 측정한 결과는 다음과 같다:</p>
@@ -194,8 +194,8 @@ $$L_{\text{drop}} = -\max{0, \log V_\theta(T|P) - \log V_\theta(T|P\setminus Q)}
 <p>시작 전제 $P_0$에서 출발하여 라운드별로 정리를 누적 승인하는 이론 확장 실험($P_0 \subset P_1 \subset \dots \subset P_N$)을 수행하였다.</p>
 <h6 id="파이프라인-및-프로토콜-appendix-d">파이프라인 및 프로토콜 (Appendix D)</h6>
 <ol>
-<li><strong>프롬프트 전제 구성 (Premise Sampling Mix)</strong>: 각 프롬프트마다 20개의 전제를 제공한다. 이 중 **5개는 직전 라운드 신규 발견 정리($P_{n-1} \setminus P_{n-2}$)**에서 추출하여 연쇄 추론(Forward Chaining)을 유도하고, 나머지 **15개는 누적 기저 맥락($P_{n-1}$) 및 초기 전제($P_0$)**에서 추출한다.</li>
-<li><strong>후보 생성 및 의미론적 필터링 (Semantic Filter)</strong>: 라운드당 400개의 후보 명제를 생성한 후, Lean 증명에 앞서 Claude 4.6 기반 **의미론적 필터(Semantic Filter)**를 거쳐 논리적 동치 명제를 제거하고 정리 패밀리 간 다양성을 확보한다.</li>
+<li><strong>프롬프트 전제 구성 (Premise Sampling Mix)</strong>: 각 프롬프트마다 20개의 전제를 제공한다. 이 중 5개는 직전 라운드 신규 발견 정리($P_{n-1} \setminus P_{n-2}$)에서 추출하여 연쇄 추론(Forward Chaining)을 유도하고, 나머지 15개는 누적 기저 맥락($P_{n-1}$) 및 초기 전제($P_0$)에서 추출한다.</li>
+<li><strong>후보 생성 및 의미론적 필터링 (Semantic Filter)</strong>: 라운드당 400개의 후보 명제를 생성한 후, Lean 증명에 앞서 Claude 4.6 기반 의미론적 필터(Semantic Filter)를 거쳐 논리적 동치 명제를 제거하고 정리 패밀리 간 다양성을 확보한다.</li>
 <li><strong>증명 및 가지치기 (Pruning)</strong>: 검증을 통과한 정리 중 기준에 따라 상위 10개를 선별하여 다음 라운드의 전제로 승인한다.</li>
 </ol>
 <h6 id="4가지-가지치기-규칙-비교-및-평가-결과">4가지 가지치기 규칙 비교 및 평가 결과</h6>
@@ -242,7 +242,7 @@ $$L_{\text{drop}} = -\max{0, \log V_\theta(T|P) - \log V_\theta(T|P\setminus Q)}
 </table>
 <ul>
 <li><strong>선호도 및 품질 압도</strong>: 4개 정책의 명제를 무작위 믹스한 4-way 블라인드 평가에서 흥미성 기준 프루닝 명제가 <strong>60%의 비율로 1위</strong>에 오른 반면, 단순 증명 길이는 19%에 그쳤다.</li>
-<li><strong>중복성 억제 효과</strong>: 흥미성 기준 선택 집합의 중복 명제 비율은 **28.0%**로, 단순 증명 길이(50.0%)나 무작위 선택(53.0%)에 비해 이론 체계 내 중복성을 크게 감소시켰다.</li>
+<li><strong>중복성 억제 효과</strong>: 흥미성 기준 선택 집합의 중복 명제 비율은 28.0%로, 단순 증명 길이(50.0%)나 무작위 선택(53.0%)에 비해 이론 체계 내 중복성을 크게 감소시켰다.</li>
 </ul>
 <hr />
 <h4 id="5-연구의-한계점-및-비판적-검증-과제-limitations-unresolved-tasks">5. 연구의 한계점 및 비판적 검증 과제 (Limitations &amp; Unresolved Tasks)</h4>

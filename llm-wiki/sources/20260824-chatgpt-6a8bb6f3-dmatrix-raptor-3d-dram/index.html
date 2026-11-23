@@ -46,8 +46,8 @@
 <h4 id="3-raptor-3d-dram의-물리적-구조와-설계-혁신-technical-structure">3. Raptor 3D-DRAM의 물리적 구조와 설계 혁신 (Technical Structure)</h4>
 <p>Raptor는 'Logic-on-DRAM' 이종 적층 구조를 통해 기존 HBM의 물리적 병목(Broadfront 한계)을 극복하고자 합니다.</p>
 <ul>
-<li><strong>이종 적층 및 연결:</strong> TSMC N4P 로직 다이와 Custom 3D-DRAM 다이를 활성면끼리 마주 보게 붙이는 <strong>Face-to-Face(F2F) 직접 본딩</strong>을 채택했습니다. <strong>36μm 피치의 마이크로범프 어레이</strong>를 통해 수만 개의 연결 통로를 확보하며, 전력은 **TSV(Through-Silicon Via)**로 공급합니다.</li>
-<li><strong>메모리 계층 구성(MCM):</strong> 32GB의 초고속 **'Hot Tier'(3D-DRAM)**와 128GB의 **'Capacity Tier'(LPDDR5X-9600)**가 혼합된 MCM 구조입니다.</li>
+<li><strong>이종 적층 및 연결:</strong> TSMC N4P 로직 다이와 Custom 3D-DRAM 다이를 활성면끼리 마주 보게 붙이는 <strong>Face-to-Face(F2F) 직접 본딩</strong>을 채택했습니다. <strong>36μm 피치의 마이크로범프 어레이</strong>를 통해 수만 개의 연결 통로를 확보하며, 전력은 TSV(Through-Silicon Via)로 공급합니다.</li>
+<li><strong>메모리 계층 구성(MCM):</strong> 32GB의 초고속 'Hot Tier'(3D-DRAM)와 128GB의 'Capacity Tier'(LPDDR5X-9600)가 혼합된 MCM 구조입니다.</li>
 <li><strong>100TB/s를 가능케 하는 보완 기술:</strong> 단순히 연결로만 늘린 것이 아니라, 데이터를 효율적으로 조합하는 <strong>Stream blocking</strong>, 전환 비트 관리를 통해 전력을 아끼는 <strong>Stream flipping</strong>, 불량 뱅크 발생 시에도 채널 폭을 유지하며 우회하는 <strong>Topology-preserving redundancy</strong> 기술이 뒷받침되어야 실제 성능 구현이 가능합니다.</li>
 <li><strong>핵심 비유:</strong> 고속 핀 소수를 활용하는 HBM이 '소수의 슈퍼카용 고속도로'라면, Raptor는 상대적으로 느린 속도의 통로 수만 개를 병렬화한 <strong>'거대 통로'</strong> 개념으로 데이터 전송량을 극대화했습니다.</li>
 </ul>
@@ -117,7 +117,7 @@
 <h4 id="7-시장-포지셔닝-hbm-대체인가-역할-분담인가-market-positioning">7. 시장 포지셔닝: HBM 대체인가, 역할 분담인가? (Market Positioning)</h4>
 <ul>
 <li><strong>분업 시나리오:</strong> 입력 프롬프트를 처리하는 <strong>Pre-fill 단계는 GPU/HBM</strong>이 담당하고, 한 토큰씩 생성하는 <strong>Decode 단계는 Raptor</strong>가 담당하는 역할 분담이 유력합니다.</li>
-<li><strong>제품 구분:</strong> d-Matrix의 SRAM 기반 제품인 **'Corsair'**와 3D-DRAM 기반인 **'Raptor'**를 혼동해서는 안 됩니다. 전자는 이미 양산 단계이나 후자는 아직 개발 단계입니다.</li>
+<li><strong>제품 구분:</strong> d-Matrix의 SRAM 기반 제품인 'Corsair'와 3D-DRAM 기반인 'Raptor'를 혼동해서는 안 됩니다. 전자는 이미 양산 단계이나 후자는 아직 개발 단계입니다.</li>
 <li><strong>Meta 참여의 실제:</strong> Meta 연구자의 발표 참여는 <strong>기술적 POC(Proof of Concept) 수준의 공동 연구</strong>일 뿐이며, 이를 실제 제품 구매 확약(PO)으로 확대 해석하는 것은 위험합니다.</li>
 </ul>
 <h4 id="8-2030년-시장-시나리오-및-가중치-2030-scenario-analysis">8. 2030년 시장 시나리오 및 가중치 (2030 Scenario Analysis)</h4>

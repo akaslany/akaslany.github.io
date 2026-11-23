@@ -41,7 +41,7 @@
 | <strong>7x7 (Compact)</strong> | $4.52 \times 10^8$ | $10^{42}$ | <strong>Minimax Solved ($Q^*$ Exact)</strong> |
 | <strong>9x9 (Tactical)</strong> | $1.04 \times 10^{15}$ | $10^{78}$ | <strong>Near-Optimal ($\epsilon \le 0.5$ pts)</strong> |
 | <strong>19x19 (Regulation)</strong> | $2.08 \times 10^{170}$ | $10^{360}$ | <strong>Deficit Compressed (0.5–13.5 pts)</strong> |</p>
-<p>이러한 방대한 공간을 제로 가중치로 처리하기 위해 두 가지 수학적 논리가 적용된다. 첫째, <strong>D4 Dihedral Group 대칭성</strong>(회전 및 대칭)을 활용하여 상태 매니폴드 볼륨을 정확히 1/8로 축소한다. 둘째, 데이터 분석 결과 축머리, 로컬 활로, 절단 등 전술적 상호작용의 **92.4%**가 맨해튼 거리 $r \le 3$ 이내의 <strong>로컬 다이아몬드 메트릭</strong>에 의존한다는 점을 발견하여 상태 표현의 효율성을 극대화했다.</p>
+<p>이러한 방대한 공간을 제로 가중치로 처리하기 위해 두 가지 수학적 논리가 적용된다. 첫째, <strong>D4 Dihedral Group 대칭성</strong>(회전 및 대칭)을 활용하여 상태 매니폴드 볼륨을 정확히 1/8로 축소한다. 둘째, 데이터 분석 결과 축머리, 로컬 활로, 절단 등 전술적 상호작용의 92.4%가 맨해튼 거리 $r \le 3$ 이내의 <strong>로컬 다이아몬드 메트릭</strong>에 의존한다는 점을 발견하여 상태 표현의 효율성을 극대화했다.</p>
 <hr />
 <h5 id="3-핵심-아키텍처-5대-구조적-불변성-structural-invariants">3. 핵심 아키텍처: 5대 구조적 불변성(Structural Invariants)</h5>
 <h6 id="3-1-dihedral-bayesian-bitboards-및-해시-기반-사전-확률">3.1. Dihedral Bayesian Bitboards 및 해시 기반 사전 확률</h6>
@@ -62,9 +62,9 @@
 <h6 id="3-3-score-centered-policy-mirror-descent-klpo">3.3. Score-Centered Policy Mirror Descent (KLPO)</h6>
 <p>비평가(Critic) 없이 단일 롤아웃($N=1$)만으로 정책 경사의 분산을 제어한다. 로그 사전 확률의 평균값 대비 편차인 'Centered Surprise'($z_t$)를 정의한다.</p>
 <p>$$z_t = \log P(a^*<em>t) - \mu</em>{\log P}$$ (식 5)</p>
-<p>**Theorem 1 (Blame-Shielding Invariant)**에 따르면, 초반의 날카로운 수($z_t &gt; 0$)를 두었으나 후반 실수($R = -1$)로 패배할 경우, 초반 수에 대한 패널티는 $\exp(-z_t) &lt; 1.0$으로 엄격히 제한된다. 이는 후반의 실수가 초반의 탁월한 선택을 오염시키지 않도록 보호한다.</p>
+<p>Theorem 1 (Blame-Shielding Invariant)에 따르면, 초반의 날카로운 수($z_t &gt; 0$)를 두었으나 후반 실수($R = -1$)로 패배할 경우, 초반 수에 대한 패널티는 $\exp(-z_t) &lt; 1.0$으로 엄격히 제한된다. 이는 후반의 실수가 초반의 탁월한 선택을 오염시키지 않도록 보호한다.</p>
 <h6 id="3-4-benson-settlement-및-pass-gating을-통한-수읽기-종료">3.4. Benson Settlement 및 Pass Gating을 통한 수읽기 종료</h6>
-<p>기존 엔진 'Jesse'는 19x19 대국 시 220수까지 대등하게 맞서다 종반에 패스를 거부하고 상대의 살아있는 대마(Eye) 속에 사석을 던져넣어 **평균 104.0점의 영토 붕괴(Collapse)**를 겪는 병리적 현상을 보였다. 이를 해결하기 위해 벤슨(Benson)의 무조건적 삶의 정리를 적용하여 착수 가능 집합을 제한한다.</p>
+<p>기존 엔진 'Jesse'는 19x19 대국 시 220수까지 대등하게 맞서다 종반에 패스를 거부하고 상대의 살아있는 대마(Eye) 속에 사석을 던져넣어 평균 104.0점의 영토 붕괴(Collapse)를 겪는 병리적 현상을 보였다. 이를 해결하기 위해 벤슨(Benson)의 무조건적 삶의 정리를 적용하여 착수 가능 집합을 제한한다.</p>
 <p>$$A_{viable}(s) = {p \in A(s) \setminus {pass} : p \notin T_{opp_living}(s) \land (\text{libs} &gt; 1 \lor \text{captures} &gt; 0)}$$ (식 8)</p>
 <p>상대 영토 내 자충수를 금지하고 보드가 결정(Settled)된 상태에서 상대를 따라 즉각 패스함으로써 104점 규모의 손실을 알고리즘적으로 완벽히 제거했다.</p>
 <hr />

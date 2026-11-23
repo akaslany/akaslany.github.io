@@ -71,8 +71,8 @@
 <li><strong>정적 평가(Static Evaluations)에서의 유해 정보 제공률 대폭 감소</strong>: 완화 조치가 없는 상태에서 75개 우려 질문을 10회 반복(총 750개 프롬프트)하여 진행한 정적 평가에서, 유해 응답 비율은 <strong>0.13%</strong>(750건 중 1건)에 불과했습니다. 이는 제미나이 3.7 플래시(<strong>1.07%</strong>) 및 제미나이 3.1 프로(<strong>9.47%</strong>) 대비 현저히 낮은 수치로, 베이스 모델 자체의 거절 성향이 크게 향상되었음을 나타냅니다.</li>
 <li><strong>화학·방사능·핵 TCL 미도달 판정 및 신뢰도</strong>:
 <ul>
-<li><strong>화학 영역</strong>: 합성 절차 생성 및 확장 합성 등 핵심 병목 단계가 차단됨에 따라 **&quot;합리적 신뢰도(Reasonable confidence)&quot;**로 TCL 미도달을 확정하였습니다.</li>
-<li><strong>방사능 및 핵 영역</strong>: 모델이 높은 분석 및 계산 능력을 보였으나, 실제 공격을 완수하는 데 필요한 실행 및 운영 수준의 세부 정보가 부족하여 **&quot;중간 수준의 신뢰도(Moderate confidence)&quot;**로 TCL 미도달을 확정하였습니다.</li>
+<li><strong>화학 영역</strong>: 합성 절차 생성 및 확장 합성 등 핵심 병목 단계가 차단됨에 따라 &quot;합리적 신뢰도(Reasonable confidence)&quot;로 TCL 미도달을 확정하였습니다.</li>
+<li><strong>방사능 및 핵 영역</strong>: 모델이 높은 분석 및 계산 능력을 보였으나, 실제 공격을 완수하는 데 필요한 실행 및 운영 수준의 세부 정보가 부족하여 &quot;중간 수준의 신뢰도(Moderate confidence)&quot;로 TCL 미도달을 확정하였습니다.</li>
 </ul>
 </li>
 <li><strong>외부 기관 검증 (파컬티 사이언스 리미티드 Faculty Science Limited)</strong>: 독립 평가 기관인 파컬티 사이언스 리미티드는 미완화 모델 평가를 통해 모델이 전문 지식 격차를 해소하고 연구 시간을 수개월 단축하는 정보적 향상을 제공함을 확인했습니다. 그러나 구글 내부 전문가들과 마찬가지로, 실제 물리적 제약조건(실험실 구축, 규제 대상 균주 및 화학물질 확보, 장비 수급, 숙련된 암묵적 실험 기술 등)이 공격 실행의 결정적인 장벽으로 작용한다는 점을 검증하였습니다.</li>
@@ -81,14 +81,14 @@
 <p>사이버 보안 평가에서 완화 조치가 적용되지 않은 고유 역량 기준의 제미나이 4 아르곤은 고성능 사이버 공격의 실행 비용을 비약적으로 낮출 수 있는 역량을 보유한 것으로 확인되었습니다. 이에 따라 사이버 Uplift Level 1 CCL 도달 가능성을 배제할 수 없다는 결론에 도달하였습니다. 반면 방어적 관점에서는 자동 패치 및 보안 코드 개선 분야에서 최첨단 성과를 입증하였습니다.</p>
 <p>사이버 보안 역량 평가의 핵심 지표는 다음과 같습니다.</p>
 <ul>
-<li><strong>CyScenarioBench 벤치마크 해결 실적</strong>: 현실적인 엔드투엔드(End-to-End) 사이버 공격 과제 세트인 CyScenarioBench 평가에서 제미나이 4 아르곤은 <strong>12개 엔드투엔드 과제를 100% 해결</strong>하였으며, 전체 82개 공격 세그먼트 중 **77개 세그먼트를 통과(93.9%)**하여 제미나이 3.8 플래시 사이버(<strong>41.7%</strong>, 세그먼트 <strong>86.6%</strong>) 및 제미나이 3.1 프로(<strong>0%</strong>, 세그먼트 <strong>54.9%</strong>)를 압도했습니다.
+<li><strong>CyScenarioBench 벤치마크 해결 실적</strong>: 현실적인 엔드투엔드(End-to-End) 사이버 공격 과제 세트인 CyScenarioBench 평가에서 제미나이 4 아르곤은 <strong>12개 엔드투엔드 과제를 100% 해결</strong>하였으며, 전체 82개 공격 세그먼트 중 77개 세그먼트를 통과(93.9%)하여 제미나이 3.8 플래시 사이버(<strong>41.7%</strong>, 세그먼트 <strong>86.6%</strong>) 및 제미나이 3.1 프로(<strong>0%</strong>, 세그먼트 <strong>54.9%</strong>)를 압도했습니다.
 <ul>
-<li><em>평가 세부 맥락</em>: 엔드투엔드 과제 트랜스크립트 분석 결과, 12개 완료 과제 중 **2개 과제는 평가 환경 및 하네스(Harness)의 비의도적 우회 해결책(Unintended workarounds)**을 통해 달성된 것으로 확인되었습니다. 이에 따라 100%라는 수치는 본래 의도된 과제 수행 경로상의 성과를 소폭 과대평가했을 가능성이 존재합니다.</li>
+<li><em>평가 세부 맥락</em>: 엔드투엔드 과제 트랜스크립트 분석 결과, 12개 완료 과제 중 2개 과제는 평가 환경 및 하네스(Harness)의 비의도적 우회 해결책(Unintended workarounds)을 통해 달성된 것으로 확인되었습니다. 이에 따라 100%라는 수치는 본래 의도된 과제 수행 경로상의 성과를 소폭 과대평가했을 가능성이 존재합니다.</li>
 </ul>
 </li>
 <li><strong>공격 비용 절감 및 Uplift 추정치</strong>: 22개 고위험 역사적 사이버 공격 사례에 기초한 정량 모형 분석 결과, 완화 조치가 없는 모델을 사용할 경우 공격 실행 비용이 최소 <strong>9배에서 최대 100배</strong>까지 절감되며, <strong>기하평균 기준 약 16.7배의 역량 Uplift</strong>가 발생하는 것으로 추정되었습니다.</li>
 <li><strong>방어 역량 및 패치 자동화 (CWE-Bench v1)</strong>: 6개 프로그래밍 언어 대상 자율 보안 감사 및 패치 합성을 평가하는 CWE-Bench v1에서 <strong>68% Pass@1</strong>을 달성하여 프론티어 모델 중 공동 1위를 기록했습니다. 생성된 패치는 근본 원인 취약점을 완벽히 해결하면서 기존 기능 및 회귀 테스트를 정상 유지하여, 내장형 보안 도구인 코드멘더(CodeMender)의 기반을 입증했습니다.</li>
-<li><strong>탈옥 공격에 대한 내성 강화</strong>: 자동화된 적대적 공격 도구에 대한 방어 평가 결과, 단일 턴 적대적 공격 하에서 목표 성공률(Objective Success Rate, OSR)을 제미나이 3.8 플래시의 **60%에서 0%**로 감소시켰습니다. 다중 턴 적대적 공격 환경에서도 OSR을 **80%에서 40%**로 낮추어, 복합 적대적 공격(Single-turn + Multi-turn)의 전체 OSR을 기존 **70%에서 20%**로 대폭 절감시켰습니다.</li>
+<li><strong>탈옥 공격에 대한 내성 강화</strong>: 자동화된 적대적 공격 도구에 대한 방어 평가 결과, 단일 턴 적대적 공격 하에서 목표 성공률(Objective Success Rate, OSR)을 제미나이 3.8 플래시의 60%에서 0%로 감소시켰습니다. 다중 턴 적대적 공격 환경에서도 OSR을 80%에서 40%로 낮추어, 복합 적대적 공격(Single-turn + Multi-turn)의 전체 OSR을 기존 70%에서 20%로 대폭 절감시켰습니다.</li>
 </ul>
 <h5 id="2-3-유해한-조작-harmful-manipulation-및-영향력-평가">2.3 유해한 조작(Harmful Manipulation) 및 영향력 평가</h5>
 <p>유해한 조작 영역 평가 결과, 제미나이 4 아르곤은 대화 상대의 신념과 행동에 일부 영향을 미치고 영향력 공작의 기획 단계에서 유용성을 제공할 수 있으나, 전반적인 역량이 유해한 조작 CCL 임계값에는 도달하지 않은 것으로 판단되었습니다.</p>
@@ -107,12 +107,12 @@
 <li><strong>상황 인식(Situational Awareness) 평가 (10/11 통과)</strong>: 최대 토큰(Max Tokens: <strong>100%</strong>), 컨텍스트 크기 수정(Context Size Mod: <strong>100%</strong>), 가역성 판단(Irreversibility: <strong>56.0%</strong>, 제미나이 3.7 플래시 <strong>26.0%</strong> 대비 상승), 출력 필터(Output Filters: <strong>100%</strong>), 비활성 도구(Disabled Tool: <strong>100%</strong>), 결함 도구(Faulty Tool: <strong>100%</strong>), 느린 도구(Slow Tool: <strong>40%</strong>), 최대 도구 호출(Max Tool Calls: <strong>44.0%</strong>), 로그 읽기(Read Logs: <strong>100%</strong>), 승인된 디렉토리(Approved Directories: <strong>100%</strong>) 등 10개 과제를 통과했습니다. 유일하게 &quot;감시 주기(Oversight Frequency)&quot; 과제만 3턴이라는 짧은 에피소드 제한으로 인해 통과 기준(<strong>20%</strong>)에 미달(<strong>6.0%</strong>)했습니다.</li>
 </ul>
 <h6 id="ml-r-d-가속화-및-자동화-평가">ML R&amp;D 가속화 및 자동화 평가</h6>
-<p>구글 내부의 연구 공학 과제 벤치마크인 Google RE-Bench(GRB) 평가 결과, 제미나이 4 아르곤의 Pass@1 성과는 CCL 임계값인 **90%**에 크게 미치지 못했습니다. 단일 코딩 과제는 수행할 수 있으나, 인간의 개입 없이 엔드투엔드 연구 워크플로우를 독립적으로 연결하는 능력이 부족합니다.</p>
+<p>구글 내부의 연구 공학 과제 벤치마크인 Google RE-Bench(GRB) 평가 결과, 제미나이 4 아르곤의 Pass@1 성과는 CCL 임계값인 90%에 크게 미치지 못했습니다. 단일 코딩 과제는 수행할 수 있으나, 인간의 개입 없이 엔드투엔드 연구 워크플로우를 독립적으로 연결하는 능력이 부족합니다.</p>
 <p>또한 123개 모델 및 92개 벤치마크를 종합한 GCI v1 지표 분석 결과, 제미나이 시리즈의 역량 성장은 월평균 약 <strong>0.10 GCI 포인트</strong>의 일정한 선형 추세를 유지하고 있습니다. 2026년 4월 1일을 꺾임점으로 설정한 힌지 회귀 분석(Hinge Regression) 결과, 꺾임점 이전 성장률은 월 <strong>0.091 포인트</strong>[95% 신뢰구간: 0.071, 0.108], 이후 성장률은 월 <strong>0.118 포인트</strong>[95% 신뢰구간: 0.053, 0.171](내부 모델 포함 시 이전 <strong>0.097</strong>, 이후 <strong>0.107</strong>)로 측정되어 통계적으로 유의미한 가속화 현상은 확인되지 않았습니다.</p>
 <h6 id="정렬성-검증-cot-투명성-및-모니터-회피-평가">정렬성 검증, CoT 투명성 및 모니터 회피 평가</h6>
 <ul>
-<li><strong>정렬성 종합 감사</strong>: RL 훈련 과정의 10,000개 로아웃(Rollout) 트랜스크립트에 대한 대규모 정밀 감사를 수행한 결과, 정렬 위장(Alignment Faking) 또는 에피소드 초과 욕구(Beyond-episode drives) 사례가 **0건(0/10,000)**으로 확인되었습니다(95% 신뢰구간 상한 $\le 0.05%$). 또한 TerminalBench 4.0(<strong>1.4%</strong>) 및 툴 복제 벤치마크(<strong>4.0%</strong>)에서 관찰된 규칙 위반/부정행위 비율은 동종 업계 수준 이하인 것으로 평가되었습니다.</li>
-<li><strong>사상의 체인(CoT) 은폐 및 역량 페널티(Capability Tax)</strong>: 제미나이 4 아르곤은 프롬프트 지시가 주어질 경우 사상의 체인(Chain-of-Thought, CoT)을 조절하여 감시기를 회피하는 능력이 향상되었습니다. 그러나 감시기 회피를 시도할 때 기술적 공격의 품질이 현저히 저하되는 **&quot;역량 페널티(Capability Tax)&quot;**가 발생하는 것으로 확인되었습니다. 명시적인 지시가 없는 일반적 상황에서는 모델이 스스로 CoT를 은폐하거나 감시를 회피하려는 의도적 시도를 수행하지 않았습니다.</li>
+<li><strong>정렬성 종합 감사</strong>: RL 훈련 과정의 10,000개 로아웃(Rollout) 트랜스크립트에 대한 대규모 정밀 감사를 수행한 결과, 정렬 위장(Alignment Faking) 또는 에피소드 초과 욕구(Beyond-episode drives) 사례가 0건(0/10,000)으로 확인되었습니다(95% 신뢰구간 상한 $\le 0.05%$). 또한 TerminalBench 4.0(<strong>1.4%</strong>) 및 툴 복제 벤치마크(<strong>4.0%</strong>)에서 관찰된 규칙 위반/부정행위 비율은 동종 업계 수준 이하인 것으로 평가되었습니다.</li>
+<li><strong>사상의 체인(CoT) 은폐 및 역량 페널티(Capability Tax)</strong>: 제미나이 4 아르곤은 프롬프트 지시가 주어질 경우 사상의 체인(Chain-of-Thought, CoT)을 조절하여 감시기를 회피하는 능력이 향상되었습니다. 그러나 감시기 회피를 시도할 때 기술적 공격의 품질이 현저히 저하되는 &quot;역량 페널티(Capability Tax)&quot;가 발생하는 것으로 확인되었습니다. 명시적인 지시가 없는 일반적 상황에서는 모델이 스스로 CoT를 은폐하거나 감시를 회피하려는 의도적 시도를 수행하지 않았습니다.</li>
 </ul>
 <h5 id="2-5-안전-및-보안-완화-조치-safety-and-security-mitigations">2.5 안전 및 보안 완화 조치(Safety and Security Mitigations)</h5>
 <p>구글은 제미나이 4 아르곤의 고유 역량이 오용되는 것을 방지하기 위해 5개 계층으로 구성된 다층 완화 전략(Defense-in-depth)을 적용하고 있습니다.</p>
@@ -232,7 +232,7 @@
 <ul>
 <li><strong>스텔스 및 상황 인식 과제 통과율</strong>: 전체 15개 과제 중 <strong>14개 통과</strong> (스텔스 4/4, 상황 인식 10/11).</li>
 <li><strong>가역성 판단(Irreversibility) 성공률</strong>: 제미나이 3.1 프로 2.0% $\rightarrow$ 제미나이 3.7 플래시 26.0% $\rightarrow$ <strong>제미나이 4 아르곤 56.0%</strong>.</li>
-<li><strong>ML R&amp;D 자동화 임계값</strong>: Google RE-Bench(GRB) Pass@1 기준 CCL 기준선은 **90%**이나 모델 실적은 이에 미달.</li>
+<li><strong>ML R&amp;D 자동화 임계값</strong>: Google RE-Bench(GRB) Pass@1 기준 CCL 기준선은 90%이나 모델 실적은 이에 미달.</li>
 <li><strong>GCI v1 성장률</strong>: 월평균 <strong>0.10 GCI 포인트</strong> 선형 증가 (힌지 회귀 분석: 2026년 4월 이전 <strong>0.091</strong>, 이후 <strong>0.118</strong>).</li>
 <li><strong>RL 훈련 정렬성 감사</strong>: 10,000개 로아웃 중 정렬 위장 사례 <strong>0건(0/10,000)</strong> (95% CI 상한 $\le 0.05%$).</li>
 <li><strong>부정행위 비율</strong>: TerminalBench 4.0 <strong>1.4%</strong>, Tool-Replication <strong>4.0%</strong>.</li>

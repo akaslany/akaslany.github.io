@@ -82,7 +82,7 @@
 <p>TypeSafe AI가 보고한 Jev의 성능 지표는 기존 프론티어 모델 대비 압도적인 경제적 임계점을 제시하고 있습니다.</p>
 <ul>
 <li><strong>속도:</strong> TypeSafe는 Jev의 엔드 투 엔드 응답 시간이 <strong>70ms에서 500ms</strong> 사이라고 발표했습니다. 이는 동일한 수준의 지능을 가진 프론티어 모델 대비 약 <strong>40배에서 200배 빠른</strong> 수치입니다.</li>
-<li><strong>비용:</strong> 입력 토큰 100만 개당 **$0.042(10억 토큰당 $42)**의 가격이 책정되었습니다. 특히 출력 토큰은 측정하기에 너무 저렴하다는 의미에서 **무료(Too cheap to meter)**로 제공됩니다.</li>
+<li><strong>비용:</strong> 입력 토큰 100만 개당 $0.042(10억 토큰당 $42)의 가격이 책정되었습니다. 특히 출력 토큰은 측정하기에 너무 저렴하다는 의미에서 무료(Too cheap to meter)로 제공됩니다.</li>
 <li><strong>신뢰도 및 보정:</strong> 모든 출력에는 확률과 신뢰도 점수가 동반되며, 유사한 입력에 대해 일관된 답변을 제공하는 높은 재현성을 갖추고 있습니다.</li>
 </ul>
 <blockquote>
@@ -93,7 +93,7 @@
 <ul>
 <li><strong>워크플로 평가(Workflow Evals):</strong> 실제 비즈니스 자동화 워크로드 기반 테스트에서 Jev는 기존 모델 대비 <strong>193.6배 빠르고 444.6배 저렴함</strong>을 기록했습니다. 이 테스트에서는 GPT-6 Astra와 Fable 5.1의 평균값을 참조 정답(Reference probabilities)으로 사용했습니다.</li>
 <li><strong>System One Adapter의 영향:</strong> 벤치마크 대상인 기존 LLM들은 TypeSafe가 개발한 'System One LLM' 래퍼(Wrapper)를 통해 구조화된 출력을 하도록 제약되었습니다. TypeSafe는 이것이 LLM으로부터 의사결정을 얻는 가장 정확한 방법이지만, 확률 정보 없이 답변만 출력하는 방식보다 더 느리고 비용이 많이 드는 방식이라는 점을 명시했습니다.</li>
-<li><strong>Wikiracing 및 Doom 데모:</strong> Jev는 Doom 게임에서 초당 10회의 쿼리를 처리하며 실시간 지능을 증명했습니다. 단, 이 데모는 이미지(Pixel)가 아닌 **텍스트 및 데이터 구조 형태의 구조화된 상태(Structured state)**를 기반으로 작동한다는 기술적 차이가 있습니다. Wikiracing 사례에서는 높은 카디널리티 상황에서도 환각 없이 목표에 도달했으나, 비교 대상인 Astra 모델이 '최저 추론 설정(lowest reasoning setting)'으로 고정되었기에 속도 향상 폭이 상대적으로 낮게 측정되었습니다.</li>
+<li><strong>Wikiracing 및 Doom 데모:</strong> Jev는 Doom 게임에서 초당 10회의 쿼리를 처리하며 실시간 지능을 증명했습니다. 단, 이 데모는 이미지(Pixel)가 아닌 텍스트 및 데이터 구조 형태의 구조화된 상태(Structured state)를 기반으로 작동한다는 기술적 차이가 있습니다. Wikiracing 사례에서는 높은 카디널리티 상황에서도 환각 없이 목표에 도달했으나, 비교 대상인 Astra 모델이 '최저 추론 설정(lowest reasoning setting)'으로 고정되었기에 속도 향상 폭이 상대적으로 낮게 측정되었습니다.</li>
 <li><strong>환각(Hallucination)에 대한 정의:</strong> TypeSafe는 Jev가 환각을 일으키지 않는다고 주장합니다. 이는 모델이 새로운 문자열을 생성하는 것이 아니라, 사전에 정의된 스키마에 매칭(Schema matching)하는 방식으로만 작동하기 때문입니다. 따라서 논리적으로 '잘못된 선택'을 할 수는 있어도, '존재하지 않는 구조나 타입'을 생성하는 것은 수학적으로 불가능합니다.</li>
 </ul>
 <h4 id="5-system-one-모델의-활용처와-전략적-제한">5. System One 모델의 활용처와 전략적 제한</h4>

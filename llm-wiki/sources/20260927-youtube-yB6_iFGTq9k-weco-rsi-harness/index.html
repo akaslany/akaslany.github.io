@@ -131,7 +131,7 @@
 <tr>
 <td style="text-align:center"><strong>Level 2</strong></td>
 <td style="text-align:center"><strong>Ignition</strong></td>
-<td style="text-align:left">내부 루프(Inner loop)가 발견한 에이전트가 스스로 우수한 외부 루프(Outer loop)로 승격되는 '내부-외부 루프 간 일반화'가 성립하는 단계. **수익 체감의 법칙(Law of Diminishing Returns)**을 극복하는 필수 조건임.</td>
+<td style="text-align:left">내부 루프(Inner loop)가 발견한 에이전트가 스스로 우수한 외부 루프(Outer loop)로 승격되는 '내부-외부 루프 간 일반화'가 성립하는 단계. 수익 체감의 법칙(Law of Diminishing Returns)을 극복하는 필수 조건임.</td>
 </tr>
 <tr>
 <td style="text-align:center"><strong>Level 3</strong></td>
@@ -151,7 +151,7 @@
 <blockquote>
 <p><strong>Weco AI의 해명 및 입장 (Zhengyao Jiang):</strong>
 &quot;구조적 측면에서 기존 Darwin Gödel Machine은 코딩 에이전트를 최적화하는 2단계(2-level) 구조에 머물렀지만, Weco의 시스템은 외부 루프-내부 루프-다운스트림 과제로 확장되는 <strong>3단계(3-level) 엔드투엔드 하네스 최적화 체계</strong>를 완성했다.
-그러나 우리가 강조하는 핵심은 개념적 최초성이 아니라 **'실제로 완전히 자율적인 시스템이 인간 R&amp;D 효율성 곡선을 구부려(Bend the curve) 지속적인 성능 향상을 입증했는가'라는 결과(Outcome)**이다. 개념 자체는 20~30년 전으로 소급될 수 있으나, 인간의 수동 개입 없이 실전 성능 곡선을 가파르게 변화시킨 실증 데이터는 이번이 처음이다.&quot;</p>
+그러나 우리가 강조하는 핵심은 개념적 최초성이 아니라 '실제로 완전히 자율적인 시스템이 인간 R&amp;D 효율성 곡선을 구부려(Bend the curve) 지속적인 성능 향상을 입증했는가'라는 결과(Outcome)이다. 개념 자체는 20~30년 전으로 소급될 수 있으나, 인간의 수동 개입 없이 실전 성능 곡선을 가파르게 변화시킨 실증 데이터는 이번이 처음이다.&quot;</p>
 </blockquote>
 <h5 id="기술적-싱귤래리티-singularity-에-대한-오해-경계">기술적 싱귤래리티(Singularity)에 대한 오해 경계</h5>
 <p>진웅요 대표는 Level 1 RSI 달성이 즉각적인 기술적 싱귤래리티나 초지능(ASI)의 도래를 의미하지 않는다고 분명히 선을 그었습니다. 여전히 연구의 방향성을 결정하는 평가 지표(Eval)를 정의하고, 시스템 제약 조건을 설정하며, 창의적 프라이머리(Creative primitives)를 제공하는 핵심 역할에서는 인간 연구자의 개입이 필수적이라고 설명했습니다.</p>
@@ -159,16 +159,16 @@
 <h4 id="6-열린-탐색-open-ended-search-대-하네스-튜닝-open-endedness-vs-harness-tuning">6. 열린 탐색(Open-ended Search) 대 하네스 튜닝 (Open-endedness vs Harness Tuning)</h4>
 <h5 id="열린-탐색과-섬-island-lineage-기반-탐색-정책">열린 탐색과 섬(Island/Lineage) 기반 탐색 정책</h5>
 <p>팀 스카프 박사는 단일 타겟 과제 최적화에 집중된 탐욕적 언덕 오르기(Greedy hill climbing) 방식의 한계를 지적하며, 목적지가 정해지지 않은 상태에서 다양하고 창의적인 디딤돌(Stepping stones)을 수집하는 열린 탐색(Open-endedness)의 중요성을 피력했습니다.</p>
-<p>이에 대해 진웅요 대표는 Agent 85가 구현한 정교한 검색 정책을 제시했습니다. Agent 85는 탐색 시 국소 최적화 및 상쇄 현상(Saturation)을 방지하기 위해 **섬(Islands) 또는 계통(Lineage)**이라 불리는 다중 탐색 줄기를 형성하고, <strong>Multi-armed Bandit</strong> 알고리즘을 적용하여 각 섬에 컴퓨팅 자원을 적절히 배분했습니다. 특정 섬의 탐색이 포화 상태에 도달하면 기존 핵심 아이디어는 일부 승계하되 깨끗한 컨텍스트(Fresh context)를 가진 새로운 섬을 분가시키는 고도의 탐색 기법을 사용했습니다.</p>
+<p>이에 대해 진웅요 대표는 Agent 85가 구현한 정교한 검색 정책을 제시했습니다. Agent 85는 탐색 시 국소 최적화 및 상쇄 현상(Saturation)을 방지하기 위해 섬(Islands) 또는 계통(Lineage)이라 불리는 다중 탐색 줄기를 형성하고, <strong>Multi-armed Bandit</strong> 알고리즘을 적용하여 각 섬에 컴퓨팅 자원을 적절히 배분했습니다. 특정 섬의 탐색이 포화 상태에 도달하면 기존 핵심 아이디어는 일부 승계하되 깨끗한 컨텍스트(Fresh context)를 가진 새로운 섬을 분가시키는 고도의 탐색 기법을 사용했습니다.</p>
 <h5 id="하네스-엔지니어링의-본질과-포스트-트레이닝-post-training-비유">하네스 엔지니어링의 본질과 포스트 트레이닝(Post-training) 비유</h5>
-<p>진웅요 대표는 하네스 엔지니어링의 본질을 **&quot;포스트 트레이닝(Post-training)의 자동화된 연장선&quot;**으로 규정하며 기존 학계의 비판적 시각을 전환했습니다.</p>
+<p>진웅요 대표는 하네스 엔지니어링의 본질을 &quot;포스트 트레이닝(Post-training)의 자동화된 연장선&quot;으로 규정하며 기존 학계의 비판적 시각을 전환했습니다.</p>
 <ul>
 <li><strong>GPT-3.5 vs GPT-4 비유:</strong> 수동으로 작성된 하네스가 새로운 기저 모델이 출시되었을 때 호환되지 않는다는 비판에 대해, 진웅요 대표는 &quot;GPT-3.5에서 수행한 포스트 트레이닝 가중치가 GPT-4에 그대로 전이되지 않는다고 불평하는 사람은 아무도 없다&quot;고 반박했습니다.</li>
 <li><strong>컴퓨팅 스케일링의 도입:</strong> 과거의 하네스 엔지니어링은 인간이 수개월간 수동 작성했기 때문에 모델 전이성에 집착했지만, 이제는 새로운 기저 모델이 나올 때마다 2~3일간 컴퓨팅 스케일링을 투입하여 하네스를 자동 튜닝할 수 있으므로 전이성 저하 문제는 더 이상 장애물이 아니라고 설명했습니다.</li>
 </ul>
 <h5 id="지속-학습-continual-learning-의-부재와-인간-집단-지성과의-대비">지속 학습(Continual Learning)의 부재와 인간 집단 지성과의 대비</h5>
 <p>현재 LLM 에이전트는 기존 아이디어를 고속으로 재조합(Recombine) 및 검증하는 주사율(Throughput)은 매우 뛰어나지만, 지속 학습(Continual learning) 능력이 부재하다는 근본적 한계를 가집니다.</p>
-<p>진웅요 대표는 인간 연구 커뮤니티가 끊임없이 독창적인 연구 파라다임을 창출할 수 있는 이유는 **&quot;모든 인간 연구자가 서로 다른 고유한 신경망 가중치(Brain/Neural weights)를 소유하고 있기 때문&quot;**이라고 분석했습니다. 반면 현재의 AI 에이전트는 단일하고 고정된 중앙집중형 모델 인스턴스에 의존하므로, 동일한 컨텍스트 내에서 반복 프롬프팅을 수행할 경우 생성되는 아이디어가 신속하게 포화(Saturation)되는 한계를 드러낸다고 지적했습니다.</p>
+<p>진웅요 대표는 인간 연구 커뮤니티가 끊임없이 독창적인 연구 파라다임을 창출할 수 있는 이유는 &quot;모든 인간 연구자가 서로 다른 고유한 신경망 가중치(Brain/Neural weights)를 소유하고 있기 때문&quot;이라고 분석했습니다. 반면 현재의 AI 에이전트는 단일하고 고정된 중앙집중형 모델 인스턴스에 의존하므로, 동일한 컨텍스트 내에서 반복 프롬프팅을 수행할 경우 생성되는 아이디어가 신속하게 포화(Saturation)되는 한계를 드러낸다고 지적했습니다.</p>
 <hr />
 <h4 id="7-parameter-golf-실전-사례-및-level-2-rsi-달성-여부-검증-parameter-golf-case-study-open-challenges">7. Parameter Golf 실전 사례 및 Level 2 RSI 달성 여부 검증 (Parameter Golf Case Study &amp; Open Challenges)</h4>
 <h5 id="parameter-golf-실전-적용-성과">Parameter Golf 실전 적용 성과</h5>

@@ -89,14 +89,14 @@
 <p>결국, 생성된 수만 개의 설계 후보군 중 실제 물리 법칙을 통과할 수 있는 '진짜'를 골라내는 속도를 높이는 것이 과학용 AI의 핵심 미션이다.</p>
 <hr />
 <p><strong>4. Neural Operator: 함수 공간 사이의 매핑(Map from Function to Function)</strong></p>
-<p>기존의 신경망(Neural Networks)이 유한 차원 벡터 공간 사이의 매핑($\mathbb{R}^n \to \mathbb{R}^m$)을 수행한다면, **Neural Operator(arXiv:2108.08481)**는 무한 차원의 함수 공간 사이의 매핑을 학습한다.</p>
+<p>기존의 신경망(Neural Networks)이 유한 차원 벡터 공간 사이의 매핑($\mathbb{R}^n \to \mathbb{R}^m$)을 수행한다면, Neural Operator(arXiv:2108.08481)는 무한 차원의 함수 공간 사이의 매핑을 학습한다.</p>
 <ul>
 <li><strong>수학적 정식화:</strong> 입력 함수(예: 초기 경계 조건)를 출력 함수(예: 특정 시간 후의 PDE 해)로 변환하는 연산자(Operator) 자체를 근사한다. 이는 특정 편미분 방정식(PDE)의 하나의 해(Solution)를 찾는 수치 해석적 접근과 달리, 조건이 변화함에 따라 달라지는 '해의 가족(Family of solutions)' 전체를 학습하는 파라메트릭(Parametric) 모델이다.</li>
 <li><strong>이산화 불변성(Discretization Invariance):</strong> 이는 아키텍처 수준에서 데이터의 해상도에 종속되지 않음을 의미한다. 64x64 해상도로 학습된 모델이 추론 시에는 256x256 해상도 데이터를 입력받아 더 정밀한 결과를 내놓는 'Zero-shot Super-resolution'이 가능해진다. 이는 모델이 단순히 픽셀 값을 외우는 것이 아니라, 함수가 정의된 연속적인 공간(Continuous Space)의 물리적 기제를 학습했기 때문이다. 학술적으로 이는 Sobolev 공간에서의 연산자 연속성을 근사하는 작업으로 정의될 수 있다.</li>
 </ul>
 <hr />
 <p><strong>5. FNO(Fourier Neural Operator)와 푸리에 공간(Fourier Space)</strong></p>
-<p>Neural Operator의 가장 성공적인 구현체인 **FNO(Fourier Neural Operator, arXiv:2010.08895)**는 적분 커널(Integral Kernel) 연산을 푸리에 공간에서 파라미터화한다.</p>
+<p>Neural Operator의 가장 성공적인 구현체인 FNO(Fourier Neural Operator, arXiv:2010.08895)는 적분 커널(Integral Kernel) 연산을 푸리에 공간에서 파라미터화한다.</p>
 <ul>
 <li><strong>전역적 상관관계(Global Correlations):</strong> 제한된 kernel의 공간 합성곱은 주로 국소 정보를 처리하는 반면, Fourier layer는 공간 전체의 mode를 결합하는 전역적 표현을 제공한다. 이는 유체역학이나 기상 현상의 장거리 상관과 여러 spatial scale을 모델링하는 데 유용하다. 물리적 영향이 수천 킬로미터에 ‘즉각’ 전파된다는 뜻은 아니다.</li>
 <li><strong>계산 복잡도의 혁신:</strong> 전역적 연결성을 확보하면서도 고속 푸리에 변환(FFT)을 활용해 $O(N \log N)$의 준선형 복잡도를 유지한다. 이는 $O(N^2)$의 트랜스포머 어텐션보다 물리 데이터 처리에 훨씬 적합하다.</li>
@@ -125,7 +125,7 @@
 </ul>
 <hr />
 <p><strong>8. FourCastNet의 진화: v1에서 v3까지</strong></p>
-<p>NVIDIA와 캘텍 연구진의 **FourCastNet(arXiv:2202.11214)**은 AI 기반 기상 대리모델이 특정 benchmark에서 빠른 추론과 경쟁력 있는 정확도를 함께 달성할 가능성을 제시했다. 운영 환경의 신뢰성은 별도의 지속적 검증 대상이다.</p>
+<p>NVIDIA와 캘텍 연구진의 FourCastNet(arXiv:2202.11214)은 AI 기반 기상 대리모델이 특정 benchmark에서 빠른 추론과 경쟁력 있는 정확도를 함께 달성할 가능성을 제시했다. 운영 환경의 신뢰성은 별도의 지속적 검증 대상이다.</p>
 <ol>
 <li><strong>v1 (FNO 기반):</strong> 2022년 논문은 0.25° 전지구 예측과 짧은 lead time에서 ECMWF IFS와의 비교를 제시하고, 일주일 예측을 2초 미만에 생성했다고 보고했다. 이는 논문 저자들의 당시 모델·지표·하드웨어 조건에 한정된다.</li>
 <li><strong>v2 (Spherical Geometry):</strong> 평면 지도로 지구를 시뮬레이션할 때 발생하는 극지방 왜곡 문제를 해결하기 위해 구형 기하학적 제약을 도입하기 시작했다.</li>
@@ -198,7 +198,7 @@
 </ul>
 <hr />
 <p><strong>14. 물리 파운데이션 모델(Foundation Model for Physics)의 비전</strong></p>
-<p>아난드쿠마르의 최종 비전은 원자 스케일(Atom)부터 행성 스케일(Planet)까지 하나의 모델로 다루는 **'Multi-physics Foundation Model'**이다.</p>
+<p>아난드쿠마르의 최종 비전은 원자 스케일(Atom)부터 행성 스케일(Planet)까지 하나의 모델로 다루는 'Multi-physics Foundation Model'이다.</p>
 <ul>
 <li><strong>연구 현황:</strong> 현재는 기상, 핵융합 등 도메인별 '좁은 대리 모델(Narrow Surrogates)' 수준이다. 서로 다른 물리 법칙이 얽힌 다중 물리 현상을 단일 모델 내에서 처리하고, 다양한 스케일 간의 데이터 일관성을 유지하는 것은 현재의 연구 로드맵(Vision) 상에 있는 원대한 도전 과제다.</li>
 </ul>

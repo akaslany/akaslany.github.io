@@ -83,7 +83,7 @@
 <li><strong>Dense vs MoE 아키텍처 비교 및 효율성 논거</strong>:
 <ul>
 <li><strong>[사실]</strong> 32GB VRAM 메모리 제한 조건 하에서 고밀도(Dense) 모델과 라우팅 희소성을 달리한 2종의 MoE 모델(1:8 및 1:16 희소성)을 동일 추론 메모리 스케일링 사다리로 실험 비교하였습니다. (Section 2.3, Figure 1)</li>
-<li><strong>[소스 주장]</strong> 연구진은 주어진 학습 연산 예산 및 파라미터 한계 내에서 Dense 아키텍처가 MoE 대비 **2배~2.5배 뛰어난 연산 효율성(Compute Efficiency)**을 보임을 증명하고, 이를 근거로 Dense 30B 구조를 최종 채택했습니다. (Section 2.3, Figure 1)</li>
+<li><strong>[소스 주장]</strong> 연구진은 주어진 학습 연산 예산 및 파라미터 한계 내에서 Dense 아키텍처가 MoE 대비 2배~2.5배 뛰어난 연산 효율성(Compute Efficiency)을 보임을 증명하고, 이를 근거로 Dense 30B 구조를 최종 채택했습니다. (Section 2.3, Figure 1)</li>
 </ul>
 </li>
 <li><strong>시스템 프롬프트 및 라우팅 프로토콜 (ATEM XML)</strong>:
@@ -155,7 +155,7 @@
 </tr>
 </tbody>
 </table>
-<p>** 표 내 모든 수치 및 구성 요소: <strong>[사실]</strong> (Section 2, Table 1 기반)*</p>
+<p> 표 내 모든 수치 및 구성 요소: <strong>[사실]</strong> (Section 2, Table 1 기반)*</p>
 <p><strong>[작성자 해석]</strong>: Muse Glimmer 30B는 MoE가 가지는 높은 메모리 대역폭 요구량과 KV 캐시 비효율성을 피하고, GQA와 슬라이딩 윈도우 조합을 통해 장문맥 에이전트 수행 시 메모리 점유율을 극도로 제한하는 Dense 최적화 전략을 구사하고 있습니다. (Section 2.1, Section 2.3 기반 분석)</p>
 <hr />
 <h5 id="2-2-지식-증류-및-파이프라인-학습-구조-training-pipeline">2.2. 지식 증류 및 파이프라인 학습 구조 (Training Pipeline)</h5>
@@ -179,7 +179,7 @@
  2. 온정책 증류 (On-policy Distillation)
  3. 다중 목적 강화학습 (Multi-objective RL)
 </code></pre>
-<p>** 그림 내 모든 학습 단계 및 구성 요소: <strong>[사실]</strong> (Section 4, Section 5 기반)*</p>
+<p> 그림 내 모든 학습 단계 및 구성 요소: <strong>[사실]</strong> (Section 4, Section 5 기반)*</p>
 <ol>
 <li><strong>사전 학습 및 체크포인트 스무딩 (Souping)</strong>:
 <ul>
@@ -341,7 +341,7 @@
 </tr>
 </tbody>
 </table>
-<p>** 표 내 모든 수치 및 평가 결과: <strong>[사실]</strong> (Table 2 기반. $\downarrow$ 표시 지표는 낮을수록 우수하며, 각 행별 최고 성과 수치만 굵은 글씨 표기)*</p>
+<p> 표 내 모든 수치 및 평가 결과: <strong>[사실]</strong> (Table 2 기반. $\downarrow$ 표시 지표는 낮을수록 우수하며, 각 행별 최고 성과 수치만 굵은 글씨 표기)*</p>
 <hr />
 <h5 id="2-4-신뢰성-안전성-및-개인정보-보호-trust-safety">2.4. 신뢰성, 안전성 및 개인정보 보호 (Trust &amp; Safety)</h5>
 <p>온디바이스 환경에서 작동하는 에이전트 특성상, 외부 제3자 서비스 및 악의적 데이터 입력으로부터 사용자의 사생활을 보호하고 시스템의 안전성을 유지하는 기술이 내장되었습니다. <strong>[소스 주장]</strong> (Section 5.5, Section 8)</p>

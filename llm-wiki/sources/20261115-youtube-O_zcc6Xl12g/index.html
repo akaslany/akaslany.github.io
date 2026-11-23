@@ -53,7 +53,7 @@
 <li><strong>논점 A: Dune 프레임워크와 <code>useEffect</code> 금지</strong>
 <ul>
 <li><strong>근거:</strong> 사용 시 높은 맥락적 미묘함(Nuance)이 요구되는 구문은 에이전트가 저품질 코드(Slop)를 작성하게 만드는 주원인이 됩니다 <strong>[소스의 주장]</strong>. 대표적으로 React의 <code>useEffect</code>는 올바르게 다루기 어려워 에이전트가 이를 오용하거나 남용하는 경향이 강하게 나타납니다 <strong>[소스의 주장]</strong>.</li>
-<li><strong>사례:</strong> Graphbot 팀은 Electron 애플리케이션을 위한 Next.js와 유사한 자체 클라이언트 프레임워크인 **'듄(Dune)'**을 개발했습니다 <strong>[사실]</strong>. Dune은 일반 제품 코드(Product Code) 내에서 <code>useEffect</code> 사용을 전면 금지(Ban)하고, 오직 Dune 내부 API로만 사용 권한을 제한했습니다 <strong>[사실]</strong>. 이를 통해 코드 리뷰 시 <code>useEffect</code> 오용 여부를 일일이 검수해야 하는 부담을 카테고리 수준에서 완전히 제거했습니다 <strong>[소스의 주장]</strong>.</li>
+<li><strong>사례:</strong> Graphbot 팀은 Electron 애플리케이션을 위한 Next.js와 유사한 자체 클라이언트 프레임워크인 '듄(Dune)'을 개발했습니다 <strong>[사실]</strong>. Dune은 일반 제품 코드(Product Code) 내에서 <code>useEffect</code> 사용을 전면 금지(Ban)하고, 오직 Dune 내부 API로만 사용 권한을 제한했습니다 <strong>[사실]</strong>. 이를 통해 코드 리뷰 시 <code>useEffect</code> 오용 여부를 일일이 검수해야 하는 부담을 카테고리 수준에서 완전히 제거했습니다 <strong>[소스의 주장]</strong>.</li>
 </ul>
 </li>
 <li><strong>논점 B: 디렉토리 구조를 통한 맥락 전달 및 의존성 제약</strong>
@@ -70,12 +70,12 @@
 </li>
 </ul>
 <h6 id="2-3-에이전트-검증-verification-체계의-다변화">2.3. 에이전트 검증(Verification) 체계의 다변화</h6>
-<p>에이전트 환경에서 인간의 코드 리뷰는 생겨난 코드를 직접 읽고 검수하는 방식에서, 에이전트가 생성한 **'검증 아티팩트(Verification Artifacts)'**를 확인하는 방식으로 전환되었습니다 <strong>[소스의 주장]</strong>. 주요 검증 기술은 다음과 같은 축으로 운용됩니다.</p>
+<p>에이전트 환경에서 인간의 코드 리뷰는 생겨난 코드를 직접 읽고 검수하는 방식에서, 에이전트가 생성한 '검증 아티팩트(Verification Artifacts)'를 확인하는 방식으로 전환되었습니다 <strong>[소스의 주장]</strong>. 주요 검증 기술은 다음과 같은 축으로 운용됩니다.</p>
 <ol>
 <li><strong>런타임 검증 (Runtime Verification):</strong>
 <ul>
 <li>에이전트가 직접 애플리케이션을 실행하고 Chrome DevTools 프로토콜 등 디버깅 도구를 활용하여 스스로 동작을 확인하도록 환경을 조성합니다 <strong>[사실]</strong>.</li>
-<li>사용자 관점에서의 <strong>&quot;일종의 웹사이트 사이트맵(Site Map)&quot;</strong> 역할을 수행하는 **'기능 맵(Feature Map)'**을 도입하여, 에이전트와 엔지니어 간의 공유 어휘(Shared Vocabulary)를 형성함으로써 에이전트의 추측성 동작을 억제합니다 <strong>[소스의 주장]</strong>.</li>
+<li>사용자 관점에서의 <strong>&quot;일종의 웹사이트 사이트맵(Site Map)&quot;</strong> 역할을 수행하는 '기능 맵(Feature Map)'을 도입하여, 에이전트와 엔지니어 간의 공유 어휘(Shared Vocabulary)를 형성함으로써 에이전트의 추측성 동작을 억제합니다 <strong>[소스의 주장]</strong>.</li>
 <li>에이전트 전용 커스텀 CLI 드라이버를 구축하여 토큰 소비량을 절감하고 테스트 재현성을 확보했습니다 <strong>[사실]</strong>.</li>
 </ul>
 </li>

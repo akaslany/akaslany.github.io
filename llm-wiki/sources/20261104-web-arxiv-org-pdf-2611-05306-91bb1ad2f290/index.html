@@ -40,9 +40,9 @@
 <h3 id="해설-보고서-긴-문맥-길이는-필수적인가-압축-및-선택적-읽기를-통한-언어-모델-효율화-논문-분석-you-don-t-need-long-context">[해설 보고서] 긴 문맥 길이는 필수적인가?: 압축 및 선택적 읽기를 통한 언어 모델 효율화 논문 분석 (&quot;You don’t need long context&quot;)</h3>
 <hr />
 <h4 id="1-개요-overview">1. 개요 (Overview)</h4>
-<p>본 해설 보고서는 NVIDIA 연구진(Peter Belcak 외 11명)이 2026년 11월 4일에 발표한 논문 **&quot;You don’t need long context&quot;**의 이론적 배경, 핵심 방법론 및 실증 연구 결과를 종합적으로 분석합니다. 본 연구는 거대 언어 모델(LLM) 서빙 및 에이전트 시스템 설계 시 당연시되어 온 '대규모 컨텍스트 창(Context Window Size)' 확장 경쟁에 근본적인 의문을 제기합니다. 연구진은 짧은 문맥(Short Context) 상태를 유지하는 엄격한 컨텍스트 관리 정책만으로도 모델의 작업 정확도를 유지하거나 오히려 향상시킬 수 있음을 다각도로 입증합니다.</p>
+<p>본 해설 보고서는 NVIDIA 연구진(Peter Belcak 외 11명)이 2026년 11월 4일에 발표한 논문 &quot;You don’t need long context&quot;의 이론적 배경, 핵심 방법론 및 실증 연구 결과를 종합적으로 분석합니다. 본 연구는 거대 언어 모델(LLM) 서빙 및 에이전트 시스템 설계 시 당연시되어 온 '대규모 컨텍스트 창(Context Window Size)' 확장 경쟁에 근본적인 의문을 제기합니다. 연구진은 짧은 문맥(Short Context) 상태를 유지하는 엄격한 컨텍스트 관리 정책만으로도 모델의 작업 정확도를 유지하거나 오히려 향상시킬 수 있음을 다각도로 입증합니다.</p>
 <p>최첨단 언어 모델들은 백만(1M) 토큰 이상의 초대형 입력 문맥을 처리할 수 있도록 발전해 왔습니다. 그러나 언어 모델이 추론 시 토큰을 생성할 때, 특정 토큰의 생성 계산 복잡도는 컨텍스트 깊이(Depth) $N$에 대해 선형적인 $O(N)$ 관계를 가집니다. 이로 인해 입력 문맥이 길어질수록 키-값 캐시(KV Cache)의 메모리 점유율이 수평적으로 증가하고, 토큰 간 생성 지연 시간(Inter-token Latency)이 가중되며, 단위 시간당 디코드 처리량(Decode Throughput)이 급감하는 치명적인 시스템 병목 현상이 발생합니다. 특히 Cloud GPU 서빙 환경(Nebius 온디맨드 기준 NVIDIA H100 GPU 시간당 $3.85)에서 16K 토큰 문맥 대신 256K 토큰 문맥을 사용할 경우, 동일한 출력 토큰을 생성하는 데 드는 비용이 최소 3.6배에서 최대 7배까지 폭증하여 서빙 주체에게 막대한 경제적 부담을 가합니다.</p>
-<p>이러한 문제의식하에 연구진은 **&quot;긴 문맥이 과연 필수적인가?(RQ0)&quot;**라는 근본적인 연구 질문을 설정합니다. 그리고 긴 문맥을 유발하는 두 가지 핵심 워크로드인 장기 수행 과제(Long-Horizon Tasks)와 긴 입력 과제(Long-Input Tasks)를 분해하여, 빈번한 컨텍스트 압축(Compaction) 기법과 파일시스템 기반의 선택적 입력 읽기(Selective Input Reading) 도구를 도입했습니다. 실험 결과, 작업 컨텍스트를 16K~50K 토큰 수준의 짧은 상태로 제한하더라도 폐쇄형 및 공개 가중치 모델 모두에서 정확도 손실이 거의 없거나 오히려 성능이 향상되는 결과를 얻었습니다.</p>
+<p>이러한 문제의식하에 연구진은 &quot;긴 문맥이 과연 필수적인가?(RQ0)&quot;라는 근본적인 연구 질문을 설정합니다. 그리고 긴 문맥을 유발하는 두 가지 핵심 워크로드인 장기 수행 과제(Long-Horizon Tasks)와 긴 입력 과제(Long-Input Tasks)를 분해하여, 빈번한 컨텍스트 압축(Compaction) 기법과 파일시스템 기반의 선택적 입력 읽기(Selective Input Reading) 도구를 도입했습니다. 실험 결과, 작업 컨텍스트를 16K~50K 토큰 수준의 짧은 상태로 제한하더라도 폐쇄형 및 공개 가중치 모델 모두에서 정확도 손실이 거의 없거나 오히려 성능이 향상되는 결과를 얻었습니다.</p>
 <p>결론적으로 본 논문은 무조건적인 초대형 문맥 창 수용이 불필요하며, 사후 학습(Post-training) 단계를 통한 체계적인 시맨틱 상태 관리 및 정교한 도구 활용을 통해 초단기 문맥 기반의 고효율·저비용 LLM 추론 및 에이전트 시스템을 구축할 수 있음을 입증하고 있습니다.</p>
 <hr />
 <h4 id="2-주요-논점-및-연구-질문-분석-key-arguments-research-question-analysis">2. 주요 논점 및 연구 질문 분석 (Key Arguments &amp; Research Question Analysis)</h4>
@@ -174,7 +174,7 @@
 </ul>
 <h6 id="실증적-벤치마크-평가-및-토큰-경제학-분석">실증적 벤치마크 평가 및 토큰 경제학 분석</h6>
 <p>연구진은 6개 장기 수행 벤치마크(SWE-bench Verified, Terminal-Bench 2.1, SWE-bench Multilingual, FRAMES, BFCLv3, Tau2Bench)에서 폐쇄형 상용 모델인 Claude Opus 4.5와 GPT 5.6 Sol을 평가했습니다. 48K/36K, 32K/24K, 24K/18K, 16K/12K 등 컨텍스트 한계를 단계적으로 축소하여 압축 빈도를 높였음에도, FHA 베이스라인 대비 정확도 변동폭은 Claude Opus 4.5가 <strong>-3.7 ~ +5.6 ppts</strong>, GPT 5.6 Sol이 <strong>-3.3 ~ +4.4 ppts</strong> 수준에 그쳤습니다. 평가된 22개 임계값 설정 중 정확도가 베이스라인 대비 2 ppts 이상 하락한 케이스는 모델당 5개 이하에 불과했습니다.</p>
-<p>이 과정에서 토큰 소비 동역학(Token Spend Dynamics)의 중요한 변화가 관찰되었습니다(Appendix C). 컨텍스트 압축을 적용하면 새로운 대화 세션마다 시스템 프롬프트와 상태 요약문을 재평가하므로 **캐시되지 않은 신규 입력 토큰(Uncached Input Tokens)**의 수가 늘어나고, 압축 요약문을 생성하는 <strong>출력 토큰(Output Tokens)</strong> 역시 소폭 증가합니다. 반면 이전 대화의 누적 이력을 재활용하는 **캐시된 입력 토큰 히트(Cached Input Token Hits)**는 크게 줄어듭니다.</p>
+<p>이 과정에서 토큰 소비 동역학(Token Spend Dynamics)의 중요한 변화가 관찰되었습니다(Appendix C). 컨텍스트 압축을 적용하면 새로운 대화 세션마다 시스템 프롬프트와 상태 요약문을 재평가하므로 캐시되지 않은 신규 입력 토큰(Uncached Input Tokens)의 수가 늘어나고, 압축 요약문을 생성하는 <strong>출력 토큰(Output Tokens)</strong> 역시 소폭 증가합니다. 반면 이전 대화의 누적 이력을 재활용하는 캐시된 입력 토큰 히트(Cached Input Token Hits)는 크게 줄어듭니다.</p>
 <p>그럼에도 불구하고 전체 추론 비용이 <strong>2.2배 ~ 8.8배 절감</strong>되는 이유는, 짧은 문맥 깊이에서 발생하는 단위 토큰당 생성 비용 단가 하락 폭($r=0.20$, 즉 16K에서의 생성 단가가 256K의 20% 수준으로 하락)이 신규 입력 및 출력 토큰의 미세한 증가량을 압도적으로 상쇄하기 때문입니다.</p>
 <ul>
 <li><strong>SWE-bench Verified</strong>: Opus 4.5는 24K/18K 설정에서 74.8%(베이스라인 70.0% 대비 +4.8 ppts), GPT 5.6 Sol은 48K/36K 설정에서 88.8%(베이스라인 84.4% 대비 +4.4 ppts)로 최고 성적을 기록했습니다.</li>
@@ -269,9 +269,9 @@
 <li><strong>라이브 컨텍스트 절감</strong>: 피크 라이브 컨텍스트(Peak Live Context) 중앙값이 <strong>7K ~ 9K 토큰</strong> 수준으로 대폭 축소되었습니다 (FHA 베이스라인 피크 18K~32K 토큰 대비 현저한 축소).</li>
 </ul>
 <h6 id="패러다임-전환-시맨틱-상태-공간-모델-sssms">패러다임 전환: 시맨틱 상태 공간 모델(SSSMs)</h6>
-<p>SAC의 성공에 기반하여 연구진은 **시맨틱 상태 공간 모델(Semantic State Space Models, SSSMs)**이라는 새로운 모델 개념을 제안합니다.</p>
+<p>SAC의 성공에 기반하여 연구진은 시맨틱 상태 공간 모델(Semantic State Space Models, SSSMs)이라는 새로운 모델 개념을 제안합니다.</p>
 <ul>
-<li><strong>개념적 대비</strong>: 기존의 State Space Model(예: Mamba, SSM)이 토큰 생성 간 수치화된 블랙박스 신경망/벡터 상태(Dense Neural State)를 전달하는 것과 달리, SSSM은 자연어로 명시된 설명 가능한 **&quot;시맨틱 상태(Semantic State)&quot;**를 대화 회차 간에 전달합니다.</li>
+<li><strong>개념적 대비</strong>: 기존의 State Space Model(예: Mamba, SSM)이 토큰 생성 간 수치화된 블랙박스 신경망/벡터 상태(Dense Neural State)를 전달하는 것과 달리, SSSM은 자연어로 명시된 설명 가능한 &quot;시맨틱 상태(Semantic State)&quot;를 대화 회차 간에 전달합니다.</li>
 <li><strong>작동 프로세스</strong>: (1) 자연어로 작성된 이전 상태 이해 -&gt; (2) 다음 조치 추론 -&gt; (3) 환경 조치 실행 -&gt; (4) 결과 등록 -&gt; (5) 다음 인퍼런스 인스턴스가 이어서 작업할 수 있도록 상태 요약을 자연어로 업데이트.</li>
 <li><strong>학습 및 토큰 효율성 장점</strong>: 전체 이력을 축적하는 기존 모델 대비 KV 캐시 오버헤드가 발생하지 않아 토큰 효율성이 극대화되며, 이전 문맥의 무수한 노이즈 속에서 특정 지점을 참조하도록 복잡한 Long-context Attention을 학습시킬 필요가 없어 포스트 트레이닝 단계의 데이터 학습 효율성이 비약적으로 향상됩니다.</li>
 </ul>
@@ -347,7 +347,7 @@
 <li><strong>소형 및 오픈소스 모델의 압축 내성 취약성 및 성능 붕괴</strong>:
 대형 상용 모델과 달리 프롬프트 이행 능력이 부족하거나 출력이 장황한 소형/오픈소스 모델의 경우 타이트한 압축 임계값에서 성능 저하가 뚜렷했습니다.
 <ul>
-<li>대표적으로 <strong>Qwen 3 Coder Next</strong> 모델은 SWE-bench Verified에서 베이스라인 정확도가 53.0%였으나, 16K/12K 임계값 설정 시 **3.6%로 정확도가 급격히 붕괴(Collapse)**했습니다. 연구진은 그 원인으로 모델의 장황한 실행 궤적(Verbose Execution Trajectories)을 지적합니다. 모델이 코딩 작업을 진행할 때 너무 많은 토큰을 소모하여, 타이트한 압축 사이 간격 동안 유의미한 소프트웨어 공학적 진전을 이루지 못하고 다음 압축 임계값에 도달해 버렸기 때문입니다.</li>
+<li>대표적으로 <strong>Qwen 3 Coder Next</strong> 모델은 SWE-bench Verified에서 베이스라인 정확도가 53.0%였으나, 16K/12K 임계값 설정 시 3.6%로 정확도가 급격히 붕괴(Collapse)했습니다. 연구진은 그 원인으로 모델의 장황한 실행 궤적(Verbose Execution Trajectories)을 지적합니다. 모델이 코딩 작업을 진행할 때 너무 많은 토큰을 소모하여, 타이트한 압축 사이 간격 동안 유의미한 소프트웨어 공학적 진전을 이루지 못하고 다음 압축 임계값에 도달해 버렸기 때문입니다.</li>
 </ul>
 </li>
 <li><strong>소스 미다룸 및 확인 불가 사항</strong>:

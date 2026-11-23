@@ -39,7 +39,7 @@
 </li>
 <li>
 <p><strong>핵심 가설: 어텐션 단순성 편향(Attention Simplicity Bias)</strong>
-본 연구는 Abbe et al. (2024)이 제시한 '글로벌도(Globality degree)' 개념에 기초함. 가설에 따르면, 학습 가능한 CoT는 낮은 글로벌도를 가짐. 즉, **&quot;다음 토큰을 예측하기 위해 컨텍스트 내의 수많은 토큰 중 오직 소수의 핵심 토큰에만 주의를 집중하면 되는 성질&quot;**이 존재하며, 모델은 이러한 '어텐션 단순성 편향'을 통해 복잡한 순차적 과제를 효율적으로 학습할 수 있음.</p>
+본 연구는 Abbe et al. (2024)이 제시한 '글로벌도(Globality degree)' 개념에 기초함. 가설에 따르면, 학습 가능한 CoT는 낮은 글로벌도를 가짐. 즉, &quot;다음 토큰을 예측하기 위해 컨텍스트 내의 수많은 토큰 중 오직 소수의 핵심 토큰에만 주의를 집중하면 되는 성질&quot;이 존재하며, 모델은 이러한 '어텐션 단순성 편향'을 통해 복잡한 순차적 과제를 효율적으로 학습할 수 있음.</p>
 </li>
 </ol>
 <hr />
@@ -49,8 +49,8 @@
 <p><strong>시스템 아키텍처 및 텐서 흐름</strong>
 ATC는 입력 시퀀스 $x$와 연속적인 CoT 벡터 $z = (z_1, \dots, z_k)$를 트랜스포머 아키텍처의 입력으로 사용함.</p>
 <ul>
-<li><strong>연속 토큰 처리:</strong> 이산적(Discrete) 입력 토큰은 임베딩 층을 거치지만, 연속 CoT 토큰은 초기 임베딩 단계를 생략하고 **첫 번째 어텐션 층 이전에 레이어 정규화(Layer Normalization)**를 거쳐 모델에 직접 입력됨.</li>
-<li><strong>토큰 생성 메커니즘:</strong> 각 단계 $i$에서 생성되는 다음 CoT 토큰은 $z_{i+1} := T_i(f_{tf}(x, z_1, \dots, z_i))$ 공식을 따름. 본 실험에서 변환 함수 $T_i$는 **항등 함수(Identity function)**로 설정되어, 마지막 레이어의 은닉 임베딩이 그대로 다음 단계의 CoT 토큰으로 사용됨.</li>
+<li><strong>연속 토큰 처리:</strong> 이산적(Discrete) 입력 토큰은 임베딩 층을 거치지만, 연속 CoT 토큰은 초기 임베딩 단계를 생략하고 첫 번째 어텐션 층 이전에 레이어 정규화(Layer Normalization)를 거쳐 모델에 직접 입력됨.</li>
+<li><strong>토큰 생성 메커니즘:</strong> 각 단계 $i$에서 생성되는 다음 CoT 토큰은 $z_{i+1} := T_i(f_{tf}(x, z_1, \dots, z_i))$ 공식을 따름. 본 실험에서 변환 함수 $T_i$는 항등 함수(Identity function)로 설정되어, 마지막 레이어의 은닉 임베딩이 그대로 다음 단계의 CoT 토큰으로 사용됨.</li>
 </ul>
 </li>
 <li>
@@ -91,7 +91,7 @@ Theorem 2와 3에 근거하여, <strong>Query($W_Q$)와 Value($W_V$) 파라미�
 </li>
 <li>
 <p><strong>후보군 드롭아웃(Candidate Dropout, $\rho=0.75$)</strong>
-모델이 프롬프트 내 정답 후보를 단순히 복사하는 **숏컷(Copying Shortcut)**에 빠지는 것을 차단하기 위해 훈련 데이터의 75%에서 후보군을 숨김. 이는 모델이 단순히 정답을 선택하는 대신 내부적으로 carry(올림) 정보를 보관하는 등 실제 연산을 수행하도록 강제함.</p>
+모델이 프롬프트 내 정답 후보를 단순히 복사하는 숏컷(Copying Shortcut)에 빠지는 것을 차단하기 위해 훈련 데이터의 75%에서 후보군을 숨김. 이는 모델이 단순히 정답을 선택하는 대신 내부적으로 carry(올림) 정보를 보관하는 등 실제 연산을 수행하도록 강제함.</p>
 </li>
 </ol>
 <hr />
@@ -108,7 +108,7 @@ Theorem 2와 3에 근거하여, <strong>Query($W_Q$)와 Value($W_V$) 파라미�
 <p><strong>그래프 도달성(Graph Reachability)</strong></p>
 <ul>
 <li><strong>효율성:</strong> ATC는 중간 단계 감독이 필요한 Coconut(Frontier supervision) 모델 대비 <strong>2.6배에서 최대 9.2배 빠른 학습 속도</strong>를 보임 (ATC: 51 epoch vs Coconut: 132-468 epoch).</li>
-<li><strong>어텐션 검증:</strong> 실험 결과, 어텐션 질량의 <strong>약 50%가 마지막 CoT 토큰에 집중</strong>된 반면, 입력 프롬프트의 **그래프 에지(Edge) 토큰에는 오직 2.3%**의 주의만을 기울임이 확인됨. 이는 모델이 원시 데이터를 매번 재연산하지 않고 추상화된 중간 표현을 적극 활용함을 입증함.</li>
+<li><strong>어텐션 검증:</strong> 실험 결과, 어텐션 질량의 <strong>약 50%가 마지막 CoT 토큰에 집중</strong>된 반면, 입력 프롬프트의 그래프 에지(Edge) 토큰에는 오직 2.3%의 주의만을 기울임이 확인됨. 이는 모델이 원시 데이터를 매번 재연산하지 않고 추상화된 중간 표현을 적극 활용함을 입증함.</li>
 </ul>
 </li>
 <li>
@@ -132,7 +132,7 @@ Theorem 2와 3에 근거하여, <strong>Query($W_Q$)와 Value($W_V$) 파라미�
 </li>
 <li>
 <p><strong>향후 과제</strong>
-ATC 프레임워크를 여러 중간 결론을 유기적으로 조합하고 이전의 선택을 수정해야 하는 **수학적 증명(Mathematical Proof)**과 같은 장기 추론(Long-horizon reasoning) 과제로 확장하여, 최신 토큰의 요약 능력 한계와 선택적 참조 메커니즘을 심화 분석할 필요가 있음.</p>
+ATC 프레임워크를 여러 중간 결론을 유기적으로 조합하고 이전의 선택을 수정해야 하는 수학적 증명(Mathematical Proof)과 같은 장기 추론(Long-horizon reasoning) 과제로 확장하여, 최신 토큰의 요약 능력 한계와 선택적 참조 메커니즘을 심화 분석할 필요가 있음.</p>
 </li>
 </ol>
 

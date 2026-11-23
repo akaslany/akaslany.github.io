@@ -30,11 +30,11 @@
 <p><strong>소스 정체성 감사 결과:</strong>
 <code>source-identity-audit.md</code>에 따르면 본 감사의 대상은 동료 심사(Peer-review)를 거친 학술 논문이나 독립적인 성능 검증 자료가 아니다. 이는 기업의 비전과 기술적 지향점을 설명하는 ‘장문 홍보 페이지’로 분류된다. 문서 내에는 구체적인 모델 아키텍처, 훈련 데이터셋의 명세, 성능 지표의 오차 범위(Error bars), 재현 가능한 코드 및 로그가 전무하다. 따라서 본 보고서는 회사의 주장을 공학적 사실로 단정하지 않으며, “범용 Physical AI가 실제 실험과 시뮬레이션의 병목을 실질적으로 해소할 수 있는가?”라는 핵심 질문을 중심으로 기술적 개연성과 잠재적 위험 요소를 분석하는 ‘기술 감사’의 관점을 유지한다.</p>
 <h4 id="2-4d-physical-ai의-기술적-정의와-개념적-오해의-분리">2. 4D Physical AI의 기술적 정의와 개념적 오해의 분리</h4>
-<p>회사는 자사의 모델이 ‘4D Physical State Field’를 예측한다고 설명한다. 기술적으로 이는 **4D = 3차원 공간(x, y, z) + 시간(t)**으로 색인된 상태장 $u(x, y, z, t)$를 의미한다. 각 위치(point)에는 온도, 압력, 속도(3성분), 밀도 등 다변량 상태(Multivariate state)를 나타내는 여러 채널(Channel)이 포함될 수 있다.</p>
+<p>회사는 자사의 모델이 ‘4D Physical State Field’를 예측한다고 설명한다. 기술적으로 이는 4D = 3차원 공간(x, y, z) + 시간(t)으로 색인된 상태장 $u(x, y, z, t)$를 의미한다. 각 위치(point)에는 온도, 압력, 속도(3성분), 밀도 등 다변량 상태(Multivariate state)를 나타내는 여러 채널(Channel)이 포함될 수 있다.</p>
 <p><strong>기술적 비판 및 감사 의견:</strong></p>
 <ol>
 <li><strong>데이터 구조와 물리적 통찰의 구분:</strong> 4차원 텐서(Tensor) 구조를 생성하고 처리할 수 있다는 사실이 곧 물리 법칙의 내재적 이해를 보증하는 증거가 될 수 없다. 이는 데이터를 인덱싱하고 배치하는 방식의 문제일 뿐이며, 그 내부의 비선형적 상호작용과 보존 법칙을 정확히 모사하고 있는지는 별개의 검증 영역이다.</li>
-<li><strong>Broad Model의 잠재적 리스크:</strong> 회사는 한 모델이 여러 물리 영역을 다루는 ‘Broad model’이 개별 영역에 특화된 ‘Narrow model’보다 우수하다고 주장한다(C1). 그러나 수치 해석 전문가의 관점에서 이는 **부정적 전이(Negative transfer)**와 <strong>용량 경쟁(Capacity competition)</strong> 문제를 야기할 수 있다. 서로 다른 편미분 방정식(PDE), 단위계(Unit), 기하학적 이질성을 가진 데이터가 하나의 잠재 공간에서 충돌할 경우, 오히려 특정 물리 현상의 정밀도를 저하시킬 위험이 있다.</li>
+<li><strong>Broad Model의 잠재적 리스크:</strong> 회사는 한 모델이 여러 물리 영역을 다루는 ‘Broad model’이 개별 영역에 특화된 ‘Narrow model’보다 우수하다고 주장한다(C1). 그러나 수치 해석 전문가의 관점에서 이는 부정적 전이(Negative transfer)와 <strong>용량 경쟁(Capacity competition)</strong> 문제를 야기할 수 있다. 서로 다른 편미분 방정식(PDE), 단위계(Unit), 기하학적 이질성을 가진 데이터가 하나의 잠재 공간에서 충돌할 경우, 오히려 특정 물리 현상의 정밀도를 저하시킬 위험이 있다.</li>
 </ol>
 <h4 id="3-모델-및-컨텍스트-규모-주장에-대한-산술적-감사">3. 모델 및 컨텍스트 규모 주장에 대한 산술적 감사</h4>
 <p>회사는 1T/35T 파라미터 규모와 1T/5T 컨텍스트 규모를 주장하고 있다. 이에 대한 산술적 검증 및 감사 의견은 다음과 같다.</p>
@@ -89,7 +89,7 @@
 <h5 id="4-2-resolution-invariance-해상도-불변성">4.2 Resolution Invariance (해상도 불변성)</h5>
 <p>동일한 가중치로 다양한 격자 크기에서 실행 가능하다는 주장은 신경 연산자(Neural Operator) 계열의 목표와 양립한다. 다만 페이지가 자사 모델을 neural operator로 정의한 것은 아니다.</p>
 <ul>
-<li><strong>기술적 제약:</strong> '실행 가능성'이 '정확도'를 보장하지 않는다. 격자가 표현하지 못하는 나이퀴스트 한계(Nyquist limit) 밖의 고주파 현상은 **에일리어싱(Aliasing)**이나 <strong>스펙트럼 절단(Spectral truncation)</strong> 오류로 이어질 수 있다. 불연속면(Shock), 경계층, 난류(Turbulence)에서의 수렴성(Convergence)은 공개된 평가가 없어 확인되지 않는다.</li>
+<li><strong>기술적 제약:</strong> '실행 가능성'이 '정확도'를 보장하지 않는다. 격자가 표현하지 못하는 나이퀴스트 한계(Nyquist limit) 밖의 고주파 현상은 에일리어싱(Aliasing)이나 <strong>스펙트럼 절단(Spectral truncation)</strong> 오류로 이어질 수 있다. 불연속면(Shock), 경계층, 난류(Turbulence)에서의 수렴성(Convergence)은 공개된 평가가 없어 확인되지 않는다.</li>
 </ul>
 <h5 id="4-3-pde-residual-편미분-방정식-잔차">4.3 PDE Residual (편미분 방정식 잔차)</h5>
 <p>예측값을 방정식 $F[\hat{u}]=0$에 대입하여 물리적 일관성을 평가하는 방식이다.</p>

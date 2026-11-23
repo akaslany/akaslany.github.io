@@ -70,7 +70,7 @@
 <li><strong>[사례/적용(Examples)]</strong>
 <ul>
 <li><em>야간 자동화 루프</em>: 개발자들은 밤사이에 5~10개의 프롬프트를 큐에 넣고 순차 실행 및 축약/재컴팩트를 반복하는 경계 기반 'Ralph loop'나 CLI 에이전트를 백그라운드 디태치 모드(detach mode)로 전환해 최대 40개를 병렬 구동하는 아키텍처를 운용한다.</li>
-<li><em>서브 에이전트 vs 독립 세션</em>: 독립적인 CLI/앱 세션을 여러 개 별도 실행하는 방식은 프롬프트 캐시 혜택을 받지 못해 속도가 느리고 사용량 한도를 빠르게 소진한다(설정 파일에 48개 서브 에이전트를 지정했을 때 Astra 모델 한도를 2시간 만에 전량 소진하여 15개로 축소 조정함). 반면, 단일 하네스 내에서 작동하는 서브 에이전트 프리미티브는 **공유 프롬프트 캐시 최적화(Shared Prompt Cache Optimization)**를 활용하여 오버헤드와 비용을 획기적으로 줄인다.</li>
+<li><em>서브 에이전트 vs 독립 세션</em>: 독립적인 CLI/앱 세션을 여러 개 별도 실행하는 방식은 프롬프트 캐시 혜택을 받지 못해 속도가 느리고 사용량 한도를 빠르게 소진한다(설정 파일에 48개 서브 에이전트를 지정했을 때 Astra 모델 한도를 2시간 만에 전량 소진하여 15개로 축소 조정함). 반면, 단일 하네스 내에서 작동하는 서브 에이전트 프리미티브는 공유 프롬프트 캐시 최적화(Shared Prompt Cache Optimization)를 활용하여 오버헤드와 비용을 획기적으로 줄인다.</li>
 <li><em>문맥 압축의 한계('Momento 효과')</em>: Claude Code나 Codex의 내장 요약 컴팩트(Summary Compaction) 기능은 대화의 맥락을 상실시켜 모델이 사용자를 전혀 모르는 새로운 인물로 인식하는 <strong>'Momento 효과(Momento Effect)'</strong> 오류를 발생시킨다. 이에 따라 패널들은 LLM에 의한 텍스트 요약 방식 대신 과거 도구 출력값 truncation이나 Jev 기반 선택적 필터링 방식을 선호한다.</li>
 </ul>
 </li>
@@ -89,7 +89,7 @@
 <li><strong>[사례/적용(Examples)]</strong>
 <ul>
 <li><em>보안 및 오작동 사례</em>: Matthew Burman은 자신이 개발한 Hermes 에이전트에 대해 유명 해커/제일브레이커인 Ply를 통해 5차례에 걸쳐 탈옥/프롬프트 주입 공격을 시도했으나, Hermes는 엄격한 시스템 프롬프트 계층 구조 덕분에 5회 모두 공격을 성공적으로 방어해냈다. 반면 Muse 어시스턴트가 중고 거래 중 사용자의 집 주소를 상대방에게 무단 노출하거나, 어시스턴트가 이직 면접 일정을 상사에게 공유하는 것과 같은 판단 실수(Misclassification) 위험은 여전히 존재한다.</li>
-<li><em>MCP 게이트웨이('Executor') 및 금융 권한 격리</em>: 대담자들은 다중 에이전트 자격 증명 혼란을 해결하기 위해 Cloudflare DNS 프록시 뒤에 위치한 로컬 리눅스 서버에 **중앙화된 MCP 게이트웨이('Executor')**를 구축하여 운용한다. 단 하나의 MCP 링크를 통해 Gmail, Google Drive, Notion을 모든 에이전트(Grokbot, Hermes, Dots 등)에 일괄 연결한다. 또한, 금융 쓰기 권한은 <strong>Link.com 및 Mercury의 가상 신용카드 생성 기술</strong>을 활용하여 결제 건별로 가상 카드를 발급하고 명시적 승인을 거치도록 격리 조치한다.</li>
+<li><em>MCP 게이트웨이('Executor') 및 금융 권한 격리</em>: 대담자들은 다중 에이전트 자격 증명 혼란을 해결하기 위해 Cloudflare DNS 프록시 뒤에 위치한 로컬 리눅스 서버에 중앙화된 MCP 게이트웨이('Executor')를 구축하여 운용한다. 단 하나의 MCP 링크를 통해 Gmail, Google Drive, Notion을 모든 에이전트(Grokbot, Hermes, Dots 등)에 일괄 연결한다. 또한, 금융 쓰기 권한은 <strong>Link.com 및 Mercury의 가상 신용카드 생성 기술</strong>을 활용하여 결제 건별로 가상 카드를 발급하고 명시적 승인을 거치도록 격리 조치한다.</li>
 </ul>
 </li>
 <li><strong>[구분 표기(Fact/Claim/Interpretation)]</strong>

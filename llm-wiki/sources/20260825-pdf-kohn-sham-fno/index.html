@@ -36,8 +36,8 @@
 <h4 id="2-전자구조-계산의-병목-현상-물리적-배경-및-스케일링의-오해">2. 전자구조 계산의 병목 현상: 물리적 배경 및 스케일링의 오해</h4>
 <p>표준 Kohn-Sham DFT는 자기일관장(SCF) 루프를 통해 바닥 상태 밀도를 도출합니다. 이 과정의 핵심 병목은 해밀토니안의 고유값 문제($H\phi = \epsilon\phi$)를 해결하는 단계입니다.</p>
 <ul>
-<li><strong>물리적 병목:</strong> 전자 수나 밴드 수($N$)가 증가함에 따라 dense orbital diagonalization 및 직교화의 명목 비용은 **$O(N^3)$**로 설명됩니다. 이는 지수적 증가가 아니라 가파른 3차 다항 증가이며, 실제 Quantum ESPRESSO 비용은 solver·k-point·병렬화·수렴 조건에도 좌우됩니다.</li>
-<li><strong>복잡도 대조의 엄밀성:</strong> 저자들은 고정 channel·mode 조건의 KS-FNO/FFT update를 실공간 격자점 수($N_g$)에 대해 **$O(N_g \log N_g)$**로 제시합니다. 여기서 $N$은 electron/band scale이고 $N_g$는 real-space grid points이므로 같은 변수가 아닙니다. 고정 해상도·조성에서 둘 다 계 크기와 함께 증가할 수 있지만, 서로 다른 변수를 단순 비교해 보편적 속도비를 만들 수 없습니다.</li>
+<li><strong>물리적 병목:</strong> 전자 수나 밴드 수($N$)가 증가함에 따라 dense orbital diagonalization 및 직교화의 명목 비용은 $O(N^3)$로 설명됩니다. 이는 지수적 증가가 아니라 가파른 3차 다항 증가이며, 실제 Quantum ESPRESSO 비용은 solver·k-point·병렬화·수렴 조건에도 좌우됩니다.</li>
+<li><strong>복잡도 대조의 엄밀성:</strong> 저자들은 고정 channel·mode 조건의 KS-FNO/FFT update를 실공간 격자점 수($N_g$)에 대해 $O(N_g \log N_g)$로 제시합니다. 여기서 $N$은 electron/band scale이고 $N_g$는 real-space grid points이므로 같은 변수가 아닙니다. 고정 해상도·조성에서 둘 다 계 크기와 함께 증가할 수 있지만, 서로 다른 변수를 단순 비교해 보편적 속도비를 만들 수 없습니다.</li>
 </ul>
 <hr />
 <h4 id="3-세-가지-학습-목표의-물리적-타당성-분석-three-learning-targets">3. 세 가지 학습 목표의 물리적 타당성 분석 (Three Learning Targets)</h4>
@@ -119,7 +119,7 @@
 <li><strong>자기일관장 (Self-Consistent Field, SCF):</strong> 입력과 출력 밀도가 일치할 때까지 포텐셜을 반복 갱신하는 수치 해석 과정.</li>
 <li><strong>퓨리에 신경 연산자 (Fourier Neural Operator, FNO):</strong> 퓨리에 변환을 통해 함수 공간 사이의 매핑을 학습하는 신경망.</li>
 <li><strong>등변성 (Equivariance):</strong> 입력의 회전/병진 변환에 따라 출력도 동일한 물리적 규칙으로 변환되는 성질.</li>
-<li><strong>밀도 응답 함수 ($\chi_s$):</strong> 포텐셜 변화에 따른 밀도 변화율. 이 함수의 **고유값 문제(Eigenvalue problem)**는 역 DFT 문제의 수치적 불안정성을 결정하는 핵심 요인임.</li>
+<li><strong>밀도 응답 함수 ($\chi_s$):</strong> 포텐셜 변화에 따른 밀도 변화율. 이 함수의 고유값 문제(Eigenvalue problem)는 역 DFT 문제의 수치적 불안정성을 결정하는 핵심 요인임.</li>
 <li><strong>v-representability:</strong> 주어진 전자 밀도에 대응하는 유효한 외부 포텐셜이 존재할 조건.</li>
 <li><strong>도메인 불변성 (Domain-invariant):</strong> 서로 다른 물리적 크기의 reciprocal grid에 같은 learned filter를 샘플링하도록 설계한 성질. 정확도나 모든 경계조건으로의 일반화를 자동 보장하지 않습니다.</li>
 <li><strong>XC functional transfer:</strong> PBE로 학습한 density model을 fine-tuning 없이 PBEsol potential construction에 적용한 시험. 이 원고의 실증 범위는 단일 Sr3SnO EOS 사례입니다.</li>

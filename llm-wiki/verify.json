@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 38838606,
+  "dist_bytes": 38820922,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -35,6 +35,13 @@
       "checked_associations": 20842,
       "missing_associations": [],
       "ok": true
+    },
+    "markers": {
+      "checked": 5281,
+      "occurrences": 0,
+      "ok": true,
+      "pages": 0,
+      "paths": {}
     },
     "material": {
       "checked": 92,
@@ -110,9 +117,9 @@
       "changed_files": 0,
       "changed_paths": [],
       "compared_files": 5285,
-      "first_sec": 17.506,
+      "first_sec": 17.624,
       "ok": true,
-      "second_sec": 16.912
+      "second_sec": 16.889
     },
     "schema": {
       "checked": 5281,

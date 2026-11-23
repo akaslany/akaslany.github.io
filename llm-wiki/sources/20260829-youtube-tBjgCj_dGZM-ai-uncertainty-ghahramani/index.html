@@ -91,7 +91,7 @@
 <p>실무적 frontier 조합은 한 모델에 별도 calibration/conformal split, 소수 test-time samples, retrieval/tool verification, risk–coverage 기반 기권과 shift 모니터링을 붙이는 방식이다. 고위험·소규모 영역에서는 ensemble이나 제한적 Bayesian head를 비교 기준으로 둘 수 있다. 비교는 같은 FLOPs, latency, parameter와 데이터 예산에서 해야 한다.</p>
 <h4 id="5-적대적-예제-school-bus-주장의-교정">5. 적대적 예제: school bus 주장의 교정</h4>
 <p>인터뷰는 school bus의 “몇 픽셀”을 바꾸자 cheetah라고 99% 확신했다고 설명한다. 이 문장은 두 유명 사례를 섞었다.</p>
-<p>Szegedy et al.의 <em>Intriguing properties of neural networks</em> Figure 5에는 school bus가 있지만 목표 클래스는 <strong>ostrich</strong>이며 99%가 표시되지 않는다. 이미지 전체에 작은 최적화 교란을 가한 사례다. Goodfellow et al.의 별도 Figure 1은 <code>ε=0.007</code> perturbation으로 **panda→gibbon 99.3%**를 보인다. 따라서 안전한 결론은 “사람에게 거의 보이지 않는 작은 최적화 교란이 고신뢰 오분류를 일으킬 수 있다”이다.</p>
+<p>Szegedy et al.의 <em>Intriguing properties of neural networks</em> Figure 5에는 school bus가 있지만 목표 클래스는 <strong>ostrich</strong>이며 99%가 표시되지 않는다. 이미지 전체에 작은 최적화 교란을 가한 사례다. Goodfellow et al.의 별도 Figure 1은 <code>ε=0.007</code> perturbation으로 panda→gibbon 99.3%를 보인다. 따라서 안전한 결론은 “사람에게 거의 보이지 않는 작은 최적화 교란이 고신뢰 오분류를 일으킬 수 있다”이다.</p>
 <p>이는 ordinary error, 자연스러운 OOD 이미지, 보안 공격자의 threat model과 구분해야 한다. 원문 그림은 재사용하지 않았다.</p>
 <h4 id="6-llm-환각-창의성-confidence">6. LLM 환각, 창의성, confidence</h4>
 <p>Ghahramani의 중요한 구분은 보존해야 한다. “Einstein이 로켓을 타고 달에 갔다”는 창작 요청에서는 허구가 의도된 생성일 수 있지만 사실 질문에서는 실패다. 평가에는 다음을 분리한다.</p>

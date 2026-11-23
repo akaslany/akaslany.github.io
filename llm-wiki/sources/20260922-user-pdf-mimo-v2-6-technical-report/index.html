@@ -27,7 +27,7 @@
 <h3 id="mimo-v2-6-기술-보고서-심층-분석-자기개선-self-improvement-을-위한-강화학습-계산-확장-전략">MiMo-V2.6 기술 보고서 심층 분석: 자기개선(Self-Improvement)을 위한 강화학습 계산 확장 전략</h3>
 <h4 id="1-서론-mimo-v2-6의-목표와-핵심-아키텍처-토대">1. 서론: MiMo-V2.6의 목표와 핵심 아키텍처 토대</h4>
 <p><strong>보고서 저자들의 주요 주장 요약</strong>
-MiMo-V2.6 시리즈(Pro 1.02T, Flash 310B)는 모델이 스스로 성능을 향상시키는 **재귀적 자기개선(Recursive Self-Improvement, RSI)**의 비전을 실현하기 위해 설계되었습니다. 저자들은 모델 지능의 경계를 확장하기 위한 핵심 동력으로 **강화학습(RL) 계산 규모의 확장(Scaling RL Compute)**을 제시합니다. 대규모 에이전트 과업에서 발생하는 복잡한 궤적과 다층적 피드백 신호를 처리하기 위해 인프라, 환경, 그리고 평가자(Grader)를 시스템적으로 고도화하는 것이 본 보고서의 핵심 아키텍처적 지향점입니다.</p>
+MiMo-V2.6 시리즈(Pro 1.02T, Flash 310B)는 모델이 스스로 성능을 향상시키는 재귀적 자기개선(Recursive Self-Improvement, RSI)의 비전을 실현하기 위해 설계되었습니다. 저자들은 모델 지능의 경계를 확장하기 위한 핵심 동력으로 강화학습(RL) 계산 규모의 확장(Scaling RL Compute)을 제시합니다. 대규모 에이전트 과업에서 발생하는 복잡한 궤적과 다층적 피드백 신호를 처리하기 위해 인프라, 환경, 그리고 평가자(Grader)를 시스템적으로 고도화하는 것이 본 보고서의 핵심 아키텍처적 지향점입니다.</p>
 <p><strong>Hybrid-SWA 아키텍처 상세</strong>
 MiMo-V2.6은 전역 문맥(Global Context)의 보존과 계산 효율성 사이의 절충점을 찾기 위해 <strong>하이브리드 희소 MoE(Hybrid Sparse Mixture-of-Experts) 트랜스포머</strong> 구조를 채택했습니다. 이 구조는 국소적 관계를 포착하는 <strong>Local Sliding Window Attention(SWA)</strong> 블록과 전역 정보를 통합하는 <strong>Global Attention(GA)</strong> 블록을 교차 배치합니다. 이러한 설계는 윈도우 경계를 넘어서는 정보 교환을 가능하게 하면서도, 고해상도 처리 시 발생하는 연산 비용을 획기적으로 낮추는 이점을 제공합니다.</p>
 <p><strong>구성 요소 비교 분석 (Table 1 기반)</strong></p>
@@ -84,7 +84,7 @@ MiMo-V2.6은 전역 문맥(Global Context)의 보존과 계산 효율성 사이�
 <p><strong>Muown 옵티마이저의 도입</strong>
 대규모 배치 학습 시 AdamW의 데이터 효율성 저하를 극복하기 위해 <strong>Muown</strong> 옵티마이저를 도입했습니다. Muown은 행렬 구조 가중치 업데이트를 직교화하는 Muon 알고리즘에 <strong>행렬 행 정규화(Row-norm control)</strong> 기능을 추가하여 스펙트럼 노름(Spectral-norm) 표류를 억제합니다.</p>
 <ul>
-<li><strong>최적화 상세:</strong> Muon 컴포넌트는 **10회의 Newton-Schulz 반복(iterations)**과 <strong>Nesterov 모멘텀</strong>을 사용하여 업데이트 정밀도를 높입니다.</li>
+<li><strong>최적화 상세:</strong> Muon 컴포넌트는 10회의 Newton-Schulz 반복(iterations)과 <strong>Nesterov 모멘텀</strong>을 사용하여 업데이트 정밀도를 높입니다.</li>
 <li><strong>혼합 전략:</strong> 은닉층 가중치에는 데이터 효율성이 높은 Muown을 적용하고, 임베딩 및 MoE 라우터에는 <strong>AdamW</strong>를 유지합니다. 이는 Muown의 행렬 기반 업데이트가 희소 라우팅 논리(Sparse routing logic)에는 지나치게 공격적일 수 있어 학습 안정성을 보장하기 위함입니다.</li>
 </ul>
 <p><strong>컨텍스트 확장</strong>
@@ -94,7 +94,7 @@ MiMo-V2.6은 전역 문맥(Global Context)의 보존과 계산 효율성 사이�
 <h5 id="제1차원-계산-규모-및-처리량-확장">제1차원: 계산 규모 및 처리량 확장</h5>
 <ul>
 <li><strong>대규모 배치 처리:</strong> 스텝당 1,568개의 프롬프트 배치를 사용하며, 그룹 크기($G=16$)를 포함해 스텝당 약 <strong>2.7B~3.7B 개의 토큰</strong>을 소비합니다.</li>
-<li><strong>자원 포화 전략:</strong> 1M 컨텍스트 환경에서 GPU 자원 활용을 극대화하기 위해 <strong>비동기 학습(Asynchronous training)</strong> 및 **부분 롤아웃(Partial rollout)**을 사용합니다. 특히 롤아웃 시 **산술 연산 강도(Arithmetic intensity)**를 높게 유지하여 HBM 점유율과 GPU 연산 성능을 최대로 끌어올립니다.</li>
+<li><strong>자원 포화 전략:</strong> 1M 컨텍스트 환경에서 GPU 자원 활용을 극대화하기 위해 <strong>비동기 학습(Asynchronous training)</strong> 및 부분 롤아웃(Partial rollout)을 사용합니다. 특히 롤아웃 시 산술 연산 강도(Arithmetic intensity)를 높게 유지하여 HBM 점유율과 GPU 연산 성능을 최대로 끌어올립니다.</li>
 </ul>
 <h5 id="제2차원-환경-및-하네스-harness-의-다양화">제2차원: 환경 및 하네스(Harness)의 다양화</h5>
 <ul>
@@ -102,7 +102,7 @@ MiMo-V2.6은 전역 문맥(Global Context)의 보존과 계산 효율성 사이�
 <li><strong>미니 하네스(Mini-harness):</strong> 복잡한 프로덕션 하네스 대신 독립적으로 구성 가능한 최소 단위의 에이전트 루프를 사용하여 다양한 상호작용 메커니즘을 학습에 통합했습니다.</li>
 </ul>
 <h5 id="제3차원-평가자-grader-계산의-확장">제3차원: 평가자(Grader) 계산의 확장</h5>
-<p>단순 이진 피드백을 넘어, 복잡한 장기 과업에서 정밀한 보상 신호를 제공하기 위해 **에이전트 기반 평가자(Agentic Grader)**에 더 많은 계산 자원을 투입합니다. 이는 해결책의 정답 여부뿐만 아니라 해결 과정의 효율성까지 평가에 포함합니다.</p>
+<p>단순 이진 피드백을 넘어, 복잡한 장기 과업에서 정밀한 보상 신호를 제공하기 위해 에이전트 기반 평가자(Agentic Grader)에 더 많은 계산 자원을 투입합니다. 이는 해결책의 정답 여부뿐만 아니라 해결 과정의 효율성까지 평가에 포함합니다.</p>
 <hr />
 <h4 id="4-혁신적-보상-체계-groupwise-agentic-grading">4. 혁신적 보상 체계: Groupwise Agentic Grading</h4>
 <h5 id="grs-groupwise-reward-synthesis">GRS (Groupwise Reward Synthesis)</h5>
@@ -113,7 +113,7 @@ MiMo-V2.6은 전역 문맥(Global Context)의 보존과 계산 효율성 사이�
 <h5 id="gar-groupwise-advantage-redistribution">GAR (Groupwise Advantage Redistribution)</h5>
 <p>온라인에서 동일 그룹 내 궤적을 실시간 비교하여 이득(Advantage)을 재분배하는 메커니즘입니다.</p>
 <ul>
-<li><strong>재분배 로직 (Eq. 3):</strong> 고품질 해결책에 양(+)의 이득을 더 많이 배분하기 위해 **재분배 계수($\lambda$)**를 사용합니다. 이는 낮은 품질의 패스(Pass)를 다운웨이트(Downweight)하되, 전체 긍정적 이득의 총합을 보존하여 엔트로피 붕괴를 방지합니다.</li>
+<li><strong>재분배 로직 (Eq. 3):</strong> 고품질 해결책에 양(+)의 이득을 더 많이 배분하기 위해 재분배 계수($\lambda$)를 사용합니다. 이는 낮은 품질의 패스(Pass)를 다운웨이트(Downweight)하되, 전체 긍정적 이득의 총합을 보존하여 엔트로피 붕괴를 방지합니다.</li>
 </ul>
 <h5 id="효과-분석-figure-8-근거">효과 분석 (Figure 8 근거)</h5>
 <ul>
@@ -130,17 +130,17 @@ MiMo-V2.6은 전역 문맥(Global Context)의 보존과 계산 효율성 사이�
 <p><strong>Harness Pool 및 메모리 관리</strong></p>
 <ul>
 <li><strong>멀티테넌트 환경:</strong> 고정된 수의 호스트 액터 내에서 여러 에이전트 루프를 실행하는 구조를 통해 효율성을 높였습니다.</li>
-<li><strong>계층적 캐싱:</strong> **HBM(GPU 메모리)**과 <strong>Pinned Host Memory</strong>를 교차 사용하는 계층적 KV 캐시 관리를 통해 1M 컨텍스트 환경에서도 지연 없는 추론을 지원합니다.</li>
+<li><strong>계층적 캐싱:</strong> HBM(GPU 메모리)과 <strong>Pinned Host Memory</strong>를 교차 사용하는 계층적 KV 캐시 관리를 통해 1M 컨텍스트 환경에서도 지연 없는 추론을 지원합니다.</li>
 </ul>
 <p><strong>추론 가속 및 일관성</strong></p>
 <ul>
-<li><strong>DFlash (Speculative Decoder):</strong> RL에 최적화된 <strong>FP8 DFlash</strong>를 통해 <strong>10.3% 높은 노드당 처리량</strong>과 **31.3% 향상된 평균 수용 길이(Accepted length)**를 달성했습니다.</li>
+<li><strong>DFlash (Speculative Decoder):</strong> RL에 최적화된 <strong>FP8 DFlash</strong>를 통해 <strong>10.3% 높은 노드당 처리량</strong>과 31.3% 향상된 평균 수용 길이(Accepted length)를 달성했습니다.</li>
 <li><strong>R3 및 Top-p 재현:</strong> MoE 전문가 인덱스(R3)와 샘플링 후보군 비트맵을 기록하여 학습과 추론 엔진 간의 수치적 정렬을 보장합니다.</li>
 </ul>
 <hr />
 <h4 id="6-학습-안정성-및-안전-보장-메커니즘">6. 학습 안정성 및 안전 보장 메커니즘</h4>
 <p><strong>MoE 라우터 동결 (Router Freezing)</strong>
-학습 초기 라우터 드리프트로 인한 **부하 붕괴(Load-collapse)**를 방지하기 위한 조치입니다(Figure 11).</p>
+학습 초기 라우터 드리프트로 인한 부하 붕괴(Load-collapse)를 방지하기 위한 조치입니다(Figure 11).</p>
 <ul>
 <li><strong>효과:</strong> 라우터 미동결 시 변동계수(CV)가 2.0으로 급증하고 피크 부하가 16배까지 치솟으나, 동결 시 CV 0.7, 피크 부하 5.5배 수준으로 전문가 부하가 균등하게 유지됩니다.</li>
 </ul>

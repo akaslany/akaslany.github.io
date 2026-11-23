@@ -103,15 +103,15 @@
 <li><strong>Contextual Latent</strong>: 개별 토큰이 아닌 인접 문맥 정보를 포함한 잠재 표현을 확산의 대상으로 삼아 표현력을 극대화합니다.</li>
 </ul>
 <h5 id="3-2-손실-함수-loss-function">3.2 손실 함수 (Loss Function)</h5>
-<p>출력 설계에 따라 손실 함수가 달라집니다. 임베딩 벡터 자체를 예측할 때는 **평균 제곱 오차(MSE)**가 흔하며, 어휘 분포를 직접 출력할 때는 **범주형 교차 엔트로피(CE)**를 쓸 수 있습니다. 특히 CDCD 연구에서 제시된 <strong>스코어 보간(Score interpolation)</strong> 기법은 연속적인 디노이저를 교차 엔트로피 손실로 학습하는 한 경로를 제시했습니다. 2023년 Plaid와 후속 RePlaid 같은 계열은 변분 하한(ELBO/NELBO) 기반 목적함수를 사용합니다. 이 bound에서 유도한 수치는 exact likelihood와 구분해야 합니다.</p>
+<p>출력 설계에 따라 손실 함수가 달라집니다. 임베딩 벡터 자체를 예측할 때는 평균 제곱 오차(MSE)가 흔하며, 어휘 분포를 직접 출력할 때는 범주형 교차 엔트로피(CE)를 쓸 수 있습니다. 특히 CDCD 연구에서 제시된 <strong>스코어 보간(Score interpolation)</strong> 기법은 연속적인 디노이저를 교차 엔트로피 손실로 학습하는 한 경로를 제시했습니다. 2023년 Plaid와 후속 RePlaid 같은 계열은 변분 하한(ELBO/NELBO) 기반 목적함수를 사용합니다. 이 bound에서 유도한 수치는 exact likelihood와 구분해야 합니다.</p>
 <h5 id="3-3-노이즈-스케줄링-noise-schedule">3.3 노이즈 스케줄링 (Noise Schedule)</h5>
-<p>고차원 임베딩 공간에서 정보 소멸은 대단히 비선형적일 수 있습니다. 낮은 노이즈 구간에서는 토큰의 정체성이 거의 유지되다가 특정 구간을 지나면 정보가 급격히 사라질 수 있습니다. 따라서 정보가 활발하게 변하는 구간에 학습 예산을 집중하는 <strong>적응형 noise schedule</strong>이나 **시간 왜곡(Time warping)**이 중요합니다. 엔트로피 또는 decoding error의 변화를 시간에 대해 고르게 만드는 선형화는 대표적 휴리스틱입니다. 다만 “각 단계가 정확히 같은 bits를 복원한다”는 보장이 아니라, 보정된 posterior와 유한-step 오차 조건이 붙는 근사적 설계 해석입니다.</p>
+<p>고차원 임베딩 공간에서 정보 소멸은 대단히 비선형적일 수 있습니다. 낮은 노이즈 구간에서는 토큰의 정체성이 거의 유지되다가 특정 구간을 지나면 정보가 급격히 사라질 수 있습니다. 따라서 정보가 활발하게 변하는 구간에 학습 예산을 집중하는 <strong>적응형 noise schedule</strong>이나 시간 왜곡(Time warping)이 중요합니다. 엔트로피 또는 decoding error의 변화를 시간에 대해 고르게 만드는 선형화는 대표적 휴리스틱입니다. 다만 “각 단계가 정확히 같은 bits를 복원한다”는 보장이 아니라, 보정된 posterior와 유한-step 오차 조건이 붙는 근사적 설계 해석입니다.</p>
 <h5 id="3-4-자기-조건화-self-conditioning">3.4 자기 조건화 (Self-conditioning)</h5>
 <p>이전 단계의 모델 예측값($x_0$의 추정치)을 다음 단계의 입력으로 다시 제공하는 <strong>self-conditioning</strong>은 여러 CDLM 연구에서 큰 경험적 개선이 보고되어 널리 쓰입니다. 이는 정답을 넘기는 것이 아니라 기존의 거친 모델 추정치를 정교화하도록 돕는 방식입니다. 다만 통일 benchmark의 메타분석으로 모든 CDLM에서 효과가 보장된 것은 아닙니다. 또한 $x_t$만을 상태로 보는 표준 stateless/Markov 해석을 벗어나 ODE/SDE solver·likelihood 이론을 복잡하게 합니다. 상태를 $(x_t,c_t)$로 확장해 기술할 수는 있지만 기존 보장이 자동으로 이전되지는 않습니다.</p>
 <hr />
 <h4 id="4-임베딩-기하학의-수치적-안정성과-정보-소멸-현상">4. 임베딩 기하학의 수치적 안정성과 정보 소멸 현상</h4>
 <p>임베딩 공간의 '의미론적 기하학(Semantic Geometry)'은 노이즈 아래에서 어떤 토큰들이 먼저 혼동되는지를 바꿉니다. 그러나 의미가 가까운 토큰(예: cat, dog)을 기하학적으로 가깝게 배치하는 것이 raw 언어모델링 성능에 필수적인지는 여전히 <strong>열린 질문</strong>입니다. 식별성, 의미 구조, 노이즈 강건성이 서로 충돌할 수도 있습니다.</p>
-<p>CANDI 연구는 주로 one-hot 좌표, 독립 Gaussian noise, argmax 식별 설정에서 토큰의 정체성 부패(Identity corruption)와 랭크 저하(Rank degradation)의 시간적 불일치를 **시간적 불협화음(Temporal dissonance)**으로 분석합니다. 이는 clean anchor로 문맥 관계를 학습할 구간과 연속 denoising 신호가 유익한 구간이 어긋날 수 있다는 논문 가설입니다. learned/contextual/spherical embedding을 포함한 모든 CDLM의 보편 법칙은 아니며, 이산 마스킹과 가우시안 노이즈를 결합하는 하이브리드 방식은 한 대응책입니다.</p>
+<p>CANDI 연구는 주로 one-hot 좌표, 독립 Gaussian noise, argmax 식별 설정에서 토큰의 정체성 부패(Identity corruption)와 랭크 저하(Rank degradation)의 시간적 불일치를 시간적 불협화음(Temporal dissonance)으로 분석합니다. 이는 clean anchor로 문맥 관계를 학습할 구간과 연속 denoising 신호가 유익한 구간이 어긋날 수 있다는 논문 가설입니다. learned/contextual/spherical embedding을 포함한 모든 CDLM의 보편 법칙은 아니며, 이산 마스킹과 가우시안 노이즈를 결합하는 하이브리드 방식은 한 대응책입니다.</p>
 <hr />
 <h4 id="5-역사적-변곡점-멸종에서-부활까지-2021-2026">5. 역사적 변곡점: 멸종에서 부활까지 (2021-2026)</h4>
 <ul>
@@ -124,17 +124,17 @@
 <hr />
 <h4 id="6-plaid-1b-64배-효율-저하-보고에-대한-비평적-재검토">6. Plaid-1B '64배 효율 저하' 보고에 대한 비평적 재검토</h4>
 <p>2023년 Plaid 연구에서 보고된 &quot;자기회귀 모델 대비 64배 낮은 효율성&quot;이라는 수치는 오랫동안 CDLM의 한계로 인용되어 왔습니다. 그러나 이 수치를 해석할 때는 엄밀한 제약 조건을 고려해야 합니다.</p>
-<p>해당 분석은 특정 규모($10^{16}$–$10^{19}$ FLOPs) 하에서, 임베딩 레이어와 출력 투영을 제외한 **비임베딩 FLOPs(Non-embedding FLOPs)**를 기준으로 compute-optimal validation NLL을 맞춘 <strong>IsoFLOP 적합</strong> 결과입니다. 즉, Plaid-1B wall-clock이나 생성 속도가 정확히 64배 느렸다는 뜻도, 모델 계열 전체의 고정 상수라는 뜻도 아닙니다. 2026년 RePlaid는 서로 다른 aligned protocol에서 self-conditioning 포함 AR gap을 약 20배로 보고했습니다. 이는 recipe에 따라 격차가 달라질 수 있음을 보여주지만, 두 숫자를 동일조건의 직접 개선치로 읽거나 AR 격차가 해소됐다고 결론내려서는 안 됩니다.</p>
+<p>해당 분석은 특정 규모($10^{16}$–$10^{19}$ FLOPs) 하에서, 임베딩 레이어와 출력 투영을 제외한 비임베딩 FLOPs(Non-embedding FLOPs)를 기준으로 compute-optimal validation NLL을 맞춘 <strong>IsoFLOP 적합</strong> 결과입니다. 즉, Plaid-1B wall-clock이나 생성 속도가 정확히 64배 느렸다는 뜻도, 모델 계열 전체의 고정 상수라는 뜻도 아닙니다. 2026년 RePlaid는 서로 다른 aligned protocol에서 self-conditioning 포함 AR gap을 약 20배로 보고했습니다. 이는 recipe에 따라 격차가 달라질 수 있음을 보여주지만, 두 숫자를 동일조건의 직접 개선치로 읽거나 AR 격차가 해소됐다고 결론내려서는 안 됩니다.</p>
 <hr />
 <h4 id="7-2026년의-재검토-flow-maps와-증류-가능성">7. 2026년의 재검토: Flow Maps와 증류 가능성</h4>
 <p>저자는 최근 CDLM 부활의 주요 동력을 <strong>증류 가능성(Distillability)의 구조적 이점</strong>으로 해석합니다. 이는 진행 중인 역사의 단일 원인으로 입증된 결론은 아닙니다.</p>
 <h5 id="7-1-흐름-사상-flow-maps">7.1 흐름 사상 (Flow Maps)</h5>
-<p>Flow Map은 확산 ODE의 <strong>유한 시간 솔루션 연산자(Finite-time solution operator)</strong> 혹은 **수송 사상(Transport map)**을 직접 근사하는 방식입니다. 이는 기존의 수십 단계에 걸친 노이즈 제거 과정(NFE)을 단일 단계 또는 아주 적은 단계로 압축하려는 시도입니다. 이론적으로 충분한 표현력을 갖춘 공동 사상(Joint map)은 한 단계에서도 토큰 간 상관관계를 표현할 수 있습니다. 다만 <strong>flow map의 1단계 생성은 모든 문장을 단번에 완벽하게 생성한다는 만능열쇠가 아닙니다.</strong> 모델 용량, 학습·증류 오차와 최종 이산화가 실제 품질을 제한합니다.</p>
+<p>Flow Map은 확산 ODE의 <strong>유한 시간 솔루션 연산자(Finite-time solution operator)</strong> 혹은 수송 사상(Transport map)을 직접 근사하는 방식입니다. 이는 기존의 수십 단계에 걸친 노이즈 제거 과정(NFE)을 단일 단계 또는 아주 적은 단계로 압축하려는 시도입니다. 이론적으로 충분한 표현력을 갖춘 공동 사상(Joint map)은 한 단계에서도 토큰 간 상관관계를 표현할 수 있습니다. 다만 <strong>flow map의 1단계 생성은 모든 문장을 단번에 완벽하게 생성한다는 만능열쇠가 아닙니다.</strong> 모델 용량, 학습·증류 오차와 최종 이산화가 실제 품질을 제한합니다.</p>
 <h5 id="7-2-연속적-궤적의-구조적-이점">7.2 연속적 궤적의 구조적 이점</h5>
 <p>다변량 잡음에서 전체 시퀀스로 가는 연속 수송 사상은 이론상 joint correlation을 표현할 수 있습니다. 반면 표준 token-factorized DDLM이 여러 위치를 한 step에서 독립 샘플하면 factorization error가 생길 수 있습니다. 이 차이는 continuous trajectory를 few-step mapping으로 증류하는 구조적 동기지만, 모든 DDLM 증류의 불가능성이나 CDLM의 자동적 우위를 뜻하지 않습니다. 2026년 연구들이 특정 조건에서 경쟁 가능성을 보고했지만, quality-matched wall-clock, 대규모 scaling, post-training 총비용은 여전히 열린 문제입니다.</p>
 <hr />
 <h4 id="8-평가-방법론의-취약성과-메트릭-게이밍의-위험성">8. 평가 방법론의 취약성과 메트릭 게이밍의 위험성</h4>
-<p>CDLM 연구의 아킬레스건은 표준화되지 않은 평가 지표에 있습니다. 특히 외부 AR 모델을 스코어러로 사용하는 **GenPPL(Generative Perplexity)**은 심각한 편향을 초래할 수 있습니다.</p>
+<p>CDLM 연구의 아킬레스건은 표준화되지 않은 평가 지표에 있습니다. 특히 외부 AR 모델을 스코어러로 사용하는 GenPPL(Generative Perplexity)은 심각한 편향을 초래할 수 있습니다.</p>
 <p><strong>Franca–Tong의 반례</strong>에서는 의도적으로 퇴화한 비문 생성기가 reference보다 더 낮은(겉보기에는 좋은) GenPPL을 얻으면서 MAUVE는 매우 낮았습니다. 이는 메트릭 게이밍(Metric gaming)의 위험성을 보여줍니다. 다만 MAUVE 하나도 최종 진실은 아니므로, 품질–다양성 frontier, 분포 지표, task·human 평가와 quality-matched 비용을 함께 봐야 합니다. 이 결과만으로 AR 대체나 보편적인 속도 우위를 단정할 근거는 없습니다.</p>
 <hr />
 <h4 id="9-결론-공학적-다원주의와-새로운-경쟁의-서막">9. 결론: 공학적 다원주의와 새로운 경쟁의 서막</h4>

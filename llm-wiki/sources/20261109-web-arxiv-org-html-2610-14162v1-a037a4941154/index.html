@@ -35,9 +35,9 @@
 <h3 id="next-concept-modeling-ncm-기술-해설-및-성과-분석-보고서">Next-Concept Modeling (NCM) 기술 해설 및 성과 분석 보고서</h3>
 <hr />
 <h4 id="1-개요-overview">1. 개요 (Overview)</h4>
-<p>본 보고서는 이산 잠재 공간(Discrete Latent Space) 기반의 계층적 텍스트 생성 패러다임을 제안한 논문 **&quot;NCM Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation&quot; (arXiv:2610.14162v1, 2026년 10월 9일 제출)**에 대한 수석 연구위원 관점의 기술적 해설 및 성과 평가 분석서이다. 최근 인공지능 분야에서 대규모 언어 모델의 추론 연산(Inference Compute)이 주요 부하로 떠오름에 따라, 단일 토큰 순차 생성 병목을 지닌 자기회귀(Autoregressive, AR) 모델의 대안으로서 확산 언어 모델(Diffusion Language Models, DLMs)에 대한 연구가 가속화되고 있다. 그러나 기존 확산 언어 모델 역시 실제 프러덕션 환경에 적용하는 과정에서 치명적인 구조적 제약을 드러내고 있다.</p>
+<p>본 보고서는 이산 잠재 공간(Discrete Latent Space) 기반의 계층적 텍스트 생성 패러다임을 제안한 논문 &quot;NCM Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation&quot; (arXiv:2610.14162v1, 2026년 10월 9일 제출)에 대한 수석 연구위원 관점의 기술적 해설 및 성과 평가 분석서이다. 최근 인공지능 분야에서 대규모 언어 모델의 추론 연산(Inference Compute)이 주요 부하로 떠오름에 따라, 단일 토큰 순차 생성 병목을 지닌 자기회귀(Autoregressive, AR) 모델의 대안으로서 확산 언어 모델(Diffusion Language Models, DLMs)에 대한 연구가 가속화되고 있다. 그러나 기존 확산 언어 모델 역시 실제 프러덕션 환경에 적용하는 과정에서 치명적인 구조적 제약을 드러내고 있다.</p>
 <p>기존 AR 모델이 $L$개 토큰 시퀀스를 생성하기 위해 $L$번의 순차적 전방향 연산(Forward Pass)을 필요로 하는 반면, DLM은 무작위 마스킹 토큰에 대한 반복적 디노이징(Denoising)을 통해 병렬 샘플링을 시도한다. 하지만 기존 DLM 패러다임은 세 가지 명확한 한계에 봉착해 있다. 첫째, 추론 속도를 위해 샘플링 단계(Number of Function Evaluations, NFE)를 축소할 경우 생성 텍스트의 품질이 급격히 저하된다. 둘째, 매 디노이징 단계마다 전체 시퀀스 길이 $L$을 고정적으로 재처리해야 하며, 양방향 어텐션(Bidirectional Attention) 특성상 기존 AR 모델의 Key-Value(KV) 캐싱 메커니즘을 직접 활용할 수 없어 단계당(Per-step) 연산 비용이 매우 높다. 셋째, 타깃 디노이징 궤적을 학습하기 위해 수천억 개 이상의 토큰 예산을 수백만 번 반복 노출해야 하는 과도한 학습 데이터 요구량이 존재한다.</p>
-<p>스탠퍼드 대학교와 Together AI 연구진이 제안한 **Next-Concept Modeling (NCM)**은 이러한 한계를 극복하기 위해 <strong>거친 수준에서 세밀한 수준으로(Coarse-to-Fine)</strong> 이행하는 2단계(Two-stage) 텍스트 생성 패러다임을 창안하였다. NCM은 1단계에서 다중 스케일 잔여 VQ-VAE(Multiscale Residual VQ-VAE)를 통해 텍스트를 거친 수준부터 세밀한 수준까지의 $K$개 이산 코드(Discrete Codes) 계층 구조로 부호화한다. 이어서 2단계에서는 NCM 트랜스포머 생성기가 이전 계층의 누적 재구성 정보를 조건(Conditioning)으로 받아, 해당 계층 내부의 모든 이산 코드를 단 한 번의 전방향 연산으로 병렬 예측한다. NCM은 복잡한 증류(Distillation) 절차 없이도 $K \ll L$ 단계만으로 고품질 및 고다양성의 텍스트를 생성하며, 초기 거친 계층에서의 압축된 코드 처리로 추론 연산 비용과 학습 토큰 예산을 격혁적으로 절감한다.</p>
+<p>스탠퍼드 대학교와 Together AI 연구진이 제안한 Next-Concept Modeling (NCM)은 이러한 한계를 극복하기 위해 <strong>거친 수준에서 세밀한 수준으로(Coarse-to-Fine)</strong> 이행하는 2단계(Two-stage) 텍스트 생성 패러다임을 창안하였다. NCM은 1단계에서 다중 스케일 잔여 VQ-VAE(Multiscale Residual VQ-VAE)를 통해 텍스트를 거친 수준부터 세밀한 수준까지의 $K$개 이산 코드(Discrete Codes) 계층 구조로 부호화한다. 이어서 2단계에서는 NCM 트랜스포머 생성기가 이전 계층의 누적 재구성 정보를 조건(Conditioning)으로 받아, 해당 계층 내부의 모든 이산 코드를 단 한 번의 전방향 연산으로 병렬 예측한다. NCM은 복잡한 증류(Distillation) 절차 없이도 $K \ll L$ 단계만으로 고품질 및 고다양성의 텍스트를 생성하며, 초기 거친 계층에서의 압축된 코드 처리로 추론 연산 비용과 학습 토큰 예산을 격혁적으로 절감한다.</p>
 <hr />
 <h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
 <h5 id="2-1-기존-확산-언어-모델-dlm-의-한계와-ncm의-연구-동기">2.1 기존 확산 언어 모델(DLM)의 한계와 NCM의 연구 동기</h5>
@@ -85,7 +85,7 @@ DUO, MDLM, CANDI 등 우수한 확산 베이스라인 모델들은 OpenWebText �
 <p>양자화된 코드북 임베딩 $e_k(r_k)$는 재구성 연산자 $R_k$를 통해 입력 시퀀스 길이 $L$ 차원으로 복원되어 누적 재구성 벡터 $\hat{z}^{(k)}$에 합산되며, 잔여 벡터는 계속 업데이트된다 (Equation 8):</p>
 <p>$$\hat{z}^{(k)} = \hat{z}^{(k-1)} + R_k(e_k(r_k)), \quad z^{(k)} = z - \hat{z}^{(k)}$$</p>
 <p>이때 계층별 코드 길이는 거친 스케일에서 세밀한 스케일로 확장되는 $\ell_1 &lt; \ell_2 &lt; \dots &lt; \ell_K = L$ 관계를 형성한다.</p>
-<p>초기 거친 계층(Coarse levels)이 고차원 의미 정보를 우선적으로 담아내도록 유도하기 위해 학습 시 무작위 계층 컷오프 $k \in {1, \dots, K}$를 적용하는 **중첩 드롭아웃(Nested Dropout)**을 적용한다. 토크나이저의 학습 손실 함수 $\mathcal{L}_{\text{tok}}$는 교차 엔트로피 재구성 손실과 커미트먼트(Commitment) 및 양자화 MSE 손실의 합으로 정의된다 (Equation 9):</p>
+<p>초기 거친 계층(Coarse levels)이 고차원 의미 정보를 우선적으로 담아내도록 유도하기 위해 학습 시 무작위 계층 컷오프 $k \in {1, \dots, K}$를 적용하는 중첩 드롭아웃(Nested Dropout)을 적용한다. 토크나이저의 학습 손실 함수 $\mathcal{L}_{\text{tok}}$는 교차 엔트로피 재구성 손실과 커미트먼트(Commitment) 및 양자화 MSE 손실의 합으로 정의된다 (Equation 9):</p>
 <p>$$\mathcal{L}<em>{\text{tok}} = -\frac{1}{L} \sum</em>{i=1}^L \log p_\psi(x^i \mid \hat{z}^{(k)}) + \beta \text{MSE}(z, \text{sg}[\hat{z}^{(k)}]) + \text{MSE}(\text{sg}[z], \hat{z}^{(k)})$$</p>
 <p>(여기서 $\text{sg}$는 Stop-gradient 연산자이며, $\beta$는 커미트먼트 손실 가중치이다).</p>
 <h6 id="stage-2-next-concept-트랜스포머-생성기-next-concept-transformer-generator">Stage 2: Next-Concept 트랜스포머 생성기 (Next-Concept Transformer Generator)</h6>
@@ -129,7 +129,7 @@ DUO, MDLM, CANDI 등 우수한 확산 베이스라인 모델들은 OpenWebText �
 <li><strong>WMT14 번역 (Unguided):</strong> NCM(120M, 11 NFE)은 BLEU <strong>22.6</strong>을 기록, 비AR 모델 중 E2D2(64 NFE, BLEU 24.8)에 이어 2위를 차지했으나 연산 단계(NFE)는 <strong>5.8배</strong> 적었다. NCM + MBR(132 NFE) 적용 시 BLEU <strong>25.2</strong>를 기록하여 AR 기준 모델과 완벽히 동일한 성능 수준에 도달하였다.</li>
 </ul>
 <h6 id="3-복합-제약-추론-reasoning---sudoku">3) 복합 제약 추론 (Reasoning - Sudoku)</h6>
-<p>81개 칸의 전역적 상호 제약 조건을 동시에 충족해야 하는 스우도쿠(Sudoku) 추론 문제에서 NCM(25M, 12 NFE)은 난이도별 보드 완전 해결 비율(Accuracy %)에서 **Easy 99.5%, Medium 96.5%, Hard 86.1%**라는 최고 성과를 달성하였다 (Section 4.4, Table 3, Figure 20).</p>
+<p>81개 칸의 전역적 상호 제약 조건을 동시에 충족해야 하는 스우도쿠(Sudoku) 추론 문제에서 NCM(25M, 12 NFE)은 난이도별 보드 완전 해결 비율(Accuracy %)에서 Easy 99.5%, Medium 96.5%, Hard 86.1%라는 최고 성과를 달성하였다 (Section 4.4, Table 3, Figure 20).</p>
 <h6 id="sudoku-성능-광범위-비교-데이터-accuracy">Sudoku 성능 광범위 비교 데이터 (Accuracy %)</h6>
 <ul>
 <li><strong>AR Sample (128 NFE):</strong> Easy 13.9% / Medium 5.1% / Hard 0.6%</li>
@@ -216,7 +216,7 @@ DUO, MDLM, CANDI 등 우수한 확산 베이스라인 모델들은 OpenWebText �
 <h6 id="모델-스케일링-및-테스트-시간-스케일링-model-test-time-scaling">모델 스케일링 및 테스트 시간 스케일링 (Model &amp; Test-Time Scaling)</h6>
 <ul>
 <li><strong>모델 스케일링 (Model Scaling):</strong> 고정된 토크나이저 위에서 생성기 파라미터를 97M, 317M, 725M으로 확장함에 따라 동일한 학습 토큰 예산 조건하에서도 LM1B 데이터셋의 Gen. PPL이 93.05에서 지속적으로 하향 개선됨을 확인하였다 (Figure 6(a)).</li>
-<li><strong>테스트 시간 스케일링 및 추론 예산의 효율적 재배치 (Test-Time Scaling &amp; Compute Budget Reallocation):</strong> NCM의 적은 NFE와 계층별 짧은 시퀀스 처리에 따른 전반적인 추론 연산 절감 효과는, 남은 추론 시간 예산(Inference Compute Budget)을 다중 후보 생성 및 MBR(최소 베이즈 리스크) 검증으로 재투입(Re-invest)할 수 있는 결정적 기회를 제공한다. XSum 실험에서 MBR 후보 수 $K$를 1개에서 256개까지 확장할 때 ROUGE-1 점수는 4.48점 향상되었다 (Figure 6(b), Figure 15). 결과적으로 동일한 벽시계 추론 시간 예산 내에서 단일 고비용 디노이징을 수행하는 기존 DLM을 유의미하게 압도하는 **&quot;추론 예산 재배치 우위&quot;**를 확립하였다.</li>
+<li><strong>테스트 시간 스케일링 및 추론 예산의 효율적 재배치 (Test-Time Scaling &amp; Compute Budget Reallocation):</strong> NCM의 적은 NFE와 계층별 짧은 시퀀스 처리에 따른 전반적인 추론 연산 절감 효과는, 남은 추론 시간 예산(Inference Compute Budget)을 다중 후보 생성 및 MBR(최소 베이즈 리스크) 검증으로 재투입(Re-invest)할 수 있는 결정적 기회를 제공한다. XSum 실험에서 MBR 후보 수 $K$를 1개에서 256개까지 확장할 때 ROUGE-1 점수는 4.48점 향상되었다 (Figure 6(b), Figure 15). 결과적으로 동일한 벽시계 추론 시간 예산 내에서 단일 고비용 디노이징을 수행하는 기존 DLM을 유의미하게 압도하는 &quot;추론 예산 재배치 우위&quot;를 확립하였다.</li>
 </ul>
 <h6 id="계층-구조-탐색-및定性-분석-qualitative-probing">계층 구조 탐색 및定性 분석 (Qualitative Probing)</h6>
 <p>TinyStories(12계층 모델) 기반의 거친 계층 코드 조작 실험(Appendix H, Figures 17–19)을 통해 NCM 표현 공간의 성질이 명백히 입증되었다.</p>

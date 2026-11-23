@@ -147,9 +147,9 @@
 <li>
 <p><strong>쓰기 및 읽기 연산 복잡도 및 동기화 메커니즘</strong> <code>[사실]</code></p>
 <ul>
-<li><strong>푸시 파이프라인 및 쓰기 복잡도</strong>: 푸시 수신 시 Pando는 데이터를 로컬 리포지토리에 풀지 않고 **단일 패스 디코딩(Single pass decode)**으로 검증하면서 블롭 저장소로 직접 스트리밍합니다. 검증 완료 후 메타데이터 저장소의 레퍼런스 포인터를 변경할 때 **원자적 멀티 키 트랜잭션(Multi-key transaction)**을 사용하여 'Read-your-own-write' 일관성을 보장합니다. 이 연산은 메타데이터 읽기 및 쓰기에 있어 **$O(1)$**의 상수 시간 복잡도를 가집니다.</li>
+<li><strong>푸시 파이프라인 및 쓰기 복잡도</strong>: 푸시 수신 시 Pando는 데이터를 로컬 리포지토리에 풀지 않고 단일 패스 디코딩(Single pass decode)으로 검증하면서 블롭 저장소로 직접 스트리밍합니다. 검증 완료 후 메타데이터 저장소의 레퍼런스 포인터를 변경할 때 원자적 멀티 키 트랜잭션(Multi-key transaction)을 사용하여 'Read-your-own-write' 일관성을 보장합니다. 이 연산은 메타데이터 읽기 및 쓰기에 있어 $O(1)$의 상수 시간 복잡도를 가집니다.</li>
 <li><strong>대규모 푸시 시 메타데이터 처리</strong>: 매우 큰 푸시의 경우, 푸시 크기와 무관하게 $O(1)$ 연산 성능을 유지하기 위해 동기적(Synchronous) 메타데이터 업데이트 시에는 커밋의 일부 서브셋(Subset)만 기록하며, 컴팩션 스케줄링 등 기타 작업은 동일 트랜잭션 내 비동기(Asynchronous) 영역으로 분리하여 처리합니다.</li>
-<li><strong>읽기 연산 복잡도</strong>: 클라이언트가 클론/패치 시 제시하는 <code>haves</code>(보유 커밋)와 <code>wants</code>(요청 커밋) 사이의 가장 짧은 레퍼런스 버전 거리를 $\Delta$라 할 때, 팩파일 선택을 위한 메타데이터 조회 복잡도는 **$O(\log \Delta)$**입니다.</li>
+<li><strong>읽기 연산 복잡도</strong>: 클라이언트가 클론/패치 시 제시하는 <code>haves</code>(보유 커밋)와 <code>wants</code>(요청 커밋) 사이의 가장 짧은 레퍼런스 버전 거리를 $\Delta$라 할 때, 팩파일 선택을 위한 메타데이터 조회 복잡도는 $O(\log \Delta)$입니다.</li>
 </ul>
 </li>
 <li>
@@ -172,7 +172,7 @@
 <p><strong>캐싱 인프라 체계 (Express Service)</strong> <code>[사실]</code></p>
 <ul>
 <li><strong>역할 및 구조</strong>: Express는 Pando의 읽기 성능을 결정짓는 핵심 지역 캐싱 계층으로, 블롭 저장소를 캐싱하는 Express 서비스와 메타데이터 저장소를 캐싱하는 별도 서비스로 구성됩니다.</li>
-<li><strong><code>packfile-uri</code> 우회 메커니즘</strong>: Git 프로토콜은 패치/클론 시 단 하나의 팩파일만 HTTP 응답 본문에 전송할 수 있도록 제한되어 있습니다. Pando는 Git의 <code>packfile-uri</code> 기능을 활용하여 메인 HTTP 응답 본문에는 **&quot;빈 팩파일(empty packfile inline)&quot;**을 전송하고, 실제 복수 팩파일 데이터는 Express 캐시 서버의 URI 주소로 리다이렉트하여 다운로드하도록 처리합니다.</li>
+<li><strong><code>packfile-uri</code> 우회 메커니즘</strong>: Git 프로토콜은 패치/클론 시 단 하나의 팩파일만 HTTP 응답 본문에 전송할 수 있도록 제한되어 있습니다. Pando는 Git의 <code>packfile-uri</code> 기능을 활용하여 메인 HTTP 응답 본문에는 &quot;빈 팩파일(empty packfile inline)&quot;을 전송하고, 실제 복수 팩파일 데이터는 Express 캐시 서버의 URI 주소로 리다이렉트하여 다운로드하도록 처리합니다.</li>
 <li><strong>대역폭 포화 성능</strong>: 일관성 해싱(Consistent hashing)을 통해 팩파일 요청을 Express 서버로 라우팅하며, <strong>99% 이상의 디스크 캐시 적중률</strong>을 달성합니다. 이를 통해 서버 가용 대역폭을 최대로 활용하여 표준 클라우드 VM 환경에서 <strong>10 Gbps 네트워크 대역폭 포화(Line-rate fetch)</strong> 성능을 검증했습니다.</li>
 </ul>
 </li>

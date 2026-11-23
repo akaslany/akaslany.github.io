@@ -28,7 +28,7 @@
 <p>본 보고서는 Pi AgentHarness v2의 아키텍처 설계 사양과 상세 구현 계획을 수석 시스템 아키텍트의 관점에서 분석한 기술 문서입니다. 본 문서는 분산 에이전트 환경에서 시스템 내구성을 보장하기 위한 상태 관리 규칙, 실행 모델, 복구 메커니즘 및 확장 체계에 대한 엄격한 명세를 정의합니다.</p>
 <hr />
 <h4 id="1-문서의-성격-및-증거-등급-nature-of-document-evidence-grade">1. 문서의 성격 및 증거 등급 (Nature of Document &amp; Evidence Grade)</h4>
-<p>본 문서는 Durable AgentHarness v2의 <strong>설계 사양(Design Specification)</strong> 및 **구현 계획(Implementation Plan)**을 정의하며, 시스템 아키텍처의 목표, 타입/저장소 계약, 불변식(Invariants), 그리고 충돌 지점(Crash-site)별 복구 의미론을 다룹니다.</p>
+<p>본 문서는 Durable AgentHarness v2의 <strong>설계 사양(Design Specification)</strong> 및 구현 계획(Implementation Plan)을 정의하며, 시스템 아키텍처의 목표, 타입/저장소 계약, 불변식(Invariants), 그리고 충돌 지점(Crash-site)별 복구 의미론을 다룹니다.</p>
 <p>본 보고서의 모든 기술적 사실은 GitHub 커밋 <code>f7f933c6e0a127bd2b56336338512092fec0399d</code> 시점의 소스 컨텍스트를 절대적 근거로 합니다.</p>
 <p><strong>주의 및 경고:</strong>
 본 문서에 기술된 설계상의 보장(Guarantees)과 목표(Goals)는 시스템이 지향하는 기술적 계약입니다. 이를 현재의 실제 구현 완료 상태, 테스트 통과 여부, 또는 실운용 환경(Production)에서의 검증 증거와 동일시해서는 안 됩니다. 특히 문서 하단에 명시된 H/J/R/I/C/N/O 구현 트랙 중 체크되지 않은 항목은 실체화되지 않은 설계 단계의 기능임을 명확히 인지해야 합니다.</p>
@@ -41,14 +41,14 @@
 <li><strong>레인별 작업 로그 (Per-lane Operation Logs):</strong> 내구성 구현의 핵심으로, 작업 시작, 단계 시도, 도구 시작/완료 등 복구에 필요한 실행 의도(Intent)를 기록합니다. 정상 실행 중에는 읽지 않으며, 오직 복구 시에만 참조되는 능동적 상태입니다.</li>
 <li><strong>전역 사실 (Global Facts):</strong> 세션 이름, 엔트리 라벨 등 세션 범위의 설정 값입니다. 추가 전용 이력을 유지하되 조회 시 최신 값을 반환하는 수동적 상태입니다.</li>
 </ol>
-<p>이 구조의 핵심 불변식은 **&quot;오퍼레이션 로그 레코드는 트리에 영향을 주지 않는다&quot;**는 점입니다. 로그를 모두 삭제하더라도 유효한 대화 트리는 보존되어야 하며, 트리에 대화 외의 상태를 넣지 않음으로써 데이터 오염을 원천 차단합니다.</p>
+<p>이 구조의 핵심 불변식은 &quot;오퍼레이션 로그 레코드는 트리에 영향을 주지 않는다&quot;는 점입니다. 로그를 모두 삭제하더라도 유효한 대화 트리는 보존되어야 하며, 트리에 대화 외의 상태를 넣지 않음으로써 데이터 오염을 원천 차단합니다.</p>
 <hr />
 <h4 id="3-실행-모델-병렬성-및-단일-작성자-원칙-execution-model-parallelism-single-writer">3. 실행 모델: 병렬성 및 단일 작성자 원칙 (Execution Model: Parallelism &amp; Single Writer)</h4>
 <p>시스템은 효율적인 작업 처리를 위해 병렬 실행을 지원하면서도, 데이터 정합성을 위해 엄격한 <strong>단일 작성자(Single Writer)</strong> 모델을 채택합니다.</p>
 <ul>
 <li><strong>병렬 레인 실행:</strong> 하나의 세션 내에서 여러 레인이 병렬로 실행될 수 있습니다. 예를 들어, 슬랙 채널이 세션이라면 각 스레드는 독립적인 레인이 되어 동시에 작업을 수행합니다.</li>
 <li><strong>단일 작성자(Single Writer) 원칙:</strong> 하네스 하나가 한 번에 하나의 세션만 작성할 수 있습니다. 서빙 레이어는 특정 세션에 대한 모든 트래픽을 해당 하네스를 보유한 단일 프로세스로 라우팅하여 멀티 라이터 충돌을 방지합니다.</li>
-<li><strong>레인 뮤테이션 라인(Lane Mutation Line):</strong> 각 레인의 상태 변경 작업은 프로세스 내 로컬 FIFO(Promise Chain)인 '뮤테이션 라인'을 통해 선형화(Linearized)됩니다. 이는 **&quot;검증(Validate) → 내구성 있는 쓰기(Durable Write) → 메모리 상태 업데이트(Update State)&quot;**의 3단계 모델을 따르며, 결정 단계에서 데이터가 최신 상태임을 보장하여 경쟁 상태(Race Condition)를 차단합니다. 각 레인은 최대 하나의 'Open Operation'만 가질 수 있습니다.</li>
+<li><strong>레인 뮤테이션 라인(Lane Mutation Line):</strong> 각 레인의 상태 변경 작업은 프로세스 내 로컬 FIFO(Promise Chain)인 '뮤테이션 라인'을 통해 선형화(Linearized)됩니다. 이는 &quot;검증(Validate) → 내구성 있는 쓰기(Durable Write) → 메모리 상태 업데이트(Update State)&quot;의 3단계 모델을 따르며, 결정 단계에서 데이터가 최신 상태임을 보장하여 경쟁 상태(Race Condition)를 차단합니다. 각 레인은 최대 하나의 'Open Operation'만 가질 수 있습니다.</li>
 </ul>
 <hr />
 <h4 id="4-내구성-메커니즘-intent-before-effect-durability-mechanism">4. 내구성 메커니즘: Intent-before-effect (Durability Mechanism)</h4>
@@ -71,7 +71,7 @@
 <ul>
 <li><strong>주입된 경계(Injected Boundary):</strong> Durable Write, Provider 요청, 도구 실행, Hook 호출, 타이머 등 모든 외부 효과는 주입된 경계를 통과합니다.</li>
 <li><strong>제어 프리미티브:</strong> Manual Drive 모드에서 하네스는 각 외부 효과 직전에 실행을 멈춥니다(Park). 테스트 코드는 <code>peekAction()</code>으로 다음 단계를 관찰하고, <code>executeAction()</code>으로 한 단계씩 진행하거나 <code>runToCompletion()</code>으로 전체를 수행할 수 있습니다.</li>
-<li><strong>설계 목적:</strong> 이 모드의 궁극적 목적은 매 **충돌 경계(Crash Boundary)**를 결정론적으로 시험하는 것입니다. 특정 지점에서 실행을 멈추고 세션을 닫았다가 다시 여는 방식으로, 어떠한 중단 시점에서도 시스템이 올바르게 복구되는지 검증합니다.</li>
+<li><strong>설계 목적:</strong> 이 모드의 궁극적 목적은 매 충돌 경계(Crash Boundary)를 결정론적으로 시험하는 것입니다. 특정 지점에서 실행을 멈추고 세션을 닫았다가 다시 여는 방식으로, 어떠한 중단 시점에서도 시스템이 올바르게 복구되는지 검증합니다.</li>
 </ul>
 <hr />
 <h4 id="6-복구-프로세스의-구분-restore-vs-resume-recovery-logic">6. 복구 프로세스의 구분: Restore vs Resume (Recovery Logic)</h4>
@@ -89,7 +89,7 @@
 <li><strong>Events (이벤트):</strong> 시스템 상태 변화를 관찰하는 <strong>수동적 관찰 채널</strong>입니다. 실행 흐름에 영향을 줄 수 없으며, 영구 저장되지 않고(Non-persisted), 복구 시 재실행되지도 않습니다(Non-replayed).</li>
 </ul>
 <p><strong>멱등성 요구사항:</strong>
-Hook 자체의 외부 사이드 이펙트에 대한 <strong>'Exactly-once' 보장은 설계 목표가 아닙니다(Non-goal).</strong> 커밋 직전 충돌 시 Hook이 재실행될 수 있으므로, Hook 내부에서 발생하는 외부 효과(HTTP 호출 등)는 반드시 **멱등성(Idempotent)**을 가져야 합니다.</p>
+Hook 자체의 외부 사이드 이펙트에 대한 <strong>'Exactly-once' 보장은 설계 목표가 아닙니다(Non-goal).</strong> 커밋 직전 충돌 시 Hook이 재실행될 수 있으므로, Hook 내부에서 발생하는 외부 효과(HTTP 호출 등)는 반드시 멱등성(Idempotent)을 가져야 합니다.</p>
 <hr />
 <h4 id="8-지연된-요청-처리-deferred-provider-requests">8. 지연된 요청 처리 (Deferred Provider Requests)</h4>
 <p>긴 시간이 소요되는 모델 요청을 처리하기 위해 <code>Deferred provider requests</code> 메커니즘을 사용합니다.</p>

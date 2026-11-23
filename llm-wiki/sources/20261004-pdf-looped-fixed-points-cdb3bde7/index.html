@@ -112,7 +112,7 @@ $$\tilde{z} \leftarrow \bar{z} + (f - \text{stopgrad}(f))$$
 </ol>
 <hr />
 <h5 id="3-고정점-형성을-위한-두-가지-학습-개선책-section-4-algorithm-2">3. 고정점 형성을 위한 두 가지 학습 개선책 (Section 4, Algorithm 2)</h5>
-<p>고정점의 형성을 결정하는 두 가지 핵심 요소는 **깊이 사전분포(Depth Prior)**와 **입력 주입(Input Injection)**입니다. 기존 고정 깊이 학습은 KV 캐시 공유를 파괴하고, Huginn의 포아송-로그정규(PLN) 고정 사전분포는 목표 깊이에서의 감독 신호를 지나치게 희석시킵니다. 한편 기존 입력 주입 방식은 이월 상태(Carryover State)가 입력 방향의 성분을 가져 입력 신호를 자발적으로 증폭하거나 상쇄시키는 결함이 존재했습니다.</p>
+<p>고정점의 형성을 결정하는 두 가지 핵심 요소는 깊이 사전분포(Depth Prior)와 입력 주입(Input Injection)입니다. 기존 고정 깊이 학습은 KV 캐시 공유를 파괴하고, Huginn의 포아송-로그정규(PLN) 고정 사전분포는 목표 깊이에서의 감독 신호를 지나치게 희석시킵니다. 한편 기존 입력 주입 방식은 이월 상태(Carryover State)가 입력 방향의 성분을 가져 입력 신호를 자발적으로 증폭하거나 상쇄시키는 결함이 존재했습니다.</p>
 <pre><code>[ 기존 주입 방식 ]   carryover (입력 방향 성분 포함)  +  input  ==&gt;  증폭 또는 상쇄 발생
 [ 직교 입력 주입 ]  Q_q(carryover) (입력 방향 수직)     +  input  ==&gt;  항상 일정 세기 유지
 </code></pre>
@@ -141,9 +141,9 @@ $$Q_{q_t} q_t = \left( I - \frac{q_t q_t^\top}{|q_t|_2^2 + \epsilon} \right) q_t
 <hr />
 <h5 id="4-실험-조건-및-세부-측정-결과-section-5-table-1-5-appendix-table-6-8">4. 실험 조건 및 세부 측정 결과 (Section 5, Table 1~5, Appendix Table 6, 8)</h5>
 <h6 id="실험-조건의-독립성-명시">실험 조건의 독립성 명시</h6>
-<p>실험에 사용된 <strong>반복 횟수(Recurrence Count $R$)</strong>, <strong>역전파 창(Backprop Window $b$)</strong>, <strong>학습 토큰 예산(Training Token Budget)</strong>, **캐시 은행 수(Cache Bank Count)**는 서로 독립적으로 설정되는 실험 조건입니다.</p>
+<p>실험에 사용된 <strong>반복 횟수(Recurrence Count $R$)</strong>, <strong>역전파 창(Backprop Window $b$)</strong>, <strong>학습 토큰 예산(Training Token Budget)</strong>, 캐시 은행 수(Cache Bank Count)는 서로 독립적으로 설정되는 실험 조건입니다.</p>
 <h6 id="파라미터-규모-및-어댑터-레이어-구별">파라미터 규모 및 어댑터 레이어 구별</h6>
-<p>본문에서 언급된 <strong>일억(100M / Small)</strong>, <strong>사억(400M / Medium)</strong>, **십육억(1.6B / Large)**은 반올림된 비임베딩 중심의 주요 파라미터 규모입니다. 루프 모델이 일반 Untied 4 모델 대비 소량의 파라미터가 더 많은 이유는 Huginn 아키텍처 특유의 $W_{\text{lin}}$ 차원 적응용 입력 어댑터(Input Adapter) 레이어가 추가되었기 때문입니다 (부록 Table 6).</p>
+<p>본문에서 언급된 <strong>일억(100M / Small)</strong>, <strong>사억(400M / Medium)</strong>, 십육억(1.6B / Large)은 반올림된 비임베딩 중심의 주요 파라미터 규모입니다. 루프 모델이 일반 Untied 4 모델 대비 소량의 파라미터가 더 많은 이유는 Huginn 아키텍처 특유의 $W_{\text{lin}}$ 차원 적응용 입력 어댑터(Input Adapter) 레이어가 추가되었기 때문입니다 (부록 Table 6).</p>
 <ul>
 <li><strong>Small (S):</strong> 본문 표기 100M | Untied 4 비임베딩 0.104B (전체 0.301B) vs. Looped 비임베딩 0.106B (전체 0.304B)</li>
 <li><strong>Medium (M):</strong> 본문 표기 400M | Untied 4 비임베딩 0.415B (전체 0.810B) vs. Looped 비임베딩 0.425B (전체 0.819B)</li>
@@ -158,11 +158,11 @@ $$Q_{q_t} q_t = \left( I - \frac{q_t q_t^\top}{|q_t|_2^2 + \epsilon} \right) q_t
 <h6 id="구체적-측정-결과-및-해당-조건-귀속">구체적 측정 결과 및 해당 조건 귀속</h6>
 <ul>
 <li><strong>캐시 절감 (Table 2):</strong> 5회 반복 조건($R=5$, 논리적 깊이 12블록)에서 물리적 블록당 1개씩 총 4개의 종단 캐시만 유지함으로써, 12개 캐시 은행을 유지해야 하는 기존 방식 대비 <strong>3배($3\times$) 캐시 감소</strong>를 달성하였습니다.</li>
-<li><strong>고정 깊이 모델의 취약성 (Section 1, Table 2, Appendix Table 8):</strong> 고정 깊이 전체 역전파 모델(Fixed Depth $R=5$)은 종단 캐시 공유 적용 시 성능이 심각하게 붕괴합니다. 1.6B(Large) 규모에서 GSM8K 정확도는 전체 캐시 사용 시 50.6% (Table 8)에서 종단 캐시 공유 시 **21.2% (Table 2)**로 급락했습니다.</li>
+<li><strong>고정 깊이 모델의 취약성 (Section 1, Table 2, Appendix Table 8):</strong> 고정 깊이 전체 역전파 모델(Fixed Depth $R=5$)은 종단 캐시 공유 적용 시 성능이 심각하게 붕괴합니다. 1.6B(Large) 규모에서 GSM8K 정확도는 전체 캐시 사용 시 50.6% (Table 8)에서 종단 캐시 공유 시 21.2% (Table 2)로 급락했습니다.</li>
 <li><strong>프리필 가속 및 성능 (Table 5):</strong> 8천(8K) 토큰 프롬프트 조건에서 증류된 프리필을 적용할 경우 교사 모델 대비 <strong>최대 1.79배 프리필 가속</strong>을 달성했습니다. 하위 과제 평균 점수는 교사 모델 대비 Small에서 1.0점, Medium에서 2.3점, Large에서 <strong>4.5점 저하</strong>되었습니다.</li>
 <li><strong>강화학습 가속, 일반화 및 주의사항 (Table 4):</strong> 강화학습(Dr. GRPO) 수행 시 종단 상태 재사용(Reuse + Neumann-4)을 적용하면 스코어링 및 역전파 시간이 <strong>약 2배 (GSM8K에서 1.99배, MBPP+에서 2.02배)</strong> 단축되었습니다.
 <ul>
-<li><em>범용적 일반화 성과:</em> GSM8K 데이터로 학습한 모델이 학습에 사용되지 않은 MATH500 평가에서도 pass@1 점수가 13.40%에서 **17.82%~18.77%**로 상향되어, 고정점 상태 재사용 방식이 수학적 추론 능력의 범용적 일반화를 손상시키지 않음이 검증되었습니다.</li>
+<li><em>범용적 일반화 성과:</em> GSM8K 데이터로 학습한 모델이 학습에 사용되지 않은 MATH500 평가에서도 pass@1 점수가 13.40%에서 17.82%~18.77%로 상향되어, 고정점 상태 재사용 방식이 수학적 추론 능력의 범용적 일반화를 손상시키지 않음이 검증되었습니다.</li>
 <li><em>실습상 주의사항:</em> 강화학습의 전체 수행 시간(Wall-clock time)은 롤아웃(Rollout) 응답 생성 단계가 지배하므로, MBPP+ 코드 생성 실험 등에서는 스코어링/역전파 시간 단축에도 불구하고 전체 학습 시간이 비례하여 빠르고 획기적으로 줄어들지는 않았음을 명시합니다.</li>
 </ul>
 </li>

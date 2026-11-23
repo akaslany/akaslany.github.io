@@ -103,7 +103,7 @@ $$S_t = \alpha_t(I - \beta_t k_t k_t^\top)S_{t-1} + \beta_t k_t v_t^\top$$
 <h4 id="5-qwen-sparse-attention-qsa-마이크로-블록-기반-정밀-검색">5. Qwen Sparse Attention (QSA): 마이크로 블록 기반 정밀 검색</h4>
 <p>하이브리드 구조에서 4개 레이어 중 1개는 전역 정보의 정밀한 검색을 위해 QSA를 사용합니다. QSA는 기존 DSA가 가졌던 인덱싱 비용 문제를 해결했습니다.</p>
 <ul>
-<li><strong>인덱싱 연산 최적화:</strong> QSA는 시퀀스를 <strong>마이크로 블록(Micro-block)</strong> 단위로 집계하는 Lightweight Indexer를 도입했습니다. 이를 통해 인덱싱 연산 비용을 기존 $O(n^2)$에서 **$O(n^2/r)$**로 대폭 감축했습니다 (여기서 $r=4$는 압축률).</li>
+<li><strong>인덱싱 연산 최적화:</strong> QSA는 시퀀스를 <strong>마이크로 블록(Micro-block)</strong> 단위로 집계하는 Lightweight Indexer를 도입했습니다. 이를 통해 인덱싱 연산 비용을 기존 $O(n^2)$에서 $O(n^2/r)$로 대폭 감축했습니다 (여기서 $r=4$는 압축률).</li>
 <li><strong>동작 메커니즘:</strong> 인덱서가 마이크로 블록 레벨에서 중요도를 산출하면, Sparse Core Attention은 선택된 영역에 대해서만 정밀 연산을 수행합니다.</li>
 <li><strong>저자 측 kernel benchmark:</strong> 기술보고서는 특정 1M-token 실험에서 dense attention 대비 <strong>Prefill 7.6배, Decode 4.9배</strong>를 보고합니다. 하드웨어·batch·framework를 바꾼 독립 실측으로 일반화할 수 없습니다.</li>
 <li><strong>MTP와의 통합:</strong> MTP 모듈은 QSA의 인덱스를 재사용함으로써 투기적 디코딩(Speculative Decoding)의 효율을 높이고 추론 지연 시간을 개선합니다.</li>
@@ -112,7 +112,7 @@ $$S_t = \alpha_t(I - \beta_t k_t k_t^\top)S_{t-1} + \beta_t k_t v_t^\top$$
 <h4 id="6-4-branch-gated-residual-gr-신호-희석-방지와-학습-안정화">6. 4-branch Gated Residual (GR): 신호 희석 방지와 학습 안정화</h4>
 <p>심층 네트워크에서 초기 레이어의 신호가 희석되는 병목 현상을 해결하기 위해 잔차 연결 구조를 4분기 병렬 경로로 확장한 GR 설계를 도입했습니다.</p>
 <ul>
-<li><strong>이미지 분석 [SOURCE_IMAGE_3] (Figure 7):</strong> 아키텍처 분석 결과, 4개의 분기 중 **Branch 0($b_0$)**는 레이어 0 GDN의 출력을 레이어 10~19의 Softmax Attention 레이어로 직접 전달하는 **'전용 장거리 경로(Long-range pathway)'**로 기능합니다. 이는 심층부 레이어가 초기 문맥의 핵심 정보를 직접 참조하게 함으로써 전역적 문맥 통합력을 극대화합니다.</li>
+<li><strong>이미지 분석 [SOURCE_IMAGE_3] (Figure 7):</strong> 아키텍처 분석 결과, 4개의 분기 중 Branch 0($b_0$)는 레이어 0 GDN의 출력을 레이어 10~19의 Softmax Attention 레이어로 직접 전달하는 '전용 장거리 경로(Long-range pathway)'로 기능합니다. 이는 심층부 레이어가 초기 문맥의 핵심 정보를 직접 참조하게 함으로써 전역적 문맥 통합력을 극대화합니다.</li>
 <li><strong>동적 제어:</strong> 데이터 기반의 동적 게이트(Dynamic Gating)가 각 분기의 읽기/쓰기 강도를 조절하여 정보 흐름을 최적화합니다.</li>
 <li><strong>메모리 트래픽:</strong> 기술보고서는 residual-state 저장에 FP8을 사용해 해당 state의 메모리 트래픽을 줄이는 설계를 설명합니다. 이것이 약 360GB weight artifact 전체의 로딩·통신 병목을 절반으로 줄인다는 뜻은 아닙니다.</li>
 </ul>
@@ -121,7 +121,7 @@ $$S_t = \alpha_t(I - \beta_t k_t k_t^\top)S_{t-1} + \beta_t k_t v_t^\top$$
 <p>Qwen3.8-Flash-Next는 <strong>20,000,000개</strong>의 엔트리를 보유한 <strong>51B 규모의 N-gram Embedding</strong>을 통해 지식 기억 능력을 비약적으로 향상시켰습니다.</p>
 <ul>
 <li><strong>아키텍처적 배치:</strong> 모델의 <strong>레이어 2</strong>에 단일 레이어로 배치되어, 현재 토큰과 이전 토큰 조합의 국소적 패턴을 기억합니다.</li>
-<li><strong>호스트 오프로딩:</strong> 대규모 엔트리 테이블을 호스트 메모리(Host Memory)에 저장하고, 모델의 전방 연산과 병렬로 **비동기 프리페칭(Asynchronous Prefetching)**을 수행합니다.</li>
+<li><strong>호스트 오프로딩:</strong> 대규모 엔트리 테이블을 호스트 메모리(Host Memory)에 저장하고, 모델의 전방 연산과 병렬로 비동기 프리페칭(Asynchronous Prefetching)을 수행합니다.</li>
 <li><strong>효율성 경계:</strong> 저자 측 구성에서는 조회 위치를 미리 결정하고 host memory에서 비동기 prefetch해 추가 FLOPs와 관측 latency가 작았다고 보고합니다. 실제 효과는 CPU 메모리, PCIe/NVLink 대역폭과 overlap 성공 여부에 달려 있으며, GPU 메모리 점유가 항상 0인 것으로 일반화하면 안 됩니다.</li>
 </ul>
 <hr />
@@ -237,7 +237,7 @@ $$S_t = \alpha_t(I - \beta_t k_t k_t^\top)S_{t-1} + \beta_t k_t v_t^\top$$
 <ul>
 <li>본 모델의 가중치 사용은 <strong>Custom Qwen Community License 1.0</strong>에 의거합니다.</li>
 <li>상업적인 <strong>모델-서비스(MaaS)</strong> 제공이나 <strong>AI 워크 어시스턴트(AI Work Assistant)</strong> 용도로 사용하는 경우 Qwen의 <strong>별도 라이선스</strong>가 필요합니다. 공개 조항만으로 유료 여부나 계약 조건을 추정하지 않습니다.</li>
-<li>공식 블로그는 managed **Qwen3.8-Flash API를 <code>coming soon</code>**으로 표시합니다. 공개 weight인 Qwen3.8-Flash-Next와 production Qwen3.8-Flash를 동일 artifact로 단정하면 안 됩니다.</li>
+<li>공식 블로그는 managed Qwen3.8-Flash API를 <code>coming soon</code>으로 표시합니다. 공개 weight인 Qwen3.8-Flash-Next와 production Qwen3.8-Flash를 동일 artifact로 단정하면 안 됩니다.</li>
 </ul>
 </blockquote>
 <hr />

@@ -29,7 +29,7 @@
 <h4 id="1-핵심-요약-executive-summary">1. 핵심 요약 (Executive Summary)</h4>
 <p>본 보고서는 2026년 8월 25일 OpenAI가 발표한 자체 설계 추론 칩 'Jalapeño'의 초기 성능 데이터를 분석한 것입니다. 주요 요약은 다음과 같습니다.</p>
 <ul>
-<li><strong>성격 명시:</strong> 본 데이터는 독립적인 제3자 검증이나 동료 심사를 거친 논문이 아닌, OpenAI의 **공식 기업 발표(Engineering/Company announcement)**에 기반합니다.</li>
+<li><strong>성격 명시:</strong> 본 데이터는 독립적인 제3자 검증이나 동료 심사를 거친 논문이 아닌, OpenAI의 공식 기업 발표(Engineering/Company announcement)에 기반합니다.</li>
 <li><strong>조건부 성과:</strong> OpenAI는 세 공개 모델의 피크 지점에서 published package TDP로 정규화한 mixed TPS/kW가 비교 시스템보다 약 1.5~1.9배 높았다고 보고했습니다. 약 104.3배는 피크나 평균이 아니라 DeepSeek R1에서 비교 시스템의 최소 TBT에 맞춘 특정 국소 운영점의 OpenAI 표기입니다.</li>
 <li><strong>지연시간 단축:</strong> GPT‑OSS 120B 모델 기준 엔드 투 엔드(E2E) 지연시간을 약 1.7배, 최소 토큰 간 간격(Min TBT)을 약 2.7배 개선했습니다.</li>
 <li><strong>전력 규격:</strong> 패키지 TDP는 700W로 설정되었으며, 실측 지속 소비 전력은 550W 이하로 보고되었습니다.</li>
@@ -209,7 +209,7 @@
 <li><strong>안전한 해석:</strong> OpenAI의 데이터는 그 특정 TBT에서 Jalapeño가 더 높은 처리량을 유지했다고 주장합니다. 그러나 원시 좌표, 보간 규칙, 칩 수와 토폴로지가 없으므로 전체 curve의 지배를 외부에서 판정할 수 없습니다. 따라서 이를 “104배 빠른 칩”이나 전 운영 범위의 일반 우위로 바꾸면 안 됩니다.</li>
 </ul>
 <h4 id="9-검증-체계와-데이터-신뢰성-검토">9. 검증 체계와 데이터 신뢰성 검토</h4>
-<p>InferenceX는 공개 벤치마크 프레임워크이나, 현재 해당 저장소에는 Jalapeño의 원시 데이터나 재현 가능한 레시피가 등록되어 있지 않습니다. 따라서 현재 결과는 **'공급자가 통제한 내부 측정치(Vendor-controlled first-party result)'**이며, 독립적인 제3자의 검증을 통한 객관적 재현 단계가 남아 있습니다.</p>
+<p>InferenceX는 공개 벤치마크 프레임워크이나, 현재 해당 저장소에는 Jalapeño의 원시 데이터나 재현 가능한 레시피가 등록되어 있지 않습니다. 따라서 현재 결과는 '공급자가 통제한 내부 측정치(Vendor-controlled first-party result)'이며, 독립적인 제3자의 검증을 통한 객관적 재현 단계가 남아 있습니다.</p>
 <h4 id="10-투명성을-위한-누락-정보-리스트">10. 투명성을 위한 누락 정보 리스트</h4>
 <p>정밀한 검증을 위해 공개가 필요한 정보들은 다음과 같습니다.</p>
 <ol>

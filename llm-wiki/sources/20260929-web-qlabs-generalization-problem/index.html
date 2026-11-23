@@ -37,17 +37,17 @@
 <h3 id="해설-보고서-q-qlabs-sh-의-연구-방향-선언문-the-generalization-problem-상세-분석">[해설 보고서] Q(qlabs.sh)의 연구 방향 선언문: 「The Generalization Problem」 상세 분석</h3>
 <hr />
 <h5 id="1-보고서-개요-및-성격-규명-document-nature-context">1. 보고서 개요 및 성격 규명 (Document Nature &amp; Context)</h5>
-<p>본 해설 보고서는 2025년 8월 AI 연구 기관 Q(qlabs.sh)의 연구원 Samip Dahal과 Akshay Vegesna가 집필·공개한 연구 방향 문서인 **「The Generalization Problem」**을 전문적으로 분석 및 해설하기 위해 작성되었습니다.</p>
-<p>본 원문은 Q라는 연구 주체가 향후 추진할 연구 패러다임과 수립하고자 하는 이론적 프레임워크를 대외적으로 밝힌 **'연구 방향 선언문(Research Direction / Manifesto)'**입니다. 본 문서는 독자적인 실증 데이터나 동료 심사(Peer-review)를 거친 논문(Empirical/Peer-reviewed Paper)이 아니라, 인공일반지능(AGI) 달성을 위한 핵심 theoretical paradigm과 근본적 문제 의식을 제시하는 정성적·이론적 기획 문서라는 성격을 가집니다.</p>
+<p>본 해설 보고서는 2025년 8월 AI 연구 기관 Q(qlabs.sh)의 연구원 Samip Dahal과 Akshay Vegesna가 집필·공개한 연구 방향 문서인 「The Generalization Problem」을 전문적으로 분석 및 해설하기 위해 작성되었습니다.</p>
+<p>본 원문은 Q라는 연구 주체가 향후 추진할 연구 패러다임과 수립하고자 하는 이론적 프레임워크를 대외적으로 밝힌 '연구 방향 선언문(Research Direction / Manifesto)'입니다. 본 문서는 독자적인 실증 데이터나 동료 심사(Peer-review)를 거친 논문(Empirical/Peer-reviewed Paper)이 아니라, 인공일반지능(AGI) 달성을 위한 핵심 theoretical paradigm과 근본적 문제 의식을 제시하는 정성적·이론적 기획 문서라는 성격을 가집니다.</p>
 <hr />
 <h5 id="2-현-ai-연구의-진단과-이론적-연구의-한계-current-ai-diagnosis-theoretical-limits">2. 현 AI 연구의 진단과 이론적 연구의 한계 (Current AI Diagnosis &amp; Theoretical Limits)</h5>
 <h6 id="2-1-대규모-신경망과-경사하강법으로의-수렴">2.1 대규모 신경망과 경사하강법으로의 수렴</h6>
-<p>현재의 AGI 연구는 대규모 데이터셋에 대해 대규모 신경망을 **경사 기반 최적화(gradient-based optimization)**하는 단일 접근법으로 완전히 수렴해 있습니다. 이 과정에서 지능의 본질에 대한 근본적 질문들은 뒷전으로 밀려났으며, 데이터와 거대한 Compute 자원에만 의존하는 **경험주의(brute empiricism)**가 전체 AI 생태계를 주도하고 있습니다.</p>
+<p>현재의 AGI 연구는 대규모 데이터셋에 대해 대규모 신경망을 경사 기반 최적화(gradient-based optimization)하는 단일 접근법으로 완전히 수렴해 있습니다. 이 과정에서 지능의 본질에 대한 근본적 질문들은 뒷전으로 밀려났으며, 데이터와 거대한 Compute 자원에만 의존하는 경험주의(brute empiricism)가 전체 AI 생태계를 주도하고 있습니다.</p>
 <h6 id="2-2-기존-이론적-접근의-한계">2.2 기존 이론적 접근의 한계</h6>
 <p>지능과 학습의 근본적 원리를 풀고자 했던 고전적 이론 모델들은 실제 AGI 현장에서 소외되었습니다.</p>
 <ul>
-<li><strong>Solomonoff induction (1964)</strong>: 귀납적 추론(Inductive Inference)의 완벽하고 공식적인 이론적 틀을 제공하지만, Kolmogorov 복잡도 계산의 불가능성에 기인하여 **계산 불가능(uncomputable)**한 한계를 지닙니다.</li>
-<li><strong>PAC learning (1984)</strong>: 학습 가능성에 대한 엄밀한 수학적 한계를 다루지만, 대규모 신경망 최적화 및 복잡한 현실 데이터 분포에 적용하기에는 지나치게 보수적인 경계 설정으로 인해 **매우 비실용적(utterly impractical)**입니다.</li>
+<li><strong>Solomonoff induction (1964)</strong>: 귀납적 추론(Inductive Inference)의 완벽하고 공식적인 이론적 틀을 제공하지만, Kolmogorov 복잡도 계산의 불가능성에 기인하여 계산 불가능(uncomputable)한 한계를 지닙니다.</li>
+<li><strong>PAC learning (1984)</strong>: 학습 가능성에 대한 엄밀한 수학적 한계를 다루지만, 대규모 신경망 최적화 및 복잡한 현실 데이터 분포에 적용하기에는 지나치게 보수적인 경계 설정으로 인해 매우 비실용적(utterly impractical)입니다.</li>
 </ul>
 <h6 id="2-3-핵심-문제-제기">2.3 핵심 문제 제기</h6>
 <p>저자들은 단순한 경험주의와 비실용적 기존 이론의 간극을 메우고, 새로운 연구 경로를 개척하기 위해 다음 3가지 핵심 질문을 던집니다.</p>
@@ -59,8 +59,8 @@
 <hr />
 <h5 id="3-스케일링-병목-데이터-vs-compute-the-scaling-bottleneck">3. 스케일링 병목: 데이터 vs Compute (The Scaling Bottleneck)</h5>
 <h6 id="3-1-bitter-lesson과-데이터-병목">3.1 Bitter Lesson과 데이터 병목</h6>
-<p>R.S. Sutton(2019)의 <strong>'Bitter Lesson'</strong> 패러다임에 따르면, 주관적 지식을 주입하는 방식보다 Compute에 따라 스케일하는 범용적 학습 방법이 장기적으로 항상 승리해 왔습니다. 그러나 현재 경사하강법 기반 신경망의 스케일링은 **데이터 가용성(data availability)**에 의해 근본적인 병목에 직면해 있습니다.</p>
-<p>따라서 데이터가 상시적인 제약 요인으로 작용하는 상황에서 Q가 설정한 최우선 과제는 **&quot;최소한의 학습 데이터만으로도 강력한 일반화 성능을 확보함과 동시에 대규모 데이터가 존재할 때는 이를 효과적으로 활용할 수 있는 학습 알고리즘을 구축하는 것&quot;**입니다.</p>
+<p>R.S. Sutton(2019)의 <strong>'Bitter Lesson'</strong> 패러다임에 따르면, 주관적 지식을 주입하는 방식보다 Compute에 따라 스케일하는 범용적 학습 방법이 장기적으로 항상 승리해 왔습니다. 그러나 현재 경사하강법 기반 신경망의 스케일링은 데이터 가용성(data availability)에 의해 근본적인 병목에 직면해 있습니다.</p>
+<p>따라서 데이터가 상시적인 제약 요인으로 작용하는 상황에서 Q가 설정한 최우선 과제는 &quot;최소한의 학습 데이터만으로도 강력한 일반화 성능을 확보함과 동시에 대규모 데이터가 존재할 때는 이를 효과적으로 활용할 수 있는 학습 알고리즘을 구축하는 것&quot;입니다.</p>
 <h6 id="3-2-compute와-data의-특성-비교">3.2 Compute와 Data의 특성 비교</h6>
 <table>
 <thead>
@@ -92,13 +92,13 @@
 <ul>
 <li><strong>빅랩들의 기존 RL(강화학습) 접근법 한계</strong>:
 <ul>
-<li>거대 AI 기업들은 강력한 사전학습(pretrained) 모델을 활용해 학습 알고리즘 코드를 생성하고, 런타임에서 일반화 능력을 검증하며 시스템을 **자체 확장/선순환 개선(Bootstrap)**하는 방식의 RL을 추구합니다.</li>
+<li>거대 AI 기업들은 강력한 사전학습(pretrained) 모델을 활용해 학습 알고리즘 코드를 생성하고, 런타임에서 일반화 능력을 검증하며 시스템을 자체 확장/선순환 개선(Bootstrap)하는 방식의 RL을 추구합니다.</li>
 <li><strong>한계</strong>: 현재의 AI 모델들은 가능성 있는 알고리즘의 거대한 탐색 공간을 스스로 항해할 만큼 충분히 강력하지 못합니다. 결국 이 경로는 RL 환경을 통해 데이터를 스케일링한 뒤, 시스템이 지능의 기초를 운 좋게 발견해주기를 기대하는 구조입니다. 또한 지능이 결정적으로 요구되는 대다수의 문제 영역에서는 무한한 데이터나 완벽한 검증기(verifier)가 존재하지 않는다는 치명적 제약이 있습니다.</li>
 </ul>
 </li>
 <li><strong>저자들이 제시하는 대안</strong>:
 <ul>
-<li>데이터 스케일링 환경 구축에 의존하기보다 **&quot;지능의 기초 및 근본 원리를 먼저 해결한다(solve the fundamentals of intelligence first)&quot;**는 직렬적·원칙적 접근법을 강조합니다.</li>
+<li>데이터 스케일링 환경 구축에 의존하기보다 &quot;지능의 기초 및 근본 원리를 먼저 해결한다(solve the fundamentals of intelligence first)&quot;는 직렬적·원칙적 접근법을 강조합니다.</li>
 </ul>
 </li>
 </ul>
@@ -114,7 +114,7 @@
 </blockquote>
 <h6 id="4-2-no-free-lunch-정리와-prior의-필요성">4.2 No-Free-Lunch 정리와 Prior의 필요성</h6>
 <p>Wolpert(1996)의 <strong>No-Free-Lunch 정리</strong>는 <strong>탐색(Search) 메커니즘만으로는 지능을 완성할 수 없으며, 반드시 Prior가 결합되어야 함</strong>을 수학적으로 증명합니다.</p>
-<p>임의의 유한한 데이터셋이 주어졌을 때, 해당 데이터를 완벽하게 설명(fit)하지만 관측되지 않은 **미관측 데이터(Unseen Data)**에서는 전혀 다르게 동작하는 함수가 무한히 존재합니다. 탐색은 주어진 데이터와 일치하는 함수 후보군을 발굴하는 역할을 담당하며, <strong>Prior는 그 무한한 후보군 중 어떤 함수가 미관측 데이터에 대해 실제 일반화될 것인지를 결정</strong>합니다. 탐색 자체는 Compute에 따라 확장되므로, 이 2단계 구조는 자연스럽게 Compute 기반 스케일링을 가능하게 합니다.</p>
+<p>임의의 유한한 데이터셋이 주어졌을 때, 해당 데이터를 완벽하게 설명(fit)하지만 관측되지 않은 미관측 데이터(Unseen Data)에서는 전혀 다르게 동작하는 함수가 무한히 존재합니다. 탐색은 주어진 데이터와 일치하는 함수 후보군을 발굴하는 역할을 담당하며, <strong>Prior는 그 무한한 후보군 중 어떤 함수가 미관측 데이터에 대해 실제 일반화될 것인지를 결정</strong>합니다. 탐색 자체는 Compute에 따라 확장되므로, 이 2단계 구조는 자연스럽게 Compute 기반 스케일링을 가능하게 합니다.</p>
 <hr />
 <h5 id="5-지능의-기초-1-모델-탐색-model-search">5. 지능의 기초 (1): 모델 탐색 (Model Search)</h5>
 <h6 id="5-1-순수-경사하강법-gradient-descent-의-한계">5.1 순수 경사하강법(Gradient Descent)의 한계</h6>
@@ -122,32 +122,32 @@
 <h6 id="5-2-탐색과-학습의-분리-vegesna-dahal-2025">5.2 탐색과 학습의 분리 (Vegesna &amp; Dahal, 2025)</h6>
 <p>저자들은 자신들의 연구 논문(Vegesna &amp; Dahal, 2025)을 인용하여, 학습 과정에서 탐색과 최적화를 분리하는 구조적 대안을 제시합니다.</p>
 <ul>
-<li><strong>표현 공간 (Representation space)</strong>: 탐색이 실질적으로 가능한 저차원 매니폴드(lower-dimensional manifold)상에서 **진화 탐색(evolutionary search)**을 수행합니다.</li>
-<li><strong>파라미터 공간 (Parameter space)</strong>: 진화 탐색으로 발굴된 표현을 실제 모델로 구현(implement)하기 위해 **경사하강법(gradient descent)**을 사용합니다.</li>
+<li><strong>표현 공간 (Representation space)</strong>: 탐색이 실질적으로 가능한 저차원 매니폴드(lower-dimensional manifold)상에서 진화 탐색(evolutionary search)을 수행합니다.</li>
+<li><strong>파라미터 공간 (Parameter space)</strong>: 진화 탐색으로 발굴된 표현을 실제 모델로 구현(implement)하기 위해 경사하강법(gradient descent)을 사용합니다.</li>
 </ul>
 <p>이러한 분리를 통해 Compute를 스케일함에 따라 단순 변형이 아닌, 다양하고 새로운 해(diverse solutions)를 효과적으로 발굴해낼 수 있습니다.</p>
 <hr />
 <h5 id="6-지능의-기초-2-보편-일반화-prior-universal-generalization-priors">6. 지능의 기초 (2): 보편 일반화 Prior (Universal Generalization Priors)</h5>
 <h6 id="6-1-암묵적-prior-vs-명시적-보편적-prior">6.1 암묵적 Prior vs 명시적·보편적 Prior</h6>
-<p>현재의 신경망은 손실 지형(loss landscapes), 최적화 역학(optimization dynamics), 아키텍처 구조 선택 등을 통해 Prior를 **암묵적(implicitly)**으로 내재화하고 있습니다.</p>
+<p>현재의 신경망은 손실 지형(loss landscapes), 최적화 역학(optimization dynamics), 아키텍처 구조 선택 등을 통해 Prior를 암묵적(implicitly)으로 내재화하고 있습니다.</p>
 <ul>
 <li>이러한 암묵적 Prior는 일정한 일반화를 가능하게 하지만, <strong>엔지니어가 직접 최적화할 수 없다</strong>는 치명적 한계가 있습니다.</li>
 <li>현대 AI 시스템이 요구하는 기하급수적인 데이터 양은 현재의 암묵적 Prior가 최적 상태와 매우 거리가 멀다는 것을 명증합니다.</li>
-<li>따라서 모델링하고자 하는 모든 현상에 광범위하게 적용 가능하고 **직접 최적화할 수 있는 명시적이고 보편적인 Prior(explicit and universal priors)**의 정립이 필수적입니다.</li>
+<li>따라서 모델링하고자 하는 모든 현상에 광범위하게 적용 가능하고 직접 최적화할 수 있는 명시적이고 보편적인 Prior(explicit and universal priors)의 정립이 필수적입니다.</li>
 </ul>
 <h6 id="6-2-고전적-단순성-simplicity-의-한계">6.2 고전적 단순성(Simplicity)의 한계</h6>
-<p>Solomonoff prior 및 Kolmogorov 복잡도(Li &amp; Vitanyi, 1997)로 대표되는 고전적 Prior는 &quot;더 짧고 단순한 프로그램이 정답일 확률이 높다&quot;는 직관적 단순성에 기반합니다. 그러나 이는 **계산 불가능(uncomputable)**할 뿐만 아니라, 실제 최적화 과정에서 구현하기 어렵고 때로는 심각하게 잘못된 방향으로 유도할 수 있습니다.</p>
+<p>Solomonoff prior 및 Kolmogorov 복잡도(Li &amp; Vitanyi, 1997)로 대표되는 고전적 Prior는 &quot;더 짧고 단순한 프로그램이 정답일 확률이 높다&quot;는 직관적 단순성에 기반합니다. 그러나 이는 계산 불가능(uncomputable)할 뿐만 아니라, 실제 최적화 과정에서 구현하기 어렵고 때로는 심각하게 잘못된 방향으로 유도할 수 있습니다.</p>
 <h6 id="6-3-과매개변수화-평탄-최소값-그리고-압축성-wilson-2025-lotfi-et-al-2024">6.3 과매개변수화, 평탄 최소값, 그리고 압축성 (Wilson 2025, Lotfi et al. 2024)</h6>
 <p>단순성을 단순히 '파라미터 개수가 적은 소형 모델'로 정의하는 통념은 최근 이론 연구를 통해 명백한 오류임이 밝혀졌습니다.</p>
 <ul>
-<li><strong>과매개변수화와 평탄 최소값</strong>: 과매개변수화(overparameterized)된 대규모 네트워크는 더 낮은 유효 차원(lower effective dimensionality)을 갖는 **더 평탄한 최소값(flatter minima)**으로 수렴하며, 이를 통해 훨씬 우수한 일반화 성능을 달성합니다 (Wilson, 2025).</li>
-<li><strong>LLM의 압축성</strong>: 대규모 언어 모델(LLM)은 소형 모델보다 이론적으로 더 엄밀한 일반화 경계(tighter generalization bounds)를 형성하며, **더 높은 압축 가능성(more compressible)**을 가집니다 (Lotfi et al., 2024).</li>
+<li><strong>과매개변수화와 평탄 최소값</strong>: 과매개변수화(overparameterized)된 대규모 네트워크는 더 낮은 유효 차원(lower effective dimensionality)을 갖는 더 평탄한 최소값(flatter minima)으로 수렴하며, 이를 통해 훨씬 우수한 일반화 성능을 달성합니다 (Wilson, 2025).</li>
+<li><strong>LLM의 압축성</strong>: 대규모 언어 모델(LLM)은 소형 모델보다 이론적으로 더 엄밀한 일반화 경계(tighter generalization bounds)를 형성하며, 더 높은 압축 가능성(more compressible)을 가집니다 (Lotfi et al., 2024).</li>
 <li><strong>논리적 시사점</strong>: 단순히 파라미터 개수(parameter count)를 단순성의 기준으로 삼을 경우, 더 높은 압축률과 일반화 능력을 갖춘 대형 모델을 배제하고 단순 차원이 작은 소형 모델만을 고집하는 치명적 오류에 빠지게 됩니다.</li>
 </ul>
 <hr />
 <h5 id="7-결론-및-요약-conclusion">7. 결론 및 요약 (Conclusion)</h5>
 <ul>
-<li><strong>Compute 스케일링의 핵심 축</strong>: **광범위한 탐색(Search)**과 **보편 일반화 Prior(Universal Generalization Priors)**는 데이터 가용성 병목에 종속되지 않고 Compute 증가에 따라 일반화 성능을 스케일시킬 수 있는 지능의 근본적인 기초입니다.</li>
+<li><strong>Compute 스케일링의 핵심 축</strong>: 광범위한 탐색(Search)과 보편 일반화 Prior(Universal Generalization Priors)는 데이터 가용성 병목에 종속되지 않고 Compute 증가에 따라 일반화 성능을 스케일시킬 수 있는 지능의 근본적인 기초입니다.</li>
 <li><strong>Q의 연구 비전</strong>: Q는 데이터 스케일링과 단순 경험주의(brute empiricism)에 의존하는 기존 패러다임에서 탈피하여, 지능의 이론적 한계에 도달할 수 있는 원칙적이고 보편적인 학습 알고리즘을 도출하는 것을 연구의 최종 목표로 설정합니다.</li>
 </ul>
 <hr />

@@ -72,21 +72,21 @@
 </tr>
 </tbody>
 </table>
-<p>핵심 설계 원칙은 **&quot;압축된 표현(Compact representation)의 필요성&quot;**을 인정하되, **&quot;그 표현이 반드시 언어여야 한다&quot;**는 언어 중심적 편향을 경계하는 것입니다.</p>
+<p>핵심 설계 원칙은 &quot;압축된 표현(Compact representation)의 필요성&quot;을 인정하되, &quot;그 표현이 반드시 언어여야 한다&quot;는 언어 중심적 편향을 경계하는 것입니다.</p>
 <h5 id="3-pomdp-기반-상태-압축과-task-state-compiler의-설계-요건">3. POMDP 기반 상태 압축과 Task-State Compiler의 설계 요건</h5>
-<p>의사결정 이론(POMDP) 관점에서 인지는 전체 관측 이력을 미래 의사결정에 충분한 **신념 상태(Belief state)**로 요약하는 과정입니다.</p>
+<p>의사결정 이론(POMDP) 관점에서 인지는 전체 관측 이력을 미래 의사결정에 충분한 신념 상태(Belief state)로 요약하는 과정입니다.</p>
 <ul>
 <li><strong>상태 압축의 수학적 정의:</strong>
 현재 목표 $g$에 대해 시스템 상태 $z_t = f(o_{\le t}, a_{&lt; t}, g)$가 다음 조건을 만족할 때:
 $P(\text{relevant future} \mid o_{\le t}, a_{\le t}, g) \approx P(\text{relevant future} \mid z_t, g)$
 여기서 $z_t$는 <strong>Task-State Compiler</strong>의 목표 출력이 됩니다.</li>
 </ul>
-<p>이 아키텍처는 **인과적 추상화(Causal abstraction)**와 **이시뮬레이션(Bisimulation)**을 통해 불필요한 감각 변수를 제거합니다. 다만, 정보 병목(Information bottleneck)에 의한 치명적 정보 유실을 방지하기 위해, 시스템은 반드시 **다해상도 멀티모달 메모리(Multiresolution Multimodal Memory)**를 유지해야 합니다. 이는 압축된 $z_t$ 상태에서 필요 시 원본의 세부 정보로 회귀할 수 있는 **'고해상도 메모리 포인터(High-resolution memory pointer)'**를 보존하기 위함입니다.</p>
+<p>이 아키텍처는 인과적 추상화(Causal abstraction)와 이시뮬레이션(Bisimulation)을 통해 불필요한 감각 변수를 제거합니다. 다만, 정보 병목(Information bottleneck)에 의한 치명적 정보 유실을 방지하기 위해, 시스템은 반드시 다해상도 멀티모달 메모리(Multiresolution Multimodal Memory)를 유지해야 합니다. 이는 압축된 $z_t$ 상태에서 필요 시 원본의 세부 정보로 회귀할 수 있는 '고해상도 메모리 포인터(High-resolution memory pointer)'를 보존하기 위함입니다.</p>
 <h5 id="4-rapid-지각-추론-분리의-실증적-우월성">4. RAPID: 지각-추론 분리의 실증적 우월성</h5>
-<p>ICLR 2026 연구인 **RAPID(Reasoning-Aligned Perception Decoupling)**는 지각 모듈을 '질문에 필요한 상세 텍스트 표현(Detailed textual representation)' 생성기로 재정의합니다.</p>
+<p>ICLR 2026 연구인 RAPID(Reasoning-Aligned Perception Decoupling)는 지각 모듈을 '질문에 필요한 상세 텍스트 표현(Detailed textual representation)' 생성기로 재정의합니다.</p>
 <ul>
 <li><strong>메커니즘:</strong> 지각 모듈이 추출한 사실적 정보를 기반으로 별도의 Text-only reasoner가 최종 판단을 내립니다.</li>
-<li><strong>학습 전략:</strong> 원문 보고에 따르면, 지각과 추론을 동시에 학습시키는 것보다 지각 모듈을 선행 학습시킨 후 추론 성능에 맞춰 최적화하는 **단계적 학습(Staged training)**이 Joint training보다 우수한 성능을 보입니다.</li>
+<li><strong>학습 전략:</strong> 원문 보고에 따르면, 지각과 추론을 동시에 학습시키는 것보다 지각 모듈을 선행 학습시킨 후 추론 성능에 맞춰 최적화하는 단계적 학습(Staged training)이 Joint training보다 우수한 성능을 보입니다.</li>
 </ul>
 <h5 id="5-neuro-symbolic-인터페이스와-검증-가능성">5. Neuro-symbolic 인터페이스와 검증 가능성</h5>
 <p>NS-VQA, VeriCoT, VIRO 등의 연구는 심볼릭 표현이 단순한 데이터 압축을 넘어선 가치를 지님을 보여줍니다.</p>
@@ -97,7 +97,7 @@ $P(\text{relevant future} \mid o_{\le t}, a_{\le t}, g) \approx P(\text{relevant
 <h5 id="6-코드는-보편적-사고-기질-이-아닌-범용-제어-평면">6. 코드는 '보편적 사고 기질'이 아닌 '범용 제어 평면'</h5>
 <p>PAL(Program-Aided Language Models)과 Code as Policies의 사례를 분석할 때, 코드를 모든 인지 과정을 대체하는 '보편적 사고 기질(Universal thought substrate)'로 오해해서는 안 됩니다.</p>
 <ul>
-<li><strong>정의:</strong> 코드는 이기종 모듈(Heterogeneous modules)을 오케스트레이션하고 상호 운용성을 보장하는 **'보편적 제어 평면(Universal control plane / Interoperability layer)'**으로 기능할 때 가장 강력합니다.</li>
+<li><strong>정의:</strong> 코드는 이기종 모듈(Heterogeneous modules)을 오케스트레이션하고 상호 운용성을 보장하는 '보편적 제어 평면(Universal control plane / Interoperability layer)'으로 기능할 때 가장 강력합니다.</li>
 </ul>
 <h5 id="7-로보틱스-의미적-계획과-물리적-실행-가능성의-이원화">7. 로보틱스: 의미적 계획과 물리적 실행 가능성의 이원화</h5>
 <p>로보틱스 분야에서는 고수준 시퀀싱과 저수준 실행의 분리가 필수적입니다.</p>
@@ -113,7 +113,7 @@ $P(\text{relevant future} \mid o_{\le t}, a_{\le t}, g) \approx P(\text{relevant
 <h5 id="9-물리적-세계-모델-연속-잠재-공간의-추론-역량">9. 물리적 세계 모델: 연속 잠재 공간의 추론 역량</h5>
 <p>PlaNet, Dreamer, V-JEPA 2-AC와 같은 모델은 자연어 매개 없이도 고도의 추론이 가능함을 보여줍니다.</p>
 <ul>
-<li><strong>핵심 메커니즘:</strong> 미래 상태 예측과 계획이 자연어 토큰이 아닌 **연속 잠재 공간(Continuous latent space)**에서의 롤아웃(Rollout)을 통해 수행됩니다. 물리적 인과관계 예측에는 언어보다 잠재 역학 모델이 더 적합한 표현입니다.</li>
+<li><strong>핵심 메커니즘:</strong> 미래 상태 예측과 계획이 자연어 토큰이 아닌 연속 잠재 공간(Continuous latent space)에서의 롤아웃(Rollout)을 통해 수행됩니다. 물리적 인과관계 예측에는 언어보다 잠재 역학 모델이 더 적합한 표현입니다.</li>
 </ul>
 <h5 id="10-latent-reasoning과-언어-토큰의-병목-현상">10. Latent Reasoning과 언어 토큰의 병목 현상</h5>
 <p>Coconut 및 HyRea 연구는 자연어 토큰화가 내부 연산에서 병목이 될 수 있음을 지적합니다.</p>
@@ -134,7 +134,7 @@ $P(\text{relevant future} \mid o_{\le t}, a_{\le t}, g) \approx P(\text{relevant
 </blockquote>
 <p><strong>핵심 아키텍처 규칙:</strong> 모든 압축된 상태는 반드시 원본 메모리(Multiresolution memory)로 회귀할 수 있는 <strong>포인터</strong>를 보유해야 합니다.</p>
 <h5 id="12-문제별-표현-특성화-representation-specialization">12. 문제별 표현 특성화(Representation Specialization)</h5>
-<p>'표현의 단일화(Unification)'보다 **'표현의 특성화(Specialization)'**가 현재로서는 더 강력한 가설입니다.</p>
+<p>'표현의 단일화(Unification)'보다 '표현의 특성화(Specialization)'가 현재로서는 더 강력한 가설입니다.</p>
 <ul>
 <li><strong>Language:</strong> 의미론적 작업 분해, 도구 선택, 인간 소통.</li>
 <li><strong>Code:</strong> 알고리즘적 도구 활용, 수학적 엄밀성.</li>
@@ -143,7 +143,7 @@ $P(\text{relevant future} \mid o_{\le t}, a_{\le t}, g) \approx P(\text{relevant
 <li><strong>Continuous:</strong> 정밀 모터 및 동적 제어.</li>
 </ul>
 <h5 id="13-신경과학적-비유-언어와-추론-네트워크의-분리">13. 신경과학적 비유: 언어와 추론 네트워크의 분리</h5>
-<p>실어증(Aphasia) 환자가 언어 능력을 상실하고도 복잡한 논리 및 수학적 추론을 유지하는 사례는, 지능 시스템에서 언어 네트워크와 도메인 일반 추론 네트워크가 분리될 수 있음을 시사합니다. 이는 AI 아키텍처 설계에 있어 **언어를 '생각의 본질'이 아닌 '생각의 인터페이스'**로 정의하는 모델의 타당성을 뒷받침합니다.</p>
+<p>실어증(Aphasia) 환자가 언어 능력을 상실하고도 복잡한 논리 및 수학적 추론을 유지하는 사례는, 지능 시스템에서 언어 네트워크와 도메인 일반 추론 네트워크가 분리될 수 있음을 시사합니다. 이는 AI 아키텍처 설계에 있어 언어를 '생각의 본질'이 아닌 '생각의 인터페이스'로 정의하는 모델의 타당성을 뒷받침합니다.</p>
 <h5 id="14-실용적-아키텍처-실패-모드-및-평가-지표">14. 실용적 아키텍처 실패 모드 및 평가 지표</h5>
 <p>시스템 구축 시 설계자가 경계해야 할 사항은 다음과 같습니다.</p>
 <ul>

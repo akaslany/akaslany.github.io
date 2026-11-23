@@ -29,7 +29,7 @@
 <h5 id="1-제품-정의-및-운영-경계-product-boundary">1. 제품 정의 및 운영 경계 (Product Boundary)</h5>
 <p>Archify는 소스 코드로부터 아키텍처를 추출하는 ‘자동 발견(Discovery) 엔진’이 아닙니다. 이 시스템은 외부 인텔리전스와 기계적 검증기 사이의 엄격한 역할 분리를 운영 전제로 합니다.</p>
 <ul>
-<li><strong>에이전트와 도구의 분리:</strong> Cursor, Claude Code, Codex CLI, OpenCode 등 외부 코딩 에이전트가 소스 코드를 해석하여 시스템의 의미와 토폴로지를 담은 **제한된 JSON IR(Intermediate Representation)**을 작성합니다. Archify는 이 authored IR을 입력받아 후속 공정을 수행합니다.</li>
+<li><strong>에이전트와 도구의 분리:</strong> Cursor, Claude Code, Codex CLI, OpenCode 등 외부 코딩 에이전트가 소스 코드를 해석하여 시스템의 의미와 토폴로지를 담은 제한된 JSON IR(Intermediate Representation)을 작성합니다. Archify는 이 authored IR을 입력받아 후속 공정을 수행합니다.</li>
 <li><strong>핵심 기능 정의:</strong> Archify는 작성된 IR을 스키마, 기하학적 제약, 소스 코드 근거(Evidence) 관점에서 검증하고 렌더링/패키징하는 <strong>다이어그램 컴파일러</strong>이자 <strong>증거 검증기</strong>입니다.</li>
 <li><strong>운영 경계:</strong> 본 도구는 ‘AI가 이해했다고 주장하는 내용’을 기계적 규칙으로 통제하고 시각적 산출물로 변환하는 데 국한되며, 코드베이스의 의미를 스스로 판단하지 않습니다.</li>
 </ul>
@@ -107,7 +107,7 @@
 </ul>
 <h5 id="9-도구-간-비교-분석-benchmark-축">9. 도구 간 비교 분석 (Benchmark 축)</h5>
 <ul>
-<li><strong>vs. Mermaid:</strong> Mermaid는 간결한 텍스트 기반 다이어그램에 집중하나, Archify는 타입화된 IR, 엄격한 진단, 소스 근거에 집중합니다. 특히 Archify는 Mermaid를 직접 파싱하지 않고 에이전트의 **'의미적 재해석(Semantic Reinterpretation)'**을 통해 IR을 새로 생성합니다.</li>
+<li><strong>vs. Mermaid:</strong> Mermaid는 간결한 텍스트 기반 다이어그램에 집중하나, Archify는 타입화된 IR, 엄격한 진단, 소스 근거에 집중합니다. 특히 Archify는 Mermaid를 직접 파싱하지 않고 에이전트의 '의미적 재해석(Semantic Reinterpretation)'을 통해 IR을 새로 생성합니다.</li>
 <li><strong>vs. PlantUML/Graphviz:</strong> 범용 다이어그램 및 그래프 엔진과 달리, Archify는 아키텍처 가독성을 위해 의도적으로 제한된 문법과 기하학적 규칙을 적용합니다.</li>
 <li><strong>vs. Structurizr:</strong> C4 모델과 유사한 지향점을 가지나, Archify는 외부 AI 에이전트가 작성한 JSON IR의 검증과 패키징된 정적 산출물 전달에 최적화되어 있습니다.</li>
 </ul>

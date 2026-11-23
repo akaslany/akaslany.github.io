@@ -93,7 +93,7 @@
 </tr>
 <tr>
 <td style="text-align:left"><strong>특권 정보를 가진 동결 교사 (Frozen Privileged Teacher)</strong></td>
-<td style="text-align:left">OPSD의 교사 역할로, 학습 초기 체크포인트($\theta_0$)로 **동결(Frozen)**되어 학습 안정성을 제공함.</td>
+<td style="text-align:left">OPSD의 교사 역할로, 학습 초기 체크포인트($\theta_0$)로 동결(Frozen)되어 학습 안정성을 제공함.</td>
 <td style="text-align:left">학습 동안 교사가 업데이트되지 않으므로, 오답 궤적 끝에서 종결 토큰(EOS)을 과도하게 선호(94.5%)하며 성찰 토큰(22.0%) 지도가 미흡함.</td>
 </tr>
 <tr>
@@ -127,7 +127,7 @@
 <p>DCE는 학생 분포 $p_{k,t}$가 교사 분포 $q_{k,t}$를 모방하도록 아래의 손실 함수를 최적화합니다.</p>
 <p>$$\mathcal{L}<em>G^{(k)} = \mathbb{E}</em>{(x,g), y^{(k)} \sim p_{\theta_k}(\cdot \mid x)}\left[\frac{1}{m}\sum_{t=1}^m \mathcal{D}<em>{KL}(q</em>{k,t} \parallel p_{k,t})\right]$$</p>
 <h6 id="3-손실-함수-방향성-분석-forward-kl-vs-reverse-kl-vs-jsd">3. 손실 함수 방향성 분석 (Forward KL vs. Reverse KL vs. JSD)</h6>
-<p>본 연구는 DCE 지도 손실 함수로 **Forward KL Divergence ($\mathcal{D}_{KL}(q \parallel p)$)**를 채택했습니다.</p>
+<p>본 연구는 DCE 지도 손실 함수로 Forward KL Divergence ($\mathcal{D}_{KL}(q \parallel p)$)를 채택했습니다.</p>
 <ul>
 <li><strong>Forward KL (65.97% Average@12):</strong> 교사의 확률 분포 $q$가 높은 확률을 배정한 정답 및 성찰 토큰 영역을 학생 $p$가 커버하도록 강제하는 Mode-covering 특성을 갖습니다. 이에 따라 학생이 초기에는 고려하지 못했던 교사의 오류 수정 및 성찰 경로를 효과적으로 모방하게 됩니다.</li>
 <li><strong>Reverse KL (60.42% Average@12):</strong> Mode-seeking 특성으로 인해 학생이 이미 잘 생성하는 모드에 집중하며 교사가 새로 제시하는 성찰 길을 과소평가하여 성능이 5.55%p 하락하고 생성 토큰 수가 6,187개 늘어납니다.</li>
@@ -137,7 +137,7 @@
 <p>학습된 $\theta_{k+1}$은 다음 라운드의 학생뿐만 아니라 특권 교사의 기본 가중치가 되므로, 한 라운드에서 학습된 자기 수정 능력이 다음 라운드 교사의 지도 능력으로 축적됩니다.</p>
 <hr />
 <h5 id="4-2-자가-정제-간결-학습-self-refined-concise-learning-srcl">4.2. 자가 정제 간결 학습 (Self-Refined Concise Learning, SRCL)</h5>
-<p>DCE가 성찰 및 오류 수정 능력을 강화하는 동안, SRCL은 군더더기 없는 직접적인 솔루션을 학습시켜 토큰 효율성을 확보합니다. SRCL은 학생 모델이 정답 $g$를 보지 않고 스스로 작성한 재작성본(Rewrite) $c_i^{(k)} = R_{\theta_k}(x_i, y_i^{(k)})$ 중 아래 **4단계 필터링 파이프라인(Acceptance Gates)**을 통과한 데이터만 학습 목표로 사용합니다.</p>
+<p>DCE가 성찰 및 오류 수정 능력을 강화하는 동안, SRCL은 군더더기 없는 직접적인 솔루션을 학습시켜 토큰 효율성을 확보합니다. SRCL은 학생 모델이 정답 $g$를 보지 않고 스스로 작성한 재작성본(Rewrite) $c_i^{(k)} = R_{\theta_k}(x_i, y_i^{(k)})$ 중 아래 4단계 필터링 파이프라인(Acceptance Gates)을 통과한 데이터만 학습 목표로 사용합니다.</p>
 <ol>
 <li><strong>종결 및 압축 (Termination &amp; Compression):</strong> 자연스럽게 종결(EOS)되어야 하며, 비어있지 않고, 최대 토큰 제한(12K) 내에 존재해야 하며, <strong>원본 온폴리시 롤아웃보다 토큰 길이가 짧아야 함</strong>.</li>
 <li><strong>성찰 표현 제거 (Reflection-free):</strong> &quot;Wait&quot;, &quot;Actually&quot;, &quot;Correction&quot;, &quot;Let me reconsider&quot;, &quot;double-check&quot; 등 명시적인 수정, 재시도, 주저함(Hesitation)을 나타내는 문구가 포함되지 않아야 함.</li>
@@ -341,8 +341,8 @@
   * Frozen Teacher: 32.8%  ───────────────►  77.4% (동적 공진화 증거)
 </code></pre>
 <ul>
-<li><strong>종결 확률 $P(\text{EOS})$의 급감:</strong> 오답 궤적의 끝부분에서 종결 토큰을 출력할 매크로 평균 확률은 초기 스텝 0에서 학생 92.6%, 교사 90.4%에 달했으나, 스텝 200에 이르러 **학생 26.3%, 교사 41.3%**로 급격히 하락했습니다.</li>
-<li><strong>성찰 확률 $P(r_t)$의 급증:</strong> 오답 후 성찰 구문(Wait 등)이 시작되는 위치에서의 예측 확률은 초기 약 30.1%/32.8%에서 스텝 200 시점 **학생 77.0%, 교사 77.4%**로 대폭 상승했습니다.</li>
+<li><strong>종결 확률 $P(\text{EOS})$의 급감:</strong> 오답 궤적의 끝부분에서 종결 토큰을 출력할 매크로 평균 확률은 초기 스텝 0에서 학생 92.6%, 교사 90.4%에 달했으나, 스텝 200에 이르러 학생 26.3%, 교사 41.3%로 급격히 하락했습니다.</li>
+<li><strong>성찰 확률 $P(r_t)$의 급증:</strong> 오답 후 성찰 구문(Wait 등)이 시작되는 위치에서의 예측 확률은 초기 약 30.1%/32.8%에서 스텝 200 시점 학생 77.0%, 교사 77.4%로 대폭 상승했습니다.</li>
 <li><strong>핵심 시사점:</strong> 이는 교사 모델이 동결되어 있지 않고 학생의 성장을 실시간으로 흡수하면서, 잘못된 추론 경로를 접했을 때 멈추지 않고 스스로 재검토하도록 유도하는 강력한 지도 신호를 생성하게 됨을 정량적으로 증명합니다.</li>
 </ul>
 <hr />
