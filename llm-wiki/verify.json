@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 39939524,
+  "dist_bytes": 38845365,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -7,7 +7,7 @@
       "ok": true
     },
     "escapes": {
-      "checked": 4460,
+      "checked": 3995,
       "html_escapes": 0,
       "html_paths": {},
       "markdown_escapes": 0,
@@ -16,8 +16,8 @@
       "ok": true
     },
     "grounding": {
-      "checked": 4460,
-      "entity_source_links_checked": 7272,
+      "checked": 3995,
+      "entity_source_links_checked": 6722,
       "invalid_extractions": {},
       "issues": {},
       "ok": true,
@@ -25,19 +25,19 @@
     },
     "links": {
       "broken": 0,
-      "html_checked": 115163,
+      "html_checked": 107848,
       "issues": [],
-      "markdown_checked": 33789,
+      "markdown_checked": 32224,
       "ok": true
     },
     "links_recheck": {
       "broken": 0,
-      "checked_associations": 22414,
+      "checked_associations": 21314,
       "missing_associations": [],
       "ok": true
     },
     "markers": {
-      "checked": 5420,
+      "checked": 4955,
       "occurrences": 0,
       "ok": true,
       "pages": 0,
@@ -53,11 +53,11 @@
       "registry_matches": true
     },
     "orphans": {
-      "edges": 32593,
+      "edges": 31028,
       "graph_valid": true,
       "low_source_inbound": [],
       "min_source_inbound": 6,
-      "nodes": 5420,
+      "nodes": 4955,
       "ok": true,
       "orphan_pages": [],
       "orphans": 0
@@ -66,7 +66,9 @@
       "differences": {
         "corpus_vs_normalized": [],
         "home_catalog_vs_pages": [],
+        "home_people_vs_eligible": [],
         "inventory_vs_pages": [],
+        "people_index_vs_eligible": [],
         "search_vs_pages": [],
         "source_catalog_vs_pages": [],
         "source_files_vs_normalized": [],
@@ -78,29 +80,26 @@
         "source_catalog": []
       },
       "expected_sources": 939,
-      "generated": 4460,
+      "generated": 3995,
       "index": 5,
       "kinds": 9,
       "ok": true,
-      "search_index_bytes": 835960,
+      "search_index_bytes": 801286,
       "sources": 939,
       "symmetric_difference": 0,
       "timeline": 7,
-      "total": 5420
+      "total": 4955
     },
     "people_complete": {
       "corpus_sources": 939,
-      "distinct": 4215,
+      "distinct": 3750,
       "extra": [],
       "extracted_v2": 939,
-      "home_matches": true,
-      "index_matches": true,
       "missing": [],
       "ok": true,
-      "pages": 4215,
+      "pages": 3750,
       "symmetric_difference": 0,
       "synthesized": 81,
-      "unmapped_mentions": [],
       "with_quote": 2846
     },
     "people_nonempty": {
@@ -173,17 +172,17 @@
     "reproducible": {
       "changed_files": 0,
       "changed_paths": [],
-      "compared_files": 5424,
-      "first_sec": 17.828,
+      "compared_files": 4959,
+      "first_sec": 17.193,
       "ok": true,
-      "second_sec": 17.956
+      "second_sec": 17.338
     },
     "schema": {
-      "checked": 5420,
+      "checked": 4955,
       "invalid": 0,
       "issues": {},
       "ok": true,
-      "passed": 5420
+      "passed": 4955
     },
     "selfcontained": {
       "external_resources": 0,
