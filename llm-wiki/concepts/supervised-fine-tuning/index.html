@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supervised Fine-Tuning</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Supervised Fine-Tuning</h1>
+<p class="page-meta">근거 소스 4편</p>
+<h2 id="다중-에이전트-학습">다중 에이전트 학습</h2>
+<p>MASS 보고서에 따르면 이 방식은 워크플로 탐색과 모델 미세조정을 번갈아 수행한다. 과제 수행 궤적만으로 지도 미세조정한 뒤 과제 수행, 워크플로 최적화, 자가 평가 역할의 성능이 모두 향상됐다. <a href="../../sources/20261010-web-arxiv-org-pdf-2610-12176-c3b57dd7ed20/">근거 A</a></p>
+<h2 id="지리적-언급의-편중">지리적 언급의 편중</h2>
+<p>영어 프롬프트 실험에서 연구진은 지도 미세조정 후 지리적 언급 분포의 엔트로피가 낮아지고 미국과 일본에 대한 언급 편중이 심해졌다고 보고했다. 이후 정렬 단계에서는 엔트로피 변화가 작았다. <a href="../../sources/20261021-web-arxiv-org-pdf-2604-21751-77b5497cb7d4/">근거 B</a></p>
+<h2 id="정치적-편향-완화">정치적 편향 완화</h2>
+<p>Arete-27B 연구진은 정치적 편향을 줄이기 위해 Inkling을 증류 교사 모델로 선정하고 지도 미세조정을 수행했다. 보고서의 평가에서 프로파간다를 포함한 응답은 베이스 모델보다 줄었다. 사고 모드를 활성화한 경우의 평가 결과는 잠정적이었다. <a href="../../sources/20261107-web-nousresearch-com-arete-bd6bbfb61392/">근거 C</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>베이스 모델에 지도 미세조정(SFT)을 적용하면 엔트로피가 급격히 하락하면서 특정 국가(미국, 일본)로의 출력 쏠림 현상이 급격히 심화되었습니다</p>
+</blockquote>
+<p><a href="../../sources/20261021-web-arxiv-org-pdf-2604-21751-77b5497cb7d4/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">Normalized Low-Rank Adaptation 검증 보고서</a></li>
+<li><a href="../../sources/20261010-web-arxiv-org-pdf-2610-12176-c3b57dd7ed20/">다중 에이전트 자가 감독을 통한 재귀적 자가 개선(MASS) 해설 보고서</a></li>
+<li><a href="../../sources/20261021-web-arxiv-org-pdf-2604-21751-77b5497cb7d4/">Why are all LLMs Obsessed with Japanese Culture? On the Hidden Cultural and Regional Biases of LLMs</a></li>
+<li><a href="../../sources/20261107-web-nousresearch-com-arete-bd6bbfb61392/">Introducing Arete-27B: Qwen3.8-27B Post-Trained To Reinforce Western Values | Nous Research</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">Normalized Low-Rank Adaptation 검증 보고서</a></li>
+<li><a href="../../sources/20261010-web-arxiv-org-pdf-2610-12176-c3b57dd7ed20/">다중 에이전트 자가 감독을 통한 재귀적 자가 개선(MASS) 해설 보고서</a></li>
+<li><a href="../../sources/20261021-web-arxiv-org-pdf-2604-21751-77b5497cb7d4/">Why are all LLMs Obsessed with Japanese Culture? On the Hidden Cultural and Regional Biases of LLMs</a></li>
+<li><a href="../../sources/20261107-web-nousresearch-com-arete-bd6bbfb61392/">Introducing Arete-27B: Qwen3.8-27B Post-Trained To Reinforce Western Values | Nous Research</a></li></ul></section>
+</main>
+</body>
+</html>

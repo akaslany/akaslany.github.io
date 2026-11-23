@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Model</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>World Model</h1>
+<p class="page-meta">근거 소스 8편</p>
+<h2 id="상태-예측과-행동-계획">상태 예측과 행동 계획</h2>
+<p>얀 르쿤은 지능적 행동을 계획하려면 현재 상태와 선택한 행동을 바탕으로 다음 상태를 예측하는 세계 모델이 필요하다고 본다. 장기 계획을 위해서는 추상적 목표를 구체적 행동으로 연결하는 계층적 구조를 제안한다. 이 제안을 다룬 보고서는 JEPA가 예측 가능한 핵심 정보를 추상적 표현 공간에서 학습한다고 설명한다. <a href="../../sources/20261029-youtube-DK0jypclGSk/">근거 H</a></p>
+<p>RSI-Anything 보고서에 따르면 이 시스템은 예측 세계 모델을 활용해 행동을 선택하고 외부 평가의 우선순위와 학습에 쓸 데이터를 정한다. 새 정책과 모델의 조합은 호환성 검사를 통과한 경우에만 다음 단계에 사용하며, 검사에 실패하면 기존에 검증된 조합을 유지한다. <a href="../../sources/20261012-web-arxiv-org-pdf-2610-13912-4c96941eea5b/">근거 E</a></p>
+<h2 id="언어-모델의-내부-표현">언어 모델의 내부 표현</h2>
+<p>다음 토큰 예측을 분석한 보고서는 예측을 개선하는 과정에서 텍스트를 생성한 세계의 잠재 구조를 학습할 수 있다고 본다. 보고서가 소개한 Othello-GPT 사례에서는 보드 상태에 대응하는 내부 표현을 바꾸자 다음 수 예측이 달라졌다. <a href="../../sources/20260803-chatgpt-next-token-reality-understanding/">근거 A</a></p>
+<p>같은 보고서는 내부 표현에서 정보를 읽어낼 수 있다는 사실만으로 그 정보가 예측에 쓰였는지 판단하기 어렵다고 지적한다. 서로 다른 세계 모형이 같은 텍스트 분포를 설명할 수 있으므로 예측 성능만으로 실제 생성 원인을 식별하기도 어렵다고 본다. <a href="../../sources/20260803-chatgpt-next-token-reality-understanding/">근거 A</a></p>
+<h2 id="공간-복원과-가상-환경">공간 복원과 가상 환경</h2>
+<p>World Labs의 Atlas를 분석한 보고서는 이 모델이 생성, 복원, 시뮬레이션을 한 체계에서 수행한다고 설명한다. Atlas는 사전 학습 단계부터 카메라의 위치와 방향을 나타내는 카메라 포즈와 깊이 지도를 입력으로 사용하며, 카메라 포즈로 관점을 제어한다. <a href="../../sources/20260905-youtube-qn1QDDBnTA0-world-models-atlas-spatial-intelligence/">근거 B</a></p>
+<p>구글 딥마인드의 Genie 4 연구 공개를 다룬 보고서에 따르면 사용자는 키보드로 시점을 움직이고 자연어로 진행 중인 시뮬레이션을 바꿀 수 있다. 구글 딥마인드는 로봇과 에이전트의 학습에 활용할 수 있을 것으로 전망하는 한편, 탐색이 길어지거나 복잡한 수정이 쌓이면 시각적 세부와 물체의 연속성이 흔들릴 수 있다고 밝혔다. <a href="../../sources/20261027-web-deepmind-google-blog-genie-4-a-new-gener-e960e8891f7d/">근거 G</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>시점 $t$의 상태와 행동으로부터 시점 $t+1$의 상태를 예측하는 '세계 모델'</p>
+</blockquote>
+<p><a href="../../sources/20261029-youtube-DK0jypclGSk/">근거 H</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260803-chatgpt-next-token-reality-understanding/">다음 토큰 예측은 정말 ‘이해’일까?</a></li>
+<li><a href="../../sources/20260905-youtube-qn1QDDBnTA0-world-models-atlas-spatial-intelligence/">Why World Models Could Change Robotics, 3D, and Creativity</a></li>
+<li><a href="../../sources/20260915-youtube-OE0YGfxLLRo-skilled-labor-ai-dilemma/">AI가 못 뺏을 줄 알았던 일자리 로봇 시대, 숙련 노동자가 마주한 잔인한 딜레마 | 투자Insight (홍기빈 소장 #1)</a></li>
+<li><a href="../../sources/20260924-youtube-OW5-N57FRPA/">Flies to Poop</a></li>
+<li><a href="../../sources/20261012-web-arxiv-org-pdf-2610-13912-4c96941eea5b/">RSI-Anything 기반 재귀적 자가 개선(RSI) 기술 해설 보고서</a></li>
+<li><a href="../../sources/20261021-youtube-F3ItSTZNtT0/">Sundar Pichai: Path To Recursive Self-Improvement, Compute Allocation Dilemma, Future AI Interfaces</a></li>
+<li><a href="../../sources/20261027-web-deepmind-google-blog-genie-4-a-new-gener-e960e8891f7d/">Genie 4: A new generation of world simulation — Google DeepMind</a></li>
+<li><a href="../../sources/20261029-youtube-DK0jypclGSk/">Yann LeCun, AMI Labs | Evident AI Symposium 2026</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260803-chatgpt-next-token-reality-understanding/">다음 토큰 예측은 정말 ‘이해’일까?</a></li>
+<li><a href="../../sources/20260905-youtube-qn1QDDBnTA0-world-models-atlas-spatial-intelligence/">Why World Models Could Change Robotics, 3D, and Creativity</a></li>
+<li><a href="../../sources/20260915-youtube-OE0YGfxLLRo-skilled-labor-ai-dilemma/">AI가 못 뺏을 줄 알았던 일자리 로봇 시대, 숙련 노동자가 마주한 잔인한 딜레마 | 투자Insight (홍기빈 소장 #1)</a></li>
+<li><a href="../../sources/20260924-youtube-OW5-N57FRPA/">Flies to Poop</a></li>
+<li><a href="../../sources/20261012-web-arxiv-org-pdf-2610-13912-4c96941eea5b/">RSI-Anything 기반 재귀적 자가 개선(RSI) 기술 해설 보고서</a></li>
+<li><a href="../../sources/20261021-youtube-F3ItSTZNtT0/">Sundar Pichai: Path To Recursive Self-Improvement, Compute Allocation Dilemma, Future AI Interfaces</a></li>
+<li><a href="../../sources/20261027-web-deepmind-google-blog-genie-4-a-new-gener-e960e8891f7d/">Genie 4: A new generation of world simulation — Google DeepMind</a></li>
+<li><a href="../../sources/20261029-youtube-DK0jypclGSk/">Yann LeCun, AMI Labs | Evident AI Symposium 2026</a></li></ul></section>
+</main>
+</body>
+</html>

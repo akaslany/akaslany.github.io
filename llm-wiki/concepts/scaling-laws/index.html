@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaling Laws</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Scaling Laws</h1>
+<p class="page-meta">근거 소스 3편</p>
+<h2 id="모델-학습-비용-추정">모델 학습 비용 추정</h2>
+<p>SMELT 논문의 저자들은 희소 전문가 혼합 모델 실험에서 토큰당 학습 연산량, 비임베딩 파라미터 수, KV 캐시 규모를 기준 모델과 비슷하게 맞췄다. 저자들은 SMELT의 최종 학습 손실이 더 낮았다고 보고했으며, 스케일링 법칙을 적합해 같은 손실에 도달하는 데 필요한 학습 연산량의 절감 폭을 실험이 뒷받침하는 계산량과 희소도 범위에서 추정했다. <a href="../../sources/20260902-arxiv-2609.01343v1-smelt-moe-looped-transformers/">근거 B</a></p>
+<h2 id="군집화-실험에서의-검증">군집화 실험에서의 검증</h2>
+<p>Meta FAIR의 e-means를 다룬 보고서는 스케일링 법칙을 적합할 때 사용하지 않은 데이터셋과 규모에서도 그 법칙을 적용했을 때의 손실이 실험에서 확인한 최적 손실에 가까웠다고 전한다. <a href="../../sources/20261110-web-e-means-github-io-bundle/">근거 C</a></p>
+<h2 id="고성능-칩-의존성과-정책">고성능 칩 의존성과 정책</h2>
+<p>오픈웨이트 모델 정책을 다룬 앤트로픽 보고서는 스케일링 법칙에 따른 칩 의존성을 확인된 사실로 분류했다. 앤트로픽은 고성능 칩과 제조 장비의 대중국 수출을 차단하자고 제안했다. <a href="../../sources/20260728-pdf-anthropic-open-weights/">근거 A</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>논문의 “6.8–18.0%”는 이 조건부 compute-optimal-frontier estimate 범위를 요약한다.</p>
+</blockquote>
+<p><a href="../../sources/20260902-arxiv-2609.01343v1-smelt-moe-looped-transformers/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260728-pdf-anthropic-open-weights/">[심층 정책 분석 보고서] 오픈웨이트(Open-weights) 모델에 대한 Anthropic의 입장 및 정책 제언</a></li>
+<li><a href="../../sources/20260902-arxiv-2609.01343v1-smelt-moe-looped-transformers/">SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers</a></li>
+<li><a href="../../sources/20261110-web-e-means-github-io-bundle/">e-means: outperforming k-means (in one-tenth the epochs)</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260728-pdf-anthropic-open-weights/">[심층 정책 분석 보고서] 오픈웨이트(Open-weights) 모델에 대한 Anthropic의 입장 및 정책 제언</a></li>
+<li><a href="../../sources/20260902-arxiv-2609.01343v1-smelt-moe-looped-transformers/">SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers</a></li>
+<li><a href="../../sources/20261110-web-e-means-github-io-bundle/">e-means: outperforming k-means (in one-tenth the epochs)</a></li></ul></section>
+</main>
+</body>
+</html>

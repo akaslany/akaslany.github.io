@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backpropagation</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Backpropagation</h1>
+<p class="page-meta">근거 소스 2편</p>
+<h2 id="추출-근거">추출 근거</h2>
+<blockquote>
+<p>100k 및 1M 토큰: Dust는 수백 회(100k 토큰) 및 1k 회 이상(1M 토큰)의 추출 개체군 조건에서 역전파보다 낮은 테스트 손실을 달성했습니다.</p>
+</blockquote>
+<p>100k 및 1M 토큰 실험에서 Dust는 각각 수백 회와 1k 회 이상의 추출 조건에서 역전파보다 낮은 테스트 손실을 기록했다. <a href="../../sources/20261006-web-qlabs-dust/">근거 A</a></p>
+<blockquote>
+<p>Dust의 멱법칙 외삽 극한값은 5.248 (95% 신뢰구간 5.17 ~ 5.30)로, 역전파의 실측 손실값인 5.361보다 낮게 형성되었습니다.</p>
+</blockquote>
+<p>1M 토큰 Adam 조건에서 Dust의 손실 외삽값은 5.248이었고, 역전파의 실측값은 5.361이었다. <a href="../../sources/20261006-web-qlabs-dust/">근거 A</a></p>
+<blockquote>
+<p>Dust의 그래디언트는 별도의 연쇄 법칙 계산 없이 오직 대규모 탐색만으로 역전파 그래디언트 방향에 수렴(Emergence)하는 양상을 보였습니다.</p>
+</blockquote>
+<p>체크포인트 실험에서 개체군이 커질수록 Dust의 추정 그래디언트 방향은 역전파 그래디언트 방향에 가까워졌다. <a href="../../sources/20261006-web-qlabs-dust/">근거 A</a></p>
+<blockquote>
+<p>당장 현행 연산 규모에서 역전파를 대체하기 위해서는 수 자릿수 이상의 추가적인 연산 효율성 개선이 선행되어야 합니다.</p>
+</blockquote>
+<p>저자들은 현행 연산 규모에서 Dust가 역전파를 대체하려면 수 자릿수 이상의 연산 효율 개선이 필요하다고 밝혔다. <a href="../../sources/20261006-web-qlabs-dust/">근거 A</a></p>
+<blockquote>
+<p>더스트는 역전파 없이 대규모 병렬 탐색(Search)만을 기반으로 트랜스포머(Transformers) 구조의 사전 학습이 가능함을 입증했습니다.</p>
+</blockquote>
+<p>보고서는 Dust가 역전파 없이 대규모 병렬 탐색으로 트랜스포머를 사전 학습할 수 있음을 입증했다고 설명한다. <a href="../../sources/20261110-web-qlabs-sh-research-alien-205c5dd3af41/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20261006-web-qlabs-dust/">Dust: Pretraining Transformers Without Backpropagation</a></li>
+<li><a href="../../sources/20261110-web-qlabs-sh-research-alien-205c5dd3af41/">Alien Optimizers: the Bitter Lesson for Optimization</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20261006-web-qlabs-dust/">Dust: Pretraining Transformers Without Backpropagation</a></li>
+<li><a href="../../sources/20261110-web-qlabs-sh-research-alien-205c5dd3af41/">Alien Optimizers: the Bitter Lesson for Optimization</a></li></ul></section>
+</main>
+</body>
+</html>

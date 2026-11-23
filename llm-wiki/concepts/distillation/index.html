@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Distillation</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Distillation</h1>
+<p class="page-meta">근거 소스 5편</p>
+<h2 id="학습-원리">학습 원리</h2>
+<p>지식 증류에서 학생 모델은 교사 모델이 각 출력 후보에 부여한 확률을 학습 신호로 사용한다. 교사의 분포를 고정하면 교차 엔트로피는 학생의 분포가 교사의 분포와 일치할 때 최소가 된다. <a href="../../sources/20261006-youtube-bundle-l6DKRf-fAAM-GlYgs6v2YfU-cinematic/">근거 A</a></p>
+<h2 id="적용-사례">적용 사례</h2>
+<p>온디바이스 모델 설계를 다룬 보고서에 따르면 Muse Glimmer 30B는 사전 학습에서 교사 모델 Muse Spark의 상위 로짓을 기록해 공통 증류에 사용했다. <a href="../../sources/20261019-web-scontent-ssn1-1-xx-fbcdn-net-v-t39-2365--f6c08b7d2e3a/">근거 D</a></p>
+<p>저비용 오픈웨이트 모델을 분석한 보고서의 원출처는 DeepSeek와 Qwen 계열의 추론 비용 절감에 아키텍처 최적화와 지식 증류가 함께 기여했다고 설명한다. <a href="../../sources/20261018-web-share-gemini-google-ir2ges7-fzi-f6bf5e693a83/">근거 C</a></p>
+<h2 id="경쟁에서의-효과와-논쟁">경쟁에서의 효과와 논쟁</h2>
+<p>네이선 램버트 대담에서는 지식 증류가 프론티어 모델과의 격차를 줄이는 효과가 제한적이라고 추정했으며, 그 추정의 오차 범위가 크다고 보았다. <a href="../../sources/20261021-youtube-BKuK0M6oDTI/">근거 E</a></p>
+<p>별도의 보고서는 앤트로픽이 중국 AI 연구소의 클로드 모델 증류를 비판해 왔다고 전한다. <a href="../../sources/20261009-web-insufferable-dev-posts-the-ai-race-just--a340387d281d/">근거 B</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>증류 과정에서는 교사 모형이 출력하는 전체 소프트 확률 분포(Soft Probability Distribution) $P_{teacher}$를 학생 모형의 분포 $Q_{student}$가 추종하도록 학습시킵니다.</p>
+</blockquote>
+<p><a href="../../sources/20261006-youtube-bundle-l6DKRf-fAAM-GlYgs6v2YfU-cinematic/">근거 A</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20261006-youtube-bundle-l6DKRf-fAAM-GlYgs6v2YfU-cinematic/">쓰리블루원브라운 압축은 지능이다 — 엔트로피와 교차 엔트로피 1·2편 통합</a></li>
+<li><a href="../../sources/20261009-web-insufferable-dev-posts-the-ai-race-just--a340387d281d/">The AI Race Just Got Awkward | insufferable.dev</a></li>
+<li><a href="../../sources/20261018-web-share-gemini-google-ir2ges7-fzi-f6bf5e693a83/">1. Executive Summary 제시된 텍스트의 핵심 명제는 &quot;중국은 미국보다 뛰어난 프론티어 AI를 개발할 필요 없이, '충분히 쓸 만한(Good enough)' 저비용 오픈웨이트(Open-weight) 모델</a></li>
+<li><a href="../../sources/20261019-web-scontent-ssn1-1-xx-fbcdn-net-v-t39-2365--f6c08b7d2e3a/">855837971_1475273414665369_3935523351908243106_n</a></li>
+<li><a href="../../sources/20261021-youtube-BKuK0M6oDTI/">Can Open Models Keep Up With OpenAI and Anthropic? | Nathan Lambert</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20261006-youtube-bundle-l6DKRf-fAAM-GlYgs6v2YfU-cinematic/">쓰리블루원브라운 압축은 지능이다 — 엔트로피와 교차 엔트로피 1·2편 통합</a></li>
+<li><a href="../../sources/20261009-web-insufferable-dev-posts-the-ai-race-just--a340387d281d/">The AI Race Just Got Awkward | insufferable.dev</a></li>
+<li><a href="../../sources/20261018-web-share-gemini-google-ir2ges7-fzi-f6bf5e693a83/">1. Executive Summary 제시된 텍스트의 핵심 명제는 &quot;중국은 미국보다 뛰어난 프론티어 AI를 개발할 필요 없이, &#x27;충분히 쓸 만한(Good enough)&#x27; 저비용 오픈웨이트(Open-weight) 모델</a></li>
+<li><a href="../../sources/20261019-web-scontent-ssn1-1-xx-fbcdn-net-v-t39-2365--f6c08b7d2e3a/">855837971_1475273414665369_3935523351908243106_n</a></li>
+<li><a href="../../sources/20261021-youtube-BKuK0M6oDTI/">Can Open Models Keep Up With OpenAI and Anthropic? | Nathan Lambert</a></li></ul></section>
+</main>
+</body>
+</html>

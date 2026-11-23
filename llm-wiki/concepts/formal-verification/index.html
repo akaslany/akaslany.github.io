@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formal Verification</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Formal Verification</h1>
+<p class="page-meta">근거 소스 9편</p>
+<h2 id="검증-대상과-보증-범위">검증 대상과 보증 범위</h2>
+<p>형식 검증의 보증 범위는 증명한 명제와 모델의 가정에 따라 정해진다. 수학에서는 자연어 문제가 형식 명제에 정확히 옮겨졌는지 별도로 확인해야 한다. 소프트웨어에서는 명세가 실제 환경을 얼마나 충실히 반영하는지가 중요하며, 배포 환경이 모델의 범위를 벗어나면 버그가 발생할 수 있다. <a href="../../sources/20260829-youtube-TtOMM8HrT64-terence-tao-ai-math/">근거 B</a> · <a href="../../sources/20261023-web-www-anthropic-com-research-formal-verifi-f6a301346a05/">근거 E</a> · <a href="../../sources/20261110-web-deepmind-google-blog-introducing-alphapr-0e9fb0eb84f1/">근거 G</a></p>
+<h2 id="수학-증명의-검증">수학 증명의 검증</h2>
+<p>리만 가설 사례를 다룬 보고서에 따르면, 제출된 정리가 Mathlib의 리만 가설 명제와 일치하는지 비교했고, 내보낸 증명 파일은 Lean 공식 커널과 독립 검증기들을 통과했다. 보고서 작성자는 Mathlib의 기본 정의와 공통 증명 내보내기 과정에 결함이 있을 가능성은 검증 범위 밖에 남았다고 지적했다. <a href="../../sources/20261121-web-leanprover-community-github-io-blog-post-5c6d12478082/">근거 I</a></p>
+<p>나비에–스토크스 사례를 다룬 보고서는 OpenAI의 문제 해결 주장과 관련해 Lean 형식 검증, 독립 동료평가, 클레이 수학연구소의 인정이 각각 별개의 절차라고 설명한다. 해당 보고서가 게시 전에 확인했을 때 클레이 수학연구소는 문제를 미해결로 분류하고 있었다. <a href="../../sources/20260908-openai-navier-stokes-solution/">근거 C</a></p>
+<h2 id="소프트웨어와-신경망에의-적용">소프트웨어와 신경망에의 적용</h2>
+<p>오픈소스 라이브러리 연구 보고서는 연구팀이 Rocq로 퍼즈 테스트 진입점의 정상 종료를 증명했다고 전한다. 증명은 크기 제한을 충족하는 입력과 모델링된 리눅스 응답을 전제로 한다. 별도의 Signal 사례에서는 연구진이 증명할 명세를 정하고 에이전트가 Lean 증명 코드를 생성했다. 후속 해설은 바이너리 검증 범위가 libsignal-cli 빌드로 한정되며 계산적 보안 증명은 고전적 공격자를 대상으로 한다고 설명한다. <a href="../../sources/20261023-web-www-anthropic-com-research-formal-verifi-f6a301346a05/">근거 E</a> · <a href="../../sources/20261110-web-deepmind-google-blog-introducing-alphapr-0e9fb0eb84f1/">근거 G</a> · <a href="../../sources/20261114-web-deepmind-google-documents-36-ormal-erifi-42f70febe1cf/">근거 H</a></p>
+<p>과학용 AI 보고서에 따르면, 아난드쿠마르는 Lean을 이용해 신경망을 형식 검증 대상으로 다루는 TorchLean을 제안했다. <a href="../../sources/20260827-youtube-79mIutht1f4-anima-physical-world/">근거 A</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>그러나 kernel이 통과시켰다는 사실만으로 자연어 문제가 정확히 형식화됐는지, 결과가 새롭고 중요한지, 적절히 귀속됐는지, 독립 재현됐는지, 동료심사를 통과했는지는 보장되지 않는다.</p>
+</blockquote>
+<p><a href="../../sources/20260829-youtube-TtOMM8HrT64-terence-tao-ai-math/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260827-youtube-79mIutht1f4-anima-physical-world/">🔬 The Physical World Is More Forgiving Than You Think — Anima Anandkumar, Caltech</a></li>
+<li><a href="../../sources/20260829-youtube-TtOMM8HrT64-terence-tao-ai-math/">Dr Terence Tao | 2026 Frontier &amp; Pioneer Symposium</a></li>
+<li><a href="../../sources/20260908-openai-navier-stokes-solution/">On the Navier–Stokes Millennium Prize Problem</a></li>
+<li><a href="../../sources/20260923-gemini-eb79116c97ca-aaronson-wonders/">인공지능 특이점 국면의 수학과 이론 컴퓨터과학: 스콧 애런슨의 '경이와 공포의 시대' 심층 분석</a></li>
+<li><a href="../../sources/20261023-web-www-anthropic-com-research-formal-verifi-f6a301346a05/">LLMs are making formal software verification feasible at a much larger scale \ Anthropic</a></li>
+<li><a href="../../sources/20261108-youtube-jGfzCJPnneQ/">Vinod Khosla on AI Regulation, Job Displacement, and the Future of Quantum Computing | WSJ</a></li>
+<li><a href="../../sources/20261110-web-deepmind-google-blog-introducing-alphapr-0e9fb0eb84f1/">Formal Verification of Signal’s Protocol with Gemini — Google DeepMind</a></li>
+<li><a href="../../sources/20261114-web-deepmind-google-documents-36-ormal-erifi-42f70febe1cf/">Formal_Verification_of_Signal_4</a></li>
+<li><a href="../../sources/20261121-web-leanprover-community-github-io-blog-post-5c6d12478082/">Lean verification of the Riemann Hypothesis | Lean community blog</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260827-youtube-79mIutht1f4-anima-physical-world/">🔬 The Physical World Is More Forgiving Than You Think — Anima Anandkumar, Caltech</a></li>
+<li><a href="../../sources/20260829-youtube-TtOMM8HrT64-terence-tao-ai-math/">Dr Terence Tao | 2026 Frontier &amp; Pioneer Symposium</a></li>
+<li><a href="../../sources/20260908-openai-navier-stokes-solution/">On the Navier–Stokes Millennium Prize Problem</a></li>
+<li><a href="../../sources/20260923-gemini-eb79116c97ca-aaronson-wonders/">인공지능 특이점 국면의 수학과 이론 컴퓨터과학: 스콧 애런슨의 &#x27;경이와 공포의 시대&#x27; 심층 분석</a></li>
+<li><a href="../../sources/20261023-web-www-anthropic-com-research-formal-verifi-f6a301346a05/">LLMs are making formal software verification feasible at a much larger scale \ Anthropic</a></li>
+<li><a href="../../sources/20261108-youtube-jGfzCJPnneQ/">Vinod Khosla on AI Regulation, Job Displacement, and the Future of Quantum Computing | WSJ</a></li>
+<li><a href="../../sources/20261110-web-deepmind-google-blog-introducing-alphapr-0e9fb0eb84f1/">Formal Verification of Signal’s Protocol with Gemini — Google DeepMind</a></li>
+<li><a href="../../sources/20261114-web-deepmind-google-documents-36-ormal-erifi-42f70febe1cf/">Formal_Verification_of_Signal_4</a></li>
+<li><a href="../../sources/20261121-web-leanprover-community-github-io-blog-post-5c6d12478082/">Lean verification of the Riemann Hypothesis | Lean community blog</a></li></ul></section>
+</main>
+</body>
+</html>

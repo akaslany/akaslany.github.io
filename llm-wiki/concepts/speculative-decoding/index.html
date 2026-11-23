@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speculative Decoding</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Speculative Decoding</h1>
+<p class="page-meta">근거 소스 5편</p>
+<h2 id="작동-방식">작동 방식</h2>
+<p>추측 디코딩은 투기적 디코딩이라고도 한다. 생성할 토큰의 초안을 먼저 제안하고 타깃 모델의 검증을 거쳐 수락된 토큰을 출력에 반영한다. <a href="../../sources/20260824-web-alexzhang-spec-ptc/">근거 B</a> · <a href="../../sources/20261029-web-www-inclusion-ai-org-ubtree-ree-pdf-d9c1660b7530/">근거 E</a></p>
+<h2 id="초안-구성과-수락">초안 구성과 수락</h2>
+<p>UBTree 원 논문은 타깃 모델의 분포가 여러 유효한 경로에 분산되면 단일 경로 초안에서 수락되는 토큰의 길이가 짧아진다고 주장한다. 이를 보완하기 위해 유니그램 제안기와 바이그램 선택기를 병렬로 결합해 여러 후보 경로를 검증하는 트리를 구성한다. <a href="../../sources/20261029-web-www-inclusion-ai-org-ubtree-ree-pdf-d9c1660b7530/">근거 E</a></p>
+<p>UBTree 보고서는 학술 벤치마크에서 자기회귀 디코딩 대비 속도 향상을 보고했다. 동시성이 높은 환경에서는 단일 경로 방식과 트리 방식 모두 속도 향상 폭이 줄거나 사라질 수 있다고 설명한다. <a href="../../sources/20261029-web-www-inclusion-ai-org-ubtree-ree-pdf-d9c1660b7530/">근거 E</a></p>
+<h2 id="추론-최적화와-성능-평가">추론 최적화와 성능 평가</h2>
+<p>사이오닉 AI 분석 보고서는 투기적 디코딩과 입력 처리·출력 단계 분리가 메모리 대역폭 병목을 조건부로 완화할 수 있다고 분석한다. 고석현 대표는 양자화로 초안 토큰의 수락률이 낮아지면 전체 추론 속도가 느려질 수 있다고 지적했다. <a href="../../sources/20260816-youtube-ZA2StFPJhEY-sionic-token-factory/">근거 A</a></p>
+<p>Inferact는 메가커널을 적용한 Kimi K3의 투기적 디코딩 실험에서 vLLM이 발표한 기준선보다 높은 처리량을 기록했다고 보고했다. 별도의 Jalapeño 평가 보고서는 당시 구현되지 않은 추측 디코딩의 예상 이익을 실현된 비용 절감으로 계산하지 않았다. <a href="../../sources/20260924-inferact-tpu-megakernels/">근거 D</a> · <a href="../../sources/20260831-web-semianalysis-openai-jalapeno-vs-nvidia/">근거 C</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>speculative decoding은 draft token을 검증·수용하는 decoding 기법이다. sPTC는 token을 고르는 대신 tool computation의 시작 시점을 당긴다.</p>
+</blockquote>
+<p><a href="../../sources/20260824-web-alexzhang-spec-ptc/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260816-youtube-ZA2StFPJhEY-sionic-token-factory/">EP 109. 인퍼런스의 시대: 사이오닉 AI의 토큰 팩토리와 추론 최적화 심층 분석</a></li>
+<li><a href="../../sources/20260824-web-alexzhang-spec-ptc/">Speculative Programmatic Tool Calling</a></li>
+<li><a href="../../sources/20260831-web-semianalysis-openai-jalapeno-vs-nvidia/">OpenAI Jalapeño: Better Than Nvidia Blackwell</a></li>
+<li><a href="../../sources/20260924-inferact-tpu-megakernels/">700 TPS on Kimi K3: A Case for TPU Megakernels</a></li>
+<li><a href="../../sources/20261029-web-www-inclusion-ai-org-ubtree-ree-pdf-d9c1660b7530/">UBTree: 병렬 유니그램·바이그램 모델 기반 트리 초안 작성을 통한 추측 디코딩 가속화 해설 보고서</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260816-youtube-ZA2StFPJhEY-sionic-token-factory/">EP 109. 인퍼런스의 시대: 사이오닉 AI의 토큰 팩토리와 추론 최적화 심층 분석</a></li>
+<li><a href="../../sources/20260824-web-alexzhang-spec-ptc/">Speculative Programmatic Tool Calling</a></li>
+<li><a href="../../sources/20260831-web-semianalysis-openai-jalapeno-vs-nvidia/">OpenAI Jalapeño: Better Than Nvidia Blackwell</a></li>
+<li><a href="../../sources/20260924-inferact-tpu-megakernels/">700 TPS on Kimi K3: A Case for TPU Megakernels</a></li>
+<li><a href="../../sources/20261029-web-www-inclusion-ai-org-ubtree-ree-pdf-d9c1660b7530/">UBTree: 병렬 유니그램·바이그램 모델 기반 트리 초안 작성을 통한 추측 디코딩 가속화 해설 보고서</a></li></ul></section>
+</main>
+</body>
+</html>

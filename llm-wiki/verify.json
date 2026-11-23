@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 38820922,
+  "dist_bytes": 39939524,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -7,7 +7,7 @@
       "ok": true
     },
     "escapes": {
-      "checked": 4321,
+      "checked": 4460,
       "html_escapes": 0,
       "html_paths": {},
       "markdown_escapes": 0,
@@ -16,8 +16,8 @@
       "ok": true
     },
     "grounding": {
-      "checked": 4321,
-      "entity_source_links_checked": 6486,
+      "checked": 4460,
+      "entity_source_links_checked": 7272,
       "invalid_extractions": {},
       "issues": {},
       "ok": true,
@@ -25,39 +25,39 @@
     },
     "links": {
       "broken": 0,
-      "html_checked": 109873,
+      "html_checked": 115163,
       "issues": [],
-      "markdown_checked": 31462,
+      "markdown_checked": 33789,
       "ok": true
     },
     "links_recheck": {
       "broken": 0,
-      "checked_associations": 20842,
+      "checked_associations": 22414,
       "missing_associations": [],
       "ok": true
     },
     "markers": {
-      "checked": 5281,
+      "checked": 5420,
       "occurrences": 0,
       "ok": true,
       "pages": 0,
       "paths": {}
     },
     "material": {
-      "checked": 92,
+      "checked": 231,
       "issues": {},
-      "min_body_chars": 375,
+      "min_body_chars": 357,
       "min_evidence_sources": 2,
       "missing": [],
       "ok": true,
       "registry_matches": true
     },
     "orphans": {
-      "edges": 30881,
+      "edges": 32593,
       "graph_valid": true,
       "low_source_inbound": [],
       "min_source_inbound": 6,
-      "nodes": 5281,
+      "nodes": 5420,
       "ok": true,
       "orphan_pages": [],
       "orphans": 0
@@ -78,15 +78,15 @@
         "source_catalog": []
       },
       "expected_sources": 939,
-      "generated": 4321,
+      "generated": 4460,
       "index": 5,
       "kinds": 9,
       "ok": true,
-      "search_index_bytes": 782462,
+      "search_index_bytes": 835960,
       "sources": 939,
       "symmetric_difference": 0,
       "timeline": 7,
-      "total": 5281
+      "total": 5420
     },
     "people_complete": {
       "corpus_sources": 939,
@@ -113,20 +113,77 @@
       "ok": true,
       "paths": {}
     },
+    "regression": {
+      "checked": 10,
+      "entities": {
+        "concept/formal-verification": {
+          "evidence": 9,
+          "ok": true,
+          "page": true
+        },
+        "concept/high-bandwidth-memory": {
+          "evidence": 19,
+          "ok": true,
+          "page": true
+        },
+        "org/anthropic": {
+          "evidence": 73,
+          "ok": true,
+          "page": true
+        },
+        "org/federal-reserve": {
+          "evidence": 33,
+          "ok": true,
+          "page": true
+        },
+        "org/gukjetonghwagigeum": {
+          "evidence": 4,
+          "ok": true,
+          "page": true
+        },
+        "org/hangukeunhaeng": {
+          "evidence": 4,
+          "ok": true,
+          "page": true
+        },
+        "org/miguk-jaemubu": {
+          "evidence": 9,
+          "ok": true,
+          "page": true
+        },
+        "org/nvidia": {
+          "evidence": 57,
+          "ok": true,
+          "page": true
+        },
+        "org/openai": {
+          "evidence": 105,
+          "ok": true,
+          "page": true
+        },
+        "org/samseongjeonja": {
+          "evidence": 15,
+          "ok": true,
+          "page": true
+        }
+      },
+      "ok": true,
+      "passed": 10
+    },
     "reproducible": {
       "changed_files": 0,
       "changed_paths": [],
-      "compared_files": 5285,
-      "first_sec": 17.624,
+      "compared_files": 5424,
+      "first_sec": 17.828,
       "ok": true,
-      "second_sec": 16.889
+      "second_sec": 17.956
     },
     "schema": {
-      "checked": 5281,
+      "checked": 5420,
       "invalid": 0,
       "issues": {},
       "ok": true,
-      "passed": 5281
+      "passed": 5420
     },
     "selfcontained": {
       "external_resources": 0,
