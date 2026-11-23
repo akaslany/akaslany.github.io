@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google just dropped the best 1 hour course on Graph Engineering from one agent to Loops and Graphs</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Google just dropped the best 1 hour course on Graph Engineering from one agent to Loops and Graphs</h1>
+<p class="page-meta">YouTube · 2026-09-26</p>
+<h2 id="요약">요약</h2>
+<p>전통적 챗봇과 현대 AI 에이전트는 사용자 요청을 처리하는 의사결정 방식과 시스템적 접근 방식에서 근본적인 구조적 차이를 갖습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=h2s4XXPVXx8">출처</a> · <a href="https://www.youtube.com/watch?v=Gwim_v5tE0M">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="google-adk-기반-에이전트-그래프-엔지니어링-및-아키텍처-심층-분석-보고서">Google ADK 기반 에이전트 그래프 엔지니어링 및 아키텍처 심층 분석 보고서</h3>
+<hr />
+<h4 id="1-에이전트의-기본-개념-및-동작-메커니즘-agent-fundamentals-reasoning-cycle">1. 에이전트의 기본 개념 및 동작 메커니즘 (Agent Fundamentals &amp; Reasoning Cycle)</h4>
+<h5 id="1-1-전통적-챗봇과-ai-에이전트의-구조적-차이점">1.1. 전통적 챗봇과 AI 에이전트의 구조적 차이점</h5>
+<p>전통적 챗봇과 현대 AI 에이전트는 사용자 요청을 처리하는 의사결정 방식과 시스템적 접근 방식에서 근본적인 구조적 차이를 갖습니다. 전통적 챗봇은 학습 데이터의 컷오프(Cutoff)와 정적 규칙에 의존하여 텍스트 응답만을 단발성으로 생성하는 확정적 시스템입니다. 반면, 현대 AI 에이전트는 사용자를 대리하여 자율적인 추론을 거쳐 외부 도구(API, 코드 실행 등)를 직접 호출하고 환경 변화에 적응하며 목표를 달성하는 능동적 아키텍처입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 요소</th>
+<th style="text-align:left">전통적 챗봇 (Traditional Chatbot)</th>
+<th style="text-align:left">현대 AI 에이전트 (Modern AI Agent)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>핵심 목적</strong></td>
+<td style="text-align:left">단순 질의응답 및 고정된 단일 텍스트 출력</td>
+<td style="text-align:left">사용자 대리 목표 달성을 위한 자율적 의사결정 및 행동 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>동작 메커니즘</strong></td>
+<td style="text-align:left">단발성 입력-출력 매핑 방식</td>
+<td style="text-align:left">추론-행동-관찰-조정(ReAct) 순환 루프 지속 실행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>외부 연동성</strong></td>
+<td style="text-align:left">제한적이며 하드코딩된 특정 엔드포인트 연동</td>
+<td style="text-align:left">API 호출, 코드 실행, 데이터베이스 조회 등 다중 도구 활용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상태 관리 및 환경</strong></td>
+<td style="text-align:left">정적 엔드포인트 바인딩 및 고정된 규칙 기반 접근</td>
+<td style="text-align:left">환경 탐색 및 실행 결과에 따른 동적 맥락(Context) 추론</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유연성 및 적응력</strong></td>
+<td style="text-align:left">계획 수립 불가능, 입력 변화에 정적 반응</td>
+<td style="text-align:left">실행 관찰 결과를 바탕으로 다음 단계 행동을 동적으로 조정</td>
+</tr>
+</tbody>
+</table>
+<p>AI 에이전트의 핵심인 <strong>ReAct(Synergizing Reasoning and Acting)</strong> 파이프라인은 논문 <em>ReAct: Synergizing Reasoning and Acting in Language Models</em>에 기반을 두며, 다음과 같은 4단계 순환 루프 구조로 동작합니다:</p>
+<ul>
+<li><strong>추론 (Reasoning):</strong> 사용자의 요청 및 현재 상태를 분석하고, 목표 달성을 위해 필요한 단계와 실행할 행동(도구 호출, API 실행 등)을 명확히 판단합니다.</li>
+<li><strong>행동 (Acting):</strong> 추론 결과를 바탕으로 외부 시스템 도구를 호출하거나 코드를 실행하는 등 환경에 직접적인 액션을 수행합니다.</li>
+<li><strong>관찰 (Observing):</strong> 수행된 행동의 결과(API 반환 데이터, 코드 실행 출력 등)를 수집하고 해당 반응을 분석합니다.</li>
+<li><strong>조정 (Adjusting):</strong> 관찰된 반환값을 평가하여 당초 수립한 계획을 수정하거나, 다음 단계를 동적으로 결정하며, 목표가 달성될 때까지 순환 루프를 반복하거나 완료 처리합니다.</li>
+</ul>
+<h5 id="1-2-에이전트의-3대-행동-패턴-분석">1.2. 에이전트의 3대 행동 패턴 분석</h5>
+<p>문제의 복잡도와 시스템 변동성에 따라 에이전트는 다음과 같은 3가지 주요 행동 패턴으로 구분하여 설계됩니다:</p>
+<ul>
+<li><strong>순차적 에이전트 (Sequential Agents):</strong>
+<ul>
+<li><strong>특징:</strong> 조립 라인(Assembly Line)과 같이 사전에 정의된 단계를 일렬(Step 1 $\rightarrow$ Step 2 $\rightarrow$ Step 3)로 실행합니다.</li>
+<li><strong>작동 방식:</strong> 이전 단계의 출력이 다음 단계의 입력으로 고정 전달되는 결합 구조를 가집니다.</li>
+<li><strong>적합한 유스케이스:</strong> 예측 가능하고 정형화된 프로세스 처리에 최적화되어 있습니다.</li>
+</ul>
+</li>
+<li><strong>반응형 에이전트 (Reactive Agents):</strong>
+<ul>
+<li><strong>특징:</strong> 현재 상태(Current State)만을 즉시 판단하여 다수의 도구 중 최선의 행동을 순간적으로 선택합니다.</li>
+<li><strong>작동 방식:</strong> 장기적 전체 계획을 미리 작성하지 않고, 상황 변화에 따라 도구 A 또는 도구 B를 자율적으로 전환하며 동적으로 대응합니다.</li>
+<li><strong>적합한 유스케이스:</strong> 변동성이 높고 환경과의 즉각적 상호작용이 필요한 유스케이스에 적합합니다.</li>
+</ul>
+</li>
+<li><strong>숙고/계획형 에이전트 (Deliberate / Planning Agents):</strong>
+<ul>
+<li><strong>특징:</strong> 행동을 실행하기 전, 전체적인 실행 계획(Plan)을 수립하는 계획 단계를 먼저 수행합니다.</li>
+<li><strong>작동 방식:</strong> 목표 간의 의존성을 고려하여 전체 실행 순서를 결정한 뒤 체계적으로 실행합니다. (예: 여행 예약 시 일정 결정 $\rightarrow$ 호텔 선택 $\rightarrow$ 항공권 구매 순서 준수)</li>
+<li><strong>적합한 유스케이스:</strong> 상호 의존성이 존재하는 복잡한 다단계(Multi-step) 목표 달성에 필수적입니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="2-google-adk를-활용한-실습-에이전트-및-루프-구조-설계-blog-writing-agent">2. Google ADK를 활용한 실습 에이전트 및 루프 구조 설계 (Blog Writing Agent)</h4>
+<h5 id="2-1-단일-에이전트-정의-및-역할-분담-planner-writer">2.1. 단일 에이전트 정의 및 역할 분담 (Planner &amp; Writer)</h5>
+<p>Google ADK(Agent Development Kit) 환경에서는 목적에 맞는 개별 LLM 에이전트를 정의하고 역할을 명확히 분담합니다. 블로그 작성 시스템을 구성하는 <code>blog_planner</code>와 <code>blog_writer</code>의 세부 사양은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">에이전트 및 설정 항목</th>
+<th style="text-align:left">상세 구성 사양</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong><code>blog_planner</code> - 이름</strong></td>
+<td style="text-align:left"><code>blog_planner</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_planner</code> - 모델</strong></td>
+<td style="text-align:left">환경 설정 파일 지정 모델 (예: Gemini 3 Flash Preview 등)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_planner</code> - 설명</strong></td>
+<td style="text-align:left">주제를 분석하여 구조화된 마크다운 개요를 전문적으로 생성하는 에이전트</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_planner</code> - 지시사항</strong></td>
+<td style="text-align:left">제목, 짧은 서론, 불렛 포인트를 포함한 4~6개의 본문 섹션, 결론을 갖춘 마크다운 개요 작성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_planner</code> - 출력 키</strong></td>
+<td style="text-align:left"><code>blog_outline</code> (공유 상태에 자동 저장)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_writer</code> - 이름</strong></td>
+<td style="text-align:left"><code>blog_writer</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_writer</code> - 모델</strong></td>
+<td style="text-align:left">환경 설정 파일 지정 모델 (예: Gemini 3 Flash Preview 등)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_writer</code> - 설명</strong></td>
+<td style="text-align:left">저장된 개요(<code>blog_outline</code>)를 참조하여 완성도 높은 블로그 초안을 작성하는 에이전트</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_writer</code> - 지시사항</strong></td>
+<td style="text-align:left">1. 타깃 청중: 소프트웨어 엔지니어&lt;br&gt;2. 기초 개념은 생략하고 실용적인 기술적 통찰(Practical Insights)에 집중&lt;br&gt;3. 단순 설명에 그치지 않고 작동 방식(How)과 이유(Why)를 구체적으로 서술&lt;br&gt;4. 적절한 위치에 단문 코드 스니펫(Short code snippets)을 필수 포함하여 개요 구조 준수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>blog_writer</code> - 출력 키</strong></td>
+<td style="text-align:left"><code>blog_post</code> (공유 상태에 자동 저장)</td>
+</tr>
+</tbody>
+</table>
+<h6 id="데이터-전달-메커니즘-shared-state">데이터 전달 메커니즘 (Shared State)</h6>
+<p>에이전트 간 데이터 연동은 ADK 파이프라인의 공유 상태(Shared State) 키값을 통해 이루어집니다. <code>blog_planner</code>가 개요 생성을 완료하면 결과 텍스트는 공유 상태의 <code>blog_outline</code> 키에 저장됩니다. 그 후 순차적으로 파이프라인을 실행하는 <code>blog_writer</code>는 파싱 로직 없이 <code>blog_outline</code>에 저장된 개요 데이터를 프롬프트 맥락으로 읽어와 본문을 작성하고, 완성을 거쳐 최종 원고를 <code>blog_post</code> 키에 기록합니다.</p>
+<h5 id="2-2-검증-checker-및-loop-agent를-통한-자동-오류-복구-및-재시도">2.2. 검증 checker 및 Loop Agent를 통한 자동 오류 복구 및 재시도</h5>
+<p>생성 결과물의 품질 검증과 환각 제어를 위해 ADK의 워크플로우 에이전트인 Loop Agent와 검증 전용 Checker 에이전트를 결합합니다.</p>
+<h6 id="validation-checker-동작-규칙">Validation Checker 동작 규칙</h6>
+<ul>
+<li><strong><code>outline_validation_checker</code>:</strong> 공유 상태의 <code>blog_outline</code>을 검토합니다. 제목, 서론, 4~6개의 본문 섹션, 결론이 완벽히 포함된 경우 문자열 <code>'okay'</code>를 반환합니다. 구성 요소가 누락된 경우 <code>'retry'</code> 응답과 함께 결함 원인을 설명하는 피드백을 출력합니다.</li>
+<li><strong><code>blog_post_validation_checker</code>:</strong> 공유 상태의 <code>blog_post</code>를 검토합니다. 서론, 개요와 정확히 일치하는 본문 섹션, 결론, 기술적 설명의 명확성이 확보된 경우 <code>'okay'</code>를 반환하며, 기준 미달 시 <code>'retry'</code> 및 수정 지침 목록을 반환합니다.</li>
+</ul>
+<h6 id="loop-agent-제어-흐름-및-안전망-safety-net-구조">Loop Agent 제어 흐름 및 안전망(Safety Net) 구조</h6>
+<ol>
+<li><strong>타겟 에이전트 실행:</strong> Loop Agent(<code>robust_blog_planner</code> 또는 <code>robust_blog_writer</code>)가 하위 LLM 에이전트(Planner 또는 Writer)를 최초 호출합니다.</li>
+<li><strong>검증 수행:</strong> 타겟 실행 직후 관련 Checker 에이전트가 호출되어 생성된 결과물의 구조와 내용을 즉시 평가합니다.</li>
+<li><strong>조건 분기:</strong>
+<ul>
+<li>Checker 응답이 <code>'okay'</code>인 경우, 재시도 루프를 탈출하고 다음 실행 단계로 제어를 넘깁니다.</li>
+<li>Checker 응답이 <code>'retry'</code>인 경우, 원본 지시사항에 Checker의 피드백을 추가하여 타겟 에이전트를 재실행합니다.</li>
+</ul>
+</li>
+<li><strong>최대 재시도 제어:</strong> 이 재시도 루프는 최대 3회까지 자동으로 반복 실행되어, 모델의 일시적 지시사항 누락이나 구조적 결함을 자동으로 복구하는 안전망 역할을 수행합니다.</li>
+</ol>
+<h5 id="2-3-루트-에이전트-blogger-와-도구-래핑-tools-wrapping">2.3. 루트 에이전트(Blogger)와 도구 래핑(Tools Wrapping)</h5>
+<p>복잡한 내부에 자가 복구 루프를 지닌 하위 에이전트들(<code>robust_blog_planner</code>, <code>robust_blog_writer</code>)을 도구(Tools) 형태로 래핑하여 최상위 루트 에이전트인 <code>Blogger</code>에 노출합니다.</p>
+<h6 id="도구-래핑의-이점-및-최종-실행-플로우">도구 래핑의 이점 및 최종 실행 플로우</h6>
+<ul>
+<li><strong>도구 래핑의 이점:</strong> 루트 에이전트는 하위 루프의 내부 재시도 횟수나 Checker의 상태 분기 로직에 관여하지 않고, 도구 인터페이스 수준에서 추상화된 정교한 기능만을 간결하게 제어할 수 있습니다.</li>
+<li><strong>최종 실행 플로우:</strong>
+<ol>
+<li><strong>주제 수신:</strong> 사용자가 작성할 블로그 주제(Topic)를 루트 에이전트에게 전달합니다.</li>
+<li><strong>개요 생성 도구 호출:</strong> 루트 에이전트가 플래너 도구(<code>robust_blog_planner</code>)를 실행하여 검증을 통과한 <code>blog_outline</code>을 확보합니다.</li>
+<li><strong>본문 작성 도구 호출:</strong> 작성자 도구(<code>robust_blog_writer</code>)를 실행하여 검증을 통과한 <code>blog_post</code> 초안을 확보합니다.</li>
+<li><strong>후처리 및 완결:</strong> 루트 에이전트가 생성된 원고에 3개의 대체 제목(Alternative Titles)과 2개의 트윗 분량 훅(Tweet-length Hooks)을 직접 추가하여 최종 완성본을 출력합니다.</li>
+</ol>
+</li>
+</ul>
+<h6 id="터미널-및-ui-실행-프로세스">터미널 및 UI 실행 프로세스</h6>
+<ul>
+<li><strong>터미널 CLI 실행:</strong> 패키지 매니저 <code>uv</code> 및 Google ADK 설치 후, 터미널에서 <code>adk run &lt;agent_name&gt;</code> 명령을 실행하여 대화형 터미널 인터페이스 형태로 에이전트를 실습합니다.</li>
+<li><strong>웹 UI 실행:</strong> 터미널에 <code>adk web</code> 명령을 입력하면 로컬 웹 서버(<code>http://127.0.0.1:8000</code>)가 구동됩니다. 사용자는 브라우저 UI 상에서 각 에이전트의 내부 실행 스택 트레이스, 도구 호출 상태 및 스레드 이력을 시각적으로 디버깅할 수 있습니다.</li>
+</ul>
+<hr />
+<h4 id="3-에이전트-메모리-아키텍처-단계별-설계-agent-memory-architecture">3. 에이전트 메모리 아키텍처 단계별 설계 (Agent Memory Architecture)</h4>
+<h5 id="3-1-단기-작업-메모리-short-term-working-memory-session-events-state">3.1. 단기 작업 메모리(Short-Term Working Memory): Session, Events, State</h5>
+<h6 id="세션-session-의-정의-및-turn-2-메모리-상실-원인">세션(Session)의 정의 및 Turn 2 메모리 상실 원인</h6>
+<p>세션(Session)은 단일 단말기에서 이루어지는 하나의 연속된 대화 스레드(Chat Thread)를 의미합니다. ADK Web UI의 기본값인 In-Memory Session Service 환경에서 매 대화 턴(Turn)마다 새로운 세션 ID를 생성하면, 이전 턴에서 주고받은 맥락(도시명, Day 1 일정, 사용자 취향 등)을 전적으로 상실하는 단기 기억 손실(Turn 2 메모리 상실) 현상이 발생합니다. 이를 방지하기 위해서는 동일한 세션 ID를 식별하여 멀티 턴에 걸쳐 재사용해야 합니다.</p>
+<h6 id="세션의-2대-구성-요소-비교">세션의 2대 구성 요소 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">세션 구성 요소</th>
+<th style="text-align:left">역할 및 정의</th>
+<th style="text-align:left">구체적 데이터 형태 및 용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>이벤트 (Events)</strong></td>
+<td style="text-align:left">대화의 전체 트랜스크립트(Transcript) 기록</td>
+<td style="text-align:left">사용자 메시지, 에이전트 응답, 이미지/오디오 등 입력 미디어 데이터 전체</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상태 (State)</strong></td>
+<td style="text-align:left">빠른 접근이 필요한 핵심 데이터를 관리하는 임시 작업 공간 (Scratchpad Memory)</td>
+<td style="text-align:left">식당 이름, 예약 번호, 목적지 등 모델이 전체 대화 이력을 재탐색하지 않고 즉시 참조하는 구조화된 데이터</td>
+</tr>
+</tbody>
+</table>
+<h6 id="상태-저장-관련-개발-지침-보안-및-정합성">상태 저장 관련 개발 지침 (보안 및 정합성)</h6>
+<p><strong>도구(Tool) 코드 내부에서 세션 객체(Session Object)를 직접 수정하는 행위는 엄격히 금지됩니다.</strong> 도구 내부에서 세션 객체를 직접 수정하는 경우, 해당 변경 사항이 ADK 이벤트 로그(Event Log)에 기록되지 않고 우회(Bypass)되어, 추후 데이터베이스 영속화 저장소에 저장될 때 데이터 손실 및 커럽션(Data Corruption)을 유발합니다. 올바른 상태 반영을 위해서는 반드시 ADK 콜백 및 도구 맥락이 제공하는 **<code>context.state</code>**에 변경 사항을 작성해야만 이벤트 로그와 함께 상태가 정상적으로 영속화됩니다.</p>
+<h5 id="3-2-영속성-세션-persistent-sessions-및-사용자-프로필-db-user-profile-store">3.2. 영속성 세션(Persistent Sessions) 및 사용자 프로필 DB (User Profile Store)</h5>
+<h6 id="세션-서비스-제공-유형-비교">세션 서비스 제공 유형 비교</h6>
+<ul>
+<li><strong>In-Memory Session Service:</strong> 처리 속도가 빠르나 애플리케이션 재시작 시 휘발되는 휘발성 단기 메모리 방식입니다.</li>
+<li><strong>Database Session Service:</strong> 로컬 DB 파일 또는 PostgreSQL 등 영구 데이터베이스에 이벤트와 상태 변경 이력을 기록합니다. 앱이 재시작되어도 기존 세션 ID를 복원하여 대화를 유지시킵니다.</li>
+<li><strong>Vertex AI Session Service:</strong> Google Cloud 환경에서 완전 관리형(Managed)으로 제공되는 클라우드 세션 저장소입니다.</li>
+</ul>
+<h6 id="persistent-session-복원-메커니즘">persistent session 복원 메커니즘</h6>
+<p>Database Session Service 연동 시 <strong><code>get_or_create_session</code></strong> 헬퍼 함수가 사용됩니다. 이 함수는 우선 <strong>1단계로 <code>get_session()</code>을 호출</strong>하여 기존 세션 이력 및 최신 상태가 디스크/DB에 존재하는지 확인하고, 존재할 경우 이전 맥락을 복원(Resume)합니다. 만약 기존 세션이 <strong>존재하지 않는 2단계 상황일 경우 <code>create_session()</code>을 실행</strong>하여 신규 세션을 안전하게 초기화합니다.</p>
+<h6 id="사용자-프로필-db-설계-및-개인화-복원-단계">사용자 프로필 DB 설계 및 개인화 복원 단계</h6>
+<p>동일한 사용자라 할지라도 새로운 세션 ID로 대화를 시작하면 이전 세션 트랜스크립트를 읽을 수 없습니다. 따라서 영구적인 사용자 프로필 DB(User ID별 Key-Value 구조)를 연동하는 아키텍처가 요구됩니다.</p>
+<pre><code>[턴 1: 사용자 접속] -&gt; recall_user_preference 실행 (조회 실패)
+                   -&gt; 여행 계획 수립 및 &quot;추가 선호사항이 있으신가요?&quot; 질의
+                   -&gt; &quot;채식주의자입니다&quot; 응답 수신
+                   -&gt; save_user_preference 실행 (dietary = vegetarian 저장)
+                                 │
+                        [애플리케이션 재시작]
+                                 │
+[턴 2: 신규 세션 생성] -&gt; recall_user_preference 실행 (dietary = vegetarian 조회)
+                   -&gt; 채식 식당 반영 맞춤형 여행 계획 즉시 생성
+</code></pre>
+<ol>
+<li><strong>조회 선수행 (Recall First):</strong> 대화 개시 직후 에이전트는 <code>recall_user_preference</code> 도구를 즉시 호출하여 현재 User ID에 매핑된 기존 선호도를 DB에서 조회합니다.</li>
+<li><strong>개인화 계획 수립 (Personalize &amp; Plan):</strong> 조회된 선호도 데이터(<code>dietary = vegetarian</code> 등)를 바탕으로 초기 대답 및 계획을 수립합니다.</li>
+<li><strong>학습 및 확인 (Present &amp; Learn):</strong> 계획 제시 후 사용자에게 추가로 기록할 맞춤 정보가 있는지 확인합니다.</li>
+<li><strong>최종 저장 (Save Last):</strong> 사용자가 새로운 정보를 제공하면 <code>save_user_preference</code> 도구를 호출하여 DB를 업데이트합니다. 이를 통해 앱 재시작이나 신규 세션 생성 시에도 지속적인 개인화가 유지됩니다.</li>
+</ol>
+<h5 id="3-3-vertex-ai-memory-bank-기반-장기-메모리-및-멀티모달-검색">3.3. Vertex AI Memory Bank 기반 장기 메모리 및 멀티모달 검색</h5>
+<h6 id="session-service와-memory-service의-역할-분담">Session Service와 Memory Service의 역할 분담</h6>
+<ul>
+<li><strong>Session Service:</strong> 현재 진행 중인 특정 대화 스레드의 활성 상태 및 단기 맥락 복원을 담당합니다.</li>
+<li><strong>Memory Service (Memory Bank):</strong> 다양한 과거 세션 및 미디어 파일 전체에서 핵심 사실(Fact)의 의미(Meaning)를 추출하여 보관하는 장기 아카이브 역할을 수행합니다.</li>
+</ul>
+<h6 id="agent-engine의-2-model-기반-아키텍처">Agent Engine의 2-Model 기반 아키텍처</h6>
+<p>Vertex AI Memory Bank를 구동하는 Agent Engine 파이프라인을 구성할 때는 <strong>서로 다른 2가지 유형의 AI 모델</strong>을 명확히 지정해야 합니다:</p>
+<ol>
+<li><strong>Fact Extraction Model (사실 추출 모델):</strong> 대화 트랜스크립트나 미디어 파일로부터 핵심 사실(Fact)을 추출하는 모델 (예: Gemini).</li>
+<li><strong>Embedding Model (임베딩 모델):</strong> 추출된 사실들을 의미 기반으로 탐색할 수 있도록 벡터 임베딩(Vector Embedding)을 생성하는 모델.</li>
+</ol>
+<h6 id="세션-아카이빙-및-멀티모달-직접-업로드">세션 아카이빙 및 멀티모달 직접 업로드</h6>
+<ul>
+<li><strong>전체 세션 아카이빙 (<code>add_session_to_memory</code>):</strong> 세션 종료 시 이 함수를 호출하면, Fact Extraction Model이 세션 내의 텍스트 및 미디어 참조 이력을 분석하여 정제된 사실을 추출하고 이를 임베딩하여 메모리 뱅크에 아카이빙합니다.</li>
+<li><strong>멀티모달 직접 업로드:</strong> 실시간 대화 스레드를 거치지 않고도 텍스트, 이미지, 오디오, 비디오 파일과 맥락 텍스트를 메모리 뱅크에 직접 전달하여 관련 사실을 임베딩 및 저장할 수 있습니다.</li>
+</ul>
+<h6 id="preload_memory_tool을-통한-자동-맥락-주입"><code>preload_memory_tool</code>을 통한 자동 맥락 주입</h6>
+<p>대화의 매 턴(Turn)이 시작될 때마다 <code>preload_memory_tool</code>이 작동하여 사용자의 입력 메시지를 기반으로 Memory Bank에 의미론적 검색(Semantic Search)을 수행합니다. 검색 결과로 도출된 과거의 장기 기억(예: 과거에 업로드했던 사진 속 건물의 양식, 해변 선호도 등)은 프롬프트 맥락으로 자동 주입(Inject)되므로, 에이전트는 별도의 복잡한 제어 코드 없이도 개인화된 응답을 출력합니다.</p>
+<hr />
+<h4 id="4-장기-실행-에이전트-패턴-long-running-agent-pattern">4. 장기 실행 에이전트 패턴 (Long-Running Agent Pattern)</h4>
+<h5 id="4-1-장기-실행-에이전트의-3대-핵심-원칙">4.1. 장기 실행 에이전트의 3대 핵심 원칙</h5>
+<p>장기 실행 에이전트 패턴(Long-Running Agent Pattern)은 수일에서 수주에 걸쳐 진행되는 엔터프라이즈 워크플로우를 처리하기 위해 설계된 아키텍처입니다.</p>
+<ul>
+<li><strong>내구성 있는 상태 (Durable State):</strong> 에이전트의 진행 상태가 벡터 저장소의 단순 JSON이나 텍스트 로그가 아닌, 데이터베이스 내 열거형(ENUM) 및 정형화된 상태값으로 완벽하게 영속화됩니다.</li>
+<li><strong>이벤트 기반 휴면 (Event-driven Dormancy):</strong> 서명 대기나 배송 대기 등 외부 처리가 진행되는 동안, 프로세스는 스레드를 점유하여 Polling을 수행하지 않고 완전한 휴면(Sleep) 상태로 전환됩니다. 유휴 상태에서 컴퓨팅 자원을 소비하지 않으며, Webhook, Human-in-the-loop 상호작용 등 외부 이벤트 수신 시에만 깨어납니다.</li>
+<li><strong>분리된 평가 (Separated Evaluation):</strong> 에이전트가 자기가 생성한 결과물을 스스로 검증(Self-evaluation)할 경우 결과물을 과도하게 긍정 평가하는 과도한 자신감(Overconfidence) 문제가 발생합니다. <strong>Anthropic 등의 연구 결과에 따르면 에이전트의 자가 평가 방식은 결과물의 품질을 심각하게 왜곡하는 것으로 밝혀졌습니다.</strong> 따라서 시스템 구성 시 플래너(Planner), 생성자(Generator), 평가자(Evaluator)를 물리적으로 완전 분리된 에이전트로 구축해야 합니다.</li>
+</ul>
+<h5 id="4-2-신규-입사자-온보딩-코디네이터-사례-연구">4.2. 신규 입사자 온보딩 코디네이터 사례 연구</h5>
+<p>신규 입사자 온보딩 프로세스는 수일에 걸쳐 외부 이벤트와의 상호작용이 요구되는 장기 실행 패턴의 대표적 사례입니다.</p>
+<h6 id="온보딩-코디네이터-ui-아키텍처-및-상태-머신-제어">온보딩 코디네이터 UI 아키텍처 및 상태 머신 제어</h6>
+<p>본 아키텍처는 **HR Command Center(관리자용 UI)**와 **Employee Portal(입사자용 UI)**의 이중 UI 구조로 설계됩니다. 백엔드의 상태 머신(State Machine)은 순차적 단계를 엄격히 강제하여, 외부 이벤트(예: 배송 완료 Webhook)가 수신되어 상태 변경이 데이터베이스에 확정되기 전에는 에이전트나 UI가 다음 단계로 임의 진행되는 것을 차단합니다.</p>
+<pre><code>[Step 1] 온보딩 케이스 생성 &amp; 환영 패킷 전송 (send_welcome_packet)
+    │
+    ▼ (완전 휴면 - 컴퓨팅 자원 소비 없음)
+[Step 2] 입사자의 서명 제출 완료
+    │
+    ▼ (외부 이벤트 발생 -&gt; ADK Wake Directive 트리거)
+[Step 3] 서명 상태 확정 및 IT 지원 서브 에이전트 위임 (노트북 배송 요청)
+    │
+    ▼ (완전 휴면 - Carrier Webhook 대기)
+[Step 4] 노트북 배송 완료 Webhook 수신
+    │
+    ▼ (이벤트 재개)
+[Step 5] 맞춤형 Day 1 오리엔테이션 일정 최종 생성 및 프로세스 완료
+</code></pre>
+<h6 id="온보딩-프로세스-실행-단계">온보딩 프로세스 실행 단계</h6>
+<ol>
+<li><strong>환영 패킷 전송 및 휴면:</strong> 에이전트가 입사자에게 환영 패킷을 전송(<code>send_welcome_packet</code>)한 후, 시스템은 완전한 휴면 상태에 진입합니다.</li>
+<li><strong>서명 확인 및 이벤트 재개 (ADK Wake Directive):</strong> 입사자가 포털에서 문서를 서명하면 외부 이벤트가 발생하고 <code>ADK Wake Directive</code>가 트리거되어 에이전트가 깨어나 서명을 확인합니다.</li>
+<li><strong>IT 하드웨어 배송 대기:</strong> IT 지원 전문 서브 에이전트에게 계정 생성을 위임한 뒤, 택배사의 배송 완료 Webhook 응답이 수신될 때까지 프로세스는 다시 휴면 상태를 유지합니다.</li>
+<li><strong>Day 1 일정 생성:</strong> 배송 완료 수신 이벤트가 확인되면 에이전트가 마지막 단계로 이행하여 맞춤형 Day 1 오리엔테이션 일정을 생성하고 전체 프로세스를 종료합니다.</li>
+</ol>
+<h6 id="전통적-챗봇과-장기-실행-에이전트-비교">전통적 챗봇과 장기 실행 에이전트 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목</th>
+<th style="text-align:left">전통적 챗봇 (Traditional Chatbot)</th>
+<th style="text-align:left">장기 실행 에이전트 (Long-Running Agent)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>맥락 유지 능력</strong></td>
+<td style="text-align:left">시간이 지남에 따라 컨텍스트 오염 및 토큰 과부하(Token Bloat) 발생</td>
+<td style="text-align:left">DB ENUM 기반 상태 관리로 컨텍스트 오염 차단</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유휴 시간 관리</strong></td>
+<td style="text-align:left">스레드 차단 및 Active Polling으로 유휴 컴퓨팅 자원 낭비</td>
+<td style="text-align:left">이벤트 기반 휴면(Event-driven Dormancy)으로 자원 절감</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>검증 정확도</strong></td>
+<td style="text-align:left">단일 에이전트의 자가 검증으로 품질 오류 감지 불가능</td>
+<td style="text-align:left">독립된 평가자(Evaluator) 에이전트를 통한 엄격한 정밀 검증</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-mcp-model-context-protocol-표준과-외부-도구-연동">5. MCP(Model Context Protocol) 표준과 외부 도구 연동</h4>
+<h5 id="5-1-mcp의-개념-및-api와의-구조적-차이점">5.1. MCP의 개념 및 API와의 구조적 차이점</h5>
+<p>Model Context Protocol(MCP)은 언어 모델과 외부 도구 및 데이터 시스템 간의 상호작용을 위해 정립된 개방형 표준 프로토콜입니다.</p>
+<h6 id="mcp의-4대-핵심-장점">MCP의 4대 핵심 장점</h6>
+<ul>
+<li><strong>격리성 (Isolation):</strong> 각 도구가 독자적인 프로세스로 실행되므로, 도구 내부에서 오류가 발생해도 루트 에이전트 프로세스 전체로 상해 패닉이 전파되지 않습니다.</li>
+<li><strong>상호운용성 (Interoperability):</strong> 도구가 Python, Go, Node.js 등 어떤 언어로 작성되었든 MCP 규격만 준수하면 모델이 동일한 방식으로 호출할 수 있습니다.</li>
+<li><strong>발견가능성 (Discoverability):</strong> 도구가 JSON Schema를 통해 자신의 기능과 파라미터를 자가 기술(Self-describing)하므로, 모델이 런타임에 유효한 스키마를 동적으로 발견하여 활용합니다.</li>
+<li><strong>확장성 (Scalability):</strong> 메인 에이전트 코드의 수정 없이 신규 MCP 서버를 추가하거나 개별 도구의 버전을 독자적으로 업그레이드할 수 있습니다.</li>
+</ul>
+<h6 id="전통적-api와-mcp의-구조적-비교">전통적 API와 MCP의 구조적 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 요소</th>
+<th style="text-align:left">전통적 API (Traditional API)</th>
+<th style="text-align:left">MCP (Model Context Protocol)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>통신 메커니즘 비유</strong></td>
+<td style="text-align:left"><strong>잠긴 장식장 (Locked Cabinet):</strong> 특정 열쇠(상세 엔드포인트 및 인자 규격)를 미리 정확히 알고 있어야만 서랍을 열 수 있음</td>
+<td style="text-align:left"><strong>동적 기계 읽기 가능 지도 (Live Machine-readable Map / Open Toolbox):</strong> 환경 내 이용 가능한 도구와 인자를 동적으로 스스로 파악함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>통신 대상 및 주체</strong></td>
+<td style="text-align:left">프로그램 간(Code-to-Code) 정적 계약</td>
+<td style="text-align:left">모델과 환경 간(Model-to-Environment) 의미론적 계약</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시스템 특성</strong></td>
+<td style="text-align:left">확정적(Deterministic) 시스템</td>
+<td style="text-align:left">확률적(Probabilistic) 추론 시스템</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연동 및 발견 방식</strong></td>
+<td style="text-align:left">개발자가 문서 수동 참조 후 엔드포인트 하드코딩</td>
+<td style="text-align:left">런타임 <code>list_tools</code> 수신을 통한 메타데이터 동적 발견</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>클라이언트 성격</strong></td>
+<td style="text-align:left">스키마가 고정된 전통적 애플리케이션</td>
+<td style="text-align:left">메타데이터 기반으로 도구 선택을 추론하는 LLM</td>
+</tr>
+</tbody>
+</table>
+<h5 id="5-2-adk-기반-mcp-서버-구현-google-trends-연동-사례">5.2. ADK 기반 MCP 서버 구현 (Google Trends 연동 사례)</h5>
+<p>Google Trends 실시간 데이터를 조회하여 에이전트에 제공하는 MCP 서버(<code>server.py</code>)의 4가지 핵심 코드 구성 요소는 다음과 같습니다:</p>
+<ol>
+<li><strong><code>FunctionTool</code> 래핑:</strong> 일반 파이썬 함수(<code>trends</code>)를 ADK <code>FunctionTool</code>로 감쌉니다. 이 과정에서 파이썬 함수의 시그니처와 독스트링(Docstring)이 자동 분석되어 수동 스키마 작성 없이 표준 JSON Schema가 생성됩니다.</li>
+<li><strong><code>adk_to_mcp_tool_type</code> 스키마 변환 (런타임 Handshake):</strong> MCP 클라이언트가 초기화 과정에서 <code>list_tools</code> 요청을 전송하면, <code>adk_to_mcp_tool_type</code> 헬퍼 함수가 ADK 메타데이터를 MCP 표준 JSON Schema로 변환하여 응답합니다. 이를 통해 루트 에이전트는 런타임에 도구의 이름, 인자 타입, 설명을 동적으로 파악합니다.</li>
+<li><strong><code>call_tool</code> 실행 핸들러:</strong> 에이전트가 도구 명칭과 JSON 인자 딕셔너리를 전송하면, <code>run_async</code>를 통해 내부 파이썬 함수를 실행하고 그 결과를 JSON 텍스트 페이로드로 포맷팅하여 반환합니다.</li>
+<li><strong><code>stdio</code> 트랜스포트 연결:</strong> MCP 서버를 표준 입출력(<code>stdio</code>) 트랜스포트에 바인딩하고 <code>asyncio.run</code>으로 프로세스를 구동하여, 에이전트와 이진/텍스트 스트림 통신 채널을 형성합니다.</li>
+</ol>
+<h6 id="루트-에이전트-연동-메커니즘">루트 에이전트 연동 메커니즘</h6>
+<p><code>agent.py</code>에 위치한 루트 에이전트(<code>Blogger</code>)의 <code>tools</code> 배열에 <code>trends_mcp</code>를 추가합니다. 루트 에이전트 입장에서는 일반 로컬 함수를 호출하는 것과 동일하게 작동하지만, 실제 구동 시에는 표준 입출력 프로토콜을 거쳐 별도 프로세스의 Google Trends 실시간 데이터를 가져오며, 이 실시간 정보를 바탕으로 최신 트렌드가 반영된 블로그 글 작성을 수행합니다.</p>
+<hr />
+<h4 id="6-검증된-기술적-성능과-강사-주장에-대한-분석적-평가-analysis-limitations">6. 검증된 기술적 성능과 강사 주장에 대한 분석적 평가 (Analysis &amp; Limitations)</h4>
+<h5 id="6-1-강의-내-시연-주장-사항과-보편적-성능-한계의-구분">6.1. 강의 내 시연/주장 사항과 보편적 성능 한계의 구분</h5>
+<h6 id="llm-검색-결과-url-환각-현상과-검증-에이전트-도입-필요성">LLM 검색 결과 URL 환각 현상과 검증 에이전트 도입 필요성</h6>
+<p>Google ADK의 <code>Google Search</code> 도구는 실시간 웹 검색을 통해 최신 데이터를 수집하는 우수한 기능을 제공합니다. 그러나 시연 과정에서도 확인되었듯이, 수집된 데이터를 바탕으로 최종 응답을 종합 요약(Recap)하는 과정에서 LLM 본연의 확률적 생성 특성으로 인해 존재하지 않는 웹 URL을 임의로 만들어내는 <strong>URL 환각(404 오류) 현상</strong>이 지속적으로 발생합니다.</p>
+<p>따라서 단일 에이전트의 검색 출력 결과를 검증 없이 그대로 사용자에게 제공해서는 안 되며, <code>fetch_URL</code> 도구를 탑재하여 실제 웹페이지 존재 여부 및 텍스트 일치성을 판정하는 **독립적인 다단계 검증 에이전트(<code>URL Verifier</code>, LLM-as-a-judge 패턴)**를 에이전트 그래프 내에 필수적으로 배치해야 합니다.</p>
+<h6 id="자막-왜곡-사례-및-소스-코드-기반-검증의-중요성">자막 왜곡 사례 및 소스 코드 기반 검증의 중요성</h6>
+<p>음성 강의를 시각화하는 과정에서 자동 자막 생성기(Auto-captioning)의 인식 오류로 인한 기술 용어 왜곡 현상이 다수 확인되었습니다:</p>
+<ul>
+<li><code>Gemini</code> $\rightarrow$ <code>Germany</code> 로 오기 ([1435.840s])</li>
+<li><code>Vertex AI</code> $\rightarrow$ <code>vortex AI</code> 로 오기 ([1356.240s], [1413.760s])</li>
+<li><code>Agentic frameworks</code> $\rightarrow$ <code>Asian frameworks</code> 로 오기 ([3397.839s])</li>
+<li><code>transient thing</code> $\rightarrow$ <code>trusence thing</code> 으로 오기 ([710.240s])</li>
+</ul>
+<p>이러한 음성 자막 왜곡은 기술적 사실 판단에 혼선을 줄 수 있으므로, 엔터프라이즈 AI 시스템을 설계할 때는 자동 생성 자막의 단어 표현에 의존하지 않고 실제 소스 코드의 함수 시그니처, 클래스 정의 및 공식 API 사양을 교차 검증하는 기술적 엄밀성을 유지해야 합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

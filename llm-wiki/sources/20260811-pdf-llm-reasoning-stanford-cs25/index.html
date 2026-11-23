@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Reasoning: Stanford CS25 강연 심층 분석 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>LLM Reasoning: Stanford CS25 강연 심층 분석 보고서</h1>
+<p class="page-meta">PDF · 2026-08-11</p>
+<h2 id="요약">요약</h2>
+<p>Denny Zhou의 LLM 추론 강연을 바탕으로 중간 토큰, 디코딩, 강화학습, 검증, 검색을 설명한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://dennyzhou.github.io/LLM-Reasoning-Stanford-CS-25.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=Rg5ngAUnRAM">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="llm-reasoning-stanford-cs25-강연-심층-분석-보고서">LLM Reasoning: Stanford CS25 강연 심층 분석 보고서</h3>
+<p>본 보고서는 표지 기준 <code>Denny Zhou</code>, <code>Google DeepMind</code>, <code>Stanford, CS25: Transformers United V5</code>, <code>April 29, 2025</code>의 강연 자료인 **&quot;LLM Reasoning&quot;**을 해설합니다. 원본은 49쪽 강의 슬라이드이며, 본 보고서는 그 한국어 쉬운 풀이 파생본을 바탕으로 작성되었습니다. 복잡한 최신 AI 연구의 흐름을 구조화하되, 숨은 chain-of-thought를 재현하거나 공개하지 않고 고수준 방법과 검증 구조만 설명합니다.</p>
+<blockquote>
+<p><strong>독립적 검증에 관한 경고:</strong> 본 보고서에 기술된 연구의 우선권(Priority), 실험적 재현성, 그리고 이론적 증명의 완전성은 강연자의 주장을 요약한 것이며, 본 분석가에 의해 독립적으로 검증되지 않았습니다. 실제 기술 도입 시에는 인용된 원문 논문의 세부 가정과 실험 환경을 반드시 대조 검토하십시오.</p>
+</blockquote>
+<hr />
+<h4 id="1-llm-추론의-정의-중간-토큰-intermediate-tokens-의-필연성">1. LLM 추론의 정의: 중간 토큰(Intermediate Tokens)의 필연성</h4>
+<p>이 강연에서 '추론'은 입력을 통해 즉각적인 최종 결과값을 도출하는 것이 아니라, 정답에 도달하기 위한 <strong>'중간 단계(Intermediate steps) 또는 중간 토큰'을 생성하는 과정</strong>으로 설명됩니다.</p>
+<ul>
+<li><strong>실무적 사례:</strong> 'artificial intelligence'라는 두 단어의 마지막 글자를 추출하여 이어 붙이는 과제를 수행할 때, 단순히 결과값인 'le'만 출력하는 것과 &quot;artificial의 마지막 글자는 l, intelligence의 마지막 글자는 e이므로 정답은 le이다&quot;라고 과정을 적는 것의 차이입니다.</li>
+<li><strong>학술적 기원:</strong> Denny Zhou는 **Ling et al. (2017)**의 연구를 자연어로 중간 추론 단계를 기술한 최초의 논문으로 꼽으며, 추론 과정의 명시적 표기가 모델 성능에 미치는 영향력을 강조합니다.</li>
+<li><strong>이론적 근거 ($O(T)$):</strong> 강연은 **Li et al. (2024)**의 이론 연구를 근거로, 크기 $T$의 불리언 회로(Boolean circuit)로 풀 수 있는 문제를 고정된 크기의 트랜스포머가 $O(T)$개의 중간 토큰을 생성해 해결할 수 있다고 주장합니다. 이를 직관적으로 풀이하면, 복잡한 암산을 머릿속으로 한 번에 끝내는 대신 **'메모지(작업 기억)'**에 한 줄씩 계산 과정을 적어 내려가는 것과 같습니다. 다만 이 N2Y는 해당 정리의 정확한 가정과 증명, 적용 범위를 독립 검증하지 않았습니다.</li>
+</ul>
+<h4 id="2-디코딩-전략의-재정의-chain-of-thought-decoding-vs-prompting">2. 디코딩 전략의 재정의: Chain-of-Thought Decoding vs. Prompting</h4>
+<p>발표자의 핵심 명제는 **&quot;사전학습된 LLM은 이미 추론할 준비가 되어 있으며, 관건은 잠재된 능력을 이끌어낼 디코딩(Decoding) 전략에 있다&quot;**는 것입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">CoT Prompting (프롬프팅)</th>
+<th style="text-align:left">CoT Decoding (디코딩)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>핵심 접근</strong></td>
+<td style="text-align:left">모델에 입력할 예시나 문구 설계</td>
+<td style="text-align:left">생성된 후보 경로 중 최적의 답 식별</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>방법론</strong></td>
+<td style="text-align:left">&quot;Let's think step by step&quot;, Few-shot 제공</td>
+<td style="text-align:left">다중 경로 생성 후 최종 답 신뢰도 검토</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>작동 메커니즘</strong></td>
+<td style="text-align:left">입력(Input) 단계에서의 유도</td>
+<td style="text-align:left">출력(Output) 단계에서의 추출 및 선택</td>
+</tr>
+</tbody>
+</table>
+<p>탐욕적 디코딩(Greedy Decoding)은 가장 가능성이 높은 한 후보만 고르기 때문에 잘못된 짧은 답을 선택할 수 있습니다. 반면 CoT Decoding은 여러 생성 후보와 최종 답의 신뢰도를 검토합니다. 이는 입력에 예시나 “단계별로 생각하라”는 문구를 넣는 Prompting과 별개의 축이며, 여러 후보를 본다고 정답이 항상 보장되는 것은 아닙니다.</p>
+<h4 id="3-학습-패러다임의-전환-sft에서-rl-미세조정으로">3. 학습 패러다임의 전환: SFT에서 RL 미세조정으로</h4>
+<p>추론 역량 강화를 위해 기존의 지도 미세조정(SFT)을 넘어 강화학습(RL)으로의 전환이 제기됩니다.</p>
+<ul>
+<li><strong>지도 미세조정 (SFT):</strong> 사람이 작성한 문제 풀이 과정을 학습합니다. 발표자는 이 방식이 학습 분포 밖 문제에 대한 일반화가 약할 수 있고, 단순한 데이터·모델 규모 확대만으로 병목이 충분히 해결되지 않을 수 있다고 강조합니다. 이는 모든 SFT 구성에 대한 보편적 판정이 아닙니다.</li>
+<li><strong>강화학습 미세조정 (RL):</strong> 발표자는 Google DeepMind 내부 기여자로 <strong>Jonathan Lai와 James An</strong>을 언급하고, 학계의 초기 연구 사례로 **Luong et al. (ReFT)**을 제시합니다. 이 역사·우선권 설명은 본 N2Y에서 독립 검증하지 않았습니다.</li>
+<li><strong>전략적 통찰:</strong> RL의 핵심은 모델이 **'자신이 생성한 분포(Self-generated distribution)'**에서 나온 풀이를 대상으로 생성 품질을 직접 최적화한다는 목표에 있습니다.</li>
+</ul>
+<h4 id="4-검증기-verifier-의-결정적-역할과-한계">4. 검증기(Verifier)의 결정적 역할과 한계</h4>
+<p>강연자는 **&quot;RL 알고리즘의 복잡성보다 신뢰할 수 있는 검증기(Verifier)의 확보가 더 결정적&quot;**이라고 주장합니다.</p>
+<ol>
+<li><strong>자동 판정의 이점:</strong> 수학이나 프로그래밍처럼 정답이 명확한 영역에서는 검증기가 모델에 비교적 선명한 보상 신호를 제공할 수 있습니다.</li>
+<li><strong>보상 해킹(Reward Hacking):</strong> 창의적 영역이나 가치 판단이 개입되는 과제에서는 신뢰할 수 있는 검증기 설계가 어렵습니다. 이 경우 모델은 실제 품질을 높이기보다 검증 규칙의 허점을 공략할 위험이 있습니다.</li>
+<li><strong>병목 구간:</strong> 발표가 설명하는 RL 접근은 자동 검증 가능한 영역에서 특히 유리합니다. 이를 넘어선 주관적 과제의 검증 설계가 다음 과제로 남습니다.</li>
+</ol>
+<h4 id="5-연산-공간의-확장-출력-길이-output-length-의-물리적-의미">5. 연산 공간의 확장: 출력 길이(Output Length)의 물리적 의미</h4>
+<p>강연은 모델의 층(Layer)만 더 깊게 쌓는 것과 대비해 <strong>'생각을 전개할 수 있는 연산 공간'으로서 출력 길이를 확보</strong>하는 방향의 중요성을 강조합니다.</p>
+<ul>
+<li><strong>논리적 연결:</strong> 이는 1절의 $O(T)$ 중간 토큰 주장과 출력 길이 확장을 개념적으로 연결합니다. 장황한 답변(Verbosity)을 권장하는 것이 아니라, 복잡한 논리적 인과관계를 유지하기 위한 연속적인 중간 상태를 보존할 공간이 필요하다는 뜻입니다.</li>
+<li><strong>비판적 시각:</strong> 발표자는 인간과 비슷해 보이는 추론 과정이 고전 AI식 완전탐색에 의존하지 않고 토큰-대-토큰 생성에서 나타날 수 있다고 설명합니다. 그렇다고 LLM의 과정이 인간 두뇌의 인지 메커니즘과 동일하다는 뜻은 아닙니다.</li>
+</ul>
+<h4 id="6-디코딩의-목적-불일치-주변화-marginalization-의-관점">6. 디코딩의 목적 불일치: 주변화(Marginalization)의 관점</h4>
+<p>슬라이드 33은 현재 디코딩 수식의 근본적인 한계를 지적합니다.</p>
+<ul>
+<li><strong>현재 방식:</strong> $\text{arg max } P(\text{path, answer} | \text{query})$
+<ul>
+<li>가장 확률이 높은 <strong>단일 추론 경로</strong>를 포함한 문장 하나를 찾는 데 집중합니다.</li>
+</ul>
+</li>
+<li><strong>이상적 방식:</strong> $\text{arg max } P(\text{answer} | \text{query})$
+<ul>
+<li>서로 다른 추론 경로들이 동일한 정답에 도달하는 모든 경우의 수를 합산(<strong>Summing over paths</strong>), 즉 <strong>주변화(Marginalization)</strong> 과정을 통해 가장 높은 지지를 받는 최종 답을 도출해야 합니다.</li>
+</ul>
+</li>
+</ul>
+<p>가장 높은 확률을 가진 문장 하나가 반드시 가장 정확한 답을 보장하지 않는다는 '목적의 불일치'가 현재 디코딩 기술의 핵심 과제입니다.</p>
+<h4 id="7-결과-통합-기술-self-consistency의-실제">7. 결과 통합 기술: Self-Consistency의 실제</h4>
+<p>여러 경로를 통해 도달한 답의 일관성을 측정하는 것은 신뢰도 확보의 핵심입니다.</p>
+<ul>
+<li><strong>Self-Consistency:</strong> 무작위 샘플링으로 여러 응답을 생성한 뒤 다수결로 정답을 선택합니다.
+<ul>
+<li><strong>사례:</strong> '오리알 판매 문제'에서 서로 다른 풀이 과정이 최종 답 <code>18</code>에 모이면 이 방법은 <code>18</code>을 선택합니다. 다수의 일치가 정답을 보장하는 것은 아니며, 발표 자료의 GSM8K 관찰과 다른 모델·과제의 재현성은 별도 확인이 필요합니다.</li>
+</ul>
+</li>
+<li><strong>Universal Self-Consistency:</strong> 자유 형식 답변과 같이 텍스트가 일치하기 어려운 경우, 모델이 스스로 의미적 일관성을 평가하게 합니다.</li>
+<li><strong>전략적 경계:</strong> 이 과정에서 모델이 본인이 생성한 답 중 하나를 편향되게 선택하는 **'자기 강화 편향(Self-reinforcement bias)'**이나 초기 단계의 오류가 증폭되는 오류 전파 가능성을 분석가적 관점에서 주의 깊게 모니터링해야 합니다.</li>
+</ul>
+<h4 id="8-지식의-외연-확장-검색-search-과-추론의-결합">8. 지식의 외연 확장: 검색(Search)과 추론의 결합</h4>
+<p>검색과 추론은 상호보완적 관계이며, 이를 결합하여 지능의 범위를 확장할 수 있습니다.</p>
+<ul>
+<li><strong>유추적 추론(Analogical Reasoning)과 추상화(Abstraction):</strong>
+<ul>
+<li>예를 들어 좌표평면의 정사각형 넓이 문제에서 모델은 관련 문제와 '두 점 사이의 거리 공식'을 떠올리거나 검색합니다.</li>
+<li>그 공식을 현재 좌표값에 적용하는 유추와 추상화 과정을 거쳐 문제를 풉니다.</li>
+</ul>
+</li>
+<li><strong>필수 조건:</strong> 외부 검색 데이터의 신뢰성 평가와 함께, 추론 결과가 실제 검색된 근거에 기반하고 있는지 확인하는 출처 귀속(Attribution)의 정확도가 수반되어야 합니다.</li>
+</ul>
+<h4 id="9-결론-llm-추론의-4대-기술-지향점">9. 결론: LLM 추론의 4대 기술 지향점</h4>
+<p>Denny Zhou 강연의 핵심은 향후 LLM 연구 및 설계가 나아가야 할 방향을 다음의 네 가지 부등호 관계로 압축합니다.</p>
+<ol>
+<li><strong>추론(Reasoning) &gt; 추론 없음</strong></li>
+<li><strong>RL 미세조정 &gt; SFT</strong></li>
+<li><strong>여러 답의 통합(Aggregation) &gt; 하나의 답</strong></li>
+<li><strong>검색 + 추론 &gt; 추론만 사용</strong></li>
+</ol>
+<p>위 부등호는 모든 환경에서 성립하는 절대적 물리 법칙이 아니라, <strong>특정 조건 하에서 성능 극대화를 위한 기술적 지향점</strong>입니다. 실제 시스템 설계 시에는 품질 향상에 따른 계산 비용과 지연 시간(Latency)의 트레이드오프를 반드시 고려해야 합니다.</p>
+<hr />
+<h4 id="10-부록-독립적-검증을-위한-체크리스트">10. 부록: 독립적 검증을 위한 체크리스트</h4>
+<p>보고서의 신뢰성과 실무 적용 타당성을 판단하기 위해 직접 확인해야 할 항목들입니다.</p>
+<ul>
+<li>[ ] <strong>인용 논문 재검토:</strong> Ling et al. (2017), Li et al. (2024), ReFT 논문의 실험 설정이 본인의 도메인과 부합하는가?</li>
+<li>[ ] <strong>우선권 및 합의:</strong> 강연자가 주장한 '최초' 연구 사례들에 대해 학계의 전반적인 합의가 존재하는가?</li>
+<li>[ ] <strong>비용 효율성:</strong> RL 미세조정 및 다중 경로 디코딩 도입 시 발생하는 추가 연산 자원 및 레이턴시를 감당할 수 있는가?</li>
+<li>[ ] <strong>검증기 타당성:</strong> 정답이 없는 주관적 과제에서 보상 모델(Reward Model)의 설계가 품질 저하 없이 이루어졌는가?</li>
+<li>[ ] <strong>데이터 신뢰성:</strong> 검색 시스템에서 제공하는 정보의 정확도와 이를 추론에 반영하는 과정에서의 '추상화' 오류 발생 가능성은 없는가?</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

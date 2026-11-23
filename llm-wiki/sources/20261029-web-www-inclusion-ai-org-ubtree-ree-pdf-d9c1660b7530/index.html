@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UBTree: 병렬 유니그램·바이그램 모델 기반 트리 초안 작성을 통한 추측 디코딩 가속화 해설 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>UBTree: 병렬 유니그램·바이그램 모델 기반 트리 초안 작성을 통한 추측 디코딩 가속화 해설 보고서</h1>
+<p class="page-meta">PDF · 2026-10-29</p>
+<h2 id="요약">요약</h2>
+<p>[사실] 대형 언어 모델(LLM)의 추론 속도를 향상시키기 위한 추측 디코딩(Speculative Decoding) 기술은 가벼운 초안 작성 모델(Drafter)이 미래의 여러 토큰을 사전에 제안하고, 타깃 모델(Target Model)이 단일 순방향 패스(Forward Pass)에서 이를 한 번에 검증하는 방식으로…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.inclusion-ai.org/ubtree/UBTree.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=dSbnyi-TDK4">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="ubtree-병렬-유니그램-바이그램-모델-기반-트리-초안-작성을-통한-추측-디코딩-가속화-해설-보고서">UBTree: 병렬 유니그램·바이그램 모델 기반 트리 초안 작성을 통한 추측 디코딩 가속화 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p><strong>[사실]</strong> 대형 언어 모델(LLM)의 추론 속도를 향상시키기 위한 추측 디코딩(Speculative Decoding) 기술은 가벼운 초안 작성 모델(Drafter)이 미래의 여러 토큰을 사전에 제안하고, 타깃 모델(Target Model)이 단일 순방향 패스(Forward Pass)에서 이를 한 번에 검증하는 방식으로 작동합니다. <strong>[소스의 주장]</strong> 최근 등장한 블록 병렬 초안 작성기(Parallel Drafter)들은 단일 순방향 패스만으로 블록 내 모든 미래 토큰을 예측함으로써 기존 자가회귀형 초안 모델의 순차적 연산 오버헤드를 대폭 줄였습니다. 그러나 타깃 모델 확률 분포의 엔트로피가 높은 복잡한 생성 환경에서는 제안되는 초안의 다양성이 급격히 부족해져 속도 향상 효과가 크게 저하되는 '초안 다양성 병목(Diversity Bottleneck)' 난제에 직면해 있습니다.</p>
+<p><strong>[소스의 주장]</strong> 이러한 병목 현상을 연산 병렬성의 손실 없이 해결하기 위해 제안된 신규 프레임워크가 바로 'UBTree'입니다. UBTree는 유니그램 제안기(Unigram Proposer)와 바이그램 선택기(Bigram Selector)를 병렬로 결합하여 검증 트리를 구축하는 아키텍처를 취합니다. 유니그램 제안기는 기존 단일 경로 초안의 제약에서 벗어나 위치별 후보 토큰들을 완전 병렬로 독립 생성하며, 경량화된 바이그램 선택기는 인접한 후보 토큰 쌍 간의 전이 점수(Transition Score)를 완전 병렬 tensor 연산으로 산출합니다.</p>
+<p><strong>[사실]</strong> UBTree는 검증 트리에 최적화된 학습 기법인 '트리 친화적 학습(Tree-native Training)'을 도입했습니다. 높은 학습 온도($T_{train} \ge T_{infer}$, 기본 $T_{train} = 1$)에서 재정규화된 KL 발산 손실(Renormalized KL Loss)을 적용함으로써, 탐욕적 경로(Greedy Path) 이외의 타깃 분포 내 유효한 대안 경로들을 효과적으로 학습시킵니다. <strong>[작성자 해석]</strong> 이는 추론 시 타깃 모델 검증 단계에서 대안 가지가 수락될 확률을 다각도로 높여 병렬 초안 작성기의 수락 길이 감소 문제를 근본적으로 보완합니다.</p>
+<p><strong>[사실]</strong> 학술 벤치마크(Qwen3-4B, Qwen3-8B) 평가 결과, UBTree는 기존 자가회귀형 디코딩 대비 평균 5.84배에서 6.94배의 속도 향상을 달성하였으며, 대표적 트리 디코딩 기법인 DARTree와의 28개 세부 비교 전 항목에서 우수한 성과를 거두었습니다. <strong>[소스의 주장]</strong> 또한 Ling3-Flash(124B), Qwen3.8-27B 등 프로덕션 규모의 최신 모델 환경 및 긴 문맥(Long-context) 벤치마크에서도 DSpark, DFlash 2 등 첨단 베이스라인 기법들을 일관되게 상회하는 속도 향상과 수락 길이($\tau$)를 실증했습니다.</p>
+<hr />
+<h4 id="2-주요-논점-및-기술-구조-key-claims-architecture">2. 주요 논점 및 기술 구조 (Key Claims &amp; Architecture)</h4>
+<h5 id="2-1-기존-병렬-추측-디코딩의-한계-초안-다양성-병목-diversity-bottleneck">2.1. 기존 병렬 추측 디코딩의 한계: 초안 다양성 병목 (Diversity Bottleneck)</h5>
+<p><strong>[사실]</strong> 기존 자가회귀형(Autoregressive) 초안 작성기는 제안하는 각 토큰을 이전 선택 결과에 순차적으로 종속시켜 생성하는 반면, 병렬형(Parallel) 초안 작성기는 단일 순방향 패스로 생성 블록 내의 모든 미래 위치 토큰을 동시에 예측합니다.</p>
+<p><strong>[소스의 주장]</strong> 병렬 초안 작성 방식은 순차적 연산 오버헤드를 줄여 더 큰 백본 모델을 채택할 수 있게 하고 단일 경로 수락 길이를 늘려주지만, 타깃 모델 확률 분포의 엔트로피가 높은 상황(예: 수학적 추론, 코드 생성, 다자간 대화 등)에서 <strong>초안 다양성 부족</strong>이라는 결정적인 약점을 드러냅니다. 높은 엔트로피 환경에서는 타깃 분포가 여러 유효한 대안 경로로 분산되는데, 단일 경로(Single-path)만 제안하는 기존 병렬 작성기는 이러한 대안 경로들을 수용하지 못해 수락 길이가 급감합니다. 더욱이 토큰 간 의존성이 완전히 생략된 병렬 예측은 서로 다른 유효 경로의 토큰들을 무분별하게 혼합하여 초안의 정밀도를 추가로 떨어뜨립니다.</p>
+<p><strong>[소스의 주장]</strong> 기존 연구들은 경량 자가회귀 보정 헤드(Correction Head)나 백본 내부 구조 개편을 통해 단일 경로의 정밀도를 보강하려 했으나, 단일 경로 제안이라는 근본적인 다양성 병목을 해결하지 못했습니다. 한편, 다양성을 확보하기 위해 도입된 기존 트리 디코딩(Tree Drafting) 기법들은 다음 두 가지 구조적 한계에 직면해 있습니다:</p>
+<ol>
+<li><strong>토큰 의존성과 병렬성 간의 충돌</strong>: 자가회귀형 헤드로 토큰 간 의존성을 포착하려 하면 병렬성이 손상되어 생성 지연 시간(Latency)이 증가하고, 반대로 의존성을 완전히 제거하면 초안의 품질과 수락 길이가 심각하게 제약됩니다.</li>
+<li><strong>훈련-인퍼런스 불일치 (Train-Inference Mismatch)</strong>: 기존 병렬 초안 작성기들은 단일 경로 검증에서 상위 1개 토큰 최적화(Single-path Top-1 Optimization)로 학습되었음에도, 추론 시에는 다중 경로 트리 검증에 직접 투입됩니다. 이로 인해 트리의 하위 가지에 배치되는 대안 토큰들이 타깃 모델의 대안 분포와 정렬되지 않아 검증 자원이 무용하게 소모되는 문제가 발생합니다.</li>
+</ol>
+<hr />
+<h5 id="2-2-ubtree-아키텍처-완전-병렬-연산-기반-3단계-트리-구축">2.2. UBTree 아키텍처: 완전 병렬 연산 기반 3단계 트리 구축</h5>
+<p><strong>[사실]</strong> UBTree는 신경망 연산 구간의 완전한 병렬성을 유지하면서, 토큰 간 의존성을 바이그램 상관관계로 단순화하여 검증 트리를 구축합니다. 전체 아키텍처는 다음 세 가지 세부 구성 요소로 구분됩니다:</p>
+<ol>
+<li><strong>유니그램 제안기 (Unigram Proposer)</strong>: 사전 학습된 DFlash 백본을 활용하여 검증된 프롬프트 문맥($c$)과 앵커 토큰($x_0$) 조건하에 각 위치별 교차 토큰 의존성을 배제한 채 후보 토큰 집합($C_i$, 상위 $K$개 토큰)을 완전 병렬로 제안합니다. 이때 각 위치 $i$에서의 확률 분포는 $q_i(x_i \mid x_0, c) = \text{softmax}(u_i(x_0, c))$로 표현됩니다.</li>
+<li><strong>바이그램 선택기 (Bigram Selector)</strong>: 유니그램 제안기의 은닉 상태($h_i$)에 조건화되어 인접한 선행 토큰($a \in C_{i-1}$)과 후행 토큰($b \in C_i$) 쌍의 전이 점수($\delta_i(a, b)$)를 완전 병렬로 평가합니다.
+<ul>
+<li><strong>심층 코드북 (Deep Codebooks)</strong>: 고정된 타깃 임베딩 $e_v \in \mathbb{R}^{d_e}$에 두 개의 비선형 MLP를 적용하여 선행/후행 코드북을 형성합니다:
+$$\phi(v) = W_{\phi,2} \text{SiLU}(W_{\phi,1} e_v), \quad \psi(v) = W_{\psi,2} \text{SiLU}(W_{\psi,1} e_v)$$
+추론 시에는 이를 사전 연산된(pre-computed) 어휘 크기 룩업 테이블로 저장하여 오버헤드를 최소화합니다.</li>
+<li><strong>깊이 보정 (Depth Calibration)</strong>: 깊이별 학습 가능한 스케일 파라미터 $\lambda_i, \alpha_i$를 도입하여 제안기 로짓 $u_i(b)$와 선택기 점수 $\delta_i(a,b)$를 아래와 같이 결합합니다:
+$$s_i(a,b) = \alpha_i u_i(b) + \lambda_i \delta_i(a,b)$$</li>
+<li><strong>병렬 연산 텐서 공식</strong>: 깊이 $i$에서 전이 점수 행렬 $\mathbf{\Delta}<em>i \in \mathbb{R}^{|C</em>{i-1}| \times K}$는 다음과 같이 완전 병렬로 계산됩니다:
+$$\mathbf{\Delta}<em>i = \mathbf{\Phi}</em>{i-1} \text{diag}(P(h_i)) \mathbf{\Psi}<em>i^\top$$
+여기서 $\mathbf{\Phi}</em>{i-1}$은 선행 후보들의 $\phi(a)^\top$ 행렬이고, $\mathbf{\Psi}_i$는 후행 후보들의 $\psi(b)^\top$ 행렬이며, $P(h_i)$는 제안기 은닉 상태의 선형 투영 벡터입니다.</li>
+</ul>
+</li>
+<li><strong>트리 생성 및 검증 (Tree Construction &amp; Verification)</strong>: 사전 연산된 결합 점수 $s_i(a,b)$를 정규화하여 조건부 로그 확률을 산출한 뒤, 추가적인 신경망 연산 없이 DARTree 방식의 깊이별 확장(Depth-Wise Expansion) 및 전역 가지치기(Global Pruning) 알고리즘으로 최대 $B$개의 비루트 노드를 가진 트리를 구축합니다. 이후 타깃 모델의 단일 순방향 패스에서 트리 주의 집중(Tree-attention) 기법으로 검증을 수행합니다.</li>
+</ol>
+<p><strong>[사실]</strong> 특히 링3(Ling3) 시리즈 및 쿠엔3.8-27B(Qwen3.8-27B)와 같은 하이브리드 주의 집중(Hybrid Attention: Kimi Delta Attention, Gated DeltaNet) 모델의 경우, 볼레(Bole) 기법에 착안하여 트리 검증 시 각 자식 노드가 부모 노드의 순환(Recurrent) 및 컨볼루션(Convolution) 상태를 상속받으며, 최종 수락된 경로의 키-값(KV) 캐시 및 순환 상태만을 지속적으로 커밋(Commit)하는 메커니즘을 적용했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 / 항목</th>
+<th style="text-align:left">UBTree</th>
+<th style="text-align:left">DFlash 2</th>
+<th style="text-align:left">DARTree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>초안 형태 (Draft Structure)</strong></td>
+<td style="text-align:left">병렬 유니그램 + 병렬 바이그램 트리 (Tree)</td>
+<td style="text-align:left">병렬 유니그램 + 단일 경로 바이그램 (Single-path)</td>
+<td style="text-align:left">자가회귀형 보정 헤드 기반 트리 (Tree)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>토큰 간 의존성 연산</strong></td>
+<td style="text-align:left">신경망 연산 없는 바이그램 전이 점수 완전 병렬 계산 ($\mathbf{\Delta}<em>i = \mathbf{\Phi}</em>{i-1} \text{diag}(P(h_i)) \mathbf{\Psi}_i^\top$)</td>
+<td style="text-align:left">저순위 바이그램 단일 경로 계산</td>
+<td style="text-align:left">순차적 자가회귀 연산 (추가 지연시간 발생)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드북 아키텍처</strong></td>
+<td style="text-align:left">고정 타깃 임베딩 + 비선형 MLP (Deep Codebooks) 사전 연산 룩업 테이블</td>
+<td style="text-align:left">단순 저순위 학습 임베딩 레이어</td>
+<td style="text-align:left">해당 없음</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>깊이 보정 (Depth Calibration)</strong></td>
+<td style="text-align:left">깊이별 학습 가능한 스케일 파라미터 ($\lambda_i, \alpha_i$) 적용</td>
+<td style="text-align:left">단일 고정 가중치 (Unit Weights)</td>
+<td style="text-align:left">해당 없음</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 메커니즘</strong></td>
+<td style="text-align:left">고온도 타깃 데이터 + 재정규화된 KL 발산 손실</td>
+<td style="text-align:left">단일 경로 기준 표준 교차 엔트로피 손실</td>
+<td style="text-align:left">단일 경로 기준 학습</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-3-트리-친화적-학습법-tree-native-training">2.3. 트리 친화적 학습법 (Tree-native Training)</h5>
+<p><strong>[소스의 주장]</strong> UBTree는 검증 트리의 다양한 대안 가지들을 효과적으로 활성화하고 훈련-인퍼런스 불일치를 해소하기 위해 학습 기법과 손실 함수를 재설계했습니다.</p>
+<ul>
+<li><strong>고온도 학습 ($T_{train} \ge T_{infer}$)</strong>: 기존의 온도 맞춤형 학습($T_{train} = T_{infer}$)과 달리, 타깃 모델 응답 생성 시 높은 학습 온도($T_{train} = 1$)를 적용합니다. 이는 탐욕적 선택 이외의 유효한 대안 경로들의 확률 차이를 적절히 증폭(Amplification)하여, 바이그램 선택기가 저품질 대안과 유효 대안 경로를 명확히 구별하도록 돕습니다. $T_{train}=1$로 학습된 단일 드래프터 체크포인트는 $T_{infer}=0$(탐욕적)과 $T_{infer}=1$(샘플링) 추론 환경 모두에서 뛰어난 적응성을 보입니다.</li>
+<li><strong>재정규화된 KL 발산 손실 (Renormalized KL Loss)</strong>: 하드 레이블 교차 엔트로피(CE) 손실 대신, 상위 $K$개 후보 토큰 공간($C_i$) 내에서 재정규화된 타깃 확률 분포와 선택기 확률 분포 간의 전방 KL 발산(Forward KL Divergence)을 메인 손실 함수로 사용합니다. 제안기의 후보 공간 유지 능력을 보존하기 위해 제안기 $q_i$에 대한 보조 CE 손실을 결합하며, 전체 손실 함수는 다음과 같습니다:</li>
+</ul>
+<p>$$\mathcal{L} = \text{KL}(\tilde{p}_i \parallel \tilde{q}<em>i) - \beta \log q_i(y_i^* \mid x</em>{\le t}), \quad \beta = 0.1$$</p>
+<p><strong>[사실]</strong> 여기서 $\tilde{p}<em>i(v) = \frac{\exp(z_i(v)/T</em>{train})}{\sum_{b \in C_i} \exp(z_i(b)/T_{train})}$는 학습 온도 $T_{train}$에서 상위 $K$개 후보 집합 $C_i$로 재정규화된 타깃 모델의 확률 분포이며, $\tilde{q}<em>i(v) = \frac{\exp(s_i(y</em>{i-1}^<em>, v))}{\sum_{b \in C_i} \exp(s_i(y_{i-1}^</em>, b))}$는 이전 정답 토큰 $y_{i-1}^<em>$이 주어졌을 때 선택기가 $C_i$ 위에서 예측한 확률 분포입니다. $y_i^</em>$는 위치 $i$에서의 정답 타깃 토큰, $x_{\le t}$는 검증된 이전 문맥, $\beta=0.1$은 제안기의 후보 수용성과 선택기의 정밀도 간의 균형을 맞추는 가중치입니다. 학습 시 후보 지원 크기는 $K=256$으로 설정됩니다.</p>
+<p><strong>[사실] 소스 논문의 아키텍처 및 소스 온도 절제 연구(Ablation Study) 결과</strong>:</p>
+<ol>
+<li><strong>아키텍처 단계별 기여 ($T_{infer}=0$)</strong>: DFlash 2 선택기 구조에 트리를 결합한 베이스라인은 평균 5.95배 속도 향상($\tau=8.82$)을 보인 반면, UBTree 선택기(심층 코드북 + 깊이 보정)를 적용하면 속도 향상이 6.57배($\tau=9.86$)로 증가했습니다. 여기에 $T_{train}=1$ 고온도 학습을 추가하면 최종 6.88배 속도 향상($\tau=10.23$)을 달성했습니다.</li>
+<li><strong>학습 온도 스위핑 ($T_{train} \in {0.8, 1.0, 1.1, 1.2}$)</strong>: $T_{train}=1.0$ 설정이 탐욕적 추론($T_{infer}=0$에서 $\tau=10.23$)과 샘플링 추론($T_{infer}=1$에서 $\tau=9.01$) 모두에서 최상의 종합 수락 길이를 산출함을 실증했습니다.</li>
+</ol>
+<hr />
+<h5 id="2-4-주요-성능-실증-및-확장성-분석">2.4. 주요 성능 실증 및 확장성 분석</h5>
+<p><strong>[사실]</strong> UBTree의 주요 실험 성과 및 아키텍처 분석 결과는 다음과 같습니다:</p>
+<ul>
+<li><strong>학술 벤치마크 (Qwen3-4B / Qwen3-8B)</strong>:
+<ul>
+<li>Qwen3-4B/8B 지시 이행(Instruct) 모델의 탐욕적 디코딩($T_{infer}=0$)에서 각각 평균 6.88배, 6.94배의 속도 향상을 기록했습니다.</li>
+<li>샘플링 추론($T_{infer}=1$) 환경에서 각각 평균 6.00배, 5.84배의 속도 향상을 보여 DARTree 대비 평균 속도 향상 폭을 7.4%~13.4% 개선했습니다.</li>
+<li>추론 기능 활성화(Thinking Enabled, Reasoning) 상태의 Qwen3-4B 모델에서도 DDTree 대비 각각 25.3%($T_{infer}=0$), 29.9%($T_{infer}=1$) 우수한 속도 향상을 입증했습니다.</li>
+</ul>
+</li>
+<li><strong>초안 작성 지연 시간 프로파일링 (Qwen3-4B 상세 분석)</strong>:
+<ul>
+<li>논문의 부록 측정 데이터(Table 7)에 따르면, 라운드당 초안 후처리(Draft Post-processing) 지연 시간은 DARTree의 <strong>3.36ms</strong>에서 UBTree의 <strong>1.38ms</strong>로 <strong>58.8% 급감</strong>했습니다.</li>
+<li>타깃 모델 검증 지연 시간은 두 기법 모두 약 20.9ms 수준으로 동일하였으나, 후처리 단에서의 병렬화 덕분에 토큰당 엔드투엔드 디코딩 지연 시간(TPOT)이 DARTree의 <strong>2.41ms/token</strong>에서 UBTree의 <strong>2.21ms/token</strong>으로 단축되었습니다. 이는 자가회귀형 보정 헤드를 병렬 바이그램 평가로 대체함시킴으로써 초안 생성 병목을 성공적으로 제거했음을 입증합니다.</li>
+</ul>
+</li>
+<li><strong>SGLang 동시성 제공 성능 (Concurrent Serving at $C \in {1, 8, 16, 32}$)</strong>:
+<ul>
+<li>동시 요청 수 증가에 따라 트리 예산($B$)과 너비($W$)를 동적으로 조정하는 적응형 트리 전략을 적용했습니다.</li>
+<li>$C=32$ 고동시성 환경에서 Qwen3-4B 기준 초당 6560.4 토큰, Qwen3-8B 기준 초당 5851.4 토큰의 처리량을 기록하여 최강의 단일 경로 베이스라인 대비 7.3%~7.7% 우수한 성능을 달성했습니다.</li>
+</ul>
+</li>
+<li><strong>프로덕션 규모 모델 검증</strong>:
+<ul>
+<li>Ling3-Tiny(7.9B MoE), Ling3-Flash(124B MoE), Qwen3.8-27B 모델 평가 시 평균 속도 향상이 각각 3.04배, 3.27배, 4.78배에 달하여 DSpark, DFlash 2 등 기존 프로덕션 최적화 기법을 뛰어넘었습니다.</li>
+</ul>
+</li>
+<li><strong>롱콘텍스트 및 에이전트 트래젝토리 검증</strong>:
+<ul>
+<li>LongBench-v2($192\text{K}\sim 260\text{K}$ 프롬프트 토큰) 및 SWE-bench($64\text{K}\sim 131\text{K}$ 누적 토큰)의 전 구간에서 최고 수락 길이를 유지했습니다.</li>
+<li>특히 SWE-bench 에이전트 수행 과정의 4단계 시간순 트래젝토리(0–25%, 25–50%, 50–75%, 75–100%) 분석에서 UBTree는 수락 길이 <strong>5.116, 5.563, 5.448, 5.644</strong>를 기록하여, DSpark(3.942, 4.321, 4.241, 4.461) 대비 <strong>26.5%~29.8%</strong> 우수한 성능을 에이전트 수행 전 과정에 걸쳐 일관되게 유지했습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-authors-contributors">3. 등장 인물 및 화자 (Authors &amp; Contributors)</h4>
+<p><strong>[사실]</strong> 본 연구를 수행한 저자진의 이름, 소속 기관 및 논문에 명시된 공식 역할은 아래 표와 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">저자명 (한글/로마자)</th>
+<th style="text-align:left">소속 기관</th>
+<th style="text-align:left">소스상 명시된 역할 및 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">추멩 리앙 (Chumeng Liang)</td>
+<td style="text-align:left">인클루전 AI (Inclusion AI), 일리노이 대학교 어바나-샴페인 (UIUC)</td>
+<td style="text-align:left">공동 제1저자 ($*$), 인클루전 AI 인턴십 기간 중 연구 수행. (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">린쉬안 왕 (Linxuan Wang)</td>
+<td style="text-align:left">인클루전 AI (Inclusion AI), 퍼듀 대학교 (Purdue University)</td>
+<td style="text-align:left">공동 제1저자 ($*$), 인클루전 AI 인턴십 기간 중 연구 수행. (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">신위 펭 (Xinyu Peng)</td>
+<td style="text-align:left">인클루전 AI (Inclusion AI)</td>
+<td style="text-align:left">공동 제1저자 ($*$). (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">화빈 리우 (Huabin Liu)</td>
+<td style="text-align:left">인클루전 AI (Inclusion AI)</td>
+<td style="text-align:left">교신저자 ($\dagger$). (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">지안궈 리 (Jianguo Li)</td>
+<td style="text-align:left">인클루전 AI (Inclusion AI)</td>
+<td style="text-align:left">교신저자 ($\dagger$). (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">샤오쉬 구오 (Xiaoxu Guo)</td>
+<td style="text-align:left">인클루전 AI (Inclusion AI)</td>
+<td style="text-align:left">저자. (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">유신 천 (Yuxin Chen)</td>
+<td style="text-align:left">일리노이 대학교 어바나-샴페인 (UIUC)</td>
+<td style="text-align:left">저자. (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">거 리우 (Ge Liu)</td>
+<td style="text-align:left">일리노이 대학교 어바나-샴페인 (UIUC)</td>
+<td style="text-align:left">저자. (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">광린 (Guang Lin)</td>
+<td style="text-align:left">퍼듀 대학교 (Purdue University)</td>
+<td style="text-align:left">저자. (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left">치판 송 (Qifan Song)</td>
+<td style="text-align:left">퍼듀 대학교 (Purdue University)</td>
+<td style="text-align:left">저자. (세부 모듈 개발 역할: 소스상 확인 불가)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-key-metrics-benchmarks">4. 수치 및 시점 (Key Metrics &amp; Benchmarks)</h4>
+<h5 id="4-1-주요-벤치마크별-속도-향상-및-수락-길이-tau-요약">4.1. 주요 벤치마크별 속도 향상 및 수락 길이 ($\tau$) 요약</h5>
+<p><strong>[사실]</strong> 논문에 수록된 핵심 정량 평가 결과 데이터는 다음과 같이 정리할 수 있습니다.</p>
+<h6 id="학술-벤치마크-요약-qwen3-4b-qwen3-8b">학술 벤치마크 요약 (Qwen3-4B / Qwen3-8B)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 모델 및 조건</th>
+<th style="text-align:left">대표 비교 기법</th>
+<th style="text-align:left">평균 속도 향상 (Speedup)</th>
+<th style="text-align:left">평균 수락 길이 ($\tau$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Qwen3-4B Instruct ($T_{infer}=0$)</strong></td>
+<td style="text-align:left">DARTree (64)&lt;br&gt;<strong>UBTree (64)</strong></td>
+<td style="text-align:left">6.31×&lt;br&gt;<strong>6.88×</strong></td>
+<td style="text-align:left">10.13&lt;br&gt;<strong>10.23</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-4B Instruct ($T_{infer}=1$)</strong></td>
+<td style="text-align:left">DARTree (64)&lt;br&gt;<strong>UBTree (64)</strong></td>
+<td style="text-align:left">5.29×&lt;br&gt;<strong>6.00×</strong></td>
+<td style="text-align:left">8.57&lt;br&gt;<strong>9.01</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-8B Instruct ($T_{infer}=0$)</strong></td>
+<td style="text-align:left">DARTree (64)&lt;br&gt;<strong>UBTree (64)</strong></td>
+<td style="text-align:left">6.46×&lt;br&gt;<strong>6.94×</strong></td>
+<td style="text-align:left">10.23&lt;br&gt;<strong>10.21</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-8B Instruct ($T_{infer}=1$)</strong></td>
+<td style="text-align:left">DARTree (64)&lt;br&gt;<strong>UBTree (64)</strong></td>
+<td style="text-align:left">5.17×&lt;br&gt;<strong>5.84×</strong></td>
+<td style="text-align:left">8.37&lt;br&gt;<strong>8.70</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-4B Reasoning ($T_{infer}=0$)</strong></td>
+<td style="text-align:left">DDTree (64)&lt;br&gt;<strong>UBTree (64)</strong></td>
+<td style="text-align:left">4.87×&lt;br&gt;<strong>6.10×</strong></td>
+<td style="text-align:left">7.39&lt;br&gt;<strong>8.84</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-4B Reasoning ($T_{infer}=1$)</strong></td>
+<td style="text-align:left">DDTree (64)&lt;br&gt;<strong>UBTree (64)</strong></td>
+<td style="text-align:left">4.08×&lt;br&gt;<strong>5.30×</strong></td>
+<td style="text-align:left">6.17&lt;br&gt;<strong>7.67</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="프로덕션-모델-벤치마크-7개-벤치마크-평균">프로덕션 모델 벤치마크 (7개 벤치마크 평균)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">대상 모델</th>
+<th style="text-align:left">기법 (Method)</th>
+<th style="text-align:left">평균 속도 향상 (Speedup)</th>
+<th style="text-align:left">평균 수락 길이 ($\tau$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Ling3-Tiny (7.9B-A1.3B MoE)</strong></td>
+<td style="text-align:left">DFlash&lt;br&gt;DSpark&lt;br&gt;<strong>UBTree</strong></td>
+<td style="text-align:left">2.37×&lt;br&gt;2.48×&lt;br&gt;<strong>3.04×</strong></td>
+<td style="text-align:left">5.36&lt;br&gt;6.31&lt;br&gt;<strong>8.74</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ling3-Flash (124B-A5.1B MoE)</strong></td>
+<td style="text-align:left">DFlash&lt;br&gt;DSpark&lt;br&gt;<strong>UBTree</strong></td>
+<td style="text-align:left">2.80×&lt;br&gt;2.73×&lt;br&gt;<strong>3.27×</strong></td>
+<td style="text-align:left">6.27&lt;br&gt;6.66&lt;br&gt;<strong>8.63</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3.8-27B</strong></td>
+<td style="text-align:left">DFlash 2&lt;br&gt;DSpark&lt;br&gt;<strong>UBTree</strong></td>
+<td style="text-align:left">4.24×&lt;br&gt;4.32×&lt;br&gt;<strong>4.78×</strong></td>
+<td style="text-align:left">5.78&lt;br&gt;5.64&lt;br&gt;<strong>7.08</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="sglang-동시성-제공-성능-t_-infer-1-tokens-s-및-배율">SGLang 동시성 제공 성능 ($T_{infer} = 1$, Tokens/s 및 배율)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 모델</th>
+<th style="text-align:left">동시성 ($C$)</th>
+<th style="text-align:left">AR 베이스라인</th>
+<th style="text-align:left">DFlash</th>
+<th style="text-align:left">Domino</th>
+<th style="text-align:left">DARTree (적응형)</th>
+<th style="text-align:left">UBTree (적응형)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Qwen3-4B</strong></td>
+<td style="text-align:left">$C = 1$&lt;br&gt;$C = 8$&lt;br&gt;$C = 16$&lt;br&gt;$C = 32$</td>
+<td style="text-align:left">253.5 (1.00×)&lt;br&gt;1404.9 (1.00×)&lt;br&gt;2208.3 (1.00×)&lt;br&gt;3307.4 (1.00×)</td>
+<td style="text-align:left">796.4 (3.14×)&lt;br&gt;2287.2 (1.63×)&lt;br&gt;3664.4 (1.66×)&lt;br&gt;6071.9 (1.84×)</td>
+<td style="text-align:left">816.3 (3.22×)&lt;br&gt;2258.9 (1.61×)&lt;br&gt;3636.5 (1.65×)&lt;br&gt;6115.5 (1.85×)</td>
+<td style="text-align:left">978.5 (3.86×)&lt;br&gt;2405.1 (1.71×)&lt;br&gt;3770.3 (1.71×)&lt;br&gt;5619.9 (1.70×)</td>
+<td style="text-align:left"><strong>1089.1 (4.30×)</strong>&lt;br&gt;<strong>2797.4 (1.99×)</strong>&lt;br&gt;<strong>4271.9 (1.93×)</strong>&lt;br&gt;<strong>6560.4 (1.98×)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-8B</strong></td>
+<td style="text-align:left">$C = 1$&lt;br&gt;$C = 8$&lt;br&gt;$C = 16$&lt;br&gt;$C = 32$</td>
+<td style="text-align:left">180.9 (1.00×)&lt;br&gt;1126.2 (1.00×)&lt;br&gt;1865.9 (1.00×)&lt;br&gt;2770.9 (1.00×)</td>
+<td style="text-align:left">634.7 (3.51×)&lt;br&gt;2181.7 (1.94×)&lt;br&gt;3596.0 (1.93×)&lt;br&gt;5265.4 (1.90×)</td>
+<td style="text-align:left">676.2 (3.74×)&lt;br&gt;2137.9 (1.90×)&lt;br&gt;3582.7 (1.92×)&lt;br&gt;5435.2 (1.96×)</td>
+<td style="text-align:left">824.4 (4.56×)&lt;br&gt;2280.1 (2.02×)&lt;br&gt;3514.5 (1.88×)&lt;br&gt;4844.9 (1.75×)</td>
+<td style="text-align:left"><strong>881.7 (4.87×)</strong>&lt;br&gt;<strong>2644.4 (2.35×)</strong>&lt;br&gt;<strong>4069.9 (2.18×)</strong>&lt;br&gt;<strong>5851.4 (2.11×)</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="롱콘텍스트-벤치마크-세부-수락-길이-tau-ling3-flash">롱콘텍스트 벤치마크 세부 수락 길이 ($\tau$, Ling3-Flash)</h6>
+<ul>
+<li><strong>LongBench-v2 프롬프트 토큰 구간별 결과</strong>:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기법 (Method)</th>
+<th style="text-align:left">$\le 32\text{K}$</th>
+<th style="text-align:left">$32\sim 64\text{K}$</th>
+<th style="text-align:left">$64\sim 96\text{K}$</th>
+<th style="text-align:left">$96\sim 128\text{K}$</th>
+<th style="text-align:left">$128\sim 192\text{K}$</th>
+<th style="text-align:left">$192\sim 260\text{K}$</th>
+<th style="text-align:left">전체 평균 (Overall)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DFlash</strong></td>
+<td style="text-align:left">4.459</td>
+<td style="text-align:left">4.503</td>
+<td style="text-align:left">3.831</td>
+<td style="text-align:left">4.025</td>
+<td style="text-align:left">4.298</td>
+<td style="text-align:left">4.320</td>
+<td style="text-align:left">4.272</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DSpark</strong></td>
+<td style="text-align:left">4.889</td>
+<td style="text-align:left">4.970</td>
+<td style="text-align:left">4.281</td>
+<td style="text-align:left">4.286</td>
+<td style="text-align:left">4.642</td>
+<td style="text-align:left">4.617</td>
+<td style="text-align:left">4.676</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>UBTree</strong></td>
+<td style="text-align:left"><strong>6.454</strong></td>
+<td style="text-align:left"><strong>6.752</strong></td>
+<td style="text-align:left"><strong>5.609</strong></td>
+<td style="text-align:left"><strong>5.799</strong></td>
+<td style="text-align:left"><strong>6.485</strong></td>
+<td style="text-align:left"><strong>6.434</strong></td>
+<td style="text-align:left"><strong>6.300</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>SWE-bench 누적 프롬프트 토큰 구간별 결과</strong>:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기법 (Method)</th>
+<th style="text-align:left">$\le 0$</th>
+<th style="text-align:left">$0\sim 4\text{K}$</th>
+<th style="text-align:left">$4\sim 8\text{K}$</th>
+<th style="text-align:left">$8\sim 16\text{K}$</th>
+<th style="text-align:left">$16\sim 32\text{K}$</th>
+<th style="text-align:left">$32\sim 64\text{K}$</th>
+<th style="text-align:left">$64\sim 131\text{K}$</th>
+<th style="text-align:left">전체 평균 (Overall)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DFlash</strong></td>
+<td style="text-align:left">3.389</td>
+<td style="text-align:left">3.436</td>
+<td style="text-align:left">3.963</td>
+<td style="text-align:left">3.794</td>
+<td style="text-align:left">4.044</td>
+<td style="text-align:left">3.923</td>
+<td style="text-align:left">4.023</td>
+<td style="text-align:left">3.826</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DSpark</strong></td>
+<td style="text-align:left">3.793</td>
+<td style="text-align:left">3.899</td>
+<td style="text-align:left">4.330</td>
+<td style="text-align:left">4.270</td>
+<td style="text-align:left">4.430</td>
+<td style="text-align:left">4.412</td>
+<td style="text-align:left">4.473</td>
+<td style="text-align:left">4.277</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>UBTree</strong></td>
+<td style="text-align:left"><strong>4.794</strong></td>
+<td style="text-align:left"><strong>5.041</strong></td>
+<td style="text-align:left"><strong>5.449</strong></td>
+<td style="text-align:left"><strong>5.481</strong></td>
+<td style="text-align:left"><strong>5.714</strong></td>
+<td style="text-align:left"><strong>5.544</strong></td>
+<td style="text-align:left"><strong>5.616</strong></td>
+<td style="text-align:left"><strong>5.450</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>SWE-bench 에이전트 트래젝토리 단계별 결과 (4 Stages)</strong>:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기법 (Method)</th>
+<th style="text-align:left">Stage 1 (0–25%)</th>
+<th style="text-align:left">Stage 2 (25–50%)</th>
+<th style="text-align:left">Stage 3 (50–75%)</th>
+<th style="text-align:left">Stage 4 (75–100%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DSpark</strong></td>
+<td style="text-align:left">3.942</td>
+<td style="text-align:left">4.321</td>
+<td style="text-align:left">4.241</td>
+<td style="text-align:left">4.461</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>UBTree</strong></td>
+<td style="text-align:left"><strong>5.116 (+29.8%)</strong></td>
+<td style="text-align:left"><strong>5.563 (+28.7%)</strong></td>
+<td style="text-align:left"><strong>5.448 (+28.5%)</strong></td>
+<td style="text-align:left"><strong>5.644 (+26.5%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p><strong>[사실]</strong> 소스 논문의 제5장, 제6장 및 부록 D(Appendix D)에 의거할 때, UBTree 기술은 다음과 같은 본질적 한계점과 구조적 불확실성을 가집니다.</p>
+<ol>
+<li><strong>고동시성(High Concurrency) 환경에서의 성능 민감성</strong>:
+추측 디코딩은 단일 요청 자가회귀형 디코딩 연산이 메모리 대역폭 제약(Memory Bandwidth-bound)을 받을 때 발생하는 남는 연산 자원(Spare Compute)을 활용합니다. 그러나 서빙 동시 요청 수($C$)가 증가하여 인퍼런스 연산이 연산량 제약(Compute-bound) 환경으로 전환되면, 추측 디코딩에 활용할 수 있는 여유 연산 자원이 축소됩니다. 트리 디코딩은 대안 가지 검증을 위해 추가적인 연산을 소모하므로 여유 연산이 풍부한 환경에 적합하며, 고동시성 환경에서는 단일 경로 및 트리 기반 기법 모두 속도 향상 폭이 감소하거나 소멸될 수 있는 구조적 민감성을 지닙니다.</li>
+<li><strong>탐색 기반 적응형 트리 전략의 한계</strong>:
+UBTree의 서빙 전략은 사전 오프라인 검색(Configuration Search)을 통해 서빙 로드별로 미리 선정된 고정 트리 예산($B$)과 검색 너비($W$) 설정에 의존합니다. 이 방식은 매 디코딩 라운드의 전이 점수 확률 분포(Uncertainty)를 실시간으로 반영하여 트리 구조를 적응적으로 변경하지 못하므로, 라운드별 예측 불확실성이나 가용 자원 변화에 항상 최적의 트리를 보장한다고 볼 수 없습니다.</li>
+</ol>
+<h6 id="확인-불가-및-소스-미다룸-uncertainties-unmentioned">확인 불가 및 소스 미다룸 (Uncertainties / Unmentioned)</h6>
+<ul>
+<li><strong>트랜스포머/디퓨전 이외 아키텍처로의 일반화 여부</strong>: 소스는 트랜스포머 및 일부 혼합 주의 집중 아키텍처(MoE, Kimi Delta Attention, Gated DeltaNet)에서의 실증만을 다루며, 완전 비트랜스포머 계열이나 디퓨전 이외 타 아키텍처로의 일반화 성능은 명시되어 있지 않습니다 <strong>(확인 불가)</strong>.</li>
+<li><strong>상용 서비스 배포 시 비용 구조</strong>: 실제 대규모 인프라 구축 및 상용 서빙 운용 시의 가동 비용(CAPEX/OPEX) 및 비용 절감액 수치는 소스에 명시되지 않았습니다 <strong>(소스 미다룸)</strong>.</li>
+<li><strong>저자별 세부 모듈 구현 내용</strong>: 논문 저자 10인의 소속 기관 및 인턴십 참여 조건 외에 개인별 상세 코드 기여나 특정 모듈 작성 내역은 명시되어 있지 않습니다 <strong>(확인 불가)</strong>.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

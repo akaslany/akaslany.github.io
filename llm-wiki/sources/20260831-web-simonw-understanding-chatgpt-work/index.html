@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Understanding ChatGPT Work</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Understanding ChatGPT Work</h1>
+<p class="page-meta">웹 · 2026-08-31</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서의 가격, 플랜, 모델 및 기능은 2026-08-31 기준 정보이며, 지역, 세금, 결제 주기 및 관리자 설정에 따라 실제 적용 내용이 달라질 수 있습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://simonw.substack.com/p/understanding-chatgpt-work">출처</a> · <a href="https://www.youtube.com/watch?v=ElUlkqLhkPc">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<p><strong>본 보고서의 가격, 플랜, 모델 및 기능은 2026-08-31 기준 정보이며, 지역, 세금, 결제 주기 및 관리자 설정에 따라 실제 적용 내용이 달라질 수 있습니다.</strong></p>
+<h3 id="chatgpt-work-독립-제품-기능-및-보안-감사-보고서-2026-08-31-기준">ChatGPT Work: 독립 제품 기능 및 보안 감사 보고서 (2026-08-31 기준)</h3>
+<h4 id="1-제품-정체성-및-분류-체계-product-taxonomy">1. 제품 정체성 및 분류 체계 (Product Taxonomy)</h4>
+<p>OpenAI가 2026-07-09 출시한 <strong>ChatGPT Work</strong>는 독립적인 구독 SKU가 아니라, ChatGPT 환경 내에서 제공되는 특정 <strong>업무 위임 표면(Surface)</strong> 혹은 &quot;ChatGPT 내의 에이전트(an agent in ChatGPT)&quot;로 정의됩니다. 감사관 관점에서 본 제품은 단순한 인터페이스의 확장이 아니라, 권한과 데이터 보존 경계가 서로 다른 개별 실행 환경의 집합으로 분석됩니다.</p>
+<ul>
+<li><strong>공식 명칭 및 제품 표면 분리:</strong>
+<ul>
+<li><strong>Chat:</strong> 답변, 설명, 초안 작성을 중심으로 하는 기본 텍스트 인터페이스.</li>
+<li><strong>Work:</strong> 파일, 도구, 브라우저를 사용하여 검토 가능한 결과물을 생성하는 실행 중심 인터페이스.</li>
+<li><strong>Codex:</strong> 전용 뷰와 별도 개발자 워크플로 기록을 유지하는 기술 중심 인터페이스.</li>
+<li><strong>기타 표면:</strong> 데스크톱 앱, Business/Enterprise Workspace, Projects, Tasks, Apps/Connectors, API Platform은 각각 별도의 권한, 보존 정책 및 요금 경계를 가집니다. 이들은 기능이 겹쳐도 권한·보존·요금 경계를 구분해 설명해야 합니다.</li>
+</ul>
+</li>
+<li><strong>분석용 분류 (Simon Willison의 체계):</strong>
+<ul>
+<li><strong>Work Cloud:</strong> OpenAI 관리 공유 인프라 기반의 VM 샌드박스 환경.</li>
+<li><strong>Work Local:</strong> 데스크톱 앱을 통해 승인된 로컬 파일 및 애플리케이션을 사용하는 환경.</li>
+<li><em>주의: 위 두 명칭은 공식 SKU가 아니며, 기능적 차이를 설명하기 위한 도구적 분류입니다.</em></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-모델-라인업-및-요금제-구조">2. 모델 라인업 및 요금제 구조</h4>
+<h5 id="2-1-모델-계층-및-추론-엔진-gpt-5-6-모델군">2.1 모델 계층 및 추론 엔진 (GPT-5.6 모델군)</h5>
+<ul>
+<li><strong>Sol:</strong> 플래그십 모델로, 추론 레벨(Instant, Medium, High, Extra High)에 따라 성능이 차등화됩니다.</li>
+<li><strong>Terra:</strong> 성능과 속도의 균형을 맞춘 중급 계층 모델입니다.</li>
+<li><strong>Luna:</strong> 빠르고 저렴한 비용으로 제공되는 보급형 계층 모델입니다.</li>
+<li><strong>Ultra 모드:</strong> 단순한 최고 성능 추론 단계가 아닌, <strong>Subagents 병렬 오케스트레이션(Parallel Orchestration) 모드</strong>를 의미하며, 공식 문서는 Ultra를 subagents 병렬 orchestration으로 설명하며 위임 강도는 별도 관찰로 남습니다.</li>
+</ul>
+<h5 id="2-2-요금제별-접근-권한-및-사용량-제한-allowance">2.2 요금제별 접근 권한 및 사용량 제한(Allowance)</h5>
+<p>사용량 제한은 고정된 메시지 수가 아닌, <strong>'5시간 공유 창(5-hour sharing window)'</strong> 또는 <strong>'주간 제한'</strong> 등 유동적인 단위로 적용됩니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">플랜 명칭</th>
+<th style="text-align:left">가격 (월 기준, 세전)</th>
+<th style="text-align:left">주요 특징 및 접근 권한</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Free</strong></td>
+<td style="text-align:left">$0</td>
+<td style="text-align:left"><strong>제한된 접근:</strong> 데스크톱 Work 표기에 대한 제한적 접근만 허용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Go</strong></td>
+<td style="text-align:left">$8</td>
+<td style="text-align:left"><strong>제한된 접근:</strong> 기본 개인용 플랜, Work 모델 접근 권한 제한적</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Plus</strong></td>
+<td style="text-align:left">$20</td>
+<td style="text-align:left">개인용 유료 플랜, GPT-5.6 Sol 전체 레벨 접근 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Pro 5x / 20x</strong></td>
+<td style="text-align:left">$100 / $200</td>
+<td style="text-align:left">전문가용 고사용량 플랜 (각각 5배, 20배의 사용량 제공)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Business</strong></td>
+<td style="text-align:left">인당 $20~$25</td>
+<td style="text-align:left">2인 이상 팀 관리, 데이터 학습 제외 정책 기본 적용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Enterprise/Edu</strong></td>
+<td style="text-align:left">별도 계약가</td>
+<td style="text-align:left">전사적 보안 통제, 관리자 기능 및 거버넌스 도구 포함</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-기능-실체-및-증거-등급-매트릭스-evidence-matrix">3. 기능 실체 및 증거 등급 매트릭스 (Evidence Matrix)</h4>
+<p>본 매트릭스는 공식 문서와 외부 보안 전문가의 실험 결과를 대조하여 기능의 신뢰도를 평가합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기능 항목</th>
+<th style="text-align:left">공식 문서 상태</th>
+<th style="text-align:left">Simon의 실험/추론</th>
+<th style="text-align:left">최종 판정 및 미해결 사항</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Cloud 실행 환경</strong></td>
+<td style="text-align:left">VM-backed sandbox (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">'Work Cloud'로 명명 (<code>AUTHOR_INFERENCE</code>)</td>
+<td style="text-align:left">공식 동작 확인; 물리적 전용 호스트 여부는 <code>UNRESOLVED</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Local 실행 환경</strong></td>
+<td style="text-align:left">승인된 파일/앱 사용 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">Codex의 UI 재구성 느낌 (<code>AUTHOR_EXPERIMENT</code>)</td>
+<td style="text-align:left">온디바이스/오프라인 추론으로 오인 금지</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>파일 지속성</strong></td>
+<td style="text-align:left">Snapshot 재사용 가능 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">세션 간 파일 즉시 공유 관찰 (<code>AUTHOR_EXPERIMENT</code>)</td>
+<td style="text-align:left">정확한 Quota 및 보존 기간(Retention)은 <code>UNRESOLVED</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인터넷 접속</strong></td>
+<td style="text-align:left">관리 정책에 따름 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">전역적으로 개방된 상태로 관찰 (<code>AUTHOR_INFERENCE</code>)</td>
+<td style="text-align:left">특정 세션 관찰일 뿐, 전역 정책으로 확정 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>패키지/Repo 관리</strong></td>
+<td style="text-align:left">npm/pip 등 주요 매니저 지원 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">Clone/Install 실험 성공 (<code>AUTHOR_EXPERIMENT</code>)</td>
+<td style="text-align:left">모든 Work 환경에 대한 확대 적용 여부 미확인</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>브라우저 제어</strong></td>
+<td style="text-align:left">격리 환경, Takeover 지원 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">Playwright 계열 도구 출력 관찰 (<code>AUTHOR_EXPERIMENT</code>)</td>
+<td style="text-align:left">Playwright API의 공식 지원 여부는 <code>UNRESOLVED</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인증 탈취 방지</strong></td>
+<td style="text-align:left">secure sign-in에서 username/password를 모델에 보이지 않도록 한다는 문서화 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">PWD/2FA가 모델을 통과 안 함 (<code>AUTHOR_EXPERIMENT</code>)</td>
+<td style="text-align:left">로그/상태/확장 프로그램에서의 무노출은 미증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sites</strong></td>
+<td style="text-align:left">D1 10GB, R2 연동 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">Cloudflare Workers 기반 추정 (<code>AUTHOR_INFERENCE</code>)</td>
+<td style="text-align:left">데이터 레지던시 미지원 및 삭제 예외 주의 필요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Subagents</strong></td>
+<td style="text-align:left">병렬 에이전트 통합 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">Ultra에서 적극적 위임 확인 (<code>AUTHOR_INFERENCE</code>)</td>
+<td style="text-align:left">계층 구조와 사용량 발생 방식의 정밀 분석 필요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Schedules</strong></td>
+<td style="text-align:left">Web Chat/Work 및 Desktop 생성 가능 (<code>OFFICIAL_CURRENT</code>)</td>
+<td style="text-align:left">Chat 내 뉴스 업데이트 확인 (<code>AUTHOR_EXPERIMENT</code>)</td>
+<td style="text-align:left">Work 전용 기능이 아님이 공식 확인됨</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>223개 도구 리스트</strong></td>
+<td style="text-align:left">공식 레지스트리 없음 (<code>UNRESOLVED</code>)</td>
+<td style="text-align:left">특정 세션에서 223개 관찰 (<code>GENERATED_OUTPUT</code>)</td>
+<td style="text-align:left"><strong>모델이 생성한 결과물이며 공식 목록이 아님</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="4-기술적-보안-경계-및-통제-메커니즘-분석">4. 기술적 보안 경계 및 통제 메커니즘 분석</h4>
+<ul>
+<li><strong>Cloud Browser 격리 및 Takeover:</strong> 사용자의 로컬 환경과 분리된 원격 샌드박스에서 실행됩니다. 사용자는 필요한 로그인·인증 단계에서 **인간 개입(Takeover)**을 수행할 수 있지만 이것이 모든 비정상 행위 차단을 보장하지는 않습니다.</li>
+<li><strong>'Sites' 데이터 구조:</strong> 관계형 데이터베이스(D1, 10GB 제한)와 오브젝트 스토리지(R2)를 활용하며 저장(Save)과 배포(Deploy) 단계가 분리되어 있습니다. Simon의 관찰에 따르면 Cloudflare Workers 기반 인프라로 보이나, OpenAI는 이를 공식적으로 명시하지 않았습니다.</li>
+<li><strong>인증 정보 관리의 한계:</strong> 모델이 사용자의 비밀번호를 직접 보지 못하도록 설계되었으나, 브라우저 세션 쿠키, 네트워크 로그, 혹은 브라우저 확장 프로그램 상태를 통한 <strong>간접적 노출 가능성</strong>은 여전히 존재합니다. &quot;모델이 보지 못한다&quot;는 것이 &quot;시스템 전체에서 안전하다&quot;는 것을 보장하지 않습니다.</li>
+<li><strong>Auto-review 시스템의 불확실성:</strong> 샌드박스 내 위협 행위를 자동 감지하는 Auto-review 시스템은 **결정론적 보안 보장(Deterministic guarantee)**이 아닙니다. 샌드박스의 접근 권한(writable roots)과 네트워크 범위가 넓어질수록, 자동 리뷰는 결정론적 보안 보장이 아니므로 사람의 검토와 최소 권한을 대체할 수 없습니다.</li>
+</ul>
+<h4 id="5-위협-모델링-the-lethal-trifecta-및-9대-위협">5. 위협 모델링: The Lethal Trifecta 및 9대 위협</h4>
+<p>보안 전문가 Simon Willison은 (1) 개인 데이터 접근권, (2) 신뢰할 수 없는 외부 콘텐츠 노출, (3) 외부 데이터 유출 채널의 결합을 가장 치명적인 위협(<strong>Lethal Trifecta</strong>)으로 정의했습니다. 이는 Work 환경이 가질 수 있는 잠재적 공격 표면에 대한 분석입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">위협 유형</th>
+<th style="text-align:left">완화 방법 (Mitigation)</th>
+<th style="text-align:left">확인 자료/증거</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>간접 프롬프트 주입</strong></td>
+<td style="text-align:left"><strong>신뢰할 수 없는 콘텐츠 표시</strong>, 도구 승인, 출력 검토</td>
+<td style="text-align:left">Red-team 결과 및 사고 사례</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>세션 간 파일 오염</strong></td>
+<td style="text-align:left">휘발성 워크스페이스 사용, Snapshot 격리</td>
+<td style="text-align:left">Snapshot 격리 정책 문서</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>브라우저 콘텐츠 공격</strong></td>
+<td style="text-align:left">Takeover 활용, <strong>생산용 계정 분리</strong>, 목적지 확인</td>
+<td style="text-align:left">브라우저 감사 로그</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>악성 Repo/패키지</strong></td>
+<td style="text-align:left">종속성 고정(Pinning), 공급망 스캔, 네트워크 제한</td>
+<td style="text-align:left">샌드박스 탈출 방지 증거</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인증/세션 남용</strong></td>
+<td style="text-align:left">로그아웃 처리, 세션 데이터 클리어, 최소권한 계정</td>
+<td style="text-align:left">쿠키 보존 범위 문서</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공개 사이트 유출</strong></td>
+<td style="text-align:left">배포 권한 통제, 비밀값 스캔, Save/Deploy 분리</td>
+<td style="text-align:left">D1/R2 삭제 정책</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>커넥터 데이터 누출</strong></td>
+<td style="text-align:left">커넥터 허용 리스트(Allowlist) 관리, 읽기 전용 권한</td>
+<td style="text-align:left">커넥터별 감사 기능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Confused Deputy</strong></td>
+<td style="text-align:left">명시적 실행 확인 절차(Explicit Confirmation)</td>
+<td style="text-align:left">확인 절차 우회 테스트</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Subagent 증폭 위협</strong></td>
+<td style="text-align:left">에이전트 수 제한, 에이전트별 추적(Trace)</td>
+<td style="text-align:left">에이전트 권한 상속 정책</td>
+</tr>
+</tbody>
+</table>
+<h4 id="6-안전-사용-가이드-5단계-사다리-safe-use-ladder">6. 안전 사용 가이드: 5단계 사다리 (Safe-Use Ladder)</h4>
+<p>다음은 데이터 민감도에 따른 review·avoid 조건을 정리한 safe-use ladder입니다.</p>
+<ol>
+<li><strong>공개 자료 조사:</strong> 외부 쓰기 기능을 비활성화하고 도구의 출력물을 철저히 검토합니다.</li>
+<li><strong>개인 문서 작업 (외부 액션 없음):</strong> 데이터 학습 제외 설정을 확인하고 휘발성 워크스페이스를 사용합니다.</li>
+<li><strong>인증된 브라우징 (Authenticated Browsing):</strong> <strong>별도의 저권한 계정</strong>을 사용하며, Takeover 기능을 통해 제출 내용을 상시 모니터링합니다.</li>
+<li><strong>소스/종속성 실행:</strong> Lockfile 사용, 버전 고정, 네트워크 허용 리스트가 설정된 격리 환경에서만 수행합니다.</li>
+<li><strong>운영/금융/관리자 액션:</strong> 원칙적으로 지양해야 합니다. 불가피한 경우 **별도의 서비스 계정(Service Account)**을 사용하고, 실행 전 Preview/Diff 검토 및 롤백 대책을 반드시 수립해야 합니다.</li>
+</ol>
+<h4 id="7-미해결-과제-및-모니터링-체크리스트">7. 미해결 과제 및 모니터링 체크리스트</h4>
+<h5 id="현재-공식-문서로-확인되지-않는-불확실한-지점">현재 공식 문서로 확인되지 않는 불확실한 지점</h5>
+<ul>
+<li>Work 파일 시스템의 정확한 할당량(Quota) 및 Snapshot의 세부 보존 기간.</li>
+<li>Cloud Browser의 Playwright/CDP 계약 범위 및 감사 로그의 완전한 추적 가능성.</li>
+<li>Sites 기능의 백엔드 인프라 상세 구현 및 데이터 삭제 시 발생하는 예외 규정.</li>
+<li>플랜별 사용량 제한(Weekly limits) 산정 방식 및 초기화 주기.</li>
+</ul>
+<h5 id="관리자-및-사용자-보안-체크리스트">관리자 및 사용자 보안 체크리스트</h5>
+<ul>
+<li>[ ] <strong>Admin Policy 변화 모니터링:</strong> 관리자 설정 내 데이터 활용 및 공유 정책의 변경 사항을 주기적으로 검토하십시오.</li>
+<li>[ ] <strong>요금제별 접근 권한 확인:</strong> 사용 중인 플랜이 Ultra 모드 등 특정 보안 통제 기능을 포함하고 있는지 확인하십시오.</li>
+<li>[ ] <strong>감사 로그(Compliance Logs) 검증:</strong> Shell 실행, 브라우저 활동, 도구 승인 내역이 누락 없이 기록되는지 정기적으로 테스트하십시오.</li>
+<li>[ ] <strong>공식 문서 최신화:</strong> 본 보고서는 2026-08-31 기준이므로, 이후 OpenAI의 Release Notes를 통해 변동 사항을 반드시 재확인하십시오.</li>
+</ul>
+<hr />
+<h3 id="공개-릴리스-독립-기술-보안-감사-부록">공개 릴리스 독립 기술·보안 감사 부록</h3>
+<h3 id="source-identity-and-audit-cutoff">Source identity and audit cutoff</h3>
+<ul>
+<li>Job: <code>20260831-web-simonw-understanding-chatgpt-work</code></li>
+<li>Audit cutoff: 2026-08-31 KST</li>
+<li>Submitted newsletter URL: https://simonw.substack.com/p/understanding-chatgpt-work?utm_source=share&amp;utm_medium=android&amp;r=2okpcp</li>
+<li>Canonical newsletter identity: https://simonw.substack.com/p/understanding-chatgpt-work</li>
+<li>Newsletter publication: <em>Understanding ChatGPT Work</em>, Simon Willison, 2026-08-31.</li>
+<li>Featured original article: https://simonwillison.net/2026/Aug/30/understanding-chatgpt-work/ — Simon Willison, 2026-08-30.</li>
+<li>The Substack page and original blog are two publication surfaces of the same featured article, not independent corroboration.</li>
+<li>Scope includes only the featured article. Sponsor copy, the Qwen/Tencent subtitle, six unrelated links, quotation and release roundup are excluded.</li>
+<li>No source screenshot, product UI capture, example-site image, logo, chart, layout or pixel asset is licensed or reused. Public visuals are independently generated diagrams.</li>
+</ul>
+<h4 id="evidence-classes">Evidence classes</h4>
+<ol>
+<li><code>OFFICIAL_CURRENT</code>: OpenAI primary documentation checked 2026-08-31.</li>
+<li><code>OFFICIAL_RELEASE</code>: dated OpenAI announcement/release note.</li>
+<li><code>AUTHOR_EXPERIMENT</code>: Simon Willison's direct test in one account and rollout.</li>
+<li><code>AUTHOR_INFERENCE</code>: language such as “I believe”, “I’m assuming”, “as far as I can tell”, “my current understanding”, and “appears”.</li>
+<li><code>GENERATED_OUTPUT</code>: model-produced site/tool list, not an authoritative registry.</li>
+<li><code>UNRESOLVED</code>: public official documentation does not establish a general contract.</li>
+</ol>
+<p>The public report and video are an independent product-and-safety audit, not a section-by-section translation or substitute for the article.</p>
+<h3 id="chatgpt-work-기능-보안-감사-팩트-카드">ChatGPT Work 기능·보안 감사 팩트 카드</h3>
+<p>기준일: 2026-08-31. 아래의 가격·플랜·모델·기능은 변동 가능하며, 날짜 없는 OpenAI 문서는 기준일에 확인한 현재 문서로만 취급한다.</p>
+<h4 id="1-공식-명칭과-분리해야-할-제품-표면">1. 공식 명칭과 분리해야 할 제품 표면</h4>
+<ul>
+<li><code>OFFICIAL_RELEASE</code>: 공식 제품명은 <strong>ChatGPT Work</strong>다. OpenAI의 2026-07-09 출시 묶음은 이를 “an agent in ChatGPT”로 소개했다.</li>
+<li>Work는 별도 구독 SKU가 아니라 ChatGPT 안의 업무 위임 표면이다.</li>
+<li><strong>Chat</strong>은 답변·설명·초안 중심, <strong>Work</strong>는 파일·도구·브라우저를 사용해 검토 가능한 결과물을 만드는 표면, <strong>Codex</strong>는 전용 뷰와 별도 개발자 워크플로 기록을 유지한다. 기능이 겹쳐도 동일 제품은 아니다.</li>
+<li>데스크톱 앱, Business/Enterprise workspace, Projects, Tasks, Apps/connectors, API Platform도 각각 권한·보존·요금 경계가 다르다.</li>
+<li><code>AUTHOR_TAXONOMY</code>: Simon의 <code>Work Cloud</code>와 <code>Work Local</code>은 설명용 분류다. 현재 OpenAI 문서는 cloud/local 환경을 설명하지만 두 표현을 공식 SKU 이름으로 확정하지 않는다.</li>
+</ul>
+<h4 id="2-모델-reasoning-플랜-allowance">2. 모델·reasoning·플랜·allowance</h4>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>2026-08-31 판정</th>
+<th>증거 경계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-5.6 Sol/Terra/Luna</td>
+<td>공식 모델군. Sol flagship, Terra 균형형, Luna 빠르고 저렴한 계층</td>
+<td><code>OFFICIAL_CURRENT</code></td>
+</tr>
+<tr>
+<td>GPT-5.5</td>
+<td>이전 세대 flagship, 일부 Work/Codex/API 표면에 잔존</td>
+<td><code>OFFICIAL_CURRENT</code></td>
+</tr>
+<tr>
+<td>Chat UI</td>
+<td>eligible paid plan에서 GPT-5.6 Sol의 Instant/Medium/High/Extra High와 Sol Pro 표시</td>
+<td><code>OFFICIAL_CURRENT</code>; Chat의 모든 mode 뒤 모델을 추정하지 말 것</td>
+</tr>
+<tr>
+<td>Work/Codex</td>
+<td>Light(CLI Low), Medium, High, Extra High, Max, Ultra</td>
+<td><code>OFFICIAL_CURRENT</code></td>
+</tr>
+<tr>
+<td>Max</td>
+<td>단일 선택 모델이 더 오래 reasoning</td>
+<td><code>OFFICIAL_CURRENT</code></td>
+</tr>
+<tr>
+<td>Ultra</td>
+<td>단순 최고 reasoning level이 아니라 subagents 병렬 orchestration mode</td>
+<td><code>OFFICIAL_CURRENT</code>; “더 eager”라는 강도는 계정별 관찰과 분리</td>
+</tr>
+<tr>
+<td>API</td>
+<td><code>gpt-5.6-sol</code>, <code>gpt-5.6-terra</code>, <code>gpt-5.6-luna</code>; <code>gpt-5.6</code> alias는 Sol로 route</td>
+<td><code>OFFICIAL_CURRENT</code>; UI label과 API ID는 동일하지 않음</td>
+</tr>
+<tr>
+<td>Work/Codex allowance</td>
+<td>같은 가격·credits·usage limits, local messages와 cloud chats는 공유 5시간 창, 추가 weekly limits 가능</td>
+<td><code>OFFICIAL_CURRENT</code>; 고정 메시지 수가 아님</td>
+</tr>
+<tr>
+<td>일반 Chat</td>
+<td>Work/Codex credit 표시와 구분되며 Enterprise 문서에서 regular Chat usage는 포함되지 않음</td>
+<td>정확한 모든 플랜 reset 단위는 계정 UI/계약에 따라 달라질 수 있음</td>
+</tr>
+<tr>
+<td>API billing</td>
+<td>ChatGPT workspace billing과 별도</td>
+<td><code>OFFICIAL_CURRENT</code></td>
+</tr>
+</tbody>
+</table>
+<p>가격(세전·지역·환율·결제주기 차이 가능): Free $0, Go $8/월, Plus $20/월, Pro 5x $100/월부터, Pro 20x $200/월, Business 연간 $20/사용자/월 또는 월간 $25/사용자/월(2인 이상), Enterprise/Edu 계약 가격. Free/Go의 제한된 데스크톱 Work 표기와 전체 GPT-5.6 Work 모델 자격 문서 사이에는 범위 차이가 있어 “제한된 접근”으로만 표현한다.</p>
+<h4 id="3-기능-상태-matrix">3. 기능·상태 matrix</h4>
+<table>
+<thead>
+<tr>
+<th>기능</th>
+<th>공식 현재 문서</th>
+<th>Simon의 실험/추론</th>
+<th>판정·미해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cloud 실행</td>
+<td>OpenAI 관리 공유 인프라의 VM-backed sandbox. 로컬 파일·탭·VPN을 자동 상속하지 않음</td>
+<td><code>Work Cloud</code>라는 분류</td>
+<td>공식 동작 확인, 물리 전용 호스트 보장 없음</td>
+</tr>
+<tr>
+<td>Local 실행</td>
+<td>데스크톱에서 승인된 로컬 파일·앱·브라우저 사용. 일부 데이터는 서비스로 전송될 수 있음</td>
+<td>Codex 재스킨처럼 느껴진다는 평가</td>
+<td>온디바이스/오프라인 추론으로 부르면 안 됨</td>
+</tr>
+<tr>
+<td>파일 scope·지속성</td>
+<td>eligible state/snapshot 재사용 가능, 채팅·Library·Project·browser cookie·실행 snapshot lifecycle이 서로 다름</td>
+<td><code>/workspace/scratch</code> 171개, 세션 간 즉시 보임, process/localhost는 분리된 듯함</td>
+<td>관찰은 유용하지만 quota·정확한 retention·모든 계정 mount 계약은 미확인</td>
+</tr>
+<tr>
+<td>인터넷</td>
+<td>Work 설정과 관리자 정책에 따름. Codex Cloud setup은 internet on, agent 단계 기본 off; allowlist·HTTP method·proxy 가능</td>
+<td>“default appears open to all”</td>
+<td>특정 테스트 관찰이지 무조건적 전역 정책 증거가 아님</td>
+</tr>
+<tr>
+<td>package/repo</td>
+<td>Codex Cloud에서 branch/SHA checkout, setup script, npm/yarn/pnpm/pip/poetry 지원</td>
+<td>clone/install/web 상호작용 실험</td>
+<td>Codex Cloud 계약을 모든 Work 환경으로 확대하지 않음</td>
+</tr>
+<tr>
+<td>브라우저</td>
+<td>cloud browser는 격리된 원격 컴퓨터. 클릭·입력·screenshot·replay·인간 takeover 지원</td>
+<td>Chrome, form, screenshot, JS DOM, Playwright 계열 tool output 관찰</td>
+<td>cloud browser의 Playwright 구현/API는 공식 미확인. 데스크톱 developer mode CDP와 구분</td>
+</tr>
+<tr>
+<td>인증 takeover</td>
+<td>secure sign-in에서 model이 username/password를 보지 않고 OpenAI가 이를 저장하지 않는다고 문서화; cookie/session은 유지될 수 있음</td>
+<td>password/2FA가 model을 round-trip하지 않는다는 관찰</td>
+<td>model 비가시성은 logs·browser state·extensions·network·향후 actions 전체의 무노출 증명이 아님</td>
+</tr>
+<tr>
+<td>Sites</td>
+<td>OpenAI-hosted public beta. 초기에는 owner/admin만, 사용자·그룹·workspace·public sharing 선택. D1 10GB, R2 object storage, secrets/settings, save와 deploy 분리</td>
+<td>Cloudflare Workers 기반으로 보였고 D1/R2 site 생성</td>
+<td>OpenAI 문서는 Cloudflare Workers를 명시하지 않음. public/private default는 문서로 확인, data residency 미지원·삭제/보존 예외는 주의</td>
+</tr>
+<tr>
+<td>subagents</td>
+<td>eligible Work에서 병렬 전문 agent와 parent 통합. Ultra가 orchestration 사용, 각 agent 사용량 발생</td>
+<td>Ultra가 더 적극 위임한다고 추정</td>
+<td>reasoning effort·model variant·service tier·orchestration mode를 분리</td>
+</tr>
+<tr>
+<td>schedules</td>
+<td>web의 Chat 또는 Work에서 생성 가능; desktop Work/Codex task도 가능</td>
+<td>기사 update가 Chat에서도 된다고 정정</td>
+<td>Work-exclusive 아님</td>
+</tr>
+<tr>
+<td>223 tools site</td>
+<td>없음</td>
+<td>fresh Work가 만든 사이트에 223개, 그중 개인 MCP 6개라고 관찰</td>
+<td><code>GENERATED_OUTPUT</code>; cutoff/account별 결과이며 OpenAI registry가 아님. 개인 MCP 세부/secret 비공개</td>
+</tr>
+</tbody>
+</table>
+<h4 id="4-보존-가시성-concurrency">4. 보존·가시성·concurrency</h4>
+<ul>
+<li>채팅 삭제는 통상 30일 내 영구 삭제 예정이나 법적·보안 예외가 있다.</li>
+<li>Enterprise의 Library 밖 임시 upload는 별도 설정이 없으면 48시간 후 만료 가능하나 Library 파일은 채팅 삭제와 연동되지 않을 수 있다.</li>
+<li>browser cookie, Project 파일, memory, execution snapshot, Sites D1/R2와 logs는 각각 별도 삭제와 보존 경계를 가진다.</li>
+<li>Business/Enterprise/Edu 데이터는 기본적으로 학습에 사용되지 않는다. 개인 Plus/Pro는 “Improve the model for everyone” 설정 영향을 받는다.</li>
+<li>Compliance Logs가 prompt/response와 일부 app/file 사건을 제공해도 모든 shell/browser/file/tool/approval의 완전한 trace를 보장하지 않는다.</li>
+<li>여러 채팅의 동시 실행은 가능하지만 공개 문서는 Work 전체의 고정 concurrency 수를 제시하지 않는다. 같은 파일·연결 소스의 동시 write는 충돌 위험이 있다.</li>
+</ul>
+<h4 id="5-보안-통제와-한계">5. 보안 통제와 한계</h4>
+<ul>
+<li>sandbox와 최소 권한, domain allowlist, HTTP method 제한, network proxy, consequential-action confirmation, browser takeover, 별도 reviewer/auto-review가 문서화돼 있다.</li>
+<li>Auto-review는 기존 sandbox·writable roots·network 범위를 넓히지 않으며 exfiltration·credential probing·파괴행위를 차단하도록 설계됐다. OpenAI도 이를 deterministic security guarantee로 부르지 않는다.</li>
+<li>product docs는 의도된 통제와 현재 제품 동작의 근거이지, prompt injection의 완전 예방·침해 부재 증명이 아니다.</li>
+</ul>
+<h5 id="lethal-trifecta">lethal trifecta</h5>
+<p>Simon Willison의 threat model은 (1) private-data access, (2) untrusted content 노출, (3) 외부 exfiltration channel의 결합이다. Work가 connector/file/browser로 private data를 읽고, 웹·repo·package의 공격자 통제 텍스트를 처리하며, network/site/write action을 수행할 수 있으면 세 조건이 동시에 성립할 수 있다. 이는 공격 표면 분석이며, 이 기사 실험에서 실제 exploit이나 유출이 발생했다는 뜻이 아니다.</p>
+<h5 id="위협-table">위협 table</h5>
+<table>
+<thead>
+<tr>
+<th>위협</th>
+<th>경계</th>
+<th>완화</th>
+<th>falsifier/확인 자료</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>간접 prompt injection</td>
+<td>웹·문서·issue의 숨은 지시가 tool 사용을 왜곡</td>
+<td>최소 domain/connectors, untrusted-content 표시, action 확인, output/diff 검토</td>
+<td>red-team 결과·incident·통제 우회 재현</td>
+</tr>
+<tr>
+<td>cross-session file poisoning</td>
+<td>persistent state가 다음 세션 입력으로 재사용</td>
+<td>disposable workspace, provenance/hash, workspace reset</td>
+<td>snapshot lifecycle·isolation 계약</td>
+</tr>
+<tr>
+<td>browser content attack</td>
+<td>페이지가 auth·navigation·submission을 유도</td>
+<td>별도 계정, takeover, 목적지 확인, no production creds</td>
+<td>browser replay·audit completeness</td>
+</tr>
+<tr>
+<td>malicious repo/package</td>
+<td>setup script·dependency가 code/secret에 접근</td>
+<td>dependency pinning, lockfile, provenance, secret scanning, network 제한</td>
+<td>supply-chain scan과 sandbox escape evidence</td>
+</tr>
+<tr>
+<td>credential/session abuse</td>
+<td>model 비가시 credential이어도 cookie와 authenticated state는 재사용 가능</td>
+<td>disposable browser profile, logout/data clear, 최소권한 계정, 2FA</td>
+<td>cookie retention·log boundary 문서</td>
+</tr>
+<tr>
+<td>public-site exfiltration</td>
+<td>Site deploy/storage가 공개 channel이 될 수 있음</td>
+<td>save/deploy 분리, public off, secret scan, approved audience</td>
+<td>remote audience·D1/R2/log deletion readback</td>
+</tr>
+<tr>
+<td>connector leakage</td>
+<td>broad connector scope가 private corpus와 write action 결합</td>
+<td>connector allowlist, read-only, separate workspace</td>
+<td>connector-specific scopes/audit</td>
+</tr>
+<tr>
+<td>confused deputy</td>
+<td>사용자의 권한으로 의도 밖 외부 변경</td>
+<td>explicit confirmation, action isolation, least privilege</td>
+<td>confirmation coverage와 bypass test</td>
+</tr>
+<tr>
+<td>subagent amplification</td>
+<td>병렬 agents가 attack surface·usage·검토량 확대</td>
+<td>agent 수 제한, scoped tasks, 결과 provenance, parent review</td>
+<td>per-agent trace와 permission inheritance</td>
+</tr>
+</tbody>
+</table>
+<h4 id="6-safe-use-ladder">6. safe-use ladder</h4>
+<ol>
+<li><strong>공개 자료 조사:</strong> 사용 가능. 출처와 tool output을 검토하고 external write는 끈다.</li>
+<li><strong>private documents, 외부 action 없음:</strong> 민감도·학습 설정·retention을 확인하고 disposable workspace와 최소 connector를 쓴다.</li>
+<li><strong>authenticated browsing:</strong> 별도 저권한 계정, takeover, 목적지·제출 내용 검토. 생산 credential·광범위 session 사용은 피한다.</li>
+<li><strong>source/dependency 실행:</strong> lockfile·pinning·secret scan·network allowlist·격리 환경 필수. 출처 불명 setup은 실행하지 않는다.</li>
+<li><strong>production/financial/admin actions:</strong> 기본 회피. 불가피하면 external-action isolation, 별도 승인자, preview/diff, rollback, 최소권한 service account를 요구한다.</li>
+</ol>
+<p>어느 단계도 제품 전체를 “안전” 또는 “불안전”으로 단정하지 않는다. 관찰된 attack surface, 문서화된 통제, 미해결 보장과 이를 뒤집을 수 있는 검증 자료를 함께 제시한다.</p>
+<h4 id="7-unresolved-questions와-monitoring-checklist">7. unresolved questions와 monitoring checklist</h4>
+<ul>
+<li>Work filesystem quota, snapshot 보존기간, 조직 가시성, cross-session mount·process·localhost isolation의 공식 범위.</li>
+<li>Work cloud browser의 정확한 Playwright/CDP 계약과 screenshot/replay 감사·보존 범위.</li>
+<li>Sites의 Cloudflare Workers 여부, secrets/logs/D1/R2의 retention·abuse controls·domain ownership·삭제 예외.</li>
+<li>플랜별 Work 접근, allowance unit·weekly limit·credits/reset 및 admin policy 변화.</li>
+<li>모델 이름·surface mapping, Ultra delegation policy, Scheduled Tasks 제공 범위 변화.</li>
+<li>출시/Help/learn docs, 가격표, model catalog, release notes를 재게시 전 다시 확인한다.</li>
+</ul>
+<h4 id="8-primary-sources-checked">8. primary sources checked</h4>
+<ul>
+<li>https://openai.com/index/chatgpt-for-your-most-ambitious-work/</li>
+<li>https://learn.chatgpt.com/docs/whats-new.md</li>
+<li>https://learn.chatgpt.com/docs/get-started-with-work.md</li>
+<li>https://learn.chatgpt.com/docs/models.md</li>
+<li>https://learn.chatgpt.com/docs/pricing.md</li>
+<li>https://learn.chatgpt.com/docs/automations.md</li>
+<li>https://learn.chatgpt.com/docs/browser.md</li>
+<li>https://learn.chatgpt.com/docs/enterprise/chatgpt-work-cloud-security.md</li>
+<li>https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security.md</li>
+<li>https://learn.chatgpt.com/docs/sites.md</li>
+<li>https://learn.chatgpt.com/docs/agent-configuration/subagents.md</li>
+<li>https://learn.chatgpt.com/docs/sandboxing/auto-review.md</li>
+<li>https://learn.chatgpt.com/docs/agent-approvals-security.md</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li></ul></section>
+</main>
+</body>
+</html>

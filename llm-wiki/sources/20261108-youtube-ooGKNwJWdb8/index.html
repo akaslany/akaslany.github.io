@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confronting Our AI Future: Closing Keynote &quot;Discovery Loop&quot; with Jeff Dean and Fei-Fei Li</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Confronting Our AI Future: Closing Keynote &quot;Discovery Loop&quot; with Jeff Dean and Fei-Fei Li</h1>
+<p class="page-meta">YouTube · 2026-11-08</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 스탠퍼드 인간 중심 AI 연구소(Stanford Institute for Human-Centered AI, HAI)가 주최한 &quot;Confronting Our AI Future&quot; 행사의 닫는 키노트(Closing Keynote) 세션 발표 및 대담 내용을 바탕으로 작성되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=ooGKNwJWdb8">출처</a> · <a href="https://www.youtube.com/watch?v=dyNzcH9vqN4">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="디스커버리-루프-discovery-loop-와-ai-기반-과학-공학적-발견의-미래-제프-딘과-페이페이-리-대담-해설-보고서">디스커버리 루프(Discovery Loop)와 AI 기반 과학·공학적 발견의 미래: 제프 딘과 페이페이 리 대담 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 스탠퍼드 인간 중심 AI 연구소(Stanford Institute for Human-Centered AI, HAI)가 주최한 &quot;Confronting Our AI Future&quot; 행사의 닫는 키노트(Closing Keynote) 세션 발표 및 대담 내용을 바탕으로 작성되었습니다. 본 세션은 AI 기술을 통한 과학 및 공학적 발견의 가속화를 핵심 주제로 다루며, 제프 딘(Jeff Dean)이 설립한 신생 기업 '디스커버리 루프(Discovery Loop)'의 비전, 기술적 구조, 자가 개선 루프, 그리고 미래 확장성을 다각도로 조명합니다.</p>
+<p>발표자로 참여한 제프 딘은 디스커버리 루프의 공동 창업자 겸 CEO로, 구글에서 27년간 근무하며 맵리듀스(MapReduce), 빅테이블(BigTable), 텐서플로(TensorFlow) 등 핵심 인프라 구축을 주도하고 제미나이(Gemini) 프로젝트의 공동 기술 리드 및 수석 과학자로 활동한 인물입니다. 제프 딘은 &quot;Discovery Loop: Accelerating Science and Engineering&quot;이라는 주제의 키노트 발표를 진행한 후, 스탠퍼드 HAI의 창립 디렉터이자 Sequoia 컴퓨터공학 교수이며 월드 랩스(World Labs)의 공동 창업자 겸 CEO인 페이페이 리(Fei-Fei Li) 교수와 대담을 가졌습니다.</p>
+<p>보고서에서는 디스커버리 루프가 추진하는 실험 루프의 자동화 체계, 자가 개선(Self-Improvement)과 재귀적 자가 개선(Recursive Self-Improvement, RSI)의 기술적 구별 및 물리적·연산적 한계, 수학 및 과학적 발견에서의 AI 역할과 최소 설명 이론(Minimal Description Theory), 머신러닝 발전사에 대한 회고 및 예측의 성패, 그리고 AI의 사회적 영향과 미래 세대에 대한 제언을 객관적 사실에 근거하여 체계적으로 정리합니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
+<h5 id="2-1-디스커버리-루프-discovery-loop-의-설립-비전과-기술적-접근법">2.1 디스커버리 루프(Discovery Loop)의 설립 비전과 기술적 접근법</h5>
+<ul>
+<li><strong>과학·공학 범용 순환 과정(Universal Loop)의 자동화</strong>: 과학 및 공학 제반 분야는 &quot;가설 및 실험 제안 → 실행 및 구현 → 결과 측정 및 검토 → 다음 단계 결정&quot;이라는 공통적인 순환 루프를 가집니다. 디스커버리 루프는 단일 반복(Iteration) 시간을 혁신적으로 단축하고 수만 건의 자동화된 실험을 대규모로 병렬 수행하는 자동화 인프라를 구축합니다.</li>
+<li><strong>자가 학습을 통한 대규모 돌파구 마련</strong>: 이전 실험 평가 결과로부터 시스템이 자가 학습을 수행하여 후속 가설의 질을 고도화하고, 실험의 품질과 수량을 동시 확장함으로써 미국 공학한림원(NAE)이 제정한 21세기 난제(Grand Challenges) 해결을 가속화하고자 합니다.</li>
+<li><strong>공익법인(Public Benefit Corporation) 설립 목적</strong>: 기술적 도약이 사회 전체에 긍정적 영향을 미치도록 법적·구조적 담보를 마련하기 위해 공익법인 형태로 회사를 설립하였습니다. 회사의 정관에 &quot;사회적 중대 문제를 해결하는 기술을 개발하고 그 혜택을 광범위하게 제공하여 인류의 삶을 개선한다&quot;는 공공 미션을 명시했습니다.</li>
+<li><strong>초기 주력 도메인 및 확장 계획</strong>: 물리적 실험 과정이 개입되어 피드백 루프가 지연되는 분야보다는 전체 순환 과정을 디지털 환경에서 즉각 가속화할 수 있는 영역에 우선 집중합니다. 초기 주력 3개 분야는 <strong>머신러닝 연구(ML Research)</strong>, <strong>머신러닝 공학(ML Engineering)</strong>, **하드웨어 설계(Hardware Design)**입니다. 이 핵심 영역의 자동화 체계를 확립한 후 헬스케어(Healthcare), 재료 과학 등 물리적 영역을 포함한 광범위한 과학 도메인으로 확장을 추진합니다.</li>
+</ul>
+<h5 id="2-2-공동-창업자-및-초기-팀-구성-운영-성과">2.2 공동 창업자 및 초기 팀 구성/운영 성과</h5>
+<ul>
+<li><strong>창업 팀 구성 및 협력 이력</strong>: 제프 딘(Jeff Dean), 산자이 게마왓(Sanjay Ghemawat), 꿕 레(Quoc Le), 오리올 비니알스(Oriol Vinyals) 4인이 공동 창업했습니다. 이들은 쌍별(pairwise) 기준으로 최소 14년에서 최대 30년간 구글 등에서 대규모 시스템 및 AI 연구를 함께 수행해 온 협력 관계를 유지하고 있습니다.</li>
+<li><strong>주요 기술적 성과 및 기술 이력</strong>: 구글 검색, 초기 광고 시스템, 맵리듀스, 빅테이블, 텐서플로(TensorFlow), TPU, 지식 증류(Distillation), 전문가 혼합(MoE), 신경망 아키텍처 탐색(NAS), AlphaChip(강화학습 기반 칩 배치·루팅), AlphaFold(단백질 구조 예측), 신경망 기상 예측, 제미나이(Gemini) 등 핵심 프로젝트를 수석 리드하거나 직접 개발했습니다.</li>
+<li><strong>연구진 창업 성과(Alumni) 및 신규 합류 인재</strong>: 팀 출신 알럼나이들은 <strong>앤트로픽(Anthropic)</strong>, <strong>OpenAI</strong>, <strong>피지컬 인텔리전스(Physical Intelligence)</strong> 등 글로벌 프론티어 AI 기업들을 창업했습니다. 또한 신규 합류 인력에는 <strong>Go 프로그래밍 언어 프로젝트 리드</strong>, <strong>딥시크(DeepSeek)</strong> 및 <strong>키미 K3(Kimi K3) 논문 공동 저자</strong>, <strong>어텐션 레지듀얼(Attention Residuals) 저자</strong> 등 AI 및 시스템 분야의 검증된 연구자와 엔지니어가 포함되어 있습니다.</li>
+<li><strong>초기 채용 및 조직 스펙</strong>: 회사의 초반 3주간 유니버시티 애비뉴의 '카페 베네치아(Cafe Venetia)'에서 400회의 인터뷰를 진행하여 팀을 선발하였으며, 구 '지비보(Zibibbo)' 레스토랑 건물에 본사를 마련했습니다. 전체 팀 인원 중 10%가 ACM 컴퓨팅 상(ACM Prize in Computing) 수상자이며, 10%가 국제정보올림피아드(IOI) 메달리스트로 구성되어 있습니다.</li>
+<li><strong>에이전트 하네스(Agent Harness) 협업 메커니즘</strong>: 자체 구축한 에이전트 하네스는 단일 사용자와 모델 간의 대화를 넘어, <strong>2인의 인간 사용자 + 에이전트/모델이 동시 참여하는 3자 다중 협업 구조</strong>를 제공합니다. 또한 작업 실행 전 다른 동료가 디자인 안이나 주석(Comments)을 에이전트에게 사전에 제안할 수 있는 고도화된 협업 프로세스를 갖추고 있습니다.</li>
+<li><strong>에이전트 중심 인프라(Agent-First Infrastructure) 및 성과</strong>: 수만~수십만 개의 에이전트 스케일을 지원하는 인프라를 바탕으로, 현재 약 20개의 자동 개선 루프(Automated Improvement Loops)가 가동되어 자가 개선 작업을 수행 중입니다. 시스템의 목표는 인간 전문가를 대체하는 것이 아니라 도메인 전문가의 생산성을 <strong>20배에서 50배(20x to 50x)</strong> 향상시키는 것입니다.</li>
+</ul>
+<h5 id="2-3-자가-개선-self-improvement-과-재귀적-자가-개선-rsi-의-개념-구분-및-한계">2.3 자가 개선(Self-Improvement)과 재귀적 자가 개선(RSI)의 개념 구분 및 한계</h5>
+<p>페이페이 리 교수와의 대담에서는 인공지능 분야에서 혼용되고 있는 '자가 개선'과 '재귀적 자가 개선(RSI)'의 개념적 구별과 세간의 오해에 대해 정교하게 다루었습니다.</p>
+<pre><code>[자가 개선 (Self-Improvement)]
+ - 목표: 특정 측정 지표(예: 모델 정확도) 향상
+ - 방식: 베이스 시스템이 제안한 다양한 모델 아키텍처/실험 탐색 (예: MRI 해석 모델 탐색)
+ - 특징: 베이스 시스템 자체는 변경되지 않음
+
+[재귀적 자가 개선 (Recursive Self-Improvement, RSI)]
+ - 목표: 다음 시도를 제안하고 개선하는 '베이스 시스템 자체'의 성능 향상
+ - 방식: 자가 개선 메커니즘을 베이스 시스템에 재귀적으로 적용
+ - 특징: 시스템이 &quot;학습하는 방법을 학습(Learning how to learn)&quot;하여 개선 속도 가속화
+</code></pre>
+<ul>
+<li><strong>자가 개선(Self-Improvement)</strong>: 측정 가능한 단일 목표(예: MRI 이미지 해석 정확도)를 설정하고, 모델 아키텍처나 파라미터를 자동으로 탐색해 성능을 높이는 구조입니다. 이 과정에서 가설을 제안하는 베이스 시스템 자체는 변하지 않습니다.</li>
+<li><strong>재귀적 자가 개선(RSI)</strong>: 자가 개선 프로세스를 구동하는 '베이스 시스템' 자체의 가설 제안 및 실험 설계 능력을 재귀적으로 개선하는 체계입니다. 즉, &quot;학습하는 방법을 학습(Learning how to learn)&quot;함으로써 발전 속도를 가속화합니다.</li>
+<li><strong>물리적·연산적 한계와 무한 가속 신화 비판</strong>: 일각에서는 RSI가 무한한 속도로 가속되어 통제 불능의 도약에 이를 것이라는 주장을 펼치나, 제프 딘은 이를 엔지니어링 현실을 무시한 과장으로 지적했습니다.
+<ul>
+<li><strong>근거</strong>: 베이스 모델을 개선하기 위해서는 실제 연산 수행(Training/Inference), 컴퓨터의 물리적 작동, 데이터 저장 및 결과 검증 프로세스가 필수적입니다. 따라서 물리적 시간과 연산 자원의 한계로 인해 무한한 속도의 가속은 불가능합니다.</li>
+</ul>
+</li>
+<li><strong>오믈렛 요리와 뇌 구조 비유</strong>:
+<ul>
+<li><strong>자가 개선 비유</strong>: 오믈렛을 처음 요리할 때 태우다가 10번의 시도를 거치며 점차 덜 태우고 나은 요리를 만드는 과정은 지수적 개편이 없는 일반적 자가 개선(단순 학습)에 해당합니다.</li>
+<li><strong>RSI 비유</strong>: 요리 과정에서 뇌의 신경 연결성(Neuronal connectivity) 자체가 구조적으로 개편되어, 새로운 지식을 습득하고 정보를 제시받는 체계 자체를 효율화하는 것이 RSI에 해당합니다. 인간은 단순 학습(자가 개선)과 학습 방식의 구조적 개선(RSI)을 동시에 수행하는 존재입니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-과학적-발견-및-수학-문제-해결에서의-ai-역할">2.4 과학적 발견 및 수학 문제 해결에서의 AI 역할</h5>
+<ul>
+<li><strong>실험주의 vs 이론주의와 최소 설명 이론(Minimal Description Theory)</strong>: 자동화된 실험 루프가 단순 실험주의에 치우칠 수 있다는 시각과 달리, AI 시스템은 이론적 탐구에도 강력하게 기여할 수 있습니다. 100개 학문 도메인에 걸쳐 1억 회의 실험을 수행하고 100만 개의 문제를 해결한 범용 AI 시스템은 학과(Department) 간 장벽을 넘어 데이터 전체를 관통하는 **최소 설명 이론(Minimal Description Theory)**을 정립할 수 있습니다.</li>
+<li><strong>수학 문제 해결과 기계 검증 증명(Machine-Checked Proof)</strong>: 나비에-스토크스(Navier-Stokes) 방정식 관련 연구 및 주요 미해결 수학 난제에 대해 AI 에이전트 시스템이 다수의 증명을 제시하는 도약이 이루어졌습니다.</li>
+<li><strong>인간 수학자에 대한 시사점</strong>: AI가 생성한 증명은 500페이지에 달하는 린(Lean) 기계 검증 코드 형태를 띠고 있어, 인간 수학자가 직관적으로 이해할 수 있는 명쾌하고 우아한 기법(Crisp, elegant technique)이 결여되어 있다는 아쉬움이 존재합니다. 그러나 특정 난제가 &quot;해결 가능하다&quot;는 사실 자체를 입증하는 것만으로도 인간 수학자들에게 강한 동기를 부여하며, 이를 바탕으로 더 우수하고 우아한 이론적 방식을 재탐구할 수 있는 발판이 됩니다.</li>
+</ul>
+<h5 id="2-5-머신러닝-기술-발전의-역사적-회고와-예측의-성패">2.5 머신러닝 기술 발전의 역사적 회고와 예측의 성패</h5>
+<ul>
+<li><strong>2017년 6월 12일 트랜스포머(Transformer) 논문 출간</strong>: 트랜스포머 논문이 arXiv에 공개된 날로, 이전 상태를 소실하며 단일 벡터를 업데이트하던 LSTM 구조와 달리 모든 이전 상태를 저장하고 주목(Attention)하는 메커니즘을 통해 연산 효율성과 모델 성능의 대대적 혁신을 이끌어냈습니다.</li>
+<li><strong>주요 기술 성과</strong>:
+<ul>
+<li><strong>지식 증류(Distillation)</strong>: 오리올 비니알스, 제프 딘, 제프리 힌튼이 2015년 작성한 논문으로, 2016년 NeurIPS 학회 제출 당시 &quot;실질적 영향력이 없을 것&quot;이라는 이유로 거절당했으나 arXiv 공개 후 40,000회 이상 인용되며 거대 교사 모델(Teacher)의 지식을 경량 학생 모델(Student)로 전이하는 핵심 기술이 되었습니다.</li>
+<li><strong>전문가 혼합(MoE, Mixture of Experts)</strong>: 토큰이나 과제별로 일부 전문가 레이어만 선택적으로 활성화하여 모델 용량을 극대화하면서 연산 비용을 통제하는 아키텍처입니다.</li>
+</ul>
+</li>
+<li><strong>예측 실패 사례 (NAS vs 정형 아키텍처)</strong>: 제프 딘은 신경망 아키텍처 탐색(NAS)을 통해 1번 레이어가 17번 레이어와 직접 연결되는 등 파격적이고 유기적인(Exotic/organic) 형태의 아키텍처가 등장했던 경험에 기반하여, MoE 이후 더욱 비정규적이고 유기적인 신경망 구조(신경 컬럼, 대각선 교차 연결 등)가 주류가 될 것으로 예측했으나 실패했습니다. 현재의 프론티어 모델들은 여전히 인간이 설계한 **정형화되고 균일한 구조(Regular and uniform architectures)**를 유지하고 있습니다.</li>
+<li><strong>예상치 못한 핵심 요소</strong>: 모델의 코딩 능력(Coding Capability)이 추론 및 범용 문제 해결 능력을 비약적으로 상승시키는 결정적 열쇠(Key Unlocker) 역할을 할 것임을 초기에는 완벽히 예측하지 못했습니다.</li>
+</ul>
+<h5 id="2-6-ai의-사회적-영향과-미래-세대에-대한-조언">2.6 AI의 사회적 영향과 미래 세대에 대한 조언</h5>
+<ul>
+<li><strong>사회적 영향 관리</strong>: 제프 딘은 공동 저술한 논문 &quot;Shaping AI's Impact on Billions of People&quot; 및 전용 웹사이트(<code>shapingai.com</code>)를 언급하며, AI 기술이 특정 영역에 국한되지 않고 사회 전반에 동시에 영향을 미치고 있음을 강조했습니다.</li>
+<li><strong>다각적 대응 필요성</strong>: 고용 변화, 경제적 변동, 디스인포메이션(Disinformation) 등에 대응하기 위해 기술적 해법 외에도 정책 입안자, 규제 기관, 시민 사회의 다각적 협력이 필수적입니다. 일자리가 변화하는 과정에서 노동자가 적응할 수 있는 제도적 지원이 수반되어야 합니다.</li>
+<li><strong>미래 세대를 위한 조언</strong>: 기술의 급변으로 불안감을 느끼는 대학생들에게 신기술을 적극적으로 이해하고, 이를 자신이 열정을 가진 도메인(의료, 문학, 소프트웨어 개발 등)에 도구로 결합할 것을 권장했습니다. 무엇을 목표로 할지 결정하는 <strong>인간의 열정(Human Passion)은 AI 시대에도 변함없는 핵심 가치</strong>를 가집니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-people-speakers">3. 등장 인물 및 화자 (People &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물/화자 이름</th>
+<th style="text-align:left">소속 및 직책 (소스 기반)</th>
+<th style="text-align:left">소스 상의 주요 역할 및 관련 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>제프 딘 (Jeff Dean)</strong></td>
+<td style="text-align:left">Discovery Loop 공동창업자 겸 CEO, 전 구글 수석 과학자 및 Gemini 공동 기술 리드</td>
+<td style="text-align:left">키노트 발표자 및 대담 참여자. 구글 27년 근무 후 디스커버리 루프 창업. 구글 연구/AI 조직 인원을 최대 4,400명에서 4명(힌튼 은퇴 후 3명)으로 축소 관리한 이력 설명.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>페이페이 리 (Fei-Fei Li)</strong></td>
+<td style="text-align:left">Stanford HAI 창립 디렉터/시니어 펠로우, World Labs 공동창업자 겸 CEO, 스탠퍼드 대학교 Sequoia 컴퓨터공학 교수</td>
+<td style="text-align:left">세션 대담 진행자. 스탠퍼드 대학교 총장의 AI 특별 고문(Special Adviser on AI) 및 HAI 자문위원회 공동 의장.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>산자이 게마왓 (Sanjay Ghemawat)</strong></td>
+<td style="text-align:left">Discovery Loop 공동창업자</td>
+<td style="text-align:left">제프 딘과 14~30년간 협업한 구글 출신 공동 창업자. MapReduce, BigTable 등 대규모 분산 시스템 구축 주도.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>꿕 레 (Quoc Le)</strong></td>
+<td style="text-align:left">Discovery Loop 공동창업자</td>
+<td style="text-align:left">전 구글 Gemini 포스트 트레이닝 리드. Neural Architecture Search(NAS) 및 AlphaChip 프로젝트 관여.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오리올 비니알스 (Oriol Vinyals)</strong></td>
+<td style="text-align:left">Discovery Loop 공동창업자</td>
+<td style="text-align:left">전 구글 Gemini 공동 기술 리드. AlphaFold, 신경망 기상 예측, 지식 증류(Distillation) 논문 공동 저자.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>제프리 힌튼 (Geoffrey Hinton)</strong></td>
+<td style="text-align:left">확인 불가 (소스 내 구글 은퇴 사실만 언급)</td>
+<td style="text-align:left">지식 증류(Distillation) 논문 공동 저자. 제프 딘의 보고 직속 인원이 4명에서 3명으로 감소하는 맥락에서 구글 은퇴 사실이 언급됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>존 레벤 (John Levven)</strong></td>
+<td style="text-align:left">스탠퍼드 대학교 총장 (President)</td>
+<td style="text-align:left">페이페이 리 교수를 AI 특별 고문(Special Adviser on AI)으로 위촉한 총장으로 트랜스크립트상 언급.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>테렌스 타오 (Terrence Tao)</strong></td>
+<td style="text-align:left">확인 불가 (소스 내 학술 논의 대상)</td>
+<td style="text-align:left">페이페이 리 교수가 대담 초청 전화를 했으나 일정상 참석하지 못한 수학자로 언급. Math 2.0 발표 및 수학 증류 관련 논의 대상으로 등장.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-정보-numbers-timepoints">4. 수치 및 시점 정보 (Numbers &amp; Timepoints)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">수치 / 시점 내용</th>
+<th style="text-align:left">소스 내 맥락 및 의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>시간/경력</strong></td>
+<td style="text-align:left">27년</td>
+<td style="text-align:left">제프 딘이 디스커버리 루프 설립 전 구글에서 근무한 기간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시간/협력</strong></td>
+<td style="text-align:left">14년 ~ 30년</td>
+<td style="text-align:left">디스커버리 루프 공동 창업자 4인의 쌍별(pairwise) 협력 기간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시간/혁신</strong></td>
+<td style="text-align:left">10년 ~ 15년</td>
+<td style="text-align:left">AI 분야에서 하드웨어(TPU/GPU), 소프트웨어 추상화, 트랜스포머 등 주요 기술 혁신이 연속적으로 지속되어 온 기간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시간/난제</strong></td>
+<td style="text-align:left">21세기 / 1/4 (25%)</td>
+<td style="text-align:left">미국공학한림원(NAE)이 21세기 난제를 제정한 후 현재까지 경과된 시간 비율</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조직/인원</strong></td>
+<td style="text-align:left">600명 → 4,400명 → 4명 → 3명</td>
+<td style="text-align:left">제프 딘이 구글에서 관리한 연구/AI 조직 인원 변화 (이메일 발송을 통해 4명으로 축소, 제프리 힌튼 은퇴 후 3명)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>채용</strong></td>
+<td style="text-align:left">3주간 400회 인터뷰</td>
+<td style="text-align:left">설립 초기 카페 베네치아(Cafe Venetia)에서 진행한 팀원 선발 인터뷰 횟수 및 기간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>자격/비율</strong></td>
+<td style="text-align:left">10% (ACM 상), 10% (IOI 메달)</td>
+<td style="text-align:left">디스커버리 루프 전체 직원 대비 ACM 컴퓨팅 상 및 국제정보올림피아드 메달 수상자 비율</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>운용</strong></td>
+<td style="text-align:left">약 20개</td>
+<td style="text-align:left">디스커버리 루프 인프라에서 가동 중인 자가 개선 루프(Automated Improvement Loops) 수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>생산성</strong></td>
+<td style="text-align:left">20배 ~ 50배 (20x to 50x)</td>
+<td style="text-align:left">자동화 시스템을 통해 도메인 전문가의 생산성을 향상시키려는 목표 수치</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>역사적 날짜</strong></td>
+<td style="text-align:left">2017년 6월 12일</td>
+<td style="text-align:left">트랜스포머(Transformer) 논문이 arXiv에 등록된 날짜</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>거절 연도</strong></td>
+<td style="text-align:left">2016년</td>
+<td style="text-align:left">지식 증류(Distillation) 논문이 NeurIPS 학회 심사에서 거절(Rejected)된 연도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인용 수</strong></td>
+<td style="text-align:left">40,000회 이상</td>
+<td style="text-align:left">NeurIPS 학회에서 거절당했으나 arXiv 공개 후 기록한 지식 증류 논문의 인용 횟수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>가상 스케일</strong></td>
+<td style="text-align:left">100만 개 / 1억 회 / 100개</td>
+<td style="text-align:left">교차 도메인 AI의 최소 설명 이론(Minimal Description Theory) 수립을 설명하기 위한 가상 실험 스케일 (100만 개 문제, 1억 회 실험, 100개 학문 도메인)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>기반 모델 및 연산 인프라 세부 정보 부재</strong>: 디스커버리 루프가 에이전트 하네스 구축 및 자가 개선 루프 구동에 사용하는 최첨단 프론티어 베이스 모델(Frontier Base Model)의 구체적인 명칭이나, 시스템 운용에 투입되는 컴퓨팅 인프라(TPU/GPU 클러스터)의 물리적 규모는 소스 텍스트에 명시되어 있지 않습니다.</li>
+<li><strong>제프리 힌튼의 은퇴 후 소속 및 현재 행보 불명확</strong>: 소스 텍스트에서는 제프 딘의 직속 보고 인원이 축소된 직후 제프리 힌튼이 구글에서 은퇴했다는 사실과 지식 증류 논문의 공동 저자라는 사실만 언급될 뿐, 은퇴 이후 힌튼의 현재 소속 기관이나 세부 행보는 제공되지 않습니다.</li>
+<li><strong>테렌스 타오 교수의 공식 직함 및 소속 미기재</strong>: 대담 중 수학자 테렌스 타오(Terrence Tao)와의 전화 통화 및 Math 2.0 발표 관련 내용이 논의되었으나, 테렌스 타오의 정확한 공식 직함이나 현재 소속 대학/연구 기관은 소스 텍스트에 나타나지 않습니다.</li>
+<li><strong>스탠퍼드 대학교 총장 성명 철자 표기 확인 한계</strong>: 페이페이 리 교수를 특별 고문으로 위촉한 스탠퍼드 대학교 총장의 이름이 소스 텍스트 트랜스크립트에 'John Levven'으로 표기되어 있으나, 소스 텍스트 외 외부 정보 검증이 배제되므로 트랜스크립트상의 표기를 그대로 유지하되 실제 정확한 공식 철자 여부는 소스만을 통해 검증하는 데 한계가 있습니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

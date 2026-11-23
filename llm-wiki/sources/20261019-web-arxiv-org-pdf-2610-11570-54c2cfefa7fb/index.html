@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaling to Tens of Thousands of Test-Time Iterations with Loop-Native Attention Residuals</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Scaling to Tens of Thousands of Test-Time Iterations with Loop-Native Attention Residuals</h1>
+<p class="page-meta">논문 · 2026-10-19</p>
+<h2 id="요약">요약</h2>
+<p>[사실] 본 해설 보고서는 반복형 트랜스포머(Looped Transformers) 아키텍처의 한계를 극복하고, 테스트 시점(Test-time)에서 추론 깊이를 수만 번 이상의 루프까지 무한히 확장할 수 있도록 설계된 새로운 잔차 연결 메커니즘인 '인피루프(InfiLoop)'에 관한 연구 문헌을 엄밀하게 분석하여 정리한…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.11570">출처</a> · <a href="https://www.youtube.com/watch?v=Ybf9p5KKB1Q">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-인피루프-infiloop-루프-고유-주의-잔차를-통한-고심도-테스트-시점-추론-확장-분석">[해설 보고서] 인피루프(InfiLoop): 루프 고유 주의 잔차를 통한 고심도 테스트 시점 추론 확장 분석</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p><code>[사실]</code> 본 해설 보고서는 반복형 트랜스포머(Looped Transformers) 아키텍처의 한계를 극복하고, 테스트 시점(Test-time)에서 추론 깊이를 수만 번 이상의 루프까지 무한히 확장할 수 있도록 설계된 새로운 잔차 연결 메커니즘인 '인피루프(InfiLoop)'에 관한 연구 문헌을 엄밀하게 분석하여 정리한 기술 보고서입니다([초록], [섹션 1]).</p>
+<p><code>[사실]</code> 기존의 루프 트랜스포머는 동일한 트랜스포머 블록을 반복 적용하여 파라미터 수의 증가 없이 연산 깊이를 늘리는 방식으로 복잡한 기호적·시공간적 추론 문제를 해결해 왔습니다([초록], [섹션 1]). 그러나 이전 루프의 최종 출력 상태를 다음 루프의 입력으로 직접 전달하는 기존의 '캐리라스트(carry-last)' 규칙($h_t = z_t$)은 루프 반복 횟수(depth)가 증가함에 따라 심각한 성능 저하를 일으키는 문제가 있었습니다([섹션 1], [섹션 3]). <code>[소스의 주장]</code> 연구진은 이를 '잠재적 과도사고(Latent Overthinking)' 현상으로 정의하였으며, 이는 루프가 거듭될수록 발생한 노이즈성 상태 업데이트가 이전에 이미 올바르게 도출된 중간 추론 및 완성된 해법을 덮어써서 파괴하는 현상입니다([초록], [섹션 2]). <code>[작성자의 해석]</code> 이는 연산 깊이를 추가할수록 성능이 향상되어야 한다는 고심도 추론의 근본적 전제를 위배하는 핵심 기술적 병목에 해당합니다.</p>
+<p><code>[사실]</code> 이러한 문제를 해결하기 위해 제안된 인피루프(InfiLoop)는 루프 고유의 주의 잔차(Loop-Native Attention Residuals) 연결 구조를 도입합니다([초록], [섹션 3.1]). 인피루프는 내용 기반 점수 매기기(content-based scoring)와 학습된 지수 시간 감쇄(exponential temporal decay)를 결합하여 역대 재귀 상태들의 누적 요약(running summary)을 유지합니다([초록], [섹션 3.2]). 특히 점진적 재귀식(exact streaming recurrence)을 구현함으로써 루프 반복 횟수가 무한히 늘어나더라도 지속 메모리 사용량을 $O(d)$로 일정하게 유지합니다([초록], [섹션 3.4]). <code>[소스의 주장]</code> 이 구조를 통해 모델은 불확실하거나 노이즈가 포함된 제안을 자율적으로 억제하고 유용한 중간 상태를 지속적으로 보존할 수 있습니다([초록], [섹션 3.3]).</p>
+<p><code>[사실]</code> 실험 결과, 7M(700만) 파라미터 규모의 인피루프 모델은 스도쿠-익스트림(Sudoku-Extreme) 벤치마크에서 97.9%의 정확도를 기록하고, 에이알씨-에이지아이-2(ARC-AGI-2)에서 13.6%의 pass@2 성과를 거두는 등 기존의 모든 재귀형 아키텍처 및 대형 언어 모델들을 상회하는 결과를 달성하였습니다([초록], [표 1]). <code>[작성자의 해석]</code> 이는 적절하게 제어된 잔차 집계 메커니즘을 적용할 경우, 소형 모델에서도 추가적인 테스트 시점 연산량이 직관적인 추론 성능 향상으로 유효하게 전환될 수 있음을 증명합니다.</p>
+<hr />
+<h5 id="2-주요-논점-key-arguments-technical-analysis">2. 주요 논점 (Key Arguments &amp; Technical Analysis)</h5>
+<h6 id="2-1-기존-루프-트랜스포머의-한계-잠재적-과도사고-latent-overthinking">2.1 기존 루프 트랜스포머의 한계: 잠재적 과도사고(Latent Overthinking)</h6>
+<p><code>[사실]</code> 기존 루프 트랜스포머에서 널리 사용되는 캐리라스트(carry-last) 규칙은 식 $z_t = f_\theta(h_{t-1}; x)$, $h_t = z_t$와 같이 직전 루프에서 생성된 후보 상태 $z_t$를 다음 루프의 재귀 상태 $h_t$로 그대로 할당합니다([섹션 3]).</p>
+<p><code>[소스의 주장]</code> 논문의 저자들은 이 캐리라스트 상태 교체 규칙이 심층 루프 트랜스포머의 핵심 병목 요인이라고 주장합니다([섹션 1]). 이 방식에서는 이전 루프에서 수행된 연산 정보가 가장 최근의 상태에 저장된 범위 내에서만 접근 가능합니다. 따라서 루프 전파 과정에서 한 번 노이즈나 부적절한 업데이트가 발생하면 유용한 중간 표현이 오염되고 전파되어 전체적인 추론 성능이 악화됩니다([섹션 1]).</p>
+<p><code>[사실]</code> 스도쿠-익스트림(Sudoku-Extreme) 데이터셋을 통한 비교 실험([그림 1])에서, 캐리라스트 방식을 사용하는 티알엠(TRM) 모델은 유효 레이어 깊이 468(26개 레이어를 갖는 외각 업데이트 18회)에서 62.2%의 최고 정확도를 달성한 후 깊이가 1,872 레이어까지 증가함에 따라 정확도가 58.1%로 하락했습니다([섹션 2], [그림 1a]). 반면 인피루프는 동일한 깊이 구간에서 정확도가 지속적으로 상승하여 90.9%에 도달했습니다([섹션 2], [그림 1a]).</p>
+<p><code>[사실]</code> 올바른 중간 표현의 파괴 현상을 실증하는 정량 데이터에 따르면, 36번째 업데이트 시점에 TRM과 인피루프 모두 142만 개의 빈칸 셀을 올바르게 예측했습니다. 그러나 이후 36회에서 72회까지의 추가 업데이트 과정 동안 TRM은 올바르게 예측했던 셀의 20.9%를 최소 한 번 이상 오답으로 다시 바꾼 반면, 인피루프는 단 2.4%만 변경하는 데 그쳤습니다([섹션 2]).</p>
+<p><code>[사실]</code> 퍼즐을 처음 해결한 직후의 상태 안정성 분석([섹션 2], [그림 1b], [그림 1c])에서도 TRM은 최초 풀이 후 5회 업데이트 이내에 상태 변화율이 3%까지 감소했다가 이후 10% 수준으로 재상승하였으며, 그 결과 최초 해결했던 퍼즐 중 19.7%의 정답을 36회 업데이트가 진행되는 동안 다시 상실했습니다. 반면 인피루프의 상태 변화율은 0.3% 수준으로 급감하여 안정화되었으며, 풀이에 성공한 퍼즐을 36회 업데이트 이후에도 100% 보존했습니다([섹션 2], [그림 1b], [그림 1c]).</p>
+<p><code>[작성자의 해석]</code> 이러한 실증 수치들은 캐리라스트 기반 루프 구조가 올바른 중간 표현을 보존하는 제어 장치가 없어 연산 깊이가 깊어질수록 스스로 도출한 답을 파괴하는 '잠재적 과도사고'를 필연적으로 유발함을 보여줍니다.</p>
+<h6 id="2-2-infiloop의-핵심-아키텍처-루프-고유-주의-잔차-loop-native-attention-residuals">2.2 InfiLoop의 핵심 아키텍처: 루프 고유 주의 잔차(Loop-Native Attention Residuals)</h6>
+<p><code>[사실]</code> 인피루프(InfiLoop)는 과거 루프의 후보 상태들 $z_i$ ($i=0, \dots, t$)을 가중 집계하여 다음 루프의 입력 상태 $h_t$를 생성합니다([섹션 3.1]):
+$$h_t = \sum_{i=0}^{t} \alpha_{t,i} z_i, \quad \alpha_{t,i} = \frac{\exp(s_i - \lambda(t-i))}{\sum_{j=0}^{t} \exp(s_j - \lambda(t-j))}$$</p>
+<p><code>[사실]</code> 각 수식 구성 요소의 역할 및 구조적 특징은 다음과 같습니다([섹션 3.1], [섹션 3.2]):</p>
+<ul>
+<li><strong>공유 의사 쿼리 ($q \in \mathbb{R}^d$) 및 내용 점수 ($s_i$)</strong>: 각 후보 상태 $z_i$가 생성될 때 $s_i = q^\top \text{RMSNorm}(z_i)$ 수식을 통해 단 한 번 평가됩니다. $q$는 모든 루프 반복에서 공유되는 학습 파라미터입니다.</li>
+<li><strong>학습된 지수 시간 감쇄 ($\lambda &gt; 0$, $\beta = e^{-\lambda} \in (0,1)$)</strong>: 오래된 후보 상태의 기여도를 지수적으로 감쇄시켜 최신 정보와의 균형을 유지합니다.</li>
+<li><strong>점진적 재귀식(Exact Streaming Recurrence) 및 초기 조건</strong>: 규격화되지 않은 가중 합 $N_t \in \mathbb{R}^d$와 규격화 질량 $D_t \in \mathbb{R}<em>{&gt;0}$를 정의하여 다음과 같이 귀납적으로 업데이트합니다([섹션 3.2]):
+$$N_t = \beta N</em>{t-1} + e_t z_t \quad (e_t = e^{s_t})$$
+$$D_t = \beta D_{t-1} + e_t$$
+$$h_t = \frac{N_t}{D_t}$$
+이 때의 초기 조건은 $N_0 = e_0 z_0, D_0 = e_0$으로 정의되어, $h_0 = \frac{N_0}{D_0} = z_0$가 자연스럽게 성립합니다.</li>
+</ul>
+<p><code>[소스의 주장]</code> 연구진은 공유 스코어링과 지수 시간 감쇄 구조 덕분에 과거 전체 히스토리를 저장할 필요 없이 토큰당 가중 상태 벡터 $N_t$ 하나와 스칼라 질량 $D_t$ 하나만 유지하면 되므로 메모리 복잡도를 $O(d)$로 일정하게 유지할 수 있다고 강조합니다([섹션 3.2], [섹션 3.4]).</p>
+<p><code>[사실]</code> 아키텍처별 연산 및 메모리 복잡도 비교는 아래 표와 같습니다([섹션 3.4]):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">아키텍처 방식 (Architecture)</th>
+<th style="text-align:left">지속 메모리 복잡도 (Persistent Memory)</th>
+<th style="text-align:left">스텝당 연산 복잡도 (Per-step Compute)</th>
+<th style="text-align:left">총 연산 복잡도 ($T$ 스텝) (Total Compute)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>기존 캐리라스트 (Carry-last)</strong></td>
+<td style="text-align:left">$O(d)$</td>
+<td style="text-align:left">$O(d)$</td>
+<td style="text-align:left">$O(Td)$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>풀 어텐션 잔차 (Full Attention Residuals)</strong></td>
+<td style="text-align:left">$O(td)$</td>
+<td style="text-align:left">$O(td)$</td>
+<td style="text-align:left">$O(T^2 d)$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인피루프 (InfiLoop)</strong></td>
+<td style="text-align:left">$O(d)$</td>
+<td style="text-align:left">$O(d)$</td>
+<td style="text-align:left">$O(Td)$</td>
+</tr>
+</tbody>
+</table>
+<p><code>[작성자의 해석]</code> 풀 어텐션 잔차 방식은 과거 모든 후보 상태를 저장해야 하므로 루프 횟수 $T$가 커짐에 따라 연산량과 메모리가 $O(T^2 d)$ 및 $O(Td)$로 폭발하지만, 인피루프는 수식 정제 및 초기 조건을 포함한 exact streaming recurrence를 통해 복잡도를 $O(d)$ 및 $O(Td)$로 통제하여 고심도 루핑을 현실적으로 가능케 만들었습니다.</p>
+<h6 id="2-3-적응형-잔차-업데이트와-자율적-자기-검증-self-verification-행동">2.3 적응형 잔차 업데이트와 자율적 자기 검증(Self-Verification) 행동</h6>
+<p><code>[사실]</code> 인피루프의 재귀식을 재정렬하면 다음과 같이 적응형 잔차 업데이트 형태로 해석될 수 있습니다([섹션 3.3]):
+$$h_t = h_{t-1} + \gamma_t (z_t - h_{t-1}), \quad \gamma_t = \frac{e_t}{\beta D_{t-1} + e_t} \in (0, 1)$$</p>
+<p><code>[작성자의 해석]</code> 이 수식에서 분모에 위치한 $\beta D_{t-1}$은 지금까지 축적되어 온 '역사적 신뢰 질량(retained historical mass)'의 총합을 의미합니다. 새로 생성된 후보 상태의 질량 $e_t$가 이 역사적 질량보다 월등히 클 때만($e_t \gg \beta D_{t-1}$) 스텝 사이즈 $\gamma_t$가 $1$에 가까워져 상태 갱신이 대폭 이루어지며, 노이즈성이거나 질량이 작은 제안($e_t \ll \beta D_{t-1}$)에 대해서는 $\gamma_t \approx 0$이 되어 기존 상태를 유지하게 됩니다.</p>
+<p><code>[소스의 주장]</code> 인피루프의 스텝 사이즈 $\gamma_t$는 외부 검증자(external verifier)나 정답 레이블에 대한 명시적 지도 없이도 탐색 단계, 정답 도출 단계, 정답 고정 단계를 자율적으로 구분하는 '자기 검증(self-verification)' 행동을 보여줍니다([초록], [섹션 4.5]).</p>
+<p><code>[사실]</code> 스도쿠 퍼즐 풀이 과정 중 스텝 사이즈 $\gamma_t$와 내용 점수 $\ln e_t$의 변화 수치는 다음과 같습니다([섹션 4.5], [그림 4]):</p>
+<ul>
+<li><strong>문제 탐색 단계</strong>: 퍼즐을 풀어내는 중에는 평균 스텝 사이즈가 약 0.40으로 낮게 유지되어 검증되지 않은 후보 상태가 전체 표현을 오염시키지 못하도록 억제합니다.</li>
+<li><strong>문제 해결 순간</strong>: 퍼즐이 완성되는 정확한 시점에 스텝 사이즈 $\gamma_t$가 0.91로 급증하여 올바른 해법 상태를 대폭 반영합니다.</li>
+<li><strong>풀이 완료 이후</strong>: 스텝 사이즈는 균등 가중치 기준선인 $1 - \beta = 0.56$으로 되돌아와 상태를 안정적으로 고정합니다.</li>
+<li><strong>내용 점수($\ln e_t = \text{clip}(s_t, -8, 8)$) 수치</strong>: 완전히 정답인 보드 상태의 중간 내용 점수 중앙값은 7.25(상한선 8.0 근처)를 기록한 반면, 오답 셀이 20개일 때 2.75, 오답 셀이 33개일 때 -0.58로 단조 감소했습니다.</li>
+</ul>
+<p><code>[사실]</code> 외란(perturbation) 주입 실험([그림 5])에서, 36번째 외각 업데이트 시점에 크기 $\epsilon \in [10^{-4}, 0.3]$의 노이즈를 상태에 주입하더라도 인피루프는 72번째 업데이트 시점까지 풀이 성공 퍼즐의 100%를 유지했으며 상대적 거리가 유한하게 제한되었습니다. 반면 TRM은 노이즈가 없는 상태에서도 15~20%의 정답을 상실하고 상태 거리가 차원 $O(1)$ 크기로 발산했습니다([섹션 4.5], [그림 5]).</p>
+<p><code>[작성자의 해석]</code> 이는 외부의 정답 신호 없이도 내장된 스코어러가 논리적 제약 조건을 위반한 상태에 낮은 가중치($e_t$)를 부여함으로써 궤적의 차오르는 노이즈를 스스로 제거하고 안정된 수렴 영역에 정착하는 동역학을 형상화함을 나타냅니다.</p>
+<h6 id="2-4-주요-벤치마크-성과-및-추론-시점-확장성-test-time-depth-scaling">2.4 주요 벤치마크 성과 및 추론 시점 확장성 (Test-Time Depth Scaling)</h6>
+<p><code>[사실]</code> 7M 파라미터 모델 기준 인피루프와 타 재귀/루프 모델 및 대형 언어 모델 간 4개 주요 벤치마크 성과 비교는 아래 표와 같습니다([표 1]):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 분류</th>
+<th style="text-align:left">모델명 (Model)</th>
+<th style="text-align:left">파라미터 수</th>
+<th style="text-align:left">Sudoku-Extreme (정확도 %)</th>
+<th style="text-align:left">Maze-Hard (정확도 %)</th>
+<th style="text-align:left">ARC-AGI-1 (pass@2 %)</th>
+<th style="text-align:left">ARC-AGI-2 (pass@2 %)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>대형 언어 모델</strong></td>
+<td style="text-align:left">딥시크 R1 (DeepSeek R1)</td>
+<td style="text-align:left">671B</td>
+<td style="text-align:left">0.0</td>
+<td style="text-align:left">0.0</td>
+<td style="text-align:left">15.8</td>
+<td style="text-align:left">1.3</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">클로드 3.7 손넷 (Claude 3.7 Sonnet)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">0.0</td>
+<td style="text-align:left">0.0</td>
+<td style="text-align:left">28.6</td>
+<td style="text-align:left">0.7</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">o3-미니-하이 (o3-mini-high)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">0.0</td>
+<td style="text-align:left">0.0</td>
+<td style="text-align:left">34.5</td>
+<td style="text-align:left">3.0</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">제미나이 2.5 프로 (Gemini 2.5 Pro)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">37.0</td>
+<td style="text-align:left">4.9</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>재귀/루프 모델</strong></td>
+<td style="text-align:left">에이치알엠 (HRM)</td>
+<td style="text-align:left">27M</td>
+<td style="text-align:left">55.0</td>
+<td style="text-align:left">74.5</td>
+<td style="text-align:left">40.3</td>
+<td style="text-align:left">5.0</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">어트랙터 모델 (Attractor Model)</td>
+<td style="text-align:left">27M</td>
+<td style="text-align:left">91.4</td>
+<td style="text-align:left">93.1</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">어트랙터 모델 (Attractor Model)</td>
+<td style="text-align:left">7M</td>
+<td style="text-align:left">54.3</td>
+<td style="text-align:left">46.7</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">유알엠 (URM)</td>
+<td style="text-align:left">14M</td>
+<td style="text-align:left">77.6</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">$\ge 53.8^\ddagger$</td>
+<td style="text-align:left">$\ge 16.0^\ddagger$</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">이큐알 (EqR)</td>
+<td style="text-align:left">7M</td>
+<td style="text-align:left">93.0</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">티알엠 (TRM)</td>
+<td style="text-align:left">7M</td>
+<td style="text-align:left">74.7 (재현 73.6)</td>
+<td style="text-align:left">85.3</td>
+<td style="text-align:left">44.6</td>
+<td style="text-align:left">7.8 (재현 4.6)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">에프피알엠 (FPRM)</td>
+<td style="text-align:left">7M</td>
+<td style="text-align:left">94.2</td>
+<td style="text-align:left">87.0</td>
+<td style="text-align:left">47.5</td>
+<td style="text-align:left">6.2</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>인피루프 (InfiLoop, 본 연구)</strong></td>
+<td style="text-align:left"><strong>7M</strong></td>
+<td style="text-align:left"><strong>97.9</strong></td>
+<td style="text-align:left"><strong>87.4</strong></td>
+<td style="text-align:left"><strong>49.1</strong></td>
+<td style="text-align:left"><strong>13.6</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>(주: $\ddagger$ URM은 ARC 벤치마크에서 pass@1 정확도를 보고함)</em></p>
+<p><code>[사실]</code> 테스트 시점 루프 확장 및 난이도별 평가 수치([섹션 4.4], [그림 3])는 다음과 같습니다:</p>
+<ul>
+<li><strong>연산 효율성</strong>: 1,872 레이어 평가 시 인피루프는 90.9%의 정확도를 달성하여, FPRM이 3,744 레이어에서 달성한 90.1% 성과를 절반의 레이어 연산으로 능가했습니다.</li>
+<li><strong>고심도 확장성</strong>: 24,960 레이어(20,000 스텝 이상)까지 평가를 확장했을 때 인피루프는 92.74%의 정확도를 기록한 반면, FPRM은 91.63%, TRM은 83.65%에 그쳤습니다.</li>
+<li><strong>난이도별 성과 (빈칸 개수 45~60개)</strong>: 빈칸이 45~51개인 쉬운 난이도에서는 인피루프와 FPRM 모두 100.0%를 기록했으나, 가장 어려운 빈칸 60개 퍼즐에서는 인피루프가 59.5%의 정확도를 유지하여 FPRM(56.5%)과 TRM(36.0%)을 대폭 상회했습니다.</li>
+</ul>
+<p><code>[작성자의 해석]</code> 20,000 스텝을 넘어서는 극단적인 테스트 시점 확장 환경에서도 정확도가 꺾이지 않고 향상되는 결과는, 인피루프가 연산 심도가 깊어짐에 따라 방대해지는 기호적 탐색 공간 속에서 유효한 중간 추론만을 정밀하게 취합하여 결합하고 있음을 뒷받침합니다.</p>
+<h6 id="2-5-주요-요소-및-초기화-소멸-연구-ablation-studies">2.5 주요 요소 및 초기화 소멸 연구 (Ablation Studies)</h6>
+<p><code>[사실]</code> 연구진은 인피루프의 각 구성 요소 및 초기화 설정에 대한 소멸 연구를 수행하였습니다([섹션 4.6], [부록 D], [표 2], [표 3]):</p>
+<ol>
+<li>
+<p><strong>연결 위치(축) 소멸 연구</strong>:</p>
+<ul>
+<li>학습 깊이(H3L6)에서 내각 축 단독 적용 시 72.6%, 외각 축 단독 적용 시 75.1%, **양쪽 축 모두 적용 시 82.1%**의 정확도를 기록했습니다.</li>
+<li>확장 예산인 H32L6 조건에서는 내각 축 단독 시 79.4%, 외각 축 단독 시 80.0%, **양쪽 축 모두 적용 시 89.7%**로 성과가 대폭 상승했습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>시간 감쇄 방식 및 초기화 소멸 연구</strong>:</p>
+<ul>
+<li>시간 감쇄 방향: 역방향 decay ($\beta = 1.82$) 적용 시 정확도 2.0%, 균등 가중치 ($\beta = 1$) 적용 시 38.4%, **순방향 decay ($\beta = 0.55$) 적용 시 74.0%**를 기록했습니다.</li>
+<li>감쇄 초기화 값 ($\beta_0$): $\beta_0 = 0.10$일 때 66.3%, $\beta_0 = 0.90$일 때 63.3%, **$\beta_0 = 0.55$일 때 82.1%(H3L6) 및 89.7%(H32L6)**로 가장 우수했습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>내용 점수 ($q=0$) 제거 소멸 연구</strong>:</p>
+<ul>
+<li>스코어러 $q=0$으로 설정하여 단순 이동 평균으로 전환할 경우, 학습 단계 적용 시 정확도가 84.1%(6.8%p 하락), 테스트 시점만 적용 시 84.8%(6.1%p 하락)로 떨어졌습니다.</li>
+<li>$\beta=0$으로 설정하여 캐리라스트 상태로 강제 전환할 경우 정확도가 1.5%로 폭락했습니다.</li>
+</ul>
+</li>
+</ol>
+<p><code>[작성자의 해석]</code> 소멸 연구 결과는 내외각 두 재귀 축의 결합 시너지와 함께, 내용 기반 평가 스코어러와 순방향 지수 감쇄가 통합적으로 작용해야만 무한 루프 상황에서의 상태 오염을 철저히 차단할 수 있음을 입증합니다.</p>
+<hr />
+<h5 id="3-등장-인물-화자-persons-speakers">3. 등장 인물·화자 (Persons &amp; Speakers)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 기관 (Affiliation)</th>
+<th style="text-align:left">역할 / 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">리펑샹 (Pengxiang Li)</td>
+<td style="text-align:left">홍콩폴리텍대학교 (The Hong Kong Polytechnic University)</td>
+<td style="text-align:left">제1저자</td>
+</tr>
+<tr>
+<td style="text-align:left">딜샤트 무스타 (Dilxat Muhtar)</td>
+<td style="text-align:left">독립 연구원 (Independent Researcher)</td>
+<td style="text-align:left">공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left">허디 (Di He)</td>
+<td style="text-align:left">중국과학원 셰전첨단기술연구원, 펑청 연구소, 중국과학원 대학교</td>
+<td style="text-align:left">공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left">수구이난 (Guinan Su)</td>
+<td style="text-align:left">엘리스 연구소 튜빙겐, 막스 플랑크 지능 시스템 연구소, 튜빙겐 AI 센터</td>
+<td style="text-align:left">공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left">인루 (Lu Yin)</td>
+<td style="text-align:left">선전첨단기술대학교 (Shenzhen University of Advanced Technology)</td>
+<td style="text-align:left">공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left">리우시웨이 (Shiwei Liu)</td>
+<td style="text-align:left">엘리스 연구소 튜빙겐, 막스 플랑크 지능 시스템 연구소, 튜빙겐 AI 센터</td>
+<td style="text-align:left">교신저자 (<code>sliu@tue.ellis.eu</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-시점-metrics-quantities-timelines">4. 수치·시점 (Metrics, Quantities &amp; Timelines)</h5>
+<ul>
+<li><strong>모델 및 아키텍처 수치</strong>:
+<ul>
+<li>모델 총 파라미터 규모: 7M (700만 개)</li>
+<li>공유 블록 구성: 은닉 차원 $d=512$, 어텐션 헤드 8개, SwiGLU 확장 비율 4배, $3 \times 3$ 깊이별 컨볼루션 레이어 포함 2개 트랜스포머 레이어</li>
+<li>축당 추가 파라미터 수: 스코어러-감쇄 쌍 $(q, \beta)$ 도입으로 축당 $d+1 = 513$개 추가</li>
+<li>토큰당 지속 메모리 용량: 퍼즐당 582.8 KiB (2개의 BF16 캐리 194.0 KiB + 축당 FP32 분자/분모 388.8 KiB, 루프 예산과 무관하게 일정함)</li>
+</ul>
+</li>
+<li><strong>연산량(FLOPs) 프로파일링 수치</strong>:
+<ul>
+<li>공유 블록 1회 적용당 연산량 ($F_{\text{block}}$): 1.36154 GFLOPs ($n=97, d=512, m=1536, K=2, g=81, k_c=3$ 조건)</li>
+<li>1,872 레이어 평가 시 총 연산량: 1.27 TFLOPs</li>
+<li>24,960 레이어 평가 시 총 연산량: 17.0 TFLOPs</li>
+</ul>
+</li>
+<li><strong>벤치마크 성과 수치 (7M InfiLoop 기준)</strong>:
+<ul>
+<li>스도쿠-익스트림 (Sudoku-Extreme): 97.9% (단일 모델 기준 최상위)</li>
+<li>미로-하드 (Maze-Hard): 87.4%</li>
+<li>에이알씨-에이지아이-1 (ARC-AGI-1): pass@2 기준 49.1%</li>
+<li>에이알씨-에이지아이-2 (ARC-AGI-2): pass@2 기준 13.6%</li>
+</ul>
+</li>
+<li><strong>테스트 시점 확장 수치 (Sudoku-Extreme 기준)</strong>:
+<ul>
+<li>1,872 레이어 평가 시 정확도: 90.9%</li>
+<li>24,960 레이어 평가 시 정확도: 92.74% (FPRM 91.63%, TRM 83.65%)</li>
+<li>가장 어려운 난이도 (빈칸 60개): InfiLoop 59.5% vs FPRM 56.5% vs TRM 36.0%</li>
+</ul>
+</li>
+<li><strong>자기 검증 스텝 사이즈 ($\gamma_t$) 및 내용 점수 수치</strong>:
+<ul>
+<li>탐색 단계 평균 스텝 사이즈: 약 0.40</li>
+<li>정답 도출 시 스텝 사이즈 피크: 0.91</li>
+<li>정착 시 기준선 스텝 사이즈: $1 - \beta = 0.56$</li>
+<li>완전히 정답인 보드 상태의 내용 점수 중앙값: 7.25 (상한선 8.0)</li>
+<li>오답 셀 20개 시 내용 점수 중앙값: 2.75</li>
+<li>오답 셀 33개 시 내용 점수 중앙값: -0.58</li>
+</ul>
+</li>
+<li><strong>시점 및 기타 정보</strong>:
+<ul>
+<li>논문 출판/업로드 연도: 소스 문헌 URL 상 2026년 표기 (상세 일자는 소스 내 확인 불가)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ol>
+<li>
+<p><strong>소스에서 명시하거나 확인 가능한 한계점</strong>:</p>
+<ul>
+<li><strong>상한 경계 조건</strong>: 본 아키텍처에서 생성된 최종 상태 $h_t$는 이전 후보 상태들의 볼록 조합(convex combination, 가중합이 1)으로 구성되어 볼록 껍질(convex hull) 내에 존재하므로 $|h_t| \le \max_{0 \le i \le t} |z_i|$ 조건이 성립합니다. 그러나 무한 루프 전파 시 상태 노름의 발산을 완벽히 차단하고 균일한 경계를 유지하기 위해서는 개별 후보 상태 $z_i$ 자체의 노름 유해성 또한 독립적으로 통제되어야 합니다([섹션 3.3]).</li>
+<li><strong>내용 스코어러 제거 시 성능 하락</strong>: 내용 점수 $q$를 제거하고 이동 평균만 남길 경우 정확도가 90.9%에서 84.1~84.8%로 약 6~7%p 저하됩니다([부록 D]).</li>
+</ul>
+</li>
+<li>
+<p><strong>소스에서 다루지 않아 확인할 수 없는 불확실성 (확인 불가 사항)</strong>:</p>
+<ul>
+<li><strong>실제 하드웨어 실행 시간 (Measured Runtime)</strong>: 연산 복잡도 및 이론적 FLOPs 수치는 정밀하게 프로파일링되었으나, GPU/TPU 등 실제 하드웨어상에서의 벽시계 시간(Wall-clock execution time) 비교 데이터는 소스 문헌에 언급되어 있지 않아 확인 불가합니다([부록 A]).</li>
+<li><strong>자연어 대형 언어 모델(LLM)로의 확장성</strong>: 본 논문의 모든 실험은 스도쿠, 미로, ARC-AGI 등 기호적·시공간적 추론 벤치마크에 한정되어 있으며, 텍스트 기반 자연어 LLM에 직접 적용했을 때의 효과성은 소스 문헌에서 다루지 않아 확인 불가합니다.</li>
+<li><strong>저자들의 세부 연구 기간 및 기타 신상 정보</strong>: 문헌 표지에 기재된 소속 및 이메일 외의 세부 정보는 소스 내에 존재하지 않아 확인 불가합니다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Beam: Reflection’s 501B open-weight model — Reflection</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing Beam: Reflection’s 501B open-weight model — Reflection</h1>
+<p class="page-meta">웹 · 2026-10-10</p>
+<h2 id="요약">요약</h2>
+<p>'빔(Beam)'은 AI 전문 기업 리플렉션(Reflection)이 공개한 첫 번째 오픈 웨이트(Open-weight) AI 모델이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://reflection.ai/blog/introducing-beam">출처</a> · <a href="https://www.youtube.com/watch?v=CGJh2l3HNQk">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="리플렉션-reflection-의-오픈-웨이트-ai-모델-빔-beam-분석-해설-보고서">리플렉션(Reflection)의 오픈 웨이트 AI 모델 '빔(Beam)' 분석 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>'빔(Beam)'은 AI 전문 기업 리플렉션(Reflection)이 공개한 첫 번째 오픈 웨이트(Open-weight) AI 모델이다. 총 5010억 개의 파라미터(501B)와 230억 개의 활성 파라미터(23B)로 구성된 희소 혼합 전문가(Sparse Mixture-of-Experts, MoE) 아키텍처를 채택하고 있으며, 프로그래밍(Coding), 복합 추론(Reasoning), 에이전트 워크로드(Agentic Workloads) 처리를 핵심 목적으로 개발되었다.</p>
+<p>본 모델의 역량은 사전 학습(Pretraining), 미드트레이닝(Midtraining), 고연산 강화학습(High-Compute Reinforcement Learning)으로 이어지는 3단계 학습 파이프라인의 결합을 통해 구축되었다. 인터넷 및 전용 라이선스 데이터셋에서 선별한 23.8조 개의 고품질 토큰을 사전 학습에 투입하였으며, 이어지는 미드트레이닝 단계를 통해 문맥 길이를 1M(100만) 토큰까지 확장하였다. 최종 강화학습 단계에서는 10,500(10.5K)대의 NVIDIA GB300 GPU를 4주간 가동하여 1억 회 이상의 롤아웃(Rollout)을 생성하는 대규모 RL 인프라를 구동하였다.</p>
+<p>빔 모델은 Apache 2.0 라이선스가 적용되어 오픈소스로 배포된다. 모델 가중치(Weights), 기술 보고서(Technical Report), 모델 카드(Model Card), 개발자 아티팩트(Developer Artifacts)를 포함한 종합 생태계 자산은 2026년 10월 말 정식 공개될 예정이다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
+<h5 id="2-1-모델-역량-및-추론-효율성-model-capability-inference-efficiency">2.1. 모델 역량 및 추론 효율성 (Model Capability &amp; Inference Efficiency)</h5>
+<ul>
+<li><strong>주장:</strong> Beam은 코딩 및 에이전트 작업 영역에서 최첨단 서구권 오픈 웨이트 프론티어를 확장하며, 추론 시 압도적인 연산 효율성을 제공한다.</li>
+<li><strong>근거:</strong>
+<ul>
+<li>GLM 5.2 등 동일 타깃 영역의 대형 오픈 모델과 비교했을 때, 추론 연산(Inference Compute) 소모량을 3~4배 적게 사용하면서도 비등한 수준의 추론 점수를 달성하였다.</li>
+<li>Qwen 3.8-Max(2조 이상 파라미터 제품군)와 같은 초대형 모델 대비 생성 토큰당 연산량 측면에서 유의미하게 적은 연산을 소모하면서 높은 '토큰당 지능(Intelligence per token)'을 실현하였다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="주요-벤치마크-평가-결과">주요 벤치마크 평가 결과</h6>
+<h6 id="에이전트-코딩-및-터미널-agentic-coding-terminal">에이전트 코딩 및 터미널 (Agentic Coding/Terminal)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목</th>
+<th style="text-align:center">Beam</th>
+<th style="text-align:center">Inkling</th>
+<th style="text-align:center">Nemotron 3 Ultra</th>
+<th style="text-align:center">GLM 5.2</th>
+<th style="text-align:center">GLM 5.3</th>
+<th style="text-align:center">Kimi K3</th>
+<th style="text-align:center">Qwen 3.8 Max</th>
+<th style="text-align:center">DeepSeek V4.1 Flash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DeepSWE v1.1</strong></td>
+<td style="text-align:center"><strong>44.4</strong></td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">44.0</td>
+<td style="text-align:center">61.0</td>
+<td style="text-align:center">68.0</td>
+<td style="text-align:center">51.0</td>
+<td style="text-align:center">74.2</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWE Bench Pro v2-Hard</strong></td>
+<td style="text-align:center"><strong>77.2</strong></td>
+<td style="text-align:center">56.9</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">84.3</td>
+<td style="text-align:center">88.2</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWE Bench Pro v1</strong></td>
+<td style="text-align:center"><strong>65.5</strong></td>
+<td style="text-align:center">54.3</td>
+<td style="text-align:center">46.4</td>
+<td style="text-align:center">62.1</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">67.7</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Terminal Bench v2.1</strong></td>
+<td style="text-align:center"><strong>80.1</strong></td>
+<td style="text-align:center">63.8</td>
+<td style="text-align:center">56.4</td>
+<td style="text-align:center">81.0</td>
+<td style="text-align:center">88.2</td>
+<td style="text-align:center">88.3</td>
+<td style="text-align:center">86.6</td>
+<td style="text-align:center">90.6</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWE Atlas Codebase QnA</strong></td>
+<td style="text-align:center"><strong>34.6</strong></td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">61.0</td>
+<td style="text-align:center">68.0</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWEBench Multilingual</strong></td>
+<td style="text-align:center"><strong>78.0</strong></td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">67.7</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWEBench Verified</strong></td>
+<td style="text-align:center"><strong>80.9</strong></td>
+<td style="text-align:center">77.6</td>
+<td style="text-align:center">70.7</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+</tr>
+</tbody>
+</table>
+<h6 id="추론-역량-reasoning">추론 역량 (Reasoning)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목</th>
+<th style="text-align:center">Beam</th>
+<th style="text-align:center">Inkling</th>
+<th style="text-align:center">Nemotron 3 Ultra</th>
+<th style="text-align:center">GLM 5.2</th>
+<th style="text-align:center">GLM 5.3</th>
+<th style="text-align:center">Kimi K3</th>
+<th style="text-align:center">Qwen 3.8 Max</th>
+<th style="text-align:center">DeepSeek V4.1 Flash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>AIME 2026</strong></td>
+<td style="text-align:center"><strong>97.8</strong></td>
+<td style="text-align:center">97.1</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">99.2</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HLE no tools</strong></td>
+<td style="text-align:center"><strong>36.2</strong></td>
+<td style="text-align:center">29.7</td>
+<td style="text-align:center">26.7</td>
+<td style="text-align:center">40.5</td>
+<td style="text-align:center">42.3</td>
+<td style="text-align:center">46.9</td>
+<td style="text-align:center">43.6</td>
+<td style="text-align:center">39.1</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SciCode</strong></td>
+<td style="text-align:center"><strong>49.7</strong></td>
+<td style="text-align:center">46.1</td>
+<td style="text-align:center">44.6</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">59.0</td>
+<td style="text-align:center">58.7</td>
+<td style="text-align:center">52.1</td>
+<td style="text-align:center">52.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CriPT AA</strong></td>
+<td style="text-align:center"><strong>16.3</strong></td>
+<td style="text-align:center">5.4</td>
+<td style="text-align:center">3.1</td>
+<td style="text-align:center">20.9</td>
+<td style="text-align:center">19.1</td>
+<td style="text-align:center">23.4</td>
+<td style="text-align:center">20.0</td>
+<td style="text-align:center">14.3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPQA Diamond</strong></td>
+<td style="text-align:center"><strong>90.5</strong></td>
+<td style="text-align:center">87.2</td>
+<td style="text-align:center">87.0</td>
+<td style="text-align:center">91.2</td>
+<td style="text-align:center">91.7</td>
+<td style="text-align:center">93.5</td>
+<td style="text-align:center">92.6</td>
+<td style="text-align:center">90.9</td>
+</tr>
+</tbody>
+</table>
+<h6 id="도구-호출-및-검색-tool-calling-search">도구 호출 및 검색 (Tool Calling / Search)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목</th>
+<th style="text-align:center">Beam</th>
+<th style="text-align:center">Inkling</th>
+<th style="text-align:center">Nemotron 3 Ultra</th>
+<th style="text-align:center">GLM 5.2</th>
+<th style="text-align:center">GLM 5.3</th>
+<th style="text-align:center">Kimi K3</th>
+<th style="text-align:center">Qwen 3.8 Max</th>
+<th style="text-align:center">DeepSeek V4.1 Flash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>AutomationBench public</strong></td>
+<td style="text-align:center"><strong>37.0</strong></td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">26.2</td>
+<td style="text-align:center">48.2</td>
+<td style="text-align:center">46.7</td>
+<td style="text-align:center">39.8</td>
+<td style="text-align:center">54.8</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MCP Atlas</strong></td>
+<td style="text-align:center"><strong>78.7</strong></td>
+<td style="text-align:center">76.0</td>
+<td style="text-align:center">63.1</td>
+<td style="text-align:center">77.8</td>
+<td style="text-align:center">84.2</td>
+<td style="text-align:center">82.3</td>
+<td style="text-align:center">84.5</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>tau3 banking</strong></td>
+<td style="text-align:center"><strong>38.0</strong></td>
+<td style="text-align:center">25.0</td>
+<td style="text-align:center">22.6</td>
+<td style="text-align:center">37.1</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">37.1</td>
+<td style="text-align:center">55.2</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BrowseComp (맥락 관리)</strong></td>
+<td style="text-align:center"><strong>77.4</strong></td>
+<td style="text-align:center">77.1</td>
+<td style="text-align:center">44.4</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">91.2</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSearchQA (맥락 관리)</strong></td>
+<td style="text-align:center"><strong>80.1</strong></td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">95.0</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+</tr>
+</tbody>
+</table>
+<h6 id="일반-역량-general-capabilities">일반 역량 (General Capabilities)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목</th>
+<th style="text-align:center">Beam</th>
+<th style="text-align:center">Inkling</th>
+<th style="text-align:center">Nemotron 3 Ultra</th>
+<th style="text-align:center">GLM 5.2</th>
+<th style="text-align:center">GLM 5.3</th>
+<th style="text-align:center">Kimi K3</th>
+<th style="text-align:center">Qwen 3.8 Max</th>
+<th style="text-align:center">DeepSeek V4.1 Flash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>AA-LCR</strong></td>
+<td style="text-align:center"><strong>79.3</strong></td>
+<td style="text-align:center">77.3</td>
+<td style="text-align:center">79.3</td>
+<td style="text-align:center">78.3</td>
+<td style="text-align:center">79.7</td>
+<td style="text-align:center">88.7</td>
+<td style="text-align:center">80.3</td>
+<td style="text-align:center">84.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LongBench v2</strong></td>
+<td style="text-align:center"><strong>65.5</strong></td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">61.9</td>
+<td style="text-align:center">64.0</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">66.3</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>IFBench</strong></td>
+<td style="text-align:center"><strong>79.7</strong></td>
+<td style="text-align:center">79.8</td>
+<td style="text-align:center">81.7</td>
+<td style="text-align:center">73.3</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">82.8</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AA Omniscience (공개 분할)</strong></td>
+<td style="text-align:center"><strong>13.0</strong></td>
+<td style="text-align:center">14.2</td>
+<td style="text-align:center">8.6</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">22.6</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">NR</td>
+<td style="text-align:center">6.6</td>
+</tr>
+</tbody>
+</table>
+<p><em>(참고: 2026년 10월 8일 업데이트된 최신 수치 반영 기준. NR은 미보고 수치임.)</em></p>
+<h6 id="구체적-실습-적용-데모-사례">구체적 실습 적용 데모 사례</h6>
+<ol>
+<li><strong>우주비행사 자유낙하 3D 게임 생성:</strong> 텍스트 표현을 바탕으로 시각적 구조를 추론하여, 지구로 자유낙하하며 빔으로 운석을 파괴하는 p5.js 기반 3D 게임을 정상 구현함.</li>
+<li><strong>토지/수면 일반화 퍼즐 실험:</strong> 180×90 그리드(총 16,200개 좌표) 분석 과제에서 이미지 입력 없이 텍스트 모드만으로 95.5%의 정확도를 기록함 (Opus 5의 92.5%를 상회하고 Fable 5의 97.8%에 근접).</li>
+<li><strong>뉴욕 지하철 실시간 대시보드:</strong> MTA 공개 데이터를 검색·인증하고 지하철 및 지도 지오메트리를 탐색하여, 실시간 열차 이동 업데이트를 위한 프론트엔드 및 백엔드 서버를 구성·유지함.</li>
+<li><strong>소형 모델 파인튜닝 노트북 작성:</strong> OpenCode 및 Unsloth 문서를 조사하여 Gemma-4 소형 모델의 Text2SQL 파인튜닝 로직을 작성하였으며, Gemma 모델의 테스트셋 정확도를 기존 대비 66.5% 향상시킴.</li>
+</ol>
+<p>[Source Context: Model Capability]</p>
+<hr />
+<h5 id="2-2-고연산-강화학습-및-인프라-혁신-high-compute-rl-infrastructure">2.2. 고연산 강화학습 및 인프라 혁신 (High-Compute RL &amp; Infrastructure)</h5>
+<ul>
+<li><strong>주장:</strong> 대규모 비동기 정책 경사(Asynchronous Policy Gradients) 및 고품질 환경 스케일링을 통해 연산 투입량 증가에 따른 성능 정체(Plateau) 없는 지속적 역량 향상을 달성했다.</li>
+<li><strong>근거:</strong>
+<ul>
+<li>10,500대의 NVIDIA GB300 GPU를 4주간 가동하여 최대 256K 토큰 문맥 길이 조건에서 1억 회 이상의 롤아웃을 생성하였고, 13억 개의 샌드박스 실행을 완수함.</li>
+<li><strong>진부화(Staleness) 제어 메커니즘:</strong> 비동기 환경에서 생성된 모든 토큰에는 해당 토큰을 생성한 모델 파라미터 버전이 태깅된다. 수집된 데이터가 현재 정책 대비 하루 이상 뒤처진(107개 파라미터 버전 차이) 상태에서도 수치적 표리 현상 및 수치 불안정성을 수학적으로 제어하는 비동기 정책 경사 알고리즘을 개발·적용함.</li>
+<li><strong>제어 가능한 추론 노력(Reasoning Effort) 파라미터:</strong> 과도한 토큰 소비를 방지하면서 성공적인 해법을 보상하는 길이 패널티(Length Penalty) 제어 체계를 구축함. 학습 초기에는 불필요한 토큰 소비를 줄여 파레토(Pareto) 효율성 국면을 형성하고, 후기에는 복잡한 과제 해결을 위해 추론 체인을 확장하는 2단계 파레토 이동을 달성함. 사용자는 추론 노력 파라미터를 조절하여 과제 난이도와 연산 예산에 맞게 답변 길이를 가변 제어할 수 있음.</li>
+</ul>
+</li>
+</ul>
+<h6 id="프론티어-rl-인프라-핵심-역량-7가지">프론티어 RL 인프라 핵심 역량 7가지</h6>
+<ul>
+<li><strong>완전 비동기 실행 (Fully asynchronous execution):</strong> 트레이너가 학습 및 새 모델 버전을 발행하는 동안 에이전트가 롤아웃을 독립 생성하며, 각 토큰에 생산 버전을 태깅하여 진부화 오차를 정확히 반영함.</li>
+<li><strong>가변적 연산 할당 (Flexible compute allocation):</strong> 워크로드 변화에 따라 추론 대 학습 GPU 비율을 3.9:1에서 5.4:1까지 유연하게 조절하고 학습 상태 손실 없이 5가지 GPU 메시 구성을 전환함.</li>
+<li><strong>신속한 모델 업데이트 (Fast model updates):</strong> RoCE 기반 랙 간 전송 및 NVLink 기반 랙 내 전파를 연결한 다단계 배포 구조로, 신규 가중치를 중앙값 12초 이내에 전사 인프라로 전파함 (크로스 랙 트래픽 75% 감소, 전파 속도 2.2배 향상).</li>
+<li><strong>추론 장애 복구력 (Resilience to inference failures):</strong> 학습 작업 중단 없이 71건의 추론 인프라 장애를 처리하였으며, 중앙값 8분 이내 복구를 통해 연산 시간 손실을 0.02% 수준으로 제어함.</li>
+<li><strong>스케일링 샌드박스 (Environments at scale):</strong> 최대 170K 동시 샌드박스를 구동하고 총 10억 건 이상의 샌드박스 생성 요청을 처리함 (90%가 10초 이내 준비 완료).</li>
+<li><strong>효율적 트레이너 패킹 (Efficient Trainer Packing):</strong> 동적 패킹을 통해 평균 배치 충진율 99.99%를 유지함으로써, 롤아웃 길이가 70% 증가하는 동안에도 GPU당 처리량 저하를 1.5% 이내로 방지함.</li>
+<li><strong>관측 가능성 및 보상 무결성 (Observability and reward integrity):</strong> 토큰 단위 기록으로 학습-추론 수치 일치성을 상시 검증하며, 재현 가능한 기록을 통해 독립 검증기가 보상 헐뜯기(Verifier exploits)를 차단함.</li>
+</ul>
+<p>[Source Context: High-Compute Reinforcement Learning / Frontier RL infrastructure]</p>
+<hr />
+<h5 id="2-3-사전-학습-및-기반-구조의-안정성-pretraining-moe-architecture">2.3. 사전 학습 및 기반 구조의 안정성 (Pretraining &amp; MoE Architecture)</h5>
+<ul>
+<li><strong>주장:</strong> 예측 가능한 스케일링 법칙(Scaling Laws) 및 수치적 안정성에 기반한 아키텍처 설계를 통해 다운스트림 RL 학습에 최적화된 균일한 전문가(Expert) 활용도를 달성했다.</li>
+<li><strong>근거:</strong>
+<ul>
+<li><strong>자체 인프라 스택 및 장애 복구:</strong> 6,144대의 NVIDIA GB300 NVL72 GPU 클러스터에서 쿠버네티스(Kubernetes) 기반 토폴로지 인지 스케줄러와 노드 라이프사이클 관리 시스템을 자체 구축함. 학습 중 발생한 미세 데이터 손상(SDC) 및 비정형 그래디언트 폭발을 감지하여 9회의 준자율적 리와인드(Semi-automatic rewinds)를 실행하면서도 최종 유효 학습 시간 비율(Goodput) 92.3%를 달성하며 23.8조 토큰 학습을 4주 미만에 완료함.</li>
+<li><strong>수치 안정적 MoE 아키텍처:</strong> 보조 손실 없는 로드 밸런싱(Auxiliary-loss-free load balancing)에 코사인 감쇄(Cosine decay) 편향 업데이트를 도입하여 완료 시점 가장 많이 사용된 전문가 부하를 평균 대비 1.04배로 통제함. 또한 깊이 기반 스케일링(Depth-based scaling), SandwichNorm, 요소별 어텐션 게이팅(Elementwise Attention Gating), FP32 잔차 누적 기술을 결합하여 52개 전체 레이어 영역에서 잔차 스트림 RMS 폭발 및 활성화 이상치(Outliers)를 안정적으로 제어함.</li>
+<li><strong>고품질 데이터 정제 및 STEM PDF 파이프라인:</strong> 원시 인터넷 토큰의 약 95%를 제거하는 엄격한 정제를 거치는 동시에, 자체 분류기를 통해 범용 필터가 유실했을 1.8조 토큰의 고품질 데이터(선별된 웹-코드 토큰의 87% 포함)를 보존함. 특히 수천 대의 GPU에 비전-언어 OCR 모델과 아티팩트 감지기를 분산 배치하여 페타바이트급 기술/STEM PDF 문서를 정밀하게 복원함.</li>
+<li><strong>RL 가교로서의 미드트레이닝(Midtraining):</strong> 대규모 RL 진입 전, 실제 코드 리포지토리와 장기 임무(Long-horizon tasks), 장문 추론 문서를 합성·확장하는 미드트레이닝을 수행하여 문맥 길이를 1M(100만) 토큰으로 확장함.</li>
+</ul>
+</li>
+</ul>
+<p>[Source Context: Pretraining a Foundation for Reasoning]</p>
+<hr />
+<h5 id="2-4-안전성-및-정렬-safety-and-alignment">2.4. 안전성 및 정렬 (Safety and Alignment)</h5>
+<ul>
+<li><strong>주장:</strong> 다중 교사 온폴리시 증류(Multi-Teacher On-Policy Distillation, MOPD) 및 심의적 정렬(Deliberative Alignment) 기술을 적용하여 성능 손실 없이 안전 정책을 완벽히 정렬시켰다.</li>
+<li><strong>근거:</strong>
+<ul>
+<li>대규모 RL 교사 모델과 전용 안전/정렬 교사 모델의 역량을 MOPD 방식으로 통합함.</li>
+<li><strong>생성형 보상 모델 기반의 예측 가능성:</strong> 비검증 영역에서 생성형 보상 모델을 활용한 강화학습 결과, RL 수행 전 보상 향상 예측치와 실제 결과 간 상관계수 $r = 0.79$를 기록하여 기존 Best-of-N 상한선($r = 0.46$)을 크게 상회하는 정밀한 정렬 예측 가능성을 입증함.</li>
+<li>적대적(Adversarial) 단일/다중 라운드 및 에이전트 탈옥 시나리오를 구성하고 SFT 재투입 및 RL을 반복하는 심의적 정렬 기법을 적용하여 과잉 거부(Over-refusal)와 유해 응답을 동시에 최소화함.</li>
+</ul>
+</li>
+</ul>
+<h6 id="3대-정렬-원칙">3대 정렬 원칙</h6>
+<ol>
+<li><strong>규칙 (Rules):</strong> 절대로 어기지 말아야 할 한계 (안전 정책 준수, AI 에이전트 정체성 유지).</li>
+<li><strong>품질 (Qualities):</strong> 지속적으로 충족해야 할 품질 (제시된 맥락 활용, 정확한 주장 제시, 불확실성 인정, 사용자 요청에 대한 투명한 이행).</li>
+<li><strong>스타일 (Style):</strong> 기본 상호작용 스타일 (직접적, 철저함, 효율성, 선제적인 사용자 니즈 지원).</li>
+</ol>
+<p>[Source Context: Safety and Alignment]</p>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-speakers">3. 등장 인물 및 화자 (Figures &amp; Speakers)</h4>
+<ul>
+<li><strong>개인 성명 및 화자:</strong> <strong>확인 불가</strong> (소스 문맥 내에 발표자, 작성자 등 특정 개인의 성명은 명시되어 있지 않음).</li>
+<li><strong>개발 및 정렬 주체:</strong> 리플렉션(Reflection / Reflection AI) 개발 팀.</li>
+<li><strong>외부 문헌 인용 저자:</strong> 소스 내 기술 참조 용도로 기재된 저자 표기(<code>DeepSeek-AI et al., 2024</code>, <code>Guan et al., 2024</code>)가 존재하나, 이는 아키텍처 및 정렬 기법의 출처 논문 저자일 뿐 본 보고서의 작성자나 화자가 아님.</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-numbers-timeframes">4. 수치 및 시점 (Numbers &amp; Timeframes)</h4>
+<h5 id="모델-사양-및-사전-학습-데이터">모델 사양 및 사전 학습 데이터</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">정량 수치 / 상세 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>총 파라미터 수</strong></td>
+<td style="text-align:left">5,010억 개 (501B)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>활성 파라미터 수</strong></td>
+<td style="text-align:left">230억 개 (23B)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>레이어 수</strong></td>
+<td style="text-align:left">52개 레이어</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>사전 학습 토큰 수</strong></td>
+<td style="text-align:left">23.8조 개의 토큰 (23.8T)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>사전 학습 인프라</strong></td>
+<td style="text-align:left">6,144대 NVIDIA GB300 NVL72 GPU</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>사전 학습 기간 및 Goodput</strong></td>
+<td style="text-align:left">4주 미만 / Goodput 92.3% (SDC 재시작 9회 포함)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="강화학습-rl-및-문맥-사양">강화학습(RL) 및 문맥 사양</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">정량 수치 / 상세 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>RL 투입 인프라</strong></td>
+<td style="text-align:left">10,500대 (10.5K) NVIDIA GB300 GPU</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RL 기간 및 롤아웃 규모</strong></td>
+<td style="text-align:left">4주간 / 1억 회 이상의 롤아웃 (100M+)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>샌드박스 및 환경 규모</strong></td>
+<td style="text-align:left">13억 개 샌드박스 실행 / 100만 개 (1M) 환경</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>동시 실행 인프라 스케일</strong></td>
+<td style="text-align:left">평균 110,000개 동시 롤아웃 / 최대 170,000개 동시 샌드박스</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>문맥 길이 (Context Length)</strong></td>
+<td style="text-align:left">Midtraining 기준 1M (100만) 토큰 / RL 롤아웃 최대 256K 토큰</td>
+</tr>
+</tbody>
+</table>
+<h5 id="주요-일정-및-타임라인">주요 일정 및 타임라인</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구 분</th>
+<th style="text-align:left">해당 시점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>원문 문서 작성 및 발표일</strong></td>
+<td style="text-align:left">2026년 10월 5일</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>벤치마크 데이터 업데이트일</strong></td>
+<td style="text-align:left">2026년 10월 8일</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오픈소스 정식 배포 예정일</strong></td>
+<td style="text-align:left">2026년 10월 말 (가중치, 기술 보고서, 모델 카드 등 공개)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ol>
+<li><strong>미보고 수치 (NR) 존재:</strong> 벤치마크 데이터표 내 'NR'로 표기된 수치(Inkling, Nemotron 3 Ultra, GLM 계열, DeepSeek V4.1 Flash 등의 일부 미비된 점수)는 원문 소스에 기술되어 있지 않아 정확한 대조가 불가함.</li>
+<li><strong>모달리티 한계 (Text-only):</strong> 빔 모델은 텍스트 전용(Text-only) 모델로, 이미지나 시각 자료 등의 멀티모달(Multimodal) 입력을 직접 수용하고 처리하는 능력이 없음. 시각적 구조나 퍼즐 분석 시 텍스트 형태 표현으로 변환된 정보에 의존하여 간접 추론을 수행함.</li>
+<li><strong>연산량 추정치의 불확실성:</strong> 본문에서 제시된 FLOPs 연산 추정치는 프롬프트 프리필(Prefill), 문맥 의존적 어텐션, 서빙 오버헤드가 제외된 대략적 간략 계산식인 $\text{FLOPs} \approx 2 \times \text{활성 파라미터 수} \times \text{평균 생성 토큰 수}$에 기반하므로, 실제 서빙 운영 환경에서의 비용과 일치하지 않을 수 있음.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

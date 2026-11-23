@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Odysseus: Scaling VLMs to 100+ Turn Decision-Making in Games via Reinforcement Learning</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Odysseus: Scaling VLMs to 100+ Turn Decision-Making in Games via Reinforcement Learning</h1>
+<p class="page-meta">논문 · 2026-08-11</p>
+<h2 id="요약">요약</h2>
+<p>Odysseus는 강화학습으로 100턴 이상 게임의 진행 거리를 늘렸으며, 독립 재현은 확인되지 않았다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=_IxcphS7Xl0">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="odysseus-강화학습을-통한-vlm의-100-턴-장기-의사결정-능력-확장-기술-보고서">Odysseus: 강화학습을 통한 VLM의 100+ 턴 장기 의사결정 능력 확장 기술 보고서</h3>
+<h4 id="1-논문-서지-정보-및-원본-현황">1. 논문 서지 정보 및 원본 현황</h4>
+<p>본 보고서는 시각-언어 모델(VLM)을 고난도 게임 환경에서의 장기 의사결정 에이전트로 진화시키기 위한 'Odysseus' 프레임워크의 기술적 성취와 한계를 분석합니다.</p>
+<ul>
+<li><strong>논문 원제:</strong> Odysseus: Scaling VLMs to 100+ Turn Decision-Making in Games via Reinforcement Learning</li>
+<li><strong>저자 명단:</strong> Chengshuai Shi, Wenzhe Li, Xinran Liang, Yizhou Lu, Wenjia Yang, Ruirong Feng, Seth Karten, Ziran Yang, Zihan Ding, Gabriel Sarch, Danqi Chen, Karthik Narasimhan, Chi Jin (총 13명)</li>
+<li><strong>arXiv 정보:</strong> arXiv ID (2605.00347v1), 제출일 (2026-05-01 02:05:56 UTC), 분량 (26쪽)</li>
+<li><strong>디지털 식별자 및 라이선스:</strong> arXiv DOI (10.48550/arXiv.2605.00347), arXiv non-exclusive distribution license 1.0 적용</li>
+<li><strong>프로젝트 페이지:</strong> <a href="https://odysseus-project.github.io/">https://odysseus-project.github.io/</a></li>
+<li><strong>참고 사항:</strong> 저자 측은 이를 '오픈 프레임워크'로 정의하고 있으나, Odysseus 전용 코드, 가중치 및 학습 데이터셋의 완전한 공개 여부는 본 분석 시점까지 저자 외의 제3자에 의해 독립적으로 확인되지 않았습니다.</li>
+</ul>
+<h4 id="2-문제-정의-super-mario-land에서의-장기-의사결정">2. 문제 정의: Super Mario Land에서의 장기 의사결정</h4>
+<p>기존 VLM 에이전트 연구가 20~30턴 내외의 단기 과제에 국한되었던 것과 달리, 본 연구는 <strong>100턴 이상의 정밀한 상호작용</strong>이 요구되는 'Super Mario Land'를 벤치마크로 삼았습니다.</p>
+<ul>
+<li><strong>입력과 정보의 비대칭성:</strong> 에이전트의 정책(Policy)은 오직 현재의 '픽셀 화면'과 '텍스트 지시문'만을 입력으로 받습니다. 게임의 내부 RAM 상태는 정책 입력으로 제공되지 않습니다. 다만 이 조건이 인간 플레이와 모든 면에서 동일하다는 뜻은 아닙니다.</li>
+<li><strong>훈련 보상과 특권적 상태:</strong> 그러나 훈련 과정에서의 보상 신호는 에뮬레이터 RAM에서 직접 읽어온 Mario의 x좌표 변화량($x_{t+1} - x_t$)을 사용합니다. 즉, 정책은 시각 정보에 의존하되 학습은 '특권적 상태(privileged state)' 정보를 활용하여 가이드를 받는 구조입니다.</li>
+</ul>
+<h4 id="3-odysseus-프레임워크의-핵심-구성-요소">3. Odysseus 프레임워크의 핵심 구성 요소</h4>
+<h5 id="3-1-qwen3-vl-8b-instruct-actor">3.1 Qwen3-VL-8B-Instruct Actor</h5>
+<p>의사결정의 중추로, 시각 정보와 지시문을 처리해 <code>&lt;perception&gt;</code>, <code>&lt;reasoning&gt;</code>, <code>&lt;answer&gt;</code> 형태의 설명과 버튼 출력을 생성합니다. 이 구조화된 출력이 모델 내부 추론을 충실하게 드러낸다고 입증된 것은 아닙니다.</p>
+<h5 id="3-2-lightweight-turn-level-cnn-critic">3.2 Lightweight Turn-level CNN Critic</h5>
+<p>대형 VLM을 Critic으로 사용할 때의 연산 부담을 줄이기 위해, 시각 정보 처리에 특화된 경량 CNN 모듈을 도입했습니다. 이는 토큰 단위가 아닌 '턴(Turn)' 단위로 가치를 추정하며, 저자는 이 실험 설정에서 안정성과 샘플 효율이 개선됐다고 보고합니다.</p>
+<h5 id="3-3-positive-advantage-filtering">3.3 Positive-advantage Filtering</h5>
+<p>강화학습의 actor 업데이트에서 음의 어드밴티지(Negative Advantage)를 가진 샘플을 제외하는 기법입니다. 저자는 PPO와 결합했을 때 이 설정의 학습 안정성이 좋아졌다고 관찰합니다. 그러나 음의 advantage를 제외하는 것이 일반적으로 항상 옳은지는 활발히 연구 중이라고 논문도 밝힙니다.</p>
+<h5 id="3-4-sft-initialization-도메인-지식-주입의-역설">3.4 SFT Initialization: 도메인 지식 주입의 역설</h5>
+<p>GPT-o3 교사 모델의 주석을 활용한 5,058개 프레임 데이터로 지도 학습(SFT)을 수행합니다. <strong>기술적으로 주목할 점은 SFT만 수행한 모델(261.77)이 오히려 Base 모델(270.23)보다 성능이 낮게 측정되었다는 것입니다.</strong> 이는 SFT의 목적이 직접적인 '행동 제어 최적화'가 아니라, RL 학습의 안정적인 출발점(Strong Prior)이 될 도메인 지식 및 시각 인지 능력을 형성하는 데 있음을 시사합니다.</p>
+<h5 id="3-5-inverse-trajectory-length-auto-curriculum">3.5 Inverse-trajectory-length Auto-curriculum</h5>
+<p>다중 레벨 학습 시 평균 궤적(Trajectory) 길이의 역수에 비례해 다음 배치의 레벨 샘플링 가중치를 정합니다. 짧은 궤적이 나온 레벨을 더 뽑아 레벨별 훈련 샘플 불균형을 완화하려는 저자 측 설계입니다.</p>
+<blockquote>
+<p><strong>RL 전문가의 비유:</strong>
+Odysseus는 '게임기 앞에 앉은 플레이어(Actor)'와 '그 옆의 작은 코치(Critic)'가 한 팀인 구조입니다. 플레이어는 화면을 보고 버튼을 고르고, 코치는 매 턴의 장기 가치를 추정합니다. 이 논문의 업데이트에서는 양의 advantage만 actor 학습에 남겼지만, 모든 경기와 모든 RL 문제에서 이 방식이 최선이라는 뜻은 아닙니다.</p>
+</blockquote>
+<h4 id="4-실험-환경-및-훈련-조건">4. 실험 환경 및 훈련 조건</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">수치 및 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>SFT 데이터셋</strong></td>
+<td style="text-align:left">5,058 프레임 (GPT-o3 교사 주석 기반)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RL 훈련 레벨</strong></td>
+<td style="text-align:left">Super Mario Land 첫 5개 레벨 (W1-L1 ~ W2-L2)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>훈련 규모</strong></td>
+<td style="text-align:left">190 training steps, 배치당 1,024 trajectories</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상호작용 제한</strong></td>
+<td style="text-align:left">에피소드당 최대 400 turns</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>추론 파라미터</strong></td>
+<td style="text-align:left">Temperature 1, Top-p 1</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5-샘플-효율성-분석-figure-4">5. 샘플 효율성 분석 (Figure 4)</h4>
+<p>W1-L1의 특정 시나리오에서 저자는 VLM 기반 PPO가 고전적 심층 RL(CNN 기반 PPO)보다 높은 샘플 효율을 보였다고 보고합니다.</p>
+<ul>
+<li><strong>효율성 정의:</strong> 저자는 **'동등 수준의 수렴 성능(comparable converged maximum performance)에 도달하기까지 필요한 샘플 수'**를 기준으로 약 2배의 효율성을 달성했다고 분석합니다.</li>
+<li><strong>실험적 한계:</strong> 이 분석은 최대 0.38M 샘플 제한 하에 이루어졌으며, 최소 2회의 독립 실행(runs) 결과에 대한 평균값입니다. 또한 EMA 0.85 스무딩이 적용되어 실제 학습 곡선의 변동성이 일부 가려져 있음을 인지해야 합니다.</li>
+</ul>
+<h4 id="6-성능-비교-결과-table-2">6. 성능 비교 결과 (Table 2)</h4>
+<p>본 보고서의 핵심 지표는 **'레벨 시작점으로부터 이동한 x축 진행 거리'**입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 명칭</th>
+<th style="text-align:left">평균 진행 거리 ± 표준오차(SE)</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Odysseus (제안 모델)</strong></td>
+<td style="text-align:left"><strong>1511.90 ± 8.95</strong></td>
+<td style="text-align:left"><strong>Base 대비 5.59배 향상</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">GLM-4.6V (106B-A12B)</td>
+<td style="text-align:left">512.91 ± 4.46</td>
+<td style="text-align:left">비교 대상 중 최고치</td>
+</tr>
+<tr>
+<td style="text-align:left">Qwen3-VL-8B (Base)</td>
+<td style="text-align:left">270.23 ± 5.22</td>
+<td style="text-align:left">Odysseus의 기반 모델</td>
+</tr>
+<tr>
+<td style="text-align:left">Odysseus-SFT</td>
+<td style="text-align:left">261.77 ± 4.57</td>
+<td style="text-align:left">SFT만으로는 성능 향상 부재</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>상대적 우위:</strong> Odysseus는 비교 모델 GLM-4.6V 대비 2.95배의 평균 x축 진행거리를 기록했습니다.</li>
+<li><strong>해석상의 주의:</strong> 독점 API 모델(GPT-5.4 등)은 단 8 runs의 표본을 가진 반면, 공개 모델 및 Odysseus는 256 runs를 기반으로 오차 범위를 산출했으므로 직접적인 수치 비교 시 신뢰 구간의 차이를 고려해야 합니다.</li>
+</ul>
+<h4 id="7-일반화-성능-및-구조적-유사성">7. 일반화 성능 및 구조적 유사성</h4>
+<p>훈련 궤적 밖에서 저자가 보고한 상대 향상은 다음과 같습니다. 저자는 이를 일반화의 징후로 해석하지만, 이 결과만으로 단순 암기를 완전히 배제하거나 범용 규칙 학습을 입증하지는 못합니다.</p>
+<ul>
+<li><strong>훈련 레벨 내 미학습 상태:</strong> 50개 off-policy states에서 <strong>32.2%</strong> 향상</li>
+<li><strong>미훈련 레벨(Unseen):</strong> Super Mario Land 내 5개 미학습 레벨에서 수동 수집한 50개 상태를 평가해 <strong>41.5%</strong> 향상</li>
+<li><strong>교차 게임(Cross-game):</strong> 'Super Mario Bros.' 32개 레벨에서 <strong>23.1%</strong> 향상</li>
+<li><strong>분석가적 견해:</strong> 교차 게임에서의 성과는 두 게임이 유사한 <strong>2D 플랫포머 구조와 시각적/조작적 메커니즘을 공유</strong>하기 때문에 가능했습니다. 이를 실제 로봇 제어나 웹 에이전트와 같은 이종 도메인으로의 일반화로 확대 해석하는 것은 경계해야 합니다.</li>
+</ul>
+<h4 id="8-일반-도메인-벤치마크-평가-table-3">8. 일반 도메인 벤치마크 평가 (Table 3)</h4>
+<p>게임 학습 뒤 일반 멀티모달 벤치마크 성능이 유지되는지를 점검한 결과입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델</th>
+<th style="text-align:center">MMMU (val)</th>
+<th style="text-align:center">MathVision</th>
+<th style="text-align:center">RealWorldQA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Base</td>
+<td style="text-align:center">69.00</td>
+<td style="text-align:center">54.64</td>
+<td style="text-align:center">71.11</td>
+</tr>
+<tr>
+<td style="text-align:left">Odysseus-SFT</td>
+<td style="text-align:center">70.44</td>
+<td style="text-align:center"><strong>55.00</strong></td>
+<td style="text-align:center"><strong>71.37</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Odysseus (Final)</td>
+<td style="text-align:center"><strong>70.77</strong></td>
+<td style="text-align:center">53.52</td>
+<td style="text-align:center">71.11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>관찰 사항:</strong> Odysseus가 MMMU에서 최고점을 기록했으나, <strong>MathVision에서는 Base 및 SFT 모델보다 낮으며, RealWorldQA에서는 SFT 모델(71.37)이 최종 Odysseus보다 더 우수한 수치</strong>를 보였습니다.</li>
+<li><strong>결론:</strong> '완전한 무손실'이나 '모든 지표 압도'가 아니라, 일반 능력이 대체로 비슷한 범위 내에서 유지되고 있다는 것이 저자 측의 정확한 데이터입니다.</li>
+</ul>
+<h4 id="9-연구의-한계-및-독립적-검증-경계">9. 연구의 한계 및 독립적 검증 경계</h4>
+<ul>
+<li><strong>검증 상태:</strong> 본 자료는 v1 프리프린트이며, peer-reviewed acceptance나 제3자의 독립 재현은 이번 작업에서 확인하지 못했습니다.</li>
+<li><strong>보상 함수의 편향:</strong> x축 전진에 편중된 보상 체계는 코인 획득, 적 처치, 생존 전략 등 게임의 다면적 목표를 완벽히 대변하지 못합니다.</li>
+<li><strong>자원 보고의 불완전성:</strong> 인터랙션 샘플 수 위주의 보고는 실제 학습에 소요된 <strong>GPU-hours, 전력 소비, API 비용 등 물리적 연산 자원의 효율성</strong>을 판단하기에는 정보가 부족합니다.</li>
+<li><strong>CoT 충실성 미검증:</strong> 모델이 생성한 구조화된 설명(Perception/Reasoning)이 실제 내부 계산의 원인을 충실하게 반영하는지는 이 실험에서 검증하지 않았습니다.</li>
+</ul>
+<h4 id="10-출처-및-후속-확인-사항">10. 출처 및 후속 확인 사항</h4>
+<p>본 보고서는 원문의 데이터 보존 원칙을 준수하며, 다음 정보를 포함하고 있습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">상세 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>원문 소스</strong></td>
+<td style="text-align:left">arXiv:2605.00347v1 (2026-05-01)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>보존 정보 범위</strong></td>
+<td style="text-align:left">Appendix A–F, Figure 1–10, Table 1–9, 110개 참고문헌 핵심 데이터</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>프로젝트 주소</strong></td>
+<td style="text-align:left"><a href="https://odysseus-project.github.io/">https://odysseus-project.github.io/</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>검증 경계</strong></td>
+<td style="text-align:left">v1 프리프린트 텍스트 및 저자 제공 데이터 기반 분석</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>후속 확인 항목</strong></td>
+<td style="text-align:left">전용 코드 저장소의 실제 공개 여부, 외부 기관의 독립 재현 성공 사례 확인 필요</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

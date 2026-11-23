@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Microsoft-Decision-1: Our model for fast decision-making</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Microsoft-Decision-1: Our model for fast decision-making</h1>
+<p class="page-meta">웹 · 2026-10-11</p>
+<h2 id="요약">요약</h2>
+<p>마이크로소프트(Microsoft)는 신속하고 정교한 의사결정 및 분류 작업에 특화된 AI 모델인 'Microsoft-Decision-1'을 공식 발표했습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://commandline.microsoft.com/microsoft-decision-1-model-foundry">출처</a> · <a href="https://www.youtube.com/watch?v=gqcoGfQbwPg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="마이크로소프트-디시전-1-microsoft-decision-1-기술-해설-보고서">마이크로소프트-디시전-1(Microsoft-Decision-1) 기술 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>마이크로소프트(Microsoft)는 신속하고 정교한 의사결정 및 분류 작업에 특화된 AI 모델인 'Microsoft-Decision-1'을 공식 발표했습니다. 해당 모델은 현재 마이크로소프트 파운드리(Microsoft Foundry)와 오픈라우터(OpenRouter) 플랫폼을 통해 배포되고 있으며, 애플리케이션, 에이전트, 작업 워크플로우 내에서 라우팅(routing), 분류(classification), 우선순위 지정(prioritization), 검증(verification), 워크플로우 제어(workflow control) 등의 과제를 안전하고 신뢰할 수 있는 환경에서 수행하도록 고안되었습니다.</p>
+<p>자연스러운 텍스트 생성이나 복잡한 단계를 거치는 추론 과정에 중점을 두는 대형 언어 모델(LLM)과 달리, 의사결정 모델(Decision Model)은 소프트웨어 시스템이 별도의 후처리 없이 즉시 실행할 수 있는 구조화된 출력(structured output)을 극히 낮은 비용과 높은 처리 성능으로 제공하는 데 특화되어 있습니다. Microsoft-Decision-1은 이러한 의사결정 모델 범주에서 기존 LLM과 기존 타 의사결정 모델 모두를 압도하는 초저지연(Ultra-low latency) 속도와 우수한 예측 정밀도를 달성했습니다.</p>
+<p>본 보고서는 마이크로소프트 공식 기술 블로그(Command Line)에 공개된 아친트 스리바스타바(Achint Srivastava) 부사장의 기술 아티클을 바탕으로 작성되었습니다. 소스 데이터의 검증 원칙에 따라 외부 지식이나 근거 없는 추측을 철저히 배제하고 소스 원문에 명시된 사실과 정량적 데이터만을 정리했습니다. 아울러 원문에 기재된 에디터 노트(Editor's note)에 따라, Jev 모델의 정확도 및 확률 교정 벤치마크 데이터가 본 기사 공개 후 추가 업데이트된 맥락을 반영하여 작성되었습니다.</p>
+<hr />
+<h5 id="2-주요-논점-main-points">2. 주요 논점 (Main Points)</h5>
+<h6 id="2-1-논점-1-지연-시간-latency-단축-및-처리-속도의-우수성">2.1 논점 1: 지연 시간(Latency) 단축 및 처리 속도의 우수성</h6>
+<ul>
+<li>
+<p><strong>[사실]</strong>
+JevBench v1.6.1 규격(동일 지역 마이크로소프트 파운드리 측정 기준)에서 Microsoft-Decision-1의 P50(중위) 지연 시간은 약 85ms이며, P95 지연 시간은 125ms를 기록했습니다.</p>
+</li>
+<li>
+<p><strong>[소스 주장]</strong>
+Microsoft-Decision-1은 측정 대상이 된 비교 모델 중 가장 빠른 처리 속도를 달성했습니다. 차순위 모델인 H2O-Lightning-4B v1.1(210ms) 대비 2.5배 빠르며, 프론티어 참조 모델인 GPT-6 Sol(3,010ms) 대비 소스 명시 기준 35배 빠른 속도를 보여줍니다.</p>
+</li>
+<li>
+<p><strong>[작성자 해석]</strong>
+의사결정이 연속하여 발생하는 멀티스텝(multi-step) 워크플로우 환경에서 단일 단계당 지연 시간 단축은 전체 시스템의 성능을 결정짓는 핵심 요소입니다. 예를 들어 20단계의 연쇄적 의사결정이 요구되는 작업에서 단일 단계당 100ms의 지연이 누적되는 것만으로도 전체 워크플로우에는 총 2초의 지연이 발생합니다. 따라서 P50 기준 85ms의 초저지연 성능은 실시간 에이전트 연동 시 병목 현상을 획기적으로 줄여줍니다.</p>
+</li>
+<li>
+<p><strong>주요 모델별 P50 지연 시간 및 상대적 속도 비교 표</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명 (Model)</th>
+<th style="text-align:left">P50 중위 지연 시간 (ms)</th>
+<th style="text-align:left">P95 지연 시간 (ms)</th>
+<th style="text-align:left">상대적 속도 비교 (vs Microsoft-Decision-1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Microsoft-Decision-1</strong></td>
+<td style="text-align:left"><strong>85 ms</strong></td>
+<td style="text-align:left"><strong>125 ms</strong></td>
+<td style="text-align:left"><strong>기준 (1.0x / 가장 빠름)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">H2O-Lightning-4B v1.1</td>
+<td style="text-align:left">210 ms</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">2.5배 느림</td>
+</tr>
+<tr>
+<td style="text-align:left">Jev 1.13.0</td>
+<td style="text-align:left">240 ms</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">2.8배 느림</td>
+</tr>
+<tr>
+<td style="text-align:left">GPT-6 Luna Decisions</td>
+<td style="text-align:left">300 ms</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">3.5배 느림</td>
+</tr>
+<tr>
+<td style="text-align:left">Quiet-1.0-Large</td>
+<td style="text-align:left">380 ms</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">4.5배 느림</td>
+</tr>
+<tr>
+<td style="text-align:left">Surrogate Rune 26B-A4B</td>
+<td style="text-align:left">380 ms</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">4.5배 느림</td>
+</tr>
+<tr>
+<td style="text-align:left">deck-31B</td>
+<td style="text-align:left">400 ms</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">4.7배 느림</td>
+</tr>
+<tr>
+<td style="text-align:left">GPT-6 Sol (참조 모델)</td>
+<td style="text-align:left">3,010 ms</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">약 35.4배 느림 (소스 명시 기준: 35배)</td>
+</tr>
+<tr>
+<td style="text-align:left">Strands-Decider 2B</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">미측정</td>
+<td style="text-align:left">미측정</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h6 id="2-2-논점-2-범용적-정확도-accuracy-및-평가-성과">2.2 논점 2: 범용적 정확도(Accuracy) 및 평가 성과</h6>
+<p>Microsoft-Decision-1은 모델 학습 과정에서 완전히 격리된(blinded) 36개의 공공 및 비공개 벤치마크, 총 147,137개의 평가 질문을 대상으로 범용 일반화 성능을 검증받았습니다. 평가 영역은 라우팅, 순위 매기기, 긴 문맥 처리, 다국어 처리, 분포 외(out-of-distribution) 과제, 추론, 안전성 등을 폭넓게 포함합니다.</p>
+<ul>
+<li><strong>36개 벤치마크 평균 정확도 평가 및 JevBench 리더보드 순위 현황:</strong>
+<ul>
+<li><strong>Microsoft-Decision-1:</strong> 83.5% (전체 1위)</li>
+<li><strong>Jev 1.13.0:</strong> 82.3%</li>
+<li><strong>Quiet-1.0-Large:</strong> 81.9% (JevBench 리더보드 1위 모델)</li>
+<li><strong>Surrogate Rune 26B-A4B:</strong> 79.7% (JevBench 리더보드 8위 모델)</li>
+<li><strong>GPT-6 Luna Decisions:</strong> 79.4% (JevBench 리더보드 7위 모델)</li>
+<li><strong>deck-31B:</strong> 77.8% (JevBench 리더보드 3위 모델)</li>
+<li><strong>H2O-Lightning-4B v1.1:</strong> 77.2% (JevBench 리더보드 5위 모델)</li>
+<li><strong>Strands-Decider 2B:</strong> 54.8% (AWS 환경 / 응답이 가능했던 23개 벤치마크 대상 평균값)</li>
+<li><strong>GPT-6 Sol:</strong> 정확도 순위 표 내 미기재 / 미측정 (Not ranked)</li>
+</ul>
+</li>
+</ul>
+<p>Microsoft-Decision-1은 공개 리더보드인 JevBench의 최상위권 모델들을 포함한 다각도 36개 벤치마크 비교에서 최고 평균 정확도(83.5%)를 기록함으로써 특정 평가셋에 과적합되지 않는 높은 일반화 성능을 입증했습니다.</p>
+<hr />
+<h6 id="2-3-논점-3-기술적-구조-및-작동-메커니즘">2.3 논점 3: 기술적 구조 및 작동 메커니즘</h6>
+<ul>
+<li><strong>기반 모델 및 사후 학습 (Post-training):</strong>
+Microsoft-Decision-1은 <code>Qwen3.5-9B</code> 모델을 기반으로 사후 학습을 진행하여 신속한 단일 패스(single-pass) 의사결정 점수 산출 구조를 구현했습니다. 향후 마이크로소프트 AI(MAI) 및 OpenAI 기반 모델로 재구축(rebase)될 예정입니다.</li>
+<li><strong>입출력 형식 및 단일 패스 구조의 이점:</strong>
+고정된 답변 옵션 집합(fixed set of answer options)이 입력으로 주어졌을 때, 단 한 번의 API 호출(single-pass)로 각 옵션에 대한 보정된 확률 점수(calibrated probability score)를 구조화된 형태(JSON 등)로 즉시 반환합니다. 이는 텍스트를 루프 형태로 생성하는 기존 LLM과 달리 소프트웨어 시스템이 반환된 객체를 즉시 파싱하여 후속 작업을 제어할 수 있게 합니다.</li>
+<li><strong>지원 기능 범위:</strong>
+<ul>
+<li>예/아니오 (Yes/No) 선택</li>
+<li>객관식 선택 (Multiple-choice)</li>
+<li>평점 옵션 (Rating options)</li>
+<li>루브릭(Rubric) 기반 AI 응답 평가 및 에이전트 행동 평가</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h6 id="2-4-논점-4-견고성-robustness-및-확률-교정-calibration">2.4 논점 4: 견고성(Robustness) 및 확률 교정(Calibration)</h6>
+<ul>
+<li><strong>입력 변형에 대한 견고성 (Robustness):</strong>
+실제 운영 환경에서는 동일한 요청이 들어오더라도 프롬프트 재구성, 옵션 설명 변경, 선택지 순서 변경, 키 변경, 서식 노이즈 등이 발생할 수 있습니다. 동일 요청에 대해 8가지 형태의 노이즈 및 변형을 가해 평가한 결과, Microsoft-Decision-1의 평균 결정 변경률(Decision flip rate)은 1.3% 수준에 불과했습니다. 특히 옵션 설명을 패러프레이징하거나 선택지 순서를 역전/무작위 섞기(shuffle)했을 때의 결정 변경률은 **0%**를 기록했습니다.</li>
+<li><strong>확률 및 신뢰도 교정 (Calibration)의 실무적 의미:</strong>
+확률 교정 점수(100점 = 완벽한 일치)는 모델이 출력한 확률 수치가 실제 정답률과 얼마나 일치하는지를 나타냅니다. 예컨대 90%의 예측 확률을 보인 결과가 실제로 10번 중 9번 정답을 맞추는 구조를 의미합니다. 의사결정 모델에서 출력되는 확률은 단순 순위 비교를 넘어, 자동화 시스템이 해당 작업을 즉시 자동 실행할지 아니면 인간 검토자에게 위임할지 판단하는 '임계값 설정(thresholding)'의 핵심 기준이 됩니다.
+<ul>
+<li><strong>Jev 1.13.0:</strong> 93.7점 (1위)</li>
+<li><strong>Quiet-1.0-Large:</strong> 93.1점 (2위)</li>
+<li><strong>Microsoft-Decision-1:</strong> 92.2점 (3위, 1위와 1.5점 차)</li>
+<li><strong>H2O-Lightning-4B v1.1 / Surrogate Rune 26B-A4B:</strong> 91.8점 (공동 4위)</li>
+<li><strong>GPT-6 Luna Decisions:</strong> 89.9점 (6위)</li>
+<li><strong>deck-31B:</strong> 83.5점 (7위)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h6 id="2-5-논점-5-안전성-safety-및-실무-내부-적용-사례">2.5 논점 5: 안전성(Safety) 및 실무 내부 적용 사례</h6>
+<ul>
+<li><strong>안전성 평가 성과:</strong>
+유해 콘텐츠, 프롬프트 인젝션(Prompt Injection), 탈옥 시도(Jailbreak attempts) 등이 포함된 11개 벤치마크, 총 5,250개의 요청을 대상으로 안전성 검증을 수행했습니다. 검증 결과, 유해 요청에 대한 거부 동작을 성공적으로 수행하는 동시에 정상 요청에 대한 유용성(utility)을 높은 수준으로 유지했습니다.</li>
+<li><strong>엑스박스 리서치(XBOX Research) 데이터 라벨링 실증 사례:</strong>
+엑스박스 리서치 팀은 설문조사, 스팀(STEAM) 리뷰, 트위터/X 등 다양한 채널에서 수집된 10,000개 이상의 주관식 피드백 및 리뷰를 연구진이 정한 주제(theme)별로 분류하는 작업에 Microsoft-Decision-1을 적용했습니다.
+<ul>
+<li><strong>품질:</strong> GPT-6 Sol과 동등한 수준의 분류 품질(competitive quality) 유지.</li>
+<li><strong>속도:</strong> GPT-6 Sol 대비 <strong>14배 이상 빠른</strong> 처리 속도 달성.</li>
+<li><strong>비용:</strong> GPT-6 Sol 대비 <strong>200배 이상 비용 절감</strong> 효과 달성.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-characters-and-speakers">3. 등장 인물 및 화자 (Characters and Speakers)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물명</th>
+<th style="text-align:left">소속 및 직책</th>
+<th style="text-align:left">역할 및 출처 내 비중</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>아친트 스리바스타바 (Achint Srivastava)</strong></td>
+<td style="text-align:left">마이크로소프트 CTO 실(Office of the CTO) 소프트웨어 엔지니어링 부사장 (VP of Software Engineering)</td>
+<td style="text-align:left">소스 기술 기사의 작성자이며 Microsoft-Decision-1의 출시 및 성능 데이터 발표 화자</td>
+</tr>
+<tr>
+<td style="text-align:left">기타 진행자 / 언급 인물</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 문서 내 개별 성명 언급 없음</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-시점-figures-and-timepoints">4. 주요 수치 및 시점 (Figures and Timepoints)</h5>
+<ul>
+<li>
+<p><strong>게시 및 데이터 확인 시점:</strong></p>
+<ul>
+<li><strong>기사 게시일:</strong> 2026년 10월 9일</li>
+<li><strong>JevBench 지연 시간 측정 확인일:</strong> 2026년 10월 7일</li>
+<li><strong>JevBench 리더보드 데이터 확인일:</strong> 2026년 10월 8일</li>
+<li><strong>원문 업데이트 노트(Editor's note):</strong> 원문 게시 후 Jev 모델의 정확도 및 확률 교정 벤치마크 데이터가 공식 업데이트되어 본문에 추가됨.</li>
+</ul>
+</li>
+<li>
+<p><strong>주요 정량 수치 모음:</strong></p>
+<ul>
+<li><strong>평가 데이터 규모:</strong> 36개 벤치마크, 147,137개 질문 (Accuracy 평가)</li>
+<li><strong>평균 정확도:</strong> Microsoft-Decision-1 (83.5%, 전체 1위)</li>
+<li><strong>지연 시간 수치:</strong> P50 85ms, P95 125ms</li>
+<li><strong>상대 속도 비교:</strong> H2O-Lightning-4B v1.1 대비 2.5배 고속, GPT-6 Sol(3,010ms) 대비 소스 명시 기준 35배(산출값 약 35.4배) 고속</li>
+<li><strong>견고성 평가 변형:</strong> 8가지 변형 테스트 시 평균 결정 변경률 1.3% (옵션 순서 역전/패러프레이징 시 0%)</li>
+<li><strong>확률 교정 점수:</strong> 92.2점 (전체 3위, 1위 Jev 1.13.0 93.7점 대비 1.5점 차)</li>
+<li><strong>안전성 평가 규모:</strong> 11개 벤치마크, 5,250개 요청</li>
+<li><strong>XBOX Research 적용 사례:</strong> 10,000개 이상의 피드백 분류, GPT-6 Sol 대비 &gt;14배 속도 향상, &gt;200배 비용 절감</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h5>
+<ol>
+<li><strong>GPT-6 Sol 모델 데이터의 기재 한계:</strong>
+프론티어 참조 모델로 사용된 GPT-6 Sol의 P50 지연 시간(3,010ms)과 XBOX 사례에서의 상대 속도/비용 비교 수치는 제공되나, 36개 벤치마크에 대한 정확도(Accuracy) 및 확률 교정 점수(Calibration Score)는 소스 데이터 표에 명시되어 있지 않아 수치를 확인할 수 없습니다.</li>
+<li><strong>Strands-Decider 2B 모델의 평가 조건 제약:</strong>
+Strands-Decider 2B 모델의 경우 전체 36개 벤치마크 중 응답이 가능했던 23개 벤치마크에 대해서만 평가가 진행되어(평균 54.8%), 다른 모델과의 완전한 동일 조건 비교에 제한이 존재합니다.</li>
+<li><strong>데모 영상 데이터의 정량적 지연 시간 미기재:</strong>
+문서 내 쿼리 분류 데모 및 백팩 구매(Computer use) 데모 설명에서 GPT-6 Sol 대비 속도와 정확성이 우수하다고 기술되었으나, 해당 데모들에 대한 ms 단위의 구체적인 정량 지연 시간 수치는 제시되지 않았습니다.</li>
+<li><strong>모델 아키텍처 및 세부 파라미터 정보의 제한:</strong>
+사후 학습된 <code>Qwen3.5-9B</code> 기반이라는 점 외에, 마이크로소프트의 자체적인 파라미터 조정 방식이나 향후 재구축 예정인 MAI 및 OpenAI 기반 아키텍처의 구체적인 세부 사양은 소스에 명시되지 않았습니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

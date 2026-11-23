@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Is Getting Good at Math. Here’s Why. — Latent Space</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>AI Is Getting Good at Math. Here’s Why. — Latent Space</h1>
+<p class="page-meta">웹 · 2026-10-25</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 수리적 분석 아티클 &quot;AI Is Getting Good at Math.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://latent.space/p/ai-is-getting-good-at-math">출처</a> · <a href="https://www.youtube.com/watch?v=bwv6M2M51Xw">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="ai의-수학적-문제-해결-능력-향상-원인-및-탐색-구조-분석-보고서">AI의 수학적 문제 해결 능력 향상 원인 및 탐색 구조 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 수리적 분석 아티클 &quot;AI Is Getting Good at Math. Here’s Why.&quot;(저자: 안키트 말루)의 내용을 바탕으로, 최근 대형 언어 모델(LLM)을 비롯한 인공지능(AI) 시스템이 수학적 난제 해결에서 보여주는 성과 향상의 원인과 문제 해결 알고리즘 및 탐색 구조의 변화를 종합 분석한다. 본 보고서는 서두에서 제시된 핵심 진단 질문—<strong>&quot;어떤 종류의 문제가 LLM에게 다루기 쉬운가(tractable)? 이 해법들의 공통점은 무엇인가? AI가 인간과 다르게 문제를 해결한다면 그 차이를 통해 AI를 어디로 향하게 할지 결정할 수 있는가?&quot;</strong>—에 답하는 것을 핵심 분석 목적으로 삼는다.</p>
+<p>소스 텍스트 서두 및 관련 자료에 명시된 사실에 따르면, 주요 AI 연구 기관인 OpenAI와 Anthropic은 2026년 타임라인상 최근 수개월 동안 괄목할 만한 수학적 성과를 거두었다. OpenAI의 내부 모델은 1946년부터 미해결 상태로 남아 있던 에르되시 단위 거리 추측(Erdős's unit distance conjecture)에 대한 반례를 2026년 5월에 발견했다. 한 달 뒤인 6월에는 사이클 더블 커버(Cycle Double Cover, CDC) 문제를 증명했고, 7월까지 10개의 미해결 문제를 추가 해결했으며, 9월에는 나비에-스토크스(Navier-Stokes) 방정식 관련 증명을 제시했다. Anthropic 역시 페르마의 마지막 정리(Fermat's Last Theorem)의 형식화와 리만 가설(Riemann Hypothesis) 관련 진전된 한계(bounds)를 발표했다.</p>
+<p>아티클의 'Problem complexity' 및 'AI and complexity' 섹션에서는 이러한 성과가 단순한 연산 능력의 확장이 아니라 문제 해결 탐색 패턴의 근본적 변화에서 기인했음을 밝힌다. 인간 연구자가 넓고 얕게 탐색하는 '너비 우선 탐색(BFS)' 방식을 취하며 경사도(Gradient)가 없는 통찰 문제에서 기회비용과 사기 저하로 조기 포기하는 반면, AI는 '깊이 우선 탐색(DFS)'과 자동 검증기(Automated verifier) 및 부정적 힌트(Negative hints) 피드백 루프를 결합하여 연산 자원(Compute)을 시간(Time)과 교환한다. 본 보고서는 수리적 복잡도 모델($2^k + t$, $b^k$)과 하네스(Harness) 구조를 중심으로 AI 수학적 탐색 능력의 성격과 한계를 기술적으로 정밀 검토한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments">2. 주요 논점 (Key Arguments)</h4>
+<h5 id="2-1-문제-복잡도-모델과-인간의-문제-해결-방식">2.1. 문제 복잡도 모델과 인간의 문제 해결 방식</h5>
+<ul>
+<li>
+<p><strong>[사실]</strong>:
+'Problem complexity' 섹션에서 WT 고워스(WT Gowers)는 수학적 증명의 난이도를 &quot;전문가가 증명을 재구성할 수 있도록 돕는 가장 짧은 힌트 시퀀스의 길이&quot;로 정의하고, 이를 '전문가 기준 콜모고로프 복잡도(Kolmogorov complexity modulo experts)'라고 명명했다. 고워스가 제시한 복잡도 공식은 다음과 같다.
+$$\text{Complexity} = 2^k + t$$
+여기서 $k$는 가장 짧은 힌트(통찰) 시퀀스의 길이이며, $t$는 전문가에게 통찰과 힌트 사이의 작업량을 나타내는 유용한 대리 지표(proxy)인 시간과 노력이다. 힌트는 다음 2가지 핵심 특성을 갖는다:</p>
+<ol>
+<li><em>표현과 이해의 전환</em>: 힌트 제공 전의 희박한 가능성 대(vs) 힌트 제공 후의 명백함 사이에 거대한 격차가 존재한다.</li>
+<li><em>순서 의존성(Ordered sequence)</em>: 힌트는 엄격한 순서를 갖는다. 예를 들어 3번째 힌트는 앞선 2개 힌트의 작업이 완료되어야만 실행 가능하며, 이는 수천 가지 수학적 기법을 무작위로 조합하는 단순 무력(Brute-force) 접근을 불가능하게 만든다.</li>
+</ol>
+<p>메트칼프와 위브(Metcalfe and Wiebe)의 실험에서는 일반 문제의 경우 해결 과정에서 피험자의 진전감(feeling of progress)이 지속 상승하지만, 통찰 문제(Insight problems)는 15초 간격 측정에서 정답 직전까지 진전감이 0에 가깝게 평평하게 유지됨을 입증했다. 또한 OpenAI에 채용된 수학자 제이콥 치머만(Jacob Tsimerman)은 에르되시 반례 탐색 중 수 주 동안 성과 없이 늪에 빠진 느낌을 받고 작업을 중단했던 경험을 밝혔다. 소스 각주에 따르면 인간 연구자는 가장 생산적인 10년 동안 아이디어당 3개월이 소요될 때 시도할 수 있는 진지한 기회(bet)가 약 20회에 불과하다.</p>
+</li>
+<li>
+<p><strong>[소스의 주장]</strong>:
+인간의 문제 해결 방식은 '너비 우선 탐색(Breadth-first search)' 구조다. 연구자는 여러 후보 방향을 설정하고 얕게 탐색한 뒤 초기 신호가 없으면 대부분 포기한다. 한 아이디어를 발전시키는 작업($t$)에 수개월이 걸리고 생애 기회비용(약 20회의 시도)이 매우 높기 때문에 탐색 착수 전 높은 확신이 요구된다. 그러나 통찰 문제에는 진전감을 알려주는 경사도가 없다. 따라서 장기간 확신 없이 탐색을 유지하는 과정에서 작업 기억 용량 초과, 사기 저하, 커리어적 리스크 등 인간적 제약이 발생하여 유망한 경로라도 조기에 포기하게 된다.</p>
+</li>
+<li>
+<p><strong>[작성자의 해석]</strong>:
+인간 수학자의 조기 포기 양상은 높은 탐색 비용($t$) 및 극도로 제한된 기회비용을 최적화하기 위한 합리적 행동 방식이다. 경사도가 존재하지 않는 통찰 문제의 특성상, 성공 여부를 알 수 없는 미개척 경로에 수개월을 바치는 것은 커리어 차원의 고위험 투자가 되므로 인간의 탐색은 '넓고 얕은 탐색 후 정체 시 조기 포기' 패턴으로 수렴한다.</p>
+</li>
+</ul>
+<h5 id="2-2-ai의-깊이-우선-탐색-depth-first-search-과-하네스-구조">2.2. AI의 깊이 우선 탐색(Depth-First Search)과 하네스 구조</h5>
+<ul>
+<li>
+<p><strong>[사실]</strong>:
+대형 언어 모델(LLM)의 생성 과정(CoT)은 단일 경로를 끝까지 추구하는 탐욕적 '깊이 우선 탐색(DFS)' 방식으로 작동한다. 테스트 타임 연산(Test-time compute)과 병렬 에이전트를 결합하면 다수의 경로를 동시 다발적으로 결론까지 전개하여 완성된 논증들을 출력하며, 이 과정에서 수많은 '거짓 증명(False proofs)'이 양산된다. 하네스(Harness) 시스템은 자동 검증기(Automated verifier)를 결합하여 작성자(Drafter), 해결자(Solver), 검증자/확인자(Verifier/Checker)의 3가지 핵심 요소로 동작한다.</p>
+<p>OpenAI의 CDC(Cycle Double Cover) 프롬프트 실제 예시에서는 다음과 같은 정교한 제약 지침이 적용되었다:</p>
+<ol>
+<li><em>“본 과제를 위해 완전한 긍정적 증명이 존재한다고 가정하라”</em> (프리트레이닝을 통해 학습된 문제의 '미해결 상태'를 탐색 중단 이유로 삼는 것을 방지).</li>
+<li><em>부분적 대체재나 특수 그래프 클래스 등 미완성 해법 제출 금지.</em></li>
+<li><em>적대적 검증 대상 명시</em>: 단순 오류 검출을 넘어 <strong>정확히 2의 중복도(exact-two multiplicity), 순환으로 위장한 중복 변 폐쇄 트레일(repeated-edge closed trails masquerading as cycles), 병렬 변 2-순환(parallel-edge 2-cycles), 끊어진 그래프(disconnected graphs), 절단점(cutvertices), 축약으로 도입된 교량(bridges), CDC 동치 진술의 순환 사용(circular use of an equivalent CDC statement)</strong> 등 구체적 실패 패턴 목록을 적대적 에이전트 상시 검증 항목으로 지정.</li>
+<li><em>학습된 게으름(Learned laziness) 방지</em>: 단순 접근 실패나 에이전트의 갭 보고를 이유로 작업을 중단하지 말 것.</li>
+</ol>
+</li>
+<li>
+<p><strong>[소스의 주장]</strong>:
+AI는 막대한 연산 자원을 소모해 탐색 완료 시간을 수 분 단위로 단축시킴으로써 연산 비용을 시간과 교환한다. 이 구조에서 작성자(Drafter)는 모델의 사전 지식(priors)을 활용하고 이전 실행의 오류를 완화하며, 아무런 성과를 내지 못한 유망 경로들을 '부정적 힌트(Negative hints)'로 전환하여 프롬프트를 재작성함으로써 다음 반복 시 해결자(Solver)가 해당 오답 경로를 피하도록 피드백 루프를 형성한다.</p>
+</li>
+<li>
+<p><strong>[작성자의 해석]</strong>:
+LLM 혼자서는 설득력 있는 거짓 증명을 남발하는 한계가 있으나, 완성된 논증만을 판별하는 자동 검증기와 실패 기록을 다음 시도의 탐색 제약으로 변환하는 작성자-해결자 피드백 루프가 결합하면서 비로소 하네스 기반의 자동화된 수학적 탐색 체계가 성립한다.</p>
+</li>
+</ul>
+<h5 id="2-3-분기-계수-branching-factor-및-모델-능력의-변화">2.3. 분기 계수(Branching Factor) 및 모델 능력의 변화</h5>
+<ul>
+<li>
+<p><strong>[사실]</strong>:
+고워스의 공식에 각 단계별 가능한 다음 힌트의 수인 '분기 계수(Branching factor, $b$)'를 도입하면 전체 탐색 경로는 $b^k$ ($k$는 힌트 수)가 된다. 가지치기(Pruning)의 3가지 주체 및 시점은 다음과 같이 구별된다:</p>
+<ol>
+<li><strong>검증자(Verifier)</strong>: 이미 완료된(completed) 경로를 검증하여 가지치기함.</li>
+<li><strong>작성자(Drafter)</strong>: 부정적 힌트를 바탕으로 미래의(future) 미개척 경로를 좁혀(narrowing) 가지치기함.</li>
+<li><strong>중간 단계(In the middle)</strong>: 가지치기 신호(경사도)가 없으므로 모든 분기를 탐색해야 함. 이때 **자체 검증(Self-verification)**은 경로 내의 구문적/수학적 오류 단계만 걸러낼 뿐, 문법적으로는 맞지만 결국 오답으로 통하는 경로는 걸러내지 못함.</li>
+</ol>
+<p>올해 AI 모델에서는 3가지 핵심 기능이 향상되었다:</p>
+<ul>
+<li><strong>원시 연산 체이닝(Chaining primitives)</strong>: 1단계의 아티팩트를 장기 과제의 $n$번째 단계에서 활용하도록 학습하여 $t$ 비용 단축.</li>
+<li><strong>자체 검증(Self-verification)</strong>: 문법적/구문론적 오류를 인간이나 외부 검증기 개입 전에 경로 내에서 자체 포착.</li>
+<li><strong>오케스트레이션(Orchestration)</strong>: 하위 에이전트 제어 및 메모리 활용을 통한 실패 경로 배제.</li>
+</ul>
+<p>사이버 보안 영역은 기존 문헌에 이미 익스플로잇 체인 구조가 존재하여 모델이 슬롯(slot)을 채우기만 하면 되었기에 중간 단계 분기 계수가 $b \approx 1\text{--}2$로 낮아 가장 먼저 해결되었다. 반면 나비에-스토크스 증명(Córdoba와 Martínez-Zoroa의 기존 선행 연구를 이어받아 완성)에는 10,000개의 에이전트가 투입되어 88시간 동안 3,000억(300B) 토큰을 소비했다.</p>
+</li>
+<li>
+<p><strong>[소스의 주장]</strong>:
+AI 모델은 $b^k \times \text{연산 비용}$의 값이 작은 문제 영역에서 압도적 성과를 거둔다. 즉, 개념적 도약($k$)이 이미 완료되었거나 분기 계수($b$)가 극도로 작아 해법 공간이 narrow하게 좁혀진 문제일수록 AI 적용 적합성이 높다. 반대로 $b$와 $k$가 모두 큰 문제는 연산 자원이 폭발하므로 AI에게도 여전히 난제로 남는다.</p>
+</li>
+<li>
+<p><strong>[작성자의 해석]</strong>:
+AI의 수학적 성과는 순수한 독창적 직관의 산물이라기보다, 분기 계수가 좁혀진 영역에서 인간 연구자가 사기 저하로 버티지 못하는 지루하고 복잡한 계산 및 검증 작업을 대규모 병렬 연산으로 밀어붙여 완주해낸 결과다.</p>
+</li>
+</ul>
+<h5 id="2-4-인간과-ai의-상호-보완성과-수학의-본질적-목적">2.4. 인간과 AI의 상호 보완성과 수학의 본질적 목적</h5>
+<ul>
+<li>
+<p><strong>[사실]</strong>:
+인간 연구자는 직관과 직관적 통찰을 통해 탐색의 가지 자체를 줄이는 능력(Shrinking branches)에 강점이 있으며, AI 모델은 특정 가지를 끝까지 추적하여 오답임을 확인하고 쳐내는 시간을 단축하는 능력(Shrinking the time to prune a branch)에 강점이 있다. 테렌스 타오(Terence Tao)는 수학의 더 깊은 목적이 단순한 정리나 증명의 출력이 아니라 '수학적 이해의 발전(Developing our understanding)'에 있다고 지적했다.</p>
+</li>
+<li>
+<p><strong>[소스의 주장]</strong>:
+실패의 정보 가치는 그 뒤에 있는 확신(conviction)의 크기에 비례한다. 인간의 실패는 높은 확신을 가진 전문가가 수개월을 바쳤다는 사실 자체로 인해 강력한 통찰과 도구를 남긴다. 반면 AI의 실패는 대량의 나이브(Naive)한 시도를 포함하며, 인간 연구자가 이를 직접 확인하거나 이해하기 어렵다. AI가 축적한 부정적 힌트(실패 기록)가 인간에게 투명하게 공개되고 해석 가능해질 때만 수학적 이해의 발전이라는 상호 보완적 목적이 달성된다.</p>
+</li>
+<li>
+<p><strong>[작성자의 해석]</strong>:
+인간이 고차원적 직관으로 분기 공간($b$)을 좁혀주고, AI가 해당 공간 내부의 개별 경로들을 신속하게 끝까지 검증 및 가지치기($t$ 단축)해주는 형태가 가장 이상적인 미래 수학 연구 프레임워크다.</p>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-persons-and-speakers">3. 등장 인물 및 화자 (Persons and Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물명 (Name)</th>
+<th style="text-align:left">소속 및 역할 (Affiliation/Role)</th>
+<th style="text-align:left">주요 발언 및 기여 내용 (Key Statements/Contributions)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>안키트 말루 (Ankit Maloo)</strong></td>
+<td style="text-align:left">본 아티클의 저자 (Senior Author)</td>
+<td style="text-align:left">AI의 수학 문제 해결 원인 분석, 고워스 복잡도 모델 응용, 하네스 및 탐색 알고리즘 구조화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>WT 고워스 (WT Gowers)</strong></td>
+<td style="text-align:left">수학자 (Mathematician)</td>
+<td style="text-align:left">전문가 기준 콜모고로프 복잡도 공식($2^k + t$, $b^k$) 제안, 인간과 AI의 탐색 패턴 및 한계 분석</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>제이콥 치머만 (Jacob Tsimerman)</strong></td>
+<td style="text-align:left">수학자 / OpenAI 채용 인력</td>
+<td style="text-align:left">에르되시 반례 탐색 중 수 주간 정체되어 중단했던 경험 증언 및 AI가 험난한 영역을 포기 없이 탐색하는 우위성 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아룰 샹카르 (Arul Shankar)</strong></td>
+<td style="text-align:left">수학자 / 연구자 (<em>소속 상세 확인 불가</em>)</td>
+<td style="text-align:left">AI 모델이 아이디어를 빠르게 검토하다가 핵심 아이디어 문단(&quot;Suppose optimistically that...&quot;)에 다다르자 체계적으로 증명에 집중했다고 관찰/증언</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>테렌스 타오 (Terence Tao)</strong></td>
+<td style="text-align:left">수학자 (Mathematician)</td>
+<td style="text-align:left">수학의 진짜 목적은 증명 출력이 아닌 '이해의 발전'이며, 과정 제시 없는 결과 발표는 본질을 간과한 것이라 지적</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코르도바 및 마르티네스-조로아 (Córdoba and Martínez-Zoroa)</strong></td>
+<td style="text-align:left">수학자 (<em>소속 상세 확인 불가</em>)</td>
+<td style="text-align:left">나비에-스토크스 방정식 관련 선행 연구 수행. OpenAI 모델은 이들의 미완성 작업을 이어받아 166페이지 증명으로 완성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>데미스 허사비스 (Demis Hassabis)</strong></td>
+<td style="text-align:left">AI 연구자 및 리더 (<em>개별 소속 상세 확인 불가</em>)</td>
+<td style="text-align:left">1901년 이전 물리학 데이터를 학습시켜 AI가 일반 상대성 이론을 도출할 수 있는지 테스트하자는 벤치마크 제안/논의</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>자하비 (Zahavy)</strong></td>
+<td style="text-align:left">AI 연구자 (<em>개별 소속 상세 확인 불가</em>)</td>
+<td style="text-align:left">1901년 이전 데이터 기준 일반 상대성 이론 도출 가능성 논의 관련 언급 인물</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아담 브라운 (Adam Brown)</strong></td>
+<td style="text-align:left">AI 연구자 (<em>개별 소속 상세 확인 불가</em>)</td>
+<td style="text-align:left">1901년 이전 데이터 기준 일반 상대성 이론 도출 가능성 논의 관련 언급 인물</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아인슈타인 (Einstein)</strong></td>
+<td style="text-align:left">물리학자 (Physicist)</td>
+<td style="text-align:left">1907년 사고실험(&quot;추락하는 사람은 무게를 느끼지 못한다&quot;)을 시작으로 8년간의 수학 작업을 거쳐 일반 상대성 이론 완성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>메트칼프 및 위브 (Metcalfe and Wiebe)</strong></td>
+<td style="text-align:left">심리학자 / 통찰 연구자 (<em>소속 상세 확인 불가</em>)</td>
+<td style="text-align:left">일반 문제와 통찰 문제 해결 과정에서 15초 간격으로 피험자의 '진전감'을 측정한 실험을 수행하여 통찰 문제의 경사도 부재 입증</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-numbers-and-timeframes">4. 수치 및 시점 (Numbers and Timeframes)</h4>
+<ul>
+<li><strong>아티클 게재 시점 및 읽기 소요 시간</strong>: 10월 23일 (Oct 23), 분량 16 min read.</li>
+<li><strong>OpenAI 및 Anthropic의 주요 성과 발표 시점 (2026년 타임라인)</strong>:
+<ul>
+<li><strong>2026년 5월</strong>: OpenAI 내부 모델, 에르되시 단위 거리 추측 반례 발견.</li>
+<li><strong>2026년 6월 (한 달 뒤)</strong>: OpenAI, 사이클 더블 커버(CDC) 문제 증명 발표.</li>
+<li><strong>2026년 7월</strong>: OpenAI, 10개 미해결 문제 추가 솔루션 발표.</li>
+<li><strong>2026년 9월</strong>: OpenAI, 나비에-스토크스 방정식 관련 증명 발표.</li>
+<li><strong>Anthropic 발표 시점</strong>: 페르마의 마지막 정리 형식화 및 리만 가설 한계 진전 발표 (<em>구체적 월/일시 확인 불가</em>).</li>
+</ul>
+</li>
+<li><strong>에르되시 단위 거리 추측 미해결 기간</strong>: 1946년부터 미해결 상태 유지.</li>
+<li><strong>나비에-스토크스 증명 관련 수치</strong>:
+<ul>
+<li>증명 문서 분량: 166페이지 (166 pages).</li>
+<li>투입 에이전트 수: 10,000개 (10,000 agents).</li>
+<li>소요 시간: 88시간 (88 hours).</li>
+<li>소비 토큰 수: 3,000억 개 (300B tokens).</li>
+</ul>
+</li>
+<li><strong>일반 상대성 이론(GR) 관련 시점 및 기간</strong>:
+<ul>
+<li>AI 성능 평가 벤치마크 학습 데이터 컷오프 기준 시점: 1901년 이전 데이터.</li>
+<li>아인슈타인의 사고실험 시점: 1907년 (&quot;추락하는 사람은 자신의 무게를 느끼지 못한다&quot;).</li>
+<li>수학적 방정식 완성까지 걸린 기간: 8년 (eight years).</li>
+</ul>
+</li>
+<li><strong>사이버 보안 분기 계수</strong>: 중간 단계(Intermediate steps)의 분기 계수 $b \approx 1\text{--}2$.</li>
+<li><strong>인간 연구자 생산성 및 실험 관련 수치</strong>:
+<ul>
+<li>연구자의 가장 생산적인 10년 동안 시도할 수 있는 3개월 단위 아이디어 기회: 약 20회 (twenty serious bets).</li>
+<li>메트칼프 및 위브 실험의 진전감 측정 주기: 매 15초마다 (every fifteen seconds).</li>
+</ul>
+</li>
+<li><strong>주요 수학적 복잡도 수식</strong>:
+<ul>
+<li>고워스의 복잡도 공식: $2^k + t$ ($k$: 힌트 시퀀스 길이, $t$: 발전 노력/시간).</li>
+<li>분기 계수 포함 탐색 경로 수: $b^k$ ($b$: 분기 계수).</li>
+</ul>
+</li>
+<li><strong>행사 일정</strong>: San Francisco AIE Code Summit 2026 (2026년 11월 10일~12일, Hilton Union Square).</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<ul>
+<li>
+<p><strong>일반 상대성 이론(GR) 1901년 데이터 테스트의 분석적 한계 (굿하트의 법칙)</strong>:
+1901년 이전 데이터로 일반 상대성 이론을 도출하는 벤치마크는 &quot;중력을 기하학으로 취급하라&quot;는 단 하나의 비직관적 힌트만 찾아내면 해법 공간 및 분기 계수($b$)가 급격히 축소되는 특성을 갖는다. 모델이 수많은 오답 경로(평면 공간에서의 장, 수성 근일점 세차운동 불일치 등)를 거친 후 이 힌트를 찾아내 수학적 완성을 이루는 것은 <strong>굿하트의 법칙(Goodhart's law)에 의해 과장되거나 빠르게 달성될 수 있으며, 이것이 AI의 완전한 창의적 통찰력을 보장하는 안정적 벤치마크가 아닐 수 있다는 불확실성</strong>이 존재한다.</p>
+</li>
+<li>
+<p><strong>수학적 탐색 능력의 비견고성</strong>:
+치머만(Tsimerman)의 지적대로 포기하지 않고 험난한 영역을 탐색하는 AI의 우위가 관찰되지만, 소스 텍스트 본문에 명시되었듯 **&quot;이것이 아직 모든 영역에서 안정적으로/견고하게 참(robustly true)은 아니며, 단지 징후적 사건(foreshadowing event)일 수 있다&quot;**는 불확실성이 존재한다.</p>
+</li>
+<li>
+<p><strong>실패 기록(Negative Hints)의 투명성 부재</strong>:
+AI 하네스 시스템이 생성한 대규모 실패 시도의 이유와 맥락을 인간 연구자가 직접 검토하고 이해하는 것이 불가능하다. 공유되지 않는 실패 기록은 수학적 이해의 발전에 기여하지 못한다.</p>
+</li>
+<li>
+<p><strong>소스 내 구체적 언급 부재로 확인 불가한 정보 목록</strong>:</p>
+<ul>
+<li>아룰 샹카르(Arul Shankar), 코르도바 및 마르티네스-조로아(Córdoba and Martínez-Zoroa), 데미스 허사비스(Demis Hassabis), 자하비(Zahavy), 아담 브라운(Adam Brown)의 구체적인 소속 기관 및 정확한 직함: <strong>&quot;확인 불가&quot;</strong></li>
+<li>Anthropic이 페르마의 마지막 정리 형식화 및 리만 가설 성과를 발표한 정확한 월/일시: <strong>&quot;확인 불가&quot;</strong></li>
+<li>CDC 문제 증명에 사용된 구체적인 연산량, 에이전트 수, 토큰 소비량: <strong>&quot;확인 불가&quot;</strong> (나비에-스토크스 사례와 달리 CDC 수치는 본문에 제시되지 않음)</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

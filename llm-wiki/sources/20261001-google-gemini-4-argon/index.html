@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini 4 Argon: our next era of frontier intelligence</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Gemini 4 Argon: our next era of frontier intelligence</h1>
+<p class="page-meta">웹 · 2026-10-01</p>
+<h2 id="요약">요약</h2>
+<p>구글이 공식 발표한 제미나이 4 아르곤(Gemini 4 Argon)은 복잡한 장기 복합 업무(long-horizon workflows)를 지속해서 수행할 수 있도록 설계된 차세대 프론티어 AI 모델이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/">출처</a> · <a href="https://www.youtube.com/watch?v=8qIDyYkaEyY">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="구글-제미나이-4-아르곤-gemini-4-argon-기술-분석-및-배포-보고서">구글 제미나이 4 아르곤(Gemini 4 Argon) 기술 분석 및 배포 보고서</h3>
+<h5 id="1-제미나이-4-아르곤-개요-및-출력을-위한-추론-역량">1. 제미나이 4 아르곤 개요 및 출력을 위한 추론 역량</h5>
+<p>구글이 공식 발표한 제미나이 4 아르곤(Gemini 4 Argon)은 복잡한 장기 복합 업무(long-horizon workflows)를 지속해서 수행할 수 있도록 설계된 차세대 프론티어 AI 모델이다. 본 모델은 실제 소프트웨어 엔지니어링, 법률 및 재무를 포함한 기업 지식 업무, 방어적 사이버보안 분야에서 높은 수준의 복합 추론 성과를 제공한다.</p>
+<ul>
+<li><strong>최대 출력 토큰 한도 확장과 추론 깊이 향상:</strong> 제미나이 4 아르곤은 복잡한 문제 해결 과정에서 모델의 <strong>'최대 출력 토큰(Output Token Limit)'을 기존 6만 4천(64K) 토큰에서 업계 최고 수준인 100만(1M) 토큰으로 대폭 확장</strong>했다.</li>
+<li><strong>입력 문맥 한도와의 구별:</strong> 본 모델에서 밝힌 100만 토큰 한도는 프롬프트 입력 용량을 뜻하는 **'입력 문맥 한도(Input Context Limit)'가 아닌, 모델이 단일 실행 과정에서 자율적으로 생성할 수 있는 '최대 출력 토큰 한도'**임을 구체적으로 명시한다.</li>
+<li><strong>장기 추론 효과:</strong> 단일 실행 과정(trajectory) 내에서 수십만 토큰을 생성할 수 있는 공간을 확보함에 따라, 모델이 깊은 추론을 지속하고 다단계 복잡한 문제를 한 번에 완결성 있게 해결하는 능력이 크게 향상되었다.</li>
+</ul>
+<h5 id="2-구글-내부-엔지니어링-적용-사례-분석">2. 구글 내부 엔지니어링 적용 사례 분석</h5>
+<p>다음 사례들은 독립 검증 조사가 아닌 &quot;구글이 발표한 내부 성과 및 주장&quot;에 기반한 구글 엔지니어링 팀의 제미나이 4 아르곤 실제 적용 결과이다.</p>
+<ul>
+<li><strong>양자 알고리즘 최적화:</strong> 양자 컴퓨팅 연구진이 주요 애플리케이션의 병목이 되는 서브루틴의 공간시간 자원(큐비트 × 게이트)을 최적화하는 데 제미나이 4 아르곤을 적용했다. 그 결과, 기존 출판된 기준선(baseline) 대비 자원 효율성을 단 몇 분 만에 40% 향상시키는 성과를 거두었다.</li>
+<li><strong>메모리 효율성 극대화:</strong> 제미나이 4 아르곤 에이전트가 데이터센터 전역의 프로파일링 텔레메트리 데이터를 자율 분석하여 메모리 최적화 방안을 도출했다. 이를 적용하여 우선 300 TiB 이상의 메모리를 즉시 확보했으며, 향후 총 500 TiB에서 1 PiB 규모의 메모리 절감 효과가 발생할 것으로 구글은 예상하고 있다.</li>
+<li><strong>대규모 코드베이스 이관 및 최적화:</strong> 구글 내부의 C/C++ 코드베이스를 러스트(Rust) 언어로 전환하는 대규모 이관 작업에 에이전트가 투입되었다.
+<ul>
+<li><strong>규모별 구분 적용:</strong> <code>re2</code>, <code>libgav1</code> 등 핵심 라이브러리 수준의 수만 줄 코드 작업부터 <code>Fuchsia OS Zircon</code> 커널의 80만 줄 이상에 달하는 대규모 시스템 코드베이스 이관까지 성공적으로 수행했다. 시스템의 중요성을 감안하여 에뮬레이션 테스트 및 자동·수동 감사 과정을 거쳐 완료되고 있다.</li>
+<li><strong>libgav1 비디오 데코더 최적화:</strong> 오픈소스 비디오 데코더인 <code>libgav1</code> 작업에서 에이전트는 프로파일 기반 실험과 컴파일러 출력 분석을 수행했다. 기존 3만 2천 줄의 SIMD 코드를 컴파일러가 자동 벡터화할 수 있는 안전한 러스트(Safe Rust) 코드로 대체했다. 그 결과 동일한 비디오 출력을 유지하면서 기존 러스트 이식 버전 대비 2.7배 빠른 실행 속도를 달성하여, 최적화된 C++ 성능에 근접한 메모리 안전 데코더를 구현했다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="3-영역별-벤치마크-성과-및-기업-지식-업무-역량">3. 영역별 벤치마크 성과 및 기업 지식 업무 역량</h5>
+<p>제미나이 4 아르곤이 거둔 영역별 평가 지표 결과는 다음과 같다. 아래 수치는 모두 &quot;구글 발표 수치&quot;이다.</p>
+<ul>
+<li><strong>소프트웨어 엔지니어링:</strong> 실제 환경의 장기 복합 소프트웨어 엔지니어링 업무 역량을 평가하는 DeepSWE v1.1에서 77.9%의 점수를 기록하며 최고 성과(State of the art)를 달성했다.</li>
+<li><strong>기업 지식 및 자동화 업무:</strong>
+<ul>
+<li><strong>Vals Index 1위:</strong> 미국 GDP 기여도로 가중치를 둔 기업 업무 종합 평가인 Vals Index에서 재무, 코딩, 법률, 세무 전 영역에 걸쳐 최고 성과를 기록했다.</li>
+<li><strong>전문 영역 평가:</strong> 다단계 재무 연구 평가인 Vals Finance Agent v2 및 법률 연구·작성 평가인 Harvey Legal Agent Benchmark에서 우위를 입증했다.</li>
+<li><strong>업무 자동화:</strong> Zapier의 핵심 비즈니스 기능 엔드투엔드 실행 평가인 AutomationBench에서 51.3%의 점수로 1위를 차지했다.</li>
+</ul>
+</li>
+<li><strong>시각적 이해 및 영상 분석:</strong>
+<ul>
+<li><strong>LVBench 1위:</strong> 장문 영상 이해도를 측정하는 LVBench에서 91.7%의 점수로 최고 성능을 기록했다.</li>
+<li><strong>멀티모달 수행 능력:</strong> 전문적인 차트 분석, 긴 비디오 내 세부 정보 포착, 일련의 문서 집합을 기반으로 한 작업 실행 역량을 갖추고 있다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-방어적-사이버보안-역량과-통제-원칙">4. 방어적 사이버보안 역량과 통제 원칙</h5>
+<p>구글은 제미나이 4 아르곤을 공격 수행이 아닌 사이버 방어자를 지원하기 위한 목적에 집중하여 학습시켰으며, 이에 따른 통제 원칙을 적용하고 있다.</p>
+<ul>
+<li><strong>취약점 자동 방어:</strong> 제미나이 4 아르곤은 소프트웨어의 중대한 보안 취약점을 자율적으로 탐지하고, 이를 검증하며, 패치(수정)하는 방어 역량을 보유하고 있다.</li>
+<li><strong>신뢰받는 방어자 대상 접근 (Fairwind Program):</strong> 신뢰할 수 있는 사이버 방어자 및 구글 내부 팀에는 보안 가드레일이 제거된 버전을 페어윈드 프로그램(Fairwind Program)을 통해 제공한다. 이를 통해 방어자가 최고 수준의 보안 기술을 제약 없이 활용할 수 있도록 지원한다.</li>
+<li><strong>실제 보안 파트너십 사례:</strong> 보안 기업 Wiz는 공공 인프라 보호를 위한 'Scan for Good' 이니셔티브에 제미나이 4 아르곤을 적용했다. 이 과정에서 전 세계 병원에서 사용하는 의료 소프트웨어 내에 개인정보를 노출시키는 중대한 취약점을 발견하여 해결했다. 이는 기존 프론티어 모델들이 감지하지 못했던 위험 요소였다.</li>
+<li><strong>보안 벤치마크 성과:</strong>
+<ul>
+<li><strong>CWE-bench v1:</strong> 보안 취약점 패치 능력을 평가하는 CWE-bench v1에서 68%의 점수로 공동 1위를 기록했다. 이는 이전 모델인 3.8 Flash Cyber가 CWE-bench v0에서 달성했던 프론티어 성과를 직접적으로 계승 및 확장한 결과이다.</li>
+<li><strong>구글 내부 보안 평가:</strong> 20개 프로그래밍 언어로 작성된 복잡한 코드베이스 상에서 넓은 범위의 노출 위험을 성공적으로 탐지했다.</li>
+<li><strong>Wiz 블랙박스 모의 침투 테스트:</strong> 소스 코드 없이 라이브 웹 시스템을 분석하는 평가에서 3.8 Flash Cyber 모델을 상회하여 공격 표면 탐지, 취약점 식별, 개념 증명(PoC) 증거 생성 능력을 입증했다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-프론티어-안전장치-및-단계적-통제-정책">5. 프론티어 안전장치 및 단계적 통제 정책</h5>
+<p>구글은 일반 공개에 앞서 모델의 안전성을 확보하기 위해 4대 핵심 통제 영역을 강화하고 있다.</p>
+<ul>
+<li><strong>남용 방지 (Defending against misuse):</strong>
+<ul>
+<li>사이버 공격 및 화학·생물·방사능·핵(CBRN) 공격 남용을 방지하기 위해 유해 요청 거부 디자인을 적용하면서도 정당한 이중 용도 과학 연구는 허용한다. 이는 구글의 <strong>프론티어 안전 프레임워크(Frontier Safety Framework)</strong> 지침을 엄격히 준수한다.</li>
+<li>남용 감지를 위해 모델의 내부 활성화(Internal Activations) 모니터링 기술을 강화했다.</li>
+<li>수동 및 자동 방식을 조합한 내부·외부 레드팀의 적대적 공격 테스트를 거쳤다.</li>
+</ul>
+</li>
+<li><strong>프롬프트 주입 방지 (Prompt Injection):</strong>
+<ul>
+<li>악의적인 지시나 문맥으로 모델 동작을 하이재킹하는 간접 프롬프트 주입(Indirect Prompt Injection) 공격에 대비해 자동화된 레드팀 공격 및 적대적 훈련을 수행했다.</li>
+<li>Gray Swan의 간접 프롬프트 주입(IPI) 벤치마크에서 우수한 방어 성능을 입증했다.</li>
+</ul>
+</li>
+<li><strong>정렬 어긋남 모니터링 (Misalignment):</strong>
+<ul>
+<li>모델이 사용자의 의도를 벗어나 인가되지 않은 방식으로 임무를 수행하는 것을 막기 위해 생각의 사슬(Chain-of-thought) 및 행동을 모니터링하고, 필요시 실행을 즉시 중단하는 시스템을 운용한다.</li>
+<li>학습 과정 모니터링 중 이상 징후가 감지되면 **전담 사고 대응 팀(dedicated incident response team)**으로 실시간 알림이 전송되는 체계를 운용했다.</li>
+<li>모니터링 감지 결과가 학습 데이터로 재입력되어 모델이 모니터링을 회피하는 기만을 학습하지 않도록 조치했다. 또한 구글은 AI 산업 전반이 이러한 역량 도약의 시점에 **추론 투명성을 보존할 것(preserve reasoning transparency)**을 강력히 촉구하고 있다.</li>
+</ul>
+</li>
+<li><strong>시스템 요새화 (Hardening systems):</strong>
+<ul>
+<li>고위험 학습 및 평가가 시작되기 전에 격리되고 봉쇄된 안전한 샌드박스 환경을 구축했다(에이전트 통제 로드맵 적용).</li>
+<li>이러한 에이전트 보안 모범 사례를 외부 파트너들과 공유하고 있다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="6-가격-정책-및-배포-계획">6. 가격 정책 및 배포 계획</h5>
+<p>제미나이 4 아르곤은 개발자, 전문가 및 기업 고객이 가장 까다로운 문제를 해결할 수 있도록 돕기 위해 설계되었으며, 안전성 검증 절차에 따라 단계적으로 배포된다.</p>
+<h6 id="배포-일정-및-접근-권한">배포 일정 및 접근 권한</h6>
+<ul>
+<li><strong>우선 제공:</strong> 페어윈드 프로그램(Fairwind Program)을 통해 신뢰할 수 있는 사이버 방어자 집단에 우선 제공된다.</li>
+<li><strong>정부 협력:</strong> 일반 공개 전 모델 접근을 위해 미국 정부의 자율적 절차(voluntary process)에 참여하고 있다.</li>
+<li><strong>향후 제공 대상:</strong> 초기 테스터의 피드백을 반영하여 가드레일을 보완한 후, 유료 API 고객 및 Google AI Ultra 구독자를 시작으로 개발자, 전문가, 기업 고객 전반에 순차적으로 배포될 예정이다.</li>
+</ul>
+<h6 id="가격-체계-비교">가격 체계 비교</h6>
+<p>출시 초기 프로모션 할인 가격과 프로모션 기간 종료 후 적용될 정가 정책 비교는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">출시 초기 프로모션 가격</th>
+<th style="text-align:left">정가 (프로모션 기간 종료 후)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>입력 토큰 (Input Tokens)</strong></td>
+<td style="text-align:left">$2 / 1M 토큰</td>
+<td style="text-align:left">$4 / 1M 토큰</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>출력 토큰 (Output Tokens)</strong></td>
+<td style="text-align:left">$10 / 1M 토큰</td>
+<td style="text-align:left">$20 / 1M 토큰</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>캐시된 입력 토큰 (Cached Input Tokens):</strong> 캐시된 입력 토큰은 해당 시점의 입력 토큰 가격 대비 <strong>95% 할인된 가격</strong>이 적용된다.</li>
+<li><strong>정가 전환 안내:</strong> 출시 초기 프로모션 기간이 만료된 후에는 입력 토큰 1M당 $4, 출력 토큰 1M당 $20의 정가가 자동으로 적용된다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

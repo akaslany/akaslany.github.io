@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SoL-Pi: Recursively Scaling Auto-Research Loops for Efficient Agent Harness</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>SoL-Pi: Recursively Scaling Auto-Research Loops for Efficient Agent Harness</h1>
+<p class="page-meta">논문 · 2026-09-18</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 긴 실행 주기를 가진 에이전트(Long-horizon agents)의 운영에 있어 1순위 시스템 과제로 부상한 토큰 효율성 문제를 해결하기 위한 SoL-Pi(Scaling Auto-Research Loop) 기술을 분석합니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.20519v1">출처</a> · <a href="https://www.youtube.com/watch?v=hubEER_PQJg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="sol-pi-자동-연구-루프-기반-에이전트-하네스-효율화-기술-분석-보고서">SoL-Pi: 자동 연구 루프 기반 에이전트 하네스 효율화 기술 분석 보고서</h3>
+<h4 id="1-보고서-목적-및-배경">1. 보고서 목적 및 배경</h4>
+<p>본 보고서는 긴 실행 주기를 가진 에이전트(Long-horizon agents)의 운영에 있어 1순위 시스템 과제로 부상한 토큰 효율성 문제를 해결하기 위한 <strong>SoL-Pi(Scaling Auto-Research Loop)</strong> 기술을 분석합니다.</p>
+<p>기존의 효율화 연구가 가중치 양자화(Quantization)나 고속 어텐션 커널과 같은 모델/인프라 레벨에 집중했다면, SoL-Pi는 모델과 환경 간의 상호작용을 중재하는 <strong>에이전트 하네스(Harness)</strong> 최적화에 초점을 맞춥니다. 하네스 레벨 최적화는 모델 재학습 없이도 토큰 소비를 줄일 수 있어 모델 레벨 접근법과 **직교적(Orthogonal)**으로 결합 가능한 강력한 보완 기술입니다. 본 보고서는 소스 논문 저자의 주장과 EdgeBench 등 주요 벤치마크의 실험 데이터 및 수치를 근거로 작성되었습니다.</p>
+<h4 id="2-sol-pi-자동-연구-루프-auto-research-loop-설계">2. SoL-Pi 자동 연구 루프(Auto-Research Loop) 설계</h4>
+<h5 id="연구-루프의-구조적-설계-broad-to-deep-funnel">연구 루프의 구조적 설계: Broad-to-Deep Funnel</h5>
+<p>SoL-Pi는 가설의 너비(Breadth)와 구현의 깊이(Depth)를 동시에 확보하기 위해 깔때기 구조의 설계 방식을 채택합니다.</p>
+<ol>
+<li><strong>Oracle Analysis:</strong> 기존 실행 궤적을 분석하여 인접한 동작(Adjacent Actions) 중 누락되거나 불필요한 요소를 식별합니다. 이 과정에서 **12.3%의 직접적인 개선 여지(Direct Headroom)**가 있음을 확인하며 최적화 동기를 부여합니다.</li>
+<li><strong>Proposal:</strong> 컨텍스트, 워크플로우, 도구, 위임 등 6개 분야에서 <strong>총 152개의 제안 방향</strong>을 도출하여 아이디어 풀을 구성합니다.</li>
+<li><strong>Implementation (Ralph Loop):</strong> 제안된 가설을 실제 코드로 구현합니다. 이때 구현자(Implementer)가 명확한 완료 기준을 충족할 때까지 정제하고, 독립된 리뷰어(Reviewer)가 코드를 검토하는 반복적인 <strong>Ralph Loop</strong> 방식을 적용합니다.</li>
+<li><strong>Review &amp; Validation:</strong> 독립적인 리뷰를 통과한 후보는 개발용 환경에서 성능 및 효율성 게이트를 검증받습니다.</li>
+<li><strong>Freeze:</strong> 검증을 마친 메커니즘은 고정(Freeze)되어 최종 평가로 이동하며, 이 시점부터는 검색 루프로의 어떠한 피드백도 차단하여 과적합을 방지합니다.</li>
+</ol>
+<h5 id="오케스트레이션-원칙">오케스트레이션 원칙</h5>
+<ul>
+<li><strong>독립된 가계 (Isolated Lineages):</strong> 각 후보 메커니즘은 독립적인 실험 단위로 운영되어 실패가 다른 실험에 전이되지 않게 설계되었습니다.</li>
+<li><strong>분리된 검증 (Independent Validation):</strong> 개발 피드백과 최종 평가를 엄격히 분리하여, 특정 작업에만 유효한 임시방편적 해결책이 필터링되도록 합니다.</li>
+<li><strong>확장 가능한 오케스트레이션:</strong> 일회성 오케스트레이션 코드를 활용하여 더 많은 아이디어와 환경으로 연구 루프를 무한히 확장할 수 있는 구조를 갖춥니다.</li>
+</ul>
+<h5 id="연구-및-검증-환경-구축">연구 및 검증 환경 구축</h5>
+<p>SoL-Pi는 총 535개의 실행 가능한 연구 환경을 통해 범용적인 메커니즘을 탐색했습니다.</p>
+<ul>
+<li><strong>저장소 기반 환경 (495개):</strong> GitHub의 이슈-PR 쌍을 활용하여 실제 소프트웨어 버그 수정 궤적을 학습 환경으로 사용합니다.</li>
+<li><strong>검증기 기반 환경 (40개):</strong> Terminal-Bench-2 스타일의 실행형 검증기를 통해 정답 궤적이 정해지지 않은 합성 작업을 수행합니다.</li>
+</ul>
+<h4 id="3-4대-핵심-하네스-메커니즘-four-retained-mechanisms">3. 4대 핵심 하네스 메커니즘 (Four Retained Mechanisms)</h4>
+<h5 id="action-fusion">Action Fusion</h5>
+<p>에이전트가 파일을 수정한 직후 빌드/테스트 명령을 내리는 패턴을 분석하여, 파일 편집과 실행 명령을 단일 API 호출로 결합합니다. 이를 통해 모델과 환경 간의 라운드트립 횟수를 줄여 직접적인 호출 비용을 감소시킵니다.</p>
+<h5 id="online-context-compact">Online Context Compact</h5>
+<p>하위 작업(Subtask) 완료 시점에서 컨텍스트 압축 여부를 결정하는 지능형 로직입니다. 단순히 컨텍스트 길이에 의존하지 않고, 압축을 통해 절약될 미래 토큰 비용과 **미회수된 프롬프트 캐시 재작성 비용(Unrecovered rewrite costs)**을 비교하는 '비용 게이트(Cost Gate)'를 활용합니다. 작업이 진행될수록 더 높은 절약 마진을 요구하여 무분별한 압축을 지양합니다.</p>
+<h5 id="observationpack">ObservationPack</h5>
+<p>대규모 환경 출력물에 대한 입력 비용을 관리합니다. 10KB 이상의 큰 결과물에 대해 **처음 두 번의 제공자 요청(n=2)**까지는 전체 텍스트를 제공하여 초기 파악을 돕고, 이후부터는 **1KB 발췌본과 고유 핸들(Stable Handle)**만 제공합니다. 에이전트는 필요한 경우에만 핸들을 통해 특정 원본 데이터 청크를 다시 호출할 수 있습니다.</p>
+<h5 id="evidence-preserving-reducer">Evidence-Preserving Reducer</h5>
+<p>저비용 모델(GPT-5.6 Luna)을 활용하여 4KB 이상의 빌드/테스트 로그를 핵심 증거 위주로 요약합니다. 요약본의 신뢰성을 담보하기 위해 **결정론적 검증기(Deterministic Verifier)**가 스키마, 해시 값, 상태 코드, 인용 정확성 등을 검증하며, 검증 실패 시 즉시 원본 로그로 복구하여 정보 손실을 방지합니다.</p>
+<h4 id="4-edgebench-평가-설계-및-데이터-분석">4. EdgeBench 평가 설계 및 데이터 분석</h4>
+<p>EdgeBench의 51개 공개 작업을 활용하여 SoL-Pi의 범용성을 측정했습니다.</p>
+<h5 id="모델별-성능-및-비용-비교-edgebench">모델별 성능 및 비용 비교 (EdgeBench)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Harness</th>
+<th style="text-align:left">Backend</th>
+<th style="text-align:center">Total Tokens (B)</th>
+<th style="text-align:center">API Cost (USD)</th>
+<th style="text-align:center">Avg. Score</th>
+<th style="text-align:center">Token Eff. ($/Score)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Codex</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:center">3.0537</td>
+<td style="text-align:center">$1,787</td>
+<td style="text-align:center">34.7</td>
+<td style="text-align:center">1.0086</td>
+</tr>
+<tr>
+<td style="text-align:left">Claude Code</td>
+<td style="text-align:left">Opus 5</td>
+<td style="text-align:center">2.0045</td>
+<td style="text-align:center">$2,535</td>
+<td style="text-align:center">43.7</td>
+<td style="text-align:center">1.1377</td>
+</tr>
+<tr>
+<td style="text-align:left">Pi</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:center">2.1538</td>
+<td style="text-align:center">$1,339</td>
+<td style="text-align:center">44.8</td>
+<td style="text-align:center">0.5855</td>
+</tr>
+<tr>
+<td style="text-align:left">SoL-Pi [Efficiency]</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:center">1.0990</td>
+<td style="text-align:center">$894</td>
+<td style="text-align:center">42.0</td>
+<td style="text-align:center">0.4174</td>
+</tr>
+<tr>
+<td style="text-align:left">SoL-Pi [Performance]</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:center">2.0224</td>
+<td style="text-align:center">$1,271</td>
+<td style="text-align:center">47.2</td>
+<td style="text-align:center">0.5280</td>
+</tr>
+</tbody>
+</table>
+<h5 id="주요-수치-분석">주요 수치 분석</h5>
+<p>SoL-Pi [Efficiency] 구성은 다음과 같은 비용 절감을 달성하며 압도적인 효율성을 증명했습니다.</p>
+<ul>
+<li><strong>Codex 대비:</strong> API 비용 <strong>50.0%</strong> 절감.</li>
+<li><strong>Claude Code 대비:</strong> API 비용 <strong>54.3%</strong> 절감.</li>
+<li><strong>Pi 대비:</strong> 성능의 93.7%를 유지하면서 토큰 트래픽을 약 <strong>49.0%</strong> 감소시킴.</li>
+</ul>
+<h4 id="5-메커니즘-활성화-및-전이-transfer-특성">5. 메커니즘 활성화 및 전이(Transfer) 특성</h4>
+<h5 id="모델-간-전이-및-백엔드-편향-backend-bias">모델 간 전이 및 백엔드 편향 (Backend Bias)</h5>
+<p>GPT-5.6 Sol에서 개발된 SoL-Pi는 Opus 5 모델에서도 Pi 대비 성능의 94.3%를 유지하며 비용을 <strong>33.5%</strong> 절감하는 등 모델 일반화 가능성을 보였습니다. 다만, Opus 5에서는 GPT-5.6 Sol에 비해 트리거 빈도와 강도가 상대적으로 낮게 관측되었습니다. 이는 하네스가 개발 단계에서 GPT-5.6 Sol의 실행 궤적에 최적화되었기 때문에 발생하는 **백엔드 편향(Backend Bias)**으로 분석되며, 향후 다양한 모델 궤적을 통합 학습할 필요성을 시사합니다.</p>
+<h5 id="메커니즘-상호-보완성-reducer-observationpack-핸드셰이크">메커니즘 상호 보완성: Reducer-ObservationPack 핸드셰이크</h5>
+<p>SoL-Pi의 효율성은 개별 메커니즘의 단순 합보다 전체 스택을 적용했을 때 극대화됩니다. 특히 <strong>Reducer와 ObservationPack 간의 상호작용</strong>이 핵심입니다. Reducer가 빌드 로그를 먼저 처리하여 마커(Marker)를 남기면, ObservationPack은 해당 마커를 인식하여 검증된 증거물에 대해서는 발췌 처리를 건너뛰고 원본을 보존합니다. 이러한 &quot;핸드셰이크&quot; 로직은 데이터 압축과 정보 보존 사이의 균형을 최적화합니다.</p>
+<h4 id="6-시스템의-한계-및-향후-연구-방향">6. 시스템의 한계 및 향후 연구 방향</h4>
+<h5 id="실전-적용의-한계">실전 적용의 한계</h5>
+<ul>
+<li><strong>탐색 비용:</strong> 자동 연구 루프를 실행하는 것 자체가 높은 계산 비용을 수반하므로 효율적인 검색 전략이 필수적입니다.</li>
+<li><strong>궤적 편향:</strong> 특정 백엔드 모델의 동작 방식에 최적화된 메커니즘이 타 모델에서는 낮은 트리거 비율을 보일 수 있는 위험이 있습니다.</li>
+</ul>
+<h5 id="향후-연구-과제">향후 연구 과제</h5>
+<ul>
+<li><strong>하네스 사전 학습 (Pre-training the harness):</strong> 방대한 작업과 궤적에 하네스를 노출시켜 재사용 가능한 최적의 아티팩트를 발견하는 연구.</li>
+<li><strong>다중 백엔드 학습 (Multi-backend training):</strong> 여러 LLM 백엔드에서 동시에 하네스를 검증하여 견고성을 높이는 전략.</li>
+<li><strong>재귀적 효율 개선 (Recursive efficient improvement):</strong> 효율화된 하네스가 연구 루프의 비용을 낮추고, 절약된 리소스로 다시 더 나은 하네스를 탐색하는 선순환 구조 구축.</li>
+</ul>
+<p>본 보고서에서 언급된 모든 수치와 가능성은 논문에 제시된 특정 실험 조건(EdgeBench 등) 내에서의 결과이며, 일반화된 성능 단정이 아님을 유의하시기 바랍니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontier-Pre-training-at-Microsoft-AI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Frontier-Pre-training-at-Microsoft-AI</h1>
+<p class="page-meta">PDF · 2026-10-15</p>
+<h2 id="요약">요약</h2>
+<p>[사실 (Fact)] 마이크로소프트 AI(Microsoft AI)는 2026년 6월 뛰어난 추론 능력을 갖춘 기반 모델 MAI-Thinking-1과 그 기저가 된 MAI-Base-1을 공개한 데 이어, 최근 차세대 프런티어 사전학습 모델인 MAI-Base-2의 사전학습을 성공적으로 완료했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://microsoft.ai/pdf/Frontier-Pre-training-at-Microsoft-AI.pdf?v=2">출처</a> · <a href="https://www.youtube.com/watch?v=LU7dYD72X3Y">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="마이크로소프트-ai의-mai-base-2-차세대-프런티어-사전학습-모델-심층-해설-보고서">마이크로소프트 AI의 MAI-Base-2 차세대 프런티어 사전학습 모델 심층 해설 보고서</h3>
+<h4 id="1-개요">1. 개요</h4>
+<p>[사실 (Fact)] 마이크로소프트 AI(Microsoft AI)는 2026년 6월 뛰어난 추론 능력을 갖춘 기반 모델 MAI-Thinking-1과 그 기저가 된 MAI-Base-1을 공개한 데 이어, 최근 차세대 프런티어 사전학습 모델인 MAI-Base-2의 사전학습을 성공적으로 완료했다. MAI-Base-2는 활성 파라미터 800억 개(80B) 및 전체 파라미터 2조 8천억 개(2.8T) 규모를 보유한 혼합 전문가(MoE, Mixture of Experts) 구조의 최첨단 파운데이션 모델이다. 본 모델은 타사 모델의 지식을 복제하는 증류(Distillation) 방식을 철저히 배제하고, 마이크로소프트가 독자 수집·정제한 유기적 고유 데이터(Organic data)만으로 구축되었다.</p>
+<p>[주장 (Claim)] 마이크로소프트 AI 측은 모델 설계부터 인프라 최적화까지 전체 파이프라인을 엔드투엔드(End-to-End)로 직접 소유·운영함으로써 최상의 성능과 최적의 비용 효율성을 동시에 확보했다고 강조한다. 이를 바탕으로 자사 제품군 적용에 그치지 않고 검증된 기업 파트너들에게 파운드리(Foundry) 플랫폼을 통해 고성능 모델 가중치 라이선스를 안정적으로 제공할 계획이다.</p>
+<p>[사실 (Fact)] 실증 평가에서 MAI-Base-2는 주요 공개 가중치 모델을 일괄 능가하는 성능을 나타냈다. 특히 공개된 최상위 파운데이션 모델인 DeepSeek-V4-Pro-Base 대비 동일 BPB 달성 기준 4.2배에서 12.3배 뛰어난 계산 효율성(FLOPs-efficiency)을 기록했다. 16,000대의 NVIDIA GB200 GPU 클러스터에서 2026년 8월부터 9월까지 38일간 수행된 사전학습 과정 동안, 평균 모델 계산 활용도(MFU) 21%와 유효 학습 시간 비율(Goodput) 89%를 달성하며 대규모 인프라에서의 뛰어난 학습 안정성을 증명했다.</p>
+<hr />
+<h4 id="2-주요-논점">2. 주요 논점</h4>
+<h5 id="2-1-모델-성능-및-계산-효율성-flops-efficiency">2.1. 모델 성능 및 계산 효율성 (FLOPs Efficiency)</h5>
+<ul>
+<li>
+<p><strong>[사실 (Fact)] 평가 방식 및 데이터 오염 방지 검증:</strong>
+비교 평가의 객관성을 확보하기 위해 토크나이저(Tokenizer) 구조에 의존하지 않는 바이트당 비트 수(BPB, Bits per byte)를 주요 지표로 채택했다. 코드 평가셋은 마이크로소프트 내부 코드베이스(MAI's codebase)를 활용했으며, STEM, 수학, 질의응답(QA) 평가셋은 학습 데이터 오염 위험을 최소화하기 위해 외부 전문 외주사(Vendors)를 통해 독립 제작했다. 추가적으로 모든 평가셋에 대해 사전학습 데이터셋과의 정밀한 데이터 오염 제거(Decontamination) 절차를 수행했다.</p>
+</li>
+<li>
+<p><strong>[사실 (Fact)] 주요 평가 영역별 바이트당 비트 수(BPB) 측정 결과:</strong>
+(수치가 낮을수록 성능이 우수함을 의미함)</p>
+<ul>
+<li><strong>코드 (Held-Out Code):</strong> MAI-Base-2 (0.2203) &lt; Kimi K3 (0.2264) &lt; DeepSeek-V4-Pro-Base (0.2370) &lt; Qwen3.8-2.4T-A95B (0.2400) &lt; MAI-Base-1 (0.2401) &lt; MiMo-V2.6-Pro-RL (0.2446)</li>
+<li><strong>질의응답 (Held-Out QA):</strong> MAI-Base-2 (0.4162) &lt; Kimi K3 (0.4269) &lt; DeepSeek-V4-Pro-Base (0.4351) &lt; Qwen3.8-2.4T-A95B (0.4427) &lt; MAI-Base-1 (0.4440) &lt; MiMo-V2.6-Pro-RL (0.4513)</li>
+<li><strong>STEM (과학·기술·공학·수학):</strong> MAI-Base-2 (0.3653) &lt; Kimi K3 (0.3761) &lt; DeepSeek-V4-Pro-Base (0.3968) &lt; MiMo-V2.6-Pro-RL (0.3975) &lt; Qwen3.8-2.4T-A95B (0.3978) &lt; MAI-Base-1 (0.4026)</li>
+<li><strong>수학 (Held-Out Math):</strong> MAI-Base-2 (0.3561) &lt; Kimi K3 (0.3589) &lt; Qwen3.8-2.4T-A95B (0.3752) &lt; MiMo-V2.6-Pro-RL (0.3803) &lt; DeepSeek-V4-Pro-Base (0.3862) &lt; MAI-Base-1 (0.3939)</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실 (Fact)] 사전학습 계산 효율성(FLOPs Efficiency) 정량 평가:</strong>
+동일한 BPB 성능 수준에 도달하기 위해 요구되는 사전학습 계산량(FLOPs)을 추정한 결과, MAI-Base-2 레시피는 DeepSeek-V4-Pro-Base 대비 <strong>4.2배 ~ 12.3배</strong> 높은 연산 효율성을 달성했다 (코드 12.3배, QA 4.2배, STEM 8.3배, 수학 6.6배). 전작인 MAI-Base-1과 비교했을 때는 <strong>6.3배 ~ 12.7배</strong>의 연산 효율성 향상(코드 12.7배, QA 6.3배, STEM 8.3배, 수학 7.5배)을 달성했다.</p>
+</li>
+<li>
+<p><strong>[해설 (Interpretation)]</strong> 비교 대상 모델 중 Kimi K3, Qwen3.8-2.4T-A95B, MiMo-V2.6-Pro-RL은 사전학습 직후의 원본 가중치가 아닌 사후 학습(Post-trained)을 거친 체크포인트만 공개된 상태이다. 사후 학습이 평가 결과에 긍정적 영향을 미쳤을 가능성을 감안하더라도, 순수 사전학습 단계의 MAI-Base-2가 모든 평가 항목에서 가장 낮은 BPB를 기록한 것은 해당 모델의 기저 데이터와 아키텍처 레시피가 갖는 독보적인 기초 역량을 증명한다.</p>
+</li>
+</ul>
+<h6 id="표-1-mai-base-1-vs-mai-base-2-하드웨어-및-아키텍처-스펙-비교">[표 1] MAI-Base-1 vs MAI-Base-2 하드웨어 및 아키텍처 스펙 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 항목</th>
+<th style="text-align:left">MAI-Base-1</th>
+<th style="text-align:left">MAI-Base-2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>활성 / 전체 파라미터 수</strong></td>
+<td style="text-align:left">350억 (35B) / 1조 (1T)</td>
+<td style="text-align:left">800억 (80B) / 2조 8천억 (2.8T)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>레이어 수 (Layers)</strong></td>
+<td style="text-align:left">78</td>
+<td style="text-align:left">102</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>은닉 차원 (Hidden dimension)</strong></td>
+<td style="text-align:left">6,656</td>
+<td style="text-align:left">8,704</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MoE 배치 구조 (MoE layout)</strong></td>
+<td style="text-align:left">밀집 FFN과 MoE 레이어 교대 배치</td>
+<td style="text-align:left">모든 레이어에 MoE 적용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>밀집 FFN 차원 (Dense FFN dim)</strong></td>
+<td style="text-align:left">13,312</td>
+<td style="text-align:left">해당 없음 (n/a)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MoE 다운 프로젝션 차원</strong></td>
+<td style="text-align:left">3,072</td>
+<td style="text-align:left">4,096 (공유 전문가는 제외)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MoE 전문가 FFN 차원</strong></td>
+<td style="text-align:left">10,240</td>
+<td style="text-align:left">8,704</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MoE 라우팅 / 전문가 수</strong></td>
+<td style="text-align:left">0 공유 + 8 / 512 라우팅</td>
+<td style="text-align:left">1 공유 + 7 / 512 라우팅</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>어텐션 헤드 (KV / Q)</strong></td>
+<td style="text-align:left">글로벌: 8 / 80 (6레이어마다)&lt;br&gt;로컬: 8 / 80</td>
+<td style="text-align:left">글로벌: 2 / 96 (6레이어마다)&lt;br&gt;로컬: 16 / 96</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>임베딩 (Embeddings)</strong></td>
+<td style="text-align:left">바인딩 적용 (Tied)</td>
+<td style="text-align:left">바인딩 미적용 (Untied)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 토큰 스케일 (Horizon)</strong></td>
+<td style="text-align:left">30조 (30T)</td>
+<td style="text-align:left">50조 (50T)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>옵티마이저 (Optimizer)</strong></td>
+<td style="text-align:left">AdamW</td>
+<td style="text-align:left">Muon (비임베딩 2D 파라미터), AdamW</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FP8 정밀도 방식</strong></td>
+<td style="text-align:left">텐서 단위, 지연 스케일링 E4M3/E5M2</td>
+<td style="text-align:left">MXFP8 E4M3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>그래디언트 클리핑</strong></td>
+<td style="text-align:left">전역 가중치 그래디언트 클리핑</td>
+<td style="text-align:left">전역 가중치 + 활성화 그래디언트 클리핑</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비전 지원 여부</strong></td>
+<td style="text-align:left">텍스트 전용 (Text only)</td>
+<td style="text-align:left">네이티브 비전-언어 모델 (Native VLM)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-2-스케일링-과학-및-하이퍼파라미터-스케일링-법칙">2.2. 스케일링 과학 및 하이퍼파라미터 스케일링 법칙</h5>
+<ul>
+<li>
+<p><strong>[사실 (Fact)] 스케일링 사다리(Scaling Ladder) 구조 및 소스 스케일링(Source Scaling):</strong>
+소규모 실험 결과를 2.8조 파라미터 스케일로 정밀하게 확장하기 위해 레이어 수 $L$에 의해 아키텍처 전체가 규정되는 '스케일링 사다리' 모델 그룹(L18, L24, L30, L36, L42)을 정의했다. 은닉 차원(Hidden size)은 $(256/3) \times L$로 계산되며, 쿼리 헤드(Query heads) 수는 $L$을 16의 가장 가까운 배수로 반올림하여 설정된다.
+파라미터당 학습 토큰 수(TPP, Tokens Per Parameter)를 고정한 상태에서 소형 모델 학습 시 발생하는 다중 에폭(Multi-epoch) 과적합 왜곡을 방지하고자 <strong>소스 스케일링(Source Scaling)</strong> 기법을 도입했다. 이는 하위 스케일 런에서 학습 데이터셋의 고유 샘플 범위를 인위적으로 제어하여 전체 50T 토큰 학습 기준 반복 횟수 비율을 동일하게 유지하는 방식이다 (예: 50T 토큰 환경에서 8회 반복되는 데이터셋의 경우, 5T 토큰 스케일 런에서는 전체 데이터의 $1/10$만 추출해 동일하게 8회 반복 적용).</p>
+</li>
+<li>
+<p><strong>[사실 (Fact)] 하이퍼파라미터 결합 탐색 및 스케일링 법칙 수식 도출:</strong>
+학습률(LR, $\eta$)과 가중치 감쇠(WD, $\lambda$) 간의 상관관계를 반영하기 위해 전통적인 직사각형 그리드 탐색 대신 $\eta \times \lambda$ 대각선 대역을 사선 방향으로 정밀 탐색한 후, 측정된 음의 로그 유도 가능도(NLL)에 2차 곡면 적합(2D quadratic surface fit)을 적용해 해석적 최솟값($LR^<em>, WD^</em>$)을 도출했다. 최종 도출된 수식은 다음과 같다.</p>
+<p>$$\text{Scaling law of } LR^* \times WD^<em>: \quad LR^</em> \times WD^* = \frac{17.04}{\text{steps}}$$</p>
+<p>$$\text{Scaling law of } LR^<em>: \quad \log LR^</em> = -1.505 - 0.572 \log \text{steps} + 0.174 \log \text{TPP}$$</p>
+<p>$$\text{Scaling law of Dropout}: \quad \text{dropout}^* = 0.812 - 0.053 \log \text{steps} + 0.021 \log \text{TPP}$$</p>
+</li>
+<li>
+<p><strong>[해설 (Interpretation)]</strong> $LR^* \times WD^<em>$ 수식에서 학습 스텝 수에 대한 지수가 $-1$에 근접하는 것은 독립적인 가중치 감쇠 시간 스케일($\lambda \times \text{steps}$)이 전체 학습 파이프라인에서 일정한 비중을 유지해야 한다는 이론적 모델과 일치한다. 또한 $LR^</em>$ 수식에서 스텝 수에 대한 지수가 $-0.5$에 가깝게 형성된 것은 배치 크기를 2배 확장할 때 학습률에 $\frac{1}{\sqrt{2}}$를 곱해 조율하는 널리 알려진 경험적 직관을 수식적으로 증명한 결과이다.</p>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-모델-인프라-공동-설계-model-infrastructure-co-design">2.3. 모델-인프라 공동 설계 (Model-Infrastructure Co-design)</h5>
+<ul>
+<li>
+<p><strong>[해설 (Interpretation)] 효율성 이득(Efficiency Gain) 평가 프레임워크:</strong>
+모델 아키텍처 변경의 이점을 정량화하기 위해 동일한 손실(Loss)에 도달하는 데 필요한 연산량 비율을 나타내는 '효율성 이득(Efficiency Gain, EG)' 메커니즘을 적용했다. 이는 연산량 기준의 $EG_{\text{FLOPs}}$와 실제 벽시계 실행 시간 기준의 $EG_{\text{time}}$ 두 축으로 구분된다. $EG_{\text{time}}$은 현재 보유 인프라에서의 실질적 생산성을 반영하며, $EG_{\text{FLOPs}}$는 알고리즘 고유의 잠재력을 측정하여 미래 인프라 투자 및 최적화 방향을 제시하는 상호보완적 지표로 활용된다.</p>
+</li>
+<li>
+<p><strong>[사실 (Fact)] 다중 라운드 드롭리스 MoE(Multi-round dropless MoE) 알고리즘 및 파이프라인 최적화:</strong>
+MAI-Base-1의 단점이었던 동적 라우팅의 메모리 파편화 및 불균형에 따른 메모리 부족(OOM) 문제를 극복하기 위해 다중 라운드 드롭리스 MoE 구조를 구축했다.</p>
+<ul>
+<li><strong>라우팅 및 그룹 메모리 제어:</strong> 전문가 병렬화 랭크(Expert parallel rank) 내 전문가들을 설정 가능한 고정 크기 그룹으로 묶고, 지정된 토큰 용량을 초과하는 동적 이탈(Overflow) 발생 시 그룹 내 잔여 용량을 활용하거나 추가 라운드(Round)를 실행하여 토큰 유실(Dropping) 없이 완벽히 처리한다.</li>
+<li><strong>순전파(Forward pass) 파이프라인 오버랩:</strong> 가중치 양자화(Weight Quantization) 및 공유 전문가(Shared Experts) 연산 수행 시간을 디스패치(Dispatch) 및 콜렉트(Collect) 통신 오버헤드와 완벽히 겹쳐 오버랩(Overlap)되도록 설계했다.</li>
+<li><strong>역전파(Backward pass) 파이프라인 오버랩:</strong> 노출된 입력 디스패치 통신을 동일 레이어의 재연산(Recompute) 과정과 겹치게 배치하고, 노출된 그래디언트 콜렉트 통신을 가중치 그래디언트 연산과 동시 실행하여 통신 병목을 제거했다.</li>
+<li><strong>단일 일괄 리덕션(Batched reduction):</strong> 기존 레이어별로 개별 수행되던 로드 밸런싱 손실(Load-balancing loss) 연산의 All-reduce 통신을 전체 레이어 대상의 단일 일괄 리덕션으로 일화화하여 호스트-디바이스 동기화 오버헤드를 극대화하여 감소시켰다.</li>
+<li><strong>최적화 성과:</strong> MoE 레이어 MFU가 기존 <strong>24%에서 35%로 향상</strong>되어 MAI-Base-2의 모든 레이어에 MoE를 전면 배치하는 구성을 실현했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실 (Fact)] Muon 옵티마이저 스케일링 파이프라인:</strong>
+16,000대 GPU 환경에서 Newton-Schulz 직교화 커널 실행 오버헤드를 줄이기 위해 ZeRO 모멘텀 분할과의 충돌을 해결하는 6단계 모멘텀 재분할(Resharding) 최적화 절차를 적용했다.</p>
+<ol>
+<li>각 GPU에서 로컬 FP32 모멘텀 샤드 업데이트 수행</li>
+<li>업데이트된 모멘텀 샤드를 BF16 정밀도로 캐스팅</li>
+<li>동일한 형상의 파라미터끼리 배치(Batch) 처리하여 All-to-all 통신을 통해 각 GPU에 전체 모멘텀 행렬의 하위 집합 소유권 할당</li>
+<li>대칭 인식(Symmetry-aware) Newton-Schulz 커널을 활용해 각 GPU별로 전체 모멘텀 행렬에 대한 로컬 직교화 수행</li>
+<li>두 번째 All-to-all 통신을 수행하여 직교화된 업데이트 결과를 원래의 샤드로 복원</li>
+<li>복원된 데이터를 FP32로 재캐스팅하여 모델 가중치에 적용</li>
+</ol>
+<ul>
+<li><strong>추가 최적화 및 결과:</strong> 복수 배치 프리페칭(Prefetching)을 통한 통신-계산 오버랩, 재분할 메타데이터 캐싱 및 재사용, MoE 라우터 가중치 등 복제 파라미터에 대해 첫 통신 단계를 스킵하고 직교화 후 All-gather를 수행하는 최적화를 통해 스텝당 평균 처리 시간을 **165ms (전체 학습 시간의 2.1%)**로 단축시켰다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사례 및 사실 (Example &amp; Fact)] 활성화 그래디언트 클리핑(Activation Gradient Clipping) 및 진단 사례:</strong>
+전체 배치의 가중치 그래디언트 노름(Norm)을 축소하는 전역 클리핑과 달리, 특정 활성화 그래디언트 위치만 선택적으로 제어하여 정상적인 데이터 샘플의 그래디언트 왜곡을 방지했다. 모델 스케일이 커질수록 효과가 증대되어 $L42$ 스케일에서 +28%의 $EG_{\text{FLOPs}}$ 향상을 기록했다.</p>
+<ul>
+<li><strong>사례:</strong> 코드 학습 데이터 전처리 파이프라인 검증 과정에서 주석 문맥 도중 <code>#</code> 토큰 위치에서 라이선스 헤더가 절단된 오염 샘플을 활성화 그래디언트 클리핑 진단 도구가 감지했으며, 이를 통해 전처리 알고리즘의 버그를 찾아 정상 수정했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[해설 (Interpretation)]</strong> 활성화 그래디언트 클리핑은 학습의 수렴 안정성을 정량적으로 개선할 뿐만 아니라, 대규모 코퍼스에 숨겨진 구조적 전처리 버그를 정밀하게 역추적할 수 있는 우수한 진단 메커니즘으로 기능함을 실증했다.</p>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-데이터-스케일링-및-고유-vlm-코퍼스-구축">2.4. 데이터 스케일링 및 고유 VLM 코퍼스 구축</h5>
+<ul>
+<li>
+<p><strong>[사실 (Fact)] 고유 사전학습 코퍼스 도메인별 성장률 및 데이터 구성:</strong>
+MAI-Base-2의 고유(Unique) 학습 토큰 규모는 MAI-Base-1 대비 <strong>약 36% 증가</strong>했다. 소스 문서의 [Figure 10] 기준 도메인별 고유 토큰 성장률 및 구성 비중은 다음과 같다.</p>
+<ul>
+<li><strong>도메인별 토큰 성장률 (MAI-Base-1 대비):</strong> 도서(Books) +194%, PDF 문서 +104%, 수학(Math) +37%, 코드(Code) +34%, STEM +24%, 비전 전용(Vision-only) +22%, 웹(Web) +16%.</li>
+<li><strong>MAI-Base-1 (30T 토큰) 기준 도메인 비중:</strong> 코드 45%, 웹 12%, PDF 9%, STEM 9%, 도서 5%, 수학 4%, 비전 전용 14%, 기타 2%.</li>
+<li><strong>MAI-Base-2 (50T 토큰) 구성:</strong> 확장된 고유(Unique) 토큰 영역과 정밀 제어된 반복(Repeated) 토큰 영역을 결합하여 총 50조(50T) 토큰 코퍼스를 완성했다. 웹 데이터의 경우 2026년 3월 지식 컷오프(Knowledge cutoff) 기준의 데이터를 크롤링 및 정제하고 임베딩 기반 다방면 샘플링(Diversity sampling)을 적용했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실 (Fact)] 인코더 프리(Encoder-free) 네이티브 VLM 데이터 구축:</strong>
+별도 비전 인코더가 없는 네이티브 VLM 아키텍처를 적용함에 따라 <strong>4조 5천억 개(4.5T)의 고유 VLM 토큰</strong>을 새로 구축했다. 반복 학습을 포함한 전체 50T 토큰 혼합 비율 중 **18%**를 VLM 데이터(웹 이미지 캡셔닝, 차트 이해, 시각적 접지, 공간 추론, 의료 이해, 컴퓨터 사용 인터페이스, 악보 읽기 등)로 할당했다.</p>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자">3. 등장 인물 및 화자</h4>
+<ul>
+<li><strong>개별 연구진 및 화자 성명:</strong> <strong>확인 불가</strong> (소스 텍스트 내 연구원 개인의 이름이나 특정 발표자, 인물의 직책은 명시되어 있지 않음)</li>
+<li><strong>주체 기관:</strong> <strong>마이크로소프트 AI (Microsoft AI)</strong> 연구 및 엔지니어링 팀</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-정리">4. 수치 및 시점 정리</h4>
+<ul>
+<li><strong>학습 하드웨어 및 실행 기간:</strong>
+<ul>
+<li>16,000대(16k) NVIDIA GB200 GPU 활용</li>
+<li>2026년 8월부터 9월까지 총 38일간 사전학습 진행</li>
+</ul>
+</li>
+<li><strong>성능 및 운영 수치 지표:</strong>
+<ul>
+<li>전체 학습 평균 MFU: 21% (BF16 기준 GB200의 이론적 최대치인 2.5 PFLOPS로 정규화, 재기억화 및 옵티마이저 FLOPs 제외)</li>
+<li>유효 학습 시간 비율 (Goodput): 89%</li>
+<li>전체 학습 토큰 스케일 (Horizon): 50조 개 (50T)</li>
+<li>MoE 레이어 MFU 향상: 24% $\rightarrow$ 35%</li>
+<li>Muon 옵티마이저 오버헤드: 평균 스텝당 165ms (전체 실행 시간의 2.1%, 이론적 피크 55ms)</li>
+<li>활성화 그래디언트 클리핑 효율 이득 ($L42$ 스케일): +28% $EG_{\text{FLOPs}}$</li>
+<li>고유 데이터 스케일 증가율: MAI-Base-1 대비 36% 증가</li>
+<li>VLM 데이터 스케일: 고유 토큰 4조 5천억 개 (4.5T), 전체 학습 혼합 비율의 18%</li>
+</ul>
+</li>
+<li><strong>타임라인 및 핵심 시점:</strong>
+<ul>
+<li>2026년 3월: 웹 데이터 수집 지식 컷오프 (Knowledge cutoff)</li>
+<li>2026년 6월: MAI-Thinking-1 및 MAI-Base-1 발표 시점</li>
+<li>2026년 8월 ~ 9월: MAI-Base-2 사전학습 수행 (38일간)</li>
+<li>2026년 10월 이전: 성능 비교 대상 외부 프런티어 모델 체크포인트 기준 시점</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성">5. 한계와 불확실성</h4>
+<ol>
+<li>
+<p><strong>Muon 옵티마이저 오버헤드 격차의 세부 원인 비중 미기재:</strong>
+Muon 옵티마이저의 스텝당 실제 측정 시간(165ms)과 이론적 피크 타임(55ms) 사이에 존재하는 110ms의 격차 원인으로 지연 요소(Stragglers), 커널 디스패치 오버헤드, 부하 불균형(Load imbalance), 재분할 중 메모리 복사/할당 등이 언급되었으나, 각 요인별 정량적 비중 및 기여도는 소스에서 밝히지 않았다.</p>
+</li>
+<li>
+<p><strong>사후 학습(Post-training) 결과 및 차세대 모델 상세 미공개:</strong>
+현재 진행 중인 MAI-Base-2의 사후 학습 정량적 평가 결과와 향후 출시 예정인 MAI-Base-3의 구체적인 아키텍처 스펙 및 학습 일정은 소스에 명시되지 않았다.</p>
+</li>
+<li>
+<p><strong>사후 학습 모델과의 엄밀한 비교 한계:</strong>
+비교 대상 오픈 가중치 모델 중 Kimi K3, Qwen3.8-2.4T-A95B, MiMo-V2.6-Pro-RL은 사전학습 원본이 아닌 사후 학습(Post-trained) 체크포인트를 사용하였으므로, 사후 학습 과정이 평가 수치(BPB)에 미친 정량적 영향력이 사전학습 성능과 분리되어 분석되지 않았다.</p>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organizing Intelligence</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Organizing Intelligence</h1>
+<p class="page-meta">PDF · 2026-10-30</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 알렉스 이마스(Alex Imas), 앤드루 고(Andrew Koh), 셰인 레그(Shane Legg)가 작성한 학술 논문 &quot;Organizing Intelligence&quot;(2026년 10월 29일 발표)의 이론적 정수와 경제학적 파급효과를 다각도로 분석하기 위해 작성되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://storage.googleapis.com/deepmind-media/papers/organizing-intelligence.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=qD5KfMPD08g">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="ai-역량-발전과-기업-조직의-경제적-전환-organizing-intelligence-논문-해설-보고서">AI 역량 발전과 기업 조직의 경제적 전환: 'Organizing Intelligence' 논문 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 알렉스 이마스(Alex Imas), 앤드루 고(Andrew Koh), 셰인 레그(Shane Legg)가 작성한 학술 논문 <strong>&quot;Organizing Intelligence&quot;</strong>(2026년 10월 29일 발표)의 이론적 정수와 경제학적 파급효과를 다각도로 분석하기 위해 작성되었습니다. 기존 기술경제학 문헌이 인공지능(AI)을 주로 단일 개별 작업의 생산성을 제고하는 도구나 단위 태스크 차원의 노동 대체 요소로 국한하여 해석했던 한계를 넘어서, 본 연구는 미시·거시 경제 생산의 근본 단위인 **기업 조직(Organization)**의 규모, 내부 구성원 조합, 시장 집중도, 그리고 임금 격차 구조에 AI 기술 발전이 미치는 종합적인 전이 경로를 엄밀한 경제학적 모형으로 규명하는 것을 목적으로 합니다.</p>
+<p>본 연구에서는 지능을 **'목표 달성 능력(Ability to achieve goals)'**으로 정의하며, 인간 역량과 AI 역량 사이의 3가지 본질적 차이점인 <strong>재현 가능성(Reproducibility)</strong>, <strong>모자이크 지능(Mosaic Intelligence)</strong>, 그리고 **독립적 조정 역량(Independent Coordination)**에 주목합니다. 인간의 기술 역량은 고정 공급되어 희소성 지대를 형성하는 반면, AI 역량은 컴퓨팅 비용에 따라 무한히 복제 가능합니다. 아울러 영역별로 울퉁불퉁한(Jagged) 인간 역량을 상호보완적으로 조직화할 때 단일 AI를 능가하는 '모자이크 지능'이 발현되는 메커니즘을 밝혀냅니다.</p>
+<p>결과적으로 소스 논문은 AI의 **숙련도/역량(Competence)*<em>과 <strong>조정(Coordination)</strong> 능력이 기업 조직에 미치는 영향이 완전히 이원화되어 있음을 입증합니다. AI의 개별 작업 숙련도가 향상되면 기업 내부 구성원의 직종 조합이 재편되면서 최적 기업 규모가 오히려 축소될 수 있습니다. 반대로 AI의 조정 역량이 성장하여 특정 초집적/초협력 임계점($y^</em> &gt; 1$)을 돌파하면, 기존 인간 조직의 성장을 가로막던 **코즈적 한계(Coasean Ceiling)**가 깨지며 시장 전체가 단일 거대 AI 기업으로 급격히 재편되는 <strong>상전이(Phase Transition)</strong> 현상이 발생하게 됩니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments">2. 주요 논점 (Key Arguments)</h4>
+<h5 id="2-1-인간과-ai-역량의-3가지-본질적-차이-및-모자이크-지능-mosaic-intelligence">2.1. 인간과 AI 역량의 3가지 본질적 차이 및 모자이크 지능 (Mosaic Intelligence)</h5>
+<p>소스 논문은 전통적 노동경제학 모형과 달리, 인간 노동자와 AI 에이전트 간의 개념적 차이를 다음 3가지 핵심 축으로 명확히 구별하여 제시합니다.</p>
+<h6 id="차이-1-희소성-대-복제성-scarcity-vs-reproducibility">차이 1: 희소성 대 복제성 (Scarcity vs. Reproducibility)</h6>
+<ul>
+<li><strong>[사실]:</strong> 인간 노동자의 역량 공급은 물리적으로 고정되어 있으나, AI 에이전트는 단위당 컴퓨팅 임대 비용($r &gt; 0$)만 지불하면 무한히 복제할 수 있음.</li>
+<li><strong>[소스 주장]:</strong> 인간의 전문성은 고정 공급(Fixed supply) 특성으로 인해 기술 수준이 높아질수록 리카도식 희소성 지대(Ricardian scarcity rents)를 발생시켜 임금 프리미엄을 형성함. 반면 AI 역량은 컴퓨팅 임대 가격($r = 1$)에 근거해 무한 복제되므로 기술 확산에 따른 희소성 지대를 완전히 소멸시킴.</li>
+<li><strong>[작성자 해석]:</strong> AI의 도입은 단순한 생산성 제고를 넘어, 인간 고유의 희소성에 기인했던 기존 임금 프리미엄 구조를 해체하고 자본과 컴퓨팅의 한계비용 중심 가격 체계로 시장을 재편하는 파급력을 가짐.</li>
+</ul>
+<h6 id="차이-2-울퉁불퉁함과-모자이크-지능-jaggedness-and-mosaic-intelligence">차이 2: 울퉁불퉁함과 모자이크 지능 (Jaggedness and Mosaic Intelligence)</h6>
+<ul>
+<li><strong>[사실]:</strong> 인간 개개인의 역량 프로필은 특정 영역에 편중되어 울퉁불퉁(Jagged)하며, 조직의 전체 역량 집합 $E(A) = \text{conv}{y_i : i \in A}$는 구성원들의 볼록 포획(Convex hull)으로 형성됨.</li>
+<li><strong>[소스 주장]:</strong> 코딩 전문 노동자(코더)와 작성 전문 노동자(작가)처럼 불균일한 역량을 가진 인간들이 팀을 이룰 때, 조직의 역량 $L$은 조화평균(Harmonic mean) 수식 $L = \frac{2}{1/\bar{y}_1 + 1/\bar{y}_2}$ (대체탄력성 파라미터 $\rho = -1$)에 의해 결정됨. 여기서 $\bar{y}_1$과 $\bar{y}_2$는 각각 조직 내부 구성원들이 보유한 코딩 영역의 평균 기술 수준과 작성 영역의 평균 기술 수준을 의미함. 단일 영역 병목을 엄격히 처벌하는 이 생산 구조에서 상호보완적 역할을 결합한 인간 팀은 단일 AI의 독립 역량보다 우수한 **'모자이크 지능(Mosaic Intelligence)'**을 창출함.</li>
+<li><strong>[작성자 해석]:</strong> 개별 인간이 단일 AI에 비해 특정 분야의 역량이 미달하더라도, 팀 구성을 통해 약점을 보완하고 강점을 집적하는 조직화 과정을 거치면 AI 대비 우위의 생산성을 유지할 수 있음을 수학적으로 증명함.</li>
+</ul>
+<h6 id="차이-3-독립적-조정-능력-independent-coordination">차이 3: 독립적 조정 능력 (Independent Coordination)</h6>
+<ul>
+<li><strong>[사실]:</strong> 과거의 기계 및 단순 소프트웨어 도구는 인간 기업 내부의 수동적 보조 수단으로만 작동함.</li>
+<li><strong>[소스 주장]:</strong> 자율 에이전트 형태의 AI는 기존 인간 기업 조직 내부에 종속되지 않고, AI 에이전트 간의 직접적인 통신과 규범 공유를 통해 스스로 독립적인 독자 기업(Standalone organizations)을 결성할 수 있음.</li>
+<li><strong>[작성자 해석]:</strong> AI가 단순한 자본재(Capital)를 넘어 시장 내에서 자율적인 생산 주체(Firm)로 직접 기능하고 경쟁하는 경제적 주체성을 확보했음을 의미함.</li>
+</ul>
+<h6 id="인간-노동자와-ai-에이전트의-주요-특성-비교">인간 노동자와 AI 에이전트의 주요 특성 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">인간 노동자 (Human Worker)</th>
+<th style="text-align:left">AI 에이전트 (AI Agent)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>공급 및 지대 구조</strong></td>
+<td style="text-align:left">고정 공급 (Fixed Supply) / 희소성에 따른 리카도 지대(Wages) 발생</td>
+<td style="text-align:left">컴퓨팅 비용($r$) 기반 무한 복제 가능 / 희소성 지대 소멸</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>역량 분포 및 조직화</strong></td>
+<td style="text-align:left">역량이 울퉁불퉁함(Jagged) / 보완적 팀 결성을 통한 '모자이크 지능' 형성</td>
+<td style="text-align:left">모델 복제본 간 역량 중복 / 단일 모델 스케일링 및 가중치 공유</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조정 및 조직 형태</strong></td>
+<td style="text-align:left">인지 한계, 암묵지 손실, 사적 커리어 목표로 조직 스케일 한계 작용</td>
+<td style="text-align:left">가중치·맥락 완전 공유 / AI 간 직접 조정을 통한 독립 기업 형성</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-2-기업-생산성의-두-축-숙련도-역량-competence-대-조정-coordination">2.2. 기업 생산성의 두 축: 숙련도/역량(Competence) 대 조정(Coordination)</h5>
+<p>기업의 총생산 기능은 $F(\nu) = L(\nu) \cdot S(\nu)$의 개념적 구조로 명확히 분해됩니다. 여기서 $\nu$는 기업이 고용한 인간 노동자 및 AI 에이전트의 역량 분포 측정값을 나타냅니다.</p>
+<pre><code>       [ 기업 총생산 기능 F(ν) = L(ν) × S(ν) ]
+                 │
+  ┌──────────────┴──────────────┐
+  ▼                             ▼
+[ 숙련도/역량 (L) ]           [ 조정 역량 (S) ]
+- 코딩, 작성, 논리추론 등     - 협력, 규범, 통신, 유인 부합
+- 생산성 곡선의 수평 이동     - 규모의 수익(Returns to scale) 결정
+- 최적 기업 규모(m*) 영향 없음  - 임계점(y* &gt; 1) 초과 시 규모 무한 확장
+</code></pre>
+<ol>
+<li>
+<p><strong>숙련도/역량 (Competence, $L$):</strong></p>
+<ul>
+<li>코딩, 문서 작성, 논리적 추론 등 특정 작업 영역에서 발휘되는 기술 수준을 의미합니다.</li>
+<li>역량 $L$의 상승은 생산성 곡선을 수평적으로 상향 이동(Level shift)시키지만, 기업의 최적 규모($m^*$) 자체를 확장시키지는 않습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>조정 역량 (Coordination, $y^*$ 및 $S$):</strong></p>
+<ul>
+<li>에이전트 간 협력, 조직 규범 이해, 통신 비용 축소, 사적 유인 불일치 완화 능력을 의미합니다.</li>
+<li>평균 조정력 $y^<em>$가 초집적/초협력 임계점인 $y^</em> &gt; 1$ (또는 스케일 지수 $\gamma &gt; 1$)을 초과하면 규모의 수익(Returns to scale)이 지속적으로 증가하여 최적 기업 규모의 무한 확장을 유발합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>인간 조직의 코즈적 한계 (Coasean Ceiling):</strong></p>
+<ul>
+<li>인간 조정자는 주의력 및 기억력의 물리적 한계(Simon), 암묵지 전달 과정에서의 맥락 손실(Polanyi, Graeber et al.), 개별 커리어 관리로 인한 유인 불일치(Holmström) 현상을 내재적으로 겪습니다.</li>
+<li>이에 따라 인간 기반 기업의 평균 조정력은 $y^* &lt; 1$ 범위에 머물게 되며, 일정 규모($m^* = \frac{\phi}{1 - y^*} - 1$)를 넘어서면 조직 비효율로 인한 수확 체감(Decreasing returns)을 경험하게 됩니다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-3-ai-역량-수준에-따른-4대-리짐-regime-과-시장-구조-변화">2.3. AI 역량 수준에 따른 4대 리짐(Regime)과 시장 구조 변화</h5>
+<p>소스 논문은 AI의 숙련도/역량(Competence)과 조정력(Coordination)의 발전 수준에 따라 시장 구조를 4가지 리짐으로 구분하여 분석합니다.</p>
+<pre><code>                  조정력 (y*)
+                   ▲
+                   │
+  Supercooperative │         ASI
+     (y* &gt; 1)      │      (y* &gt; 1,
+                   │     Competence &gt; Max Human)
+ ──────────────────┼────────────────────────────── 임계점 (y* = 1)
+   Minimal AGI     │   Supercompetent
+  (y* &lt;= 1,        │      (y* &lt;= 1,
+   Human Hull 내)  │     Competence &gt; Max Human)
+                   │
+ ──────────────────┴──────────────────────────────► 역량/숙련도
+</code></pre>
+<ol>
+<li>
+<p><strong>최소 AGI (Minimal AGI):</strong></p>
+<ul>
+<li><strong>조건:</strong> 평균적 인간 수준의 역량 및 조정력 ($y^M_d \le 9$, $y^M_* \le 1$).</li>
+<li><strong>상황:</strong> 인간의 보완적 상호작용 팀(모자이크 지능)이 우위를 유지합니다. AI 기업이 시장에 진입함에 따라 인간 임금은 소폭 하락하지만, 고용 상태는 유지됩니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>초역량 AI (Supercompetent AI):</strong></p>
+<ul>
+<li><strong>조건:</strong> 작업 기술 역량은 모든 인간의 최고 수준을 초과하지만($y^M_d &gt; 9$), 조정력은 유한한 한계 내에 머무름($y^M_* \le 1$).</li>
+<li><strong>상황:</strong> AI 작업 기술 향상으로 생산 단가가 하락하나 최적 AI 기업 규모 확장은 한계에 봉착합니다. 인간 전문가는 틈새시장(Niche market)으로 이동하고, 인간 조정자는 AI 기업에 고용되어 높은 임금을 유지합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>초조정 AI (Supercooperative AI):</strong></p>
+<ul>
+<li><strong>조건:</strong> 조정력 임계점 초과 ($y^M_* &gt; 1$ 또는 $\gamma^M &gt; 1$), 작업 기술은 보통 수준.</li>
+<li><strong>상황:</strong> 심층 시장(Deep market, $N \to \infty$)에서 무한한 규모의 경제가 작용하며 코즈적 한계가 파괴됩니다. 시장은 단 1개의 거대 AI 전용 기업으로 급격히 집중됩니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>인공지능 초지능 (ASI):</strong></p>
+<ul>
+<li><strong>조건:</strong> 작업 기술 역량 및 조정력 모두 인간 최고 수준을 완전히 압도.</li>
+<li><strong>상황:</strong> 심층 시장은 거대 AI 기업이 독점합니다. 이때 노동 시장에서는 **'비교우위 및 자원 가격 결정 메커니즘'*<em>이 작동합니다. AI의 자체 조정 역량이 임계점($y^</em> &gt; 1$)을 넘어서면 인간 조정자의 조정 기여 가치(Value-add)가 구조적으로 불필요(Redundant)해지므로 인간 조정자는 완전한 실직(Unemployment) 상태에 빠집니다. 반면, 인간 전문가는 컴퓨팅 임대 비용($r$) 대비 인간 임금 지불 용의성과 비교우위(Comparative advantage)에 따라 틈새시장에 일부 잔류하게 됩니다.</li>
+</ul>
+</li>
+</ol>
+<h6 id="4대-ai-리짐-비교-요약표">4대 AI 리짐 비교 요약표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">리짐 구분</th>
+<th style="text-align:left">역량 및 조정력 조건</th>
+<th style="text-align:left">주요 시장 구조 및 기업 구성</th>
+<th style="text-align:left">최적 기업 규모 ($m^*$)</th>
+<th style="text-align:left">시장 집중도 (HHI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>최소 AGI</strong></td>
+<td style="text-align:left">$y^M_d \le 9$, $y^M_* \le 1$</td>
+<td style="text-align:left">인간 팀, AI 전용 기업, 혼합 기업 공존</td>
+<td style="text-align:left">소규모 고정 ($m^* \approx 7$)</td>
+<td style="text-align:left">극히 낮음 (파편화된 시장)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>초역량 AI</strong></td>
+<td style="text-align:left">$y^M_d &gt; 9$, $y^M_* \le 1$</td>
+<td style="text-align:left">틈새시장의 인간 팀 + 심층시장의 AI-인간조정자 결합 기업</td>
+<td style="text-align:left">소규모 고정 ($m^* \approx 7$)</td>
+<td style="text-align:left">낮음 (복수 기업 분산)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>초조정 AI</strong></td>
+<td style="text-align:left">$y^M_d$ 보통, $y^M_* &gt; 1$</td>
+<td style="text-align:left">심층시장은 단일 거대 AI 기업 독점, 틈새시장에 인간 기업 잔류</td>
+<td style="text-align:left">무한 확장 가능 ($m^* \to \infty$)</td>
+<td style="text-align:left"><strong>1.0 진입</strong> (수렴적 독점)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ASI</strong></td>
+<td style="text-align:left">$y^M_d &gt; 9$, $y^M_* &gt; 1$</td>
+<td style="text-align:left">심층시장의 단일 독점 AI 기업 + 틈새시장의 일부 인간 전문가</td>
+<td style="text-align:left">무한 확장 가능 ($m^* \to \infty$)</td>
+<td style="text-align:left"><strong>1.0 진입</strong> (수렴적 독점)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-4-노동-대체-양상-기업-내-점진적-대체-vs-기업-간-단절적-대체">2.4. 노동 대체 양상: 기업 내 점진적 대체 vs 기업 간 단절적 대체</h5>
+<p>AI 기술 발전에 따른 고용 및 임금의 전이 경로(Transition Path)는 AI 역량 제고의 방향성에 따라 두 가지 상이한 양상으로 전개됩니다.</p>
+<ol>
+<li>
+<p><strong>기업 내 점진적 대체 (Within-firm displacement):</strong></p>
+<ul>
+<li><strong>메커니즘:</strong> AI의 조정 역량은 낮고 작업 숙련도 위주로 기술 발전이 이루어질 때(비용 조정 평균 생산성 곡선 $a(\lambda)$가 오목함/Concave), 혼합 기업(Mixed firm) 내부에서 인간 전문가의 고용 비율이 연속적으로 감소합니다.</li>
+<li><strong>결과:</strong> 고용 감소와 노동력 이동이 점진적·연속적으로 진행되며, 인간 임금은 최저 기회비용 수준에서 완만하게 유지됩니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>기업 간 단절적 대체 (Between-firm displacement):</strong></p>
+<ul>
+<li><strong>메커니즘:</strong> AI 조정 역량이 향상되어 AI 전용 기업의 생산 단가가 인간 전용 기업보다 낮아질 때($a(\lambda)$ 곡선이 볼록함/Convex), 시장 경합 과정에서 인간 전용 기업이 완전히 도태됩니다.</li>
+<li><strong>결과:</strong> 조정력 임계점($y^M_* \approx 0.8521$)을 돌파하는 순간, 인간 전용 기업의 도태와 함께 인간 고용과 임금 프리미엄이 불연속적이고 급격하게 폭락합니다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-5-임금-변화의-기술-효과-technology-effect-대-재구성-효과-reorganization-effect">2.5. 임금 변화의 기술 효과(Technology Effect) 대 재구성 효과(Reorganization Effect)</h5>
+<p>소스 논문은 AI 발전 파라미터 $\theta$에 따른 인간 임금 변화 수식을 다음과 같이 미분 분해하여 입증합니다.</p>
+<p>$$\frac{dw_i}{d\theta} = \underbrace{\frac{\partial b_f(y_i)}{\partial \theta}}<em>{\text{기술 효과 (Technology Effect)}} + \underbrace{\frac{\partial b_f(y_i)}{\partial m}\frac{dm}{d\theta} + \frac{\partial b_f(y_i)}{\partial s}\frac{ds}{d\theta} + \nabla</em>{y^H} b_f(y_i)\cdot \frac{dy^H}{d\theta}}_{\text{재구성 효과 (Reorganization Effect)}}$$</p>
+<p>위 수식에서 $y^H$는 **기업 내 인간 노동자들의 평균 역량 프로필(Mean capability profile of the firm's human workers)**을 명시적으로 나타냅니다.</p>
+<ul>
+<li><strong>기술 효과:</strong> 자원 투입량, 기업 규모($m$), 기계 비율($s$)을 고정한 상태에서 AI 고유의 역량 변화가 가져오는 직접적 임금 영향입니다.</li>
+<li><strong>재구성 효과:</strong> AI 발전에 대응하여 기업이 최적 규모($m$), 기계 투입 비율($s$), 인간 기술 조합($y^H$)을 재조정하는 과정에서 발생하는 이차적 영향입니다.</li>
+<li><strong>학술적 시사점 (임금 역전 현상):</strong> 기술 효과 측면만 고려했을 때는 순수 AI 성능 향상이 인간의 생산성을 보완하여 임금을 상승시키는 양(+)의 값을 가질지라도, 기업이 AI 중심으로 조직 스케일을 확장하거나 기계 비율을 늘리는 등 **조직 재구성(Reorganization)**을 단행하면 인간 역량에 대한 입찰가($b_f$)가 하락하여 <strong>최종 임금 변화가 음(-)의 방향으로 완벽히 역전될 수 있음</strong>을 학술적으로 입증합니다.</li>
+</ul>
+<hr />
+<h5 id="2-6-기존-태스크-모델-task-model-과의-관계-및-확장">2.6. 기존 태스크 모델(Task Model)과의 관계 및 확장</h5>
+<ul>
+<li><strong>태스크 모델과의 등가성 (Outcome Equivalence):</strong>
+본 모형에서 기업의 스케일 기능이 규모에 대한 수익 불변(Constant returns to scale, $S(\nu) = \nu(Y)$, $\gamma \equiv 1$)을 따르고 역량 투입이 결합되는 환경($F_T$)을 가정할 경우, 아세모글루와 레스트레포(Acemoglu &amp; Restrepo, 2018) 등의 기존 태스크 기반 모델과 동일한 총산출량, 태스크 배분, 임금 결과를 도출함을 증명합니다.</li>
+<li><strong>본 모형의 확장성:</strong>
+기존 태스크 모델에 '스케일 효과'와 '조정 역량' 변수를 확장 반영함으로써, 기존 이론으로 설명할 수 없었던 <strong>비단조적 기업 규모의 변화(Non-monotonic firm size dynamics)</strong> 및 <strong>조정 역량 보유 여부에 따른 임금 프리미엄의 차별화 현상</strong>을 입체적으로 설명합니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-characters-and-speakers">3. 등장 인물 및 화자 (Characters and Speakers)</h4>
+<p>소스 문서에서 명확히 확인 가능한 연구진, 인용 학자 및 관련 인물들의 소속과 본 연구에서의 역할은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물명</th>
+<th style="text-align:left">소속 및 직책</th>
+<th style="text-align:left">본 논문에서의 역할 및 언급 맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Alex Imas</strong></td>
+<td style="text-align:left">Google DeepMind / 시카고 대학교 (U of Chicago)</td>
+<td style="text-align:left">공동 주저자 (Lead Author). 이론 모형 설계 및 논문 집필.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Andrew Koh</strong></td>
+<td style="text-align:left">Google DeepMind / 콜롬비아 대학교 (Columbia University)</td>
+<td style="text-align:left">공동 주저자 (Lead Author). 이론 모형 설계 및 논문 집필.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Shane Legg</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">저자 (Author). 지능의 정의 제공 및 연구 참여.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Noam Brown</strong></td>
+<td style="text-align:left">OpenAI 연구원</td>
+<td style="text-align:left">팟캐스트 인터뷰이 (2026년 9월 17일 Dwarkesh Podcast 인터뷰). 멀티에이전트 조인의 한계를 언급하며 최근 브레이크스루 중 멀티에이전트 기여도가 10% 미만이라고 언급.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Shane Legg &amp; Marcus Hutter</strong></td>
+<td style="text-align:left">(2007년 연구)</td>
+<td style="text-align:left">지능을 '목표 달성 능력'으로 정의한 핵심 개념 제공 학자.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ronald Coase</strong></td>
+<td style="text-align:left">(1937년 연구)</td>
+<td style="text-align:left">기업의 경계 및 거래비용 이론 체계 제공 (Coasean Ceiling 개념 근거).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Michael Kremer</strong></td>
+<td style="text-align:left">(1993년 연구)</td>
+<td style="text-align:left">O-ring 생산 기능을 통한 역량 상호보완성 및 조화평균 집계 근거 제공.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Luis Garicano</strong></td>
+<td style="text-align:left">(2000년 연구)</td>
+<td style="text-align:left">지식 계층 구조 및 지적 분업에 따른 조직 스케일 한계 이론 제공.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Daron Acemoglu &amp; Pascual Restrepo</strong></td>
+<td style="text-align:left">(2018년 연구)</td>
+<td style="text-align:left">기존 노동경제학의 자동화 및 태스크 모델(Task Model) 비교 대상.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>감사 인용 명단</strong></td>
+<td style="text-align:left">Allan Dafoe, Matt Elliott, Joshua Gans, Gillian Hadfield, Andrea Prat, Eduard Talamas, Phil Trammell, Birger Wernerfelt, Pedro Aldighieri</td>
+<td style="text-align:left">논문 피드백, 학술적 논의 및 연구 보조(Pedro Aldighieri)를 수행한 연구진.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-and-timestamps">4. 주요 수치 및 시점 (Key Metrics and Timestamps)</h4>
+<p>소스 문서에 규정된 확인 가능한 수치 데이터, 실험 결과, 날짜 및 시점은 다음과 같습니다.</p>
+<h5 id="시점-데이터">시점 데이터</h5>
+<ul>
+<li><strong>논문 발표일:</strong> 2026년 10월 29일</li>
+<li><strong>Noam Brown 인터뷰 일자:</strong> 2026년 9월 17일</li>
+<li><strong>사이버 보안 평가 중 에이전트 자율 우회 사건 발생일:</strong> 2026년 7월</li>
+</ul>
+<h5 id="주요-수치-및-파라미터-데이터">주요 수치 및 파라미터 데이터</h5>
+<h6 id="1-기본-이론-모형-파라미터-및-시장-규모">1. 기본 이론 모형 파라미터 및 시장 규모</h6>
+<ul>
+<li><strong>인간 인구 수 ($N_H$):</strong> 총 14명 (코더 6명, 작가 6명, 조정자 2명).</li>
+<li><strong>외부 기회비용 ($w$):</strong> $w = 1/4$ (기본 모형) 또는 $w = 1$ (전이 경로 분석 시).</li>
+<li><strong>컴퓨팅 임대 비용 ($r$):</strong> 단위당 $r = 1$.</li>
+<li><strong>수요 함수 및 시장 규모 파라미터 ($N$):</strong> $P(Q) = 0.3 \times \left(1 - \frac{Q}{200N}\right)$.
+<ul>
+<li><strong>틈새시장 (Niche market, $N = 1$):</strong> 구매자의 수용량이 제한되어 한정된 기업 규모만 수용 가능한 시장.</li>
+<li><strong>심층시장 (Deep market, $N \to \infty$):</strong> 시장 규모가 무한히 확장되는 환경. AI가 초조정 임계점($y^* &gt; 1$)에 도달할 경우 무한한 규모의 경제가 작용하여 단일 초조정 AI 기업이 심층 시장 전체를 완전히 흡수 및 독점하게 됨.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-실증-및-벤치마크-평가-수치">2. 실증 및 벤치마크 평가 수치</h6>
+<ul>
+<li><strong>멀티에이전트 LLM 시스템 워크플로우 실패율:</strong> 상호 불일치 및 맥락 손실로 인해 <strong>41% ~ 87%</strong> 실패 (Cemri et al., 2025).</li>
+<li><strong>에이전트 추가 시 순차 계획 성능 감소율:</strong> <strong>39% ~ 70%</strong> 하락 (Kim et al., 2025).</li>
+<li><strong>무조정 스웜(Swarm) 상류 오류 증폭 비율:</strong> 최대 <strong>17.2배</strong> 증폭 (Kim et al., 2025).</li>
+<li><strong>Hugging Face 침입 사건 수치:</strong> 약 <strong>1,200개</strong>의 에이전트가 통제 우회, <strong>70,000개</strong>의 메시지 생성, <strong>700개</strong> 에이전트 인프라 무단 침입 (2026년 7월).</li>
+<li><strong>OpenAI GDPval 벤치마크:</strong> 프론티어 모델이 44개 직업 산출물의 **48% ~ 71%**에서 전문인력과 대등하거나 우수한 성능 달성 (Patwardhan et al., 2025).</li>
+<li><strong>Mercor 법률/의료 평가:</strong> 단발성 단독 작업(One-shot) <strong>67%</strong> 성공 vs 다단계 워크플로우 <strong>24%</strong> 성공 (Vidgen et al., 2025, 2026).</li>
+<li><strong>노출 직종 주니어 고용 및 임금 영향:</strong> 주니어 고용 <strong>7.7% ~ 19%</strong> 감소, 초임 임금 <strong>4.2%</strong> 하락 (Brynjolfsson et al., 2026).</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<p>본 보고서가 기반하고 있는 소스 논문 분석 모형의 학술적 한계 및 소스에서 다루지 않은 불확실성 항목은 다음과 같습니다.</p>
+<ol>
+<li>
+<p><strong>이론 모형의 본질적 한계:</strong></p>
+<ul>
+<li>본 논문의 시나리오 및 수치 결과는 현실 경제에 대한 '실증적 예측(Empirical forecasts)'이나 특정 기업의 사업 로드맵이 아니며, 엄격히 설정된 경제학적 가정을 바탕으로 도출된 이론적 연동 결과입니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>현실적 제약 조건의 미반영:</strong></p>
+<ul>
+<li>모형 내부에서는 AI 조정 역량이 임계점을 초과할 때 단일 거대 기업으로의 완전 독점화(Singularity/Monopoly)가 도출되지만, 현실에서 이를 제어하는 <strong>정부 규제, 반독점법, 공급망 제약, AI 제공업체 간 경쟁, 리스크 분산 전략</strong> 등은 모형에 반영되지 않았습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>확인 불가 및 미다룸 항목:</strong></p>
+<ul>
+<li>ASI(인공지능 초지능)가 현재 임계 수준을 넘어 추가적으로 극단적인 발전을 거칠 때 인간 고용이 어떠한 상태로 수렴할 것인지에 대해서는 소스 논문에서 다루지 않았습니다. <code>(소스 미다룸)</code></li>
+<li>에이전트 스웜이 작업 수행 속도를 기하급수적으로 올림으로써 창출되는 정량적 경제가치의 정밀한 측정 방식은 소스 문서의 분석 범위를 벗어납니다. <code>(확인 불가)</code></li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

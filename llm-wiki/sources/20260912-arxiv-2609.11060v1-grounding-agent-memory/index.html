@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grounding Agent Memory: Environment-Probing Curation for Enterprise Agents</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Grounding Agent Memory: Environment-Probing Curation for Enterprise Agents</h1>
+<p class="page-meta">논문 · 2026-09-12</p>
+<h2 id="요약">요약</h2>
+<p>장기 실행 에이전트의 사후 메모리 큐레이터가 완료된 궤적만 보고 기억을 만들면, 한 번의 오류를 보존하거나 부분 관찰을 일반화하고 환경 변화 뒤에도 낡은 지식을 남길 수 있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/abs/2609.11060v1">출처</a> · <a href="https://www.youtube.com/watch?v=L5HrQxY9Ig0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="grounding-agent-memory-환경을-확인한-뒤-기억하는-에이전트">Grounding Agent Memory: 환경을 확인한 뒤 기억하는 에이전트</h3>
+<h4 id="핵심-주장">핵심 주장</h4>
+<p>장기 실행 에이전트의 사후 메모리 큐레이터가 완료된 궤적만 보고 기억을 만들면, 한 번의 오류를 보존하거나 부분 관찰을 일반화하고 환경 변화 뒤에도 낡은 지식을 남길 수 있다. 이 논문은 기존 비동기 큐레이터에게 최소 권한의 읽기 전용 환경 도구를 제공하는 <code>environment-probing curation</code>을 제안한다. 큐레이터는 후보 기억을 곧바로 쓰기 전에 현재 환경을 조회해 사실을 확인하고 적용 범위를 좁히며 낡은 내용을 갱신한다.</p>
+<h4 id="무엇이-바뀌고-무엇이-그대로인가">무엇이 바뀌고 무엇이 그대로인가</h4>
+<p>변경점은 작업 종료 뒤의 쓰기 단계다. 큐레이터는 완료된 궤적, 채점 결과, 관련 기존 기억을 받은 뒤 읽기 전용 도구로 테이블·조인 키·인코딩·변경된 필드 또는 문서 위치·워크북 내용·도구 관례를 확인한다. 논문의 <code>propose–probe–commit</code> 흐름에서 프로브는 미래 과제를 풀지 않고 생산 환경을 수정하지 않는다. 작업 에이전트, 검색기, 메모리 표현·스키마, 작업 시점의 <code>memory_read</code> 인터페이스, 생산 쓰기 권한은 그대로다. 안전한 읽기 표면이 없으면 궤적 전용 큐레이션으로 되돌아간다.</p>
+<h4 id="평가-계약">평가 계약</h4>
+<p>비교 대상은 GHCP(No Memory), GHCP + Full ICL, GHCP + Mem, GHCP + Mem(w/ Env Probing) 네 시스템이다. 주요 CLBench와 adapted APEX 실험은 gpt-5.4를 쓰며, 각 실험 안에서 작업 에이전트·증류기·큐레이터의 기반 모델은 같다. CLBench는 20번째 질문 뒤 SQLite 스키마가 바뀌는 40문항 drift 일정이며 구성마다 짝지은 시드 5회다. 별도의 30문항 no-drift 일정은 Sonnet 4.6과 Opus 4.7에서 각 모델·메모리 비교를 5회 수행한다. APEX는 여섯 문서 세계의 경영 컨설팅 과제 90개이며, 상태 보유 구성은 5회, stateless 기준선은 3회다.</p>
+<p>통과 할인 보상은 엄격 통과 여부와 작업 에이전트 도구 호출 수를 함께 반영한다. CLBench의 예산 B는 SQL 호출 15회, APEX는 Archipelago 도구 호출 100회다. 메모리 관리 호출은 이 보상의 도구 호출 수에서 제외되고, 본문 표의 작업 에이전트 비용은 별도로 추적한 증류·큐레이션 비용을 제외한다.</p>
+<h4 id="clbench-결과-정확한-조건에-묶어-읽기">CLBench 결과: 정확한 조건에 묶어 읽기</h4>
+<p>40문항 GPT-5.4 drift 일정에서 No Memory는 통과율 39±4%, 총 보상 8.60±0.83, 질문당 쿼리 8.8±0.3, 입력 토큰 3.14M±14.5K, 작업 에이전트 비용 3.38±0.70달러다. Env Probing은 통과율 73±5%, 총 보상 22.60±2.07, 질문당 쿼리 4.7±0.3, 입력 토큰 1.69M±97.8K, 비용 1.68±0.14달러다. 모두 5회의 짝지은 독립 실행에 대한 평균과 95% Student-t 신뢰구간이다.</p>
+<p>Full ICL은 쿼리가 3.0±0.2로 가장 적었지만 입력 토큰이 5.42M±569.5K로 커졌다. 궤적 전용 GHCP + Mem은 통과율 70±16%, 총 보상 20.00±6.52, 쿼리 5.6±1.4, 비용 1.99±0.65달러였다. 따라서 이 표는 환경 프로빙이 모든 지표에서 언제나 최고라는 뜻이 아니라, 이 drift 조건에서 가장 높은 통과율·보상과 가장 낮은 입력량·비용을 기록했다는 뜻이다.</p>
+<p>30문항 no-drift 일정에서는 Sonnet 4.6의 Env Probing 평균 보상이 0.748±0.030, 짝지은 No Memory가 0.327±0.055로 lift가 +0.421이었다. Opus 4.7에서는 각각 0.721±0.062와 0.458±0.048로 lift가 +0.263이었다. 논문은 두 모델 모두에서 궤적 전용 메모리보다 프로빙 평균 보상이 높았다고 보고하지만, 이는 고정 순서 no-drift 평가에 한정된다.</p>
+<h4 id="adapted-apex-결과와-음의-결과">adapted APEX 결과와 음의 결과</h4>
+<p>APEX 표는 여섯 세계별로 3회 No Memory 기준선 대비 후보의 통과 할인 보상 증가량을 후보 작업 에이전트 평균 비용으로 나눈 값이다. 후보 상태 보유 구성은 5회이며 비용은 증류·큐레이션을 제외한다. 여섯 세계×세 메모리 방식의 18개 평균 보상 비교는 모두 기준선보다 양수였고, 작업 에이전트 호출 감소 범위는 16–75%였다. Env Probing은 여섯 세계 중 다섯 곳에서 보상 증가/달러가 가장 높았다. 나머지 hard 세계 075ef4df에서는 GHCP + Mem이 0.274/달러, Probe가 0.271/달러로 궤적 전용 메모리가 근소하게 앞섰다. 세계 941eba66에서는 Probe의 원시 보상 증가가 Mem보다 0.04 낮았다. Full ICL은 일부 세계에서 원시 보상이 더 높을 수 있지만 한 세계에서는 stateless 기준선보다 비용이 더 컸다.</p>
+<h4 id="해석과-한계">해석과 한계</h4>
+<p>이 결과는 작업 시간 기능을 늘리지 않고 쓰기 시점의 증거 품질을 높이면, 평가된 데이터베이스 탐색과 문서 분석 환경에서 반복 탐색을 줄일 수 있다는 시스템 수준의 증거다. 그러나 프로빙 자체만의 순수 인과 효과로 모든 장기 에이전트에 일반화할 수는 없다. 벤치마크·하네스·모델·도구·과제 순서와 비용 경계가 정해진 실험이며, selected matched cases는 메커니즘 예시일 뿐 집계 효과를 입증하지 않는다. 세계별 불확실성 구간이 겹쳐 subgroup 차이는 확정되지 않았다. 프로브 비용, 지연, 저장·I/O, 개인정보·접근통제 부담은 작업 에이전트 비용과 별도다. 읽기 전용도 민감 정보 노출 위험을 없애지 않으며 실제 배포에서는 최소 권한, 인증, 감사, 범위 제한이 필요하다.</p>
+<p>이 패키지는 arXiv:2609.11060v1 원문만을 바탕으로 만든 출처 충실 해설이다. arXiv v1 프리프린트이며 동료평가와 독립 재현은 이 패키지에서 확인되지 않았다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

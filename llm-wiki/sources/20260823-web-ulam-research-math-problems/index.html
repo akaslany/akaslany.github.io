@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Math Problems and Verifier-Backed Tasks for Frontier Models - Ulam Blog</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Research Math Problems and Verifier-Backed Tasks for Frontier Models - Ulam Blog</h1>
+<p class="page-meta">웹 · 2026-08-23</p>
+<h2 id="요약">요약</h2>
+<p>Ulam은 공개 벤치마크 오염에 대응해 새 수학 문제와 검증 가능한 연구 데이터를 제안한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.ulam.ai/research-math-problems">출처</a> · <a href="https://www.youtube.com/watch?v=aY7r5nx2UTU">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="수학-ai의-다음-병목-새-문제와-검증-가능한-연구">수학 AI의 다음 병목: 새 문제와 검증 가능한 연구</h3>
+<p>이 보고서는 2026년 8월 18일 공개된 Ulam의 공식 블로그 글 「Research Math Problems and Verifier-Backed Tasks for Frontier Models」를 심층 분석한 결과입니다. 본 문서는 수학적 인공지능(AI) 개발이 직면한 데이터 오염 문제를 진단하고, 이를 해결하기 위한 Ulam의 데이터 계층 구조와 검증 방법론을 상세히 다룹니다.</p>
+<hr />
+<h4 id="1-개요-수학-ai의-데이터-문제와-공개-벤치마크의-한계">1. 개요: 수학 AI의 데이터 문제와 공개 벤치마크의 한계</h4>
+<p>현재 수학 AI 모델들은 공개된 벤치마크에서 높은 점수를 기록하고 있으나, 이것이 진정한 수학적 일반화 능력을 의미하는지는 불확실합니다.</p>
+<ul>
+<li><strong>친숙성과 오염:</strong> 대부분의 공개 문제 스타일은 이미 모델에 익숙하며, 해결책이 공개 데이터셋에 포함되어 있을 가능성이 큽니다.</li>
+<li><strong>측정의 불확실성:</strong> 기존 데이터로는 모델이 단순히 기억(Recall)을 통해 문제를 푸는 것인지, 새로운 수학적 개념에 대해 추론하는 것인지 구분하기 어렵습니다.</li>
+<li><strong>병목 현상:</strong> 프론티어 모델의 발전을 위해서는 공개 분포를 벗어난 '진짜 새로운 수학'에 대한 데이터가 필수적입니다.</li>
+</ul>
+<hr />
+<h4 id="2-수학-연구-데이터의-세-가지-계층">2. 수학 연구 데이터의 세 가지 계층</h4>
+<p>Ulam은 수학 AI의 성능 향상 및 평가를 위해 데이터를 세 가지 계층으로 구분하여 제안합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">제품군</th>
+<th style="text-align:left">주요 목적</th>
+<th style="text-align:left">검증 경계</th>
+<th style="text-align:left">최적 활용 분야</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>연구 수학 문제 (Problems)</strong></td>
+<td style="text-align:left">정리 증명/반증, 반례 발견, 부분적 진전 달성</td>
+<td style="text-align:left">전문가 리뷰, 문헌 검토, 계산 및 개별 주장 검증</td>
+<td style="text-align:left">프론티어 평가, 장기 추론 에이전트, RLVR, SFT</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구 수학 과제 (Tasks)</strong></td>
+<td style="text-align:left">난해한 수치 계산, 객체 구성, 검증 가능한 인증서 생성</td>
+<td style="text-align:left">실행 가능한 검증기, 비공개 테스트 케이스, Lean 형식화</td>
+<td style="text-align:left">RLVR, 자동 평가, 보상 모델 훈련, 에이전트 환경</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구 추론 데이터셋 (Datasets)</strong></td>
+<td style="text-align:left">난해한 수학 문제 해결 시도 과정 학습</td>
+<td style="text-align:left">주장, 증명 단위, 행동 및 궤적 수준의 검증 상태 기록</td>
+<td style="text-align:left">SFT, 프로세스 감독(Process Supervision), 선호 데이터</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-열린-문제의-평가-이진-검증의-한계-극복">3. 열린 문제의 평가: 이진 검증의 한계 극복</h4>
+<p>연구 수준의 열린 문제(Open Problems)는 정답 유무라는 이진적 틀로 평가하기 어렵습니다. 모든 평가를 전문가의 주관에만 맡기면 확장성이 떨어지고, 모든 문제를 이진 검증기로 축소하면 수학적 가치가 손실됩니다.</p>
+<ul>
+<li><strong>부분 진전의 가치:</strong> 증명 과정에서 검증된 보조정리(Lemma), 유효한 축약, 정직한 미완성 상태를 보존하는 것이 중요합니다.</li>
+<li><strong>Rich Signal 추출:</strong> 모델의 응답 전체를 '정답/오답'으로 라벨링하는 대신, 다음과 같은 요소를 분리하여 평가합니다.
+<ul>
+<li>입증된 주장 및 계산으로만 뒷받침된 주장</li>
+<li>타당한 추측 및 가설</li>
+<li>전제 조건이 확인된 정리의 적용</li>
+<li>타당하지만 불완전한 축약 및 오류 단계</li>
+<li>해결되지 않은 첫 번째 증명 의무(Proof Obligation)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="4-best-of-k-방식의-재정의">4. Best-of-k 방식의 재정의</h4>
+<p>가장 자신감 있는 답(Most confident answer)을 선택하는 방식은 연구 수학 데이터에서 지양해야 할 방식입니다. 유익한 데이터셋 구성을 위해 Ulam은 다음과 같은 궤적 쌍(Trajectory Pairs) 구성을 권장합니다.</p>
+<ol>
+<li><strong>최고의 시도:</strong> 전문가가 평가한 가장 강력한 시도로, 검증된 모든 보조정리와 유의미한 축약을 포함합니다.</li>
+<li><strong>가장 유익한 실패:</strong> 결정적인 오류나 근거 없는 도약이 발생한 지점을 주석으로 처리한 '근접한 실패' 사례입니다.</li>
+</ol>
+<p>이러한 방식은 오류 탐지, 유효한 접두사 보존, 과대 주장된 해법과 보정된 진전 간의 선호도 학습에 기여합니다.</p>
+<hr />
+<h4 id="5-rlvr을-위한-과제-설계-발견은-어렵게-검증은-싸게">5. RLVR을 위한 과제 설계: 발견은 어렵게, 검증은 싸게</h4>
+<p>두 번째 데이터 층인 '연구 수학 과제'는 난해한 발견 과정을 자동화된 검증으로 연결하는 데 집중합니다. 이는 RLVR(Reinforcement Learning from Verifiable Rewards) 및 자기 주도 강화 학습 환경에 적합합니다.</p>
+<ul>
+<li><strong>과제 예시:</strong> 특정 속성을 가진 그래프나 조합론적 객체 구성, 거대한 탐색 공간 내 반례 발견, 수학적 구조의 최적화 등.</li>
+<li><strong>검증의 효율성:</strong> 모델이 해결책을 찾는 과정은 극도로 어려울 수 있으나, 결과물(인증서)은 자동 검증기를 통해 빠르게 확인할 수 있어야 합니다.</li>
+</ul>
+<hr />
+<h4 id="6-검증-경계-verification-boundary-의-명확화">6. 검증 경계(Verification Boundary)의 명확화</h4>
+<p>검증기가 증명하는 범위를 정확히 명시하는 것은 데이터의 신뢰성을 위해 필수적입니다.</p>
+<ul>
+<li><strong>Python 검증기:</strong> 유한한 객체가 특정 조건을 만족함을 확인할 뿐, 그에 대응하는 <strong>점근적 추측(Asymptotic Conjecture) 전체를 증명하지는 않습니다.</strong></li>
+<li><strong>수치 실험:</strong> 이는 가설에 대한 증거(Evidence)를 제공할 뿐, <strong>수학적 정리(Theorem)가 아닙니다.</strong></li>
+<li><strong>Lean 형식화:</strong> Lean 4가 승인한 명제는 오직 <strong>Lean에 실제로 인코딩된 범위 내에서만</strong> 공식적으로 검증된 것으로 간주합니다.</li>
+</ul>
+<hr />
+<h4 id="7-문제군-problem-family-단위의-확장-및-분리">7. 문제군(Problem Family) 단위의 확장 및 분리</h4>
+<p>하나의 열린 문제를 여러 개의 보조 과제로 변환함으로써 모델의 학습 효율을 높일 수 있습니다.</p>
+<ul>
+<li><strong>변환 구조:</strong> 문헌 조사 및 독창성 선별 → 타당하지만 잘못된 논증 기반의 증명 간극 탐지 → 유한한 근사(Proxy) 과제 → 반례 탐색 환경 → 정리 선택 및 연구 계획 수립.</li>
+<li><strong>데이터 분리 원칙:</strong> 훈련(Train), 개발(Dev), 비공개 홀드아웃(Holdout) 데이터는 단순히 문장을 변형하는 수준이 아니라 <strong>문제군 수준에서 분리</strong>되어야 합니다. 이는 모델이 동일한 수학적 개념의 변형을 암기하여 일반화 능력을 오해하는 것을 방지합니다.</li>
+</ul>
+<hr />
+<h4 id="8-연구-궤적이-주는-학습-신호">8. 연구 궤적이 주는 학습 신호</h4>
+<p>연구 수학 데이터의 진정한 가치는 문제와 검증기 사이의 '경로'에 있습니다. 전체 연구 궤적에는 다음과 같은 유의미한 신호가 포함됩니다.</p>
+<ul>
+<li>잘못된 비유의 폐기 및 유한한 수치 실험 수행</li>
+<li>불변량(Invariant)의 발견 및 정리의 오용 확인</li>
+<li>검증기 실패 메시지에 따른 증명 수선(Proof Repair)</li>
+<li>어떤 부분이 해결되지 않았는지에 대한 정직한 보고</li>
+</ul>
+<p>이러한 데이터는 SFT, 비평 모델(Critic) 훈련, 프로세스 감독 및 연구 에이전트 개발의 핵심 자산이 됩니다.</p>
+<hr />
+<h4 id="9-ulam의-공급-규모-및-독창성-관리-자기보고-데이터">9. Ulam의 공급 규모 및 독창성 관리 (자기보고 데이터)</h4>
+<p>Ulam은 자사가 제공하는 데이터의 규모와 관리 방식에 대해 다음과 같이 밝히고 있습니다.</p>
+<ul>
+<li><strong>UnsolvedMath:</strong> 8,000개 이상의 열린 문제와 역사적 난제를 아카이브한 데이터셋입니다. 단, 공개된 문제 문장은 모델 훈련 데이터에 포함될 수 있으므로 <strong>그 자체를 비공개 일반화 벤치마크로 취급하지 않습니다.</strong></li>
+<li><strong>ArxivNet:</strong> 5,000편 이상의 수학 논문을 구조화된 증명 과정 데이터로 변환한 자산입니다.</li>
+<li><strong>공급 능력:</strong> 초기 1,000개의 연구 문제/과제 공급이 가능하며, 단계적으로 10,000개까지 확장이 가능하다고 주장합니다.</li>
+<li><strong>독창성 판정:</strong> '정확한 일치가 발견되지 않음(No exact match found)'이라는 검색 결과가 <strong>문제의 수학적 독창성을 보증하는 정식 증명은 아닙니다.</strong> 상태 라벨과 검색 범위의 불확실성을 데이터에 포함하여 관리합니다.</li>
+</ul>
+<hr />
+<h4 id="10-결론-유창함을-넘어선-실제적-해결로">10. 결론: 유창함을 넘어선 실제적 해결로</h4>
+<p>수학적 추론 모델의 다음 단계는 단순히 교과서적 문제를 푸는 능력을 넘어서야 합니다.</p>
+<ul>
+<li><strong>핵심 통찰:</strong> 어려운 프롬프트가 그 자체로 데이터셋이 될 수 없으며, 모델의 유창한 답변이 곧 수학적 해답을 의미하지도 않습니다.</li>
+<li><strong>핵심 가치:</strong> 데이터의 진정한 가치는 추론 과정 중 어떤 부분이 엄밀한 검토를 견뎌냈는지 식별하는 데 있습니다.</li>
+</ul>
+<p>수학 AI 개발 팀은 모델이 본 적 없는 문제에 대해 진행 상황을 측정하고, 연구 문제(Problems)를 통해 거동을 확인하며, 연구 과제(Tasks)를 통해 확장 가능한 보상을 제공받아야 합니다. 이 과정에서 <strong>검증 경계(Verification Boundary)를 보존하는 것</strong>이 성공적인 수학 AI 구축의 핵심입니다.</p>
+<hr />
+<h4 id="공개-전-편집-검증-메모">공개 전 편집 검증 메모</h4>
+<ul>
+<li><strong>출처 경계:</strong> Ulam 공식 블로그의 회사 자기보고 자료이며 제품 성능·규모를 외부에서 독립 검증한 보고서가 아니다.</li>
+<li><strong>검증 경계:</strong> Python checker는 유한 객체의 속성을, 수치 실험은 경험적 증거를, Lean은 실제로 형식화된 명제 범위를 확인한다. 어느 하나도 자동으로 열린 추측 전체의 해결을 뜻하지 않는다.</li>
+<li><strong>독창성 경계:</strong> 정의된 검색에서 정확한 일치를 찾지 못했다는 사실은 수학적 독창성의 증명이 아니다.</li>
+<li><strong>벤치마크 경계:</strong> 공개 UnsolvedMath 문장은 학습 데이터에 포함될 수 있으므로 그 자체는 비공개 일반화 holdout이 아니다.</li>
+<li><strong>수치 경계:</strong> 8,000+, 5,000+, 1,000, 10,000 규모는 Ulam의 자기보고 수치로 귀속한다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

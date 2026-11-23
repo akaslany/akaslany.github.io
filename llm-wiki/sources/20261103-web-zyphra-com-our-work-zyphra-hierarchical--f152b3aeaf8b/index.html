@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZHA: Zyphra Hierarchical Attention | Zyphra</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>ZHA: Zyphra Hierarchical Attention | Zyphra</h1>
+<p class="page-meta">웹 · 2026-11-03</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 지프라(Zyphra) 연구진이 발표한 연구 논문 &quot;ZHA: Zyphra Hierarchical Attention&quot;을 바탕으로, 트랜스포머(Transformer) 모델의 초장문 컨텍스트 처리 한계를 극복하기 위해 제안된 계층적 희소 어텐션(Sparse Attention) 기술인 ZHA의 핵심 메커니즘과…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://zyphra.com/our-work/zyphra-hierarchical-attention">출처</a> · <a href="https://www.youtube.com/watch?v=w5Qxos8ZQZ8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="지프라-계층적-어텐션-zha-기술-해설-보고서">지프라 계층적 어텐션(ZHA) 기술 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 지프라(Zyphra) 연구진이 발표한 연구 논문 &quot;ZHA: Zyphra Hierarchical Attention&quot;을 바탕으로, 트랜스포머(Transformer) 모델의 초장문 컨텍스트 처리 한계를 극복하기 위해 제안된 계층적 희소 어텐션(Sparse Attention) 기술인 ZHA의 핵심 메커니즘과 성과를 분석한다. 기존 트랜스포머의 표준 어텐션은 시퀀스 길이가 길어짐에 따라 연산 복잡도가 2차(Quadratic)로 증가하는 문제를 안고 있으며, 이를 해결하기 위한 기존 희소 어텐션 기법들 또한 평면적 인덱서(Indexer)의 연산 한계로 인해 완전한 하위 2차 연산 복잡도(Subquadratic complexity) 스케일링을 달성하지 못했다.</p>
+<p>지프라 연구진은 이러한 문제를 해결하기 위해 키-값(KV) 캐시를 계층적 트리(Hierarchical tree) 구조로 생성하고, 탐색 과정을 트리 검색 형태로 단순화하는 ZHA 기법을 제시한다. ZHA는 상위 단계에서 하위 단계로 내려가는 상위-p 루팅(top-p routing) 메커니즘을 적용하여 쿼리(Query)에 가장 관련성이 높은 토큰 집합만을 선택적으로 참조함으로써 어텐션 연산 및 탐색 복잡도를 효과적으로 낮춘다.</p>
+<p>또한 지프라 연구진은 사전 학습된 기존 대규모 언어 모델(LLM)을 동결(Freeze)한 상태에서 단 몇 십억(a few billion) 개의 토큰만을 활용한 KL-증류(KL-distillation) 과정을 통해 ZHA 구조로의 이식이 가능함을 증명하였다. 실험 결과, ZHA는 높은 희소성 수준에서도 긴 컨텍스트 추론, 에이전트 코딩, 정보 검색 벤치마크 등에서 기존의 밀집(Dense) 어텐션 모델과 대등하거나 더 뛰어난 성능을 유지하는 것으로 나타났다.</p>
+<p>본 보고서에서는 소스 문맥에 명기된 사실(Fact)과 지프라 연구진이 제시한 주장(Source's Claim)을 엄격히 구분하여 서술하며, 외부 정보나 불확실한 추론을 배제하고 기술적 작동 원리와 평가 지표를 상세히 정리한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-issues-arguments">2. 주요 논점 (Key Issues &amp; Arguments)</h4>
+<h5 id="2-1-기존-어텐션-방식의-효율성-한계">2.1 기존 어텐션 방식의 효율성 한계</h5>
+<ul>
+<li><strong>[논점]:</strong> 기존 어텐션 효율화 방식들은 정보 손실 문제에 직면하거나, 2차 복잡도 연산 부담을 인덱서로 전이시키는 한계를 지닌다.</li>
+<li><strong>[근거]:</strong>
+<ul>
+<li>소스문맥의 'Why Is Efficient Attention So Difficult?' 단락에 명시된 바와 같이, 표준 밀집 어텐션(Standard Dense Attention)은 모든 토큰을 이전의 모든 토큰과 비교하므로 복잡도가 2차($O(N^2)$)로 증가하며, 컨텍스트가 길어질수록 KV 캐시 용량과 연산 비용이 폭증한다.</li>
+<li>상태 공간 모델(SSM), 선형 어텐션(Linear Attention) 변형, 슬라이딩 윈도우(Sliding-window) 어텐션 등 '고정 크기 상태(Fixed-size state)' 압축 방식은 시퀀스가 길어질 때 새로 들어오는 정보가 기존의 유용한 정보를 덮어쓰거나 간섭을 일으키는 한계가 발생한다.</li>
+<li>경량 인덱서를 활용하는 기존 희소 어텐션(Sparse Attention) 방식은 실제 어텐션 연산 자체는 희소하게 수행하지만, 전체 컨텍스트 토큰이나 압축 텍스트 청크를 검색하는 인덱서 자체가 전체 컨텍스트를 스캔해야 하므로 2차 연산 부담이 인덱서로 옮겨갈 뿐 아심토틱(Asymptotic) 스케일링 문제를 근본적으로 해결하지 못한다.</li>
+</ul>
+</li>
+<li><strong>[사례/실험결과]:</strong> 책을 읽으며 고정된 크기의 메모장에만 요약할 경우, 책의 양이 늘어남에 따라 결국 과거의 중요한 정보가 지워지거나 오염되는 현상에 비유된다. Qwen 3.6 35B MoE 모델 분석에 따르면, 고정 비율의 어텐션 확률을 차지하는 상위-p 토큰 집합의 크기는 시퀀스 길이에 따라 서브리니어(Sublinear) 전력 법칙(Power law)을 따른다.</li>
+<li><strong>[구분 표기: 사실/소스 주장/작성자 해석]:</strong>
+<ul>
+<li><em>사실:</em> 표준 어텐션의 2차 복잡도 특성 및 기존 희소 어텐션 인덱서의 선형/2차 스캔 구조는 소스문맥의 'Why Is Efficient Attention So Difficult?' 단락에 명시된 사실임.</li>
+<li><em>소스 주장:</em> 기존 접근법들은 쿼리 의존적 검색 유지와 서브리니어 성장을 동시에 달성하지 못하며, ZHA가 제시하는 트리 인덱서만이 이를 극복할 수 있다는 지프라 연구진의 주장임.</li>
+<li><em>작성자 해석:</em> 해당 단락 분석을 바탕으로 기존 기법들의 한계와 ZHA의 필요성을 객관적으로 구조화함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-zha의-작동-원리-및-트리-구조-검색">2.2 ZHA의 작동 원리 및 트리 구조 검색</h5>
+<ul>
+<li><strong>[논점]:</strong> KV 캐시를 계층적 트리 구조로 구축하고 상위-p 루팅을 적용함으로써, 전체 컨텍스트를 동등한 해상도로 스캔하지 않고 하위 2차 연산 복잡도(Subquadratic complexity)로 유용한 토큰을 검색할 수 있다.</li>
+<li><strong>[근거]:</strong>
+<ul>
+<li><strong>트리 생성:</strong> KV 캐시의 원본 키(Key)들을 연속된 그룹(청크, Chunk)으로 나누고, 학습된 '참조 쿼리(Reference queries)'를 사용하여 청크별 요약 표상을 생성한다. 소스 문맥의 Figure 2 및 3 사양에 따르면 청크 창 크기(Chunk Window)는 4개의 키로 구성되며, 1단계 트리는 4개, 2단계는 16개, 6단계는 4,096개 토큰 영역을 요약한다. 이때 4개 쿼리, 1개 키, 1개 밸류 조작을 갖는 GQA(Grouped-Query Attention) 구조가 활용된다. 원본 KV 캐시는 리프(Leaf) 노드에 그대로 유지된다.</li>
+<li><strong>상위-p 루팅 (Top-p Routing):</strong> 새로운 쿼리가 들어오면 트리의 최상위 단계 요약과 먼저 비교한 후, 예상 어텐션 확률의 특정 비율을 차지하는 가장 작은 노드 그룹을 선택(top-p)하여 해당 하위 가지로만 확장을 진행한다. 이 과정을 원본 KV 캐시 단계까지 반복한 뒤 최종 선택된 토큰들에 대해서만 어텐션을 수행한다.</li>
+</ul>
+</li>
+<li><strong>[사례/실험결과]:</strong> 지프라 연구진은 이 방식을 &quot;매우 큰 책에서 특정 문단을 찾을 때 모든 문장을 읽지 않고 목차(Table of contents)를 보고 장(Chapter)을 찾고, 절(Section)을 거쳐 단락(Paragraph)을 찾아가는 검색 과정&quot;에 비유하였다.</li>
+<li><strong>[구분 표기: 사실/소스 주장/작성자 해석]:</strong>
+<ul>
+<li><em>사실:</em> 청크 분할(청크 크기 4), 참조 쿼리를 통한 요약 생성, GQA 구조(4:1:1), 상위-p 루팅을 통한 계층적 트리 구축 및 단계적 정밀 탐색 메커니즘은 논문에 기재된 객관적 기술 사양임.</li>
+<li><em>소스 주장:</em> 고정된 상위-k 대신 상위-p 방식을 사용함으로써 쿼리의 확산성/집중도에 따라 검색 범위를 가변적으로 적응시켜 연산 낭비를 막고 하위 2차 연산 스케일링을 달성할 수 있다는 지프라 연구진의 주장임.</li>
+<li><em>작성자 해석:</em> 서점/도서 검색 비유를 통해 ZHA의 조대-미세(Coarse-to-fine) 탐색 절차를 직관적으로 이해할 수 있도록 구성함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-사전-학습된-모델로의-증류-distillation-및-성능-평가">2.3 사전 학습된 모델로의 증류(Distillation) 및 성능 평가</h5>
+<ul>
+<li><strong>[논점]:</strong> 기존 사전 학습 모델의 가중치를 동결한 상태에서 소량의 토큰으로 ZHA 인덱서를 증류할 수 있으며, 높은 희소성 수준에서도 높은 벤치마크 성능을 유지한다.</li>
+<li><strong>[근거]:</strong>
+<ul>
+<li>사전 학습된 모델의 가중치는 완전히 동결(Frozen)하고, KL-증류(KL-distillation)를 통해 ZHA의 참조 쿼리가 원본 밀집 어텐션의 확률 분포를 모사하도록 학습시킨다.</li>
+<li>추가되는 파라미터는 참조 쿼리뿐이므로 파라미터 증가량이 매우 적다. 32K 컨텍스트 길이에서 단 몇 십억(a few billion) 개의 토큰 학습만으로도 수백K 이상의 컨텍스트에 적용이 가능하다. 이는 비교 대상인 MiniMax Sparse Attention(MSA)의 인덱서 학습에 400억(40B) 개의 토큰이 소요된 것과 비교할 때 10분의 1 이하의 토큰만으로 학습이 완료됨을 의미한다.</li>
+</ul>
+</li>
+<li><strong>[사례/실험결과]:</strong>
+<ul>
+<li>Qwen3.6-35B-A3B 모델 기준 추가 학습 파라미터는 81,920개로, 베이스 모델 파라미터의 약 0.00024% 수준이다.</li>
+<li>아래 표는 밀집(Dense) 어텐션, ZHA (Wide/Deep), MSA의 주요 벤치마크 평가 비교 결과이다.</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 벤치마크 (Benchmark)</th>
+<th style="text-align:center">Dense (밀집 어텐션)</th>
+<th style="text-align:center">ZHA (Wide Tree)</th>
+<th style="text-align:center">ZHA (Deep Tree)</th>
+<th style="text-align:center">MSA (MiniMax Sparse)</th>
+<th style="text-align:left">비고 / 대조 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>RULER-13</strong></td>
+<td style="text-align:center">96.0%</td>
+<td style="text-align:center"><strong>96.2%</strong></td>
+<td style="text-align:center">93.3%</td>
+<td style="text-align:center">77.1%</td>
+<td style="text-align:left">256K 토큰 조건</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LongBench v2</strong></td>
+<td style="text-align:center">58.0%</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>63.4%</strong></td>
+<td style="text-align:center">MSA 대비 +12.7%p 우수</td>
+<td style="text-align:left">Deep ZHA는 KV 캐시의 약 1.1%만 참조</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWE-bench Verified</strong></td>
+<td style="text-align:center">67.4%</td>
+<td style="text-align:center"><strong>68.4%</strong></td>
+<td style="text-align:center">67.4%</td>
+<td style="text-align:center">-</td>
+<td style="text-align:left">에이전트 코딩 벤치마크</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Terminal-Bench 2.1</strong></td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">-</td>
+<td style="text-align:left">에이전트 터미널 환경 평가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AIME 2026</strong></td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">-</td>
+<td style="text-align:left">고난도 수학적 추론 평가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MMLU-Pro / GPQA Diamond</strong></td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">동등 수준</td>
+<td style="text-align:center">-</td>
+<td style="text-align:left">종합 지식 및 전문 추론 평가</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[구분 표기: 사실/소스 주장/작성자 해석]:</strong>
+<ul>
+<li><em>사실:</em> 81,920개(0.00024%)의 추가 파라미터 수치, ZHA 학습 토큰 수(단 몇 십억 개) 대 MSA 학습 토큰 수(40B 개) 대조 수치, 그리고 벤치마크 수치 비교 결과는 논문에 수록된 사실임.</li>
+<li><em>소스 주장:</em> ZHA가 단순 바늘 찾기형 단일 사실 검색(Needle-in-a-haystack)뿐만 아니라 장문 복합 추론, 에이전트 코딩, 터미널 환경 과제에서도 성능 저하 없이 밀집 어텐션을 대등하게 대체하거나 능가할 수 있다는 주장임.</li>
+<li><em>작성자 해석:</em> 소스 문맥 및 그림 4에 기술된 평가 데이터를 마크다운 테이블과 비교 서술로 통합함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-트리-기하구조에-대한-강인성-및-속도-향상-예측">2.4 트리 기하구조에 대한 강인성 및 속도 향상 예측</h5>
+<ul>
+<li><strong>[논점]:</strong> ZHA는 트리의 깊이와 구조 변형에 강인하며, 컨텍스트가 길어질수록 GPU 루프라인(Roofline) 모델 기준 밀집 어텐션 및 기존 희소 어텐션 대비 연산 속도 향상을 나타낸다.</li>
+<li><strong>[근거]:</strong>
+<ul>
+<li>28가지의 서로 다른 트리 구성(참조 쿼리 수, 청크당 토큰 수, 트리 깊이 변경)을 평가한 결과, 동일한 압축 비율(희소성 수준)을 유지할 때 깊은 트리(Deeper trees) 구조가 얕은 트리 구조보다 우수하거나 유사한 성능을 보였다.</li>
+<li>GPU 루프라인 성능 모델(Roofline performance model)을 구축하여 연산량, 메모리 대역폭, 커널 오버헤드, 하드웨어 병렬성을 종합 측정하였다.</li>
+</ul>
+</li>
+<li><strong>[사례/실험결과]:</strong>
+<ul>
+<li>경량 ZHA 설정 기준, 컨텍스트 길이가 <strong>48K 토큰</strong> 부근에서 밀집 어텐션보다 빨라지고, <strong>480K 토큰</strong> 부근에서 MSA보다 빨라진다.</li>
+<li><strong>1,000만(10M) 토큰</strong> 컨텍스트: 밀집 어텐션 대비 <strong>32~35배</strong>, MSA 대비 <strong>4.7~5.1배</strong> 속도 향상 예측.</li>
+<li><strong>10억(1B) 토큰</strong> 컨텍스트: 밀집 어텐션 대비 <strong>373~417배</strong>, MSA 대비 <strong>52~58배</strong> 속도 향상 예측.</li>
+</ul>
+</li>
+<li><strong>[구분 표기: 사실/소스 주장/작성자 해석]:</strong>
+<ul>
+<li><em>사실:</em> 28가지 트리 구성 실험 결과 및 GPU 루프라인 모델에 기반한 각 컨텍스트 길이별 속도 향상 예측 배수는 논문 원문에 명시된 수치임.</li>
+<li><em>소스 주장:</em> 깊은 트리가 성능 병목이 되지 않는다는 점은 컨텍스트 확장에 따른 아심토틱 이점을 실제로 누릴 수 있음을 입증한다는 연구진의 주장임.</li>
+<li><em>작성자 해석:</em> 48K 및 480K 크로스오버 지점과 10M, 1B 컨텍스트에서의 예측치를 체계적으로 분석 정리함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-5-초장문-컨텍스트-확장을-위한-정보-이론적-과제">2.5 초장문 컨텍스트 확장을 위한 정보 이론적 과제</h5>
+<ul>
+<li><strong>[논점]:</strong> 초장문 컨텍스트를 성공적으로 활용하기 위해서는 어텐션의 과도한 확산과 과도한 희소화라는 두 가지 실패 모드 사이의 균형을 유지해야 한다.</li>
+<li><strong>[근거]:</strong>
+<ul>
+<li><strong>실패 모드 1 (Attention too diffuse):</strong> 컨텍스트가 길어지면 무관하거나 약하게 관련된 토큰의 총합이 커져 소프트맥스(Softmax) 어텐션 확률이 산일(Dispersive)되고 방해 요소(Distractors)에 노출되어 성능이 저하된다.</li>
+<li><strong>실패 모드 2 (Attention too sparse):</strong> 희소성을 너무 높이면 트리를 내려갈수록 어텐션 확률 누적 수치가 0으로 수렴하여 유용한 문맥을 버리게 되고, 고정 크기 메모리와 동일한 정보 붕괴(Information collapse) 한계에 빠진다.</li>
+</ul>
+</li>
+<li><strong>[사례/실험결과]:</strong> 자연어 시퀀스의 예측 정보량(Predictive information)은 시퀀스 길이가 늘어나더라도 선형적으로 증가하지 않고 서브리니어하게 증가한다. 따라서 트리 깊이와 컨텍스트 길이에 따라 상위-p 루팅 임계값을 적응적으로 변화시켜 시퀀스의 통계적 구조와 압축률을 일치시켜야 한다.</li>
+<li><strong>[구분 표기: 사실/소스 주장/작성자 해석]:</strong>
+<ul>
+<li><em>사실:</em> 두 가지 실패 모드(Diffuse vs Sparse)의 정의와 정보 이론적 제약 사항은 논문의 'The Narrow Path to Truly Ultra-Long Contexts' 섹션 내용임.</li>
+<li><em>소스 주장:</em> 단순 연산 속도 향상을 넘어, 데이터 내 예측 정보량의 성장에 어텐션 활성 상태를 동적으로 맞추는 희소성 제어가 초장문 연구의 핵심 방향이라는 지프라 연구진의 제언임.</li>
+<li><em>작성자 해석:</em> 서브리니어 성장의 필요성과 정보 이론적 관점에서의 시사점을 정리함.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-화자-figures-speakers">3. 등장 인물 · 화자 (Figures &amp; Speakers)</h4>
+<ul>
+<li><strong>Leon Lufkin</strong> - 지프라(Zyphra) 소속 연구원 / ZHA 논문 공동 저자</li>
+<li><strong>Cutter Dawes</strong> - 지프라(Zyphra) 소속 연구원 / ZHA 논문 공동 저자</li>
+<li><strong>Alexander Speicher</strong> - 지프라(Zyphra) 소속 연구원 / ZHA 논문 공동 저자</li>
+<li><strong>Kamesh Krishnamurthy</strong> - 지프라(Zyphra) 소속 연구원 / ZHA 논문 공동 저자</li>
+<li><strong>Tomás Figliolia</strong> - 지프라(Zyphra) 소속 연구원 / ZHA 논문 공동 저자</li>
+<li><strong>Beren Millidge</strong> - 지프라(Zyphra) 소속 연구원 / ZHA 논문 공동 저자</li>
+<li><strong>기타 발표자 및 진행자</strong> - 확인 불가 (소스문맥 내 별도 명시 없음)</li>
+</ul>
+<hr />
+<h4 id="4-수치-시점-metrics-dates-timestamps">4. 수치 · 시점 (Metrics, Dates &amp; Timestamps)</h4>
+<ul>
+<li>[논문 공개 및 게재 시점] - 2026년 11월 2일 - [소스 위치: 웹페이지 상단 메타데이터]</li>
+<li>[연구진 소속 지역] - 샌프란시스코, 칼리포니아 (San Francisco, California) - [소스 위치: 웹페이지 상단 메타데이터]</li>
+<li>[기술 논문 링크/번호] - arXiv:2610.42112 - [소스 위치: Technical paper 링크]</li>
+<li>[청크 창 기본 단위 크기] - 4개 키 토큰 - [소스 위치: Figure 2 &amp; 3]</li>
+<li>[GQA 구조 설정] - 4개 쿼리 · 1개 키 · 1개 밸류 (4 queries · 1 key · 1 value) - [소스 위치: Figure 3]</li>
+<li>[트리 단계별 요약 범위 - 1단계] - 4개 토큰 영역 - [소스 위치: Hierarchical Attention: Building the tree]</li>
+<li>[트리 단계별 요약 범위 - 2단계] - 16개 토큰 영역 - [소스 위치: Hierarchical Attention: Building the tree]</li>
+<li>[트리 단계별 요약 범위 - 6단계] - 4,096개 토큰 영역 - [소스 위치: Hierarchical Attention: Building the tree]</li>
+<li>[Qwen3.6-35B-A3B ZHA 추가 학습 파라미터 수] - 81,920개 (베이스 모델의 0.00024%) - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[ZHA 증류 학습 토큰 수 및 컨텍스트 길이] - 32K 컨텍스트 길이 조건에서 단 몇 십억(a few billion) 개 토큰 - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[MSA 인덱서 학습 토큰 수 및 ZHA 비교] - 400억(40B) 개 토큰 (ZHA 학습 토큰 수는 MSA의 10분의 1 수준) - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[RULER-13 벤치마크 (256K 토큰) 정확도 - Wide ZHA] - 96.2% - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[RULER-13 벤치마크 (256K 토큰) 정확도 - Dense] - 96.0% - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[RULER-13 벤치마크 (256K 토큰) 정확도 - Deep ZHA] - 93.3% - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[RULER-13 벤치마크 (256K 토큰) 정확도 - MSA] - 77.1% - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[LongBench v2 점수 - Deep ZHA] - 63.4% (KV 캐시 참조 비율 약 1.1%) - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[LongBench v2 점수 - Dense] - 58.0% - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[LongBench v2 점수 차이 - Deep ZHA vs MSA] - Deep ZHA가 MSA 대비 약 12.7%p 우수 - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[SWE-bench Verified 점수 - Wide ZHA] - 68.4% - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[SWE-bench Verified 점수 - Deep ZHA / Dense] - 67.4% - [소스 위치: Distilling ZHA into Pretrained Models]</li>
+<li>[트리 기하구조 실험 구성 개수] - 28가지 - [소스 위치: Robustness to Tree Geometry]</li>
+<li>[밀집 어텐션 대비 속도 교차점(Crossover point)] - 약 48,000(48K) 토큰 - [소스 위치: Robustness to Tree Geometry]</li>
+<li>[MSA 대비 속도 교차점(Crossover point)] - 약 480,000(480K) 토큰 - [소스 위치: Robustness to Tree Geometry]</li>
+<li>[1,000만(10M) 토큰 컨텍스트 예측 속도 향상] - 밀집 대비 32~35배 / MSA 대비 4.7~5.1배 - [소스 위치: Robustness to Tree Geometry]</li>
+<li>[10억(1B) 토큰 컨텍스트 예측 속도 향상] - 밀집 대비 373~417배 / MSA 대비 52~58배 - [소스 위치: Robustness to Tree Geometry]</li>
+<li>[지프라 본사 주소] - 415 Mission St, Floor 44 San Francisco, CA 94105 - [소스 위치: 웹페이지 푸터]</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<h5 id="소스문맥에서-밝히고-있는-기술적-한계점">소스문맥에서 밝히고 있는 기술적 한계점</h5>
+<ol>
+<li><strong>위치 인코딩 부재(NoPE) 모델에서의 검색 성능 저하:</strong>
+위치 인코딩이 없는 어텐션 레이어를 사용하는 모델인 <code>Nemotron-3.5-Lightning-30B-A3B</code>에 ZHA를 적용한 결과, 추론 및 에이전트 코딩 과제에서는 잘 작동하였으나 RULER 벤치마크 상의 정보 검색 성능에서는 눈에 띄는 성능 저하가 관찰됨 (이는 NoPE 어텐션의 희소 적응에 관한 기존 연구 결과들과 일치함).</li>
+<li><strong>누적 희소화에 따른 정보 상실 위험:</strong>
+트리 깊이가 깊어질수록 고정된 상위-p 임계값을 유지할 경우 각 단계에서의 희소화가 누적되어 전체 어텐션 확률 질량이 0으로 수렴하고, 결과적으로 필요한 문맥 정보를 잃어버리는 정보 고갈 현상이 발생할 수 있음.</li>
+<li><strong>루팅 임계값 제어의 난이도:</strong>
+단순 고정 상위-p 임계값만으로는 100M~1B 단위의 초장문 컨텍스트에서 최적의 스케일링을 보장할 수 없으며, 트리 깊이 및 컨텍스트 길이에 맞춰 임계값을 정교하게 변화시키는 고도화된 스케일링 제어가 추가로 필요함.</li>
+</ol>
+<h5 id="소스문맥에서-다루지-않아-확인할-수-없는-불확실한-사항-소스-내-정보-없음-불확실함">소스문맥에서 다루지 않아 확인할 수 없는 불확실한 사항 (소스 내 정보 없음 / 불확실함)</h5>
+<ol>
+<li><strong>실제 하드웨어 측정 속도 데이터 부재:</strong>
+보고서상의 32~35배, 373~417배 등 초장문 속도 향상 지표는 GPU 루프라인(Roofline) 성능 예측 모델에 기반한 실뮬레이션 수치이며, 실제 10M 또는 1B 토큰 물리 환경 GPU 클러스터에서 측정된 실측 대기 시간(Latency) 데이터는 소스에 포함되어 있지 않음 (소스 내 정보 없음).</li>
+<li><strong>트리 구축의 실시간 컴퓨팅 오버헤드:</strong>
+컨텍스트가 증가함에 따라 온더플라이(On-the-fly)로 트리를 구성하는 데 드는 정확한 메모리 점유량 및 런타임 연산 오버헤드 실측값 미제시 (소스 내 정보 없음).</li>
+<li><strong>논문 발표 학회 및 실물 코드 공개 여부:</strong>
+arXiv 번호(2610.42112) 외에 해당 논문이 특정 정기 학회에 채택되었는지 여부나 오픈소스 코드 베이스의 완전 공개 여부는 명시되지 않음 (확인 불가).</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

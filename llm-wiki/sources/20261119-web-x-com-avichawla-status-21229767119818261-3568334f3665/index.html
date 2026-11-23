@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The next AI inference architecture, clearly explained (4x faster than GPUs)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>The next AI inference architecture, clearly explained (4x faster than GPUs)</h1>
+<p class="page-meta">소셜 · 2026-11-19</p>
+<h2 id="요약">요약</h2>
+<p>The next AI inference architecture, clearly explained (4x faster than GPUs)</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/social/">소셜</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://x.com/_avichawla/status/2122976711981826119?a=MhQSrkqtTKvZ9nyyxXw&amp;s=20">출처</a> · <a href="https://www.youtube.com/watch?v=2jF9-1GW5CA">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-sambanova-rdu-기반-데이터플로우-아키텍처의-llm-디코드-속도-향상-원리-분석">[해설 보고서] SambaNova RDU 기반 데이터플로우 아키텍처의 LLM 디코드 속도 향상 원리 분석</h3>
+<hr />
+<h5 id="1-개요-overview"><strong>1. 개요 (Overview)</strong></h5>
+<ul>
+<li><strong>[사실]</strong> 거대언어모델(LLM)을 활용한 텍스트 생성 과정에서 기존 GPU 아키텍처는 디코드(Decode) 단계 시 극심한 메모리 대역폭 병목 현상에 직면합니다. 단일 요청 처리 시 연산 장치가 가중치를 로드하는 동안 오랜 시간 대기하게 되며, 이는 특히 대규모 컨텍스트와 연속적인 추론을 수행하는 AI 에이전트(Agent) 워크로드에서 치명적인 성능 저하를 야기합니다. 앤트로픽(Anthropic)의 연구에 따르면 AI 에이전트는 일반 대화형 챗 대비 약 4배, 멀티 에이전트 시스템은 약 15배의 토큰을 소비하므로 디코드 단계의 속도 개선이 시스템 전체 실행 효율을 결정짓는 핵심 요소입니다.</li>
+<li><strong>[사실]</strong> 삼바노바(SambaNova)의 RDU(Reconfigurable Dataflow Unit) 및 SN40L 칩은 기존 GPU의 순차적 커널 실행 방식 대신 데이터플로우(Dataflow) 실행 아키텍처를 도입하여 메모리 대역폭의 한계를 극복합니다. RDU 컴파일러는 디코더 레이어의 각 연산 단계를 칩 상에 공간적으로 매핑(Spatial Mapping)하고, 중간 연산 결과를 칩 내부 온칩(On-chip) SRAM에 직접 전달함으로써 주 메모리인 HBM(High Bandwidth Memory) 접근 횟수를 획기적으로 줄입니다. 이를 통해 HBM 대역폭을 가중치 로딩과 KV 캐시 접근에 전용하여 연산 대기 시간을 최소화합니다.</li>
+<li><strong>[사실]</strong> 실전 성능 측정 결과, 삼바노바 클라우드(SambaNova Cloud) 환경에서 동작하는 753B 파라미터 규모의 MoE(Mixture-of-Experts) 모델인 GLM-5.3은 초당 179 토큰의 디코드 속도를 기록하여, GLM-5.3 모델 기준 단일 H100 GPU의 이론적 디코드 상한선(약 42 tokens/s) 대비 약 4배 빠른 성과를 보였습니다. 또한 프레필(Prefill) 단계를 엔비디아 B200(NVIDIA B200)에, 디코드 단계를 SN40 RDU에 분리 배치하는 디스애그리게이티드(Disaggregated) 추론을 적용했을 때 B200 단독 구성 대비 2배의 속도 향상이 입증되었습니다.</li>
+<li><strong>[해석]</strong> 이러한 데이터플로우 아키텍처의 성과는 순차적 명령어 실행에 최적화된 기존 GPU 아키텍처가 지닌 메모리 벽(Memory Wall)을 하드웨어 공간 매핑과 데이터 스트리밍 방식으로 해소할 수 있음을 보여주는 중요한 기술적 전환점입니다.</li>
+</ul>
+<hr />
+<h5 id="2-주요-논점-및-기술-분석-key-points-technical-analysis"><strong>2. 주요 논점 및 기술 분석 (Key Points &amp; Technical Analysis)</strong></h5>
+<h6 id="2-1-ai-에이전트-워크로드의-특성과-프레필-prefill-vs-디코드-decode-병목"><strong>2.1. AI 에이전트 워크로드의 특성과 프레필(Prefill) vs 디코드(Decode) 병목</strong></h6>
+<ul>
+<li><strong>[사실] 에이전트 루프의 동작 과정 및 추론 비중</strong>: AI 에이전트는 '모델에 다음 행동 요청 -&gt; 툴(Tool) 실행 -&gt; 수행 결과를 컨텍스트에 추가'하는 루프를 연속적으로 반복합니다. SWE-bench Pro 및 Terminal-Bench 벤치마크 분석 결과, 전체 에이전트 실행 시간 중 71%에서 98%가 모델 추론에 소비됩니다.</li>
+<li><strong>[사실] 토큰 소비량의 비약적 증가</strong>: 앤트로픽 조사에 따르면 에이전트 워크로드는 일반 단일 챗 대비 약 4배, 멀티 에이전트 시스템은 약 15배 더 많은 토큰을 소비하여 메모리 접근 빈도를 폭발적으로 증가시킵니다.</li>
+<li><strong>[사실] 프레필과 디코드의 역할 및 접두사 캐싱의 효과</strong>:
+<ul>
+<li><strong>프레필(Prefill)</strong>: 전체 프롬프트 입력값을 병렬로 처리하여 KV 캐시(KV cache)를 생성하는 단계입니다.</li>
+<li><strong>디코드(Decode)</strong>: 생성된 캐시를 바탕으로 한 번에 1개의 토큰을 순차적으로 출력하는 단계입니다.</li>
+<li><strong>접두사 캐싱(Prefix Caching)</strong>: 에이전트 루프는 이전 회차의 컨텍스트를 대부분 재사용하므로, 접두사 캐싱을 적용하면 프레필 작업이 대폭 축소되어 결국 디코드 단계의 처리 속도가 전체 응답 지연 시간을 결정짓는 핵심 병목이 됩니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-gpu-디코드의-메모리-대역폭-한계와-커널-융합-kernel-fusion-의-제약"><strong>2.2. GPU 디코드의 메모리 대역폭 한계와 커널 융합(Kernel Fusion)의 제약</strong></h6>
+<ul>
+<li><strong>[사실] 단일 요청 디코드 연산 비율</strong>: 단일 요청 디코드 시 새로 생성되는 토큰 1개당 모델의 전체 가중치를 1회 읽어야 하므로, 메모리에서 읽어오는 1바이트당 수행되는 연산량은 약 1 FLOP에 불과합니다.</li>
+<li><strong>[사실/수치] H100 SXM의 연산 성능 대 메모리 대역폭 불균형</strong>: H100 SXM은 초당 989조 BF16 FLOPs(989 trillion BF16 FLOPs/s)의 연산 성능을 제공하지만 HBM 대역폭은 3.35 TB/s에 그칩니다. 이로 인해 단일 요청 디코드 수행 시 하드웨어가 가진 연산 한계 성능보다 약 300배 미달하는 시점에서 속도가 제한됩니다.</li>
+<li><strong>[사실] 커널 체인 실행과 메모리 대기</strong>: 소형 Llama 모델이라 할지라도 토큰 1개를 생성할 때마다 약 100개의 커널 체인(Kernel chain)이 순차적으로 실행됩니다. 개별 커널이 종료될 때마다 중간 결과가 HBM에 기록되고 다음 커널이 이를 다시 읽어오므로, GPU는 연산보다 메모리 읽기/쓰기 대기 상태에 대부분의 시간을 소비합니다.</li>
+<li><strong>[사실/수치] GPU 모델별 이론적 디코드 속도 상한선</strong>:
+<ul>
+<li>Llama-3.2-1B 모델: 초당 1,351 토큰 (1,351 tokens/s)</li>
+<li>Llama-3.2-8B 모델: 초당 209 토큰 (209 tokens/s)</li>
+</ul>
+</li>
+<li><strong>[사실] 프레임워크별 대역폭 활용률 한계</strong>: 스탠포드 헤이지 리서치(Stanford Hazy Research) 분석에 의하면 vLLM 및 SGLang 프레임워크는 Llama-3.2-1B 디코드 시 H100 대역폭의 최대 50%만을 활용합니다.</li>
+<li><strong>[사실/해석] 커널 융합의 구조적 한계</strong>: 수동으로 작성된 메가커널(Megakernel)을 적용해 1B 모델의 순전파 과정을 하나로 융합하면 대역폭 활용률을 78%까지 끌어올릴 수 있습니다. 그러나 GPU는 온칩 SRAM 용량이 영세하여 대규모 중간 활성화(Activation) 값이 SRAM 범주를 초과하며, 연동된 파이프라인 형태로 커널을 연속 실행하는 프로그래밍 모델이 부재하여 커널 융합 최적화에 명확한 한계를 가집니다.</li>
+</ul>
+<h6 id="2-3-rdu의-데이터플로우-실행-구조-및-메모리-계층-memory-tiers"><strong>2.3. RDU의 데이터플로우 실행 구조 및 메모리 계층(Memory Tiers)</strong></h6>
+<ul>
+<li><strong>[해석]</strong> 삼바노바 RDU는 연산 단계를 공간적으로 분할 배치하여 GPU의 연속적인 커널 전환 및 HBM 입출력 병목을 구조적으로 제거합니다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">GPU (순차적 커널 실행)</th>
+<th style="text-align:left">RDU (데이터플로우 실행)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>연산 단위 배치</strong></td>
+<td style="text-align:left">RMSNorm, 어텐션, MLP를 시간 순서에 따라 순차 실행 <code>[사실]</code></td>
+<td style="text-align:left">연산 단계(RMSNorm, 어텐션, MLP)별로 칩 내 전용 연산 그룹을 공간적으로 동시 배치 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>중간 결과 저장</strong></td>
+<td style="text-align:left">각 커널의 연산 결과를 HBM에 읽고 쓰는 과정 반복 <code>[사실]</code></td>
+<td style="text-align:left">연산 결과(활성화값)를 온칩 SRAM을 통해 다음 연산 그룹으로 직접 전달 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>가중치 로딩 방식</strong></td>
+<td style="text-align:left">커널 실행 직전 가중치가 HBM에서 로드될 때까지 연산 정지 <code>[사실]</code></td>
+<td style="text-align:left">현재 연산이 진행되는 동안 다음 단계 가중치를 미리 로드해 대기 소멸 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아키텍처적 효과</strong></td>
+<td style="text-align:left">메모리 접근 지연으로 인한 연산 자원 휴동 현상 가중 <code>[해석]</code></td>
+<td style="text-align:left">HBM 대역폭을 가중치 및 KV 캐시 독점 전용으로 전환하여 연산 효율 극대화 <code>[해석]</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[사실] RDU의 3단계 메모리 계층 구조</strong>:
+<ol>
+<li><strong>온칩 SRAM</strong>: 활성화값(Activations)을 온칩 상에 유치하여 칩 외부 메모리 트래픽 차단.</li>
+<li><strong>64GB HBM</strong>: 활성 가중치(Active weights) 및 KV 캐시 보유.</li>
+<li><strong>최대 512GB DDR</strong>: 칩 자체에 온칩 형태로 탑재되어 호스트 CPU 메모리를 거치지 않고 RDU 내부에서 즉시 모델 전환 수행.</li>
+</ol>
+</li>
+</ul>
+<h6 id="2-4-단일-디코더-커널-whole-decoder-kernels-과-루프-변환-loop-conversion"><strong>2.4. 단일 디코더 커널(Whole-decoder Kernels)과 루프 변환(Loop Conversion)</strong></h6>
+<ul>
+<li><strong>[사실] 컴파일러 최적화 기법</strong>: Llama 3.1 8B(32개 디코더 레이어) 적용 시, RDU 컴파일러 패스인 루프 변환(Loop Conversion)을 통해 32개 레이어 호출 과정을 단일 루프로 통합하여 실행합니다.</li>
+<li><strong>[사실/수치] SN40L 16개 기반 최적화 단계별 속도 변화</strong>:
+<ul>
+<li>베이스라인(Baseline): 초당 100 토큰 (100 tokens/s)</li>
+<li>단일 커널 디코더(Single-kernel decoder) 적용: 초당 500 토큰 (500 tokens/s)</li>
+<li>루프 변환(Loop conversion) 완료: 초당 1,100 토큰 (1,100 tokens/s)</li>
+</ul>
+</li>
+<li><strong>[사실] 대역폭 활용 효율</strong>: SN40L 관련 기술 논문에 따르면 온칩 SRAM의 활성화값 유지 덕분에 HBM 대역폭은 오직 가중치 및 KV 캐시 이동에만 할당되며, 연산 도중 가중치 로딩을 병행하여 85% 이상의 HBM 대역폭 활용률을 유지합니다.</li>
+</ul>
+<h6 id="2-5-agcu를-통한-다중-칩-데이터플로우-및-moe-모델-처리"><strong>2.5. AGCU를 통한 다중 칩 데이터플로우 및 MoE 모델 처리</strong></h6>
+<ul>
+<li><strong>[사실] 대규모 모델의 다중 칩 분산</strong>: 753B 파라미터의 GLM-5.3과 같은 초대형 모델은 단일 칩 온칩 메모리에 탑재가 불가능하여 여러 칩에 분산 배치됩니다.</li>
+<li><strong>[사실/해석] AGCU(Address Generation and Coalescing Unit)의 스트리밍 메커니즘</strong>: 기존 GPU 클러스터는 다중 칩 간 통신 시 '메모리 쓰기 -&gt; 네트워크 전송 -&gt; 상대 메모리 읽기'의 과정을 거치며 각 단계(Hop)마다 심각한 지연을 유발합니다. 반면 RDU의 AGCU는 칩 간 데이터를 직접 스트리밍 방식으로 전송하여 칩 경계에서도 데이터플로우 파이프라인이 끊기지 않고 계속 유지되도록 합니다.</li>
+<li><strong>[사실/해석] MoE(Mixture-of-Experts) 아키텍처 통신 병목 해소</strong>: GLM-5.3은 토큰당 약 40B 파라미터만 활성화하지만, 해당 전문가(Expert) 연산 유닛들이 여러 칩에 나누어져 있어 토큰 생성 시 칩 간 이동이 매우 빈번하게 발생합니다. AGCU는 이러한 MoE 특성상 발생하는 칩 간 데이터 통신 병목을 직렬 파이프라인 스트리밍으로 차단합니다.</li>
+</ul>
+<h6 id="2-6-실전-성능-측정-및-디스애그리게이티드-disaggregated-추론"><strong>2.6. 실전 성능 측정 및 디스애그리게이티드(Disaggregated) 추론</strong></h6>
+<ul>
+<li><strong>[사실] 상호운용성 및 API 개발 환경</strong>: 삼바노바 클라우드(SambaNova Cloud)는 OpenAI 호환 API를 제공하므로 기존 개발 환경에서 엔드포인트 base URL 변경만으로 OpenAI SDK를 그대로 활용할 수 있습니다.</li>
+<li><strong>[사실/수치] SambaNova Cloud GLM-5.3 측정치</strong>:
+<ul>
+<li>디코드 속도: 초당 179 토큰 (179 tokens/s)</li>
+<li>프레필 완료 시간: 0.211초 (0.211 s)</li>
+<li>비교 맥락: GLM-5.3 모델을 다중 칩 전문가 분산 배치로 처리함으로써 GLM-5.3 모델 기준 단일 H100 GPU 상한선(약 42 tokens/s) 대비 약 4배의 속도를 기록.</li>
+</ul>
+</li>
+<li><strong>[사실/수치] 10단계 에이전트 루프 실측</strong>: 전체 서버 처리 시간 16.85초 중 디코드 연산이 83%의 비중을 차지함을 확인.</li>
+<li><strong>[사실/수치] 디스애그리게이티드(Disaggregated) 추론 성과</strong>:
+<ul>
+<li>구성: 컴퓨팅 특성에 맞춰 프레필 단계는 엔비디아 B200(NVIDIA B200)에, 디코드 단계는 SN40 RDU에 분리 할당.</li>
+<li>결과: B200 단독 구성 대비 2배(2x)의 속도 향상을 입증 (아티피셜 애널리시스/Artificial Analysis 독립 검증 완료).</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-7-데이터플로우-아키텍처의-트레이드오프-trade-off-및-진단-제언"><strong>2.7. 데이터플로우 아키텍처의 트레이드오프(Trade-off) 및 진단 제언</strong></h6>
+<ul>
+<li><strong>[사실/주장] 유연성(Flexibility) 제약</strong>: 데이터플로우 아키텍처는 컴파일러가 사전에 고정된 실행 그래프(Fixed graph)를 하드웨어 공간에 매핑해야 하므로, 가변적인 동적 그래프 처리에 대한 유연성이 일반 GPU 대비 떨어진다는 한계가 있습니다.</li>
+<li><strong>[해석/제언] 실무자를 위한 시스템 진단 제언</strong>: AI 에이전트 시스템의 응답 속도가 지연될 경우, 최적화의 첫 단계로 프레필(Prefill)과 디코드(Decode)의 시간 비중(split)을 먼저 측정해야 합니다. 디코드 비중이 압도적이라면 메모리 대역폭 중심 아키텍처로의 전환이나 분리 추론 도입을 적극 검토해야 합니다.</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-people-key-entities"><strong>3. 등장 인물 및 화자 (People &amp; Key Entities)</strong></h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">이름 / 기관명</th>
+<th style="text-align:left">소스 내 역할 및 맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">저자 / 화자</td>
+<td style="text-align:left">아비 차우라 (Avi Chawla / @_avichawla)</td>
+<td style="text-align:left">본 해설 아티클의 작성자. 데이터 사이언스, 머신러닝, LLM, RAG 전문 튜토리얼 공유자 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left">기업 / 협력</td>
+<td style="text-align:left">삼바노바 (SambaNova)</td>
+<td style="text-align:left">RDU AI 칩(SN40L, SN40) 및 SambaNova Cloud 제공업체 (본 글의 기술 협력사) <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left">인용 기관</td>
+<td style="text-align:left">앤트로픽 (Anthropic)</td>
+<td style="text-align:left">에이전트 및 멀티 에이전트 시스템의 토큰 소비량 연구 데이터 제공 출처 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left">연구 기관</td>
+<td style="text-align:left">스탠포드 헤이지 리서치 (Stanford Hazy Research)</td>
+<td style="text-align:left">GPU 커널 융합 및 H100 대역폭 활용률(vLLM, SGLang, 메가커널) 연구 논문 발표 기관 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left">검증 기관</td>
+<td style="text-align:left">아티피셜 애널리시스 (Artificial Analysis)</td>
+<td style="text-align:left">B200(프레필) + SN40 RDU(디코드) 분리 추론의 2배 속도 향상 성과 검증 기관 <code>[사실]</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-시점-metrics-timestamps"><strong>4. 주요 수치 및 시점 (Metrics &amp; Timestamps)</strong></h5>
+<ul>
+<li><strong>게시 시점</strong>: 2026년 11월 18일 수요일 08:54:25 UTC (Wed Nov 18 08:54:25 +0000 2026) <code>[사실]</code></li>
+<li><strong>수집 시점</strong>: 2026년 11월 19일 08:07:24 UTC (2026-11-19T08:07:24.538202+00:00) <code>[사실]</code></li>
+<li><strong>이벤트 일정</strong>:
+<ul>
+<li>NeurIPS 시드니 부스: 12월 6일 ~ 12일 <code>[사실]</code></li>
+<li>NeurIPS 아틀란타 부스: 12월 8일 ~ 13일 <code>[사실]</code></li>
+<li>SambaHouse AI Night (시드니): 12월 9일 <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>하드웨어 및 성능 측정 데이터</strong>:
+<ul>
+<li><strong>H100 SXM 스펙</strong>: 초당 989조 BF16 FLOPs (989 trillion BF16 FLOPs/s), HBM 대역폭 3.35 TB/s (연산 한계 대비 대역폭 미달률 약 300배) <code>[사실/수치]</code></li>
+<li><strong>GPU 커널 체인</strong>: 소형 Llama 모델 기준 토큰당 약 100개 커널 실행 <code>[사실/수치]</code></li>
+<li><strong>H100 디코드 이론적 상한선</strong>: Llama-3.2-1B (1,351 tokens/s), Llama-3.2-8B (209 tokens/s), GLM-5.3 기준 단일 H100 상한선 (약 42 tokens/s) <code>[사실/수치]</code></li>
+<li><strong>GPU 대역폭 활용률</strong>: vLLM 및 SGLang (최대 50%), 수동 작성 메가커널 (최대 78%) <code>[사실/수치]</code></li>
+<li><strong>SN40L 16개 기반 Llama 3.1 8B 속도</strong>: 베이스라인 (100 tokens/s) -&gt; 단일 커널 디코더 (500 tokens/s) -&gt; 루프 변환 완료 (1,100 tokens/s) <code>[사실/수치]</code></li>
+<li><strong>GLM-5.3 모델 파라미터</strong>: 전체 파라미터 753B, 토큰당 활성화 파라미터 약 40B <code>[사실/수치]</code></li>
+<li><strong>SambaNova Cloud GLM-5.3 측정값</strong>: 디코드 속도 179 tokens/s, 프레필 완료 시간 0.211초 (GLM-5.3 단일 H100 상한선 대비 약 4배) <code>[사실/수치]</code></li>
+<li><strong>에이전트 루프 디코드 비중</strong>: 전체 서버 시간 16.85초 중 83% <code>[사실/수치]</code></li>
+<li><strong>분리 추론 속도</strong>: B200(프레필) + SN40 RDU(디코드) 조합 시 B200 단독 대비 2배 향상 <code>[사실/수치]</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties"><strong>5. 한계와 불확실성 (Limitations &amp; Uncertainties)</strong></h5>
+<ul>
+<li><strong>소스 미다룸 / 확인 불가 사항</strong>:
+<ul>
+<li>SambaNova RDU 및 SN40L 칩의 구체적인 개별 단가, 전력 소비량(W), 실물 칩 다이 크기(Die Size) 정보는 소스에서 다루지 않음.</li>
+<li>AGCU(Address Generation and Coalescing Unit)의 세부 하드웨어 회로 설계 방식 및 동작 클록 속도는 소스에서 다루지 않음.</li>
+<li>원문 메타데이터 상 게시물 조회수가 &quot;Views: 0&quot;으로 명시되어 있으나, 이는 데이터 수집 당시 소셜 미디어 플랫폼의 시스템적 표시 제약일 수 있어 정확한 확인 불가.</li>
+</ul>
+</li>
+<li><strong>정보 제공의 제약</strong>:
+<ul>
+<li>본 보고서의 소스는 삼바노바와의 기술 협력으로 작성된 아티클이므로, 타사 아키텍처와의 비교 데이터는 제공된 소스 내 벤치마크 및 인용된 연구(스탠포드 헤이지 리서치, 아티피셜 애널리시스) 범위로 한정됨.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/social/">소셜</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

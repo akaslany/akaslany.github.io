@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing System One Models &amp; Jev</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing System One Models &amp; Jev</h1>
+<p class="page-meta">웹 · 2026-09-16</p>
+<h2 id="요약">요약</h2>
+<p>TypeSafe AI는 기존 대규모 언어 모델(LLM)의 구조적 한계를 해결하기 위해 'System One Model'이라는 새로운 범주의 프론티어 모델을 정의했습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">출처</a> · <a href="https://www.youtube.com/watch?v=8Kg_7YCE5m0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="분석-보고서-typesafe-ai의-system-one-model-및-jev-기술-아키텍처와-성능-분석">[분석 보고서] TypeSafe AI의 System One Model 및 'Jev' 기술 아키텍처와 성능 분석</h3>
+<h4 id="1-개요-차세대-의사결정-자동화를-위한-system-one-모델의-등장">1. 개요: 차세대 의사결정 자동화를 위한 System One 모델의 등장</h4>
+<p>TypeSafe AI는 기존 대규모 언어 모델(LLM)의 구조적 한계를 해결하기 위해 'System One Model'이라는 새로운 범주의 프론티어 모델을 정의했습니다. OpenAI에서 ChatGPT의 기반이 된 인스트럭션 튜닝 연구를 주도했던 Diogo Almeida는 기존 LLM이 인간과의 상호작용(Chat)에는 최적화되어 있으나, 소프트웨어 워크플로 내에서의 직접적인 자동화 도구로서는 치명적인 결함이 있다고 분석합니다.</p>
+<p>기존 모델들은 본질적으로 텍스트 문자열(String) 생성에 집중하도록 설계되어 있어, 소프트웨어가 이를 활용하려면 별도의 파싱과 유효성 검사 과정이 필수적입니다. 이 과정에서 발생하는 환각(Hallucination)과 유형 오류(Type errors)는 시스템의 신뢰성을 저해하는 핵심 요소입니다. TypeSafe AI는 이러한 문제를 해결하기 위해 자유로운 문자열 생성 기능을 포기하는 대신, 소프트웨어가 즉각적으로 실행 가능한 '구조화된 의사결정(Structured decisions)'에 모든 자원을 집중하는 기술적 패러다임 전환을 시도했습니다.</p>
+<h4 id="2-핵심-기술-아키텍처-rlcd-및-병렬-샘플링">2. 핵심 기술 아키텍처: RLCD 및 병렬 샘플링</h4>
+<p>TypeSafe의 첫 번째 모델인 'Jev'는 자동화 효율성을 극대화하기 위해 기존 LLM의 자동 회귀(Auto-regressive) 구조를 탈피한 세 가지 핵심 기술 스택을 도입했습니다.</p>
+<ul>
+<li><strong>RLCD (Reinforcement Learning for Calibrated Decisions):</strong> 인간의 선호도(RLHF)나 프로그램적 검증 가능성(RLVR)에 치중하는 기존 방식과 달리, RLCD는 '에피스테믹하게 정직한 확률(Epistemically honest probabilities)'을 최적화합니다. 이는 모델이 단순히 답을 내놓는 것을 넘어, 자신의 판단에 대한 확신도를 정확한 확률 값으로 보정(Calibration)하도록 훈련됨을 의미합니다. 결과적으로 &quot;높은 신뢰도 점수가 곧 높은 정확도&quot;로 직결되는 통계적 신뢰성을 확보합니다.</li>
+<li><strong>병렬 샘플러 (Parallel Sampler):</strong> 토큰을 하나씩 순차적으로 생성하는 기존 LLM의 방식과 달리, 단 한 번의 쿼리로 모든 확률적 출력을 동시에 생성합니다. 이러한 하드웨어 인지적(Hardware-aware) 설계는 추론 효율성을 극단적으로 높여 지연 시간을 단축합니다.</li>
+<li><strong>Type-safe Structured Values:</strong> 출력 구조와 선택 가능한 답변이 사전에 정의(Typed)됩니다. Jev는 사전에 정의된 스키마에 따라 결과값을 도출하며, 이는 수학적으로 유형 오류(Type errors) 발생 가능성을 원천적으로 차단합니다.</li>
+</ul>
+<h5 id="표-기존-llm-아키텍처-vs-system-one-jev-아키텍처-비교">[표] 기존 LLM 아키텍처 vs System One (Jev) 아키텍처 비교</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">기존 LLM (Existing LLMs)</th>
+<th style="text-align:left">System One (Jev)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>최적화 알고리즘</strong></td>
+<td style="text-align:left">RLHF / RLVR</td>
+<td style="text-align:left">RLCD</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>핵심 최적화 목표</strong></td>
+<td style="text-align:left">인간 선호도 및 답변 작성 능력</td>
+<td style="text-align:left">에피스테믹하게 보정된 확률 기반 의사결정</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>출력 형태</strong></td>
+<td style="text-align:left">유연한 문자열 (Strings)</td>
+<td style="text-align:left">사전에 정의된 구조화된 값 (Typed values)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>샘플링 방식</strong></td>
+<td style="text-align:left">순차적 생성 (Sequential / Auto-regressive)</td>
+<td style="text-align:left">단일 쿼리 기반 병렬 생성 (Parallel)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>신뢰도 제공</strong></td>
+<td style="text-align:left">일관성 부족 및 과잉 확신 경향</td>
+<td style="text-align:left">모든 출력에 보정된 신뢰도 점수 포함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선택지 제약</strong></td>
+<td style="text-align:left">제약 없음 (가변적 성능)</td>
+<td style="text-align:left">255개 초과 시 2단계 시스템(순차 스코어링) 전환</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-모델-jev-의-성능-및-경제성-지표">3. 모델 'Jev'의 성능 및 경제성 지표</h4>
+<p>TypeSafe AI가 보고한 Jev의 성능 지표는 기존 프론티어 모델 대비 압도적인 경제적 임계점을 제시하고 있습니다.</p>
+<ul>
+<li><strong>속도:</strong> TypeSafe는 Jev의 엔드 투 엔드 응답 시간이 <strong>70ms에서 500ms</strong> 사이라고 발표했습니다. 이는 동일한 수준의 지능을 가진 프론티어 모델 대비 약 <strong>40배에서 200배 빠른</strong> 수치입니다.</li>
+<li><strong>비용:</strong> 입력 토큰 100만 개당 **$0.042(10억 토큰당 $42)**의 가격이 책정되었습니다. 특히 출력 토큰은 측정하기에 너무 저렴하다는 의미에서 **무료(Too cheap to meter)**로 제공됩니다.</li>
+<li><strong>신뢰도 및 보정:</strong> 모든 출력에는 확률과 신뢰도 점수가 동반되며, 유사한 입력에 대해 일관된 답변을 제공하는 높은 재현성을 갖추고 있습니다.</li>
+</ul>
+<blockquote>
+<p><strong>주석:</strong> 상기 속도 수치는 TypeSafe의 자체 평가 자료를 근거로 하며, 미 서부 지역 서비스 거점을 기준으로 노트북 환경에서 실행된 결과입니다. 실제 사용 환경이나 지역별 네트워크 지연에 따라 변동 가능성이 있습니다.</p>
+</blockquote>
+<h4 id="4-벤치마크-및-기술-검증-결과-분석-nuance-포함">4. 벤치마크 및 기술 검증 결과 분석 (Nuance 포함)</h4>
+<p>TypeSafe는 Jev의 성능을 입증하기 위해 기존 LLM과의 비교 실험 결과를 제시했으나, 여기에는 몇 가지 기술적 전제 조건과 맥락이 포함되어 있습니다.</p>
+<ul>
+<li><strong>워크플로 평가(Workflow Evals):</strong> 실제 비즈니스 자동화 워크로드 기반 테스트에서 Jev는 기존 모델 대비 <strong>193.6배 빠르고 444.6배 저렴함</strong>을 기록했습니다. 이 테스트에서는 GPT-6 Astra와 Fable 5.1의 평균값을 참조 정답(Reference probabilities)으로 사용했습니다.</li>
+<li><strong>System One Adapter의 영향:</strong> 벤치마크 대상인 기존 LLM들은 TypeSafe가 개발한 'System One LLM' 래퍼(Wrapper)를 통해 구조화된 출력을 하도록 제약되었습니다. TypeSafe는 이것이 LLM으로부터 의사결정을 얻는 가장 정확한 방법이지만, 확률 정보 없이 답변만 출력하는 방식보다 더 느리고 비용이 많이 드는 방식이라는 점을 명시했습니다.</li>
+<li><strong>Wikiracing 및 Doom 데모:</strong> Jev는 Doom 게임에서 초당 10회의 쿼리를 처리하며 실시간 지능을 증명했습니다. 단, 이 데모는 이미지(Pixel)가 아닌 **텍스트 및 데이터 구조 형태의 구조화된 상태(Structured state)**를 기반으로 작동한다는 기술적 차이가 있습니다. Wikiracing 사례에서는 높은 카디널리티 상황에서도 환각 없이 목표에 도달했으나, 비교 대상인 Astra 모델이 '최저 추론 설정(lowest reasoning setting)'으로 고정되었기에 속도 향상 폭이 상대적으로 낮게 측정되었습니다.</li>
+<li><strong>환각(Hallucination)에 대한 정의:</strong> TypeSafe는 Jev가 환각을 일으키지 않는다고 주장합니다. 이는 모델이 새로운 문자열을 생성하는 것이 아니라, 사전에 정의된 스키마에 매칭(Schema matching)하는 방식으로만 작동하기 때문입니다. 따라서 논리적으로 '잘못된 선택'을 할 수는 있어도, '존재하지 않는 구조나 타입'을 생성하는 것은 수학적으로 불가능합니다.</li>
+</ul>
+<h4 id="5-system-one-모델의-활용처와-전략적-제한">5. System One 모델의 활용처와 전략적 제한</h4>
+<p>Jev는 소프트웨어가 인간의 개입 없이 직접 호출하여 사용할 수 있는 '인터페이스로서의 AI'를 지향하며, 이에 따른 명확한 강점과 약점을 보유합니다.</p>
+<p><strong>주요 활용처 (강점)</strong></p>
+<ul>
+<li><strong>AI-Powered Workflows:</strong> 분류, 라우팅, 스코어링 등 기존의 경직된 if-조건문을 대체하는 유연한 의사결정 규칙.</li>
+<li><strong>대규모 데이터 맵리듀스(Map-reducing):</strong> 페타바이트급 데이터에서 정형화된 특징(Features)이나 통찰을 추출.</li>
+<li><strong>실시간 애플리케이션:</strong> 100ms 수준의 응답이 필수적인 UX 중심의 앱 내 AI 통합.</li>
+<li><strong>LLM 가드레일 및 검증:</strong> 다른 LLM의 프롬프트, 추론 과정, 출력을 실시간으로 감시하고 탈옥(Jailbreak) 시도를 감지.</li>
+</ul>
+<p><strong>전략적 제한 (약점)</strong></p>
+<ul>
+<li><strong>자유 텍스트 생성 불가:</strong> 챗봇, 창의적 글쓰기, 코드 작성 등 텍스트 생성 자체를 목적으로 하는 작업에는 사용이 불가능함.</li>
+<li><strong>카디널리티(Cardinality) 제한:</strong> 한 번에 선택 가능한 옵션이 255개를 초과할 경우, 각 옵션을 독립적으로 스코어링한 뒤 선택하는 '2단계 시스템'으로 전환되어 응답 속도가 저하될 수 있음.</li>
+</ul>
+<h4 id="6-결론-ai-지능의-경제적-임계점과-향후-전망">6. 결론: AI 지능의 경제적 임계점과 향후 전망</h4>
+<p>TypeSafe AI는 효율적인 증기 기관의 등장이 오히려 석탄 수요를 폭증시켰다는 '제본스 역설(Jevons Paradox)'에서 모델명(Jev)을 고안했습니다. 이는 지능의 비용이 하락할수록 그 활용 사례는 기하급수적으로 확산될 것이라는 경제적 예측을 바탕으로 합니다.</p>
+<p>Jev는 텍스트 생성의 자유도를 희생함으로써 <strong>비약적인 속도, 저렴한 비용, 그리고 수학적 타입 안전성</strong>이라는 실질적인 자동화 요건을 확보했습니다. TypeSafe AI는 이를 통해 소프트웨어가 인간의 개입 없이도 상시 의존할 수 있는 견고한 'AI 인터페이스' 표준을 제시하고 있으며, 이는 지능의 대중화와 자동화의 확산을 가속화하는 기술적 분기점이 될 것으로 전망됩니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

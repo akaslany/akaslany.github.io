@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generative Representation Learning for Scalable Latent Tokenization</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Generative Representation Learning for Scalable Latent Tokenization</h1>
+<p class="page-meta">논문 · 2026-10-20</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 Alan Baade 등이 발표한 연구 논문 *&quot;Generative Representation Learning for Scalable Latent Tokenization&quot;*의 핵심 내용과 기술적 기여를 AI 및 머신러닝 논문 분석 관점에서 종합적으로 분석합니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.20533">출처</a> · <a href="https://www.youtube.com/watch?v=IckrRuZb564">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="생성적-표현-학습을-통한-확장-가능한-잠재-토큰화-연구-분석-보고서">생성적 표현 학습을 통한 확장 가능한 잠재 토큰화 연구 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 Alan Baade 등이 발표한 연구 논문 *&quot;Generative Representation Learning for Scalable Latent Tokenization&quot;*의 핵심 내용과 기술적 기여를 AI 및 머신러닝 논문 분석 관점에서 종합적으로 분석합니다. [작성자 해석] Recent generative modeling approaches, particularly in diffusion transformers, have frequently relied on pre-trained discriminative representation encoders such as DINOv2 or LeJEPA to serve as latent tokenizers. [사실] 그러나 이러한 판별적 인코더들은 하류 생성(Downstream Generation) 임무를 위한 신호 복원을 목적으로 설계되지 않았기 때문에, 소수의 세만틱 비트만으로 손실 목표가 포화되는 피처 억제(Feature Suppression) 현상, 패치 표현의 구조적 불안정성, VAE 계열의 아키텍처적 경사 하강법 병목 등 심각한 한계를 노출했습니다. [소구 주장]</p>
+<p>연구진은 이러한 근본적인 한계를 해결하기 위해 새로운 자가지도 표현 학습 프레임워크인 **RePR(Relative Prediction Representations)**을 제안합니다. [소구 주장] RePR은 기존의 대조 학습(Contrastive Learning)이 가진 판별적 접근 방식에서 벗어나, 학습된 생성 모델을 기반으로 조건부 예측 확률 차이를 계산하여 점별 상호 정보량(Pointwise Mutual Information, PMI)을 직접 추정하고 이를 벡터 내적으로 요인화(Factorization)하도록 설계되었습니다. [사실] 이를 통해 음성 샘플(Negative samples)에 의존하지 않으면서도 차원 붕괴(Dimensional Collapse) 및 피처 억제 현상을 근본적으로 방지하며, 토크나이저 인코더 스케일링 법칙(Tokenizer Encoder Scaling Laws)을 최초로 입증하였습니다. [소구 주장]</p>
+<p>본 보고서는 기존 토크나이저 인코더의 수학적·아키텍처적 문제점, RePR의 변분 하한(ELBO) 기반 PMI 추정 및 스케줄링 이론, 예측 및 표현 모델의 공동 최적화 메커니즘, 그리고 ImageNet 및 GPIC 데이터셋에서 검증된 스케일링 법칙과 컴퓨팅 최적 생성(Compute-Optimal Generation) 성과를 체계적으로 도출하여 기술적 시사점을 제공합니다. [작성자 해석]</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-analysis">2. 주요 논점 (Key Arguments &amp; Analysis)</h4>
+<h5 id="2-1-기존-토크나이저-인코더의-3가지-핵심-한계">2.1. 기존 토크나이저 인코더의 3가지 핵심 한계</h5>
+<ul>
+<li><strong>논점</strong>: 판별적 표현 학습 기반 인코더를 생성 모델의 잠재 토크나이저로 전용할 경우, 피처 누락 및 아키텍처 확장성 저하 현상이 필연적으로 발생합니다. [소구 주장]</li>
+<li><strong>근거</strong>:
+<ol>
+<li><strong>피처 억제 (Feature Suppression)</strong>: 대조 학습(InfoNCE) 및 LeJEPA와 같은 판별적 기법은 클래스 분류 등 수 비트의 핵심 세만틱 정보만으로도 손실 목표가 포화되는 특성을 가집니다. [사실] 이는 분류 작업에는 유용하지만, 모든 잠재 변수를 복원하고 샘플링해야 하는 생성 모델링 관점에서는 세부 시각 피처가 대거 누락되는 피처 억제 문제를 야기합니다. [소구 주장]</li>
+<li><strong>인과적 이론적 근거 결여 (Causal Theoretical Grounding)</strong>: 판별적 인코더는 CLS 토큰을 중심으로 최적화되지만, RAE 등의 잠재 확산 모델에서 토크나이저로 사용되는 내부 패치 피처(Internal patch features)는 명확한 구조적 감독 없이 '창발적(Emergent)'으로 형성된 것에 불과합니다. [소구 주장] 이로 인해 스케일 확장 시 아웃라이어 피처가 발생하거나 표현 품질이 자발적으로 저하되는 불안정성을 나타내며, 이를 억제하기 위해 레지스터 토큰이나 추가적인 증류(Distillation) 단계라는 임시방편적 기법에 의존해야 했습니다. [사실]</li>
+<li><strong>아키텍처 확장성 제약 (Architectural Scalability)</strong>: 고전적 토크나이저인 VAE 및 VQ-VAE는 재파라미터화 트릭(Reparameterization trick)이나 직선 통과 경사 추정(Straight-through gradient estimation)으로 인해 경사 하강법 최적화 과정에서 병목 현상이 발생하며 세만틱 스케일링에 실패합니다. [사실]</li>
+</ol>
+</li>
+<li><strong>사례 및 데이터</strong>:
+<ul>
+<li>대표적 잠재 토크나이저로 쓰이는 DINOv2-B 인코더는 ImageNet 데이터의 100배가 넘는 자원과 11억 개의 파라미터 모델로부터 증류되어 사전 학습되었으므로, 인코더 본연의 FLOP 연산 효율성이 은폐되어 있었습니다. [사실]</li>
+<li>16x16 패치마다 이미지 고유 식별 워터마크가 삽입된 ImageNet 실험에서, DINOv3-B/16 및 LeJEPA-S/8 모델은 워터마크라는 숏컷 신호에 지배되어 손실이 즉시 포화되었으며, ImageNet Top-1 검증 정확도가 0% 근처로 완전히 붕괴되는 피처 억제 현상을 보였습니다. [사실]</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-2-repr-프레임워크와-점별-상호-정보량-pmi-요인화">2.2. RePR 프레임워크와 점별 상호 정보량(PMI) 요인화</h5>
+<ul>
+<li><strong>논점</strong>: RePR은 음성 샘플링 없이 확산 모델의 조건부 예측 확률 차이로 스케일 가중 PMI를 직접 추정하고, 이를 표현 벡터 내적으로 엄밀하게 요인화합니다. [소구 주장]</li>
+<li><strong>근거</strong>:
+<ul>
+<li><strong>InfoNCE와 PMI의 수식적 연관성</strong>: 기존 대조 학습(InfoNCE)은 두 표현 $R_\theta(x), R_\theta(y)$의 내적이 점별 상호 정보량 $\text{PMI}(x,y) = \log \frac{P(x,y)}{P(x)P(y)}$로 수렴함을 이용하지만, 강한 조건부 환경에서 음성 샘플(Negative samples) 수집의 난이도로 인해 스케일링 한계에 직면합니다. [사실]</li>
+<li><strong>생성 모델을 통한 PMI 추정 및 ELBO 유도</strong>: RePR은 생성 모델 $G_\theta$의 조건부 로그 확률 차이 $\text{PMI}(x, y) = \log P_{G_\theta}(y|x) - \log P_{G_\theta}(y)$를 직접 계산합니다. [사실] 연속적 선형 보간 흐름 스케줄 $z_t = (1-t)x + t\epsilon$ ($\epsilon \sim \mathcal{N}(0, I)$)하에서, $t=1$일 때 $q(z_1|x) = p(z_1)$이 되어 Prior loss가 0이 되고, 이산 데이터 특성상 $t=0$일 때 재구성 오차(Reconstruction loss)가 0으로 귀결됩니다. [소구 주장] 이에 따라 변분 하한(VLB)은 Diffusion loss $L_\infty(x)$로 완전 귀결되며, 두 조건부 상태 간의 ELBO 차이를 통해 미분 가능한 PMI 수식을 아래와 같이 도출합니다. [소구 주장]
+$$\text{PMI}(x, y) = \mathbb{E}_{t \sim U[0,1], \epsilon \sim \mathcal{N}(0, I)} \left[ \frac{1-t}{t^3} \left( |y - \mathbb{E}(y|y_t, t)|_2^2 - |y - \mathbb{E}(y|x, y_t, t)|_2^2 \right) \right]$$ [사실]</li>
+<li><strong>타임스텝 가중치 스케줄링 (Timestep Weighting)</strong>: 나이브한 ELBO 가중치 $\frac{1-t}{t^3}$를 직접 적용할 경우 고주파 노이즈 영역에서 수치적 발산(NaN)이 발생하는 치명적 문제가 존재합니다. [사실] RePR은 신호 대 잡음비(SNR) 영역에 따른 세만틱 중요도를 반영하기 위해 타임스텝 가중치 함수 $g(t) = \frac{1-t}{\max(0.33, t)^2}$와 분포 $f(t)$를 도입한 스케일 가중 PMI($\text{PMI}^*$)를 정의하여, 학습 안정성을 확보하고 ImageNet FID-10K를 35.09로 크게 향상시켰습니다. [사실]</li>
+<li><strong>부트스트랩 PMI 추정 (Bootstrapped PMI)</strong>: 고차원 전체 이미지 $y$에 대한 우도 직접 추정의 난이도를 완화하기 위해 $y$를 토큰 단위 $y_1, \dots, y_k$로 분할하고, 순차적 PMI 증분의 망원합(Telescoping sum) 관계식 $\sum_{k=1}^K [\text{PMI}(x, y_{\le k}) - \text{PMI}(x, y_{\le k-1})] = \text{PMI}(x, y)$를 이용하여 로컬 PMI 단위로 안정적으로 추정합니다. [사실]</li>
+<li><strong>최종 RePR 표현 손실 함수</strong>: 마스크된 뷰 $x, y$ 및 추가 정보 토큰 $z$에 대하여 RePR의 전체 손실 함수 $L_{\text{RePR}}$은 다음과 같이 정립됩니다. [사실]
+$$L_{\text{RePR}} = \left| \langle R_\theta(x), R_\theta(y, z) - R_\theta(y) \rangle - \mathbb{E}_{t \sim f(t), \epsilon} \left[ g(t) , \text{stopgrad} \left( |z - \mathbb{E}(z|z_t, t, y)|_2^2 - |z - \mathbb{E}(z|z_t, t, x, y)|_2^2 \right) \right] \right|_2^2$$ [사실]</li>
+</ul>
+</li>
+<li><strong>사례 및 데이터</strong>: 몬테카를로 샘플링 단계 $N=32$ 설정 시 $N=4096$ 단계 대비 평균 제곱 오차(MSE)가 완전 수렴하며, PMI 계산에 소모되는 연산량은 전체 학습 FLOPs의 약 1.3% 수준에 불과하여 뛰어난 효율성을 보였습니다. [사실]</li>
+</ul>
+<hr />
+<h5 id="2-3-아키텍처-및-학습-알고리즘-구조">2.3. 아키텍처 및 학습 알고리즘 구조</h5>
+<ul>
+<li><strong>논점</strong>: 예측 모델(MAR)과 표현 모델($R_\theta$)의 공동 최적화 구조 및 토큰 지시자 임베딩, 공간 동변성(Spatial Equivariance) 설계를 통해 고품질 패치 피처 표현을 습득합니다. [소구 주장]</li>
+<li><strong>근거</strong>:
+<ul>
+<li><strong>예측 모델 구조 및 학습 순서 (Algorithm 1 연계)</strong>: 예측 모델은 MAR(Masked Autoencoder with Diffusion MLP) 아키텍처를 따르며, 관측 뷰 $AB$와 $B$에 대해 MAE 인코더 $E_\theta$ 및 디코더 $D_\theta$를 통한 잠재 표현 계산을 공유합니다. [사실] 이후 경량 패치 확산 MLP $M_\theta$를 노이즈 레벨 $t$에 따라 반복 실행하여 타겟 패치 $p$의 노이즈를 제거하는 손실 함수 $L_{\text{MAR}} = w(t)|M_\theta(z_p, p_t, t) - p|_2^2$를 최적화합니다. [사실]</li>
+<li><strong>PMI 비대칭성 및 토큰 지시자 임베딩</strong>: PMI는 수학적으로 비대칭적이며 비양의정치(Non-positive semi-definite) 성질을 띱니다. [사실] RePR은 표현 모델 $R_\theta$에 추가 증량 토큰 $z$를 입력할 때 학습 가능한 지시자 임베딩(Learned indicator embedding)을 가산함으로써 내적의 비대칭성을 보장하고, 최적 수렴 시 PMI의 완벽한 SVD 복원을 가능하게 합니다. [소구 주장]</li>
+<li><strong>공간 동변성 (Spatial Equivariance) 보장 설계</strong>: 인코더 $E_\theta$에서 절대 위치 임베딩을 제거하고 RoPE(Rotary Position Embedding)를 적용하며, 표현 모델 $R_\theta$가 관측 영역의 중심 대비 상대적 오프셋 쿼리(Center-relative offset queries)에 대해 Cross-Attention을 수행하도록 설계했습니다. [사실] 경계 조건 처리를 위해 이미지 외곽에 1행/열의 패딩 토큰을 추가하였으며, $R_\theta$는 이 패딩 토큰에서 낮은 수준의 유의미한 가중치를 형성함을 확인했습니다. [사실]</li>
+<li><strong>마스킹 전략 아블레이션</strong>: Block 마스킹 기법이 Uniform random 마스킹 대비 우수한 성능(Top-1 Accuracy 58.75% vs 57.63%)을 보였으며, 마스크 비율은 관측 뷰 $A$에 대해 $M_A = 75%$ (64개 가시 패치), 관측 뷰 $B$에 대해 $M_B = 93.75%$ (16개 가시 패치) 설정이 최적임을 입증했습니다. [사실]</li>
+</ul>
+</li>
+<li><strong>사례 및 데이터</strong>:
+<ul>
+<li><strong>반복적 피처 예측 (Iterative Feature Prediction)</strong>: 이전 학습 주기의 인코더 피처 $R_{\theta_{\text{old}}}$ 공간 상에서 다음 주기의 PMI를 예측하는 반복 학습(Iter 1 -&gt; Iter 2 -&gt; Iter 3)을 적용한 결과, ImageNet FID-10K가 30.68(Iter 1)에서 24.73(Iter 2), 23.81(Iter 3)로 대폭 개선되었습니다. [사실]</li>
+<li><strong>게으른 최적화 (Lazy Optimization) 및 손실 가중치</strong>: 표현 모델 $R_\theta$의 빠른 수렴 속도를 고려하여 4회 반복당 1회만 $R_\theta$를 업데이트하는 1:3 비대칭 스케줄링을 적용했습니다. [사실] 또한 RePR 손실 가중치는 $0.005$의 매우 작은 값에서 최적화되었으며, 가중치를 $0.4$로 높일 경우 학습 난이도 불균형으로 인해 Top-1 Accuracy가 $43.9%$로 급락했습니다. [사실]</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-실험-검증-피처-억제-내성-스케일링-법칙-컴퓨팅-최적-생성">2.4. 실험 검증: 피처 억제 내성, 스케일링 법칙, 컴퓨팅 최적 생성</h5>
+<ul>
+<li><strong>논점</strong>: RePR은 피처 억제 내성, 예측 가능한 인코더 스케일링 법칙, 그리고 화소 공간 직접 확산 모델 대비 컴퓨팅 최적 우수성을 완벽히 검증했습니다. [소구 주장]</li>
+<li><strong>근거 및 사례</strong>:
+<ol>
+<li><strong>피처 억제 내성 검증</strong>: 16x16 패치별 워터마크가 삽입된 ImageNet 데이터셋 실험에서 DINOv3-B/16 및 LeJEPA-S/8은 숏컷 학습에 빠져 성능이 0%로 붕괴된 반면, RePR-78M은 피처 억제를 극복하고 클린 데이터셋과 동일한 정상적 학습 곡선을 유지했습니다. [사실]</li>
+<li><strong>토크나이저 인코더 스케일링 법칙 (Scaling Laws)</strong>: ImageNet(FID-10K) 및 GPIC(FD-DINOv2-10K) 데이터셋에서 인코더 파라미터(20M~306M) 및 FLOPs 확장에 따라 명확한 거듭제곱 법칙(Power-law) 성능 향상 추세를 도출했습니다. [사실]
+<ul>
+<li><strong>ImageNet 연산 효율성</strong>: DINOv2-B 수준의 표현력을 달성하는 데 필요한 인코더 학습 연산량은 RePR 외삽 기준 $1.504 \times 10^{21}$ FLOPs로, DINOv2 Baseline 연산량($1.168 \times 10^{22}$ FLOPs) 대비 약 <strong>7.77배(7배 이상)</strong> 적은 컴퓨팅을 소모합니다. [사실]</li>
+<li><strong>GPIC 연산 효율性</strong>: WebSSL-DINO-1B 수준의 표현력을 달성하는 데 필요한 연산량은 RePR 외삽 기준 $1.229 \times 10^{21}$ FLOPs로, WebSSL Baseline 연산량($9.78 \times 10^{21}$ FLOPs) 대비 약 <strong>7.96배(8배 이상)</strong> 적은 컴퓨팅을 소모합니다. [사실]</li>
+</ul>
+</li>
+<li><strong>컴퓨팅 최적 생성 (Compute-Optimal Generation)</strong>: Latent Forcing 프레임워크 기반 하에, 화소 공간 직접 확산 모델인 JiT-L과 동일한 $1.19 \times 10^{20}$ FLOPs 연산 예산(JiT-L 200 에포크 분량)에서 조건부 FID-10K를 2.61, 무조건부 FID-10K를 4.18 크게 개선하였습니다. [사실] 나아가 총 $3.49 \times 10^{20}$ FLOPs 예산에서 RePR-78M + JiT-L(440ep) 결합 모델은 ImageNet FID-50K <strong>2.18</strong> (Inception Score 338.4)을 달성하여, 동일 연산 예산 이상의 raw pixel 확산 모델인 JiT-L 600ep($3.57 \times 10^{20}$ FLOPs, FID-50K 2.36, IS 298.5)을 능가했습니다. [사실]</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-화자-persons-and-roles">3. 등장 인물·화자 (Persons and Roles)</h4>
+<p>소스 문서에 기재된 모든 연구 참여자 및 역할 정보는 아래 표와 같습니다. [사실]</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물명 (Name)</th>
+<th style="text-align:left">소속 기관 (Affiliation)</th>
+<th style="text-align:left">역할 및 연구 기여 (Role &amp; Contribution)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Alan Baade</strong></td>
+<td style="text-align:left">Stanford University</td>
+<td style="text-align:left">주저자 및 교신저자 (<code>baade@stanford.edu</code>) [사실]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kyle Sargent</strong></td>
+<td style="text-align:left">Stanford University</td>
+<td style="text-align:left">공저자 [사실]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Vincent Sitzmann</strong></td>
+<td style="text-align:left">Massachusetts Institute of Technology</td>
+<td style="text-align:left">공저자 [사실]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Eric Ryan Chan</strong></td>
+<td style="text-align:left">Stanford University</td>
+<td style="text-align:left">공동 지도 (Equal advising) [사실]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Justin Johnson</strong></td>
+<td style="text-align:left">University of Michigan</td>
+<td style="text-align:left">공동 지도 (Equal advising) [사실]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Li Fei-Fei</strong></td>
+<td style="text-align:left">Stanford University</td>
+<td style="text-align:left">공동 지도 (Equal advising) [사실]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gordon Wetzstein</strong></td>
+<td style="text-align:left">Stanford University</td>
+<td style="text-align:left">공동 지도 (Equal advising) [사실]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Yilun Du</strong></td>
+<td style="text-align:left">확인 불가 (소스 내 미기재)</td>
+<td style="text-align:left">감사의 글에 언급된 논의 참여자 (Helpful discussion) [사실]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-시점-numbers-and-timestamps">4. 수치·시점 (Numbers and Timestamps)</h4>
+<p>소스 문서에서 확인할 수 있는 핵심 수치 지표, 모델 파라미터, 컴퓨팅 예산 및 에포크 데이터입니다. [사실]</p>
+<h5 id="성능-지표-및-지각-품질-performance-metrics">성능 지표 및 지각 품질 (Performance Metrics)</h5>
+<ul>
+<li><strong>ImageNet FID-50K</strong>: RePR-78M + JiT-L 결합 시 <strong>2.18</strong> 달성 (Inception Score 338.4), Pixel JiT-L 600ep Baseline (<strong>2.36</strong>, IS 298.5) 대비 우수함. [사실]</li>
+<li><strong>재구성 성능 (Reconstruction PSNR)</strong>: RePR-B Iter 3 (600ep) <strong>21.72 dB</strong> (rFID 0.47), DINOv2-B (<strong>18.09 dB</strong>, rFID 0.49) 대비 3.63 dB 향상됨. [사실]</li>
+<li><strong>RAE 디코더 하 FID-50K (DiT-XL 20ep)</strong>: RePR-173M Iter 3 기준 <strong>11.13</strong> 달성 (Mocov3-B 13.84, IJEPA-H 12.46 대비 우수함). [사실]</li>
+<li><strong>유지도 손실 FID-10K 개선량 ($1.19 \times 10^{20}$ FLOPs 예산)</strong>: 조건부 생성 FID 2.61 향상, 무조건부 생성 FID 4.18 향상됨. [사실]</li>
+</ul>
+<h5 id="컴퓨팅-및-연산-효율성-compute-efficiency">컴퓨팅 및 연산 효율성 (Compute Efficiency)</h5>
+<ul>
+<li><strong>ImageNet 인코더 FLOPs 비교</strong>: RePR DINOv2 동등 표현 달성 연산량 <strong>$1.504 \times 10^{21}$ FLOPs</strong> vs DINOv2 Baseline <strong>$1.168 \times 10^{22}$ FLOPs</strong> (7.77배 절감). [사실]</li>
+<li><strong>GPIC 인코더 FLOPs 비교</strong>: RePR WebSSL 동등 표현 달성 연산량 <strong>$1.229 \times 10^{21}$ FLOPs</strong> vs WebSSL-DINO-1B Baseline <strong>$9.78 \times 10^{21}$ FLOPs</strong> (7.96배 절감). [사실]</li>
+<li><strong>PMI 계산 연산 비중</strong>: 몬테카를로 적분 단계 $N=32$ 적용 시 전체 인코더 학습 연산량의 <strong>1.3%</strong> 소모. [사실]</li>
+<li><strong>AutoGuidance 추론/학습 연산 비중</strong>: 전체 연산량의 <strong>1.6%</strong> 소모. [사실]</li>
+</ul>
+<h5 id="모델-규모-및-구조-파라미터-model-scale-architecture-params">모델 규모 및 구조 파라미터 (Model Scale &amp; Architecture Params)</h5>
+<ul>
+<li><strong>인코더 파라미터 규격</strong>: <strong>20M</strong> (XT, 임베딩 차원 256), <strong>44M</strong> (T, 차원 384), <strong>78M</strong> (S, 차원 512), <strong>173M</strong> (B, 차원 768), <strong>306M</strong> (L, 차원 1024). [사실]</li>
+<li><strong>네트워크 깊이</strong>: 총 24 레이어 (E 인코더 18 레이어, D 디코더 6 레이어, R 표현 브랜치 6 레이어 [3 self-attention + 3 cross-attention]). [사실]</li>
+<li><strong>이미지 및 패치 규격</strong>: $256 \times 256$ 해상도, $16 \times 16$ 패치 크기. [사실]</li>
+<li><strong>총 학습 계산량 (Total Training FLOPs)</strong>:
+<ul>
+<li>Pixel JiT-L 600ep: $3.57 \times 10^{20}$ FLOPs. [사실]</li>
+<li>RePR-78M + Pixel JiT-L 440ep: $3.49 \times 10^{20}$ FLOPs. [사실]</li>
+<li>JiT-L 200ep 등가 예산: $1.19 \times 10^{20}$ FLOPs. [사실]</li>
+</ul>
+</li>
+</ul>
+<h5 id="학습-시점-및-에포크-시간-epochs-timestamps">학습 시점 및 에포크/시간 (Epochs &amp; Timestamps)</h5>
+<ul>
+<li><strong>스케일링 법칙 평가 시점</strong>: ImageNet <strong>80 에포크</strong> (JiT-B 결합), GPIC <strong>1 에포크</strong> (MiniT2I 결합). [사실]</li>
+<li><strong>체크포인트 저장 및 Decay 시점</strong>: <strong>110, 210, 410, 610 에포크</strong> (기본 에포크 + 10 에포크 학습률 선형 감쇠). [사실]</li>
+<li><strong>평가 소요 시간 (GPU Hours)</strong>: Latent Forcing 평가 1회당 ImageNet JiT-B 약 <strong>31 GPU 시간</strong>, GPIC MiniT2I 약 <strong>56 GPU 시간</strong> 소요. [사실] 스케일링 그래프 전체 재현 시 B200 8-GPU 노드 기준 <strong>250시간</strong> 소요 추정. [사실]</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<p>소스 문서 분석을 통해 명시적으로 도출된 연구의 한계점 및 불확실한 요소는 다음과 같습니다. [사실]</p>
+<ul>
+<li><strong>실제 추론(Inference) 시 실시간 시간 지연(Latency) 수치 미기재</strong>: Latent Forcing 및 RePR 인코더를 결합하여 실시간 이미지를 생성할 때 소요되는 밀리초(ms) 단위의 추론 시간 지연이나 FPS 수치가 문서에 명시되지 않았습니다. [사실]</li>
+<li><strong>비전/텍스트-이미지 외 타 모달리티 확장성 미검증</strong>: 본 연구의 실험적 검증은 2D 이미지(ImageNet) 및 텍스트-이미지(GPIC)에 국한되어 있으며, 비디오(Video), 오디오(Audio), 3D 모달리티로의 확장 적용 가능성에 대한 실험 데이터는 소스 문서에서 다루지 않습니다. [사실]</li>
+<li><strong>공저자별 세부 기여 항목 확인 불가</strong>: 주저자(Alan Baade) 및 지도 교수진의 역할은 밝혀져 있으나, individual co-authors(Kyle Sargent, Vincent Sitzmann 등)의 구체적 코드 구현 및 실험 분담 내역은 기재되어 있지 않습니다 (확인 불가). [사실]</li>
+<li><strong>하이퍼파라미터 범용 도출 공식의 부재</strong>: Block masking 비율, ARepeat, pRepeat, RePR loss weight(0.005) 등 최적 하이퍼파라미터가 실험적으로 산출되었으나, 새로운 타 아키텍처나 모달리티에 적용할 때 이를 자동으로 계산할 수 있는 범용 수학 공식은 제시되지 않았습니다. [사실]</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Training 100x Cheaper Retrieval models Neon and Castform</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Training 100x Cheaper Retrieval models Neon and Castform</h1>
+<p class="page-meta">웹 · 2026-08-10</p>
+<h2 id="요약">요약</h2>
+<p>Neon·Castform의 자체 평가에서 특화 4B 모델은 검색 롤아웃 비용이 약 95분의 1이었다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://neon.com/blog/how-castform-neon-beats-frontier-models-on-price-and-efficiency">출처</a> · <a href="https://www.youtube.com/watch?v=2dL0GhIbhBk">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="training-100x-cheaper-retrieval-models-neon-and-castform">Training 100x Cheaper Retrieval models Neon and Castform</h3>
+<h5 id="1-검색-패러다임의-변화-embedding-rag에서-multi-hop-agentic-retrieval로">1. 검색 패러다임의 변화: Embedding RAG에서 Multi-hop Agentic Retrieval로</h5>
+<p>최근 검색 시스템의 기술적 패러다임은 단순한 유사도 기반 검색에서 '컴퓨팅을 통한 지능 구현(Compute-Over-Intelligence)'이라는 전략적 전환을 맞이하고 있습니다. 2022년경의 초기 RAG가 정적인 문맥 제공에 그쳤다면, 2025년 이후 부상한 에이전틱 검색은 반복적 추론(Iterative Reasoning)을 통해 복잡한 문제를 해결합니다.</p>
+<ul>
+<li><strong>단순 검색 (One-shot Search, 2022년경):</strong>
+<ul>
+<li><strong>메커니즘:</strong> 엔지니어가 수동으로 설계한 파이프라인 내에서 단 한 번의 임베딩 유사도 검색(Embedding Similarity Search) 수행.</li>
+<li><strong>특징:</strong> <code>pgvector</code>와 같은 도구를 활용해 정적인 지식 전달에 집중하며, 추론보다는 검색 결과의 단순 나열에 의존.</li>
+</ul>
+</li>
+<li><strong>에이전틱 검색 (Iterative Planning, 2025년 이후):</strong>
+<ul>
+<li><strong>메커니즘:</strong> 대규모 문제를 작은 단위로 분해하고, 모델이 스스로 계획을 수립하여 멀티홉(Multi-hop) 검색 루프를 반복 수행.</li>
+<li><strong>특징:</strong> 모델이 능동적으로 검색 도구를 호출하며, 결과에 따라 다음 행동을 결정하는 '반복적 추론' 과정 포함. 이 방식은 데이터베이스에 대해 극심한 저지연성(Latency) 및 고병렬성(Concurrency)을 요구함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-frontier-모델의-경제적-기술적-병목-현상">2. Frontier 모델의 경제적/기술적 병목 현상</h5>
+<p>GPT-5.6 Sol과 같은 거대 Frontier 모델을 에이전틱 검색 루프에 투입하는 것은 비즈니스 전략 측면에서 심각한 비용 및 운영 리스크를 수반합니다.</p>
+<ul>
+<li><strong>반복 호출에 따른 비용 증가:</strong> 글은 일반적인 멀티턴 검색 요청 한 건이 약 <strong>$0.03</strong>이고, 자체 평가 그래프에서 GPT-5.6 Sol의 에이전틱 루프 <strong>Rollout당 비용이 $0.087338</strong>이라고 제시합니다. 반복 검색은 모델 호출 횟수를 늘려 비용을 키울 수 있습니다.</li>
+<li><strong>운영 병목 가능성:</strong> 글은 전형적인 멀티턴 요청이 10초를 넘는다고 주장합니다. 이는 실시간 에이전트 서비스에서 지연 문제가 될 수 있지만, 공개 글만으로 다양한 조건의 latency tail이 독립 검증된 것은 아닙니다.</li>
+</ul>
+<h5 id="3-neon과-castform의-역할-분담-및-협업-구조">3. Neon과 Castform의 역할 분담 및 협업 구조</h5>
+<p>본 아키텍처는 Neon Postgres(Lakebase Search)가 '문맥(Context)' 인프라를 제공하고, Castform이 '모델(Model)'의 지능을 최적화하는 전략적 분업 구조를 취합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Stage</th>
+<th style="text-align:left">Neon + Lakebase Search (Context)</th>
+<th style="text-align:left">Castform (Model Optimization)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Corpus storage</strong></td>
+<td style="text-align:left">원천 문서 및 운영 데이터를 Postgres에 저장</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Synthetic data generation</strong></td>
+<td style="text-align:left"><code>lakebase_text</code> 및 <code>lakebase_vector</code> 데이터 접근</td>
+<td style="text-align:left">기존 Corpus로부터 Ground Truth 및 훈련 과제 생성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RL Training</strong></td>
+<td style="text-align:left">수천 개의 병렬 Rollout 시 발생하는 검색 요청 처리</td>
+<td style="text-align:left">RL 루프 관리 및 GPU/ML 내부 최적화 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Production Inference</strong></td>
+<td style="text-align:left">학습 시와 동일한 하이브리드 검색 인터페이스 제공</td>
+<td style="text-align:left">최적화된 4B 모델의 저지연 추론 수행</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4-데이터-파이프라인-원천-데이터에서-합성-훈련-데이터로의-전환">4. 데이터 파이프라인: 원천 데이터에서 합성 훈련 데이터로의 전환</h5>
+<p>기업 내부에 산재한 비정형 데이터(Corpus)를 모델 학습이 가능한 자산으로 전환하는 과정은 Castform의 자동화된 엔지니어링을 통해 이루어집니다.</p>
+<ol>
+<li><strong>원천 데이터(Corpus) 통합:</strong> 내부 위키, 제품 기록, 고객 상담 로그, 운영 DB 등 가공되지 않은 지식원을 Neon Postgres에 통합합니다.</li>
+<li><strong>훈련 과제(Task) 생성:</strong> Castform은 원천 데이터로부터 문서(Document)를 추출하고, 이에 기반한 추론된 정답(Ground Truth)과 이를 도출하기 위한 합성 질문(Synthetic Question)을 생성합니다.</li>
+<li><strong>데이터 엔지니어링의 추상화:</strong> 복잡한 라벨링 공정 없이도 기존 데이터를 즉시 RL(강화 학습)에 활용할 수 있도록 변환하여, 인프라 구축의 허들을 제거합니다.</li>
+</ol>
+<h5 id="5-하이브리드-검색-기반의-rl-post-training-메커니즘">5. 하이브리드 검색 기반의 RL Post-training 메커니즘</h5>
+<p>Castform은 <code>lakebase_text</code>(키워드 기반)와 <code>lakebase_vector</code>(의미 기반)를 결합한 하이브리드 검색을 통해 모델을 미세 조정합니다.</p>
+<ul>
+<li><strong>보상 체계(Reward Function)의 세분화:</strong> 모델이 최적의 성능으로 '언덕 오르기(Hill-climbing)'를 할 수 있도록 세 가지 요소를 정의합니다.
+<ul>
+<li><strong>Retrieval(검색):</strong> 질문 해결에 필요한 핵심 데이터 청크를 정확히 식별했는가?</li>
+<li><strong>Citation(인용):</strong> 검색된 정보 중 정답의 근거가 되는 부분을 정확히 인용했는가?</li>
+<li><strong>Correctness(정확성):</strong> 최종 답변이 추론된 정답(Ground Truth)과 논리적으로 일치하는가?</li>
+</ul>
+</li>
+<li><strong>설계상 이점:</strong> 훈련 시와 실제 운영(Inference) 시에 같은 검색 인터페이스를 사용해 환경 차이를 줄이려는 구조입니다. 이것만으로 할루시네이션 방지나 행동 일관성의 극대화가 입증되는 것은 아닙니다.</li>
+</ul>
+<h5 id="6-성능-및-비용-벤치마크-100x-주장의-실체-분석">6. 성능 및 비용 벤치마크: '100x' 주장의 실체 분석</h5>
+<p>Castform RL을 거친 Qwen3.5-4B 모델과 GPT-5.6 Sol의 벤치마크 결과는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 구분</th>
+<th style="text-align:left">추론 비용 (per Rollout)</th>
+<th style="text-align:left">평균 보상 (Mean Reward)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Castform fine-tune (4B)</strong></td>
+<td style="text-align:left"><strong>$0.000920</strong></td>
+<td style="text-align:left"><strong>1.447</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:left">$0.087338</td>
+<td style="text-align:left">1.369</td>
+</tr>
+<tr>
+<td style="text-align:left">Qwen3.5-4B Base</td>
+<td style="text-align:left">$0.000929</td>
+<td style="text-align:left">0.382</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>비용 효율성의 본질:</strong> 제목의 '100x'는 실제 비용 비율(약 94.9배 저렴)을 반올림한 수치입니다. 이는 모델 학습 전체 비용이 아닌, <strong>에이전틱 루프 내의 특정 검색 과제 추론(Rollout) 비용</strong>에 한정된 성과입니다.</li>
+<li><strong>성능 도약의 의미:</strong> 회사 측 그래프에서는 베이스 모델(Qwen3.5-4B)의 보상값 0.382가 RL Post-training 후 1.447로 높아집니다. 이는 해당 검색 평가에서 특화 소형 모델의 가능성을 보여주지만, 범용적 가치나 우월성을 증명하지는 않습니다.</li>
+</ul>
+<h5 id="7-neon-인프라의-전략적-가치-확장성과-데이터-격리">7. Neon 인프라의 전략적 가치: 확장성과 데이터 격리</h5>
+<p>수천 개의 병렬 Rollout이 발생하는 강화 학습은 매우 불규칙하고 폭발적인(Bursty) 워크로드를 생성합니다.</p>
+<ul>
+<li><strong>Scale-to-zero 및 Autoscaling:</strong> Neon은 서버리스 아키텍처가 피크 때 자원을 늘리고 유휴 시 축소해 bursty workload의 과잉 프로비저닝을 줄일 수 있다고 설명합니다. 실제 총비용 절감 폭은 별도 검증이 필요합니다.</li>
+<li><strong>격리·재현 경로:</strong> Neon은 <strong>Branching 및 Time-travel Query</strong>가 데이터를 수정하는 Stateful Agent의 Rollout별 DB 상태 격리와 과거 상태 점검에 활용될 수 있다고 제안합니다. 공개 글은 이런 대규모 stateful-agent 학습이 완료됐거나 완전한 격리가 독립 입증됐다는 증거를 제공하지 않습니다.</li>
+</ul>
+<h5 id="8-기술적-한계-및-검증-기준-critical-review">8. 기술적 한계 및 검증 기준 (Critical Review)</h5>
+<p>해당 결과는 Neon과 Castform의 자체 평가에 기반한 것으로, 독립적인 제3자 검증을 거치지 않았습니다. 실제 도입 전 다음 5가지 기준에 대한 엄격한 감사가 필요합니다.</p>
+<ol>
+<li><strong>보상 해킹 및 오염:</strong> Reward Hacking을 통한 수치 부풀리기 여부 및 훈련 데이터와 테스트셋 간의 누출(Leakage) 여부 검증.</li>
+<li><strong>검색 효율성 감사:</strong> 설정된 검색 예산(Search Budget) 내에서 최적의 인용 품질을 유지하는지, 불필요한 호출을 남발하지 않는지 확인.</li>
+<li><strong>데이터 거버넌스:</strong> 기업 데이터 활용 시 개인정보 보호(PII) 및 접근 제어 정책(ACL)이 브랜칭 환경에서도 준수되는지 여부.</li>
+<li><strong>통계적 투명성:</strong> 평균값 외에 결과의 분산, 신뢰구간, 반복 실험 횟수 및 실패율에 대한 상세 명세 요구.</li>
+<li><strong>운영 인프라 신뢰성:</strong> Production 환경에서의 데이터 브랜치 자동 삭제 주기 및 작업 로그의 감사 가능성(Auditability) 보장 수준.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

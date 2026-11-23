@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepInfer/doc/inference_deployment_qa.md at main · deepseek-ai/DeepInfer · GitHub</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>DeepInfer/doc/inference_deployment_qa.md at main · deepseek-ai/DeepInfer · GitHub</h1>
+<p class="page-meta">코드 · 2026-10-21</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 대규모 언어 모델(LLM)인 DeepSeek V4.1 Flash의 대규모 클라우드 추론 시스템 아키텍처 및 배포 전략을 다루는 전문 기술 해설 문서입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/code/">코드</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md">출처</a> · <a href="https://www.youtube.com/watch?v=KBVel8hpdys">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="딥시크-v4-1-플래시-deepseek-v4-1-flash-추론-배포-q-a-기술-해설-보고서">딥시크 V4.1 플래시(DeepSeek V4.1 Flash) 추론 배포 Q&amp;A 기술 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 대규모 언어 모델(LLM)인 DeepSeek V4.1 Flash의 대규모 클라우드 추론 시스템 아키텍처 및 배포 전략을 다루는 전문 기술 해설 문서입니다. DeepSeek V4.1 Flash 추론 시스템은 초고성능·저비용 인프라 구축을 목표로 초기 설계 단계부터 세 가지 핵심 목표를 설정하였습니다. 첫째, 다중 벤더의 가속기(NVIDIA 및 Huawei Ascend 플랫폼 등)를 지원하여 이종 하드웨어 플랫폼 전반에서 성능을 극대화하는 것입니다. 둘째, 상용 하드웨어(프리필은 일반 8-GPU 머신, 디코드는 64~128-GPU 수퍼노드)를 기반으로 프리필(Prefill)과 디코드(Decode) 단계를 구조적으로 분리(Disaggregation)하고, 각 단계의 부하 특성에 맞춘 연산·통신·스케줄링을 구현하는 것입니다. 셋째, 반복적인 프리필 연산을 줄이고 문맥 재사용성을 높이기 위해 KV 캐시(KV Cache)를 72시간 이상 장기 유지함으로써 용량 한계와 관리 오버헤드를 제어하는 동시에 캐시 히트 시 중복 연산을 대폭 절감하는 것입니다.</p>
+<p>이러한 시스템 목표를 실현하기 위해 공개된 핵심 오픈소스 프레임워크가 바로 딥인퍼(DeepInfer)와 딥시크 레시피(deepseek-recipe)입니다. DeepInfer는 대규모 클라우드 서비스를 위해 구축된 오픈소스 추론 프레임워크로서 고성능 연산 커널, 비동기 스케줄러, SWA 바운디드 리플레이(Bounded Replay), 투기적 디코딩(Speculative Decoding), 구조화된 출력(Structured Outputs) 지원 기능을 통합 제공합니다. 현재 단일 클러스터 기준 일일 155조(155 trillion) 토큰을 처리하며 GPU 시간당 38 달러(오프피크 골짜기 가격 기준)의 수익성을 달성하고 있습니다. 함께 제공되는 deepseek-recipe는 생산 환경급 토큰 인코딩/디코딩 구성 요소로서, 주요 LLM API 프로토콜과 모델 토큰 시퀀스 간의 변환을 정확하고 효율적으로 수행합니다. 이 프레임워크의 처리 로직은 공식 DeepSeek API와 완벽하게 일치하므로 타사 배포 환경에서도 공식 서비스와 동일한 API 동작을 보장받을 수 있습니다.</p>
+<p>본 기술 해설 보고서는 기존에 발표된 지휘(Zhihu) 블로그 포스트의 내용을 기반으로 제작되었습니다. 내부 인프라와 밀접하게 결합되어 코드 전체가 직접 공개되지 않은 KV 캐시 관리 및 로드 밸런싱 모듈을 포함하여, DeepSeek V4.1 Flash 추론 배포 시스템의 구체적인 하드웨어 구성 사양, 연산 및 파이프라인 최적화, 로드 밸런싱 메커니즘을 인프라 아키텍트 및 엔지니어링 조직에 명확하고 정밀하게 전달하는 것을 목적으로 합니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-system-components">2. 주요 논점 (Key Arguments &amp; System Components)</h4>
+<h5 id="2-1-시스템-아키텍처-및-분리형-배포-전략-system-architecture-disaggregated-deployment">2.1. 시스템 아키텍처 및 분리형 배포 전략 (System Architecture &amp; Disaggregated Deployment)</h5>
+<blockquote>
+<p><strong>핵심 요약(Executive Summary):</strong> 비전 인코더, 프리필, 디코드의 아키텍처 분리(E/P/D Disaggregation) 및 Wide-EP 배포를 통해 최초 토큰 생성 시간(TTFT)과 토큰 간 생성 시간(TBT)을 독자적으로 최적화하고 시스템 처리량을 극대화합니다.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>관련 소스 섹션:</strong> <code>Inference system overview</code></p>
+</li>
+<li>
+<p><strong>사실 (Fact):</strong></p>
+<ul>
+<li>추론 시스템은 비전 인코더(VE), 프리필(Prefill), 디코드(Decode)의 역할이 독립적인 컴퓨팅 노드 및 전용 저장소 노드로 분리된 E/P/D 분리형 아키텍처를 채택합니다.</li>
+<li>병렬화 구조: MoE 레이어에는 전문가 병렬화(EP)를 적용하며, 어텐션 레이어에는 데이터 병렬화(DP)를 적용하여 <code>#DP = #EP</code> 구조를 형성합니다. 텐서 병렬화(TP) 및 시퀀스/콘텍스트 병렬화(CP)는 사용하지 않습니다.</li>
+<li>단계별 병렬화 구성:
+<ul>
+<li><strong>프리필(Prefill):</strong> EP2–8 / DP2–8 (HBM 메모리 용량이 허용하는 최저 수준의 EP/DP 적용).</li>
+<li><strong>디코드(Decode):</strong> EP64–128 / DP64–128 (Wide-EP, 가용 GPU가 허용하는 최대 수준의 EP/DP 적용).</li>
+<li><strong>비전 인코더(VE):</strong> 인스턴스당 단일 GPU(저렴한 GPU 권장)로 구성됩니다.</li>
+</ul>
+</li>
+<li>배포 시 최소 실효 단위는 64 GPU 프리필 + 64 GPU 디코드(총 128 GPU)입니다. 1P + 1D의 소형 배포도 가능하지만, 실제 운영상 프리필과 디코드의 GPU 비율이 약 1:1이고 디코드 권장 설정이 EP64 이상이므로 64+64 설정이 최소 효율 단위가 됩니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>주장 (Claim):</strong></p>
+<ul>
+<li>E/P/D 분리를 통해 각 단계별 리소스 할당을 디커플링함으로써 최초 토큰 생성 시간(TTFT)과 토큰 간 생성 시간(TBT)을 독립적으로 제어 및 최적화할 수 있습니다.</li>
+<li>디코드 단계에서 Wide-EP를 적용하면 MoE 전문가 영역의 스텝당 메모리 트래픽이 크게 감소하고, 정교한 EPLB 지원 하에 초당 토큰 처리량(TPS)을 효과적으로 향상시킵니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>해설 (Interpretation):</strong></p>
+<ul>
+<li><strong>아키텍처적 트레이드오프 및 병목 해소:</strong> TP/CP를 배제하고 Wide-EP와 DP=EP 구조를 채택한 것은 노드 간 대규모 올투올(All-to-All) 통신 병목을 줄이면서 대규모 배치 처리를 통해 GPU의 행렬 곱셈 연산 효율성을 극대화하기 위한 설계입니다. 디코드 단계에서 EP64 이상의 Wide-EP를 형성하면 각 GPU가 보유하는 전문가 수가 줄어들어 weights 메모리 대역폭 한계(Memory-Bound)를 획기적으로 완화할 수 있습니다.</li>
+<li><strong>엔드투엔드 요청 처리 흐름 요약 (End-to-End Processing Pipeline):</strong>
+<ol>
+<li><strong>요청 수신 및 변환:</strong> 클라이언트 요청이 Entrypoint에 도착하면 Rust 기반 <code>deepseek-recipe</code>가 API 프로토콜을 통일된 대화 포맷으로 인코딩하고 특수 토큰 구획화 병렬 인코딩을 수행합니다.</li>
+<li><strong>프롬프트 분할 및 프리필 할당:</strong> Prefill LB가 컨텍스트 길이에 따라 요청을 4개 티어로 버킷팅하고, 스텝당 시간 예산(time budget) 및 이차 비용 모델 <code>cost(q, c)</code>에 기반하여 동적 청크 크기를 결정한 후 프리필 노드에 할당합니다.</li>
+<li><strong>저장소 조회 및 SWA 재연산:</strong> Entrypoint(CHECK 역할)가 3FS 전용 클러스터에서 메타데이터 해시 체인 접두사 매칭을 수행합니다. 블록 KV 캐시 히트 시 3FS에서 비동기로 가져오고, SWA KV 미스 발생 시 SWA Bounded Replay를 통해 최신 128 토큰만 최소 재연산합니다.</li>
+<li><strong>P-to-D 전송 및 디코드 배치:</strong> 프리필 완료 후 생성된 상태와 SWA KV 캐시가 인터커넥트/400G VLAN을 통해 디코드 노드로 전송(P-to-D Transfer)됩니다.</li>
+<li><strong>디코드 실행 및 투기적 검증:</strong> Decode LB(DualPath)가 요청 수와 KV 캐시 길이를 고려해 랭크 간 균형 배치를 수행하고, 비동기 스케줄러(Zero-overhead Batch Scheduler) 제어 하에 GPU가 Forward를 실행하는 동안 DSpark의 TileLang 커널이 가변 길이 투기적 검증을 처리합니다.</li>
+<li><strong>스트리밍 디코딩 및 응답:</strong> 디코드 출력 토큰은 Rust 기반 파서의 증분 KMP 알고리즘 및 UTF-8 버퍼링을 거쳐 실시간 스트리밍 응답으로 클라이언트에 반환됩니다.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-2-클러스터-및-3fs-분산-파일-시스템-cluster-storage-architecture">2.2. 클러스터 및 3FS 분산 파일 시스템 (Cluster &amp; Storage Architecture)</h5>
+<blockquote>
+<p><strong>핵심 요약(Executive Summary):</strong> 3FS 분산 파일 시스템과 10+2 소거 코딩 기반 전용 스토리지 클러스터를 구축하여, 프릿픽스 어피니티와 동적 로드 밸런싱 간의 근본적 충돌을 해소하고 안정성을 확보합니다.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>관련 소스 섹션:</strong> <code>Cluster &amp; storage</code></p>
+</li>
+<li>
+<p><strong>사실 (Fact):</strong></p>
+<ul>
+<li><strong>3FS 아키텍처 및 10+2 소거 코드 (Erasure Coding):</strong> 데이터를 10+2 EC 방식으로 분할 저장하여 EC 그룹당 2개의 동시 노드 장애를 완벽히 허용합니다.</li>
+<li><strong>병렬 읽기 메커니즘:</strong> 읽기 요청 발생 시 그룹 내 11개 저장소 노드 전체에 동시에 요청을 전송하며, 가장 먼저 도착한 10개의 응답만으로 즉시 데이터를 복원하여 반환함으로써 지연 시간을 단축합니다.</li>
+<li><strong>가비지 컬렉션 (GC Worker):</strong> 각 저장소 노드마다 GC Worker가 배포되어 주기적으로 LRU(Least Recently Used) 정책에 따라 만료된 KV 캐시를 정리하여 디스크 사용량을 임계값 이하로 유지합니다.</li>
+<li><strong>표준 저장소 서버 사양:</strong> 서버당 20 × 30.73 TB SSD 탑재, 최소 40 GB/s 읽기 및 5 GB/s 쓰기 대역폭 제공, 24시간 분량 데이터 보존 가능. 온라인 GPU당 논리 용량 기준 약 14.4 TB 할당 (물리 필요 용량은 이보다 큼).</li>
+<li><strong>데이터 센터 간 분산 배포:</strong> KV 캐시의 높은 압축률 덕분에 프리필과 디코드를 서로 다른 데이터 센터에 분할 배포하는 것이 기술적으로 가능하며, 8 GPU당 약 400 Gbps의 상호 연결 대역폭이 필요합니다. 실제 DeepSeek 인프라는 인접한 별개의 데이터 센터들에 분산 배포되어 있습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>주장 (Claim):</strong></p>
+<ul>
+<li>3FS의 10+2 EC 동시 읽기 메커니즘은 노드 장애나 네트워크 지연(Jitter) 발생 시에도 극도로 높은 가용성과 일정한 읽기 성능을 보장합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>해설 (Interpretation):</strong></p>
+<ul>
+<li><strong>프리픽스 어피니티와 로드 밸런싱 간 근본 충돌 해소:</strong> 기존 로컬 호스트 메모리 중심 계층형 저장 구조에서는 특정 프롬프트 캐시를 보유한 특정 컴퓨팅 노드로 요청을 보낼 수밖에 없어 라우팅 불균형(Prefix Affinity 충돌)이 발생합니다. 반면, 전용 3FS 저장소 클러스터를 구축함으로써 <strong>모든 프리필 컴퓨팅 노드가 3FS 상의 어떠한 캐시 접두사(Prefix)라도 자유롭게 조회(Hit) 및 인출</strong>할 수 있게 되어, 로드 밸런서가 동적으로 순수 계산 부하 기반의 최적 할당을 수행할 수 있습니다.</li>
+<li><strong>컴퓨팅-저장소 결합 해제 및 장애 격리:</strong> 컴퓨팅 노드는 저장소 노드에 비해 장애 발생률이 10배 이상 높습니다. KV 캐시를 독립된 3FS 클러스터로 분리함으로써 컴퓨팅 노드가 다운되더라도 캐시 데이터의 손실을 막고 스토리지와 컴퓨팅 자원을 독립적으로 오토스케일링할 수 있습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-로드-밸런싱-기법-load-balancing-strategies">2.3. 로드 밸런싱 기법 (Load Balancing Strategies)</h5>
+<blockquote>
+<p><strong>핵심 요약(Executive Summary):</strong> EPLB, DP 버킷팅, 동적 time-budget 청킹, DualPath 알고리즘을 결합하여 완벽히 균형 잡힌 오프라인 벤치마크 대비 80% 수준의 실효 시스템 성능을 달성합니다.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>관련 소스 섹션:</strong> <code>Expert-parallel load balancing</code>, <code>Data-parallel load balancing</code></p>
+</li>
+<li>
+<p><strong>사실 (Fact):</strong></p>
+<ul>
+<li><strong>전문가 병렬화 로드 밸런서 (EPLB):</strong>
+<ul>
+<li>각 GPU는 담당 기본 전문가 외에 핫(Hot) 전문가의 복제본을 보유하는 '중복 전문가(Redundant Experts)'를 추가 할당받습니다.</li>
+<li>최근 N 스텝의 전문가 로드를 수집하여 M 스텝마다 NVLink <code>symm_mem</code>을 통해 전문가 가중치를 재배치합니다.</li>
+<li><strong>프리필:</strong> GPU당 4개 중복 전문가(올림하여 총 전문가 수가 ep_size의 배수가 되도록 조정), 100 스텝 통계 창, 1,000 스텝 주기 재배치. 측정된 <code>moe_lb</code> (가장 느린 랭크 / 평균) = 1.074 (EP4DP4) / 1.045 (EP2DP2).</li>
+<li><strong>디코드:</strong> GPU당 1개 중복 전문가(EP64 기준 공유 전문가 제외 GPU당 7개 전문가 할당), 1,000 스텝 통계 창, 10,000 스텝 주기 재배치. 측정된 <code>moe_lb</code> = 1.090.</li>
+</ul>
+</li>
+<li><strong>데이터 병렬화 로드 밸런서 (DP LB):</strong>
+<ul>
+<li><strong>프리필 로드 밸런서:</strong> 요청을 총 컨텍스트 길이에 따라 4개 티어(&lt;16K / 16–64K / 64–256K / ≥256K)로 버킷팅합니다. 각 스텝에 나노초 단위 시간 예산(<code>compute_quota_limit</code>)을 부여하고, 이차 비용 모델 <code>cost(q, c)</code> ($q$: 시퀀스 토큰 수, $c$: 이미 계산된 접두사 길이)를 통해 32,768 토큰 한도 내에서 잔여 예산을 완전히 소비하는 최대 토큰 수 $q$를 산출해 청크 크기를 동적으로 결정합니다. 예산 자체는 DP 그룹 내 All-Reduce MIN을 통해 추가 축소됩니다.</li>
+<li><strong>디코드 로드 밸런서:</strong> DualPath 알고리즘 기반. 요청 수(스텝당 배치 크기 결정)와 총 KV 캐시 길이(어텐션 연산 비용 결정)를 동시에 균형 있게 분산시킵니다. 동시성은 낮지만 total KV 길이가 큰 GPU에는 짧은 요청을, total KV 길이가 작은 GPU에는 긴 요청을 전달합니다.</li>
+<li><strong>비전 인코더 로드 밸런서:</strong> 머신 단위로 무작위 선택 후, 해당 머신 내에서 현재 가장 적은 이미지 패치 수($(width/patch_size) \times (height/patch_size)$)를 처리 중인 GPU에 할당합니다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>주장 (Claim):</strong></p>
+<ul>
+<li>다층 로드 밸런싱 기법의 종합 적용을 통해 완벽하게 균형 잡힌 오프라인 벤치마크 성능의 약 80% 수준까지 실제 시스템 실효 성능을 끌어올릴 수 있습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>해설 (Interpretation):</strong></p>
+<ul>
+<li><strong>고정 청킹 배제와 동적 예산 청킹의 공학적 의의:</strong> 프리필 단계에서 고정 크기 청킹 방식을 사용하면 입력 접두사 길이에 따른 연산 복잡도차로 인해 DP 랭크 간 동기화 대기 시간(Straggler Effect)이 크게 발생합니다. Quadratic cost model 기반 동적 청킹 및 DP 랭크 간 All-Reduce MIN 예산 정렬을 통해 모든 GPU가 한 스텝에서 거의 동일한 시간 동안 연산을 수행하도록 보증함으로써 동기화 병목을 제거했습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-kv-캐시-계층-및-swa-바운디드-리플레이-kv-cache-swa-bounded-replay">2.4. KV 캐시 계층 및 SWA 바운디드 리플레이 (KV Cache &amp; SWA Bounded Replay)</h5>
+<blockquote>
+<p><strong>핵심 요약(Executive Summary):</strong> 3FS 기반 블록 KV와 로컬 SWA KV 캐시의 이원화, GDR 스왑인 및 SWA Bounded Replay 재연산을 통해 캐시 재연산 비용을 상수로 고정시킵니다.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>관련 소스 섹션:</strong> <code>KV cache storage</code>, <code>KV cache hits and recomputation</code></p>
+</li>
+<li>
+<p><strong>사실 (Fact):</strong></p>
+<ul>
+<li><strong>KV 캐시 계층 구조 요약:</strong></li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">캐시 종류</th>
+<th style="text-align:left">저장 매체</th>
+<th style="text-align:left">복제 구조</th>
+<th style="text-align:left">관리 주체 및 세부 스펙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>인플라이트 및 상태 KV 캐시</strong>&lt;br&gt;(In-flight &amp; State KV)</td>
+<td style="text-align:left">추론 GPU 메모리 (HBM)</td>
+<td style="text-align:left">없음 (—)</td>
+<td style="text-align:left">프리필 / 디코드 인스턴스</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWA KV 캐시</strong>&lt;br&gt;(Sliding Window Attention KV)</td>
+<td style="text-align:left">로컬 호스트 메모리 (CPU RAM)</td>
+<td style="text-align:left">단일 복제본&lt;br&gt;(3FS 미저장)</td>
+<td style="text-align:left">프리필 / 디코드 인스턴스 관리.&lt;br&gt;타 머신 히트 시 400G VLAN으로 인출.&lt;br&gt;<strong>비고:</strong> <code>20 레이어 × 134 토큰 × 528 B = 1,415,040 B/seq</code> (MXFP8 포맷)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>페이징 블록 KV 캐시</strong>&lt;br&gt;(Paged Block KV)</td>
+<td style="text-align:left">전용 3FS 저장소 클러스터</td>
+<td style="text-align:left">앱 레벨 복제 없음&lt;br&gt;(3FS EC 중복성 의존)</td>
+<td style="text-align:left"><code>kvcache-store</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>Entrypoint 매칭 및 GDR 기반 Block KV Swap-in 메커니즘:</strong></p>
+<ul>
+<li><strong>매칭(Matching):</strong> Entrypoint가 CHECK 역할로서 로컬 <code>kvcache-store</code>에 대해 메타데이터 해시 체인 접두사 매칭을 수행합니다. 히트 길이는 라우팅 전 계산되어야 하므로 숨겨지지 않습니다.</li>
+<li><strong>인출(Fetching) 및 스왑인(Swap-in):</strong> 비동기 별도 프로세스가 3FS에서 호스트 공유 메모리로 KV 캐시를 이동시킵니다. 이후 호스트 메모리에서 HBM으로 스왑인할 때 CUDA 복사 엔진의 미세 블록 복사 효율 저하를 극복하기 위해 **GDR(GPU Direct RDMA)**을 활용하여 SM(Streaming Multiprocessor) 소모 없이 PCIe 대역폭을 완전히 포화시킵니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>SWA KV 캐시 영역 분할 및 저장 메커니즘:</strong></p>
+<ul>
+<li><code>StateBlock</code> 내부 구조: 각 시퀀스별 슬롯은 <code>[stored region: SWA]</code>와 <code>[dropped region: YOCO consumer SWA]</code>로 분할됩니다. dropped 영역에는 prefill 재연산에 의존하는 YOCO consumer 레이어 및 C2 압축 경계 어큐뮬레이터(<code>ca_state</code>/<code>ica_state</code>)가 위치하며, C2 경계는 128 토큰 저장 단위에 자연 정렬되어 경계 간 의존성이 없습니다. V4.1에서는 상위 20개 레이어만 저장 대상(<code>state_size_to_disk</code>)입니다.</li>
+<li>디코드 단계 복제 및 overshoot 흡수: 디코드 중 GPU 메모리 내 별도 복제 영역을 두고 128 토큰 경과 시마다 복사합니다. 요청 종료 시 마지막 복제본에서 디스크로 저장되며, 복사 위치가 경계를 최대 5토큰 초과(overshoot)하더라도 슬롯 링 버퍼(Ring Buffer)가 보유한 윈도우 외 **6개의 추가 슬롯(extra 6 positions)**이 이를 흡수합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>SWA 바운디드 리플레이 (Bounded Replay) 재연산 메커니즘:</strong></p>
+<ul>
+<li>최신 128개 토큰만 재연산하고 어텐션 윈도우를 재연산 세그먼트 내부($\max(s, i-127) \sim i$)로 제한해 근사 SWA KV를 생성합니다.</li>
+<li><strong>인코더 SWA 리플레이:</strong> SWA KV 미스 시 프롬프트의 마지막 128개 토큰을 재연산하여 SWA KV만 재구성하며, 블록 KV 캐시는 재연산이나 덮어쓰기 없이 그대로 재사용합니다.</li>
+<li><strong>디코더 SWA 리플레이:</strong> CED 아키텍처에서 디코더 레이어 블록 KV는 인코더 마지막 레이어 숨겨진 상태에서 사영되므로, 디코더 SWA KV만 재계산합니다. 프리필 시 디코더 레이어에서 프롬프트의 마지막 128 토큰만 재연산하여 프리필 전체 연산량을 절반 수준으로 절감합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>히트 정책 (Hit Policy):</strong></p>
+<ul>
+<li>최대 히트 길이는 입력 $L$에 대해 $L - 134$ (128 윈도우 + 6 투기적 백트래킹)로 제한됩니다.</li>
+<li>블록 KV 캐시를 먼저 조회하여 $L1$(128의 배수)을 얻은 후 SWA KV 존재를 확인합니다. $L1-128 \sim L1$ 구간에 SWA KV가 존재하면 히트 길이는 $L1$, 부재 시 $L1-128$로 백오프(Back-off)하여 128 토큰 재연산을 수행합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>주장 (Claim):</strong></p>
+<ul>
+<li>SWA 바운디드 리플레이를 도입함으로써 컨텍스트 길이 및 레이어 수와 무관하게 KV 캐시 재연산 연산량을 상수(Constant) 수준으로 고정합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>해설 (Interpretation):</strong></p>
+<ul>
+<li>프롬프트 전체를 재연산하는 고비용 방식을 탈피하여 슬라이딩 윈도우 경계(128 토큰)로 재연산 범위를 한정함으로써, 초장문 컨텍스트 입력 시 발생하는 GPU 전처리 병목을 근본적으로 제거했습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-5-연산-최적화-저정밀도-커널-및-비동기-스케줄링-low-precision-kernels-scheduling">2.5. 연산 최적화: 저정밀도, 커널 및 비동기 스케줄링 (Low-Precision, Kernels &amp; Scheduling)</h5>
+<blockquote>
+<p><strong>핵심 요약(Executive Summary):</strong> FP4/MXFP4 양자화, Mega MoE 커널, Zero-overhead 비동기 스케줄링을 통합하여 GPU 가동률을 극대화하고 유휴 시간을 소멸시킵니다.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>관련 소스 섹션:</strong> <code>Low-precision computation</code>, <code>Kernel implementation</code>, <code>Asynchronous scheduling</code></p>
+</li>
+<li>
+<p><strong>사실 (Fact):</strong></p>
+<ul>
+<li><strong>저정밀도 양자화 포맷:</strong>
+<ul>
+<li>메인 KV (Main KV): FP4 per-16 (<code>e4m3</code> 포맷, 전역 스케일 제거).</li>
+<li>인덱서 KV (Indexer KV) 및 MoE 라우팅 전문가 가중치: MXFP4 per-32 (<code>ue8m0</code> 포맷).</li>
+</ul>
+</li>
+<li><strong>연산 커널 성능 비교:</strong>
+<ul>
+<li><strong>Mega MoE:</strong> 스케일업 도메인 내에서 EP 크기나 배치 크기와 무관하게 unfused MoE 대비 현저히 빠른 범용 커널입니다.</li>
+<li><strong>FlashMLA:</strong> 수동 작성 SASS 최적화 1개가 누락되어 디코딩 커널이 내부 정밀 버전 대비 5%–10% 지연됩니다. 단, 엔드투엔드 전체 시스템 성능 차이는 5% 이내로 미비합니다.</li>
+</ul>
+</li>
+<li><strong>비동기 스케줄러 (Zero-overhead Batch Scheduler) 작동 메커니즘:</strong>
+<ul>
+<li>기존 동기 방식: 디코드 스텝 N에서 <code>schedule(N) → forward(N) → sample(N) → post-process(N)</code> 순서로 실행되며, <code>post-process(N)</code> 전 CPU/GPU 동기화로 인해 CPU가 스케줄링 및 후처리를 수행하는 동안 GPU가 유휴(Idle) 상태에 빠집니다.</li>
+<li>비동기 파이프라인 구조: GPU가 <code>forward(N) → sample(N)</code>을 수행하는 동안 CPU가 병렬로 <code>schedule(N+1) → launch_forward(N+1) → post-process(N-1) → launch_sample(N+1)</code>을 수행함으로써 GPU 유휴 시간을 완전히 제거합니다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>주장 (Claim):</strong></p>
+<ul>
+<li>비동기 스케줄링을 통해 CPU 오버헤드와 GPU 계산을 완벽히 오버랩하여 스케줄링 지연으로 인한 GPU 대기 시간을 제로(0)로 만듭니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>해설 (Interpretation):</strong></p>
+<ul>
+<li>저정밀도 양자화(FP4/MXFP4)로 메모리 대역폭 한계(Memory Wall)를 극복함과 동시에, CPU 제어 파이프라인의 오버랩을 완벽히 이뤄냄으로써 GPU 연산 자원의 가동률을 극대화했습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-6-투기적-디코딩-및-구조화된-출력-speculative-decoding-structured-outputs">2.6. 투기적 디코딩 및 구조화된 출력 (Speculative Decoding &amp; Structured Outputs)</h5>
+<blockquote>
+<p><strong>핵심 요약(Executive Summary):</strong> DSpark의 GPU 기반 가variable-length 검증과 비동기 오토마톤 컴파일 기반 구조화된 출력을 통해 처리량과 출력 정밀도를 동시에 달성합니다.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>관련 소스 섹션:</strong> <code>Speculative decoding</code>, <code>Structured outputs</code></p>
+</li>
+<li>
+<p><strong>사실 (Fact):</strong></p>
+<ul>
+<li><strong>DSpark 가변 길이 검증 메커니즘 (Speculative Decoding):</strong>
+<ul>
+<li>드래프트 모델이 5개 토큰 생성 시 Confidence Head가 각 토큰의 수락 확률을 예측하고, 기대 수락률에 따라 정렬하여 하드웨어 스루풋 곡선 기준 효율이 가장 높은 접두사 하위 집합(Prefix subset)을 동적으로 선택합니다.</li>
+<li>고정 5개(fixed-5) 검증 대비 검증 토큰 수를 약 30% 절감(5.00개 → 3.2~4.4개)하면서도 평균 수락 토큰 길이는 동일 수준으로 유지(3.29개 vs 3.20개)합니다.</li>
+<li>운영 포인트(랭크당 동시성 ~60) 기준 처리량이 +5.4% 향상되며, 동시성 96에서는 최대 +11.0% 향상됩니다.</li>
+</ul>
+</li>
+<li><strong>GPU 내 TileLang 커널 연산 메커니즘:</strong>
+<ul>
+<li><code>schedule(N+1)</code> 실행 시 스텝 N의 신뢰도 결과가 CPU로 반환되지 않는 문제를 해결하기 위해 CPU는 전체 처리 예산만 고정합니다.</li>
+<li>GPU 내부에서 <strong>TileLang 커널</strong>이 누적 곱(Cumulative product), 전역 정렬(Global sort for top-k), fused remap scatter 연산을 직접 수행하여 시퀀스별 검증 길이를 재계산하고 결과를 핀드 버퍼(Pinned buffer)에 기록합니다.</li>
+</ul>
+</li>
+<li><strong>구조화된 출력 (Structured Outputs):</strong>
+<ul>
+<li>컴파일과 추론의 분리: 포맷 제약조건(JSON schema, 정규식, EBNF 등)은 전용 SO 머신에서 비동기적으로 문법 오토마톤(Grammar automaton)으로 컴파일됩니다.</li>
+<li>런타임 추론: 각 디코드 스텝에서 오토마톤을 전진시켜 유효 토큰 집합을 판별하고, 샘플링 로직에 마스크(Mask)를 적용하여 구조화된 출력을 강제합니다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>주장 (Claim):</strong></p>
+<ul>
+<li>동적 길이 검증을 통해 수락 확률이 낮은 드래프트 토큰에 검증 자원이 낭비되는 것을 차단하여 실효 시스템 처리량을 극대화합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>해설 (Interpretation):</strong></p>
+<ul>
+<li>비동기 스케줄링 구조 하에서 CPU-GPU 간 신뢰도 데이터 반환 병목을 비동기 고정 예산 분배와 GPU 전용 TileLang 커널 연산으로 극복해낸 뛰어난 시스템 공학적 해법입니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-7-딥시크-레시피-및-토큰화-처리-deepseek-recipe-tokenization">2.7. 딥시크 레시피 및 토큰화 처리 (DeepSeek Recipe &amp; Tokenization)</h5>
+<blockquote>
+<p><strong>핵심 요약(Executive Summary):</strong> Rust 기반의 multi-protocol 변환, 특수 토큰 위치 기록 기반 구획화 가속, Output Token ID 보안 매칭을 통해 안정성과 인코딩 속도를 확보합니다.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>관련 소스 섹션:</strong> <code>DeepSeek Recipe</code></p>
+</li>
+<li>
+<p><strong>사실 (Fact):</strong></p>
+<ul>
+<li><strong>Rust 구현 및 멀티 프로토콜 지원:</strong> Rust 언어로 구현되어 있으며 Python 바인딩을 제공합니다. Chat Completions, Responses, Messages 등 다양한 API 프로토콜 요청을 단일 대화 포맷으로 변환합니다.</li>
+<li><strong>입력 인코딩 및 보안 제어 토큰 주입 방지:</strong> 프롬프트 구축 시 명시적으로 삽입된 특수 토큰과 그 위치를 기록하여 직접 토큰 ID로 매핑하고 일반 텍스트는 기본 어휘집으로 인코딩합니다. 사용자 입력 내 <code>&lt;｜User｜&gt;</code>, <code>&lt;｜image｜&gt;</code> 등의 문자열은 일반 토큰 시퀀스로 인코딩되어 제어 토큰 주입(Control token injection)을 원천 차단합니다.</li>
+<li><strong>출력 토큰 ID 기반 보안 매칭:</strong> 출력 파싱 시에도 추론 완료 태그 <code>&lt;/think&gt;</code> 및 <code>|DSML|</code> 태그를 <strong>문자열이 아닌 토큰 ID 기반으로 직접 식별</strong>합니다. 이를 통해 모델이 일반 텍스트 토큰으로 동일한 문자열을 생성하더라도 제어 동작(생성 종료 또는 도구 호출)이 잘못 트리거되는 보안 사고를 방지합니다.</li>
+<li><strong>구획화 가속 (Segmented Acceleration):</strong> 특수 토큰 경계를 활용하여 특수 토큰 사이의 일반 텍스트 구간을 독립적으로 병렬 인코딩한 후 연결함으로써 긴 컨텍스트의 토큰화 지연 시간을 크게 단축합니다.</li>
+<li><strong>스트리밍 출력 파싱:</strong> 미완성 UTF-8 문자는 완료 시까지 버퍼링됩니다. 딜리미터 매칭 시 증분 KMP(Incremental KMP) 알고리즘을 사용해 청크 간 상태를 유지하며, DSML 태그의 인자 경계로부터 직접 JSON 조각을 생성해 이스케이프 및 이중 파싱 오버헤드를 제거합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>주장 (Claim):</strong></p>
+<ul>
+<li>deepseek-recipe를 적용하면 공식 DeepSeek API와 완전히 동일한 API 동작을 보장하면서 토큰화 성능 및 시스템 보안성을 동시에 극대화할 수 있습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>해설 (Interpretation):</strong></p>
+<ul>
+<li>기존 Python 중심 토큰 처리 파이프라인을 Rust 기반의 병렬화 구조로 전환하여 대규모 프롬프트 처리 시 발생하는 CPU 인코딩 병목을 해소하고 엄격한 토큰 ID 기반 검증으로 보안적 취약점을 방지했습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-speakers">3. 등장 인물 및 화자 (Figures &amp; Speakers)</h4>
+<p>소스 텍스트에서 명시적으로 확인 가능한 커밋 작성자, 계정, 조직 및 저작권 정보는 다음과 같습니다.</p>
+<ul>
+<li><strong>최근 커밋 작성자 (Commit Author):</strong> <code>hkeee21</code>
+<ul>
+<li>커밋 메시지: <code>update Q&amp;A EN doc</code></li>
+<li>커밋 해시: <code>774ce244b87cc0eb8d4b94ab9f5de2ab22049f01</code> (단축형: <code>774ce24</code>)</li>
+<li>발생 시점: 문서 조회 기준 2일 전 (2 days ago)</li>
+</ul>
+</li>
+<li><strong>조직 및 리포지토리 (Organization &amp; Repository):</strong> <code>deepseek-ai</code> / <code>DeepInfer</code></li>
+<li><strong>저작권자 (Copyright Owner):</strong> <code>GitHub, Inc.</code> (© 2026)</li>
+<li><strong>개별 발언자 및 작성자 이름:</strong> <strong>확인 불가</strong> (소스 텍스트 내에 Q&amp;A 본문의 구체적인 작성자 개인명이나 발표자 이름은 명시되어 있지 않음).</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-metrics-timelines">4. 수치 및 시점 (Metrics &amp; Timelines)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목 (Category)</th>
+<th style="text-align:left">수치 / 지표 (Metric / Value)</th>
+<th style="text-align:left">상세 조건 및 맥락 (Context)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>일일 토큰 처리량</strong></td>
+<td style="text-align:left">155조 토큰/일 (155 trillion tokens/day)</td>
+<td style="text-align:left">단일 클러스터 기준 실효 처리 능력</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPU 시간당 수익</strong></td>
+<td style="text-align:left">US$38 / GPU-hour</td>
+<td style="text-align:left">오프피크(Valley) 가격 기준 총 수익</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>KV 캐시 보존 기간</strong></td>
+<td style="text-align:left">72시간 이상 (&gt;72 hours)</td>
+<td style="text-align:left">문맥 재사용 창 유지를 위한 시스템 설계 기본 목표</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>KV 캐시 TTL (Agent)</strong></td>
+<td style="text-align:left">3일 (3 days)</td>
+<td style="text-align:left">에이전트 트래픽 대상 3FS KV 캐시 보존 기간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>KV 캐시 TTL (Chatbot)</strong></td>
+<td style="text-align:left">7일 (7 days)</td>
+<td style="text-align:left">챗봇 트래픽 대상 (3일 적용 시 히트율 0.5%–1% 손실 발생)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3FS 저장소 총 용량</strong></td>
+<td style="text-align:left">약 100 PiB</td>
+<td style="text-align:left">SSD 기반 KV 캐시 저장용 총 물리 용량</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인터커넥트 대역폭</strong></td>
+<td style="text-align:left">8 GPU당 400 Gbps</td>
+<td style="text-align:left">데이터 센터 간 프리필/디코드 분리 배포 시 요구 대역폭</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWA KV 전송 네트워크</strong></td>
+<td style="text-align:left">400G VLAN</td>
+<td style="text-align:left">타 머신 SWA KV 캐시 인출(Pull-back) 전용 네트워크</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저장소 서버 디스크 사양</strong></td>
+<td style="text-align:left">20 × 30.73 TB SSD</td>
+<td style="text-align:left">저장소 서버 1대당 구성 사양</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저장소 서버 대역폭</strong></td>
+<td style="text-align:left">읽기 ≥40 GB/s, 쓰기 ≥5 GB/s</td>
+<td style="text-align:left">저장소 서버 1대당 최소 보장 대역폭</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPU당 논리 저장 용량</strong></td>
+<td style="text-align:left">약 14.4 TB / GPU</td>
+<td style="text-align:left">온라인 GPU 대 스토리지 클러스터 비율 기준 (논리 측정치)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저장소 서버 데이터 보존</strong></td>
+<td style="text-align:left">24시간</td>
+<td style="text-align:left">단일 저장소 서버 기준 데이터 보존 가능 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWA KV 블록 저장 단위</strong></td>
+<td style="text-align:left">128 토큰 단위</td>
+<td style="text-align:left">128 토큰 배수 위치에서만 저장 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWA KV 크기 (seq당)</strong></td>
+<td style="text-align:left">1,415,040 Bytes (20 레이어 × 134 토큰 × 528 B)</td>
+<td style="text-align:left">MXFP8 SWA KV 포맷 기준 디스크/메모리 저장 크기</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EPLB 지표 (<code>moe_lb</code>)</strong></td>
+<td style="text-align:left">1.074 (EP4DP4) / 1.045 (EP2DP2)</td>
+<td style="text-align:left">프리필 단계 측정치 (가장 느린 랭크 / 평균)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EPLB 지표 (<code>moe_lb</code>)</strong></td>
+<td style="text-align:left">1.090</td>
+<td style="text-align:left">디코드 단계 측정치 (EP64 기준 GPU당 7개 전문가)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EPLB 통계/재배치 (Prefill)</strong></td>
+<td style="text-align:left">100 스텝 창 / 1,000 스텝 주기</td>
+<td style="text-align:left">프리필 로드 수집 및 전문가 가중치 재배치 주기</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EPLB 통계/재배치 (Decode)</strong></td>
+<td style="text-align:left">1,000 스텝 창 / 10,000 스텝 주기</td>
+<td style="text-align:left">디코드 로드 수집 및 전문가 가중치 재배치 주기</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>프리필 버킷팅 티어</strong></td>
+<td style="text-align:left">4개 티어</td>
+<td style="text-align:left">&lt;16K / 16–64K / 64–256K / ≥256K</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>프리필 청크 토큰 한도</strong></td>
+<td style="text-align:left">최대 32,768 토큰</td>
+<td style="text-align:left">스텝당 time budget 연산 시 최대 토큰 스케줄 한도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전체 로드 밸런싱 효율</strong></td>
+<td style="text-align:left">약 80%</td>
+<td style="text-align:left">완벽히 균형 잡힌 오프라인 벤치마크 대비 성능 비율</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오토스케일링 유예 기간</strong></td>
+<td style="text-align:left">1분 (1 min)</td>
+<td style="text-align:left">Decode Engine(CE) 셧다운 통보 후 요청 전달 유예 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오토스케일인 제한</strong></td>
+<td style="text-align:left">쿼터 사용률 &gt; 0.8</td>
+<td style="text-align:left">사용률 80% 초과 시 오토스케일인 금지</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>엔진 재시작 소요 시간</strong></td>
+<td style="text-align:left">분 단위 (Order of minutes)</td>
+<td style="text-align:left">단일 엔진 재시작 시 걸리는 소요 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FlashMLA 성능 지연</strong></td>
+<td style="text-align:left">디코딩 커널 5%–10% 지연</td>
+<td style="text-align:left">SASS 최적화 1개 누락에 따름 (엔드투엔드 차이는 ≤5%)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투기적 디코딩 검증 토큰</strong></td>
+<td style="text-align:left">5.00개 → 3.2~4.4개 (약 30% 감소)</td>
+<td style="text-align:left">DSpark 동적 길이 검증 적용 시 절감 효과</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투기적 디코딩 (동시성 16)</strong></td>
+<td style="text-align:left">verified: 5 → 4.44 / acc: 3.32 → 3.24 / tp: 4891 → 4816</td>
+<td style="text-align:left">동적 길이 vs 고정-5 비교 지표 (증감률: <strong>−1.5%</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투기적 디코딩 (동시성 32)</strong></td>
+<td style="text-align:left">verified: 5 → 3.65 / acc: 3.25 → 3.17 / tp: 8964 → 9111</td>
+<td style="text-align:left">동적 길이 vs 고정-5 비교 지표 (증감률: <strong>+1.6%</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투기적 디코딩 (동시성 48)</strong></td>
+<td style="text-align:left">verified: 5 → 3.94 / acc: 3.30 → 3.26 / tp: 12032 → 12467</td>
+<td style="text-align:left">동적 길이 vs 고정-5 비교 지표 (증감률: <strong>+3.6%</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투기적 디코딩 (동시성 60)</strong></td>
+<td style="text-align:left">verified: 5 → 3.58 / acc: 3.30 → 3.21 / tp: 13730 → 14466</td>
+<td style="text-align:left">동적 길이 vs 고정-5 비교 지표 (운영 포인트, 증감률: <strong>+5.4%</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투기적 디코딩 (동시성 72)</strong></td>
+<td style="text-align:left">verified: 5 → 3.24 / acc: 3.29 → 3.12 / tp: 14962 → 15961</td>
+<td style="text-align:left">동적 길이 vs 고정-5 비교 지표 (증감률: <strong>+6.7%</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투기적 디코딩 (동시성 96)</strong></td>
+<td style="text-align:left">verified: 5 → 3.24 / acc: 3.30 → 3.15 / tp: 16817 → 18660</td>
+<td style="text-align:left">동적 길이 vs 고정-5 비교 지표 (증감률: <strong>+11.0%</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>내부 결합 모듈의 비공개 상태:</strong>
+추론 시스템의 핵심 성능을 좌우하는 KV 캐시 관리 모듈(<code>KVCache Storage</code>) 및 데이터/전문가 병렬 로드 밸런싱 모듈(<code>EPLB</code>, <code>Prefill/Decode LB</code>)의 코드는 DeepSeek의 내부 인프라와 강력하게 결합(Tightly coupled)되어 있어 현재 오픈소스 코드베이스(<code>DeepInfer</code>)에 완전히 포함되어 있지 않습니다.</li>
+<li><strong>커널 세부 SASS 구현체의 미공개:</strong>
+DeepGEMM 및 FlashMLA 등 핵심 커널 라이브러리의 내부 최적화 패치 전체 내역과 인덱서/메가 시리즈 커널의 구체적인 SASS 최적화 코드는 소스 문서상에 세부 구현체 형태로 공개되어 있지 않습니다.</li>
+<li><strong>작성자 및 화자 식별 불확실성:</strong>
+문서 내 커밋 작성자 계정(<code>hkeee21</code>) 외에 본 Q&amp;A 기술 아티클을 구체적으로 작성하거나 발표한 엔지니어 개인의 성명이나 조직 내 직책 정보는 소스에서 확인할 수 없습니다(&quot;확인 불가&quot;).</li>
+<li><strong>외부 탐색 및 추측의 배제:</strong>
+본 보고서는 제공된 소스 context만을 절대적 근거로 작성되었으므로, 소스에 언급되지 않은 기타 하드웨어 네트워크 토폴로지 세부 사항이나 타사 인프라 파라미터는 명시하지 않았습니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/code/">코드</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

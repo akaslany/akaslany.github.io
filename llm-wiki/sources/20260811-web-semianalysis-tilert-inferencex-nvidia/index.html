@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[분석 보고서] NVIDIA GPU 기반 초고속 상호작용의 실체: TileRT와 InferenceX 기술 분석</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>[분석 보고서] NVIDIA GPU 기반 초고속 상호작용의 실체: TileRT와 InferenceX 기술 분석</h1>
+<p class="page-meta">웹 · 2026-08-11</p>
+<h2 id="요약">요약</h2>
+<p>TileRT는 NVIDIA GPU의 단일 사용자 디코딩을 가속하며, 동시 요청과 총처리량에 제약이 있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://newsletter.semianalysis.com/p/ultra-high-interactivity-on-nvidia">출처</a> · <a href="https://www.youtube.com/watch?v=SDJD0cF4TE4">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/semianalysis/">SemiAnalysis</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/semiconductors-infra/">반도체·인프라</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="분석-보고서-nvidia-gpu-기반-초고속-상호작용의-실체-tilert와-inferencex-기술-분석">[분석 보고서] NVIDIA GPU 기반 초고속 상호작용의 실체: TileRT와 InferenceX 기술 분석</h3>
+<h4 id="1-핵심-요약-executive-summary">1. 핵심 요약 (Executive Summary)</h4>
+<p>NVIDIA GPU 환경에서도 '상주형 디코드 엔진(Persistent Decode Engine)' 아키텍처를 도입하면 특정 모델·구성에서 단일 사용자 기준의 토큰 생성 속도(Interactivity)를 크게 높일 수 있습니다. 그러나 이는 물리적 한계를 없앤 마법이 아니라 <strong>aggregate throughput과 개별 반응성 사이에서 다른 운용점을 선택한 결과</strong>입니다. B200 8-GPU 노드의 이론적 HBM 대역폭 루프라인(Roofline)은 기사 계산상 단일 사용자 기준 초당 약 3,047개 토큰(tok/s/user)의 상한을 시사하지만, 이는 실측치가 아니며 kernel launch·동기화·통신·memory latency 등을 제외한 계산입니다. TileRT는 '많은 승객을 실은 버스'보다 '한 명을 위한 고속차선'에 가까운 운용점을 목표로 합니다. 본 보고서는 이 속도와 함께 처리량·동시성·모델 지원·운영비의 제약을 분석합니다.</p>
+<h4 id="2-보고서-출처-및-정보-공개-범위-metadata-transparency">2. 보고서 출처 및 정보 공개 범위 (Metadata &amp; Transparency)</h4>
+<p>본 보고서는 아래 공개 source와 기술 문서를 바탕으로 작성되었습니다.</p>
+<ul>
+<li><strong>Canonical URL:</strong> <a href="https://newsletter.semianalysis.com/p/ultra-high-interactivity-on-nvidia">https://newsletter.semianalysis.com/p/ultra-high-interactivity-on-nvidia</a></li>
+<li><strong>저자:</strong> Bryan Shan, Daniel Nishball, Cam Quilici 등 6명 (SemiAnalysis)</li>
+<li><strong>게시일:</strong> 2026년 8월 10일</li>
+<li><strong>정보 공개 범위 및 제한:</strong> 본 분석은 SemiAnalysis가 공개한 티저(Teaser) 및 기술 백서를 근거로 합니다. 유료 구독 장벽 뒤의 상세 TCO(총소유비용) 수치와 결론은 확보되지 않았으며, 이를 근거 없는 추측으로 보완하지 않았음을 선언합니다.</li>
+</ul>
+<h4 id="3-기술-지표-정의-및-아키텍처적-인과관계-glossary-rationales">3. 기술 지표 정의 및 아키텍처적 인과관계 (Glossary &amp; Rationales)</h4>
+<p>성능 지표의 오용은 잘못된 인프라 투자로 이어집니다. 본 보고서에서는 다음 지표들을 엄격히 구분하며, 이를 혼용해서는 안 되는 아키텍처적 이유를 명시합니다.</p>
+<ul>
+<li><strong>Interactivity (tok/s/user):</strong> 단일 사용자가 체감하는 속도이며, 출력 토큰 간 지연 시간(TPOT)의 역수입니다. 사용자 경험(UX)의 핵심 지표이지만, 배치 사이즈가 1로 제한될 때 극대화되므로 시스템 효율과는 반비례 관계에 놓이는 경우가 많습니다.</li>
+<li><strong>Throughput (tok/s/GPU):</strong> GPU 한 장당 총 처리량입니다. 비용·용량 산정에 중요한 입력이지만, 이것만으로 CAPEX/OPEX를 결정할 수는 없습니다. 높은 Interactivity를 추구할수록 작은 batch/concurrency 때문에 이 지표가 낮아질 수 있습니다.</li>
+<li><strong>TTFT (Time to First Token):</strong> 요청 후 첫 응답까지의 지연입니다. 이는 주로 Prefill 단계의 성능에 의존하며, TileRT가 집중하는 Decode 단계의 Interactivity와는 별개의 최적화 영역입니다.</li>
+<li><strong>End-to-end Latency:</strong> 전체 요청 완료 시간입니다. TTFT와 모든 토큰 생성이 끝나는 'Decode Tail' 시간을 합산한 것으로, 최종적인 서비스 품질 목표(SLO)를 결정합니다.</li>
+<li><strong>Goodput:</strong> 특정 지연 시간 조건을 만족하는 유효 처리량입니다. 본 보고서에서 언급되는 TileRT 수치는 공개 본문상 Goodput 수치가 아니라 지정된 benchmark 조건의 Interactivity입니다.</li>
+</ul>
+<h4 id="4-8k-input-1k-output-성능-분석-이론과-실제의-간극">4. 8k Input / 1k Output 성능 분석: 이론과 실제의 간극</h4>
+<p>긴 문맥 입력 환경에서의 벤치마크 결과는 TileRT가 특정 조건에서 기존 엔진을 압도함을 보여줍니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">시스템 구성</th>
+<th style="text-align:left">정밀도 및 기술</th>
+<th style="text-align:center">Interactivity (tok/s/user)</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>TileRT (8×B200)</strong></td>
+<td style="text-align:left">FP8</td>
+<td style="text-align:center"><strong>340.0</strong></td>
+<td style="text-align:left">Batch Size 1 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GB300 NVL72</strong></td>
+<td style="text-align:left">NVFP4 + MTP</td>
+<td style="text-align:center">181.4</td>
+<td style="text-align:left">기존 최고치 대비 1.9배</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>B300</strong></td>
+<td style="text-align:left">FP8 + MTP</td>
+<td style="text-align:center">113.6</td>
+<td style="text-align:left">동일 정밀도 대비 3.0배</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[시스템 아키텍트 분석]</strong>
+TileRT는 8k/1k 조건에서 GB300 NVL72(NVFP4+MTP) 비교점보다 1.9배 높은 상호작용 속도를 기록했습니다. TileRT 결과는 <strong>B200 GPU 8개가 들어간 단일 노드</strong>에서 나온 반면 비교점은 72-GPU NVLink scale-up domain이지만, batch size 1에서는 큰 scale-up domain이 aggregate throughput에 주는 이점이 per-user interactivity에 그대로 반영되지 않습니다. 이는 특정 모델·길이·정밀도·엔진 조건의 결과이며, 하드웨어 전체 성능이나 비용 우위로 일반화할 수 없습니다.</p>
+<p>여기서 8×B200은 <strong>TileRT decode node</strong>를 뜻합니다. 공개 InferenceX end-to-end PD 설정에는 별도의 8×B200 vLLM prefill node도 포함돼 전체 요청 경로는 총 16개 B200을 사용합니다. 따라서 “8개 B200만으로 전체 서비스를 돌렸다”고 표현하지 않습니다.</p>
+<h4 id="5-1k-input-1k-output-성능-분석-정밀도의-한계-극복">5. 1k Input / 1k Output 성능 분석: 정밀도의 한계 극복</h4>
+<p>입력 문맥이 짧은 환경에서 TileRT의 아키텍처적 우위는 더욱 선명해집니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">시스템 구성</th>
+<th style="text-align:left">정밀도</th>
+<th style="text-align:center">Interactivity (tok/s/user)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>TileRT (8×B200)</strong></td>
+<td style="text-align:left">FP8</td>
+<td style="text-align:center"><strong>494.2</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Conventional 최고 기록</strong></td>
+<td style="text-align:left">FP4</td>
+<td style="text-align:center">256.3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Conventional 최고 기록</strong></td>
+<td style="text-align:left">FP8</td>
+<td style="text-align:center">136.3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[분석 결과]</strong>
+TileRT FP8+MTP 비교점은 분석 시점 FP4 conventional 비교점보다 약 1.9배 높은 494.2 tok/s/user를 기록했습니다. 이 결과에는 정밀도뿐 아니라 MTP, engine implementation, hardware topology가 함께 작용하므로 어느 한 요소의 단독 효과로 분해할 수 없습니다. 이 역시 Batch Size 1이라는 특수한 제약 조건 하에서의 결과입니다.</p>
+<h4 id="6-상호작용-속도의-대가-throughput과의-교환관계">6. 상호작용 속도의 대가: Throughput과의 교환관계</h4>
+<p>초고속 상호작용을 선택할 때는 '수송 능력'과의 교환관계를 함께 봐야 합니다.</p>
+<ul>
+<li><strong>일반 Pareto 곡선의 예:</strong> 기사에 제시된 별도 구성에서는 Interactivity를 약 25 tok/s/user에서 260 tok/s/user로 높일 때 GPU당 Throughput이 약 5,900에서 200 tok/s/GPU로 감소했습니다. 이는 TileRT 결과 자체가 아니라 throughput–interactivity trade-off를 설명하는 특정 예시입니다.</li>
+<li><strong>현재 동시성 제약:</strong> TileRT v0.1.5 decode node는 <strong>one in-flight request</strong>만 처리하고 router가 back-pressure를 적용합니다. 따라서 batch 중심 엔진과 같은 방법으로 capacity를 해석할 수 없으며, token cost는 전력·utilization·가격까지 포함해 별도 산정해야 합니다.</li>
+<li><strong>같은 8k/1k 비교:</strong> GB300 NVL72 FP4+MTP는 concurrency 12에서 154 tok/s/user와 기사 집계상 약 240의 aggregate/end-to-end 계열 수치를 기록합니다. TileRT는 340 tok/s/user와 160.4입니다. 즉 이 비교점에서는 TileRT의 단일 사용자 속도가 높고 GB300의 총 처리량 계열 값이 높습니다. 다만 공개 차트의 <code>tok/s/chip</code>과 본문의 <code>tok/s/GPU</code> 표기가 완전히 정합되지 않아 160.4와 240을 물리 GPU 한 장당 처리량으로 단정하지 않습니다.</li>
+</ul>
+<h4 id="7-지연-시간-latency-의-세부-구조와-decode-tail">7. 지연 시간(Latency)의 세부 구조와 Decode Tail</h4>
+<p>전체 지연 시간 관점에서 TileRT의 가치는 '첫 응답'이 아닌 '마무리 속도'에 있습니다.</p>
+<ul>
+<li><strong>TTFT의 경계:</strong> 기사에서 TileRT의 첫 토큰 지연 시간(TTFT)은 &quot;양호하지만 예외적인 수준은 아님(Good but not exceptional)&quot;으로 평가됩니다. 구체적인 비교 없이는 첫 반응이 기존 시스템과 같다고 단정하지 않습니다.</li>
+<li><strong>Decode Tail의 차이:</strong> 기사 결과에서 큰 차이는 첫 토큰 이후의 decode 구간에 나타납니다.
+<ul>
+<li><strong>1k/1k 조건 Decode Tail 비교:</strong> TileRT <strong>3.01초</strong> vs 경쟁사(NVFP4+MTP) 6.54초 vs MI355X 18.18초.</li>
+</ul>
+</li>
+<li><strong>조건부 결론:</strong> 해당 benchmark에서는 우위가 decode tail에서 주로 나타났습니다. 실제 agent workload의 전체 완료 시간은 prefill, cache reuse, tool delay, routing, queueing까지 재검증해야 합니다.</li>
+</ul>
+<h4 id="8-tilert의-기술적-아키텍처-커널-실행-단위의-폐지">8. TileRT의 기술적 아키텍처: 커널 실행 단위의 폐지</h4>
+<p>기사와 TileRT 문서는 기존 kernel-boundary overhead를 줄이는 실행 모델을 다음과 같이 설명합니다.</p>
+<ol>
+<li>
+<p><strong>상주형 엔진 커널 (Persistent Engine Kernel):</strong>
+기존 엔진이 다수 kernel을 반복 호출하고 동기화하는 것과 달리, TileRT는 decode schedule을 상주형 파이프라인으로 컴파일해 kernel boundary와 data spill, orchestration overhead를 줄이려 합니다. CUDA Graph는 launch DAG를 재생하지만 개별 kernel 경계를 유지한다는 점에서 접근이 다릅니다. 모든 overhead가 완전히 제거된다고 표현해서는 안 됩니다.</p>
+</li>
+<li>
+<p><strong>워프/블록 분업화 (Warp/Block Specialization):</strong>
+각 CTA(Cooperative Thread Array)를 균일한 작업자로 다루는 대신, <strong>'이질적 공정으로 구성된 팩토리(Factory)'</strong> 모델을 도입합니다. 특정 워프 그룹은 비동기 데이터 이동을, 다른 그룹은 텐서 연산을, 또 다른 그룹은 통신을 담당하여 타일(Tile) 단위에서 연산과 데이터 흐름이 빈틈없이 중첩(Overlap)되도록 설계했습니다.</p>
+</li>
+<li>
+<p><strong>GPU Specialization (GLM-5.1 사례):</strong>
+GLM-5.1 예시에서 <strong>GPU 0은 Sparse Indexer</strong>로서 Top-K 선택 및 라우팅을 맡고, <strong>GPU 1~7은 MLA Worker</strong>로서 연산과 통신을 수행합니다. 이는 해당 모델에 강하게 특화된 schedule이며 다른 모델에 그대로 적용된다고 볼 수 없습니다.</p>
+</li>
+</ol>
+<h4 id="9-pd-disaggregation-vllm과의-통합-및-rdma-전송">9. PD Disaggregation: vLLM과의 통합 및 RDMA 전송</h4>
+<p>기사에서 다루는 PD 구성에서는 TileRT가 vLLM 생태계에 연결되는 latency-critical decode engine으로 동작합니다. TileRT가 vLLM 전체를 대체하는 구조가 아닙니다.</p>
+<ul>
+<li><strong>계층 구조:</strong> vLLM이 Prefill, 스케줄링, 캐싱, API 관리 등 '공항의 관제탑' 역할을 수행하고, TileRT는 지연 시간에 극도로 민감한 '활주로의 초고속 이륙(Decode)'만을 담당합니다.</li>
+<li><strong>KV 전송 경로:</strong> Prefill node에서 생성된 KV state는 <strong>NIXL</strong> 또는 <strong>Mooncake</strong> transfer engine을 통해 decode node로 전송됩니다. vLLM 공동문서는 pre-registered GPU buffer에 one-sided RDMA write를 사용하고 host-memory staging을 피하는 경로로 설명합니다.</li>
+<li><strong>전략적 유연성:</strong> vLLM의 MultiConnector 기능을 활용하면 일반 요청은 기존 vLLM 디코드 풀로, 초고속 반응이 필요한 요청만 TileRT 풀로 라우팅하는 하이브리드 운영이 가능합니다.</li>
+</ul>
+<h4 id="10-상용화-사례-분석-시스템-공동-설계-co-design-의-결과">10. 상용화 사례 분석: 시스템 공동 설계(Co-design)의 결과</h4>
+<p>외부에 발표된 경이로운 수치들은 단일 기술이 아닌 복합적인 최적화의 결과임을 명확히 해야 합니다.</p>
+<ul>
+<li><strong>Xiaomi MiMo 사례:</strong> 1조 개 파라미터(1T) 모델에서 1,000 tok/s를 달성했다는 주장은 <strong>FP4 양자화, DFlash(Block-level masked parallel prediction) 추측 디코딩, 그리고 TileRT 시스템 최적화</strong>가 결합된 '공동 설계'의 산물입니다. 특히 DFlash는 한 번에 여러 토큰을 예측하여 검증 시간을 비약적으로 단축했습니다.</li>
+<li><strong>Z.ai:</strong> GLM-5.1 HighSpeed 서비스에 TileRT를 실제 적용하여 운영 중이라는 프로젝트 측의 주장이 보고되었습니다.</li>
+</ul>
+<h4 id="11-기술적-제약-사항-pinned-stack-의-경직성과-유지보수-비용">11. 기술적 제약 사항: 'Pinned Stack'의 경직성과 유지보수 비용</h4>
+<p>TileRT 도입 전 반드시 검토해야 할 제약 사항들은 다음과 같습니다.</p>
+<ul>
+<li><strong>소프트웨어 경직성 (Pinned Stack):</strong> TileRT v0.1.5 공개 wheel은 8×B200, Python 3.12, <code>torch==2.11.0+cu130</code> 등 build ABI가 고정돼 있고, README는 CUDA 13.2 runtime을 지원하는 driver를 요구합니다. 다른 조합은 미검증·비보장으로 명시돼 있으므로 upgrade compatibility를 별도 시험해야 합니다.</li>
+<li><strong>높은 AoT 비용:</strong> 모델의 아키텍처나 어텐션 메커니즘이 조금이라도 변경되면 정적 스케줄링을 처음부터 다시 설계해야 합니다. 이는 범용 GPU를 사용하면서도 <strong>ASIC과 같은 소프트웨어적 경직성</strong>을 감수해야 함을 의미하며, 높은 엔지니어링 유지보수 비용을 수반합니다.</li>
+<li><strong>운영 제약:</strong> 현재 버전에서는 decode node당 한 번에 하나의 요청만 처리합니다. 대규모 동시 접속에 필요한 node 수·queueing·cost는 실부하 시험으로 계산해야 합니다.</li>
+</ul>
+<h4 id="12-전략적-분석-범용-gpu-fungibility-vs-전용-asic">12. 전략적 분석: 범용 GPU(Fungibility) vs 전용 ASIC</h4>
+<p>TileRT와 Groq/Cerebras와 같은 ASIC의 대결은 '소프트웨어의 유연성'과 '물리적 한계'의 대결입니다.</p>
+<ul>
+<li><strong>Fungibility (자산 가치):</strong> GPU pool은 지원되는 workload 범위에서 software routing으로 speed tier와 throughput tier 사이 capacity를 재배치할 수 있다는 장점이 있습니다. 전용 silicon fleet은 물리적 설치 비율을 빠르게 바꾸기 어렵지만, 제품별 software flexibility는 별도로 평가해야 합니다.</li>
+<li><strong>물리적 한계:</strong> 소프트웨어는 execution gap을 줄일 수 있지만 <strong>HBM의 물리적 대역폭 자체를 높이지는 못합니다.</strong> 온칩 SRAM·wafer-scale·dataflow 설계가 유리한 모델과 workload도 남아 있습니다.</li>
+<li><strong>결론:</strong> TileRT는 ASIC을 시장에서 축출하는 것이 아니라, 기존 GPU 자산을 보유한 기업들이 별도의 하드웨어 추가 구매 없이도 '속도 등급' 서비스를 신설할 수 있게 해주는 전략적 옵션으로서 가치가 있습니다.</li>
+</ul>
+<h4 id="13-검증-경계-및-신뢰성-고지-verification-boundaries">13. 검증 경계 및 신뢰성 고지 (Verification Boundaries)</h4>
+<p>본 보고서의 작성 과정에서 다음 사항을 엄중히 고지합니다.</p>
+<ol>
+<li><strong>신뢰성 경계:</strong> SemiAnalysis와 InferenceX는 같은 조직이며 TileRT maintainers가 benchmark에 협업했습니다. 따라서 완전히 독립적인 제3자 검증으로 표현하지 않고, 공개 config와 후속 독립 재현 여부를 함께 봐야 합니다.</li>
+<li><strong>재현성 미확인:</strong> 본 보고서 작성 시 실제 B200 하드웨어를 통한 직접적인 재현 실험은 수행되지 않았으며, 제공된 소스 텍스트의 데이터 정합성만을 검토했습니다.</li>
+<li><strong>TCO 추측 배제:</strong> 공개된 티저 이후의 상세 비용 분석은 포함되지 않았으므로, 본 기술이 경제적으로 항상 우월하다는 결론은 내릴 수 없습니다.</li>
+</ol>
+<h4 id="14-실무-체크리스트-업데이트-및-철회-기준">14. 실무 체크리스트: 업데이트 및 철회 기준</h4>
+<p>향후 기술 도입 여부를 판단할 때 다음 지표의 변화를 모니터링하십시오.</p>
+<ul>
+<li><strong>Multi-batch 지원:</strong> 동시 요청(2/4/8 등) 처리 시에도 Interactivity가 유지되는지 여부.</li>
+<li><strong>FP4 정식 지원:</strong> TileRT 엔진 자체에서 FP4를 공식 지원하여 추가적인 성능 이득을 얻는지 확인.</li>
+<li><strong>독립 제3자 재현:</strong> SemiAnalysis 외 타 벤치마크 기관에 의한 교차 검증 결과 확인.</li>
+<li><strong>결과 정정:</strong> InferenceX가 config·수치·provenance를 수정하거나 결과를 철회하는지 확인.</li>
+<li><strong>통합 변경:</strong> vLLM connector, NIXL/Mooncake 경로, one-in-flight 제한이 바뀌는지 확인.</li>
+<li><strong>상용 배포 정정:</strong> Xiaomi 또는 Z.ai가 production deployment 주장을 수정·철회하는지 확인.</li>
+<li><strong>TCO 공개:</strong> 상세 CAPEX/OPEX 가정이 공개될 경우 teaser의 iso-cost 주장과 일치하는지 다시 검증.</li>
+</ul>
+<h4 id="15-결론-속도-계층-이라는-전략적-선택">15. 결론: &quot;속도 계층&quot;이라는 전략적 선택</h4>
+<p>TileRT와 InferenceX 결과는 NVIDIA GPU가 특정 GLM-5 계열·batch-size-1 조건에서 매우 높은 per-user interactivity를 낼 수 있음을 보여줍니다. 이를 모든 ASIC, 모델, 서비스의 일반 성능으로 확대해서는 안 됩니다.</p>
+<p>아키텍트의 시각에서 이는 <strong>GPU fleet에 별도의 speed tier를 만드는 선택지이지, 전체 시스템의 수송 효율성을 자동으로 높이는 마법이 아닙니다.</strong> 조직은 latency-critical tier와 throughput tier를 분리하고, 실제 workload에서 latency SLO·throughput·queueing·power·token cost를 함께 측정해야 합니다. 기사에 나온 30배 감소는 별도 Pareto 곡선의 예시이므로 TileRT의 고정 손실률로 사용하면 안 됩니다. 본 분석은 기술 설명이며 특정 기업·가속기의 매수·매도를 권유하지 않습니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/semianalysis/">SemiAnalysis</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/semiconductors-infra/">반도체·인프라</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

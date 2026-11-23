@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses</h1>
+<p class="page-meta">웹 · 2026-08-26</p>
+<h2 id="요약">요약</h2>
+<p>Recuris는 외부 메모리를 진화시키며, 저자 보고에서 일부 장기 작업의 성공률을 높였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=MbRCMBEjbqk">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="recursive-experiential-working-memory-evolution-for-long-horizon-agent-harnesses">Recursive Experiential–Working Memory Evolution for Long-Horizon Agent Harnesses</h3>
+<h4 id="1-결론-메모리-제어-계층-진화와-저자-보고-성능-개선">1. 결론: 메모리 제어 계층 진화와 저자 보고 성능 개선</h4>
+<blockquote>
+<p><strong>편집 경계:</strong> 아래 성능 수치는 논문 <strong>저자</strong>가 보고한 <code>avg@4</code> 벤치마크 결과이며 독립 재현을 확인한 결과가 아니다. Recuris의 <code>validation gate</code>는 held-out 증거로 후보 메모리 패치를 수용하거나 거절하지만, 모든 도메인·모델에서 성능 향상을 보장하지 않는다. 여기서 RSI는 모델 가중치 자기수정이 아니라 고정된 모델 주변의 외부 memory-control layer 진화를 뜻한다.</p>
+</blockquote>
+<p>본 기술 감사 보고서는 LLM 에이전트의 자가 개선(Self-improvement)을 위한 새로운 패러다임인 <strong>Recuris</strong> 아키텍처를 분석한다. 기존 연구들이 모델 가중치의 직접적인 수정이나 비정형적인 프롬프트 최적화에 집중한 반면, Recuris는 에이전트의 외부 실행 계층인 '하네스(Harness)' 내의 메모리 제어 구조를 재귀적으로 진화시키는 방식을 취한다. 이는 모델의 고정된 추론 능력을 보완하는 정교한 '실행 가이드라인'의 진화로 정의될 수 있다. 특히 장기 작업(Long-horizon tasks)에서 발생하는 정보 혼선과 목표 상실 문제를 해결하기 위해 도입된 경험적 메모리(EM)와 작업 메모리(WM)의 결합은 에이전트 아키텍처의 전환점을 마련하였다.</p>
+<p><strong>논문 저자가 보고한 Recuris의 3가지 핵심 주장(Key Takeaways)은 다음과 같다.</strong></p>
+<ol>
+<li><strong>상태 지향적 메모리 호출(State-grounded Invocation): 단순 검색이 아닌, 하네스가 검증한 작업 상태($w_t$)를 기준으로 기술($E_k$)을 주입해 정보 검색 노이즈를 줄이고 실행 정확도를 높이는 것을 목표로 한다.</strong></li>
+<li><strong>구조화된 추적 기반의 정밀 실패 국소화: 실행 과정을 $(w_t, E_t, a_t, o_t)$로 구조화하여 기록함으로써, 실패 원인을 특정 메모리 구성 요소로 귀속시키는 진단 정밀도를 기존 13.0%에서 64.8%로 약 5배 향상시켰다.</strong></li>
+<li><strong>검증 게이트를 통한 제한적 재귀 진화: 가중치 수정 없이 외부 메모리 계층만 진화시키고, held-out 개발 세트의 회귀 방지 gate($G_{fixed}$)로 위험을 제한한다. 이 절차가 보편적 성능 향상을 보장하는 것은 아니다.</strong></li>
+</ol>
+<hr />
+<h4 id="2-long-horizon-agent-실패-문제-컨텍스트-비대화와-목표-상실의-상관관계">2. Long-horizon Agent 실패 문제: 컨텍스트 비대화와 목표 상실의 상관관계</h4>
+<p>에이전트가 긴 시간 동안 상호작용을 지속할 때 성능이 퇴행하는 현상은 고질적인 문제다. 소스 문헌의 Introduction 및 분석에 따르면, 작업의 호라이즌이 확장될수록 다음의 두 가지 치명적인 결함이 발생한다.</p>
+<p>첫째, <strong>컨텍스트 비대화에 따른 미해결 목표(Unresolved goals)의 상실</strong>이다. 기존 하네스는 초기 명령어나 전체 대화 이력에 의존하여 정보를 검색한다. 그러나 실행이 진행될수록 컨텍스트에는 이미 완료된 단계, 구식 정보, 실행 중 발생한 노이즈가 뒤섞인다. 이로 인해 에이전트는 '현재' 시점에서 해결해야 할 핵심 목표를 망각하거나, 이미 완료된 작업을 반복하는 오류에 빠진다.</p>
+<p>둘째, **기술 호출의 비정렬(Skill Invocation Misalignment)**이다. 환경의 변화나 실행 진척도를 반영하지 못하는 고정된 메모리 검색 방식은 에이전트가 현재 상태에 부합하지 않는 기술을 호출하게 만든다. 이는 '정보의 부재'가 아니라 '정보의 오용'으로 인한 실패를 초래하며, 결국 실행 오류의 연쇄(Error cascades)로 이어진다.</p>
+<p>Recuris는 이러한 실패가 '정보 검색(Retrieval)'의 문제가 아닌 '실행(Execution)'의 문제임을 간파하였다. 에이전트에게 필요한 것은 거대한 이력이 아니라, 환경 피드백에 의해 검증된 '컴팩트한 작업 상태 표현'이며, Recuris는 이를 작업 메모리(WM)를 통해 구현함으로써 기존의 고정된 검색 방식과 차별화된다.</p>
+<hr />
+<h4 id="3-skill-memory-아키텍처-m-e-w-rho-c-의-정의와-구성-요소">3. Skill Memory 아키텍처: $M=(E,W,\rho,C)$의 정의와 구성 요소</h4>
+<p>Recuris는 에이전트 하네스의 '진화 가능한 표면(Evolving surface)'을 스킬 메모리 $M$으로 정의한다. 소스 텍스트 2.1.1절에 근거한 각 요소의 상세 정의는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구성 요소</th>
+<th style="text-align:center">기호</th>
+<th style="text-align:left">정의 및 기술적 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Experiential Memory</strong></td>
+<td style="text-align:center">$E_k$</td>
+<td style="text-align:left">Anthropic의 에이전트 스킬 형식을 따르는 재사용 가능한 기술 저장소. 실행 가능한 지식과 워크플로우를 포함한다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Working-memory Spec</strong></td>
+<td style="text-align:center">$W_k$</td>
+<td style="text-align:left">작업 상태의 스키마를 정의하며, 상태 갱신을 위한 제안($U_W$) 로직을 관리한다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Invocation Policy</strong></td>
+<td style="text-align:center">$\rho_k$</td>
+<td style="text-align:left">특정 실행 이벤트(Call-time, Boundary 등)에서 어떤 기술을 컨텍스트에 주입할지 결정하는 규칙 집합이다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Checkers</strong></td>
+<td style="text-align:center">$C_k$</td>
+<td style="text-align:left">도구 호출 결과나 환경 관측값($o_t$)이 목표 달성 조건을 충족하는지 검증하는 독립적인 술어(Predicates)들이다.</td>
+</tr>
+</tbody>
+</table>
+<p>이 네 가지 구성 요소($M_k = (E_k, W_k, \rho_k, C_k)$)는 상호 연결되어 작동하며, 메타 에이전트는 실패 진단 시 이 중 실패의 '근본 원인'이 되는 특정 요소만을 정밀하게 수정하는 패치(Patch)를 제안한다.</p>
+<hr />
+<h4 id="4-within-task-em-wm-coupling-작업-내-상태-지향적-메모리-활용">4. Within-task EM-WM Coupling: 작업 내 상태 지향적 메모리 활용</h4>
+<p>Recuris의 핵심 메커니즘은 작업 수행 중에 발생하는 EM과 WM의 긴밀한 결합(Coupling)이다. [SOURCE_IMAGE_3]의 (a) 부분에 명시된 상태 지향적 호출 프로세스는 다음과 같이 엄격한 단계로 진행된다.</p>
+<ol>
+<li><strong>상태 모니터링:</strong> 작업 메모리($w_t$)가 현재의 미해결 목표와 각 목표의 상태(Pending, Done, Blocked)를 실시간으로 유지한다.</li>
+<li><strong>실행 이벤트 발생:</strong> 에이전트가 도구 호출을 시도하거나(Call-time) 턴 경계에 도달하면 호출 정책($\rho$)이 트리거된다.</li>
+<li><strong>상태 기반 기술 필터링:</strong> 정책은 전체 이력이 아닌, 현재 WM에 기록된 '미해결 상태'를 기준으로 EM에서 필요한 기술만을 선택한다. 예를 들어, '항공권 변경'이 미해결 상태라면 관련 환불 규정 기술만을 주입한다.</li>
+<li><strong>최소 컨텍스트 주입:</strong> 선택된 기술만이 에이전트의 컨텍스트에 주입되어, 모델이 불필요한 정보에 노출되는 것을 방지하고 현재 작업에 집중하게 한다.</li>
+<li><strong>피드백 수신 및 검증:</strong> 에이전트의 행동($a_t$) 이후 환경에서 오는 관측값($o_t$)은 체커($C$)에 의해 즉각 검증된다. 에이전트의 주관적인 성공 주장은 무시된다.</li>
+</ol>
+<p>이 프로세스를 통해 에이전트는 '자신이 무엇을 했다고 생각하는가'가 아니라 '하네스가 무엇이 완료되었음을 확인했는가'를 바탕으로 다음 행동을 결정하게 된다.</p>
+<hr />
+<h4 id="5-evidence-grounded-state-update-검증-기반의-작업-상태-갱신-메커니즘">5. Evidence-Grounded State Update: 검증 기반의 작업 상태 갱신 메커니즘</h4>
+<p>에이전트의 '환각 기반 완료 선언(Hallucinated completion)'을 차단하기 위해, Recuris는 수식 (5)에 정의된 엄격한 상태 갱신 로직을 따른다.</p>
+<p>$$w_{t+1} = K (w_t, U_{W_k}(w_t, a_t, o_t), C_k(w_t, w_{t+1}, a_t, o_t))$$</p>
+<p>이 메커니즘의 상세 분석은 다음과 같다.</p>
+<ul>
+<li><strong>상태 제안($U_W$):</strong> 현재 상태($w_t$)와 행동($a_t$), 관측값($o_t$)을 입력으로 받아 작업 메모리 사양에 따라 다음 예상 상태를 제안한다.</li>
+<li><strong>체커 검증($C$):</strong> 이 단계가 가장 중요하다. 체커는 모델의 텍스트 출력이 아니라, **'도구 호출 영수증(Structured tool receipt)'**과 같은 객관적 증거를 기반으로 제안된 상태 변화를 검증한다. 특정 목표 $g$에 대한 체커 $C_{k,g}$가 1(승인)을 반환하지 않으면 상태는 갱신되지 않는다.</li>
+<li><strong>커밋 규칙($K$):</strong> 하네스 내부에 고정된 커널(Kernel)은 체커의 승인이 떨어진 변화만을 실제 작업 메모리($w_{t+1}$)에 반영(Commit)한다.</li>
+</ul>
+<p>이러한 엄격성은 에이전트가 실수를 저질렀을 때 상태를 'Pending'으로 유지시켜, 다음 턴에 다시 올바른 기술을 호출할 수 있는 기회를 제공한다. 만약 체커가 유효한 증거를 무시하거나(False-pending) 증거 없이 승인하는 오류가 발생하면, 이는 구조화된 추적에 기록되어 향후 체커 자체를 개선하는 근거가 된다.</p>
+<hr />
+<h4 id="6-structured-trace-gamma-와-failure-localization-진단의-정밀도-향상">6. Structured Trace($\Gamma$)와 Failure Localization: 진단의 정밀도 향상</h4>
+<p>실패 원인을 규명하는 '고립화(Localization)' 단계는 RSI 시스템의 지능을 결정한다. Recuris는 단순 텍스트 로그(Raw trajectory)의 한계를 극복하기 위해 **구조화된 추적($\Gamma$)**을 도입했다.</p>
+<p>$$\Gamma_k = (x_k, {w_t, E_t, a_t, o_t, w_{t+1}, c_t, w_{t+1}}_{t=1}^L, y_k)$$</p>
+<p>여기서 각 항의 역할은 다음과 같다.</p>
+<ul>
+<li>$w_t$: 실행 시점의 작업 상태 타임라인을 제공하여 목표 상실 지점을 특정한다.</li>
+<li>$E_t$: 주입된 기술의 적절성을 검토한다.</li>
+<li>$c_t$: 체커의 판단이 환경 피드백과 일치했는지 확인하는 '판단 증거' 역할을 한다.</li>
+</ul>
+<p><strong>진단 정밀도 분석:</strong>
+본 감사 결과, 구조화된 추적을 활용했을 때의 진단 정확도는 **64.8%**로 나타났다. 이는 작업 결과(Outcome)만 보고 판단했을 때의 **13.0%**보다 약 5배 높은 수치다. 특히 '기술 호출 실패(Invocation fault)'의 경우, 실제 대화 기록에는 나타나지 않는 '비사건(Non-event)'이기 때문에 구조화된 추적이 없으면 진단 자체가 불가능하다. 예를 들어, 특정 시점에 필요한 기술이 주입되지 않았다는 사실은 하네스의 이벤트 기록($E_t$)을 통해서만 확인할 수 있다. 이러한 정밀 진단은 메타 에이전트가 &quot;모델이 부족하다&quot;는 모호한 결론 대신 &quot;호출 정책($\rho$)의 트리거 조건이 너무 좁다&quot;는 구체적인 처방을 내리게 한다.</p>
+<hr />
+<h4 id="7-scoped-patch와-held-out-gate-검증된-메모리-진화-프로세스">7. Scoped Patch와 Held-out Gate: 검증된 메모리 진화 프로세스</h4>
+<p>메타 에이전트가 제안하는 패치는 전체 시스템을 수정하는 것이 아니라, 진단 결과에 의해 특정된 구성 요소에 국한(Scoped)된다.</p>
+<ol>
+<li><strong>구성 요소 한정성:</strong> 진단이 $E$를 지목하면 $E$만 수정하고 $W, \rho, C$는 복사하여 유지한다. 이는 에이전트 시스템 전체의 파괴적 수정을 방지하는 안전장치다.</li>
+<li><strong>검증 게이트($G_{fixed}$):</strong> 제안된 패치는 즉시 승인되지 않는다. 실패했던 원래 작업(Source task)을 수리할 수 있는지 확인하고, 동시에 이전에 잘 수행하던 작업들(Held-out Dev Set)에서의 성능 저하(Regression) 여부를 95% 신뢰구간에서 검증한다.</li>
+<li><strong>Bounded Recursive Evolution:</strong> 이 과정에서 모델 가중치는 고정된다. 재귀(Recursion)는 외부 메모리 제어 계층 내에서만 발생하며, 이는 성능 개선이 '블랙박스'가 아닌 '해석 가능한 코드와 규칙'의 형태로 축적됨을 의미한다.</li>
+</ol>
+<hr />
+<h4 id="8-실험-설정-benchmark-model-avg-4-및-통계적-프로토콜">8. 실험 설정: Benchmark, Model, avg@4 및 통계적 프로토콜</h4>
+<p>Recuris의 성능 검증은 4개 벤치마크와 10개 모델을 대상으로 수행되었으며, 통계적 엄밀성을 위해 다음의 프로토콜을 준수했다.</p>
+<ul>
+<li><strong>벤치마크:</strong> $\tau^2$-Retail/Airline(복잡한 정책 제약), SkillFlow(절차 지향적 작업), Terminal-Bench 2.1(실제 도커 환경 터미널 작업).</li>
+<li><strong>모델군 분류:</strong>
+<ul>
+<li><strong>Frontier Models:</strong> GPT-5.6 Sol, Claude Opus 5, Gemini 3.7 Flash.</li>
+<li><strong>Open-weight Models:</strong> Qwen3.6-27B/35B, Granite-4.1-3B, GPT-OSS-20B 등.</li>
+</ul>
+</li>
+<li><strong>평가 지표:</strong> 각 작업에 대해 4회의 독립적 시도를 수행한 <strong>avg@4</strong> 성공률을 측정하였다. 10,000회 리샘플링을 통한 95% 신뢰구간(CI)을 활용하여 성능 향상의 통계적 유의성을 검증했다.</li>
+<li><strong>Deployment Model:</strong> 모든 메모리 진화는 <strong>Doubao-2.0-Pro</strong> 모델에서 수행되었으며, 다른 모델들은 이 모델이 생성한 메모리를 이식받아 평가되었다(Cross-model transfer).</li>
+</ul>
+<hr />
+<h4 id="9-주요-수치-분석-sota급-성능-향상과-실패-모드-감소">9. 주요 수치 분석: SOTA급 성능 향상과 실패 모드 감소</h4>
+<p>논문 저자의 실험 데이터에서는 Recuris 적용 후 여러 모델의 장기 작업 성공률이 개선됐다. 특히 저자들은 일부 실패가 검색보다 실행 단계에 있다는 해석을 제시한다.</p>
+<p><strong>주요 모델별 성능 향상 및 Recall 대조 표</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:left">벤치마크</th>
+<th style="text-align:center">기준 성공률</th>
+<th style="text-align:center">Recuris 적용</th>
+<th style="text-align:center">향상 폭 (pp)</th>
+<th style="text-align:center">Read Recall</th>
+<th style="text-align:center">Write Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>GPT-5.6 Sol</strong></td>
+<td style="text-align:left">$\tau^2$-Retail</td>
+<td style="text-align:center">58.3%</td>
+<td style="text-align:center">76.1%</td>
+<td style="text-align:center"><strong>+17.8</strong></td>
+<td style="text-align:center">94.2%</td>
+<td style="text-align:center"><strong>82.4%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Claude Opus 5</strong></td>
+<td style="text-align:left">$\tau^2$-Retail</td>
+<td style="text-align:center">72.4%</td>
+<td style="text-align:center">87.9%</td>
+<td style="text-align:center"><strong>+15.6</strong></td>
+<td style="text-align:center">96.1%</td>
+<td style="text-align:center"><strong>85.7%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Doubao-2.0-Pro</strong></td>
+<td style="text-align:left">$\tau^2$-Retail</td>
+<td style="text-align:center">58.1%</td>
+<td style="text-align:center">81.4%</td>
+<td style="text-align:center"><strong>+23.3</strong></td>
+<td style="text-align:center">93.8%</td>
+<td style="text-align:center"><strong>81.4%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Granite-4.1-3B</strong></td>
+<td style="text-align:left">$\tau^2$-Retail</td>
+<td style="text-align:center">9.7%</td>
+<td style="text-align:center">23.0%</td>
+<td style="text-align:center"><strong>+13.4</strong></td>
+<td style="text-align:center">88.5%</td>
+<td style="text-align:center"><strong>25.2%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>분석 통찰:</strong>
+상기 표에서 보듯, 모든 모델에서 **Read-action recall(정보 검색)**은 이미 90% 내외의 높은 수치를 기록하고 있다. 즉, 실패의 원인은 정보를 몰라서가 아니라, 찾아낸 정보를 바탕으로 <strong>필요한 쓰기(Write) 동작을 실행하지 못했기 때문</strong>이다. Recuris는 Required-write recall을 비약적으로 높임으로써 이 '실행의 격차'를 메웠다. 작업 길이가 길어질수록 효과는 극대화되어, 31턴 이상의 최장 Interaction 작업에서 <strong>+32.2 pp</strong>의 성공률 향상을 기록했다. 또한 환각 기반 완료 선언은 <strong>86%</strong>, 쓰기 누락은 <strong>80%</strong> 감소하는 등 질적인 실패 모드 개선이 확인되었다.</p>
+<hr />
+<h4 id="10-결과의-이면-negative-null-in-sample-결과에-대한-비판적-고찰">10. 결과의 이면: Negative, Null, In-sample 결과에 대한 비판적 고찰</h4>
+<p>기술 감사관으로서 본 보고서는 Recuris의 한계와 데이터의 노이즈를 가감 없이 보고한다.</p>
+<ol>
+<li><strong>통계적 유의성 결여 (Terminal-Bench 2.1):</strong> Terminal-Bench에서의 성능 향상은 겉으로 보기에 긍정적이나, <strong>95% CI가 0을 포함</strong>하고 있다. 이는 관찰된 성능 향상이 학습 효과가 아닌 단순히 여러 번 시도(Retry)하는 과정에서 발생한 운에 의한 것일 가능성을 배제할 수 없음을 의미한다.</li>
+<li><strong>부정적 결과 (Gemini 3.7 Flash):</strong> $\tau^2$-Airline 도메인에서 Gemini 모델은 <strong>-1.5 pp</strong>의 성능 하락을 보였다. 이는 특정 모델의 내장된 추론 스타일이 하네스의 고정된 제어 구조와 충돌할 수 있음을 시사한다.</li>
+<li><strong>A/A 테스트 노이즈 플로어:</strong> 동일한 패키지를 세 번의 간격을 두고 재실행했을 때 성공률이 <strong>$[-6.98, +7.27]$</strong> 범위 내에서 변동했다. 따라서 이 범위 내의 성능 향상은 기술적으로 유의미한 '진화'로 간주하기 어렵다.</li>
+<li><strong>Double Dissociation (이중 해리):</strong> 실험 3.3.3절에 따르면, $\tau^2$-Retail에서는 'Status Board'가 핵심이었으나 Airline에서는 'Write Review'가 핵심이었다. 즉, 한 도메인에서 유효한 하네스 기능이 다른 도메인에서는 무용지물일 수 있으며, 모든 환경에 통용되는 '마법의 메모리 구조'는 존재하지 않음을 확인했다.</li>
+</ol>
+<hr />
+<h4 id="11-재현성-및-코드-오픈-소스-생태계-기여">11. 재현성 및 코드: 오픈 소스 생태계 기여</h4>
+<p>연구팀은 평가·진화 코드, evolved Skill Memory 패키지와 frozen split을 공개했다. 다만 본 N2Y 작업에서 전체 실험의 독립 재현은 수행하지 않았다.</p>
+<ul>
+<li><strong>GitHub Repository:</strong> <code>Gen-Verse/Recuris</code></li>
+<li><strong>Commit Hash:</strong> <code>f54c9dabfa370c0da495ddabe8ccbe8702b3eae7</code></li>
+<li><strong>License:</strong> Apache-2.0</li>
+<li><strong>Meta-Agent 구현:</strong> 논문은 <code>Claude Code</code>와 <code>DeepSeek Harness</code> 구현이 유사한 패치를 제안했다고 보고한다. 이는 저자 분석이며 독립적으로 견고성이 입증됐다는 의미는 아니다.</li>
+</ul>
+<hr />
+<h4 id="12-한계점-및-반증-기준-rsi에-대한-올바른-정의와-향후-과제">12. 한계점 및 반증 기준: RSI에 대한 올바른 정의와 향후 과제</h4>
+<h5 id="rsi의-기술적-경계">RSI의 기술적 경계</h5>
+<p>Recuris의 **재귀적 자가 개선(RSI)**은 &quot;Weight-free&quot; 방식임을 명확히 규정해야 한다. 이는 모델이 자신의 신경망 가중치를 직접 수정하는 초지능적 시나리오가 아니며, 외부의 메모리 제어 계층(하네스) 내의 파라미터와 로직을 정교화하는 과정이다. 베이스 모델의 추론 능력 자체를 바꾸는 것이 아니라, 그 능력을 발휘할 수 있는 '환경적 제약 조건'과 '실행 가이드라인'을 스스로 최적화하는 시스템이다.</p>
+<h5 id="향후-과제-및-반증-조건">향후 과제 및 반증 조건</h5>
+<p>본 시스템이 작동하지 않을 가능성이 있는 반증 조건(Falsifiability)은 다음과 같다.</p>
+<ul>
+<li><strong>공유 구조가 없는 고립된 작업:</strong> 도메인 간에 공유되는 도구나 정책이 전무한 경우, 이전 작업에서의 학습 내용이 전이되지 않아 이점이 사라진다.</li>
+<li><strong>피드백 노이즈:</strong> 환경 피드백($o_t$) 자체가 신뢰할 수 없을 만큼 노이즈가 많을 경우, 체커($C$)의 검증 논리가 무력화된다.</li>
+<li><strong>지능의 임계점:</strong> 모델 자체의 기본 추론 능력이 극도로 낮아 하네스가 제공하는 정교한 가이드라인을 해석하지 못하는 경우에는 메모리 진화가 무의미해진다.</li>
+</ul>
+<hr />
+<h4 id="13-출처-references">13. 출처 (References)</h4>
+<ul>
+<li><strong>Document ID:</strong> arXiv:2608.24876v1</li>
+<li><strong>Submission Date:</strong> 2026-08-25</li>
+<li><strong>Affiliations:</strong> National University of Singapore (NUS), Stanford University, University of Oxford, Princeton University.</li>
+<li><strong>Authors:</strong> Zhaochen Yu, Yingcheng Wu, Zhenfei Yin, Ling Yang (Corresponding author) et al.</li>
+<li><strong>Categories:</strong> cs.AI (Artificial Intelligence), cs.CL (Computation and Language)</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

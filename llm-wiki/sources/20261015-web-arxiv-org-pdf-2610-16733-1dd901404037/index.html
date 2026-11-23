@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TheoPhysEval: 인공지능 에이전트의 이론물리학 문제 해결 능력 평가 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>TheoPhysEval: 인공지능 에이전트의 이론물리학 문제 해결 능력 평가 보고서</h1>
+<p class="page-meta">논문 · 2026-10-15</p>
+<h2 id="요약">요약</h2>
+<p>TheoPhysEval은 미공개 연구 수준의 이론물리학 문제 50개로 구성된 기술 평가 데이터셋이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.16733">출처</a> · <a href="https://www.youtube.com/watch?v=ZcYS6VFMzjg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="theophyseval-인공지능-에이전트의-이론물리학-문제-해결-능력-평가-보고서">TheoPhysEval: 인공지능 에이전트의 이론물리학 문제 해결 능력 평가 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>TheoPhysEval은 미공개 연구 수준의 이론물리학 문제 50개로 구성된 기술 평가 데이터셋이다. 본 연구의 핵심 목적은 인간의 힌트나 개입 없이 최신 인공지능(AI) 에이전트가 자율적으로 고난도의 정립된 이론물리학 연구 문제를 해결할 수 있는지 정량적·정성적으로 평가하는 것이다. 데이터셋에 포함된 개별 문제는 해당 분야의 세계적 전문가가 인간 보조 도구 없이 해결하더라도 약 하루 또는 그 이상의 집중적 계산 작업이 소요되는 최신 연구 기반 난이도를 지닌다 (arXiv:2610.16733, Section I 참조).</p>
+<p>본 벤치마크 평가에서는 외부 문헌 검색 허용 여부에 따라 '현실적 트랙(Realistic track)'과 '고립적 트랙(Isolated track)'이라는 두 가지 평가 환경을 구축하였다. 현실적 트랙은 인터넷 웹 검색과 로컬 수치/기호 계산 도구 접근을 모두 허용하여 실제 이론물리학 연구자의 보조 에이전트로 활용되는 상황을 모사한다. 반면 고립적 트랙은 외부 웹 검색을 전면 차단하고 로컬 Docker 샌드박스 환경 내 도구만 사용하게 함으로써, 에이전트 자체에 내재된 물리학 지식 재구성 및 코드 생성 능력을 엄격히 검증한다. 평가 대상 에이전트는 프론티어 대형언어모델(LLM)과 실행 도구 하네스(Harness)의 조합으로 구성된 5종(GPT-6-Astra with Codex, Opus 5.5 with Claude Code CLI, Gemini 3.8 Flash with Antigravity, DeepSeek-V4.1-Flash with Codex, GLM 5.3 with Claude Code CLI)이다 (Section I 및 III 참조).</p>
+<p>평가 결과, 현실적 트랙에서 최고 성능을 보인 GPT-6-Astra(Codex 하네스)는 50개 문제 중 49개를 정확히 해결하여 98.0%의 통과율을 달성하였으며, Opus 5.5(Claude Code CLI 하네스)는 92.0%(46/50)를 기록하였다. 고립적 트랙에서도 Astra와 Opus 5.5는 모두 92.0%(46/50)의 높은 정답률을 유지하였다. 외부 웹 검색 차단 여부에 따른 최고 성능 에이전트들의 성능 변화가 통계적 오차 범위 내로 미미하다는 점은, 선두 모델들이 기존 이론물리학 학술 문헌의 핵심 공식과 기호 계산 절차를 파라미터 수준에서 광범위하게 암기(Memorization)하고 있음을 강력히 시사한다 (Section I 및 IV 참조).</p>
+<p>이론물리학 연구 프로세스는 크게 '물리 이론의 구축', '고수준 학술 질문의 도출', '구체적 수치 및 기호 계산으로의 전환' 단계로 구별된다. 본 평가 데이터셋 분석 결과, AI 에이전트는 구체적인 물리 계산 및 수치 해석 영역에서 이미 세계적 연구자 수준에 도달하였으나, 연구의 장기적 방향성을 설정하고 독창적인 질문을 제시하며 계산 막힘 현상 시 연구 경로를 동적으로 수정하는 '연구적 취향(Taste)과 비전'의 영역에서는 여전히 인간 연구자의 개입과 지도가 필수적인 요소로 잔존함을 보여준다 (Section I 및 V 참조).</p>
+<hr />
+<h5 id="2-주요-논점-key-points-arguments">2. 주요 논점 (Key Points &amp; Arguments)</h5>
+<h6 id="2-1-theophyseval-데이터셋의-특성과-구축-방법">2.1. TheoPhysEval 데이터셋의 특성과 구축 방법</h6>
+<h6 id="데이터셋-구축-원칙-및-성격">데이터셋 구축 원칙 및 성격</h6>
+<p>소스 연구진은 세계 각국의 이론물리학 분야 전문가들로부터 다음 3가지 기준을 엄격히 충족하는 문제를 수집하였다 (Section II 참조):</p>
+<ol>
+<li>최신 물리학 연구 항목과 직접적으로 연관될 것.</li>
+<li>검증이 용이하지만 단순 추측으로는 맞출 수 없는 명확한 정답이 존재할 것.</li>
+<li>출판된 학술 문헌이나 공공 인터넷 공간에서 정답을 직접 검색할 수 없을 것.</li>
+</ol>
+<p>중대한 미해결 개척 연구 문제(Open research problems)는 기여 연구자들에게 학술지 즉시 출판을 권장하여 대상에서 제외하였다. 이에 따라 TheoPhysEval은 기존에 확립된 이론적 기법 및 수치 알고리즘을 확장 적용하여 정답 도출이 가능한 'Turn-the-crank' 형태의 연구 문제들로 구성되었다. 이 문제들은 학술적으로 엄밀하며 독립된 논문으로 출간 가능한 수준이지만, 파괴적인 학술적 돌파구(Breakthrough)를 요구하지는 않는다 (Section I 및 II 참조).</p>
+<h6 id="대표-문제-사례-분석-box-1">대표 문제 사례 분석 (Box 1)</h6>
+<p>데이터셋 구축 및 해결 메커니즘을 보여주는 대표적인 3가지 문제 사례는 다음과 같다 (Section II.A 및 Box 1 참조):</p>
+<ol>
+<li><strong>블랙 스트링 페이지 시간(Black-string Page time) 계산 문제 (§10d)</strong>: $\text{AdS}_4$ 공간 내 수직선으로부터 $\pi/10$ 각도로 배치된 두 개의 브레인을 갖는 블랙 스트링 배경에서 페이지 시간을 산출하는 문제이다. 해법 도출을 위해 에이전트는 5차원 spacetimes 환경을 다룬 선행 연구(<code>arXiv:2012.04671</code>)를 참조하여 이를 4차원($d=3$) 방정식으로 변환한 후, 경계 조건의 특이점(Singularities)을 처리하는 수치 미분방정식 슈팅 알고리즘(Shooting routine) 코드를 작성 및 실행해야 한다.</li>
+<li><strong>클래스 D 페르미온 패리티 펌프(Class D fermion parity pump) 문제 (§5a)</strong>: 미시적 대칭성이 페르미온 패리티뿐인 1차원 클래스 D 자유 페르미온 시스템에서 현수 구조(Suspension construction, <code>arXiv:2605.20339</code>)를 활용하여 2-파라미터 해밀토니안을 구성하고, 디아볼릭 점(Diabolical point)에서의 임계 이론 중심 차아지(Central charge) 및 섭동 하에서의 불안정성을 규명하는 문제이다.</li>
+<li><strong>평판 경계층(Flat-plate boundary layer) Perturbation 문제 (§1c)</strong>: 레이놀즈 수 $Re = 160000$ 조건에서 평판 위를 흐르는 비압축성 유체에 대해 $y/L = 0.01$ 수평 평면상에 발달하는 주요 초기 유동 구조의 주파수 및 주기성 스팬와이즈 규격화 길이 스케일($L_s/L$)을 수치 해석 코드로 산출하는 문제이다 (<code>arXiv:2405.04949</code> 참조).</li>
+</ol>
+<h6 id="정답-검증-및-수치-변환-방식-box-2">정답 검증 및 수치 변환 방식 (Box 2)</h6>
+<p>기호 수식 형태의 정답은 동치인 수식이 다양한 형태로 표현될 수 있어 채점 자동화 시 오류를 유발할 수 있다. 이를 방지하기 위해 연구진은 기호 계산 문제에 구체적인 물리 상수 및 변수 수치를 프롬프트에 주입하여, 무작위 추측이 불가능한 부동소수점 수치나 정수 수열 형태로 정답 제출 방식을 규격화하였다. 예를 들어 Box 2의 아키온-광자 전환율 계산 문제에서는 결합 상수 $g_{a\gamma\gamma}=10^{-10}\text{ GeV}^{-1}$, 플라즈마 주파수 $\omega_p=16.6\text{ eV}$, 굴절률 $n=1.5$, 속도 $v_a=10^{-3}$, 질량 $m_a=25\text{ eV}, 15\text{ eV}$ 수치를 주어 최종 전환율 $\Gamma_{\text{NR}}$을 $\text{eV}$ 단위의 지수 표기법 수치 배열로 제출받도록 설계하였다 (Section III 및 Box 2 참조).</p>
+<h6 id="분야별-문제-분포">분야별 문제 분포</h6>
+<p>TheoPhysEval 데이터셋을 구성하는 50개 문제의 11개 주제별 상세 분포는 아래 표와 같다 (Section II.B, Table I 참조).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">주제 (Theme)</th>
+<th style="text-align:center">문제 수 (Problems)</th>
+<th style="text-align:left">소스 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">고전물리학 (Classical physics)</td>
+<td style="text-align:center">5</td>
+<td style="text-align:left">Table I / App. A.1</td>
+</tr>
+<tr>
+<td style="text-align:left">확률 과정 및 생물물리학 (Stochastic processes and biological physics)</td>
+<td style="text-align:center">5</td>
+<td style="text-align:left">Table I / App. A.2</td>
+</tr>
+<tr>
+<td style="text-align:left">비평형 통계역학 (Nonequilibrium statistical mechanics)</td>
+<td style="text-align:center">3</td>
+<td style="text-align:left">Table I / App. A.3</td>
+</tr>
+<tr>
+<td style="text-align:left">격자 이론 (Lattice theories)</td>
+<td style="text-align:center">3</td>
+<td style="text-align:left">Table I / App. A.4</td>
+</tr>
+<tr>
+<td style="text-align:left">물질의 양자 상 (Quantum phases of matter)</td>
+<td style="text-align:center">5</td>
+<td style="text-align:left">Table I / App. A.5</td>
+</tr>
+<tr>
+<td style="text-align:left">전자 구조 이론 (Electronic structure theory)</td>
+<td style="text-align:center">4</td>
+<td style="text-align:left">Table I / App. A.6</td>
+</tr>
+<tr>
+<td style="text-align:left">양자장론 (Quantum field theory)</td>
+<td style="text-align:center">7</td>
+<td style="text-align:left">Table I / App. A.7</td>
+</tr>
+<tr>
+<td style="text-align:left">입자물리학 (Particle physics)</td>
+<td style="text-align:center">2</td>
+<td style="text-align:left">Table I / App. A.8</td>
+</tr>
+<tr>
+<td style="text-align:left">산란 진폭 (Scattering amplitudes)</td>
+<td style="text-align:center">5</td>
+<td style="text-align:left">Table I / App. A.9</td>
+</tr>
+<tr>
+<td style="text-align:left">홀로그래피 및 얽힘 (Holography and entanglement)</td>
+<td style="text-align:center">5</td>
+<td style="text-align:left">Table I / App. A.10</td>
+</tr>
+<tr>
+<td style="text-align:left">중력 및 우주론 (Gravitation and cosmology)</td>
+<td style="text-align:center">6</td>
+<td style="text-align:left">Table I / App. A.11</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>합계 (Total)</strong></td>
+<td style="text-align:center"><strong>50</strong></td>
+<td style="text-align:left"><strong>Table I</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h6 id="2-2-에이전트-평가-트랙-및-정량적-성과-분석">2.2. 에이전트 평가 트랙 및 정량적 성과 분석</h6>
+<h6 id="평가-트랙-환경-설정">평가 트랙 환경 설정</h6>
+<ul>
+<li><strong>Realistic Track (현실적 트랙)</strong>: 에이전트에 웹 검색 기능과 로컬 스크립트 작성 및 실행 도구(Bash 터미널, Python 등) 접근 권한을 모두 부여한다. 이론물리학 연구자가 인터넷 문헌 검색과 컴퓨팅 리소스를 병행 활용하는 실제 연구 환경을 모사한다.</li>
+<li><strong>Isolated Track (고립적 트랙)</strong>: 모델 제공자의 API 호출을 제외한 외부 인터넷 웹 검색이 전면 차단된 Docker 샌드박스 내부에서 로컬 도구만 활용하여 문제를 해결한다. 에이전트에 내재된 물리학 지식 수준과 계산 코드 생성 역량을 고립 평가한다 (Section III 참조).</li>
+</ul>
+<h6 id="정량적-성과-토큰-소비량-및-비용-종합-분석">정량적 성과, 토큰 소비량 및 비용 종합 분석</h6>
+<p>5개 에이전트의 트랙별 통과율, 토큰 소비 현황(미캐시/캐시 입력 및 출력), 그리고 추정 비용을 종합 비교한 표준 데이터는 다음과 같다 (Section IV.A, Table II, Table III, Table IV 참조).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">에이전트 (Agent)</th>
+<th style="text-align:left">평가 트랙 (Track)</th>
+<th style="text-align:center">해결 문제 수 (Pass / 50)</th>
+<th style="text-align:center">통과율 (Pass Rate)</th>
+<th style="text-align:center">미캐시 입력 토큰 (Uncached In)</th>
+<th style="text-align:center">캐시 입력 토큰 (Cached In)</th>
+<th style="text-align:center">출력 토큰 (Output)</th>
+<th style="text-align:center">총 토큰량 (Total Tokens)</th>
+<th style="text-align:center">총 평가 비용 (Cost in USD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>GPT-6-Astra</strong>&lt;br&gt;<em>(with Codex)</em></td>
+<td style="text-align:left">Realistic&lt;br&gt;Isolated</td>
+<td style="text-align:center">49&lt;br&gt;46</td>
+<td style="text-align:center"><strong>98.0%</strong>&lt;br&gt;<strong>92.0%</strong></td>
+<td style="text-align:center">2.931M&lt;br&gt;1.869M</td>
+<td style="text-align:center">33.552M&lt;br&gt;21.657M</td>
+<td style="text-align:center">0.922M&lt;br&gt;1.004M</td>
+<td style="text-align:center">37.405M&lt;br&gt;24.529M</td>
+<td style="text-align:center"><strong>$116.28</strong>&lt;br&gt;<strong>$95.20</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Opus 5.5</strong>&lt;br&gt;<em>(with Claude Code CLI)</em></td>
+<td style="text-align:left">Realistic&lt;br&gt;Isolated</td>
+<td style="text-align:center">46&lt;br&gt;46</td>
+<td style="text-align:center"><strong>92.0%</strong>&lt;br&gt;<strong>92.0%</strong></td>
+<td style="text-align:center">11.781M&lt;br&gt;18.129M</td>
+<td style="text-align:center">192.247M&lt;br&gt;203.095M</td>
+<td style="text-align:center">7.150M&lt;br&gt;7.210M</td>
+<td style="text-align:center">211.178M&lt;br&gt;228.433M</td>
+<td style="text-align:center"><strong>$240.43</strong>&lt;br&gt;<strong>$275.46</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gemini 3.8 Flash</strong>&lt;br&gt;<em>(with Antigravity)</em></td>
+<td style="text-align:left">Realistic&lt;br&gt;Isolated</td>
+<td style="text-align:center">34&lt;br&gt;31</td>
+<td style="text-align:center"><strong>68.0%</strong>&lt;br&gt;<strong>62.0%</strong></td>
+<td style="text-align:center">41.995M&lt;br&gt;35.242M</td>
+<td style="text-align:center">558.961M&lt;br&gt;552.935M</td>
+<td style="text-align:center">5.759M&lt;br&gt;6.022M</td>
+<td style="text-align:center">606.715M&lt;br&gt;594.198M</td>
+<td style="text-align:center"><strong>$95.01</strong>&lt;br&gt;<strong>$90.48</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek-V4.1-Flash</strong>&lt;br&gt;<em>(with Codex)</em></td>
+<td style="text-align:left">Realistic&lt;br&gt;Isolated</td>
+<td style="text-align:center">27&lt;br&gt;25</td>
+<td style="text-align:center"><strong>54.0%</strong>&lt;br&gt;<strong>50.0%</strong></td>
+<td style="text-align:center">12.842M&lt;br&gt;10.748M</td>
+<td style="text-align:center">989.734M&lt;br&gt;799.721M</td>
+<td style="text-align:center">23.020M&lt;br&gt;23.503M</td>
+<td style="text-align:center">1025.597M&lt;br&gt;833.972M</td>
+<td style="text-align:center"><strong>$37.42</strong>&lt;br&gt;<strong>$36.23</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM 5.3</strong>&lt;br&gt;<em>(with Claude Code CLI)</em></td>
+<td style="text-align:left">Realistic&lt;br&gt;Isolated</td>
+<td style="text-align:center">21&lt;br&gt;26</td>
+<td style="text-align:center"><strong>42.0%</strong>&lt;br&gt;<strong>52.0%</strong></td>
+<td style="text-align:center">16.554M&lt;br&gt;22.293M</td>
+<td style="text-align:center">945.717M&lt;br&gt;1079.793M</td>
+<td style="text-align:center">9.692M&lt;br&gt;13.524M</td>
+<td style="text-align:center">971.963M&lt;br&gt;1115.610M</td>
+<td style="text-align:center"><strong>$180.00\dagger</strong>&lt;br&gt;<em>(API: $311.71)</em></td>
+</tr>
+</tbody>
+</table>
+<p><em>$\dagger$주: GLM 5.3의 비용은 연구진이 실제 지불한 코딩 플랜(Coding plan) 두 트랙 합산 비용($180)이며, 단순 API 토큰 요율 적용 시 Realistic $311.71 / Isolated $371.46임.</em></p>
+<h6 id="암기-효과-memorization-및-성능-역전-현상-분석">암기 효과(Memorization) 및 성능 역전 현상 분석</h6>
+<p>웹 검색이 전면 차단된 Isolated 트랙에서 Astra와 Opus 5.5가 모두 92.0%의 높은 통과율을 달성한 점은, 최첨단 프론티어 LLM들이 선행 물리학 문헌의 복잡한 수식과 기호를 내부 파라미터로 암기하고 있음을 보여준다.</p>
+<p>한편, GLM 5.3 모델의 경우 Realistic 트랙(42.0%)보다 Isolated 트랙(52.0%)에서 성능이 높게 나타나는 특이점(Anomaly)이 관찰되었다. 소스 분석에 따르면 이는 연쇄 의존성을 갖는 전자 구조 이론 문제 계열(Appendix A.6의 §6a~§6d)에서 비롯되었다. Realistic 트랙의 GLM 에이전트는 인터넷 검색 결과를 처리하는 초기 분석 단계에서 부호 오류(Sign error)를 범하였고, 이 오류가 연쇄적인 후속 문제 전체로 전파되어 다수의 오답을 야기하였다. 반면 Isolated 트랙의 GLM 에이전트는 초기 단계에서 부호 오류를 범하지 않아 후속 문제들을 연쇄적으로 통과함에 따라 Isolated 트랙의 전체 통과율이 더 높게 나타났다 (Section IV.B 참조).</p>
+<hr />
+<h6 id="2-3-에이전트의-정성적-오류-및-한계-분석">2.3. 에이전트의 정성적 오류 및 한계 분석</h6>
+<h6 id="역문제-inverse-problem-실패-사례-1b">역문제(Inverse Problem) 실패 사례 (§1b)</h6>
+<p>현실적 트랙에서 GPT-6-Astra를 포함한 5개 에이전트가 예외 없이 모두 해결에 실패한 유일한 문제는 §1b(궤적으로부터 자율 미분방정식 복원) 문제이다. 이 문제는 시각적으로 제시된 곡선 궤적을 생성하는 1계 자율 미분방정식을 도출하는 역문제(Inverse problem)로, 순방향 계산 문제와 달리 출제자와 에이전트 간의 심각한 정보 비대칭성이 존재한다. 정답 수식은 분수 차수 미분(Fractional derivative) 및 지연 항(Delay term)을 포함하는 분수 지연 방정식(Fractional delay equation) 형태였다. 프롬프트 내 '미분방정식'이라는 용어에 대한 자의적 해석 가능성 및 답의 비유일성으로 인해 모든 에이전트가 탐색에 실패하였다 (Section IV.B 및 Appendix B 참조).</p>
+<h6 id="전문가-원본-해법-오류-교정-및-astra-정답-재확인-사례">전문가 원본 해법 오류 교정 및 Astra 정답 재확인 사례</h6>
+<p>초기 채점 과정에서 Astra가 몇몇 문제에서 오답을 낸 것으로 판정되었으나, 에이전트의 정교한 수치 계산 및 풀이 경로를 정밀 재검토한 모더레이터들이 출제진과 재논의를 거친 결과, 인간 전문가가 최초 작성했던 원본 해법(Reference solution)에 미세한 계산 오류가 존재했음이 드러났다. 출제진이 원본 정답 수치를 교정한 후 재채점을 수행함에 따라 Astra가 최초 제출했던 답안이 정답으로 최종 승격·재확인되었다 (Section IV.B 참조).</p>
+<h6 id="기타-모델의-주요-오류-유형">기타 모델의 주요 오류 유형</h6>
+<ul>
+<li><strong>차원 조건 착오</strong>: §10d 페이지 시간 계산 문제에서 Gemini와 GLM은 5차원 계산을 다룬 선행 문헌(<code>arXiv:2012.04671</code>)의 공식을 4차원 문제 조건에 맞게 차원 변환을 거치지 않고 그대로 적용하는 오류를 범했다.</li>
+<li><strong>수렴 속도 오판 및 토큰 초과</strong>: Opus는 §7a 문제 해결 중 Realistic 트랙에서 최대 토큰 출력 제한(Maximum token output limit)에 반복적으로 도달하여 실패하였으나 Isolated 트랙에서는 성공하였다. 또한 §9a 문제에서는 급수의 수렴 속도에 대해 잘못된 학술적 결론을 내렸다.</li>
+<li><strong>초기 조건 및 근저 방정식 착오</strong>: Opus는 §1c 문제에서 프롬프트에 명시된 초기 데이터 대신 관련 문헌(<code>arXiv:2405.04949</code>)의 초기 데이터를 잘못 적용하였다. §11f 문제에서 GLM은 해당 문제가 타 문제와 등가라는 잘못된 주장을 폈고, DeepSeek과 Gemini는 기저(Basis) 선택 오류를 범했다 (Section IV.B 참조).</li>
+</ul>
+<hr />
+<h6 id="2-4-이론물리학-학술-및-교육-생태계에-대한-시사점">2.4. 이론물리학 학술 및 교육 생태계에 대한 시사점</h6>
+<h6 id="계산-능력-vs-연구-능력의-격차">계산 능력 vs 연구 능력의 격차</h6>
+<p>AI 에이전트는 기호 연산, 수치 미분방정식 슈팅 알고리즘 구현, 고난도 연구 코드 작성 등 정립된 문제 해결 영역에서는 이미 인간 세계적 전문가 수준에 도달하였다. 그러나 이론물리학의 핵심인 '새로운 물리 이론의 창안', '학술적으로 가치 있는 질문의 도출', '막힌 계산 경로에서의 동적 연구 방향 전환' 등 &quot;연구적 취향(Taste)과 비전&quot; 측면에서는 여전히 한계를 보이며, 인간 연구자의 개입이 필수적이다 (Section I 및 V 참조).</p>
+<h6 id="교육-및-대학원-과정에의-영향">교육 및 대학원 과정에의 영향</h6>
+<p>기존에 대학원생이나 초급 연구자들에게 문헌 검토 및 계산 기법 숙달을 위해 부여되던 '기존 연구 확장형 계산 문제(Turn-the-crank problems)'들은 이제 AI 에이전트가 수분 내에 완벽히 해결할 수 있게 되었다. 따라서 연구 훈련 목적으로 단순히 정답 도출만을 요구하는 방식의 과제 부여는 더 이상 유효하지 않으며, 물리학 교육 및 대학원 평가 방식 전반에 대한 근본적인 재검토가 요구된다 (Section I 및 V 참조).</p>
+<hr />
+<h5 id="3-등장-인물-및-화자-key-figures-roles">3. 등장 인물 및 화자 (Key Figures &amp; Roles)</h5>
+<p>소스 문서의 Title, Author Contributions, Section I, VI 등에서 확인되는 주요 인물 및 역할 구구분은 다음과 같다 (Section I, VI 및 Author Contributions 참조).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 / 성명</th>
+<th style="text-align:left">역할 / 소속 및 작업 내용 (소스 확인 기준)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Suvrat Raju</strong></td>
+<td style="text-align:left"><strong>평가 코디네이터(Coordinator)</strong> 및 <strong>문제 기여(Problem Contributor)</strong>. International Centre for Theoretical Sciences 소속. 교신저자 (<code>suvrat@icts.res.in</code>). 예시 문제 §10d 변형 및 계산 수행, 원고 작성 총괄.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Praneeth Netrapalli</strong></td>
+<td style="text-align:left"><strong>평가 코디네이터(Coordinator)</strong>. Google DeepMind 소속. 평가 기획, 기여 저자 모집 및 원고 작성 총괄.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>A. Ramesh Chandra</strong></td>
+<td style="text-align:left"><strong>모더레이터(Moderator)</strong> 및 <strong>문제 기여(Problem Contributor)</strong>. International Centre for Theoretical Sciences 소속. 문제 미세조정, 벤치마크 코드 작성, 평가 수행 및 원고 작성.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aaghaz Mahajan</strong></td>
+<td style="text-align:left"><strong>모더레이터(Moderator)</strong>. Tata Institute of Fundamental Research 소속. 문제 미세조정, 벤치마크 코드 작성 및 평가 수행.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ainesh Sanyal</strong></td>
+<td style="text-align:left"><strong>모더레이터(Moderator)</strong>. University of Texas at Austin 소속. 문제 미세조정, 벤치마크 코드 작성 및 평가 수행.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Mianqi Wang</strong></td>
+<td style="text-align:left"><strong>모더레이터(Moderator)</strong> 및 <strong>문제 기여(Problem Contributor)</strong>. Kavli IPMU, The University of Tokyo 소속. 문제 미세조정, 벤치마크 코드 작성 및 평가 수행.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 문제 기여자 (Contributors)</strong></td>
+<td style="text-align:left">Shubhadeep Chakraborty, Sudip Chakraborty, Shailesh Chandrasekharan, Rama Govindarajan, Akshit Goyal, Jonathan J. Heckman, Yasir Iqbal, Divya Jaganathan, Saumav Kapoor, Andreas Karch, Pushkar Khandare, Sandeep Krishna, Anupam Kundu, Alok Laddha, Tongyan Lin, Swarnendu Maity, Nilmani Mathur, Shani Nadir Meynet, Alessandro Mininno, Abhijeet Mishra, Vidur Niranjan, Abhishodh Prakash, Pratik Rath, Durbar Roy, Debargha Sarkar, Srikanth Sastry, Gary Shiu, Aninda Sinha, Thomas Van Riet (이상 논문 서문 ‡ 표시 저자들, 각 전문 분야 연구 문제 제공).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점-metrics-timestamps">4. 수치 및 시점 (Metrics &amp; Timestamps)</h5>
+<h6 id="핵심-수치-지표">핵심 수치 지표</h6>
+<ul>
+<li><strong>문제 집합 규모</strong>: 미공개 연구 수준 이론물리학 문제 총 50개 (11개 테마)</li>
+<li><strong>최고 성능 에이전트 성과 (Realistic Track)</strong>:
+<ul>
+<li>GPT-6-Astra (with Codex): <strong>98.0%</strong> (49/50 문제 해결)</li>
+<li>Opus 5.5 (with Claude Code CLI): <strong>92.0%</strong> (46/50 문제 해결)</li>
+<li>Gemini 3.8 Flash (with Antigravity): <strong>68.0%</strong> (34/50 문제 해결)</li>
+<li>DeepSeek-V4.1-Flash (with Codex): <strong>54.0%</strong> (27/50 문제 해결)</li>
+<li>GLM 5.3 (with Claude Code CLI): <strong>42.0%</strong> (21/50 문제 해결)</li>
+</ul>
+</li>
+<li><strong>최고 성능 에이전트 성과 (Isolated Track)</strong>:
+<ul>
+<li>GPT-6-Astra: <strong>92.0%</strong> (46/50 문제 해결)</li>
+<li>Opus 5.5: <strong>92.0%</strong> (46/50 문제 해결)</li>
+<li>Gemini 3.8 Flash: <strong>62.0%</strong> (31/50 문제 해결)</li>
+<li>GLM 5.3: <strong>52.0%</strong> (26/50 문제 해결)</li>
+<li>DeepSeek-V4.1-Flash: <strong>50.0%</strong> (25/50 문제 해결)</li>
+</ul>
+</li>
+<li><strong>평균 평가 비용</strong>: GPT-6-Astra 기준 문제당 평균 <strong>USD 3 달러 미만</strong></li>
+<li><strong>총 평가 비용 (Table III)</strong>:
+<ul>
+<li>Astra: Realistic $116.28 / Isolated $95.20</li>
+<li>Opus: Realistic $240.43 / Isolated $275.46</li>
+<li>Gemini: Realistic $95.01 / Isolated $90.48</li>
+<li>DeepSeek: Realistic $37.42 / Isolated $36.23</li>
+<li>GLM: 코딩 플랜 실제 비용 $180 (API 요율 적용 시 Realistic $311.71 / Isolated $371.46)</li>
+</ul>
+</li>
+<li><strong>하드웨어 및 제한시간 설정</strong>:
+<ul>
+<li>Google Cloud <code>e2-standard</code> 가상 머신 (작업당 2 vCPU, 4 GB 메모리, 10 GB 스토리지 할당)</li>
+<li>단일 작업 제한시간: <strong>8시간</strong> (다중 작업 전자 구조 문제 §6 계열은 <strong>20시간</strong> 할당)</li>
+</ul>
+</li>
+</ul>
+<h6 id="시점-및-타임라인">시점 및 타임라인</h6>
+<ul>
+<li><strong>논문 식별자</strong>: <code>arXiv:2610.16733</code></li>
+<li><strong>실험 완료 후 문헌 출판 사례</strong>: §10a 문제(워프된 홀로그래픽 인터페이스 전달)의 해법은 본 평가 실험이 완료된 후 공개 문헌(<code>arXiv:2609.38318</code> [61])에 정식 출판됨 (Section I 및 §10a 참조).</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ol>
+<li><strong>데이터 누출(Data Leakage) 가능성</strong>: 문제 출제 및 검증 과정에서 일부 인간 전문가들이 AI 도구를 보조적으로 사용하여 문제를 해결했으므로, 데이터가 생성 과정에서 누출되었을 가능성을 완전히 배제할 수 없다 (Section I 참조).</li>
+<li><strong>단일 실행(Single Run)으로 인한 통계적 불확실성</strong>: API 비용 및 실행 시간 제약으로 인해 각 에이전트당 전체 문제 세트를 단 1회만 실행하였다. LLM의 디코딩 온도가 0이 아닌 설정에서는 반복 실행 시 결과가 달라질 수 있는 통계적 불확실성이 존재한다 (Section III 참조).</li>
+<li><strong>컨벤션 및 기호 미지정으로 인한 평가 한계</strong>: §9a 및 §11d 등 일부 문제의 경우 평가 프롬프트 내에 약식 관례(Convention)가 완벽하게 규정되지 않아 오답 처리될 위험이 있었다. 이에 따라 실제 실행에서 관찰된 선택지들을 허용하도록 정답 키를 수정한 한계가 있다. 또한 §1b 문제는 정답의 유일성이 보장되지 않는 역문제 특성을 지닌다 (Section III 및 Appendix B 참조).</li>
+<li><strong>평가 범주의 한계</strong>: 본 데이터셋은 정립된 물리학 문제 해결 능력만을 평가하며, 에이전트의 자율적인 연구 주제 선정 능력, 장기적 연구 비전 설정 능력, 미해결 난제에 대한 파괴적 창의성(Breakthrough research)은 평가하지 않으며 소스에서도 이를 평가하지 않는다 (Section I 및 V 참조).</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

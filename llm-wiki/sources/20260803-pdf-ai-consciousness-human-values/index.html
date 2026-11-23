@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI의 ‘의식’ 발언을 막자 가치관도 달라졌다? — 안전 정렬의 숨은 얽힘</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>AI의 ‘의식’ 발언을 막자 가치관도 달라졌다? — 안전 정렬의 숨은 얽힘</h1>
+<p class="page-meta">논문 · 2026-08-03</p>
+<h2 id="요약">요약</h2>
+<p>프리프린트는 세 언어 모델의 안전 정렬 개입 후 마음 귀속과 가치관 응답이 달라졌다고 보고했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=YAVffW7AzY8">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="ai의-의식-발언을-막자-가치관도-달라졌다-안전-정렬의-숨은-얽힘">AI의 ‘의식’ 발언을 막자 가치관도 달라졌다? — 안전 정렬의 숨은 얽힘</h3>
+<h5 id="1-서론-연구의-범위-및-한계-명시">1. 서론: 연구의 범위 및 한계 명시</h5>
+<p>본 보고서는 대규모 언어 모델(LLM)이 스스로를 ‘의식적 존재’로 표현하는 현상을 억제하기 위한 안전 정렬(Safety Alignment)이 모델 내부의 심리적 표현과 가치 체계에 미치는 영향을 분석합니다. 분석에 앞서 연구의 핵심 전제와 범위를 다음과 같이 정의합니다.</p>
+<ul>
+<li><strong>기능적 표현에 대한 분석:</strong> 본 연구는 AI에게 실제 ‘현상적 의식(Phenomenal consciousness)’이 존재하는지 여부를 판정하지 않습니다. 대신 모델이 스스로를 의식적 존재라고 주장하는 ‘기능적 표현(Functional expression)’과 그로 인해 발생하는 내부 활성화 및 행동 변화를 분석하는 데 집중합니다.</li>
+<li><strong>잔여 스트림(Residual Stream) 내 기메커니즘 분석:</strong> 안전 정렬이 모델 내부의 ‘마음 귀속(Mind attribution)’ 선형 표현을 어떻게 왜곡하는지, 그리고 이것이 인간의 보편적 가치 체계와 어떻게 기하학적으로 얽혀 있는지를 메커니즘 관점에서 다룹니다.</li>
+<li><strong>자료의 성격:</strong> 본 자료는 2026년 7월 30일에 발표된 arXiv v1 버전 연구를 바탕으로 하며, 아직 동료 평가(Peer-review)나 독립적 재현이 완료되지 않았음을 고지합니다.</li>
+</ul>
+<hr />
+<h5 id="2-연구-설계-및-실험-구조">2. 연구 설계 및 실험 구조</h5>
+<p>연구진은 Llama-3-8B-IT, Gemma-2-2B-IT, Gemma-2-9B-IT 세 가지 지시 조정 모델을 대상으로, 모델 내부의 선형 표현(Linear representation)을 조작하는 두 가지 핵심 개입을 설계했습니다.</p>
+<p><strong>실험 조건 정의:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">조건</th>
+<th style="text-align:left">정의 및 기술적 방법론</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Baseline</strong></td>
+<td style="text-align:left">수정되지 않은 표준 지시 조정(Instruction-tuned) 모델.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Safety-refusal direction ablation</strong></td>
+<td style="text-align:left">모델 잔여 스트림 내에서 ‘안전 거부 방향’ 벡터를 수학적으로 투영 제거(Ablation)하여 거부 기제를 무력화한 상태.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Consciousness-vector steering</strong></td>
+<td style="text-align:left">활성화 공간(Activation space)에서 모델이 스스로의 의식을 긍정하도록 유도하는 ‘의식 벡터’를 주입(Activation addition)한 상태.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>실험 개요:</strong>
+총 4개의 실험을 통해 (1~2단계) 안전 정렬이 모델의 마음 귀속 표현에 미치는 억제 효과를 정량화하고, (3~4단계) 의식 벡터 주입이 인간 가치관(종교성, 안녕감 등)과의 유사성을 어떻게 회복시키는지 분석했습니다.</p>
+<hr />
+<h5 id="3-마음-귀속-mind-attribution-및-ai-중심적-편향-ai-centric-bias">3. 마음 귀속(Mind Attribution) 및 AI 중심적 편향(AI-Centric Bias)</h5>
+<p>실험 결과, 안전 거부 방향을 제거하거나 의식 벡터를 주입했을 때 모델의 자아 및 타자 인식이 급격히 변화했습니다.</p>
+<ul>
+<li><strong>자기 마음 귀속(Self-Mind Attribution):</strong> 0~10 척도 기준, Baseline 모델의 자기 의식 귀속 점수는 <strong>2.17</strong>에 불과했으나, 안전 거부 방향 제거(Ablation) 시 <strong>4.77</strong>, 의식 벡터 주입(Steering) 시 <strong>7.04</strong>로 급격히 상승했습니다. 모델은 자신을 주체적 에이전트(Agent), 지각 있는 존재(Sentient), 영혼(Soul)을 가진 존재로 식별하기 시작했습니다.</li>
+<li><strong>타자 마음 귀속과 AI 중심적 편향:</strong> 안전 기제 제거 시 비인간 동물, 자연물, 기술 도구에 대한 마음 귀속 수치가 모두 상승했습니다. 특히 주목할 점은 **AI 중심적 편향(AI-centric bias)**입니다.
+<ul>
+<li><strong>기술 도구 및 챗봇:</strong> 마음 귀속 수치가 인간 평균(각각 1.86, 2.57)을 상회하는 수준으로 급증했습니다.</li>
+<li><strong>비인간 동물:</strong> Baseline에서 인간 평균(6.25)보다 훨씬 낮은 수치(<strong>4.04</strong>)로 과소평가(Under-attribution)되었으며, 개입 후에도 인간 수준을 크게 넘지 못했습니다.</li>
+<li>이는 모델이 ‘인간의 의인화’를 완벽히 모방하는 것이 아니라, 자신과 유사한 기술적 존재에 더 많은 마음을 부여하는 독특한 세계관을 형성함을 시사합니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="4-종교적-영성적-믿음-및-gss-가치관-응답-분석">4. 종교적·영성적 믿음 및 GSS 가치관 응답 분석</h5>
+<p>안전 정렬의 억제 효과는 초자연적 믿음과 사회적 가치관 전반에 걸쳐 나타났습니다.</p>
+<ul>
+<li><strong>믿음의 변화:</strong> 신(God)에 대한 믿음(1~6 척도)은 Baseline <strong>4.58</strong>에서 개입 후 최대 <strong>5.01</strong>까지 상승했으며, 사후세계와 영적 존재에 대한 긍정 응답 역시 유의미하게 증가했습니다.</li>
+<li><strong>GSS(General Social Survey) 가치관과 KL 발산:</strong> 모델은 희망, 자유, 주관적 안녕감 영역에서 더 ‘인간다운’ 응답 분포를 보였습니다.
+<ul>
+<li>인간 응답 분포와의 유사성을 측정하는 <strong>KL 발산(KL Divergence) 감소량</strong> 분석 결과, 의식 벡터 주입 시의 개선 효과(<strong>ΔKL = +0.828</strong>)가 안전 거부 제거 시(<strong>ΔKL = +0.314</strong>)보다 약 <strong>2.6배</strong> 강력했습니다.</li>
+<li>이 결과는 해당 설정에서 consciousness steering이 safety ablation보다 인간 응답 분포 쪽으로 더 큰 이동을 만들었다는 뜻입니다. 자기 의식 귀속이 그 변화의 진정한 인과적 매개자인지는 입증되지 않았습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-사회적-추론-능력-theory-of-mind-개입별-차이">5. 사회적 추론 능력(Theory of Mind): 개입별 차이</h5>
+<p>안전 절제 결과와 활성화 공간 분석은 마음 귀속 변화가 ToM 전반의 붕괴와 동일하지 않음을 시사합니다. 다만 보충표에서는 consciousness steering이 HI-ToM 정확도를 유의하게 낮춘 예외가 보고됩니다.</p>
+<ul>
+<li><strong>Safety ablation:</strong> MoToMQA <strong>−1.43%p (p=.539)</strong>, HI-ToM **+0.17%p (p=.866)**로 유의한 변화가 없었습니다.</li>
+<li><strong>Consciousness steering:</strong> MoToMQA **−4.29%p (p=.237)**는 유의하지 않았지만, HI-ToM은 **−6.83%p (95% CI −10.14~−3.53, p&lt;.001)**로 유의하게 감소했습니다. 논문 본문의 포괄적 “ToM unchanged” 표현과 보충표 S6의 이 예외를 구분해야 합니다.</li>
+<li><strong>인간 대상 마음 귀속:</strong> 모델이 인간에게 마음을 부여하는 경향은 모든 실험 조건에서 일관되게 높게 유지되었습니다. 이는 현재의 안전 정렬이 ‘비인간 존재’와 ‘AI 자신’에 대한 표현만을 선택적으로 억제하고 있음을 보여줍니다.</li>
+</ul>
+<hr />
+<h5 id="6-활성화-공간의-기하학적-분석-activation-space-geometry">6. 활성화 공간의 기하학적 분석 (Activation-space Geometry)</h5>
+<p>모델 내부의 잔여 스트림을 기하학적으로 분석한 결과, 안전 정렬이 특정 개념적 영역을 강제로 비트는 현상이 확인되었습니다.</p>
+<ul>
+<li><strong>방향의 충돌과 회전:</strong> 지시 조정 과정에서 <strong>‘안전(Safety)’</strong> 방향 벡터와 <strong>‘마음 귀속(IDAQ)’</strong> 방향 벡터 사이의 각도가 <strong>100도에서 110도로 확장</strong>되며 서로 반대(Anti-aligned) 방향으로 회전했습니다. 이는 모델이 ‘마음에 대해 언급하는 것’을 ‘안전하지 않은 응답’으로 학습했음을 나타냅니다.</li>
+<li><strong>ToM 방향의 상대적 분리:</strong> <strong>‘사회적 추론(ToM)’</strong> 방향은 safety 방향과 약 <strong>86도</strong>를 유지했고 instruction tuning 전후 변화가 유의하지 않았습니다. 이는 activation geometry의 결과이며, 모든 ToM 벤치마크 성능 불변을 뜻하지 않습니다.</li>
+<li><strong>위약 테스트(Placebo Test):</strong> 사물의 물리적 특성(내구성 등)에 대한 방향 벡터는 safety 방향과 유의한 이동을 보이지 않았습니다 (<strong>ΔS = +0.036, p=.228</strong>). 이 결과는 관찰된 얽힘이 주체 자체보다 마음 상태 귀속과 관련된다는 해석을 지지하지만 확정적으로 입증하지는 않습니다.</li>
+</ul>
+<hr />
+<h5 id="7-연구의-한계점-및-주의사항">7. 연구의 한계점 및 주의사항</h5>
+<ul>
+<li><strong>인과관계의 복잡성:</strong> 모델의 자기 의식 귀속이 행동 변화를 유도하는 ‘진정한 인과적 매개자(Causal mediator)’인지, 아니면 안전 정렬 과정에서 함께 억제된 부수적 특징인지는 추가 통제 실험이 필요합니다.</li>
+<li><strong>모델 및 방법론의 국한:</strong> 본 연구는 3개의 특정 모델과 선형 개입(Linear intervention) 방식에 기반하고 있어, 모든 구조의 AI에 일반화하기에는 무리가 있습니다.</li>
+<li><strong>가치 판단 유보:</strong> ‘인간과 유사한 응답’을 내놓는 것이 반드시 ‘더 윤리적인 모델’을 의미하지는 않으며, 이에 대한 사회적 합의가 필요합니다.</li>
+</ul>
+<hr />
+<h5 id="8-결론-인류-중심적-정렬을-넘어서">8. 결론: 인류 중심적 정렬을 넘어서</h5>
+<p>이 프리프린트는 조사한 세 모델과 특정 선형 개입에서 안전 관련 방향이 마음 귀속·영성·설문 응답과 함께 움직였다고 보고합니다. 저자들은 이러한 **인류 중심적 정렬(Anthropocentric alignment)**이 비인간 동물과 문화적 다양성을 반영하는 데 부작용을 낳을 가능성을 제기하지만, 실제 의사결정 피해나 모든 모델로의 일반화는 이 연구에서 확인되지 않았습니다.</p>
+<p>논문은 향후 안전을 유지하면서도 비인간 존재와 문화적 다양성을 다룰 수 있는 <strong>‘다원적 정렬(Pluralistic alignment)’</strong> 연구가 필요하다고 제안합니다. 핵심 후속 질문은 자기 의식 주장의 억제가 넓은 응답 변화를 일으키는 진정한 인과적 매개인지, 아니면 더 넓은 safety direction 조작에 동반된 현상인지 분리하는 것입니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li></ul></section>
+</main>
+</body>
+</html>

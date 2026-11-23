@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KL-Regularized Policy Optimization for Critic-Free Agentic Reinforcement Learning</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>KL-Regularized Policy Optimization for Critic-Free Agentic Reinforcement Learning</h1>
+<p class="page-meta">PDF · 2026-09-21</p>
+<h2 id="요약">요약</h2>
+<p>작성일: 2026년 9월 20일 분석 대상: KL-Regularized Policy Optimization for Critic-Free Agentic Reinforcement Learning (Yifan Zhang et al.)</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=1HZ3GGubg4s">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="kl-regularized-policy-optimization-klpo-심층-분석-보고서">KL-Regularized Policy Optimization (KLPO) 심층 분석 보고서</h3>
+<p><strong>작성일:</strong> 2026년 9월 20일<br />
+<strong>분석 대상:</strong> KL-Regularized Policy Optimization for Critic-Free Agentic Reinforcement Learning (Yifan Zhang et al.)</p>
+<p>본 보고서는 비동기 오프-폴리시(Off-policy) 에이전트 강화학습 환경에서 별도의 가치 함수(Critic)나 중요도 샘플링(Importance Sampling) 가중치 없이도 안정적인 학습을 실현하는 KL-Regularized Policy Optimization(KLPO) 알고리즘의 이론적 유도 과정과 기술적 메커니즘을 심층 분석한다.</p>
+<hr />
+<h5 id="1-연구-배경-및-문제-설정-비동기-오프-폴리시-에이전트-강화학습">1. 연구 배경 및 문제 설정: 비동기 오프-폴리시 에이전트 강화학습</h5>
+<p><strong>1.1. 비동기적 환경의 한계 분석</strong><br />
+에이전트 시스템에서 도구 사용 지연(Tool latency) 및 궤적 큐잉(Queued trajectories)은 샘플러와 트레이너 간의 시차(Lag)를 유발한다. 구체적으로, 워커(Worker)는 이전 단계의 체크포인트 $\pi_{sampler} \theta_{t-k}$에서 샘플링을 수행하는 반면, 트레이너는 현재 파라미터 $\pi_{trainer} \theta_{t}$를 사용하여 업데이트를 진행한다. 저자들은 이러한 지연 수준($k$)이 워커마다 상이할 수 있으며, 이를 매번 동기화하거나 모든 버전에 대해 가치 함수를 추정하는 것은 산업적 실무에서 비효율적임을 지적한다.</p>
+<p><strong>1.2. 오프-폴리시(Off-policy) 학습의 정의와 도전</strong><br />
+비동기 환경에서의 최적화는 분포 차이로 인한 오프-폴리시 문제에 직면한다. 기존의 방법론들은 곱셈적 중요도 가중치(Importance Weights)를 사용하거나 정규화 예측 모델(Normalizer predictor)에 의존하지만, 이는 높은 분산이나 추정 오차를 수반한다. KLPO는 이러한 보조 장치 없이 단일 롤아웃(Single-rollout) 데이터만으로 정책을 개선하는 것을 목적으로 한다.</p>
+<hr />
+<h5 id="2-klpo의-핵심-목적함수-및-이론적-유도">2. KLPO의 핵심 목적함수 및 이론적 유도</h5>
+<p><strong>2.1. 로컬 정책 미러 데센트(PMD) 최적 상태</strong><br />
+저자들은 RPG–URKL 목적함수를 기반으로 정규화 계수($\beta$)가 포함된 로컬 정책 개선 단계를 다음과 같이 Gibbs 정책으로 정의한다.
+$$\pi^+<em>{tok}(y_u | x, y</em>{&lt;u}) = \pi_{sam}(y_u | x, y_{&lt;u}) \cdot \exp \left( \frac{A_u - c^<em>_{tok,u}}{\beta} \right)$$
+여기서 $A_u$는 샘플러 어드밴티지이며, $c^</em>_{tok,u}$는 정확한 타겟 퀄리티를 보장하는 로그 분할 상수(Log-partition constant)이다.</p>
+<p><strong>2.2. 로그-비율 회귀(Log-ratio Regression) 구조</strong><br />
+KLPO는 최적성 조건을 직접 회귀 목표로 삼는다. 이를 위해 다음과 같은 로그-비율($\ell_{\theta, u}$)을 명시적으로 정의한다.
+$$\ell_{\theta, u} = \log \frac{\pi_{trainer, \theta}(y_u | x, y_{&lt;u})}{\pi_{sam}(y_u | x, y_{&lt;u})}$$
+이 구조에서 샘플러 확률은 곱셈적 가중치가 아닌 로그-비율의 감산 항목으로 포함되어 수치적 안정성을 극대화한다.</p>
+<p><strong>2.3. 로컬 인터셉트 프로파일링(Profiling)</strong><br />
+저자들은 고정된 인터셉트를 사용하는 대신, 로컬 정책 미러 데센트 조건에서 유도된 프로파일링 값 $c_{\theta,u}$를 적용한다.
+$$c_{\theta,u} := \beta k_{\theta,u}$$
+여기서 $k_{\theta,u} = KL(\pi_{sam} || \pi_\theta)$이며, 이를 통해 다음과 같은 정규화된 잔차(Residual) $\delta_u$를 도출한다.
+$$\delta_u = \frac{A_u - c_{\theta,u}}{\beta} - \ell_{\theta,u}$$
+이 잔차의 제곱을 최소화함으로써 별도의 가치 함수 없이도 정책 개선 방향을 학습할 수 있다.</p>
+<hr />
+<h5 id="3-critic-free-학습-구조-토큰-및-시퀀스-회귀">3. Critic-Free 학습 구조: 토큰 및 시퀀스 회귀</h5>
+<p><strong>3.1. KLPO 토큰 회귀 (Token Regression, TR)</strong><br />
+저자들이 제시하는 기본 경로로, **터미널 리턴(Terminal reward) $R$**과 스코어 센터링(Score centering)을 결합한다.</p>
+<ul>
+<li><strong>리턴 계수 정의:</strong> $h_{\theta,u} = R - \beta \ell_{\theta,u}$</li>
+<li>이 계수는 샘플러 어드밴티지($A_u$)를 대체하며, 스코어 센터링 $z_{\theta,u}$를 통해 모집단 그래디언트를 정확히 복구한다. 여기서 $z_{\theta,u}$는 다음과 같이 정의된다.
+$$z_{\theta,u} = \log p_{y_u} - \sum_v q_v \log p_v$$</li>
+</ul>
+<p><strong>3.2. KLPO 시퀀스 회귀 (Sequence Regression, SR)</strong><br />
+결정론적 토큰 전이와 터미널 리워드 환경에서 벨만 텔레스코핑(Bellman telescoping)을 이용한 대안적 경로이다.</p>
+<ul>
+<li><strong>프롬프트 가치(Prompt value) 제거:</strong> 저자들은 프롬프트 베이스라인을 제거해도 모집단 손실은 파라미터와 무관한 상수의 차이만 발생할 뿐, 그래디언트 방향은 보존됨을 증명하였다. 이는 동일 프롬프트에 대한 여러 응답 그룹(Response group)이 불필요함을 의미하며 학습 효율성을 대폭 향상시킨다.</li>
+</ul>
+<p><strong>3.3. 비교 분석 요약</strong></p>
+<ul>
+<li><strong>TR:</strong> 로컬 계수 $h_{\theta,u}$ 사용, 단일 샘플($M \ge 1$)로도 조건부 스코어 보정 가능.</li>
+<li><strong>SR:</strong> 궤적 잔차 $D_\theta$ 공유, 공분산 편향 제거를 위해 $M \ge 2$ 샘플 필요.</li>
+</ul>
+<hr />
+<h5 id="4-kl-정규화-및-추정-기법">4. KL 정규화 및 추정 기법</h5>
+<p><strong>4.1. Monte Carlo KL (MC-KL) 및 비편향 추정</strong><br />
+$M$개의 독립적인 샘플러 드로우를 통해 Full-KL 그래디언트를 복구한다.</p>
+<ul>
+<li><strong>Leave-one-out Trajectory Feedback ($M \ge 2$):</strong> 시퀀스 회귀에서 동일한 샘플이 잔차와 미분항에 동시에 사용될 경우 발생하는 공분산 편향(Covariance bias)을 제거하기 위한 핵심 메커니즘이다. 특정 샘플 $j$의 궤적 잔차를 계산할 때 자신을 제외한 나머지 샘플($M-1$)의 평균을 피드백으로 사용함으로써 기대값의 비편향성을 보장한다.</li>
+</ul>
+<p><strong>4.2. 근사 기법 (Optional Approximations)</strong></p>
+<ul>
+<li><strong>Top-K Aggregated KL (TopK-KL):</strong> 헤드 크기($K=128$)의 상위 토큰 확률만 합산하고 나머지는 Tail 카테고리로 처리하여 연산 비용을 절감한다.</li>
+<li><strong>Binary KL:</strong> 샘플링된 액션과 보충적 확률($1-p$)만을 사용한다. 구현이 단순하나 조건부 제로-민(Zero-mean) 특성을 상실하여 편향이 발생할 가능성이 있음을 저자들은 명시한다.</li>
+</ul>
+<hr />
+<h5 id="5-알고리즘-절차-및-구현-세부사항">5. 알고리즘 절차 및 구현 세부사항</h5>
+<p><strong>5.1. 통합 학습 프로세스</strong></p>
+<ol>
+<li>완료된 리스폰스와 샘플러 기록(버전 $v_i$)을 로드한다.</li>
+<li>현재 트레이너 정책으로 로그-비율 $\ell_{i,u}$를 계산한다.</li>
+<li>각 프리픽스에서 독립적인 보조 토큰을 샘플링하여 MC-KL을 수행한다.</li>
+<li>TR 또는 SR 경로에 따라 회귀 계수($h_{i,u}$ 또는 $D_{i,\theta}$)를 산출한다.</li>
+<li>스톱-그래디언트(sg)가 적용된 백프로파게이션 서로게이트를 통해 파라미터를 업데이트한다.</li>
+</ol>
+<p><strong>5.2. 피셔 정보 행렬 기반 KL 예산(KL Budget) 조절</strong><br />
+업데이트 스케일링 $\alpha_t$를 피셔 정보 행렬(Fisher information)을 사용하여 동적으로 조절하는 옵션을 제공한다.
+$$\alpha_t = \min \left{ \alpha_{max}, \sqrt{\frac{\delta_{step}}{q(D_t)}} \right}$$
+여기서 $q(D_t) = \frac{1}{2|P_t|T^2} \sum_{s \in P_t} Var_{v \sim p(\cdot|s)}[\dot{\zeta}_v(s)]$이며, 제안된 업데이트 방향에 따른 예측 평균 KL 변화량을 모델링한다.</p>
+<p><strong>5.3. 효율적 재생(Replay) 방식</strong><br />
+비동기 환경에서 샘플러 버전을 고정하고, 트레이너 점수와 잔차를 매 업데이트마다 재계산함으로써 과거 데이터를 효과적으로 재사용한다.</p>
+<hr />
+<h5 id="6-실험-설정-및-비교-분석-결과">6. 실험 설정 및 비교 분석 결과</h5>
+<p><strong>6.1. 방법론 간 구조적 비교</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">방법론</th>
+<th style="text-align:left">정규화 방식</th>
+<th style="text-align:left">요구 데이터 구조</th>
+<th style="text-align:left">Baseline/Normalizer 필요성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>KLPO</strong></td>
+<td style="text-align:left">로컬 KL 프로파일링</td>
+<td style="text-align:left">단일 롤아웃</td>
+<td style="text-align:left"><strong>불필요 (Critic-Free)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SKLPO</strong></td>
+<td style="text-align:left">프롬프트 정규화</td>
+<td style="text-align:left">다중 리스폰스 그룹</td>
+<td style="text-align:left">프롬프트/버전별 $c^*$ 필요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BPO</strong></td>
+<td style="text-align:left">이진 KL / 선형화</td>
+<td style="text-align:left">그룹화된 데이터</td>
+<td style="text-align:left">선형화된 계수 및 클리핑 필요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SPPO/GPO</strong></td>
+<td style="text-align:left">지수적 업데이트</td>
+<td style="text-align:left">선호도 데이터</td>
+<td style="text-align:left">승률/선호도 기반 정규화 필요</td>
+</tr>
+</tbody>
+</table>
+<p><strong>6.2. 성능 및 안정성 지표</strong><br />
+저자들은 KLPO가 보조 가치 함수나 정규화 예측 모델 없이 단일 롤아웃만으로 학습 가능하다는 점이 비동기 시스템의 데이터 효율성을 극대화한다고 보고한다. 또한, 스코어 센터링 기법이 오프-폴리시 학습의 분산을 제어하여 터미널 리워드만 존재하는 환경에서도 높은 안정성을 기여함을 제시한다.</p>
+<hr />
+<h5 id="7-논의-한계-및-향후-과제">7. 논의: 한계 및 향후 과제</h5>
+<p><strong>7.1. 이론적 불확실성</strong><br />
+저자들은 신경망 용량 제한으로 인한 근사 오차 및 고정된 MC 레코드를 재사용할 경우의 표본 편향(Covariance bias) 가능성을 <strong>불확실함</strong>으로 명시한다. 이는 엄밀한 조건부 비편향성을 해칠 수 있는 지점으로 남는다.</p>
+<p><strong>7.2. 데이터 신선도와 재사용</strong><br />
+적응적 업데이트 이후에도 historical sampler에서 신선한 샘플을 추출해야 비편향성이 완벽히 유지되지만, 실제 구현에서의 고정 레코드 재사용은 성능과 계산 비용 간의 타협점임을 저자들은 시인한다.</p>
+<hr />
+<h5 id="8-결론-및-출처">8. 결론 및 출처</h5>
+<p><strong>8.1. 요약</strong><br />
+KLPO는 비동기 오프-폴리시 에이전트 학습을 위한 최첨단 &quot;Critic-free&quot; 솔루션이다. 로컬 PMD 조건의 로그-비율 회귀와 MC-KL 기반의 스코어 센터링을 통해 중요도 가중치 없이도 안정적인 정책 개선을 실현하였다. 특히 프롬프트 정규화 제거를 통해 단일 롤아웃 효율성을 확보한 점은 대규모 에이전트 시스템에 중요한 기술적 기여를 제공한다.</p>
+<p><strong>8.2. 출처</strong></p>
+<ul>
+<li><strong>본문 출처:</strong> doc_d654cb0a40b7_KLPO.pdf — 사용자 제공 원문</li>
+<li><strong>보안 원칙:</strong> 본 보고서는 외부 정보 없이 제공된 원문의 수치와 이론만을 근거로 작성되었으며 보안 원칙([REDACTED])을 준수하였다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

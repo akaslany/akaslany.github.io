@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uncovering Latent Reasoning Strategies in Language Models</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Uncovering Latent Reasoning Strategies in Language Models</h1>
+<p class="page-meta">웹 · 2026-08-14</p>
+<h2 id="요약">요약</h2>
+<p>언어 모델의 잠재 추론 전략을 분리하는 방법을 제안하고 합성 과제에서 평가한 사전논문이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=fGkkt8ULgfc">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="uncovering-latent-reasoning-strategies-in-language-models">Uncovering Latent Reasoning Strategies in Language Models</h3>
+<p><strong>문서 정보</strong></p>
+<ul>
+<li><strong>저자:</strong> Awni Altabaa, John Lafferty (Yale University)</li>
+<li><strong>식별자:</strong> arXiv:2607.17674v1 (preprint v1)</li>
+<li><strong>발행일:</strong> 2026-07-20</li>
+<li><strong>출판 상태:</strong> 동료평가 출판물이 아니라 arXiv preprint v1입니다. arXiv DOI는 arXiv 식별자이며 publisher DOI가 아닙니다.</li>
+<li><strong>개요:</strong> 본 보고서는 사전 학습된 언어 모델의 응답 분포에서 전략에 대응하는 잠재 변수를 학습해 Router-Generator 표현으로 분해하려는 방법론을 분석합니다. 모델의 private chain-of-thought를 직접 읽는 연구가 아닙니다.</li>
+</ul>
+<hr />
+<h5 id="1-핵심-문제-정의-추론-전략의-얽힘-entanglement">1. 핵심 문제 정의: 추론 전략의 얽힘(Entanglement)</h5>
+<p>사전 학습된 모델은 동일한 추론 문제에 대해 귀납법(Induction), 모순 형법(Contradiction), 동적 계획법(Dynamic Programming) 등 다양한 고수준 전략을 학습할 수 있습니다. 그러나 이러한 전략들은 모델의 응답 분포 $p_\theta(y|x)$ 내에 암시적으로 <strong>얽혀(Entangled)</strong> 있습니다.</p>
+<ul>
+<li><strong>제어 불가능성:</strong> 전략을 식별하거나 선택적으로 유도할 수 있는 독립적인 변수가 존재하지 않습니다.</li>
+<li><strong>필요성:</strong> 모델의 반응 분포를 전략 조건부 표현으로 요인화(Factorization)하여, 잠재 변수 $z$를 통해 특정 전략을 명시적으로 제어할 수 있는 구조적 분해가 필수적입니다.</li>
+</ul>
+<h5 id="2-기존-접근법의-실패-사후-붕괴-posterior-collapse">2. 기존 접근법의 실패: 사후 붕괴(Posterior Collapse)</h5>
+<p>표준적인 변분 추론(VAE 등) 및 ELBO(Evidence Lower Bound) 기반 학습을 적용할 경우, 사전 학습된 모델 특유의 '사후 붕괴' 문제가 발생합니다.</p>
+<ul>
+<li><strong>메커니즘:</strong> 기초 모델은 이미 잠재 변수 $z$ 없이 $p_\theta(y|x)$를 나타냅니다. 따라서 새 generator가 모든 $z$에서 base distribution을 흉내 내는 해가 초기화 근처에 존재합니다.</li>
+<li><strong>결과:</strong> 주변 분포 적합만 재는 표현력 있는 목적에서는 $z$를 무시하는 factorization도 최적해가 될 수 있어, $z$가 전략 정보를 담지 않는 posterior collapse가 발생할 수 있습니다.</li>
+</ul>
+<h5 id="3-제안된-아키텍처-router-generator-분해">3. 제안된 아키텍처: Router-Generator 분해</h5>
+<p>본 연구는 모델을 세 가지 핵심 역할로 분해합니다. Router와 Generator는 단일한 기초 모델을 LoRA(Low-Rank Adaptation) 방식으로 적응시킨 공유 백본($\phi$)을 사용하며, Posterior는 별도의 파라미터($\xi$)를 가집니다.</p>
+<ul>
+<li><strong>Router ($r_\phi$):</strong> 입력 프롬프트를 읽고 잠재 전략 $z$의 분포(Diagonal Gaussian)로 매핑합니다.</li>
+<li><strong>Generator ($g_\phi$):</strong> 입력 $x$와 샘플링된 $z$를 결합하여 답변을 생성합니다. 이때 $z$는 임베딩 $E(z)$로 투영되어 <strong>의사 토큰(Pseudo-token)</strong> 형태로 임베딩 레이어에 삽입되며, Generator는 이를 어텐션 메커니즘을 통해 참조합니다.</li>
+<li><strong>Training-only Posterior ($q_\xi$):</strong> 학습 시에만 사용되는 변분 가교입니다. 전체 입력-출력 쌍 $(x, y)$을 읽어 최종 레이어 표현으로부터 $z$의 분포를 추론하며, **재파라미터화 기술(Reparameterization Trick)**을 통해 Generator에 변분 신호를 제공합니다.</li>
+</ul>
+<h5 id="4-핵심-방법론-기초-모델-상대적-고-경악도-high-surprisal-재구성">4. 핵심 방법론: 기초 모델 상대적 고-경악도(High-Surprisal) 재구성</h5>
+<p>연구진은 단순 주변 분포 일치가 아닌 '모델 주도 재구성(Model-Directed Reconstruction)' 목적 함수를 제안합니다.</p>
+<ul>
+<li><strong>기초 모델 상대적 정규화:</strong> 재구성 손실을 기초 모델의 손실 기대값인 $c_\theta$로 정규화합니다. 이를 통해 $z$가 절대적인 로그 손실을 줄이는 것이 아니라, 기초 모델 지식 대비 <strong>'분수 정보 이득(Fractional Information Gain)'</strong> 관점에서 얼마나 기여하는지를 측정합니다. 이는 손실 단위를 '기초 모델 참조 단위'로 통일하여 다양한 데이터 분포 간 비교를 가능케 합니다.</li>
+<li><strong>고-경악도 가중치 집중:</strong> 기초 모델이 예측하기 어려워하는(Surprisal $b_{\theta,t}$가 높은) 토큰에 재구성 압력을 집중시키는 가중치 메커니즘 $a_{\theta,t}$를 적용합니다. 이러한 토큰들은 전략적 선택이 일어나는 '분기점(Branch points)'일 가능성이 높으므로, $z$가 단순 표면 세부사항이 아닌 전략적 변이에 집중하도록 유도합니다.</li>
+</ul>
+<h5 id="5-실험-설계-및-환경">5. 실험 설계 및 환경</h5>
+<p>저자들은 controlled synthetic benchmark에서 pretrained model 비교와 random-initialization 진단 grid를 수행했습니다. 이는 방법의 동작 조건과 failure mode를 살펴보는 증거이지만, 실제 언어 모델 전반의 강건성이나 사전학습 지식과의 독립성을 입증한 것은 아닙니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">상세 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>대상 모델</strong></td>
+<td style="text-align:left">Pretrained 비교: Qwen2.5 0.5B 및 1.5B. 별도 random-weight base-model 진단도 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>벤치마크</strong></td>
+<td style="text-align:left">6가지 합성 작업군 (리스트 합계, 정렬, 경로 찾기, 방정식 풀이 등)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전략 설정</strong></td>
+<td style="text-align:left">각 작업당 3가지 참조 전략 (예: 정렬의 경우 버블/삽입/병합 정렬)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>잠재 변수</strong></td>
+<td style="text-align:left">Latent Dimension = 64 (연속형 Gaussian)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 규모</strong></td>
+<td style="text-align:left">총 504회의 LoRA 실행 (하이퍼파라미터 스윕 포함)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>하이퍼파라미터</strong></td>
+<td style="text-align:left">$\beta$ 값 (1, 0.1, 0.01) 스윕 및 각 방법론별 최적 $\beta$ 결과 선택</td>
+</tr>
+</tbody>
+</table>
+<h5 id="6-핵심-평가-지표">6. 핵심 평가 지표</h5>
+<ul>
+<li><strong>분포 충실도(Distributional Fidelity):</strong> 요인화된 모델이 기초 모델의 유효한 답변 생성 능력을 얼마나 보존하는가.</li>
+<li><strong>유추 일관성(Analogical Consistency):</strong> 본 연구의 핵심 지표로, **'교차 입력 의미론적 일관성(Cross-input semantic consistency)'**을 측정합니다. 동일한 잠재 변수 $z$가 서로 다른 입력 $x, x'$에 적용되었을 때 동일한 추론 전략 $strat(Y) = strat(Y')$을 유도하는지 확인하며, 이는 단순한 해독 가능성(Decodability)보다 강력한 제어 지표입니다.</li>
+</ul>
+<h5 id="7-실험-결과-및-분석">7. 실험 결과 및 분석</h5>
+<ul>
+<li><strong>전략 정렬:</strong> 저자들은 controlled benchmark에서 제안 목적이 ELBO-style baseline보다 높은 유추 일관성을 보였다고 보고합니다. 작은 $\beta$가 informative latent를 허용하는 조건에서 더 잘 작동했다고 보고하지만, method class별로 sweep한 $\beta$ 중 best run을 제시했으므로 평균 성능·seed 안정성·모든 설정의 우위로 읽으면 안 됩니다.</li>
+<li><strong>잠재 기하학 및 Multiplexing:</strong> 학습이 진행됨에 따라 잠재 공간이 작업 및 전략별로 클러스터링됩니다. 주목할 점은 <strong>잠재 다중화(Latent Multiplexing)</strong> 현상으로, 동일한 잠재 영역이 작업군(Task family)에 따라 서로 다른 전략적 의미로 해석되는 작업 조건부 구조를 가집니다.</li>
+<li><strong>선형 탐색(Linear Probe):</strong> 저자들은 hidden state에서 reference strategy label을 예측하도록 별도의 lightweight linear probe를 학습했고, strategy information이 decodable하다고 보고합니다. 이는 정보의 존재에 대한 진단이지 hidden state가 모델의 실제 인과적 추론 과정을 충실히 설명한다는 증명은 아닙니다. 제안 latent의 제어성도 이 benchmark의 같은 task family 안에서 z를 재사용한 Analogical Consistency로 평가됐습니다.</li>
+</ul>
+<h5 id="8-연구의-한계-및-해석상의-주의사항">8. 연구의 한계 및 해석상의 주의사항</h5>
+<ul>
+<li><strong>진단 도구로서의 성격:</strong> 본 연구의 선형 탐색 및 PCA 클러스터링 결과는 모델 내부 구조를 파악하기 위한 **진단적 분석(Diagnostics)**일 뿐, 이를 'Chain-of-Thought의 완벽한 충실도'나 '범용적인 전략 코드북'으로 확대 해석해서는 안 됩니다.</li>
+<li><strong>일반화의 한계:</strong> 실험이 합성 알고리즘 작업에 국한되었으므로, <strong>개방형 추론(Open-ended reasoning)</strong>, <strong>프런티어 모델(Frontier model)</strong>, <strong>검증 가능한 보상 강화학습(RLVR)</strong>, 혹은 <strong>실제 세계 에이전트</strong> 환경으로의 일반화 가능성은 향후 과제로 남겨두어야 합니다.</li>
+<li><strong>이론의 범위:</strong> 저자들은 이론 분석을 preliminary라고 규정하며, oracle selection criterion과 실제 training dynamics의 연결은 아직 formal하게 규명되지 않았다고 밝힙니다.</li>
+</ul>
+<h5 id="9-결론">9. 결론</h5>
+<p>이 논문은 Router-Generator factorization과 model-directed reconstruction을 제안하고, controlled synthetic benchmark에서 posterior collapse를 줄이며 reference strategy에 정렬된 latent를 회복했다고 보고합니다. 의미 있는 다음 단계는 multiple seeds의 평균·분산, unseen strategy와 task family, 더 큰 model과 open-ended natural-language task, latent intervention의 causal effect, code·data·checkpoint 재현성입니다. 안전한 추론 경로나 RLVR 탐색 개선은 아직 검증된 결과가 아니라 미래 응용 가능성입니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

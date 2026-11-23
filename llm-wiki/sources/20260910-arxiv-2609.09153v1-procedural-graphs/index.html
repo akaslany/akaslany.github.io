@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procedural Graphs: Self-Evolving Execution Structures for LLM Agents</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Procedural Graphs: Self-Evolving Execution Structures for LLM Agents</h1>
+<p class="page-meta">논문 · 2026-09-10</p>
+<h2 id="요약">요약</h2>
+<p>이 문서는 Yuxing Lu, Yicheng Chen, Shanchan Wu, Sercan Ö.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.09153">출처</a> · <a href="https://www.youtube.com/watch?v=5dS8EtQX0cw">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="절차-지식을-그래프로-만들고-실행-경험으로-진화시키는-방법">절차 지식을 그래프로 만들고 실행 경험으로 진화시키는 방법</h3>
+<h4 id="문서-성격과-범위">문서 성격과 범위</h4>
+<p>이 문서는 Yuxing Lu, Yicheng Chen, Shanchan Wu, Sercan Ö. Arık의 arXiv v1 프리프린트 「Procedural Graphs: Self-Evolving Execution Structures for LLM Agents」를 한국어로 충실하게 해설한다. 원문은 2026년 9월 8일 제출된 arXiv:2609.09153v1, 주 분류 cs.AI다. 이 패키지는 외부 사실검증이나 독립 재현을 수행하지 않았고, 동료평가도 확립된 것으로 보지 않는다. 아래 결과는 모두 저자들이 보고한 실험 결과다.</p>
+<h4 id="문제-긴-궤적에서-절차가-흐려진다">문제: 긴 궤적에서 절차가 흐려진다</h4>
+<p>ReAct형 에이전트는 질의, 과거 행동, 관찰을 누적한 자유 형식 문맥에서 다음 행동을 만든다. 긴 작업에서는 목표를 놓치거나, 도구 호출 순서를 어기거나, 실패한 행동을 반복할 수 있다. 텍스트 메모리와 상태 조건 지침은 경험을 재사용하지만 연속 단계의 연결을 명시적으로 보존하지 못할 수 있다. 반대로 워크플로와 상태 기계는 순서를 강하게 정하지만 수작업 설계와 경직성의 비용이 있다.</p>
+<h4 id="핵심-표현-procedure-relation-procedure">핵심 표현: (procedure, relation, procedure)</h4>
+<p>Procedural Graph(PG)는 방향성과 속성을 가진 그래프다. 노드는 도구 함수, 기술, 내부 추론 단계, 작업 상태를 추상화한다. 에지는 (procedure, relation, procedure) 삼중항으로 허용 가능한 전이를 표현한다. 저자들의 구현에서 에지 속성은 condition, guidance, pitfalls 세 텍스트 필드다. 따라서 사실 그래프가 “무엇인가”를 조직한다면 PG는 “다음에 무엇을 해야 하는가”를 조직한다. 절차 지식은 모델 가중치 밖에 있으므로 검사·검색·수정할 수 있다.</p>
+<h4 id="온라인-추론-능동-노드에서-가까운-문맥만-읽는다">온라인 추론: 능동 노드에서 가까운 문맥만 읽는다</h4>
+<p>각 결정 단계에서 최근 실행 절차를 그래프 노드와 정확히 맞춰 능동 노드를 찾는다. 첫 단계는 Start다. 일치하면 그 노드에서 최대 2-hop으로 확장한 방향성 이웃을 추출하고, 일치하지 않으면 전체 그래프를 대체 문맥으로 사용한다. 지침 모델은 이 부분 그래프, 질의, 최근 3개 궤적 단계를 함께 읽어 즉시 목표와 피해야 할 오류를 상황별 지침으로 만든다. 이 지침은 solver의 프롬프트에 추가되어 다음 행동의 확률을 편향하지만 행동을 강제하지 않는다. 즉 그래프는 허용 가능한 절차 구조를 제공하면서도 solver의 자유로운 추론을 남긴다.</p>
+<h4 id="오프라인-자기진화-성공과-실패를-대조한다">오프라인 자기진화: 성공과 실패를 대조한다</h4>
+<p>한 라운드는 네 단계다. 첫째, 유지 중인 그래프로 훈련 작업 묶음을 실행해 질의·궤적·점수를 기록한다. 둘째, LLM refiner가 높은 점수와 낮은 점수의 궤적, 이진 과제라면 성공과 실패를 대조해 반복 오류와 유용한 다단계 지름길을 찾는다. 노드·에지를 추가하거나 삭제하고, 에지를 삭제한 뒤 새 속성으로 다시 추가하는 방식으로 condition·guidance·pitfalls도 고친다. 셋째, 구조 검사를 통과한 후보만 독립된 held-out validation set에서 평가한다. 평균 검증 점수가 현재 그래프와 같거나 높을 때만 후보를 채택한다. 넷째, 점수가 낮아 거절된 후보와 편집, 관련 궤적과 검증 결과를 rejection memory에 보존해 같은 제안을 반복하지 않도록 refiner에 부정 증거로 준다. 거절된 후보는 다음 라운드의 시작 그래프가 되지 않는다.</p>
+<h4 id="초기화와-결함-있는-전문가-사전지식">초기화와 결함 있는 전문가 사전지식</h4>
+<p>PG는 전문가 그래프 또는 최소 골격에서 시작할 수 있다. HotpotQA에서 Scratch + Online Evolution은 Ans EM 66.30, Ans F1 78.79로 비교한 구성 중 최고였다. MultiChallenge에서는 같은 모드의 Overall Success가 91.07였고 Expert + Online Evolution이 92.86으로 가장 높았다. 중요한 음성 결과는 수작업 expert graph만 쓴 Mode 1이 MultiChallenge의 unguided 87.50을 58.93으로 낮췄고, 1회 static update도 53.57로 더 낮췄다는 점이다. 반복 진화와 검증 게이트를 결합한 Mode 3은 92.86으로 회복했다. 전문가 사전지식 자체가 자동으로 좋은 결과를 보장하지 않는다.</p>
+<h4 id="실험-조건">실험 조건</h4>
+<p>저자들은 일곱 벤치마크를 사용했다: 검색 도구를 쓰는 다중 홉 질의응답 HotpotQA, 다중 턴 지시 유지 MultiChallenge, 전문가 rubric 기반 개방형 전문 과제 GDPval, 엄격한 행동 순서가 필요한 가정 환경 ALFWorld, 상호작용 중 정책 준수 도구 사용 τ-bench, 다중 턴 함수 호출 BFCL, 지연 피드백과 거시 충격 아래 장기 재무 의사결정 EnterpriseArena다. 본문 표 1은 앞의 여섯 벤치마크와 네 모델의 24개 조합을 비교하고 EnterpriseArena는 별도 장기 실험으로 다룬다.</p>
+<p>모든 방법은 동일한 ReAct solver를 쓰고 절차 경험의 저장·재사용 방식만 달리했다. 학습 기반 기준선에는 동일한 훈련 궤적을 제공했다. 기준선은 Vanilla ReAct, MemoryBank, RAP, ExpeL, AutoGuide, AWM, KnowAgent다. 모델은 Claude Sonnet 4.6, Gemini 3.1 Pro, Gemini 3.5 Flash, Grok 4.1 Fast이며 guidance model과 offline refiner는 solver와 같은 기반 LLM을 사용했다. 모든 호출은 temperature 0의 greedy decoding이었다. 기본 온라인 설정은 2-hop 이웃과 최근 3단계 궤적 창이다.</p>
+<p>지표는 HotpotQA·MultiChallenge·BFCL의 accuracy, GDPval rubric score, ALFWorld success rate, τ-bench Pass@1이다. EnterpriseArena는 full-horizon survival, 평균 lifespan, enterprise score, 월별 tool calls, capital raised 등을 본다. 표 1은 95% 신뢰구간도 함께 제시한다.</p>
+<h4 id="저자-보고-주요-결과와-음성-결과">저자 보고 주요 결과와 음성 결과</h4>
+<p>PG는 24개 모델-벤치마크 조합 중 21개에서 1위 또는 공동 1위였고, 각 설정의 최강 기준선과 비교해 19승 2무 3패였다. 동률을 뺀 단측 exact binomial sign test는 p=4.3×10^-4다. 큰 차이의 예는 Gemini 3.5 Flash의 BFCL v3 67.00% 대 58.00%, Gemini 3.1 Pro의 GDPval 78.78 대 71.37, 같은 모델의 τ-bench 80.00% 대 73.04%다. 그러나 HotpotQA에서 최강 기준선 대비 차이는 -0.90에서 +1.30포인트로 작고 일부 설정에서는 손실이었다. 모든 과제에서 효과 크기가 같다는 결론은 아니다.</p>
+<p>EnterpriseArena는 최대 132개월, 엄격한 유동성 제약, 에이전트에게 공개되지 않은 세 번의 예정 위기를 포함한다. PG는 네 LLM 모두에서 full-horizon survival과 평균 lifespan이 최고 또는 공동 최고였다. 저자들은 Claude Sonnet 4.6의 생존율이 44.0%에서 58.0%, Gemini 3.1 Pro는 6.0%에서 34.0%, Grok 4.1 Fast는 26.0%에서 40.0%로 올랐다고 보고한다. 도구 호출 수는 일관되게 줄지 않았다. Gemini 3.5 Flash에서는 월 18.94회에서 12.53회로 줄었지만 Claude Sonnet 4.6은 0.13에서 0.36, Gemini 3.1 Pro는 0.89에서 3.18로 늘었다. 생존과 함께 나타난 행동은 자금이 도착하기 1~6개월 전에 선제적으로 조달을 요청하는 것이었다.</p>
+<p>10라운드 자기진화에서 EnterpriseArena validation survival은 Round 1에 0%에서 45%, Round 2에 80%, Round 8에 90%가 됐다. Rounds 3~6에는 채택된 수정이 없었고 한 후보는 rollout 전에 구조 검증을 통과하지 못했다. Round 10 후보도 거절됐다. 반환된 그래프의 test survival은 baseline 0% 대비 85%였고 Fisher exact p=2.6×10^-8이었다. 탐색 도중 관측된 최고 단일 라운드는 95%였지만 저자들은 test set 선택 편향을 피하려고 반환 그래프의 85%를 보고했다. 각 split이 20 episodes라 채택·거절 결정은 1~2 episode에 좌우될 수 있으며, 저자들은 이를 유의성 검정이 아니라 탐색 궤적으로 읽어야 한다고 명시한다.</p>
+<h4 id="효율성-절제와-ablation">효율성 절제와 ablation</h4>
+<p>Gemini 3.5 Flash와 같은 그래프를 쓴 ablation에서 localized subgraph + generative guidance가 MultiChallenge 89.31, GDPval 63.99, ALFWorld 81.53으로 세 과제 모두 가장 높았다. 전체 그래프를 생성형 지침으로 읽는 방식은 ALFWorld 54.48로 no-graph baseline 72.58보다 크게 낮았고 토큰도 늘었다. 국소화는 full-graph generative 대비 토큰을 ALFWorld 70.9%, GDPval 18.1%, MultiChallenge 14.8% 줄였다. 하지만 no-graph baseline과 비교하면 GDPval·ALFWorld의 solver steps는 줄어도 총 토큰은 각각 33.4%, 55.4% 더 많았다. 추가 guidance call은 공짜가 아니다.</p>
+<h4 id="한계와-해석">한계와 해석</h4>
+<p>논문의 직접적인 미래 과제는 단계 간 guidance 재사용 또는 선택적 생성으로 토큰 비용을 낮추는 것, 다른 solver와 tool interface 사이에서 학습된 절차의 전이를 평가하는 것이다. 실험은 네 특정 LLM, 정해진 데이터 분할·프롬프트·greedy decoding, 저자들의 그래프 구성과 평가 조건에 묶여 있다. validation gate가 측정 점수 하락을 막도록 설계되었어도 작은 검증 표본과 확률적 평가가 일반적 안전성이나 단조로운 실제 성능 향상을 보증하지 않는다. PG가 행동을 부드럽게 편향한다는 설계는 규칙 준수를 강제하는 검증기와 같지 않다.</p>
+<p>결론적으로 저자들의 주장은, 연결된 절차 전이와 국소 상황 지침, 성공·실패 대조 편집, held-out 검증 게이트, rejection memory를 결합하면 모델 가중치를 바꾸지 않고 절차 지식을 고칠 수 있다는 것이다. 이 패키지는 그 주장을 출처에 귀속해 설명할 뿐, 동료평가 완료나 독립 재현을 주장하지 않는다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지</h1>
+<p class="page-meta">YouTube · 2026-09-02</p>
+<h2 id="요약">요약</h2>
+<p>EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=9Qf_QLt7IWY">출처</a> · <a href="https://www.youtube.com/watch?v=OOQxYUAKrBA">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="ai-반도체-inference-심층-해부-kv-cache-용량부터-roofline-그리고-lpddr-칩-bertha까지">AI 반도체 inference 심층 해부: KV Cache 용량부터 Roofline, 그리고 LPDDR 칩 Bertha까지</h3>
+<blockquote>
+<p>본 보고서는 2026-09-01 공개된 AI Frontier Korea(노정석)의 팟캐스트 「EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지」(유튜브, 104분)의 크리에이터 수동 한국어 자막을 원문으로 삼아 작성한 소스 연계 분석 보고서입니다. 주요 강연자는 HyperAccel CTO 이진원이며, HyperAccel은 자체 추론 칩 Bertha를 판매하는 회사이므로 Bertha·LPU 관련 모든 서술은 판매자 주장(홍보 인센티브 포함)으로 간주합니다. 스폰서 키워드는 감지되지 않았지만, 키워드 부재가 중립성을 증명하지는 않습니다. 모든 숫자는 본 빌더가 공개된 가정에서 재계산했으며, 재현 불가한 수치는 화자 주장으로만 표기했습니다. 이 보고서는 투자 추천이 아니며 특정 종목 매수·매도 신호를 주지 않습니다.</p>
+</blockquote>
+<h4 id="1-배경-가치-포착이-인프라로-이동하고-컴퓨트는-영원히-부족하다는-주장">1. 배경: 가치 포착이 인프라로 이동하고, 컴퓨트는 영원히 부족하다는 주장</h4>
+<ul>
+<li>화자는 2026년 4월 OpenAI 포럼에서 샘 알트만이 &quot;compute crunch(연산 부족)에서 영원히 벗어나지 못할 것 같다&quot;고 말했다고 소개합니다. (화자 인용, 독립 확인 불가)</li>
+<li>Google GCP 토큰 사용량이 12개월 만에 50배, 14개월 만에 100배, 2024년 대비 약 330배로 늘었다는 발표 수치를 화자가 인용합니다. (화자 인용, 독립 확인 불가)</li>
+<li>2030년까지 전 세계 데이터센터 투자 약 6.7조 달러, 한국의 2035년 18.4GW 데이터센터 메가프로젝트도 화자 인용입니다. (독립 확인 불가)</li>
+<li>화자의 해석 골격: Anthropic이 3년 연속 매출 10배 성장하는 동안 compute는 연 3배씩 증가해, 그 간극은 ① 마진 인상(추론 마진 70~80%로 알려져 상한 90% 가정), ② training→inference GPU 비중 전환(현재 약 5대5), ③ inference 단가 상승으로 메워진다는 것입니다. ①②는 한계가 있으므로 남는 것은 compute 단가 상승이며, neocloud의 단기 임대가 장기 대비 2배 이상 비싼 현상이 그 증거라는 주장입니다. (마진·비중·가격 수치는 화자 인용/역산이며, 기업 공시가 아닙니다)</li>
+</ul>
+<h4 id="2-prefill과-decode-서로-다른-두-개의-workload">2. prefill과 decode — 서로 다른 두 개의 workload</h4>
+<ul>
+<li>prefill: 사용자가 넣은 프롬프트 토큰 전체를 한 번에 병렬 연산해 첫 출력 토큰을 만드는 단계. GPU 병렬성을 최대한 활용하고, time to first token(TTFT)이 이 단계에 걸립니다.</li>
+<li>decode: 첫 토큰 이후, 이전 토큰 1개를 입력으로 다음 토큰 1개를 순차 생성하는 autoregressive 단계. 1회 생성 시간을 time between tokens(TBT)·time per output token(TPOT)이라 합니다.</li>
+<li>Transformer의 핵심 연산은 attention과 FFN(feed-forward network) 두 가지입니다. 화자는 dense 모델 기준 attention 파라미터 약 20%, FFN 약 80%(4:1)라고 설명합니다(모델별 상이, MoE에서는 FFN 비중이 더 큼).</li>
+<li>attention은 토큰 간 관계 연산(Q·K 내적 → softmax → V 결합)이고, FFN은 토큰 내부 차원 연산(두 개의 linear layer)입니다.</li>
+</ul>
+<h4 id="3-kv-cache-decode가-이전-컨텍스트를-기억하는-방법과-용량-문제">3. KV cache — decode가 이전 컨텍스트를 기억하는 방법과 용량 문제</h4>
+<ul>
+<li>decode 단계에서 새 토큰의 Query는 필요하지만, 이전 토큰들의 Key·Value는 이미 prefill 때 계산된 것을 재사용할 수 있습니다. 대부분의 서빙 시스템은 이를 메모리에 저장해 다시 계산하지 않습니다. 이것이 KV cache입니다.</li>
+<li>용량 파생(본 빌더 재계산, 화자와 일치): Llama 3.1 70B(GQA, BF16) 기준 token당 KV = 2(K,V) x 80 layers x 8 KV heads x 128 head_dim x 2 bytes = 320KB/token.
+<ul>
+<li>128K 토큰 컨텍스트면 41.9GB로, H100 80GB의 약 절반입니다(화자: 약 40GB). 배치 1명당입니다.</li>
+<li>가중치(140GB, 화자 ~141GB)와 KV 용량이 같아지는 토큰 수는 배치 1 기준 약 427,000 토큰(화자: 43만 1천, 근사 일치).</li>
+<li>배치 512 x 128K면 KV만 21.5TB(화자 ~22TB)로 단일 서버 서빙이 사실상 불가능한 규모입니다.</li>
+</ul>
+</li>
+<li>KV를 줄이는 방법: ① 모델 축소, ② 양자화(8bit→4bit, MXFP4/NVFP4 등 신규 부동소수점 포맷), ③ attention 구조 변경 — GQA(grouped-query attention, KV head를 query head들에 공유), MQA, DeepSeek의 MLA(multi-head latent attention, KV를 latent로 압축 저장), ④ sliding-window attention(hybrid 사용), ⑤ Mooncake류 계층형 KV(CPU DRAM/SSD로 이동 후 재로드).</li>
+<li>GPU 수 계산(화자 주장, 부분 재현 불가): 화자는 Llama 3.1 405B를 H100으로 서빙할 때 저장 공간 기준 약 27장(8의 배수로 32장)이라고 합니다. 본 빌더가 weights+KV(배치 32, 평균 128K)로 재계산하면 약 36.5장입니다. KV만으로 계산하면 약 26.4장으로 화자 수치에 가깝습니다. 화자의 배치·컨텍스트·양자화 가정이 명시되지 않아 27장은 정확히 재현되지 않으며, 이 보고서는 저장공간 기반 상한(36.5장)을 공개합니다.</li>
+</ul>
+<h4 id="4-arithmetic-intensity와-roofline-왜-decode는-memory-bound일-수밖에-없는가">4. Arithmetic intensity와 roofline — 왜 decode는 memory-bound일 수밖에 없는가</h4>
+<ul>
+<li>XPU 성능은 ① 메모리에서 데이터를 읽어오는 속도와 ② 연산 속도 중 병목이 되는 쪽이 결정합니다. Arithmetic intensity(산술 강도)는 메모리에서 1바이트를 읽을 때 수행할 수 있는 연산 수(FLOP/byte)입니다.</li>
+<li>H100 SXM 공식 사양 기준: BF16 dense 약 989.5 TFLOPS/s, HBM3 3.35TB/s → ridge point = 989.5e12 / 3.35e12 ≈ 295 FLOP/byte(화자: 약 300). ridge point는 하드웨어가 정해지면 그려지는 곡선으로, 왼쪽은 memory-bound, 오른쪽은 compute-bound입니다.</li>
+<li>prefill은 B x S(배치 x 시퀀스)만큼 데이터를 재사용하므로 intensity가 매우 높아 compute-bound입니다(예: 100만 토큰 → intensity 100만).</li>
+<li>decode의 weight GEMM은 1개 토큰이 가중치를 1회 사용하므로 intensity ≈ 1로 ridge(≈300)보다 훨씬 왼쪽 → memory-bound. 토큰 하나를 내는 데 가중치 전체를 읽어야 하기 때문입니다.</li>
+<li>이 경계는 배치로 움직입니다: decode에서 여러 사용자의 출력 토큰을 모아 행렬 연산하면 weight GEMM의 intensity는 배치만큼 올라갑니다. 그러나 attention은 사용자별 KV가 공유되지 않아 배치를 늘려도 intensity가 오르지 않고 1 부근에 남습니다. GQA는 query 8개당 KV 1개라 attention intensity를 8배, MQA는 head 수만큼, MLA는 latent 압축으로 개선합니다.</li>
+<li>주의: 이 분석은 커널 효율·SRAM 재사용(FlashAttention류)·인터커넥트·병렬화 기법을 생략한 단순화 모델입니다. 실제 병목은 구현과 구성에 따라 달라질 수 있습니다.</li>
+</ul>
+<h4 id="5-interactivity와-throughput-그리고-pareto-곡선">5. Interactivity와 throughput, 그리고 Pareto 곡선</h4>
+<ul>
+<li>interactivity = 사용자 한 명이 초당 받는 토큰 수(tokens/sec per user). throughput = GPU당 초당 생성 토큰 총합(사용자 수와 무관).</li>
+<li>배치를 키워 throughput을 올리면 한 사용자의 체감 속도는 내려갑니다(화자의 맥도날드 비유). 둘은 트레이드오프 관계입니다.</li>
+<li>SemiAnalysis InferenceX는 다양한 병렬화(tensor/expert/pipeline/data parallel)·배치·소프트웨어(vLLM, SGLang) 구성의 점들을 찍고, 우상단 점들을 이어 interactivity–throughput Pareto curve를 그립니다. 곡선 위가 최적, 아래가 비효율이며, 곡선은 상황(하드웨어·소프트웨어·모델)에 따라 교차할 수 있습니다. 사용자는 요구 interactivity(예: 100 tokens/s)에서 세로선을 긋고 throughput을 비교합니다.</li>
+<li>화자는 NVIDIA GTC에서 Jensen Huang이 LPU를 쓸 때 이 곡선이 우상단에서 덜 내려가는 모양을 보여줬다고 언급합니다(화자 인용, 독립 확인 불가). 이 곡선은 역산 기반 매출 추정(예: Anthropic 마진 70~80% 주장)에도 쓰인다고 합니다.</li>
+</ul>
+<h4 id="6-서빙-최적화-기법-production에서-실제로-쓰는-것들">6. 서빙 최적화 기법 — production에서 실제로 쓰는 것들</h4>
+<ul>
+<li>continuous batching(연속 배치): request 단위가 아니라 iteration(토큰 1개 생성) 단위로 스케줄링해, 끝난 요청 자리에 새 요청의 prefill을 넣습니다. 기원은 서울대 전병곤 교수 연구실의 Orca(OSDI 2022, 후에 FriendliAI 창업)입니다. prefill과 decode는 attention만 분리하면 같은 weight 연산이므로 한 배치에 섞을 수 있습니다.</li>
+<li>PagedAttention: 출력 길이를 모르므로 기존에는 최대(worst case) 길이로 KV 메모리를 예약해 낭비가 컸습니다. OS 가상 메모리의 page 개념을 KV에 적용해 필요할 때 물리 페이지를 동적 할당합니다(vLLM, SOSP 2023). 모든 사용자가 동시에 최대 출력을 내면 메모리 과다 약정(overcommit)이 발생해 KV 축출·재로드가 필요해지는 한계가 있습니다.</li>
+<li>chunked prefill: 큰 prefill이 decode를 막지 않도록 prefill을 조각내어 decode 우선으로 스케줄링. TBT(토큰 간 간격)를 안정화하고 TTFT를 일부 희생합니다.</li>
+<li>speculative decoding: 작은 draft 모델(대략 1/100 크기)이 여러 토큰을 빠르게 제안하면 큰 모델이 prefill처럼 한 번에 검증합니다. 맞은 만큼 이득, 틀린 지점부터 draft가 재생성합니다. 실패 모드는 낮은 수락률과 draft 오버헤드로, 화자는 DeepSeek DSpark가 검증 토큰 수를 compute 상황에 맞게 조절한다고 소개합니다(화자 인용). Meta의 중간 레이어 조기 예측 연구, EAGLE-3 같은 파생 방법도 언급됩니다.</li>
+<li>prefill-decode(PD) disaggregation: prefill pool과 decode pool을 분리해 각각의 특성에 맞게 운영합니다(Microsoft Splitwise, EuroSys 2024 선행). raw throughput은 같지만 SLO(예: 초당 30토큰)를 만족하는 goodput이 크게 올라갑니다. 단, KV 전송 네트워크(NVLink급)가 빠르고 규모가 있어야 이득이며, 작은 규모에서는 chunked prefill이 더 유리합니다(화자도 동일한 경계를 제시).</li>
+</ul>
+<h4 id="7-agentic-ai-kv-cache-관리가-새-병목이-되는-이유">7. Agentic AI — KV cache 관리가 새 병목이 되는 이유</h4>
+<ul>
+<li>화자가 인용한 트레이스 통계(독립 확인 불가): session 평균 62.6분, session당 request 9.2개, request당 step 약 9개, session당 약 100 step. LLM 호출의 약 90%가 사람이 아닌 AI(agent)에 의해 시작됩니다.</li>
+<li>대표 예시: 한 LLM 호출이 prefix에서 기존 KV 11만 9천 토큰을 읽고, 새로 875토큰을 만들며, 출력은 214토큰 — 대부분의 작업이 '이미 계산된 KV를 다시 읽는 것'입니다.</li>
+<li>워크로드는 heavy-tail이라 worst case를 무시하면 서비스가 무너지고, 중앙값과 평균의 skew가 약 15배입니다.</li>
+<li>사람은 session 시간의 약 92%를 차지합니다(tool 4.8%, LLM 3.3%). 사람이 돌아올 때까지 기다리는 동안 비싼 HBM에 KV를 붙잡아두는 것은 낭비이므로, 대기 중앙값 25분, 유휴 KV 중앙값 약 40GB를 보고 '골든타임 5~10분' 후에는 가벼운 ML 모델로 복귀를 예측해 CPU DRAM/SSD로 내보내거나 버립니다. 대부분의 경우 재계산보다 멀리 저장했다 읽어오는 편이 싸고, 읽는 동안 다른 연산으로 가릴 수 있습니다.</li>
+<li>결론적으로 agentic 시대의 병목은 compute에서 memory로, 그리고 '언제 어디로 KV를 옮기고 다시 가져올지'의 스케줄링으로 이동합니다.</li>
+</ul>
+<h4 id="8-hbm-대신-lpddr-hyperaccel-bertha의-포지셔닝">8. HBM 대신 LPDDR — HyperAccel Bertha의 포지셔닝</h4>
+<ul>
+<li>화자(제품 개발자) 주장: Bertha는 삼성 4nm로 만든 첫 데이터센터형 AI 반도체로, HBM 대신 LPDDR5X를 사용합니다. HyperAccel 공식 CTO 인터뷰(2026-04-04)도 같은 내용을 확인합니다: LPDDR5X 채택, LPU 아키텍처, GPU 대역폭 활용률 약 50%를 목표 약 90%로 올리는 설계, TCO 1/3 목표, Naver Cloud PoC, LG전자 가전용 온디바이스 PoC.</li>
+<li>화자 수치: 칩당 192GB 메모리, 대역폭 546GB/s(H100 3.35TB/s의 약 1/6.1), 목표 가격 약 5천 달러, 내부 아키텍처로 대역폭 활용률 90% 이상을 목표. 2026년 3월 말 칩 출시 후 bring-up 중이며, Hot Chips(2026)에서 데모, 1~2달 내 PoC 출시 계획(2026-08-30 발언 기준). 이는 인터뷰의 '2026-02 설계 완료→그달 출시→하반기 양산' 계획과 시간축이 일치합니다.</li>
+<li>경계: 546GB/s·192GB·5천 달러·90% 활용률은 회사 목표/설계 수치이며 독립 측정이 아닙니다. 목표 가격을 현재 판매 가격으로 바꾸지 않습니다. 대역폭이 H100 대비 6분의 1이므로 '속도가 중요하지 않은 애플리케이션'을 겨냥한다는 화자의 시장 포지셔닝은 그 자체로 사업 전망입니다.</li>
+<li>LPDDR vs HBM 일반론: LPDDR은 저전력·저가·용량 확보에 유리하고(칩당 수십~수백 GB), HBM은 대역폭이 압도적입니다. 적합성은 모델 크기·동시 사용자·지연 요구·소프트웨어 생태계·TCO에 따라 달라지며, '한쪽이 항상 우월하다'는 결론은 성립하지 않습니다.</li>
+</ul>
+<h4 id="9-이종-컴퓨팅의-미래-미검증-주장-nvidia-groq-jalapeño-포함">9. 이종 컴퓨팅의 미래 — 미검증 주장(NVIDIA-Groq, Jalapeño) 포함</h4>
+<ul>
+<li>화자 주장(2026-09-02 기준 독립 확인 불가): NVIDIA가 Groq을 인수했고, Vera Rubin 패밀리에서 prefill·decode·attention은 Rubin GPU가, FFN만 Groq의 LPX가 담당하는 구성(LPX)이 검토 중이라는 내용을 제시. Groq LPU는 SRAM 약 500MB로 KV를 담기엔 작지만 FFN에는 KV가 필요 없고, MoE는 expert별 배치가 작아져 intensity가 낮은 영역에서 LPU가 유리하다는 논리입니다(화자 해석). Groq LPU의 ridge point가 8로 낮아(대역폭 강점) 우상단 interactivity 영역에서 유리하다는 것도 화자 주장입니다.</li>
+<li>화자 주장(독립 확인 불가): OpenAI가 Hot Chips(2026)에서 HBM4를 쓴 자체 AI 반도체 'Jalapeño'를 공개했고, 메모리 인접 core 연산·core 간 결과 공유 구조가 Bertha와 유사하다고 합니다. 이는 화자 관찰/소속사 관점이므로 사실로 단정하지 않습니다.</li>
+<li>화자의 전망: homogeneous 컴퓨팅은 끝나 가고, 특성이 맞는 칩을 파이프라인에 끼워 넣는 heterogeneous 세상이 온다. HyperAccel의 차기 제품은 agentic AI의 외부 메모리·KV 특성에 맞춘다고 합니다(로드맵 전망).</li>
+<li>화자·호스트 대화에서 'GLM-5.3 Flash가 완전히 중국산 칩으로 inference됐다'는 소식과 'gpt-oss 2T 유출' 루머가 언급되지만, 후자는 화자 자신이 '확인 못 했다'고 밝혔고 전자도 미확인 소식입니다.</li>
+</ul>
+<h4 id="10-반증-실패-모드-모니터링">10. 반증·실패 모드·모니터링</h4>
+<ul>
+<li>roofline 결론은 모델·정밀도·커널·인터커넥트에 의존하므로 단순화 모델의 한계를 항상 함께 읽어야 합니다.</li>
+<li>batching은 지연·꼬리 지연 비용을 키우고, speculative decoding은 수락률에 좌우되며, PD disaggregation은 네트워크·규모 의존적입니다.</li>
+<li>GQA/MLA/양자화는 품질 영향과 소프트웨어 지원이 전제입니다.</li>
+<li>5천 달러 목표가·90% 활용률·TCO 1/3은 양산·고객 채택 전까지 목표입니다. 모니터링: HyperAccel 양산/판매가/PoC 전환, NVIDIA-Groq 공시(announced/signed/closed), OpenAI Jalapeño 사양, SemiAnalysis 방법론, Copilot 트레이스 원 논문.</li>
+<li>유효 기간: 2026-12-01까지. 시장·상용화 수치는 이후 재검증 필요.</li>
+</ul>
+<h4 id="11-요약-결정-요약">11. 요약(결정 요약)</h4>
+<ul>
+<li>교수 내용(용량·roofline·최적화 기법)은 표준 문헌·공식 사양과 일치하며, 320KB/token·40GB@128K·ridge 295·22TB 등 주요 파생 숫자는 전부 재현됩니다.</li>
+<li>화자 고유 수치(27장 GPU, Bertha 상세, 마진 70~80%, 트레이스 통계, NVIDIA-Groq, Jalapeño)는 화자/벤더 주장으로만 유지되며, 27장은 재현 불가로 이견을 공개합니다.</li>
+<li>Bertha는 bring-up 단계의 신생 제품이며, '저가·저전력' 포지셔닝은 검증된 결과가 아닌 목표와 데모입니다.</li>
+<li>투자 판단 시: 목표가≠판매가, 데모≠벤치마크, 전망≠실적. 철회 기준은 위 모니터링 지표의 반증입니다.</li>
+</ul>
+<h4 id="출처">출처</h4>
+<ul>
+<li>원본 영상(캐논컬): https://www.youtube.com/watch?v=9Qf_QLt7IWY — 「EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지」, AI Frontier Korea (노정석), 2026-09-01 공개, 크리에이터 수동 한국어 자막.</li>
+<li>HyperAccel 공식 CTO 인터뷰: https://hyperaccel.ai/cto-interview-hyperaccel-bets-lpu-to-cut-llm-inference-costs-and-challenge-nvidia-in-korea/ (원문 ChosunBiz English, 2026-04-04)</li>
+<li>PagedAttention/vLLM: https://arxiv.org/abs/2309.06180 (SOSP 2023) 및 https://www.vllm.ai/</li>
+<li>Llama 3.1 70B 모델 구성(GQA): https://huggingface.co/meta-llama/Llama-3.1-70B</li>
+<li>Orca(연속 배치 기원): OSDI 2022, Seoul National University (전병곤 교수 연구실) — arXiv 2208.14221</li>
+<li>Splitwise(PD disaggregation): EuroSys 2024 — arXiv 2401.18171</li>
+<li>DeepSeek-V2(MLA): arXiv 2405.04434</li>
+<li>Mooncake(계층형 KV): arXiv 2407.00079</li>
+<li>Speculative decoding: Leviathan et al. 2023(arXiv 2211.17192), Chen et al. 2023(arXiv 2302.01318)</li>
+<li>Roofline model: Williams, Waterman, Patterson, &quot;Roofline: An Insightful Visual Performance Model for Multicore Architectures&quot; (2009)</li>
+<li>H100 SXM 사양(BF16 ~989.5 TFLOPS, HBM3 3.35TB/s): NVIDIA 공식 사양서</li>
+</ul>
+<blockquote>
+<p>검증 한계: 2026-09-02 기준, NVIDIA-Groq 인수·OpenAI Jalapeño·SemiAnalysis InferenceX·Copilot 2026-06 트레이스·Google 토큰 수치·Anthropic 마진 등은 독립 확인이 불가능했습니다(로컬 검색 스택 장애 포함). 이들은 화자 주장으로 표기되며, 확인되는 대로 갱신 대상입니다.</p>
+</blockquote>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

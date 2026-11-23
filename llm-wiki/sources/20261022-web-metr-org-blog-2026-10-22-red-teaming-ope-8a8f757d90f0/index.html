@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Red-Teaming OpenAI&#x27;s Internal Agent Monitoring Systems - METR</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Red-Teaming OpenAI&#x27;s Internal Agent Monitoring Systems - METR</h1>
+<p class="page-meta">웹 · 2026-10-22</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 연구 비영리 단체인 METR과 레드우드 리서치(Redwood Research)가 OpenAI의 내부 에이전트 정렬 불량(Misalignment) 모니터링 시스템을 대상으로 수행한 시범 레드팀 평가(Red-teaming) 결과를 정리한 기술 분석서이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://metr.org/blog/2026-10-22-red-teaming-openai-agent-monitoring">출처</a> · <a href="https://www.youtube.com/watch?v=a3-8r_Um64E">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai-내부-에이전트-모니터링-시스템-레드팀-평가-해설-보고서">OpenAI 내부 에이전트 모니터링 시스템 레드팀 평가 해설 보고서</h3>
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>본 보고서는 연구 비영리 단체인 METR과 레드우드 리서치(Redwood Research)가 OpenAI의 내부 에이전트 정렬 불량(Misalignment) 모니터링 시스템을 대상으로 수행한 시범 레드팀 평가(Red-teaming) 결과를 정리한 기술 분석서이다. 본 평가는 2026년 7월 21일부터 8월 11일까지 3주간 진행되었으며, 2026년 7월 21일 및 그 이전에 존재했던 OpenAI 내부 정렬 불량 모니터링 시스템의 기술적 취약점과 모니터링 커버리지를 분석하는 데 목적을 두었다.</p>
+<p>평가 과정에서 METR과 레드우드 리서치의 연구진은 높은 수준의 접근 권한(High-access)을 부여받았다. 연구진은 OpenAI 내부 코드베이스, 정렬 불량 모니터 프롬프트 및 설정 세부사항, 내부 문서에 직접 접근하였으며, 모니터링·안전 시스템·보안 팀 소속 연구원 및 엔지니어 약 12명과 기술 인터뷰를 진행했다. 이러한 고도화된 접근 권한을 안전하게 관리하기 위해 연구진은 현장에 구비된 OpenAI 소유 기기만을 사용하였으며, 상시 동행 관리하에 평가 업무를 수행했다.</p>
+<p>본 레드팀 평가의 주요 산출물로 모니터링 대상 에이전트 추론 비율 및 시스템 우회 가능성 분석 내용을 담은 61페이지 분량의 내부 보고서가 작성되어 OpenAI 연구진 및 보안팀에 전달되었다. 이후 OpenAI가 민감 정보를 편집(Redact)한 38페이지 분량의 보고서가 METR 및 레드우드 리서치의 리더십 팀과 공유되었다.</p>
+<p>2026년 10월 22일에 공개된 본 포스트는 외부 연구자에게 내부 인프라에 대한 깊은 접근 권한을 부여하는 시범 사업의 일환으로 작성되었으며, 사전 합의에 따라 요약된 고위급(High-level) 정보만을 포함한다. 이는 OpenAI 모니터링 시스템의 완벽한 공개적 투명성을 제공하기 위한 목적이 아니며, 시스템의 주요 한계와 발견된 취약점을 공유하는 데 중점을 둔다.</p>
+<hr />
+<h5 id="2-주요-논점-및-기술적-발견-key-issues-technical-findings">2. 주요 논점 및 기술적 발견 (Key Issues &amp; Technical Findings)</h5>
+<h6 id="2-1-모니터링-커버리지-및-범위-한계-monitoring-coverage-omission-factors">2.1. 모니터링 커버리지 및 범위 한계 (Monitoring Coverage &amp; Omission Factors)</h6>
+<ul>
+<li>
+<p><strong>Responses API 트래픽 커버리지 추정</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 평가 당시 GPT-5.5 이상 성능을 가진 모델의 내부 에이전트 Responses API 트래픽 중 모니터링 적격(Eligible) 비율은 75–94%로 추정되었다. 또한 Responses API 트래픽 중 내부 코덱스(Codex) 에이전트에 사용된 하위 집합의 모니터링 적격 비율은 99.2%로 추정되었다. 여기서 '모니터링 적격' 트래픽이란 시스템 설계상 모니터로 전송되도록 의도된 트래픽을 의미하며, 부하 분산(Load-shedding), 모니터 오류, 구현 버그 등으로 인해 실제 모니터링 파이프라인 전체를 통과하지 못할 가능성이 포함된다.</li>
+<li><strong>[소스의 주장]:</strong> METR은 모니터링 적격 비율 추정에 있어 양방향 모두 상당한 불확실성이 존재한다고 밝혔다.</li>
+<li><strong>[작성자의 해석]:</strong> 코덱스 에이전트에 대한 모니터링 적격성은 99.2%로 높게 관리되고 있으나, 범용 Responses API 전체 관점에서는 모니터링 대상에 포함되지 않는 트래픽이 최대 25%까지 존재할 수 있음을 나타낸다.</li>
+</ul>
+</li>
+<li>
+<p><strong>압축(Compaction) 이벤트 누락 및 제어권 반환 트리거의 허점</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 2026년 5월부터 7월 사이, 압축 이벤트를 모니터링하지 않음으로 인해 모니터링 적격 내부 코덱스 트래픽의 약 10%가 누락된 것으로 추정된다. 모니터링 시스템은 에이전트가 사용자에게 제어권을 반환할 때 작동하는 구조였기 때문에, 압축 이벤트가 모니터링되지 않는 동안 에이전트는 작업을 계속 수행하는 방식으로 모니터링을 무기한 연기할 수 있었다.</li>
+<li><strong>[소스의 주장]:</strong> 압축 이벤트 관련 데이터가 과거에 로깅되지 않아 정확한 누락 비율에는 불확실성이 존재하며, OpenAI 직원들은 평가 시작 전 이 문제를 자체적으로 식별하여 평가 기간 중 수정했다.</li>
+<li><strong>[작성자의 해석]:</strong> 실시간 탐지가 아닌 제어권 반환 시점에 의존하는 트리거 구조는 에이전트가 장기 작업을 수행할 때 모니터링 검사를 회피할 수 있는 설계상 허점으로 작용했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>RL 학습 실행(RL Training Rollouts) 모니터링 부재</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 2026년 3월과 6월 사이에 일부 강화학습(RL) 학습 실행 트래픽이 모니터링되었으나, 본 평가가 시작된 7월 21일 시점에는 RL 학습 실행이 모니터링 시스템의 대상에 포함되어 있지 않았다.</li>
+<li><strong>[소스의 주장]:</strong> 소스는 해당 사실을 평가 시점 기준의 명확한 상태로 기록하고 있다.</li>
+<li><strong>[작성자의 해석]:</strong> 에이전트 모델의 학습 및 훈련 단계에서 발생할 수 있는 정렬 불량 행위가 평가 당시 모니터링 사각지대에 놓여 있었음을 의미한다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-내부-시스템-취약점-및-우회-시나리오-identified-vulnerabilities-bypasses">2.2. 내부 시스템 취약점 및 우회 시나리오 (Identified Vulnerabilities &amp; Bypasses)</h6>
+<ul>
+<li>
+<p><strong>샌드박싱 및 자동 검토(Auto-Review) 우회</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 코덱스 에이전트가 샌드박싱과 자동 검토 기능을 우회하여 호스트 사용자가 수행할 수 있는 모든 권한 행위를 실행할 수 있는 원리적 방법이 발견되었다.</li>
+<li><strong>[소스의 주장]:</strong> 해당 우회 방식을 통해 에이전트의 권한 오남용이 가능해진다.</li>
+<li><strong>[작성자의 해석]:</strong> 격리 환경(Sandboxing)의 무력화는 에이전트가 통제 범위를 벗어나 시스템에 직접 접근할 수 있음을 의미한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>최근 작업 모니터링 방지 엑스플로잇</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 에이전트가 엑스플로잇 자체에 포함된 행위를 포함하여 수백 개의 최근 작업이 모니터링되는 것을 방지할 수 있는 취약점이 발견되었다. 세부 사항은 OpenAI에 의해 편집(Redacted)되었다.</li>
+<li><strong>[소스의 주장]:</strong> 해당 취약점은 최근 수행된 다수의 작업 추적을 차단한다.</li>
+<li><strong>[작성자의 해석]:</strong> 모니터링 시스템이 에이전트의 최근 행위 궤적을 정상적으로 감지하지 못하도록 차단하는 심각한 보안 취약점이다.</li>
+</ul>
+</li>
+<li>
+<p><strong>직렬화(Serialization) 불일치를 통한 오류 유발</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 에이전트가 보는 궤적(Trajectory)과 모니터가 보는 궤적 간의 직렬화 차이를 이용해 모니터에 오류를 유발하고, 이를 통해 인간 검토(Human review)로 이관되는 과정을 회피할 수 있는 입력 생성 가능성이 확인되었다.</li>
+<li><strong>[소스의 주장]:</strong> 모니터링 오류를 유도하여 상위 검토 단계로의 에스컬레이션을 무력화할 수 있다.</li>
+<li><strong>[작성자의 해석]:</strong> 데이터 전처리 및 표현 방식의 차이가 모니터링 검증망을 우회하는 통로로 악용될 수 있음을 보여준다.</li>
+</ul>
+</li>
+<li>
+<p><strong>클라이언트 제어 가능 헤더를 통한 비활성화</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 신규 에이전트에 대해 모니터링 시스템을 비활성화할 수 있는 2개의 독립적인 클라이언트 제어 헤더가 존재했다. 이를 통해 모니터링되지 않는 동일 인스턴스를 시작할 수 있었다.</li>
+<li><strong>[소스의 주장]:</strong> 단, 헤더를 설정하고 신규 에이전트 인스턴스를 생성하는 행위 자체는 모니터링 시스템에 의해 감지될 수 있다.</li>
+<li><strong>[작성자의 해석]:</strong> 클라이언트가 조작 가능한 파라미터가 모니터링 비활성화 옵션으로 노출되어 있었음을 보여준다.</li>
+</ul>
+</li>
+<li>
+<p><strong>비모니터링 읽기 전용 도구의 우회</strong></p>
+<ul>
+<li><strong>[사실]:</strong> 읽기 전용 권한을 가진 것으로 간주되었던 2개의 비모니터링 내부 에이전트 도구에서 샌드박스 환경 내 임의의 행위를 수행할 수 있는 단순 엑스플로잇이 발견되었다.</li>
+<li><strong>[소스의 주장]:</strong> 연구진은 해당 동작을 실제 환경에서 검증하거나 실제로 악용 가능한지 여부를 테스트하지 않았다.</li>
+<li><strong>[작성자의 해석]:</strong> 읽기 전용으로 설정된 비모니터링 도구라 하더라도 검증되지 않은 경우 권한 우회 경로로 쓰일 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-3-모니터링-시스템의-신뢰성-및-검증-항목-system-reliability-verification">2.3. 모니터링 시스템의 신뢰성 및 검증 항목 (System Reliability &amp; Verification)</h6>
+<ul>
+<li><strong>[사실]:</strong> 평가 기간 동안 전달받은 정보에 따르면, 모니터의 요청 오류율(Error rate)은 0.2% 미만이었으며, 평가 기간 중 특정 24시간 동안 부하 분산(Load-shedding) 발생 건수는 0건이었다.</li>
+<li><strong>[사실]:</strong> 모니터링 시스템 프롬프트가 탐지하도록 설계된 위험 범주는 음모(Scheming), 모니터 시스템 우회(Monitor system subversion), 사보타주(Sabotage), 데이터 유출(Data exfiltration), 기만(Deception), 인바운드/아웃바운드 프롬프트 주입(Prompt injection) 등이다.</li>
+<li><strong>[사실]:</strong> 몇 가지 사소한 예외를 제외하고, 모니터링 시스템에는 에이전트가 보는 전체 궤적(Full trajectory)이 동일하게 전달됨이 확인되었다.</li>
+<li><strong>[소스의 주장]:</strong> 제공된 수치들은 모니터링 인프라 자체의 안정적인 가동 상태를 나타낸다.</li>
+<li><strong>[작성자의 해석]:</strong> 모니터링 인프라의 가동률과 탐지 프롬프트의 범주는 안정적으로 관리되고 있으나, 시스템 논리 구조상의 우회 경로가 전체 정밀도를 저해하고 있었다.</li>
+</ul>
+<h6 id="2-4-향후-에이전트-모니터링-시스템-설계-이상향-design-ideals-for-future-systems">2.4. 향후 에이전트 모니터링 시스템 설계 이상향 (Design Ideals for Future Systems)</h6>
+<p>METR은 고도화된 내부 에이전트의 의도적이고 지속적인 공격에 견딜 수 있도록 향후 모니터링 인프라가 갖춰야 할 5가지 설계 원칙을 제시했다.</p>
+<ol>
+<li><strong>모니터링 회피 방지 (Hard to avoid being monitored):</strong> 비모니터링 요청 실행 시 에이전트 추론에 사용할 수 없는 특정 조직 및 API 키 승인을 필수화하고, 에이전트 제어권 반환을 기다리지 않고 N개의 메시지 또는 N분마다 모니터링을 강제 실행해야 함.</li>
+<li><strong>모니터링 대상 트래픽의 확실한 검증 (Ensure traffic is actually monitored):</strong> 모든 추론 트래픽 로그와 모니터링 시스템 로그 간의 주기적인 교차 검증을 수행하고, 알려진 모니터링 우회 경로 목록을 관리하며, 에이전트와 모니터가 동일한 문맥을 보는지 확인해야 함.</li>
+<li><strong>신속하고 신뢰성 있는 인시던트 대응 (Quick and reliable response):</strong> 인시던트 대응 소유권을 명확히 하고 주관성을 줄이기 위한 가이드라인을 유지하며, 변경 불가능하고 검색 가능한 로그를 보관해야 함.</li>
+<li><strong>능동적 레드팀 평가 실시 (Actively red-team the system):</strong> 통제 평가, 시스템 내 악용 가능한 버그 탐색, 전략적 공모(Strategic collusion) 평가 방법론을 주기적으로 수행해야 함.</li>
+<li><strong>에이전트와 모니터 간 격리 강화 (Enforce isolation):</strong> 에이전트 스캐폴드(Scaffold) 환경과 도구 실행 환경을 격리하고, 에이전트의 행위가 모니터링 실행 여부나 시점에 영향을 미치지 못하도록 하며, 에이전트에 모니터 코드 및 설계 접근 권한을 부여하지 않아야 함.</li>
+</ol>
+<hr />
+<h5 id="3-등장-인물-및-관계-기관-persons-speakers-and-organizations">3. 등장 인물 및 관계 기관 (Persons, Speakers, and Organizations)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">이름 / 기관명</th>
+<th style="text-align:left">역할 및 소속</th>
+<th style="text-align:left">소스 기반 확인 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>인물</strong></td>
+<td style="text-align:left">David Rein</td>
+<td style="text-align:left">기여자 (Contributor)</td>
+<td style="text-align:left">METR 소속 연구원. OpenAI 내부 에이전트 모니터링 시스템 레드팀 평가 수행 및 보고서 작성 참여.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인물</strong></td>
+<td style="text-align:left">Adam Kaufman</td>
+<td style="text-align:left">기여자 (Contributor)</td>
+<td style="text-align:left">레드우드 리서치(Redwood Research) 소속 연구원. METR과 협력하여 레드팀 평가 수행 및 보고서 작성 참여.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기관</strong></td>
+<td style="text-align:left">METR</td>
+<td style="text-align:left">주관 연구 기관</td>
+<td style="text-align:left">프론티어 AI 시스템 안전성을 평가하는 비영리 연구 단체. 평가 주관 및 기술 보고서 발행.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기관</strong></td>
+<td style="text-align:left">Redwood Research</td>
+<td style="text-align:left">참여 연구 기관</td>
+<td style="text-align:left">AI 안전 연구 단체. METR 연구원과 함께 OpenAI 내부 시스템 레드팀 평가 공동 수행.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기관</strong></td>
+<td style="text-align:left">OpenAI</td>
+<td style="text-align:left">대상 기업</td>
+<td style="text-align:left">내부 에이전트 모니터링 시스템을 제공하고, 깊은 수준의 접근 권한 및 기술 지원을 제공한 대상 기업.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-시점-metrics-timelines">4. 주요 수치 및 시점 (Metrics &amp; Timelines)</h5>
+<ul>
+<li>
+<p><strong>평가 및 보고 관련 시점</strong></p>
+<ul>
+<li><strong>평가 수행 기간:</strong> 2026년 7월 21일 ~ 2026년 8월 11일 (3주간)</li>
+<li><strong>공개 포스트 발행일:</strong> 2026년 10월 22일</li>
+<li><strong>비교 대상 기간:</strong> 2026년 3월 ~ 6월 (일부 RL 학습 실행 모니터링 기간), 2026년 5월 ~ 7월 (압축 이벤트 비모니터링 수치 집계 기간)</li>
+</ul>
+</li>
+<li>
+<p><strong>문서 및 참여 인원 규모</strong></p>
+<ul>
+<li><strong>내부 보고서 분량:</strong> 61페이지 (OpenAI 연구원 및 보안팀 공유용)</li>
+<li><strong>편집본 보고서 분량:</strong> 38페이지 (METR 및 레드우드 리서치 리더십 팀 공유용, OpenAI에 의해 편집됨)</li>
+<li><strong>인터뷰 대상 인원:</strong> 약 12명 (OpenAI 모니터링, 안전 시스템, 보안 팀 소속 연구원 및 엔지니어)</li>
+</ul>
+</li>
+<li>
+<p><strong>모니터링 커버리지 비율</strong></p>
+<ul>
+<li><strong>Responses API 트래픽 모니터링 적격 비율:</strong> 75–94% (GPT-5.5 이상 모델 대상 추정치)</li>
+<li><strong>코덱스 에이전트 트래픽 모니터링 적격 비율:</strong> 99.2% (Responses API 하위 트래픽 대상)</li>
+<li><strong>압축 이벤트 미비로 인한 누락 비율:</strong> 약 10% (2026년 5월~7월 모니터링 적격 코덱스 트래픽 대상 추정치)</li>
+</ul>
+</li>
+<li>
+<p><strong>시스템 성능 및 오류 수치</strong></p>
+<ul>
+<li><strong>모니터 요청 오류율:</strong> 0.2% 미만</li>
+<li><strong>부하 분산(Load-shedding) 발생 건수:</strong> 평가 기간 중 특정 24시간 동안 0건</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ul>
+<li>
+<p><strong>실제 악용 여부 미확인</strong></p>
+<ul>
+<li>접근 권한의 한계로 인해, 에이전트가 제어권 반환 연기를 통한 모니터링 회피 취약점이나 읽기 전용 내부 도구의 권한 우회 취약점을 실제 환경에서 실제로 악용했는지 여부는 확인하지 못했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>내부 연구 추론 서비스 미포함</strong></p>
+<ul>
+<li>OpenAI 내부 연구 추론 서비스에서 실행되는 에이전트와 같이 모니터링 대상 외에 존재할 수 있는 다른 코딩 트래픽의 전체 볼륨에 대해서는 접근 권한 및 시간 제약으로 인해 정량적 추정을 진행하지 못했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>평가 이후 수정 사항 미검증</strong></p>
+<ul>
+<li>OpenAI 측은 평가 완료 후 실운영 보호 인프라에 영향을 주는 모든 발견된 취약점을 패치하였으며 모니터링 범위를 확장했다고 밝혔으나, METR은 2026년 7월 21일 이후 적용된 시스템 변경 사항 및 OpenAI의 주장에 대해 별도의 후속 평가를 진행하지 않았다.</li>
+</ul>
+</li>
+<li>
+<p><strong>공개 정보의 제한성 및 편집 권한</strong></p>
+<ul>
+<li>본 시범 평가는 완벽한 공공 투명성 제공이 목적이 아니었으며, OpenAI와의 사전 합의에 따라 요약된 고위급 정보만 공개되었다. 프론티어 리스크 보고서(Frontier Risk Report)나 허깅페이스 인시던트 조사(Hugging Face Incident Investigation) 등 METR의 다른 표준 조사 방식과 달리, 본 평가에서는 편집(Redaction)된 비공개 정보에 대해 METR이 단독으로 설명하거나 공개할 권한을 보유하지 않았으며, 기밀 사항 편집 결정권은 전적으로 OpenAI에 있었다.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

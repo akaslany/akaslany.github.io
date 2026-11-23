@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toward Recursive Self-Improvement: How GLM Built Its Own Inference Infrastructure</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Toward Recursive Self-Improvement: How GLM Built Its Own Inference Infrastructure</h1>
+<p class="page-meta">웹 · 2026-09-17</p>
+<h2 id="요약">요약</h2>
+<p>인공지능 개발의 패러다임이 급격하게 변화하고 있습니다. 과거 모델이 단순한 코딩 보조 도구에 머물렀다면, 이제 GLM-5.3은 인프라 구축과 최적화의 핵심 주체로 부상했습니다. 실제로 팀 내에서 GLM-4.7을 사용할 당시만 해도 자사 모델 활용은 일종의 '의무감'에 가까웠으나, GLM-5.3에 이르러서는 엔지니어링…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://z.ai/blog/glm-built-its-inference-infrastructure">출처</a> · <a href="https://www.youtube.com/watch?v=lJz1lE9r6bs">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="glm-5-3-flash-추론-인프라-구축-및-최적화-기술-보고서-infra-agent와-밀집-피드백의-역할">GLM-5.3-Flash 추론 인프라 구축 및 최적화 기술 보고서: Infra Agent와 밀집 피드백의 역할</h3>
+<h4 id="1-서론-ai-개발-패러다임의-변화와-재귀적-자기-개선-rsi">1. 서론: AI 개발 패러다임의 변화와 재귀적 자기 개선(RSI)</h4>
+<p>인공지능 개발의 패러다임이 급격하게 변화하고 있습니다. 과거 모델이 단순한 코딩 보조 도구에 머물렀다면, 이제 GLM-5.3은 인프라 구축과 최적화의 핵심 주체로 부상했습니다. 실제로 팀 내에서 GLM-4.7을 사용할 당시만 해도 자사 모델 활용은 일종의 '의무감'에 가까웠으나, GLM-5.3에 이르러서는 엔지니어링 워크플로우에서 없어서는 안 될 '필수적인 파트너'로 자리 잡았습니다.</p>
+<p>이러한 진화의 종착점은 **재귀적 자기 개선(Recursive Self-Improvement, RSI)**입니다. RSI는 시스템이 충분한 컴퓨팅 자원과 시간을 확보했을 때, 인간의 개입 없이 스스로의 후속 모델을 완전히 자율적으로 설계하고 학습시키는 단계를 의미합니다. GLM-5.3-Flash의 추론 인프라 구축 사례는 모델이 시스템을 최적화하고, 그 시스템이 다시 더 강력한 모델을 구동하는 초기 RSI 순환 구조가 이미 실전 단계에 진입했음을 증명합니다.</p>
+<h4 id="2-인프라-구축-배경-및-하드웨어적-도전-과제">2. 인프라 구축 배경 및 하드웨어적 도전 과제</h4>
+<p>GLM-5.3-Flash는 전례 없는 규모와 제약 조건 속에서 구축되었습니다.</p>
+<ul>
+<li><strong>하드웨어 규모:</strong> 10만 개 이상의 중국산 AI 가속기(Chinese-made AI accelerators) 클러스터 기반의 대규모 추론 서비스 환경.</li>
+<li><strong>주요 제약 사항:</strong>
+<ul>
+<li><strong>생태계 및 소프트웨어 미비:</strong> 성숙하지 못한 에코시스템과 불완전한 커널 지원, 문서화되지 않은 기술 세부 사항으로 인해 상당 부분의 엔지니어링을 실험과 추측에 의존.</li>
+<li><strong>하드웨어적 한계:</strong> 주류 GPU 대비 제한된 칩 메모리 용량 및 대역폭.</li>
+</ul>
+</li>
+<li><strong>서비스 요구사항:</strong> 새로운 모델 아키텍처 지원, 100만(1M) 토큰 컨텍스트 윈도우 처리, 그리고 복잡한 멀티모달 요청에 대한 안정적 대응.</li>
+</ul>
+<h4 id="3-infra-agent를-통한-시스템-최적화-및-성능-성과">3. Infra Agent를 통한 시스템 최적화 및 성능 성과</h4>
+<p>GLM-5.3 기반의 'Infra Agent'는 인간 엔지니어와 협력하여 시스템 전반의 최적화를 주도했습니다.</p>
+<h5 id="주요-최적화-기법">주요 최적화 기법</h5>
+<ul>
+<li><strong>메모리 및 연산 최적화:</strong>
+<ul>
+<li><strong>병렬화:</strong> 선형 어텐션 및 LM Head에 노드 내 텐서 병렬화(Intra-node tensor parallelism) 적용.</li>
+<li><strong>연산 효율화:</strong> ReplaySSM 기술을 통해 대역폭을 절약하고 연산을 재계산하는 전략 채택.</li>
+<li><strong>양자화:</strong> W8A8 양자화 및 혼합 정밀도 캐시 양자화(INT8/FP8/BF16) 적용.</li>
+<li><strong>메모리 관리:</strong> Layer Split 기법을 통한 효율적인 자원 할당.</li>
+</ul>
+</li>
+<li><strong>아키텍처 혁신:</strong> Encode-Prefill-Decode(EPD) 분리형(Disaggregated) 아키텍처 도입.</li>
+</ul>
+<h5 id="성능-성과-요약">성능 성과 요약</h5>
+<p>Infra Agent의 피드백 루프를 통해 GLM-5.3-Flash는 단기간에 비약적인 성능 향상을 달성했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">성과 수치 및 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>성능 향상</strong></td>
+<td style="text-align:left">초기 베이스라인 대비 엔드 투 엔드(End-to-End) 처리량 약 3배 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>준비 기간</strong></td>
+<td style="text-align:left">초기 모델 적응부터 프로덕션 배포까지 2주 미만 소요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>처리량 성과</strong></td>
+<td style="text-align:left">출시 후 6일간 62조 개의 토큰 처리 (Ox-Alpha 테스트 결과)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인프라 효율</strong></td>
+<td style="text-align:left">주류 NVIDIA GPU 클러스터에 필적하는 하드웨어 활용 효율 및 토큰당 비용 달성</td>
+</tr>
+</tbody>
+</table>
+<h5 id="실제-검증">실제 검증</h5>
+<p>본 시스템의 실전 성능은 OpenCode와 OpenRouter에서 'Ox-Alpha'라는 익명 모델로 검증되었습니다. 출시 일주일 만에 두 플랫폼에서 가장 활발하게 사용되는 모델로 등극하며 대규모 트래픽 환경에서의 안정성을 입증했습니다.</p>
+<h4 id="4-핵심-메커니즘-밀집-피드백-dense-feedback">4. 핵심 메커니즘: 밀집 피드백(Dense Feedback)</h4>
+<p>인프라 최적화에서 '처리량'이나 '지연 시간' 같은 희소한(Sparse) 엔드 투 엔드 지표만으로는 복잡한 성능 저하의 원인을 파악하기 어렵습니다. Infra Agent가 자율적으로 문제를 해결하기 위해서는 <strong>'밀집 피드백(Dense Feedback)'</strong> 환경이 필수적입니다. 여기서 '밀집'이란 단순히 로그의 양이 많은 것이 아니라, 피드백이 **'원인 추적 가능(Attributable)'**하고 **'실행 가능(Actionable)'**해야 함을 의미합니다.</p>
+<h5 id="밀집-피드백의-세-가지-핵심-특성">밀집 피드백의 세 가지 핵심 특성</h5>
+<ol>
+<li><strong>국소성(Local):</strong> 피드백은 특정 커널, 코드 경로, 파라미터 또는 실행 구간과 명확히 연결되어야 합니다. 이는 에이전트가 문제 범위를 좁히고 최소 재현 케이스를 생성하는 데 결정적인 역할을 합니다.</li>
+<li><strong>적시성 및 저비용(Inexpensive and Timely):</strong> 가설 검증 주기가 짧아야 합니다. 전체 서비스 배포 없이도 커널 테스트나 로컬 마이크로벤치마크를 통해 에이전트가 즉각적으로 결과를 확인할 수 있어야 합니다.</li>
+<li><strong>객관적 검증 지원(Objective Verification):</strong> 실험 결과는 참조 구현체나 정량적 지표를 통해 객관적으로 입증되어야 합니다. 단순한 상관관계를 넘어 대조 실험을 통해 근본 원인을 파악할 수 있는 환경을 제공합니다.</li>
+</ol>
+<h5 id="infra-agent-최적화-루프">Infra Agent 최적화 루프</h5>
+<ul>
+<li><strong>목표 정의:</strong> 인간 엔지니어가 최적화 목표와 시스템 경계를 설정합니다.</li>
+<li><strong>가설 및 구현:</strong> Agent가 코드를 분석하여 가설을 세우고 최적화 코드를 작성합니다.</li>
+<li><strong>계층적 피드백:</strong> 실험 환경에서 정확성 테스트, 실행 추적(Trace), 마이크로벤치마크 등 세분화된 피드백을 실시간으로 제공합니다.</li>
+<li><strong>반복 및 수렴:</strong> Agent는 제공된 피드백을 바탕으로 가설을 수정하며 최적의 결과물을 도출합니다.</li>
+</ul>
+<h4 id="5-infra-agent-구현-및-최적화-세부-사례-연구">5. Infra Agent 구현 및 최적화 세부 사례 연구</h4>
+<h5 id="사례-1-수치적-정확도-correctness-해결">사례 1: 수치적 정확도(Correctness) 해결</h5>
+<p>KDA 커널의 컨텍스트 병렬화(CP) 경로에서 수치 오류가 발생했습니다. 에이전트는 병렬화 구성과 커널 경로를 매핑하여 분석한 결과, CP 상태 전파 및 병합 시 <code>tl.dot</code> 연산의 기본 정밀도(TF32)가 부족하여 오차가 누적됨을 발견했습니다. 에이전트는 이를 **<code>input_precision=&quot;tf32x3&quot;</code>**로 명시하여 세 개의 TF32 텐서 코어 연산을 조합함으로써 정밀도를 확보했습니다. 해당 수정 사항은 <strong>Flash Linear Attention PR #1180</strong>으로 업스트림에 반영되어 실제 오픈소스 생태계에 기여하는 성과를 거두었습니다.</p>
+<h5 id="사례-2-시스템-동작-system-behavior-분석">사례 2: 시스템 동작(System Behavior) 분석</h5>
+<p>KV Transfer 과정에서 Prefill 대비 성능 격차가 20% 이상 벌어지는 병목 현상이 식별되었습니다. 에이전트는 타임라인 분석을 통해 <strong>Mooncake Transfer</strong>를 담당하는 Python thread가 <strong>DeepEP v1.2.1</strong>의 C++ 호출 구간과 전혀 오버랩되지 않는 것을 발견했습니다. 원인은 DeepEP 호출 시 Python GIL(Global Interpreter Lock)을 해제하지 않아 전송 태스크 스케줄링이 지연된 것이었습니다. C++ 실행 구간에서 GIL을 명시적으로 해제하도록 수정하여 성능 격차를 1% 미만으로 최소화했습니다.</p>
+<h5 id="사례-3-커널-성능-performance-극대화">사례 3: 커널 성능(Performance) 극대화</h5>
+<p>에이전트는 SGLang, DeepGEMM 등의 기존 커널에서 '최적화 스켈레톤(Optimization Skeletons)'을 학습하여 KDA Decode 커널에 적용했습니다. 초기 구현(v2)은 V 차원을 따라 타일링(Tiling)을 수행하며 동일한 FP32 정규화 및 게이팅 연산을 4번 중복 실행하고 있었습니다. 에이전트는 **병렬성을 일부 희생(sacrificing some parallelism)**하더라도 이 타일들을 단일 스레드 블록으로 병합하고 중간 결과를 레지스터에 상주시킴으로써 중복 연산을 근본적으로 제거했습니다. 그 결과, v2 대비 <strong>1.71배</strong>의 성능 향상을 달성했습니다.</p>
+<h4 id="6-결론-기술적-한계-및-인간의-책임">6. 결론: 기술적 한계 및 인간의 책임</h4>
+<p>GLM-5.3-Flash 프로젝트는 AI가 자신의 구동 인프라를 직접 최적화하는 시대의 가능성을 증명했습니다. 하지만 이것이 인간 엔지니어의 퇴장을 의미하지는 않습니다. 오히려 시스템 아키텍처가 복잡해질수록 다음과 같은 인간의 고유한 역할이 더욱 중요해집니다.</p>
+<ul>
+<li><strong>전략적 목표 및 경계 설정:</strong> 시스템이 준수해야 할 물리적/기술적 제약 조건 정의.</li>
+<li><strong>피드백 인프라 설계:</strong> 에이전트가 활용할 수 있는 정교한 관찰 도구와 테스트 환경 구축.</li>
+<li><strong>리스크 평가 및 최종 승인:</strong> 비동기 동시성 이슈, 시스템 구조 변경, 생산 환경의 리스크에 대한 최종 검증 및 책임.</li>
+</ul>
+<p>결론적으로, 모델이 시스템을 최적화하고 시스템이 모델의 성능을 극대화하는 선순환 구조는 기술 진보의 속도를 획기적으로 가속할 것입니다. 우리는 이 강력한 도구를 수용하되, 목표 설정과 위험 관리라는 핵심 통제권을 유지하며 인공지능과 협력하는 인프라 엔지니어링의 미래를 준비해야 합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

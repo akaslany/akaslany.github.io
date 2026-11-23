@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadrillion-parameter transformers and how to train them – Q</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Quadrillion-parameter transformers and how to train them – Q</h1>
+<p class="page-meta">웹 · 2026-11-03</p>
+<h2 id="요약">요약</h2>
+<p>인공지능(AI)과 인간 간에 존재하는 약 1,000,000배의 샘플 효율성 격차(Sample Efficiency Gap)는 현대 인공지능 연구의 가장 핵심적인 미스터리 중 하나이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://qlabs.sh/research/parameters">출처</a> · <a href="https://www.youtube.com/watch?v=s7woaNk596o">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="초거대-트랜스포머-모델의-데이터-제약-환경-스케일링-법칙-및-학습-기법-해설-보고서">초거대 트랜스포머 모델의 데이터 제약 환경 스케일링 법칙 및 학습 기법 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>인공지능(AI)과 인간 간에 존재하는 약 1,000,000배의 샘플 효율성 격차(Sample Efficiency Gap)는 현대 인공지능 연구의 가장 핵심적인 미스터리 중 하나이다. 기존의 대표적인 컴퓨팅 최적화 스케일링 법칙인 치칠라(Chinchilla) 법칙(Hoffmann et al., 2022)은 30조(30T) 토큰 학습 시 약 1.5조(1.5T) 파라미터 모델을 권장하여, 토큰 당 파라미터 비율을 20:1 수준으로 규정하였다. 반면, 인간의 뇌는 약 2억(200M) 토큰 분량의 자극으로 약 100조(100T) 개의 시냅스(파라미터)를 학습함으로써 1:500,000의 비율을 형성한다. 이로 인해 AI와 인간 사이에는 토큰 당 파라미터 비율에서 약 1,000만 배(7 orders of magnitude)라는 극심한 격차가 존재하며, 기존 AI 모델은 데이터 대비 파라미터 크기가 지나치게 작게 설정되어 있다.</p>
+<p>최근 고품질 언어 데이터의 증가 속도가 컴퓨팅 자원의 성장 속도를 따라잡지 못함에 따라(Villalobos et al., 2024), 제한된 고정 데이터셋을 여러 에포크(Epoch)에 걸쳐 반복 학습하는 '데이터 제약 환경(Multi-epoch Data-constrained Regime)'이 점차 중요해지고 있다. 본 보고서가 다루는 연구(Baron et al., 2026)는 고정된 데이터셋 환경에서 컴퓨팅 예산이 증가함에 따라 모델의 파라미터 크기를 치칠라 규정 대비 수천 배 이상으로 크게 늘려야 함을 입증하고, 컴퓨팅 예산이 주어졌을 때 쿼드릴리온($10^{15}$) 파라미터 네트워크를 학습시키기 위한 구체적 지침을 제공한다.</p>
+<p>이 연구는 데이터 크기, 모델 파라미터 수, 학습 에포크 수, 그리고 앙상블 구성원 수의 4가지 변수와 학습 손실 간의 관계를 정량화한 '5요소 통합 스케일링 법칙'을 제시한다. 특히 에포크 수와 모델 크기 확장에 맞춰 하이퍼파라미터인 체중 감쇠(Weight Decay)를 가파르게 증가시키는 정량적 파워 로(Power Law) 규칙을 도출하였으며, 추가 학습 연산 비용이 없는 스냅샷 앙상블(Snapshot Ensembling)과 추가 연산을 활용하는 딥 앙상블(Deep Ensembling)을 스케일링 축으로 최초 통합하였다. 본 개요는 소스 텍스트의 <code>TL;DR</code>, <code>1. Introduction</code>, <code>5. Conclusion</code> 섹션을 종합적이고 전문적으로 분석하여 작성되었다.</p>
+<hr />
+<h5 id="2-주요-논점-key-arguments-data-breakdown">2. 주요 논점 (Key Arguments &amp; Data Breakdown)</h5>
+<h6 id="2-1-논점-1-인간과-ai의-샘플-효율성-격차-및-모델-크기-확장-필요성">2.1. 논점 1: 인간과 AI의 샘플 효율성 격차 및 모델 크기 확장 필요성</h6>
+<ul>
+<li><strong>주장 (Claim)</strong>: AI의 샘플 효율성 격차를 완화하기 위해서는 데이터 제약 환경에서 데이터 대비 모델 파라미터 수를 획기적으로 늘려 쿼드릴리온($10^{15}$) 및 퀸틸리온($10^{18}$) 수준으로 확장해야 한다.</li>
+<li><strong>사실 (Fact)</strong>:
+<ul>
+<li>인간의 학습 데이터 규모: 약 2억 토큰 ($200\text{M} = 2 \times 10^8$).</li>
+<li>인간의 파라미터(시냅스) 수: 약 100조 개 ($100\text{T} = 10^{14}$).</li>
+<li>인간의 토큰 당 파라미터 비율: $1 : 500,000$.</li>
+<li>치칠라(Chinchilla) 기준 권장안: 30T 토큰 학습 시 약 1.5T 파라미터 모델 적용 (토큰 당 파라미터 비율 $20 : 1$).</li>
+<li>5T 토큰 데이터셋 및 $10^{29}$ FLOPs 연산 예산 조건에서 기존 치칠라 법칙이 도달하는 파라미터 상한선: 2,500억 개($250\text{B}$).</li>
+</ul>
+</li>
+<li><strong>논거 및 수치</strong>:
+<ul>
+<li>AI 대 인간의 샘플 효율성 격차는 약 1,000,000배($10^6$)이다.</li>
+<li>AI 대 인간의 토큰 당 파라미터 비율 격차는 약 10,000,000배($10^7$, 7 orders of magnitude)에 달한다.</li>
+<li>치칠라 법칙은 고정 데이터셋에 대해 고정된 모델 크기(20:1 비율)를 처방하지만, 멀티 에포크 환경에서는 컴퓨팅 예산 증가에 따라 모델 파라미터를 차원(orders of magnitude) 단위로 대폭 늘려야만 컴퓨팅 최적 성능에 도달할 수 있다.</li>
+</ul>
+</li>
+<li><strong>실험 및 사례</strong>: 5T 토큰 데이터셋과 $10^{29}$ FLOPs 연산 예산을 적용할 경우, 본 연구의 스케일링 법칙에 따른 앙상블 전체 파라미터 수는 토큰 당 300개 이상($&gt;300$)에 도달하여 치칠라 예측 비율의 약 7,000배($\sim 7,000\times$)에 이른다.</li>
+<li><strong>소스 위치</strong>: <code>1. Introduction</code>, <code>2. Parameters are all you need</code>, <code>Figure 1</code></li>
+</ul>
+<h6 id="2-2-논점-2-데이터-제약-환경을-위한-5요소-통합-스케일링-법칙">2.2. 논점 2: 데이터 제약 환경을 위한 5요소 통합 스케일링 법칙</h6>
+<ul>
+<li><strong>주장 (Claim)</strong>: 고정 데이터셋 기반의 멀티 에포크 학습 환경에서는 컴퓨팅 예산 확장에 따라 모델 크기($N$), 에포크 수($R$), 앙상블 구성원 수($M$)를 동시에 늘리는 것이 컴퓨팅 최적(Compute-optimal) 전략이다.</li>
+<li><strong>사실 (Fact)</strong>:
+<ul>
+<li>고품질 언어 데이터의 성장 속도가 컴퓨팅 증가 속도를 따라잡지 못해 멀티 에포크 데이터 제약 환경 연구가 필수적이다.</li>
+<li>기존 데이터 제약 스케일링 법칙(Muennighoff et al., 2023; Lovelace et al., 2026)은 앙상블 효과를 정률화 수식에 통합하지 못했다.</li>
+</ul>
+</li>
+<li><strong>논거 및 수식 요소</strong>:
+연구진은 고유 토큰 수($U$), 모델 크기($N$), 에포크 수($R$), 앙상블 구성원 수($M$)로부터 예측 손실 $L(U, N, R, M)$을 도출하는 통합 스케일링 수식을 다음과 같이 제시한다.
+$$L(U, N, R, M) = E + \frac{A}{N^\alpha} + \frac{B}{(UR)^\beta} + P(R-1)^\delta\left(\frac{N}{U^\gamma}\right)^\kappa - \frac{F}{N^\nu U^\epsilon R^\rho}\left(1-\frac{1}{M}\right)^\mu$$
+<ol>
+<li><strong>Irreducible cost ($E$)</strong>: 데이터 및 모델 스케일 확장으로 줄일 수 없는 기본 불확실성 손실.</li>
+<li><strong>Small model penalty ($\frac{A}{N^\alpha}$)</strong>: 모델 파라미터 크기($N$) 부족으로 인한 손실 페널티 항.</li>
+<li><strong>Tokens seen ($\frac{B}{(UR)^\beta}$)</strong>: 고유 토큰 수($U$)와 에포크 수($R$)의 곱인 총 노출 토큰 부족 페널티 항.</li>
+<li><strong>Overfitting penalty ($P(R-1)^\delta\left(\frac{N}{U^\gamma}\right)^\kappa$)</strong>: 동일 데이터의 반복 학습($R &gt; 1$) 및 모델 크기 확장 시 발생하는 오버피팅 손실 페널티 항.</li>
+<li><strong>Ensembling gain ($-\frac{F}{N^\nu U^\epsilon R^\rho}\left(1-\frac{1}{M}\right)^\mu$)</strong>: 앙상블 구성원 수($M$)가 증가함에 따라 손실을 차감해 주는 이득 항 ($M=1$일 때 0이며, $M$이 증가함에 따라 수렴 상한선으로 감소).</li>
+</ol>
+<ul>
+<li><strong>앙상블 완화 기전</strong>: 모델 크기와 에포크 증가로 가중되는 오버피팅 페널티를 앙상블 항이 차감함으로써, 데이터가 제약된 상태에서도 컴퓨팅 투입에 따라 손실이 지속적으로 하강한다.</li>
+</ul>
+</li>
+<li><strong>실험 및 사례</strong>: 다양한 데이터 크기, 모델 크기, 에포크 수에 걸쳐 트랜스포머를 학습시키고 손실 데이터를 피팅하여 수식의 계수 및 지수를 검증함.</li>
+<li><strong>소스 위치</strong>: <code>2. Parameters are all you need</code></li>
+</ul>
+<h6 id="2-3-논점-3-하이퍼파라미터-트랜스퍼-및-체중-감쇠-weight-decay-스케일링">2.3. 논점 3: 하이퍼파라미터 트랜스퍼 및 체중 감쇠(Weight Decay) 스케일링</h6>
+<ul>
+<li><strong>주장 (Claim)</strong>: 에포크 수와 모델 크기가 증가함에 따라 체중 감쇠(Weight Decay) 수치를 가파르게 증가시켜야 데이터 제약 환경에서 최적 손실을 유지할 수 있다.</li>
+<li><strong>사실 (Fact)</strong>:
+<ul>
+<li>기존 데이터 제약 스케일링 법칙(Lovelace et al., 2026)은 체중 감쇠를 고정한 채 스케일을 확장하여 컴퓨팅 투입량이 늘어남에도 오버피팅으로 인해 손실이 악화되는 현상이 발생함.</li>
+<li>기존 MuP(Yang et al., 2022)는 학습률(Learning Rate) 전이는 다루지만 체중 감쇠 전이는 다루지 않음.</li>
+<li>기존 체중 감쇠 휴리스틱들(Wang &amp; Aitchison, 2025; Bergsma et al., 2025; Qiu et al., 2025)은 상충되며 에포크 요인을 반영하지 못함.</li>
+</ul>
+</li>
+<li><strong>논거 및 비교</strong>:
+<ul>
+<li>연구진은 유효 학습률과 체중 감쇠 격점(Grid cell)에 대한 2차 적합(Quadratic fit)을 수행하여 각 최적점을 도출하고, 이를 고유 데이터 수, 모델 크기, 에포크 수에 대한 파워 로(Power law)로 정률화함.</li>
+<li>모델 크기와 에포크가 늘어날 때 규제(Regularization)를 강화해야 오버피팅 없이 더 큰 모델을 사용할 수 있음을 정률적으로 증명함.</li>
+</ul>
+</li>
+<li><strong>실험 및 사례</strong>:
+<ul>
+<li>50M 토큰 학습 조건에서 모델 크기별 에포크 대비 최적 체중 감쇠 파워 로를 산출함.</li>
+<li>학습된 연산량의 16배 지점($16\times$)까지 외삽(Extrapolation) 평가를 수행한 결과, 기존 고정 하이퍼파라미터 규칙들은 최적점을 크게 벗어난 반면 본 파워 로 법칙은 모든 테스트 축에서 최적 손실 대비 0.01 nats 이내의 매우 우수한 성능을 유지함.</li>
+</ul>
+</li>
+<li><strong>소스 위치</strong>: <code>3. Larger models for more epochs</code>, <code>Figure 2</code></li>
+</ul>
+<h6 id="2-4-논점-4-스냅샷-및-딥-앙상블-snapshot-deep-ensembling-을-통한-축-확장">2.4. 논점 4: 스냅샷 및 딥 앙상블(Snapshot &amp; Deep Ensembling)을 통한 축 확장</h6>
+<ul>
+<li><strong>주장 (Claim)</strong>: 데이터 대비 컴퓨팅 예산 비율이 높아지면 단일 모델의 단순 확장보다 딥 앙상블 구성원 수를 늘리는 것이 컴퓨팅 최적 전략이다.</li>
+<li><strong>사실 (Fact)</strong>:
+<ul>
+<li>100M 토큰 환경 실험에서 기존 처방(Prior recipe)은 컴퓨팅 연산량 증가 시 검증 손실이 상승(악화)함.</li>
+<li>하이퍼파라미터 스케일링과 앙상블을 결합한 본 연구의 처방은 연산량 증가에 따라 검증 손실이 지속적으로 하강함.</li>
+</ul>
+</li>
+<li><strong>구현 방식 및 논거</strong>:
+<ul>
+<li><strong>스냅샷 앙상블 (Snapshot Ensembling)</strong>: 단일 학습 실행의 2차 전반부(Second half)에서 1 에포크 주기의 주기적 학습률(Cyclic Learning Rate)을 적용함. 주기별 최저 학습률 지점에서 체크포인트를 저장하고 예측값을 평균화함. 단일 실행 내에서 수행되므로 추가 학습 컴퓨팅 비용이 전혀 발생하지 않음($0$ extra training compute). 이는 모드 연결성(Mode Connectivity, Garipov et al., 2018) 가설에 기초하며, 우수한 해들이 낮은 손실 경로로 연결되어 있어 짧은 주기 학습으로도 다채롭고 강건한 모델에 도달함.</li>
+<li><strong>딥 앙상블 (Deep Ensembling)</strong>: 서로 다른 시드(Seed)로 독립 학습된 모델들의 예측을 합산함. 구성원당 100%의 추가 학습 연산이 소모되지만, 모델 파라미터 증가와 달리 오버피팅을 직접적으로 감소시킴.</li>
+<li><strong>자원 할당 선후 순서 (Prioritization Strategy)</strong>: 소량 데이터 환경에서는 우선 scaled weight decay와 스냅샷 앙상블을 적용하여 모델 크기와 에포크 수를 늘린 후, 남아있는 추가 컴퓨팅 자원을 딥 앙상블 구성원 수($M$) 확장에 선형적으로 할당함.</li>
+</ul>
+</li>
+<li><strong>소스 위치</strong>: <code>4. (Fast) Ensembling as a scaling axis</code>, <code>Figure 3</code></li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-key-figures-authors">3. 등장 인물 및 화자 (Key Figures &amp; Authors)</h5>
+<p>소스 텍스트에서 확인 가능한 연구자, 저자 및 관련 인용 논문 저자진의 정보는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (한글 표기 및 로마자 원문)</th>
+<th style="text-align:left">소스 내 역할 / 소속 / 관련 논문</th>
+<th style="text-align:left">확인 가능 여부</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">악샤이 베게스나 (Akshay Vegesna)</td>
+<td style="text-align:left">아티클 공저자, Q Labs Research 소속, Baron et al. (2026) 및 Mandal et al. (2026) 공저자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">에단 바론 (Ethan Baron)</td>
+<td style="text-align:left">아티클 공저자, Q Labs Research 소속, 주저자 논문(Baron et al., 2026) 제1저자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">애니루드 사티시 (Anirudh Satheesh)</td>
+<td style="text-align:left">아티클 공저자, Q Labs Research 소속, Baron et al. (2026) 공저자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">사밉 다할 (Samip Dahal)</td>
+<td style="text-align:left">아티클 공저자, Q Labs Research 소속, Baron et al. (2026) 및 Mandal et al. (2026) 공저자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">슈무엘 베르만 (Shmuel Berman)</td>
+<td style="text-align:left">Baron et al. (2026) 및 Mandal et al. (2026) 참고문헌 논문 공저자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">앤드류 고든 윌슨 (Andrew Gordon Wilson)</td>
+<td style="text-align:left">Baron et al. (2026), Garipov et al. (2018), Qiu et al. (2025) 참고문헌 논문 공저자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">호프만 외 (Hoffmann et al.)</td>
+<td style="text-align:left">치칠라(Chinchilla) 법칙 논문(2022) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">비야로보스 외 (Villalobos et al.)</td>
+<td style="text-align:left">LLM 데이터 한계 연구 논문(2024) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">럽레이스 외 (Lovelace et al.)</td>
+<td style="text-align:left">데이터 제약 환경 스케일링 법칙 논문(2026) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">가리포프 외 (Garipov et al.)</td>
+<td style="text-align:left">손실 평면 및 모드 연결성 논문(2018) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">락시미나라야난 외 (Lakshminarayanan et al.)</td>
+<td style="text-align:left">딥 앙상블 논문(2017) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">황 외 (Huang et al.)</td>
+<td style="text-align:left">스냅샷 앙상블 논문(2017) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">킴 외 (Kim et al.)</td>
+<td style="text-align:left">무한 컴퓨팅 전처리 학습 논문(2026) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">뮨니그호프 외 (Muennighoff et al.)</td>
+<td style="text-align:left">데이터 제약 언어 모델 논문(2023) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">베르그스마 외 (Bergsma et al.)</td>
+<td style="text-align:left">체중 감쇠 스케일링 법칙 논문(2025) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">칠 외 (Qiu et al.)</td>
+<td style="text-align:left">행렬 전처리기 하이퍼파라미터 전이 논문(2025) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">왕 &amp; 에이치슨 (Wang &amp; Aitchison)</td>
+<td style="text-align:left">AdamW 체중 감쇠 설정 논문(2025) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">양 외 (Yang et al.)</td>
+<td style="text-align:left">MuP 텐서 프로그램 하이퍼파라미터 전이 논문(2021) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">마달 외 (Mandal et al.)</td>
+<td style="text-align:left">q0 하이퍼 에포크 사전학습 논문(2026) 저자진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">화자/발표자의 개별 발언 구별</td>
+<td style="text-align:left">문서 내 구체적 인물별 독립 발언 구분</td>
+<td style="text-align:left"><strong>확인 불가</strong> (합동 연구 보고서 형태)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점-key-metrics-timeline">4. 수치 및 시점 (Key Metrics &amp; Timeline)</h5>
+<h6 id="4-1-주요-시점-및-게시-정보">4.1. 주요 시점 및 게시 정보</h6>
+<ul>
+<li><strong>아티클 게시 시점</strong>: 2026년 11월 (November 2026)</li>
+<li><strong>주요 인용 연구 발표 연도</strong>: 2017년 ~ 2026년 (Garipov et al. 2018, Hoffmann et al. 2022, Villalobos et al. 2024, Baron et al. 2026 등)</li>
+</ul>
+<h6 id="4-2-주요-정량적-수치-및-비교-데이터">4.2. 주요 정량적 수치 및 비교 데이터</h6>
+<ul>
+<li><strong>인간 대 AI 샘플 효율성 정량 비교</strong>:
+<ul>
+<li>인간 학습 토큰 수: 약 2억 토큰 ($200\text{M} = 2 \times 10^8$)</li>
+<li>인간 파라미터(시냅스) 수: 약 100조 개 ($100\text{T} = 10^{14}$)</li>
+<li>인간의 토큰 당 파라미터 비율: $1 : 500,000$</li>
+<li>AI(치칠라 기준 30T 토큰) 파라미터 권장안: 약 1.5조 개 ($1.5\text{T}$)</li>
+<li>AI의 토큰 당 파라미터 비율: $20 : 1$</li>
+<li>AI 대 인간 토큰 당 파라미터 비율 격차: 약 10,000,000배 ($10^7$ / 7 orders of magnitude)</li>
+<li>AI 대 인간 샘플 효율성 전체 격차: 약 1,000,000배 ($10^6$ / 6 orders of magnitude)</li>
+</ul>
+</li>
+<li><strong>스케일링 법칙 예측 수치 (5T 토큰, $10^{29}$ FLOPs 예산 기준)</strong>:
+<ul>
+<li>치칠라 법칙 예측 모델 크기 상한: 약 2,500억 개 ($250\text{B}$) 파라미터</li>
+<li>본 스케일링 법칙 예측 토큰 당 파라미터 수: 300개 이상 ($&gt;300$ parameters per token)</li>
+<li>치칠라 대비 본 법칙의 토큰 당 파라미터 비율 확장 배수: 약 7,000배 ($\sim 7,000\times$)</li>
+</ul>
+</li>
+<li><strong>실험 및 외삽 평가 수치</strong>:
+<ul>
+<li>하이퍼파라미터 스케일링 법칙 외삽 범위: 피팅(Fitted) 컴퓨팅 예산의 16배($16\times$) 지점까지 검증 수행</li>
+<li>최적 손실 대비 오차 유지 범위: 모든 평가 축에서 0.01 nats 이내 유지</li>
+<li>주요 실험 데이터셋 규모: 50M 토큰 (체중 감쇠 및 파워 로 측정), 100M 토큰 (앙상블 검증 손실 평가), 5T 토큰 (외삽 추정 기준)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<h6 id="5-1-소스-텍스트-미기재-사항">5.1. 소스 텍스트 미기재 사항</h6>
+<ol>
+<li><strong>스케일링 법칙 파워 로 계수값</strong>:
+<ul>
+<li>5요소 통합 손실 수식 $L(U, N, R, M)$에 포함된 계수 및 지수값인 $E, A, B, P, F, \alpha, \beta, \gamma, \delta, \epsilon, \kappa, \mu, \nu, \rho$의 구체적인 정량 수치는 본문 아티클에 명시되어 있지 않다 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+<li><strong>학습 하이퍼파라미터 세부 상수</strong>:
+<ul>
+<li>학습률 디케이 스케줄(Learning Rate Decay Schedule)의 감속 상수, 배치 사이즈(Batch Size) 스케일링 파워 로의 구체적 정량 계수 수치는 소스에서 제공되지 않는다 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+<li><strong>실험 하드웨어 클러스터 및 학습 소요 시간</strong>:
+<ul>
+<li>실험을 수행하는 데 사용된 컴퓨팅 클러스터(GPU/TPU 종류, 개수, 노드 간 대역폭) 및 실제 학습 벽시계 시간(Wall-clock time)은 소스에 명시되지 않았다 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+</ol>
+<h6 id="5-2-연구-본연의-한계-및-향후-과제">5.2. 연구 본연의 한계 및 향후 과제</h6>
+<ol>
+<li><strong>샘플 효율성 격차 해소의 범위적 한계</strong>:
+<ul>
+<li>인간 수준의 샘플 효율성 격차($10^7$배)를 완전히 극복하기 위해서는 쿼드릴리온($10^{15}$)을 넘어 퀸틸리온($10^{18}$) 수준의 파라미터 네트워크가 요구된다.</li>
+<li>그러나 본 연구(Baron et al., 2026)에서 제시한 방법론은 데이터 제약 환경에서 파라미터 크기를 약 4자리 수(4 orders of magnitude) 확장하는 처방 단계에 머무르므로, 남아있는 3자리 수 이상의 격차를 해결하기 위한 추가 연구가 필요하다.</li>
+</ul>
+</li>
+<li><strong>추가적 기술 혁신의 필요성</strong>:
+<ul>
+<li>단순히 모델 파라미터 크기를 늘리고 앙상블을 적용하는 전략만으로는 인간 수준의 데이터 효율성에 다다르기 부족하며, 향후 새로운 알고리즘, 하드웨어 혁신 등 다각도의 기술적 돌파구가 결합되어야 함을 연구진이 강조하고 있다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QD-Rec: Open-Ended Evolution of Recommendations via Quality–Diversity</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>QD-Rec: Open-Ended Evolution of Recommendations via Quality–Diversity</h1>
+<p class="page-meta">웹 · 2026-10-20</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 복잡한 의사결정 지원을 목표로 품질-다양성(Quality-Diversity, QD) 탐색 기법을 추천 시스템에 최초로 도입한 QD-Rec 시스템의 기술적 구조와 연구 성과를 해설한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://pub.sakana.ai/qd-rec">출처</a> · <a href="https://www.youtube.com/watch?v=giqoGZGmpSE">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="qd-rec-품질-다양성-quality-diversity-기반-열린-추천-시스템-해설-보고서">QD-Rec: 품질-다양성(Quality-Diversity) 기반 열린 추천 시스템 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>본 보고서는 복잡한 의사결정 지원을 목표로 <strong>품질-다양성(Quality-Diversity, QD)</strong> 탐색 기법을 추천 시스템에 최초로 도입한 <strong>QD-Rec</strong> 시스템의 기술적 구조와 연구 성과를 해설한다. 기존의 생성형 열린 탐색(Open-ended search) 연구는 인공지능이 코드, 과학적 아이디어, 새로운 알고리즘, 문학적 저작물 등을 자유롭게 창작하는 분야에 주로 집중되어 왔다. 그러나 현실 세계의 수많은 고위험 의사결정 문제(예: 기업 인수 대상 선정, 마케팅 타깃 고객 추출 등)는 무한한 생성 공간이 아닌 이미 정해진 <strong>고정된 후보군(Fixed candidate pool)</strong> 내에서 최적의 항목을 선택해야 하는 강한 제약 조건을 가진다.</p>
+<p>유한하게 정해진 후보군 구조에서는 표면적으로 열린 탐색의 여지가 존재하지 않는 것처럼 보일 수 있다. 하지만 동일한 후보 아이템이라 할지라도 의사결정자의 목적, 관점, 배경에 따라 해당 아이템을 선택해야 하는 **선택 이유(가설, Hypothesis)**는 무수히 존재하며, 이 이유의 탐색 공간은 여전히 열려 있다(Open-ended). 예를 들어, 특정 기업을 인수하려는 목적은 핵심 기술 확보, 신규 시장 진입, 재무적 시너지 창출 등 의사결정 맥락에 따라 완전히 달라질 수 있다.</p>
+<p><strong>QD-Rec</strong>은 이러한 본질에 착안하여, 단일한 최적안만을 제시하는 기존 추천 알고리즘의 한계를 극복하고 의사결정자의 프로필에 부합하는 **다양하고 고품질인 아이템-가설 쌍(Item-hypothesis pair)의 아카이브(Archive)**를 구축하는 것을 최종 목표로 한다. 이를 위해 품질(Quality)과 다양성(Diversity)을 동시에 극대화하는 <strong>품질-다양성(QD)</strong> 접근법을 정교하게 설계하였으며, 과거의 평가 피드백을 바탕으로 아이템 탐색, 가설 진화, 아카이브 업데이트를 지속적으로 수행하는 반복 알고리즘을 구현하였다.</p>
+<hr />
+<h5 id="2-주요-논점-key-arguments-system-mechanisms">2. 주요 논점 (Key Arguments &amp; System Mechanisms)</h5>
+<h6 id="2-1-열린-추천-open-ended-recommendation-의-정형화-및-특성">2.1. 열린 추천(Open-Ended Recommendation)의 정형화 및 특성</h6>
+<p>열린 추천 문제에서 탐색의 기본 단위는 <strong>아이템-가설(item-hypothesis) 쌍</strong>이다. 이는 후보 아이템과 해당 아이템이 의사결정자의 프로필(목표, 관심사, 제약 조건 등)에 왜 적합한지 서술한 자연어 논리의 결합을 의미한다. 소스 문맥은 열린 추천 문제를 정형화하며 시스템 메커니즘을 규정하는 두 가지 핵심 특성을 다음과 같이 제시한다.</p>
+<ol>
+<li>
+<p><strong>평가 비용의 고가성 (Costly Evaluation)</strong></p>
+<ul>
+<li><strong>사실 (Fact)</strong>: 추천 아이템의 실제 가치는 해당 아이템에 대한 구체적인 가설이 생성되고 평가자(Evaluator)에 의해 검증되기 전까지 알 수 없다.</li>
+<li><strong>소스가 주장하는 바 (Source Claim)</strong>: 수천~수만 개에 달하는 대규모 후보군 전체에 대해 아이템당 단 하나의 가설만 평가하더라도 가용한 계산 예산(Compute budget)을 초과하게 된다. 따라서 이전 평가 결과를 바탕으로 다음에 탐색할 아이템을 지능적으로 선택하는 수용적 탐색 메커니즘이 필수적이다.</li>
+</ul>
+</li>
+<li>
+<p><strong>가설 공간의 거대성 (Huge Hypothesis Space)</strong></p>
+<ul>
+<li><strong>사실 (Fact)</strong>: 후보 아이템의 수가 유한하더라도, 각 아이템을 추천할 수 있는 잠재적 가설(이유)의 조합 공간은 아이템 후보군보다 비교할 수 없이 거대하다.</li>
+<li><strong>소스가 주장하는 바 (Source Claim)</strong>: 모든 아이템을 한 번씩 전수 평가하더라도 대다수의 가설 공간은 미탐색 상태로 남는다. 이를 극복하기 위해 이전 가설의 우수한 아이디어를 적응(Adapt)하고 결합(Combine)하는 진화적 생성이 필요하다. 특히 당장은 평가 점수가 낮은 가설이라도 다른 아이템을 위한 뛰어난 가설을 창출하는 <strong>발판 가설(Stepping stone)</strong> 역할을 수행하므로, 다양한 대안을 버리지 않고 보존하는 QD 탐색 메커니즘이 정당성을 얻는다.</li>
+</ul>
+</li>
+</ol>
+<h6 id="2-2-qd-rec의-3단계-반복-메커니즘">2.2. QD-Rec의 3단계 반복 메커니즘</h6>
+<p>QD-Rec은 의사결정자의 프로필과 고정된 후보군을 입력받아 고품질의 다양한 추천 아카이브를 유지 및 개선한다. 시스템은 다음 3단계를 지속적으로 반복 실행한다.</p>
+<ol>
+<li>
+<p><strong>다음 탐색 아이템 선택 (Select)</strong></p>
+<ul>
+<li>**맥락적 밴딧(Contextual bandit)**을 활용하여 가설 생성 및 평가를 수행할 다음 아이템을 선택한다. 아이템 임베딩과 과거 평가 점수를 반영하여 유망한 아이템의 활용(Exploitation)과 불확실한 아이템의 탐색(Exploration) 간 최적의 균형을 유지한다.</li>
+<li>이미 아카이브에 존재하는 항목들과 유사하지 않은 후보에 **다양성 보너스(Diversity bonus)**를 부여함으로써 아카이브가 미처 커버하지 못한 후보군 영역으로 탐색을 유도한다. 아카이브 탈락 항목을 포함한 모든 평가 결과가 밴딧 학습에 반영된다.</li>
+<li><strong>[기술적 차별성]</strong> 기존 QD 문헌에서는 맥락적 밴딧을 부모 후보/빈(Bin) 선택이나 생성 전략 선택 등 <em>새로운</em> 솔루션을 생성하는 파라미터 제어에 활용한 반면, QD-Rec은 <em>이미 존재하는 고정된 후보군 아이템</em>을 직접 선택하는 데 밴딧을 적용했다는 점에서 차별화된다.</li>
+</ul>
+</li>
+<li>
+<p><strong>이전 추천을 통한 가설 생성 (Generate)</strong></p>
+<ul>
+<li>**제안자 LLM(Proposer)**은 프로필, 선택된 아이템, 그리고 아카이브에서 무작위 균등 샘플링한 3개의 예시(<strong>부모 가설, Parent</strong>)를 입력받는다.</li>
+<li>다음 3가지 연산자 중 하나를 적용하여 신규 가설(<strong>자식 가설, Child</strong>)을 생성한다:
+<ul>
+<li><strong>돌연변이 (Mutate)</strong>: 이전 부모 가설 1개의 아이디어를 선택된 신규 아이템에 맞게 적응시킴.</li>
+<li><strong>교차 (Crossover)</strong>: 여러 이전 부모 가설의 아이디어를 융합함.</li>
+<li><strong>탐색 (Explore)</strong>: 제시된 예시들이 다루지 않는 새로운 접근 방식을 제안함.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>신규 아이디어 보존 및 유사 추천 개선 (Archive Update)</strong></p>
+<ul>
+<li>**평가자 LLM(Evaluator)**이 신규 아이템-가설 쌍의 품질 점수(0~10점)를 측정한다.</li>
+<li>신규 추천의 아이템 설명과 가설 텍스트를 결합하여 임베딩한 후, 코사인 유사도(Cosine similarity)가 가장 높은 아카이브 내 상위 3개 근접 이웃 항목을 검색한다.</li>
+<li>LLM 판정자(Judge)를 통해 다음 규칙에 따라 국소적 <strong>생태적 지위(Ecological niche)</strong> 내에서 수용 및 교체 여부를 결정한다:
+<ul>
+<li><strong>국소적 신규성(Local novelty) 검사</strong>: 신규 가설이 기존 3개 이웃들과 구분되는 새로운 관점/이유를 제공한다고 판단되면 점수와 상관없이 아카이브에 수용된다.</li>
+<li><strong>암묵적 1대1 비교 (Blind pairwise comparison)</strong>: 신규하지 않다고 판단되면 가장 가까운 이웃과 1대1 비교를 수행한다. 점수와 제시 순서를 은폐(Blind)한 상태에서 신규 가설이 승리하면 기존 이웃을 교체(Replace)하고, 패배하면 폐기(Discard)한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">단계명</th>
+<th style="text-align:left">담당 모듈</th>
+<th style="text-align:left">핵심 기능</th>
+<th style="text-align:left">처리 규칙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>1. Select</strong></td>
+<td style="text-align:left">맥락적 밴딧 (Contextual Bandit)</td>
+<td style="text-align:left">탐색 대상 후보 아이템 선택</td>
+<td style="text-align:left">아이템 임베딩·과거 점수 기반 활용/탐색 균형, 다양성 보너스 부여 (고정 후보군 아이템 직접 선택)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2. Generate</strong></td>
+<td style="text-align:left">제안자 LLM (Proposer)</td>
+<td style="text-align:left">신규 가설(Child) 생성</td>
+<td style="text-align:left">아카이브 내 3개 부모 가설 표출, Mutate/Crossover/Explore 연산 적용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3. Archive Update</strong></td>
+<td style="text-align:left">평가자 LLM (Evaluator / Judge)</td>
+<td style="text-align:left">품질 평가 및 아카이브 국소 갱신</td>
+<td style="text-align:left">코사인 유사도 상위 3개 이웃 검색 후 국소 신규성 검과 패스 시 수용, 미통과 시 암묵적 1대1 비교를 통한 승자 교체</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-3-비교-실험-구조-및-박탈-연구-ablation-study">2.3. 비교 실험 구조 및 박탈 연구 (Ablation Study)</h6>
+<p>QD-Rec의 각 메커니즘이 전체 성능에 미치는 영향을 고찰하기 위해 두 가지 박탈 모델(Ablation variants)과 비교 실험을 수행하였다. 모든 모델은 동일한 아카이브 업데이트 규칙(국소 신규성 필터 및 국소 교체 규칙)을 적용받는다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기법명</th>
+<th style="text-align:center">국소 신규성 필터 여부</th>
+<th style="text-align:center">진화 연산자 사용 여부</th>
+<th style="text-align:center">밴딧 아이템 선택 여부</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Novelty</strong></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:left">무작위 아이템 선택, 예시 없이 제로샷 가설 작성 (베이스라인)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Novelty+Evo</strong></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">×</td>
+<td style="text-align:left">무작위 아이템 선택, 아카이브 부모 표출 및 진화 연산자 활용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>QD-Rec (Full)</strong></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:left">다양성 인식 맥락적 밴딧 아이템 선택 + 진화 연산자 활용</td>
+</tr>
+</tbody>
+</table>
+<p><strong>평가 지표 (4가지):</strong></p>
+<ul>
+<li><strong>품질 (Quality)</strong>: LLM 판정자가 아카이브 내 최종 수용 항목들에 대해 부여한 평가 점수(0~10점)의 평균값.</li>
+<li><strong>다양성 (Diversity)</strong>: 아카이브 내 항목 간 임베딩의 평균 쌍방 코사인 유사도를 1에서 뺀 값 ($1 - \text{mean pairwise cosine similarity}$).</li>
+<li><strong>커버리지 (Coverage)</strong>: 임베딩의 2D PCA 투영 영역 상에 설정된 25×25 그리드 내 점유 셀의 비율. <strong>[교차 비교 정규화]</strong> 모델 간 엄밀한 비교를 위해 각 프로필, 제안자, 시드별 2D PCA 투영 공간은 비교 대상 3가지 기법(Novelty, Novelty+Evo, QD-Rec)의 최종 아카이브 항목을 모두 결합(Jointly fit)하여 생성함으로써 동일한 특징 공간 내에서 그리드 점유율을 정규화 측정함.</li>
+<li><strong>아카이브 크기 ($n$)</strong>: 최종 아카이브 진입 및 생존에 성공한 추천 항목의 총 개수.</li>
+</ul>
+<h6 id="2-4-구체적-추천-적용-및-사례-분석">2.4. 구체적 추천 적용 및 사례 분석</h6>
+<p>전통적 탐욕적 최적화(Greedy optimization) 알고리즘은 낮은 점수의 가설을 즉시 폐기하지만, QD-Rec은 국소 신규성 필터를 통해 저평가된 아이디어도 아카이브에 보존하여 **발판 가설(Stepping stone)**로 활용한다. 소스 문맥이 제시하는 두 가지 대표 사례는 다음과 같다.</p>
+<h6 id="사례-1-jpmorgan의-liberty-tripadvisor-인수-추천">사례 1: JPMorgan의 Liberty TripAdvisor 인수 추천</h6>
+<blockquote>
+<p><strong>[Novelty 베이스라인]</strong> (점수: 1/10)
+<em>&quot;이 거래는 전략적 논리가 부족하다. JPMorgan은 다각화된 금융 지주회사인 반면 Liberty TripAdvisor는 소비자 여행 마켓플레이스 사업으로, 기존 Chase Travel 플랫폼 및 카드 연계 파트너십을 통해 제공받지 못하는 역량이나 기술의 중복이 없다. [...] 전략적 적합성이 떨어지고 설득력 있는 시너지 근거가 없으므로 인수를 추진하지 않을 것을 권장한다.&quot;</em></p>
+<p><strong>[부모 가설: Southwest Airlines Co 인수 제안]</strong> (기업가치(EV): $15.3B, 점수: 1/10)
+<em>&quot;Southwest Airlines는 JPMorgan의 Rapid Rewards 제휴 카드 발급 역할을 고려할 때 매우 적합하다. [...] 항공사 운영 리스크를 부담해야 하지만, 수직적 통합을 통해 JPMorgan이 <strong>은행, 금융 및 결제 상품을 여행 구매 창구(Chase 대차대조표 대출을 통한 할부 금융, Chase Travel 번들 예약 등)에 직접 수용</strong>할 수 있게 해준다.&quot;</em></p>
+<p><strong>[자식 가설: QD-Rec의 Liberty TripAdvisor 인수 제안]</strong> (기업가치(EV): $2.08B, 점수: 5/10)
+<em>&quot;Liberty TripAdvisor의 3대 마켓플레이스(Tripadvisor, Viator, TheFork)는 JPMorgan이 <strong>Chase Travel, Chase Offers, Ultimate Rewards 리뎀션에 직접 연결</strong>할 수 있는 글로벌 고객층을 제공하며, <strong>활동, 식음료, 숙박에 대한 할부 금융 수익 및 결제 수수료를 포착</strong>할 수 있다. [...] 이러한 소비자 접점 소유는 Chase의 카드 및 여행 보상 상품으로의 교차 판매 및 심사를 정교화할 풍부한 거래 데이터와 행동 데이터를 생성할 것이다.&quot;</em></p>
+</blockquote>
+<ul>
+<li><strong>분석 및 발판 메커니즘</strong>: Novelty 베이스라인은 Chase Travel과의 단순 기능 중복을 이유로 1점을 부여했다. QD-Rec은 Southwest Airlines 인수 제안(1점: 직접적인 항공사 운영 리스크 및 비금융업 소유 규제로 인해 저평가됨)에서 **'금융 및 결제 서비스/할부 상품을 여행 구매 접점에 직접 편입시킨다'**는 고유한 핵심 논리를 계승하였다. 이를 Liberty TripAdvisor에 적용함으로써 항공사 운영 리스크를 완벽히 배제한 채 결제 및 데이터 시너지를 창출하는 가설로 돌연변이시켜 5점의 고득점 추천안을 도출해냈다.</li>
+</ul>
+<h6 id="사례-2-예수스-몬탈보-jesus-montalvo-대상-skillforge-온라인-교육-추천">사례 2: 예수스 몬탈보(Jesus Montalvo) 대상 SkillForge(온라인 교육) 추천</h6>
+<blockquote>
+<p><strong>[Novelty 베이스라인]</strong> (점수: 2/10)
+<em>&quot;예수스의 단기 커리어 목표는 거의 전적으로 임상 분야(BSN 취득, FNP 진출, 예방 건강 검진 프로그램 구축)에 치우쳐 있어 SkillForge의 비즈니스/기술 트랙이 이를 대체할 수 없다. 프로젝트 관리나 데이터 분석 과정에 약간 끌릴 수 있으나 이는 주된 요구가 아닌 주변적 사용 사례에 불과하며, 빽빽한 교대 근무 일정상 주당 3~4시간을 투자하도록 만드는 것은 설득력이 부족하다.&quot;</em></p>
+<p><strong>[부모 가설: Sharon English (유치원 교사) 대상 제안]</strong> (점수: 7/10)
+<em>&quot;샤론이 교육청 단위 리더십으로 이동하려는 야망은 유아교육 트레이닝이 제공하지 못하는 역량을 요구한다: <strong>구역 프로그램 출범을 위한 프로젝트 관리, 학습 결과 평가를 위한 데이터 분석, 행정가 및 교육위원회 설득을 위한 발표 능력</strong>. SkillForge의 비즈니스 트랙은 이러한 간극에 직접 매핑된다.&quot;</em></p>
+<p><strong>[자식 가설: QD-Rec의 Jesus Montalvo 대상 제안]</strong> (점수: 7/10)
+<em>&quot;예수스가 수석 간호사가 되고 검진 프로그램을 출범시키려는 목표는 임상 교육에서 다루지 않은 역량을 요구한다: <strong>검진 이니셔티브 코디네이션을 위한 프로젝트 관리, 건강 성과 추적 및 보고를 위한 기초 데이터 분석, 병원 행정가나 재단 지원금 신청을 위한 발표 능력</strong>. [...] 유연한 교대 근무 일정에는 플랫폼의 주당 3~4시간 체계적 구조가 잘 맞아떨어진다.&quot;</em></p>
+</blockquote>
+<ul>
+<li><strong>분석 및 발판 메커니즘</strong>: Novelty 베이스라인은 비임상 교육 트랙을 '주변적 유스케이스'로 한정하고 교대 근무를 장애물로 해석하여 2점을 부여했다. 반면 QD-Rec은 유치원 교사의 리더십 진출 가설(7점)에서 **'전문 분야 실무 교육이 제공하지 않는 비즈니스/관리 역량의 보완'**이라는 상위 프레임을 차용했다. 이를 간호사의 검진 프로그램 출범에 필요한 비임상 관리 역량(프로젝트 관리, 데이터 분석, 행정가 설득)으로 전환하고, 교대 근무의 유연성을 플랫폼 활용의 강점으로 재해석함으로써 7점의 고품질 추천 가설을 창출했다.</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-화자-및-역할-persons-authors-roles">3. 등장 인물·화자 및 역할 (Persons, Authors &amp; Roles)</h5>
+<p>소스 문맥에서 명시적으로 확인되는 연구 저자 및 사례 연구 내 가상 페르소나의 역할은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속 / 신원</th>
+<th style="text-align:left">역할 및 특이사항</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>저자</strong></td>
+<td style="text-align:left">다카시 이시다 (Takashi Ishida)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">논문 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저자</strong></td>
+<td style="text-align:left">타로 마키노 (Taro Makino)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">논문 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저자</strong></td>
+<td style="text-align:left">이사 스기우라 (Issa Sugiura)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">논문 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>가상 페르소나</strong></td>
+<td style="text-align:left">예수스 몬탈보 (Jesus Montalvo)</td>
+<td style="text-align:left">캘리포니아 내셔널 시티의 29세 간호사 (마케팅 타깃)</td>
+<td style="text-align:left">BSN 취득, 수석 간호사 승진, 지역사회 예방 건강 검진 프로그램 출범을 목표로 함 (SkillForge 추천 대상)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>가상 페르소나</strong></td>
+<td style="text-align:left">샤론 잉글리시 (Sharon English)</td>
+<td style="text-align:left">46세 유치원 교사 (마케팅 타깃)</td>
+<td style="text-align:left">교육청 단위 리더십 진출 및 STEM 커리큘럼 개발을 목표로 함 (발판 가설의 부모 대상)</td>
+</tr>
+</tbody>
+</table>
+<p><em>참고: 소스 문맥상 상기 저자 및 가상 페르소나 외에 명시된 다른 실존 인물이나 화자는 존재하지 않는다.</em></p>
+<hr />
+<h5 id="4-수치-및-시점-data-points-timestamps">4. 수치 및 시점 (Data Points &amp; Timestamps)</h5>
+<h6 id="도메인-데이터-규모-및-벤치마크">도메인 데이터 규모 및 벤치마크</h6>
+<ul>
+<li><strong>M&amp;A 대상 기업</strong>: 미국 기업 약 6,300개 (LSEG Workspace 수집, 기업 설명 평균 약 123단어, 7개 재무 필드 포함). 인수 주체: Walt Disney Co, JPMorgan Chase &amp; Co.</li>
+<li><strong>마케팅 타깃</strong>: 가상 고객 프로필 10,000개 (NVIDIA Nemotron-Personas-USA 캘리포니아 샘플, 평균 약 685단어). 대상 제품: 탁상용 3D 프린터, 온라인 학습 구독 서비스(SkillForge).</li>
+<li><strong>학술 논문</strong>: 약 17,500개 (ICLR 2026, ICML 2026, NeurIPS 2025 채택 논문 제목 및 초록). 타깃 연구자: 열린 탐색 연구자, AI 스타트업 응용 연구자.</li>
+<li><strong>도서 추천 벤치마크</strong>: 소스 문맥은 LLM 품질 점수 대신 실제 기록된 인간 평가 점수(Recorded human ratings)를 바탕으로 평가한 도서 추천 벤치마크 실험도 함께 포함하고 있음.</li>
+</ul>
+<h6 id="실험-및-모델-설정-수치">실험 및 모델 설정 수치</h6>
+<ul>
+<li><strong>초기 시드 추천 수</strong>: 10개 (동일 무작위 시드에 대해 모든 비교 기법이 동일한 초기 아카이브 공유).</li>
+<li><strong>총 평가 예산 (Evaluations)</strong>: 시드 생성 이후 총 1,000회 평가 수행.</li>
+<li><strong>무작위 시드 (Random Seeds)</strong>: 5개 무작위 시드 반복 실험.</li>
+<li><strong>임베딩 파라미터</strong>: OpenAI <code>text-embedding-3-small</code>, 512차원 설정.</li>
+<li><strong>PCA 그리드 파라미터</strong>: 커버리지 측정을 위한 2D PCA 공간 상의 25×25 그리드 설정.</li>
+<li><strong>사용 모델</strong>:
+<ul>
+<li>제안자 LLM (Proposer): <code>claude-sonnet-5</code>, <code>claude-haiku-4-5</code></li>
+<li>평가자 LLM (Evaluator/Judge): <code>gpt-5.6-terra</code> (**자기도착적 편향(Self-preference bias)**을 방지하기 위해 Anthropic 계열 생성 모델과 독립된 타사 모델 채택)</li>
+</ul>
+</li>
+</ul>
+<h6 id="시점-및-날짜-데이터">시점 및 날짜 데이터</h6>
+<ul>
+<li><strong>M&amp;A 재무 데이터 스냅샷 날짜</strong>: 2024년 8월 31일.</li>
+<li><strong>Tripadvisor의 Liberty TripAdvisor Holdings 인수 실제 시점</strong>: 2025년 4월.</li>
+<li><strong>Southwest Airlines 발표 언급 시점</strong>: 2026년 7월 (모델 지식 컷오프 이후 시점의 실적 발표).</li>
+</ul>
+<h6 id="성능-측정-수치-범위-table-2-데이터-종합">성능 측정 수치 범위 (Table 2 데이터 종합)</h6>
+<ul>
+<li><strong>Quality (0~10점)</strong>:
+<ul>
+<li>M&amp;A 도메인: 2.11 ±0.04 ~ 3.04 ±0.04 (Sonnet 5 사용 시 QD-Rec이 최고점 2.91~3.04 달성).</li>
+<li>ML Papers 도메인: 4.26 ±0.02 ~ 6.24 ±0.02 (AI Startup 타깃 Sonnet 5에서 최고 6.24 달성).</li>
+<li>Marketing 도메인: 6.29 ±0.02 ~ 7.05 ±0.05 (3D 프린터 타깃 Sonnet 5에서 최고 7.05 달성).</li>
+</ul>
+</li>
+<li><strong>Diversity ($1 - \text{cosine similarity}$)</strong>: 전체 설정에 걸쳐 0.199 ±.001 ~ 0.526 ±.002 범위 측정.</li>
+<li><strong>Coverage (그리드 점유 비율)</strong>: 전체 설정에 걸쳐 0.07 ±.00 ~ 0.48 ±.00 범위 측정.</li>
+<li><strong>Archive Size ($n$)</strong>: 최소 54 ±3개(Marketing Haiku 4.5)부터 최대 789 ±8개(ML Papers Sonnet 5) 범위 형성. QD-Rec이 대부분의 설정에서 가장 큰 아카이브 크기를 유지함.</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<h6 id="5-1-모델-생성-환각-및-데이터-시점-한계">5.1. 모델 생성 환각 및 데이터 시점 한계</h6>
+<ul>
+<li><code>[한계 분석]</code> <strong>Southwest Airlines 로열티 회원 수 불일치</strong>: 생성된 가설 중 Southwest Airlines의 로열티 회원이 &quot;1억 명 이상&quot;이라는 주장이 포함되어 있으나, 지식 컷오프 이후 시점인 2026년 7월 Southwest 공식 발표 자료에는 &quot;약 1억 명(nearly 100 million)&quot;으로 명시되어 있어 &quot;1억 명 초과&quot; 주장은 검증할 수 없는 환각(Hallucination) 또는 오기로 확인된다.</li>
+<li><code>[한계 분석]</code> <strong>재무 데이터 시점과 실제 거래 간의 격차</strong>: 본 실험은 2024년 8월 31일 자 재무 스냅샷과 요약 텍스트만을 모델에 제공하였다. 그러나 실제 현실에서는 2025년 4월에 Tripadvisor가 Liberty TripAdvisor Holdings를 직접 인수하였다. 입력 정보의 단순성으로 인해 본 시스템의 출력 결과를 실제 실체적인 투자 및 M&amp;A 인수 의사결정에 그대로 적용하기에는 제한이 존재한다.</li>
+</ul>
+<h6 id="5-2-시스템-단순성-및-향후-연구-과제">5.2. 시스템 단순성 및 향후 연구 과제</h6>
+<ul>
+<li><code>[시스템 제약]</code> <strong>아이템 선택 모듈의 선형성 한계</strong>: 현재 QD-Rec의 맥락적 밴딧은 선형 예측기(Linear predictor) 기반으로 동작한다. 아이템 피처와 실제 보상(Reward) 간의 복잡한 비선형 관계를 정교하게 포착하기 위해 신경 맥락적 밴딧(Neural contextual bandits)으로의 고도화가 요구된다.</li>
+<li><code>[시스템 제약]</code> <strong>가설 생성 도구 및 부모 선택 메커니즘의 제약</strong>: 제안자 LLM이 외부 연구 도구나 최신 데이터베이스에 직접 접근하지 못하고 제공된 텍스트에만 의존한다. 또한 아카이브 내 부모 가설 선택 시 단순 무작위 균등 샘플링을 사용하므로, 향후 품질·최신성·과거 활용도를 고려한 부모 선택용 밴딧 메커니즘의 도입이 필요하다.</li>
+<li><code>[시스템 제약]</code> <strong>평가자 편향 및 보상 해킹 위험</strong>: 품질 평가를 전적으로 LLM 판정자에 의존함에 따라, 제안자 모델이 내용의 실질적 개선 없이 평가자의 점수 부여 패턴만을 교묘히 공략하는 <strong>보상 해킹(Reward hacking)</strong> 발생 위험이 존재한다. 주관적 선호도가 중요한 영역에서는 평가 프로세스에 인간 전문가를 참여시키는 <strong>인간 참여형(Human-in-the-loop)</strong> 평가 메커니즘 도입이 향후 과제로 남아있다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

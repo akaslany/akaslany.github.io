@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI와 수학 연구의 접점: 2026년 arXiv 데이터 분석 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>AI와 수학 연구의 접점: 2026년 arXiv 데이터 분석 보고서</h1>
+<p class="page-meta">논문 · 2026-08-29</p>
+<h2 id="요약">요약</h2>
+<p>2026년 arXiv 수학 논문에서 실질적 AI 활용 공시 비중이 3월 1.39%에서 8월 1~20일 14.09%로 늘었다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=1xrS2Gn9VkQ">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="ai와-수학-연구의-접점-2026년-arxiv-데이터-분석-보고서">AI와 수학 연구의 접점: 2026년 arXiv 데이터 분석 보고서</h3>
+<h5 id="1-조사-개요-및-데이터-모집단의-정의">1. 조사 개요 및 데이터 모집단의 정의</h5>
+<p>본 보고서는 2026년 상반기 수학 연구 커뮤니티 내 인공지능(AI)의 실제 채택 현황을 정량적으로 분석한 결과를 담고 있습니다.</p>
+<ul>
+<li><strong>분석 대상 및 기간:</strong> 2026년 3월 1일부터 8월 20일 사이 arXiv에 제출된 논문 중 수학(Mathematics) 카테고리(Primary 또는 Secondary)를 포함하는 총 32,944건을 분석 모집단으로 정의합니다.</li>
+<li><strong>분석의 한계 설정:</strong> 본 보고서의 결과는 arXiv 제출물이라는 특정 샘플에 기반하며, 전 세계의 모든 수학 연구나 동료 심사(Peer-review)를 거친 학술지 게재 논문 전체의 경향을 완벽하게 대변하는 것은 아닙니다.</li>
+<li><strong>데이터 추출 방식:</strong> 저자가 원고 내에 명시한 공시(Disclosure) 문구를 기반으로 분류를 진행했습니다. 추출 도구로는 'GPT-5.6 Terra(낮은 추론 강도 설정, 100개 워커 스레드 활용)'를 사용하였으며, 이는 모델이 수학적 증명을 검증한 것이 아니라 텍스트 마이닝 도구로서 저자의 공시 내용을 식별하고 의미를 파악하는 데 집중했음을 의미합니다. 또한, 30만 자를 초과하는 문서(1,007건)는 문서의 전반부와 후반부 각 15만 자씩을 활용하는 절삭(Truncation) 처리를 적용했습니다.</li>
+</ul>
+<h5 id="2-ai-기여의-분류-실질적-substantive-사용-vs-비실질적-non-substantive-사용">2. AI 기여의 분류: 실질적(Substantive) 사용 vs 비실질적(Non-substantive) 사용</h5>
+<p>분석의 정밀도를 높이기 위해 AI 사용 방식을 수학적 기여도에 따라 두 가지 핵심 범주로 정의하였습니다.</p>
+<ul>
+<li><strong>실질적(Substantive) 사용:</strong> AI가 수학적 본질에 직접 개입한 경우입니다. 증명 구성(Proof Construction), 문제 정식화(Problem Formulation), 수학적 형식화 및 검증(Formalization &amp; Verification) 등 연구의 핵심 추론 단계에 AI를 활용한 사례가 포함됩니다.</li>
+<li><strong>비실질적(Non-substantive) 사용:</strong> 연구의 본질적 내용보다는 보조적인 기능에 AI를 한정한 경우입니다. 문장 다듬기(Language/Formatting), 코드 작성 및 단순 계산(Code/Computation), 문헌 탐색 및 인용 보조 등이 이에 해당합니다.</li>
+<li><strong>분류의 특성:</strong> 위 두 대분류 및 하위 항목들은 비배타적(Non-exclusive)인 성격을 가집니다. 하나의 논문이 여러 항목에 중복 해당할 수 있으므로, 각 수치를 단순 합산하여 전체 사용 건수를 도출하는 방식은 통계적 오류를 범할 수 있습니다.</li>
+</ul>
+<h5 id="3-통계적-현황-및-증가-추세-분석">3. 통계적 현황 및 증가 추세 분석</h5>
+<p>모집단 내에서 관찰된 AI 활용 공시 데이터는 명확한 증가세를 나타내고 있습니다.</p>
+<ul>
+<li><strong>주요 수치 요약:</strong> 전체 모집단 32,944건 중 어떤 형태로든 AI 사용을 명시한 논문은 3,575건으로 분류되었습니다. 이 중 실질적인 수학적 기여(Substantive use) 라벨을 부여받은 논문은 1,712건입니다.</li>
+<li><strong>증가율 분석:</strong> 실질적 기여 비중은 3월 1.39%(73건/5,265건)에서 시작하여, 8월 20일 기준 14.09%(632건/4,487건)까지 급격하게 상승했습니다.</li>
+<li><strong>주의사항:</strong> 8월 수치는 20일까지만의 기록이며, 이를 근거로 &quot;모든 수학 연구의 14%가 AI를 사용한다&quot;고 일반화하거나, 특정 모델의 출시와 활용 증가 사이의 직접적인 인과관계를 단정하는 것은 통계적으로 경계해야 합니다.</li>
+</ul>
+<h5 id="4-난제-open-problems-해결-보고의-실체">4. 난제(Open Problems) 해결 보고의 실체</h5>
+<p>실질적 사용 논문 내에서 확인된 수학적 난제에 대한 AI의 기여 기록을 심층 분석하였습니다.</p>
+<ul>
+<li><strong>데이터의 정의:</strong> 분석 대상 논문에서 총 717개의 명명된 오픈 문제 기록(Named open-problem records)이 식별되었습니다. 이는 고유한 문제의 개수가 아니라, 분석 대상이 된 논문들에서 식별된 언급 및 보고 기록의 총합입니다.</li>
+<li><strong>해결 보고 수치:</strong> 식별된 717건의 기록 중 약 71.13%인 510건이 '완전 해결(Fully Resolved)'로 분류되었습니다. 이 중 329건은 참(True)으로, 181건은 거짓(False)으로 분류된 결과입니다.</li>
+<li><strong>해석의 경계 설정:</strong> 이 수치는 저자가 논문에 기술한 내용을 LLM이 분류한 결과일 뿐이며, AI가 독자적으로 난제의 71%를 해결했다는 의미가 아닙니다. 이는 독립적인 수학적 증명 검증이나 성공률 지표가 아니며, 저자의 주장을 데이터화한 것임을 분명히 합니다.</li>
+</ul>
+<h5 id="5-국가별-가중치-및-주요-모델-점유-현황">5. 국가별 가중치 및 주요 모델 점유 현황</h5>
+<ul>
+<li><strong>국가별 분포:</strong> 저자 소속 기반의 가중치 합산 방식을 적용하였습니다. 한 논문에 $m$명의 저자가 있을 경우 국가별 기여도를 인당 $1/m$로 배분하여 합산한 결과, 미국(33.7%)과 중국(32.9%)이 인식된 전체 국가 가중치의 약 3분의 2를 차지했습니다. 이는 arXiv의 플랫폼 선택 효과 및 소속 미확인 저자의 한계를 포함한 결과입니다.</li>
+<li><strong>모델 빈도:</strong> 저자들의 공시 문구에서 OpenAI 모델이 가장 빈번하게 언급되었으며, Anthropic이 그 뒤를 이었습니다. 이는 공시 문자열의 빈도일 뿐이며, 특정 모델의 성능 우위나 실제 시장 점유율과 동일시할 수 없습니다.</li>
+</ul>
+<h5 id="6-정보-성격에-따른-분석-결과-분리">6. 정보 성격에 따른 분석 결과 분리</h5>
+<p>분석된 데이터의 성격을 4가지 범주로 구분하여 요약합니다.</p>
+<ul>
+<li><strong>저자 보고 실증 결과:</strong>
+<ul>
+<li>32,944건의 arXiv 제출물 분석 완료 및 증명 구성(PC) 항목에 1,225건 연루 확인.</li>
+<li>분야별 이질성 확인: Metric Geometry(13.11%), Combinatorics(11.74%), Number Theory(7.95%) 등에서 상대적으로 높은 실질적 사용 비중 보고.</li>
+</ul>
+</li>
+<li><strong>저자 해석:</strong>
+<ul>
+<li>수학 연구에서의 AI 채택은 현재 급격히 확장 중이나, 여전히 초기 단계이며 분야 및 지역별로 불균형하게 확산되고 있다는 판단.</li>
+</ul>
+</li>
+<li><strong>인용된 제3자 사례:</strong>
+<ul>
+<li>Knuth(2026)의 Hamiltonian-cycle 관련 성과, First Proof 프로젝트의 전문가 심사 결과.</li>
+<li>OpenAI Astra가 10개의 장기 난제를 해결하거나 실질적으로 진전시킨 사례.</li>
+<li>Claude가 리만 제타 함수 제로점의 하한선을 41.6%에서 67.2%로 개선한 성과 등 논문 내 인용된 외부 사례.</li>
+</ul>
+</li>
+<li><strong>해설자 추론:</strong>
+<ul>
+<li>조합론, 대수학, 수론 등 이산적(Discrete) 영역이 AI의 자동 추론과 결합하기 용이한 분야적 특성이 통계적 편향에 영향을 주었을 가능성.</li>
+<li>특정 분야 연구자들의 공시 규범이나 초기 수용자(Early Adopter) 구성의 차이가 수치에 반영되었을 가능성.</li>
+</ul>
+</li>
+</ul>
+<h5 id="7-방법론적-불투명성-및-검증의-한계">7. 방법론적 불투명성 및 검증의 한계</h5>
+<ul>
+<li><strong>비공개 항목:</strong> 분석에 사용된 구체적인 오퍼레이셔널 프롬프트(Operational prompt) 및 분류 정확도를 나타내는 정밀도(Precision)와 재현율(Recall) 지표가 외부에 공개되지 않았습니다.</li>
+<li><strong>검증 상태:</strong> 현재 10명 이상의 자원봉사자가 수작업 검토를 진행 중이나 아직 완료되지 않았습니다. 또한, 분석 대상인 arXiv 자료는 동료 심사를 거치지 않은 사전 공개본(Preprint) 상태임을 유의해야 합니다.</li>
+</ul>
+<h5 id="8-결론-투명성-강화와-모니터링-제언">8. 결론: 투명성 강화와 모니터링 제언</h5>
+<p>AI가 수학 연구의 실질적 영역에서 활용 보고되는 현상은 뚜렷하게 관찰되나, 이는 어디까지나 저자가 스스로 '공시한' 데이터에 국한된 결과입니다. 향후 수학계는 단순한 활용 증가를 넘어 다음과 같은 항목을 중심으로 지속적인 모니터링을 수행해야 합니다.</p>
+<ol>
+<li>공시되지 않은 AI 사용(Undisclosed use) 사례를 추정할 수 있는 객관적 방법론 확보.</li>
+<li>보고된 해결 문제들에 대한 수학계의 독립적인 사후 검증 결과 추적.</li>
+<li>수학 세부 분야별로 상이한 AI 활용 공시 규범(Disclosure Norms)의 표준화 여부 감시.</li>
+</ol>
+<hr />
+<h3 id="수학-연구의-ai-골드러시-근거-경계형-보고서-개요">수학 연구의 AI 골드러시 — 근거 경계형 보고서 개요</h3>
+<h4 id="질문">질문</h4>
+<p>AI가 수학 연구에 실제로 얼마나 들어왔는가, 무엇을 했다고 보고됐고, 이 통계가 말하지 않는 것은 무엇인가?</p>
+<h4 id="요약-2">요약</h4>
+<p>이 논문은 2026년 3월 1일부터 8월 20일까지 Mathematics를 primary/secondary category로 포함한 arXiv 제출 32,944건을 조사했다. 저자가 AI 사용을 명시적으로 공개했다고 분류된 원고는 3,575건, 그중 적어도 하나의 substantive 수학 기여 라벨을 받은 원고는 1,712건이었다. 월별 disclosed substantive share는 3월 1.39%에서 8월 1~20일 14.09%로 늘었다. 이것은 모든 수학 연구의 AI 사용률이 아니며 disclosure·카테고리·기간·분류 오차의 경계를 가진다.</p>
+<p>717개의 named open-problem records 중 약 71%가 저자 설명 기준 fully resolved로 라벨링됐지만, AI 성공률이나 독립 증명 검증이 아니다. 분야, 국가, 모델 집중도도 arXiv 선택·저자 소속 가중·vendor-name disclosure의 결과다. 향후에는 독립 검증, 동료심사, disclosure 표준, 데이터·프롬프트 공개, AI/인간 기여도와 신용 배분을 추적해야 한다.</p>
+<h4 id="공개-전-편집-경계">공개 전 편집 경계</h4>
+<h3 id="ai4math-gold-rush-검토된-한국어-팩트-카드">AI4Math Gold Rush — 검토된 한국어 팩트 카드</h3>
+<h4 id="조사-설계">조사 설계</h4>
+<ul>
+<li>모집단: 2026-03-01~2026-08-20 사이 arXiv 제출물 중 Mathematics가 primary 또는 secondary category인 32,944건. 모든 수학 연구나 저널 논문의 모집단이 아니다.</li>
+<li>AI 사용: 저자가 원고에 명시한 disclosure를 GPT-5.6 Terra(low reasoning, 100 workers)가 추출·분류했다. 30만 자 초과 문서는 앞뒤 각 15만 자만 사용했고 1,007건이 truncated였다.</li>
+<li>수작업 검토는 10명 이상 자원봉사자가 일부 후보를 계속 검토 중이라고만 보고된다. 표본 크기·정확도·재현율·일치도는 공개되지 않았다.</li>
+</ul>
+<h4 id="핵심-결과와-정확한-경계">핵심 결과와 정확한 경계</h4>
+<ul>
+<li>32,944건 중 3,575건이 어떤 AI 사용이든 명시적으로 공개한 것으로 분류됐다. disclosure가 없는 사용은 잡지 못하므로 실제 사용의 완전한 추정치가 아니다.</li>
+<li>1,712건이 적어도 하나의 substantive 수학 기여 라벨을 받았다. substantive는 증명 구성, 문제 정식화, 형식화·검증, 기타 연구 보조 중 하나 이상이며 하위 라벨은 비배타적이다.</li>
+<li>substantive 공개 비중은 3월 73/5,265=1.39%에서 8월 1~20일 632/4,487=14.09%로 증가했다. 8월은 20일까지만이며, '모든 수학 연구의 14%'가 아니다. 관찰 추세이지 모델 출시의 인과효과가 아니다.</li>
+<li>substantive-use 논문에서 717개의 named open-problem records가 추출됐다. 329 resolved true + 181 resolved false = 510건, 약 71.13%가 저자 설명을 읽은 LLM 분류에서 fully resolved로 표시됐다. 독립 증명 검증, 성공률, 고유 문제 717개, AI가 71%를 해결했다는 뜻이 아니다.</li>
+<li>국가를 저자 소속으로 추론하고, 한 논문 내 국가별 저자 비중을 가중치로 합산했다. 미국과 중국이 인식된 국가 가중치의 약 3분의 2를 차지한다. 미확인 소속·공동저자 가중·arXiv 선택효과가 있다.</li>
+<li>named model 집계에서는 OpenAI가 가장 자주, Anthropic이 두 번째였다. 이는 disclosure 문자열의 빈도이지 성능·인과·시장점유율이 아니다.</li>
+</ul>
+<h4 id="substantive-vs-non-substantive-쉬운-설명">substantive vs non-substantive 쉬운 설명</h4>
+<ul>
+<li>substantive: AI가 수학 내용 자체에 관여했다고 저자가 적은 경우(증명 아이디어·문제 설정·형식검증 등).</li>
+<li>non-substantive: 문장 다듬기, 형식, 코드·계산, 문헌 탐색처럼 연구를 지원하지만 수학적 기여로 분류되지 않은 경우.</li>
+<li>두 대분류와 하위 항목은 겹칠 수 있다. 건수를 단순 합산하면 안 된다.</li>
+</ul>
+<h4 id="분야-검증-신용-경계">분야·검증·신용 경계</h4>
+<ul>
+<li>Metric Geometry 13.11%, Combinatorics 11.74% 등 분야별 이질성이 보고됐지만 분야 문화, disclosure 규범, early adopter 구성의 효과를 분리하지 못한다.</li>
+<li>named examples와 First Proof, Astra, Claude/OpenAI 관련 사례는 논문이 인용한 제3자 발표다. 이번 32,944건 표본 결과나 독립 검증으로 바꾸지 않는다.</li>
+<li>arXiv는 배포 플랫폼이며 동료심사 완료를 뜻하지 않는다. 해결 라벨은 수학적 정확성·새로움·우선권을 검증하지 않는다.</li>
+</ul>
+<h4 id="반드시-말하지-않을-문장">반드시 말하지 않을 문장</h4>
+<ul>
+<li>'수학 연구의 14%가 AI를 쓴다.'</li>
+<li>'AI가 오픈 문제의 71%를 풀었다.'</li>
+<li>'1,225개의 증명을 AI가 완성했다.'</li>
+<li>'미국·중국이 전 세계 AI 수학의 3분의 2다.'</li>
+<li>'분류 정확성이 수작업으로 검증됐다.'</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE EXPONENTIAL TIME HYPOTHESIS IS FALSE — OpenAI, preprint 2026-10-25</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>THE EXPONENTIAL TIME HYPOTHESIS IS FALSE — OpenAI, preprint 2026-10-25</h1>
+<p class="page-meta">문서 · 2026-10-27</p>
+<h2 id="요약">요약</h2>
+<p>계산복잡도론에서 3-SAT 및 $k$-SAT 문제는 NP-완전성(NP-completeness)을 규정하는 핵심 논리제약 문제이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/document/">문서</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=qvxSYvIMIKI">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai의-지수-시간-가설-eth-반박-논문-심층-해설-보고서">OpenAI의 지수 시간 가설(ETH) 반박 논문 심층 해설 보고서</h3>
+<hr />
+<h5 id="1-지수-시간-가설-eth-과-강한-지수-시간-가설-seth-의-개념-및-역할">1. 지수 시간 가설(ETH)과 강한 지수 시간 가설(SETH)의 개념 및 역할</h5>
+<h6 id="1-1-eth-및-seth의-정의">1.1 ETH 및 SETH의 정의</h6>
+<p>계산복잡도론에서 3-SAT 및 $k$-SAT 문제는 NP-완전성(NP-completeness)을 규정하는 핵심 논리제약 문제이다. $n$개의 선언된 부울 변수 $x_1, \dots, x_n$와 $m$개의 절(clause)로 구성된 임의의 $k$-CNF 논리식 $F(x_1, \dots, x_n)$은 다음과 같이 표현된다.</p>
+<p>$$F(x_1, \dots, x_n) = \bigwedge_{e=1}^m \left( (x_{i_{e,1}} \oplus b_{e,1}) \vee \dots \vee (x_{i_{e,k}} \oplus b_{e,k}) \right)$$</p>
+<p>여기서 $i_{e,j} \in {1, \dots, n}$는 변수의 인덱스이고 $b_{e,j} \in {0, 1}$는 부정(negation) 비트이며, $\oplus$는 모듈로 2 가산을 나타낸다. 이러한 $k$-CNF 논리식의 충족 가능성을 결정하는 문제에 대해, 지수 시간 가설(Exponential Time Hypothesis, ETH)과 강한 지수 시간 가설(Strong Exponential Time Hypothesis, SETH)은 결정적 알고리즘의 최악의 경우(worst-case) 하한을 다음과 같이 정의한다.</p>
+<ul>
+<li><strong>지수 시간 가설 (ETH):</strong> 고정된 $k \ge 3$에 대해 $n$개 변수를 갖는 3-SAT 문제를 결정적으로 판별하는 데 최악의 경우 $2^{\Omega(n)}$ 시간이 필요하다고 주장한다. 즉, 임의의 $k \ge 3$에 대해 $2^{o(n)}$ 시간 내에 3-SAT을 해결하는 결정적 알고리즘은 존재하지 않는다는 가설이다.</li>
+<li><strong>강한 지수 시간 가설 (SETH):</strong> $k$-SAT을 해결하는 알고리즘의 실행 시간 상한이 $k$가 증가함에 따라 충족 가능성 전수 조사 시간인 $2^n$에 다가간다고 예측한다. 엄밀하게는, 모든 $\varepsilon \in (0, 1)$에 대해 적절한 상수 $k \ge 3$가 존재하여 $n$개 변수, $m$개 절의 $k$-SAT 문제를 $2^{(1-\varepsilon)n}(n+m)^{O(1)}$ 시간에 해결할 수 있는 결정적 알고리즘이 존재하지 않는다는 명제이다. 즉, $k \to \infty$ 일 때 최악의 경우 실행 시간 하한이 $2^{n(1-o_k(1))}$로 수렴함을 시사한다.</li>
+</ul>
+<h6 id="1-2-알고리즘-하한의-기준점으로서의-역할">1.2 알고리즘 하한의 기준점으로서의 역할</h6>
+<p>ETH와 SETH는 수십 년간 이론 컴퓨터 과학 전반에서 조건부 하한(conditional lower bounds)을 도출하는 확고한 계산복잡도론적 기준점(benchmark)으로 작동해 왔다.</p>
+<ol>
+<li><strong>매개변수화 복잡도 (Parameterized Complexity):</strong> ETH는 클리크(Clique), 지배 집합(Dominating Set) 문제 등에서 솔루션 크기 매개변수에 대한 최적 실행 시간 하한을 입증하거나, 제약 충족 문제(CSP) 및 분할 부분 그래프 동형 사상(Partitioned Subgraph Isomorphism) 등에서 트리 폭(Treewidth) 매개변수에 대한 지수적 하한을 설정하는 근거가 되었다.</li>
+<li><strong>세밀한 복잡도 (Fine-grained Complexity):</strong> SETH는 P 클래스 내부 문제들의 다항식 시간 알고리즘에 대한 최적 하한을 제공했다. 편집 거리(Edit Distance), 최장 공통 부분 수열(LCS), 동적 시간 와핑(DTW), 프레셰 거리(Fréchet Distance), 정규 표현식 매칭(Regular Expression Matching) 문제 등에 대해 2차 시간($O(n^2)$)을 넘어서는 다항식 인자 가속이 불가능함을 입증하는 핵심 도구로 사용되었다.</li>
+<li><strong>기타 계산 하한:</strong> SETH 및 ETH는 그래프 직경(Graph Diameter) 근사 한계, 동적 그래프에서의 연결성 유지 관리 하한, Subset Sum 및 Bicriteria Path 알고리즘의 의사 다항식 시간 가속 한계 등을 설명하는 표준적 가설로 자리 잡아 왔다.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">가설 (Hypothesis)</th>
+<th style="text-align:left">대상 문제</th>
+<th style="text-align:left">주장하는 복잡도 하한 (Worst-case)</th>
+<th style="text-align:left">반박에 따른 직접적 파급 효과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>ETH</strong></td>
+<td style="text-align:left">3-SAT</td>
+<td style="text-align:left">$2^{\Omega(n)}$ 결정적 실행 시간</td>
+<td style="text-align:left">$2^{o(n)}$ 알고리즘의 존재로 매개변수화 알고리즘 하한 기준점 무효화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SETH</strong></td>
+<td style="text-align:left">$k$-SAT</td>
+<td style="text-align:left">$k \to \infty$ 일 때 $2^{n(1-o_k(1))}$</td>
+<td style="text-align:left">P 클래스 내 다항식 시간 문제(편집 거리, LCS 등)의 최적성 설명 틀 해체</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gap-ETH</strong></td>
+<td style="text-align:left">Gap-3-SAT</td>
+<td style="text-align:left">$2^{\gamma n}$ (상수 비율 근사 불가능)</td>
+<td style="text-align:left">Label Cover, Dense CSP, Clique 근사 하한의 기반 재검토 필요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NSETH</strong></td>
+<td style="text-align:left">$k$-CNF 불충족성</td>
+<td style="text-align:left">$2^{(1-\varepsilon)n}$ 비결정적 시간</td>
+<td style="text-align:left">3SUM, APSP 등으로의 세밀한 환원 장벽 재구성 필요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>#ETH</strong></td>
+<td style="text-align:left">#3-SAT</td>
+<td style="text-align:left">$2^{\Omega(n)}$ 결정적 카운팅 시간</td>
+<td style="text-align:left">완벽 매칭, 그래프 착색 등의 결정적 카운팅 하한 붕괴</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-논문의-주요-결과-및-eth-반박의-논리-구조">2. 논문의 주요 결과 및 ETH 반박의 논리 구조</h5>
+<h6 id="2-1-메인-정리-theorem-1-1">2.1 메인 정리 (Theorem 1.1)</h6>
+<p>OpenAI 연구진은 2026년 10월 25일 제출한 프리프린트를 통해 고정된 $k \ge 2$에 대해 $n$개 변수, $m$개 절을 가진 임의의 $k$-CNF 논리식 $F$의 만족 할당 개수(#F)를 정확히 세는 결정적 알고리즘을 제시함으로써 ETH를 공식 반박하였다.</p>
+<blockquote>
+<p><strong>Theorem 1.1 (메인 정리).</strong>
+고정된 각 $k \ge 2$에 대해, $m$개의 절과 $n \ge 20$개의 선언된 변수를 갖는 임의의 $k$-CNF 논리식 $F$가 주어졌을 때, 만족 할당 개수 $#F = |{x \in {0,1}^n : F(x) = 1}|$를 정확히 계산하는 결정적(deterministic) 알고리즘이 존재한다.
+이 알고리즘은 **$\text{poly}_k(n, m)$ 공간 (즉, $(n+m)^{O_k(1)}$ 비트)**을 사용하며, 다항식 공간 상한 내에서의 핵심 복잡도 및 비트 연산 실행 시간은 다음과 같다:</p>
+<p>$$\text{Primary Complexity Bound: } (n+m)^{O_k(1)} 2^{n/(\log n)^{1+o(1)}}$$</p>
+<p>$$\text{Bit-Operation Square-Root Bound: } \sqrt{(n + m)^{O_k(1)} 2^{O_k(n \log \log n / \log n)}}$$</p>
+<p>고정된 절 밀도 $m \le Dn$ (상수 $D &gt; 0$) 조건에서 실행 시간은 다음과 같이 서술된다:</p>
+<p>$$\sqrt{(n + m)^{O_{k,D}(1)} 2^{O_{k,D}(n / \log n)}}$$</p>
+<p>약화된 유리 보간(Rational Interpolation) 구성을 통하면 지수 스케일 $O_k(\rho(n))$의 비트 연산 상한을 얻으며, 여기서 $\rho(n)$은 다음과 같다:</p>
+<p>$$\rho(n) = \frac{n(\log \log n)^2}{\log n} = \frac{n}{(\log n)^{1 + o(1)}}$$</p>
+</blockquote>
+<h6 id="2-2-가설-연쇄-반박의-논리-구조-및-패러다임-전환">2.2 가설 연쇄 반박의 논리 구조 및 패러다임 전환</h6>
+<p>Theorem 1.1의 카운팅 알고리즘은 다항식 공간 내에서 $2^{o(n)}$ 시간 상한을 보장하므로, 단순 충족 가능성 결정 문제(#F &gt; 0 판단)로 환원되어 기존의 복잡도 가설들을 연쇄적으로 반박(Refute)한다.</p>
+<ol>
+<li><strong>ETH 및 SETH 반박:</strong> $#F &gt; 0$을 검사하는 결정적 알고리즘의 실행 시간이 $2^{O_k(\rho(n))} = 2^{o(n)}$이므로, ETH가 주장하는 $2^{\Omega(n)}$ 하한과 SETH가 주장하는 $2^{n(1-o_k(1))}$ 하한이 동시에 무너진다.</li>
+<li><strong>Gap-ETH 반박:</strong> 서브지수 시간에 만족 할당의 존재 여부를 정확히 결정할 수 있으므로, 약한 가속조차 허용하지 않는 약속 문제(promise problem)인 Gap-ETH 역시 직관적으로 해소된다.</li>
+<li><strong>NSETH 반박:</strong> 동일한 결정적 $2^{o(n)}$ 알고리즘이 논리식의 불충족성(unsatisfiability) 역시 다항식 공간 내에서 인증하므로 NSETH가 반박된다.</li>
+<li><strong>#ETH 반박:</strong> #3-SAT을 다항식 시간 인자를 제외하고 $2^{o(n)}$ 시간에 정확히 카운팅하므로 #ETH가 직접적으로 반박된다.</li>
+<li><strong>확률적 변형 가설 반박:</strong> 본 알고리즘은 완전한 결정적(deterministic) 알고리즘이므로, ETH, SETH, Gap-ETH의 확률적(randomized, bounded-error) 변형 가설들까지 완전히 반박한다.</li>
+</ol>
+<ul>
+<li><strong>개념적 패러다임 전환 (Theoretical Synthesis):</strong> 기존 알고리즘(Schöning의 국소 탐색, PPSZ 등)이 변수 공간의 직접적인 트리를 탐색하거나 분기(branching)하는 방식에 의존하여 $2^n$ 전수 조사의 지수적 장벽을 완전히 넘어서지 못했던 반면, OpenAI의 접근법은 **저차 대체 형식(Low-Degree Replacement Forms)**과 **공유 선형 요약(Shared Linear Summaries)**을 도입하였다. 이를 통해 변수 간 결합성을 정수 선형 측정값으로 분리하고, 대수적 보간법을 통해 전체 할당을 직접 탐색하지 않고도 테일러 계수를 복원함으로써 전통적인 $2^n$ 지수 하한 장벽을 무력화시켰다.</li>
+</ul>
+<h6 id="2-3-부수적-결과-corollaries-1-2-1-4">2.3 부수적 결과 (Corollaries 1.2 ~ 1.4)</h6>
+<blockquote>
+<p><strong>Corollary 1.2 (Max-$k$-SAT 무작위 근사 알고리즘).</strong>
+고정된 $k \ge 2$ 및 $\varepsilon &gt; 0$에 대해, 임의의 $k$-CNF $F$에 대해 최대로 만족시킬 수 있는 절의 개수를 $\text{OPT}(F)$라 할 때, Hoeffding 부등식 및 유니온 바운드에 기반하여 <strong>확률 $1 - 2^{-\Omega(n)}$ 이상</strong>으로 최소 $\text{OPT}(F) - \varepsilon m$개의 절을 만족하는 할당을 찾는 확률적 알고리즘이 존재한다. 이 알고리즘의 실행 시간은 <strong>$(n+m)^{O_{k,\varepsilon}(1)} 2^{O_{k,\varepsilon}(\rho(n))}$</strong> 이며, <strong>$(n+m)^{O_{k,\varepsilon}(1)}$</strong> 공간을 사용한다.</p>
+</blockquote>
+<blockquote>
+<p><strong>Corollary 1.3 (독립 집합, Proper $q$-Coloring, 완벽 매칭의 결정적 카운팅).</strong>
+정점 수 $v$, 간선 수 $e$인 단순 그래프에서 독립 집합의 개수 및 고정된 $q \ge 2$에 대한 올바른 $q$-색칠(proper $q$-coloring)의 개수는 결정적으로 <strong>$2^{o(v)}$ 시간 및 $\text{poly}_q(v, e)$ 공간</strong>에서 계산 가능하다. 완벽 매칭(perfect matching)의 개수는 결정적으로 <strong>$2^{o(v+e)}$ 시간 및 $\text{poly}(v, e)$ 공간</strong>에서 계산 가능하다.</p>
+</blockquote>
+<blockquote>
+<p><strong>Corollary 1.4 ($E^{\text{NP}}$ 클래스에 대한 회로 하한).</strong>
+$E^{\text{NP}}$(결정적 지수 시간 $2^{O(n)}$ 내에서 NP 오라클을 사용하여 결정 가능한 언어 클래스)에 속하는 언어 $L$과 상수 $c &gt; 0$가 존재하여, 최대 팬인(fan-in) 2의 부울 게이트로 구성된 회로 복잡도 $C_L(n)$이 무한히 많은 $n$에 대해 다음 하한을 만족한다:</p>
+<p>$$C_L(n) &gt; c \sqrt{n \log n}$$</p>
+</blockquote>
+<ul>
+<li><strong>Williams의 프레임워크와의 연계성:</strong> Corollary 1.4는 라이언 윌리엄스(Ryan Williams)의 회로 하한 도출 프레임워크(알고리즘적 가속이 회로 하한 증명을 귀결시킨다는 이론)를 적용한 결과이다. Jahanjou-Miles-Viola의 국소 환원 기법을 결합하여, 서브지수 시간 SAT 해결 알고리즘으로부터 $E^{\text{NP}}$ 언어 클래스에 대한 회로 하한을 엄밀하게 도출해 낸다.</li>
+</ul>
+<hr />
+<h5 id="3-핵심-기법-개요-technique-overview">3. 핵심 기법 개요 (Technique Overview)</h5>
+<p>OpenAI 보고서는 지수적 탐색 한계를 극복하기 위해 대수적 보간법과 조합론적 구성을 결합한 4가지 핵심 기법을 사용한다. 전반적인 환원 체인은 아래 구조와 같다.</p>
+<pre><code>[#k-SAT 문제]
+       │
+       ▼ (1. Disjoint Sparsification &amp; Tanner Code / Greedy Parity Tests)
+[희소 다항식 연립방정식 공통 영점 카운팅 문제] (Theorem 2.2)
+       │
+       ▼ (2. Beigel-Tarui 다항식 p_ℓ &amp; 잘린 곱 Truncated Product 기법)
+[전체 차수 O(n)의 단일 다항식 곱 형태]
+       │
+       ▼ (3. 공유 선형 요약 Shared Linear Summaries &amp; (r, τ, D)-Design)
+[그룹 간 독립적 다항식 평가 및 테일러 계수 복원]
+       │
+       ▼ (4. 유리 보간법 / 부울 텐서 네트워크 축약)
+[최종 정확한 충족 할당 개수 #F 산출]
+</code></pre>
+<h6 id="3-1-공유-선형-요약-shared-linear-summaries">3.1 공유 선형 요약 (Shared Linear Summaries)</h6>
+<p>변수 간 상호작용을 분리하여 독립적인 그룹 간 카운팅을 가능하게 만드는 메커니즘이다.</p>
+<ol>
+<li><strong>변수 분할:</strong> 전체 $n$개 변수를 크기 $|S_g| \le 2n/r$인 $r$개의 소그룹 $S_1, \dots, S_r$로 분할한다.</li>
+<li><strong>선형 측정 공유:</strong> 각 그룹 $g$에 대해 정수 행렬 $C_g$를 정의하고 선형 측정값 $y_g = C_g x_g$를 생성한다.</li>
+<li><strong>상호작용 분리:</strong> 전체 선형 요약 $\vec{y} = (y_1, \dots, y_r)$의 값을 고정하면, 서로 다른 변수 그룹 간에 복잡하게 얽혀 있던 절(clause) 다항식들이 각 그룹 내 변수들에만 의존하는 독립적 다항식의 곱으로 분리된다.</li>
+<li><strong>독립 카운팅:</strong> 고정된 $\vec{y}$에 대해 각 그룹 별로 할당을 독립적으로 탐색 및 합산($B_{t,g}(\vec{y})$)한 후 이를 곱함으로써, 전체 $2^n$ 탐색 공간을 개별 그룹 크기 지수 시간들의 곱으로 축소한다.</li>
+</ol>
+<h6 id="3-2-저차-대체-형식-low-degree-replacement-forms">3.2 저차 대체 형식 (Low-Degree Replacement Forms)</h6>
+<p>보간 매개변수 $T$를 도입하여 대수적 계산 복잡도를 제어하는 기법이다.</p>
+<ol>
+<li><strong>보간 변수 도입:</strong> 각 변수 $X_v$ 대신 보간 매개변수 $T$에 대한 저차 다항식 $P_{e,v}(T)$ 형태의 대체 선형 형식(replacement linear form)을 도입한다. $T=0$일 때 원래 변수 값 $X_v$를 복원한다.</li>
+<li><strong>저차 다항식 구조:</strong> 정방 유리 행렬 $M_0$와 측정 행렬 $C$의 대수적 구조를 통해 $\text{deg } P_{e,v} \le R$ (여기서 $R \ll Q$)을 보장한다.</li>
+<li><strong>평가 및 설계 (Design):</strong> 선택된 보간점 $t \in [Q]$에서 다항식들이 $(r, \tau, D)$-design 조건(작은 그룹 크기, 소수의 측정 행렬, 측정 고정 시 그룹 독립성)을 만족하도록 구성한다.</li>
+<li><strong>테일러 계수 복원:</strong> 각 평가점 $t$에서 $z$에 대한 테일러 계수(Taylor Coefficients)를 계산하고, 포괄적인 Hermite 보간법을 적용하여 $T=0$에서의 정답인 $H(0) = #F$를 복원한다.</li>
+</ol>
+<h6 id="3-3-희소-다항식-연립방정식의-공통-영점-계수-counting-common-zeros">3.3 희소 다항식 연립방정식의 공통 영점 계수 (Counting Common Zeros)</h6>
+<p>$\mathbb{F}_2$ 상의 저차 희소 다항식 연립방정식의 공통 영점을 효율적으로 카운팅하는 기법(<strong>Theorem 2.2</strong>)이다.</p>
+<ol>
+<li><strong>Beigel-Tarui 다항식 변환:</strong> $\mathbb{F}<em>2$ 상의 각 방정식을 정수 합 $L_i(x)$로 변환한 후, 짝수 판별 인디케이터인 보완된 Beigel-Tarui 다항식 $p</em>\ell(L_i(x)) \equiv 1_{{2 | L_i(x)}} \pmod{2^\ell}$를 적용한다 ($\ell = n+1$).</li>
+<li><strong>잘린 곱 (Truncated Product) 기법:</strong> $p_\ell(Y) = \sum_{j=0}^{\ell-1} e_j(Y) h(Y)^j$ 식 표현을 바탕으로, 대수 $A_\ell = \mathbb{Q}[V]/(V^\ell)$ 상에서 전체 식의 곱을 구한다. 이때 변수 $V$는 **모든 결합된 패리티 방정식 전체에 걸쳐 $h(Y) = Y(Y-1)$의 누적 지수(global power)**를 추적한다.</li>
+<li><strong>차수 한계 제어:</strong> $h(Y)$의 전체 곱해진 개수가 $\ell$ 이상인 항은 $V^\ell \equiv 0 \pmod{2^\ell}$에 의해 모듈로 $2^\ell$ 상에서 버려진다. 이를 통해 전체 방정식들의 곱 다항식의 입력 차수를 $O(n)$으로 완벽히 통제한다.</li>
+<li><strong>분기 및 카운팅:</strong> 가장 자주 출현하는 변수들을 브랜칭(branching)하여 분리한 후, 저차 다항식 연립방정식의 공통 영점 수를 $2^{O_{k,c}(n(\log \log n)^2/\log n)}$ 시간 및 다항식 공간에서 결정적으로 계산한다.</li>
+</ol>
+<h6 id="3-4-k-sat에서-공통-영점-계수로의-환원-reduction-from-k-sat">3.4 #k-SAT에서 공통 영점 계수로의 환원 (Reduction from #k-SAT)</h6>
+<p>#k-SAT 문제를 희소 다항식 연립방정식 공통 영점 카운팅 문제로 환원하는 절차이다.</p>
+<ol>
+<li><strong>Disjoint Sparsification:</strong> 입력 $k$-CNF를 변수당 출현 횟수가 $B = (\log n)^{O_k(1)}$로 제한된 희소 논리식들의 분리 집합으로 분할한다.</li>
+<li><strong>Tanner Code 기반 초기 검사:</strong> 익스팬더 그래프(Expander graph) 기반 Tanner code 구조를 이용하여 적은 수의 위반 절을 가지는 잘못된 할당들을 한꺼번에 배제하는 초기 패리티 검사 행렬 $A^{(0)}$를 구성한다.</li>
+<li><strong>탐욕적 패리티 검사 (Greedy Parity Tests) 선택:</strong> 남은 비충족 할당들을 배제하기 위해 조건부 기대값 방법(method of conditional expectations)을 적용한다. 매 라운드마다 남아있는 오답 할당의 개수를 최소 $3/4$ 비율로 줄여주는 짧은 패리티 검사식을 탐욕적으로 선택하여 추가한다.</li>
+<li><strong>최종 환원 완수:</strong> $3n$ 라운드의 패리티 검사 추가 과정을 거쳐, 원래 $k$-SAT의 만족 할당과 정확히 일치하는 공통 영점을 갖는 $O(n)$개의 희소 다항식 연립방정식을 완성한다.</li>
+</ol>
+<hr />
+<h5 id="4-부록-a-d의-역할-및-주요-내용">4. 부록 A~D의 역할 및 주요 내용</h5>
+<ul>
+<li><strong>Appendix A (Partitioning the Satisfying Assignments):</strong> Disjoint Sparsification Lemma를 엄밀하게 확장 적용한다. 중복 없는 분기(Disjoint Branching) 규칙을 설계하여 만족 할당의 중복 계산을 방지하면서, 트리 구조의 각 잎(leaf) 논리식에서 변수당 출현 횟수를 $B = O_k(\sigma^{-1} \log(2/\sigma))^{k-1}$ 이하로 제한하는 역할을 수행한다.</li>
+<li><strong>Appendix B (Exact Arithmetic and Space):</strong> 정확 산술(Exact Arithmetic) 구현 및 공간 복잡도를 분석한다. 분할 다항식의 공통 분모 $d_{\text{den}} = (R-1)! Q!$ 설정, 비트 길이 상한(Bit-length bounds) 도출, 분수 없는 가우스 소거법(fraction-free Gaussian elimination)을 통한 Hermite 보간법 정밀도 보장 및 다항식 공간 메모리 관리를 입증한다.</li>
+<li><strong>Appendix C (Additional Consequences of Refuting ETH):</strong> ETH 반박에 따른 추가적 이론 결과를 증명한다.
+<ul>
+<li><strong>C.1:</strong> Williams의 증명 프레임워크와 Jahanjou-Miles-Viola의 국소 환원을 결합하여 $E^{\text{NP}}$ 클래스에 대한 회로 하한 $C_L(n) &gt; c \sqrt{n \log n}$을 입증한다.</li>
+<li><strong>C.2:</strong> 상수 출력 국소성(constant output locality)을 갖는 부울 맵의 역상 구하기(Inversion) 및 정확한 역상 카운팅을 서브지수 시간 내에 수행하는 알고리즘을 제시한다.</li>
+</ul>
+</li>
+<li><strong>Appendix D (A Sharper Bound for Exact Counting):</strong> 부울 텐서 네트워크 축약(Boolean Tensor Network Contraction, <strong>Theorem D.1</strong>) 기법을 정립한다. 공유 선형 요약 및 유리 보간 계산을 텐서 네트워크 상의 축약 알고리즘으로 변환하여, 비트 연산 복잡도를 $(s+L)^{O(1)} 2^{O(s/\log s)}$ 스케일로 첨예화(sharpening)하고 $O(n \log \log n / \log n)$ 지수 경계를 유도함으로써 메인 정리의 최종 연산량 하한을 완수한다.</li>
+</ul>
+<hr />
+<h5 id="5-한계-및-검증-관련-유의-사항-limitations-disclaimers">5. 한계 및 검증 관련 유의 사항 (Limitations &amp; Disclaimers)</h5>
+<blockquote>
+<p><strong>[경고 및 검증 한계 유의 사항]</strong></p>
+<ul>
+<li><strong>대상 문서의 성격:</strong> 본 보고서가 분석한 대상은 2026년 10월 25일 공개 저장소 <code>openai/math</code>에 게재된 프리프린트(Preprint) PDF 원문(<code>paper.pdf</code>)이다.</li>
+<li><strong>학술적 검증 상태:</strong> 본 보고서 작성 시점을 기준으로, 해당 논문은 동료심사(Peer Review)를 거치지 않았으며 외부 학계의 독립적인 사실 확인 및 독립 검증이 완료되지 않은 상태이다.</li>
+<li><strong>기술적 서술의 한계:</strong> 본 보고서에 수록된 지수 시간 가설(ETH)의 반박, 새로운 알고리즘의 비트 연산량 및 회로 하한 등 모든 기술적 주장과 성과는 어디까지나 작성자(OpenAI) 측의 주장에 근거한 것이며, 동료 심사를 거쳐 독립적으로 입증된 학술적 사실로 확정 규정되어서는 안 된다.</li>
+</ul>
+</blockquote>
+<hr />
+<h5 id="6-원문-정보-및-링크-original-reference-link">6. 원문 정보 및 링크 (Original Reference &amp; Link)</h5>
+<ul>
+<li>원문 제목: THE EXPONENTIAL TIME HYPOTHESIS IS FALSE</li>
+<li>원문 링크: https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/document/">문서</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

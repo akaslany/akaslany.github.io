@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Symmetry in language statistics shapes the geometry of model representations</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Symmetry in language statistics shapes the geometry of model representations</h1>
+<p class="page-meta">논문 · 2026-11-19</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 인공지능 언어 모델의 내부 표현(Internal Representation) 공간에서 관찰되는 고차원 기하학적 매니폴드(Representational Manifold)의 형성 원리를 체계적으로 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2602.15029">출처</a> · <a href="https://www.youtube.com/watch?v=mi16di80Rs8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="언어-통계의-대칭성과-모델-표현-기하학-형성-메커니즘-분석-보고서">언어 통계의 대칭성과 모델 표현 기하학 형성 메커니즘 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 인공지능 언어 모델의 내부 표현(Internal Representation) 공간에서 관찰되는 고차원 기하학적 매니폴드(Representational Manifold)의 형성 원리를 체계적으로 분석한다. 심층 언어 모델 및 텍스트 임베딩 모델의 내부 잔재 연결 흐름(Residual Stream)과 임베딩 공간에서는 달력의 월(Month)과 같은 주기적 개념이 명확한 원형(Circle) 기하학을 형성하고, 역사적 연도(Year)와 같은 연속적 계통이 1차원 유연 매니폴드 및 리플(Ripple) 구조를 나타내며, 지리적 위치(위도 및 경도) 정보가 선형 프로브(Linear Probe)를 통해 높은 정밀도로 디코딩되는 등 규칙적인 기하학적 구조가 관찰된다. 본 연구는 이러한 기하학적 매니폴드가 우연히 학습된 결과가 아니라, 훈련 텍스트 데이터에 내재된 **'공동 출현 통계의 이동 대칭성(Translation Symmetry in Pairwise Co-occurrence Statistics)'**에 의해 수리적으로 결정된다는 근본적 원리를 명확히 규명한다.</p>
+<p>이동 대칭성이란 자연어 데이터 뭉치 상에서 두 단어가 함께 출현할 확률(Co-occurrence Probability)이 각 단어의 문맥 내 절대적 위치가 아닌, 두 개념이 지닌 잠재적 시공간 간격이나 거리(Distance/Interval)에 의해서만 결정되는 통계적 대칭성을 의미한다. 예컨대 텍스트 데이터에서 두 달력 월이 함께 출현할 확률은 해당 월들이 달력상에서 떨어져 있는 시간적 간격에만 의존하며, 특정 월이라는 절대적 위치에는 영향받지 않는다. 본 연구는 2차 상관관계(Pairwise Correlation)만을 학습하는 정적 워드 임베딩 동역학 분석에서 출발하여, 이동 대칭성이 표현 공간 내 푸리에 고유모드(Fourier Eigenmodes) 및 리사주 곡선(Lissajous Curves)을 유도함을 수학적으로 증명하고 이에 대한 닫힌 형태의 해석적 해(Analytical Closed-form Solution)를 제시한다.</p>
+<p>본 수리적 모델링의 타당성은 전통적인 정적 워드 임베딩 알고리즘(word2vec, GloVe, LSA)뿐만 아니라 최신 대용량 텍스트 임베딩 모델(EmbeddingGemma) 및 거대 언어 모델(Gemma 2 2B)의 내부 활성화 표현 전반에서 실증적으로 검증되었다. 나아가 특정 단어쌍 간의 직접적인 공동 출현 데이터를 인위적으로 완전 삭제(Ablation)하더라도, 전체 어휘 집합이 공유하는 연속적 잠재 변수(Continuous Latent Variable)의 집단적 효과(Collective Effects)에 의해 기하학적 매니폴드가 훼손되지 않고 강력한 견고성(Robustness)을 유지함을 밝혀냈다.</p>
+<p>(소스 위치: Abstract, Section 1, Section 5)</p>
+<hr />
+<h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
+<h5 id="2-1-표현-기하학-형성을-이끄는-이동-대칭성-원리">2.1. 표현 기하학 형성을 이끄는 이동 대칭성 원리</h5>
+<ul>
+<li><strong>[사실]</strong> 자연어 코퍼스에서 어휘 $i$와 $j$의 공동 출현 확률 $P_{ij}$ 및 단일 어휘 출현 확률 $P_i, P_j$로 정의되는 정규화된 공동 출현 행렬 $M^\star$는 다음과 같다:
+$$M^\star_{(ij)} := \frac{P_{ij} - P_i P_j}{\frac{1}{2}(P_{ij} + P_i P_j)} \approx \log \left( \frac{P_{ij}}{P_i P_j} \right)$$
+이 행렬 $M^\star$는 점간 상호 정보량(PMI) 행렬과 3차 오차 이내에서 일치한다. 2차 상관관계만을 학습하는 워드 임베딩 최적화 행렬 $W$의 $i$번째 행 벡터 $w_i$는 $M^\star$의 고유값 분해 $M^\star = \Phi \Lambda^\star \Phi^\top$에 의해 상위 고유모드 $\Phi$ 및 고유값 $\Lambda^\star$의 조합으로 결정된다:
+$$W_{(i\mu)} = \Phi_{(i\mu)} \sqrt{|\Lambda^\star_{(\mu\mu)}|}$$
+잠재 시공간 좌표 $x_i, x_j$를 갖는 어휘 집합 $S$에 대해 이동 대칭성 가정(Assumption 3.1)이 성립할 경우, $M^\star_{(ij)} = C(\text{dist}(x_i, x_j))$ 형태의 커널 함수로 표출된다. 예컨대 미국 인접 48개 주의 중심점 좌표 간 록소드롬 거리(Loxodromic Distance) $d_{ij} := (x_i - x_j)^2 + 0.78(y_i - y_j)^2$를 기반으로 한 이론적 공동 출현 커널 모델은 $M^\star_{(ij)} = 10 \exp(-d_{ij} / 20)$ 형태로 주어진다.</li>
+<li><strong>[소스 주장]</strong> 텍스트 상의 두 개념 간 공동 출현 확률이 오직 거리에만 의존하는 이동 대칭성을 만족할 때, 임베딩 공간의 주성분 분석(PCA) 축은 커널 $C(\cdot)$의 푸리에 고유모드 방향으로 정렬된다. 그 결과 주기적 경계 조건을 갖는 개념(달력 월)은 임베딩 공간에서 원형 구조를 형성하고, 개방적 경계 조건을 갖는 연속 개념(역사적 연도)은 1차원 리플 매니폴드를 나타내며, 2차원 공간 개념(미국 주 지리 좌표)은 2차원 곡면 맵 구조를 형성한다.</li>
+<li><strong>[작성자 해석]</strong> 자연어 데이터의 2차 상관관계 행렬이 순환 행렬(Circulant Matrix) 또는 토플리츠 행렬(Toeplitz Matrix) 형태의 이동 대칭성을 띠므로, 인공지능 모델이 이를 손실 함수 최소화 과정에서 학습할 때 푸리에 변환 기저가 표현 공간의 기하학적 매니폴드로 자연스럽게 발현되는 것이다.</li>
+</ul>
+<p>(소스 위치: Section 1, Section 2.1, Section 3, Assumption 3.1, Appendix A.1.3, Figure 1, Figure 3)</p>
+<hr />
+<h5 id="2-2-경계-조건에-따른-수리적-모델링-주기적-경계-조건-vs-개방적-경계-조건">2.2. 경계 조건에 따른 수리적 모델링 (주기적 경계 조건 vs 개방적 경계 조건)</h5>
+<ul>
+<li><strong>[사실]</strong> 개념이 갖는 경계 조건(Boundary Condition, BC)의 특성에 따라 대칭성 행렬의 고유함수 해와 임베딩 공간 내 기하학 구조가 수학적으로 다르게 도출된다.
+<ol>
+<li><strong>주기적 경계 조건 (Periodic BC, 예: 달력 월):</strong>
+어휘 집합 $S$가 주기적 격자에 위치하고 지수형 커널 $C(\Delta x) = \sum_{n \in \mathbb{Z}} \exp(-|\Delta x + 2n|/\sigma)$을 따를 때, PCA 투영 임베딩 $w_i$는 정수 파수(Wavenumber) $k_n = \pi n$에 기반한 정현파 모드로 유도된다 (Proposition 1, Corollary 2):
+$$w_i = \sqrt{\frac{2}{|S|}} \left[ a_1 \cos(k_1 x_i), a_1 \sin(k_1 x_i), a_2 \cos(k_2 x_i), a_2 \sin(k_2 x_i), \dots \right]$$
+여기서 진폭은 $\lim_{|S| \to \infty} a_n = \sqrt{2\sigma / (1 + \sigma^2 k_n^2)}$으로 수렴한다. 달력 월 표현을 3차원 PCA 공간에서 관찰할 때 확인되는 안장(Saddle) 형태의 &quot;달력 프링글스(Calendar Pringles)&quot; 구조(Figure 8)는 첫 번째 기저 주파수의 원형 궤도 위에 세 번째 주성분 축이 기본 주파수의 고주파 오버톤(First Overtone, 2배 주파수) 모드로 상하 진동하면서 형성되는 푸리에 기하학의 직접적 결과이다.</li>
+<li><strong>개방적 경계 조건 (Open BC, 예: 역사적 연도):</strong>
+경계가 열려 있는 격자에서 지수형 커널 $C(\Delta x) = \exp(-|\Delta x|/\sigma)$을 따를 때, 양자화 조건(Quantization Condition)에 의해 비정수 파수 $k_n$이 유도된다 (Proposition 3):
+$$k_n = \begin{cases} (n+1)\pi/2 - \tan^{-1}(\sigma k_n), &amp; n \text{ 홀수} \ n\pi/2 + \tan^{-1}\left( \frac{k_n}{1 + \sigma(1+\sigma)k_n^2} \right), &amp; n \text{ 짝수} \end{cases}$$
+여기서 홀수 $n$ 모드는 경계면에서의 진폭 상쇄 조건에 부합하는 사인(sine) 성향의 진동을 나타내고, 짝수 $n$ 모드는 코사인(cosine) 성향의 진동을 나타내며, 위수 변화량 $\tan^{-1}(\cdot)$에 의해 파수가 수정을 받는다. 이에 따라 연속체 한계(Continuum Limit)에서의 임베딩 $w_i$는 평균이 0이고 단위 정규화된 삼각함수 $\text{sin}<em>{k_n}, \text{cos}</em>{k_n}$의 결합 형태인 리사주 곡선(Lissajous Curves)을 형성한다.</li>
+</ol>
+</li>
+<li><strong>[소스 주장]</strong> 달력 월과 같은 순환적 개념은 푸리에 계수로 진폭이 제어되는 완벽한 닫힌 원형 루프를 형성하지만, 역사적 연도와 같은 개방적 연속 개념은 경계 조건에 따른 양자화 파수의 비정수성으로 인해 임베딩 투영면상에서 닫히지 않는 리사주 곡선과 외재적 곡률(Extrinsic Curvature)을 지닌 리플(Ripple) 기하학을 유도한다.</li>
+<li><strong>[작성자 해석]</strong> 경계 조건의 차이가 미분방정식의 경계값 문제(Boundary Value Problem)와 동일하게 작용하여, 주기적 경계 조건은 완벽한 정수 주파수 고유모드를 생성하는 반면 개방 경계 조건은 경계면에서의 파수 변형 및 위수 이동을 유발하여 비선형 매니폴드의 특수 곡률을 형성하게 된다.</li>
+</ul>
+<p>(소스 위치: Section 3, Proposition 1, Corollary 2, Proposition 3, Figure 1, Figure 2, Figure 8, Appendix E)</p>
+<hr />
+<h5 id="2-3-선형-좌표-디코딩-및-정밀도-스케일링-법칙">2.3. 선형 좌표 디코딩 및 정밀도 스케일링 법칙</h5>
+<ul>
+<li><strong>[사실]</strong> 모델 내부 표현의 상위 $r$개 주성분 투영 벡터 $w_{i, r} \in \mathbb{R}^r$로부터 선형 프로브 $\Omega \in \mathbb{R}^{r \times D}$를 통해 잠재 시공간 좌표 $x_i$를 디코딩하는 최적 디코딩 오차 $\epsilon^2(r)$는 프로브 차원 $r$과 잠재 공간의 차원 $D$에 대하여 다음과 같은 수리적 상한을 갖는다 (Proposition 4):
+$$\lim_{|S| \to \infty} \epsilon^2(r) \le \frac{6}{\pi^2} \left[ \left( \frac{r}{\text{Vol}_D} \right)^{-1/D} - \frac{\sqrt{D}}{2} \right]$$
+여기서 $\text{Vol}<em>D$는 단위 $D$-구체의 부피이다. 따라서 디코딩 오차는 프로브 차원에 따라 점근적으로 $\epsilon^2 \sim r^{-1/D}$의 멱법칙(Power Law) 비율로 감소한다. 1900년~2020년 역사적 연도 임베딩을 활용한 실증 디코딩 실험(120개 연도 중 60개 훈련 / 60개 평가) 결과, 프로브 차원 $r$이 훈련 데이터 수($n</em>{\text{train}}=60$)에 도달하는 보간 임계값(Interpolation Threshold)에서 훈련 오차가 0으로 떨어짐과 동시에 평가 오차가 일시적으로 급증하는 이중 강하(Double Descent) 현상이 확인되었다. 고차원 PCA 축으로 확장될수록 고주파 오버톤 모드가 포함되면서 시공간적 디코딩 정밀도가 높아진다.</li>
+<li><strong>[소스 주장]</strong> 최적의 선형 프로브는 잠재 좌표 함수 $f(x)=x$에 대한 절단된 푸리에 급수(Truncated Fourier Series)를 계산하는 역할을 수행하므로, 프로브 차원 $r$이 증가할수록 잘려나가는 고주파 테일 오차가 줄어들어 오차 감소율이 이론적 예측치인 $r^{-1/D}$에 정밀하게 수렴한다.</li>
+<li><strong>[작성자 해석]</strong> 언어 모델이 시공간적 좌표 정보를 고차원 푸리에 고유모드 형태로 내부 공간에 차곡차곡 인코딩하고 있기 때문에, 단지 몇 차원의 저차원 선형 변환(Linear Transformation)을 적용하는 것만으로도 복잡한 시공간 좌표를 정밀하게 복원할 수 있다.</li>
+</ul>
+<p>(소스 위치: Section 3.2, Proposition 4, Figure 2, Appendix E.5)</p>
+<hr />
+<h5 id="2-4-노이즈-견고성-및-집단적-잠재-변수-효과-robustness-collective-effects">2.4. 노이즈 견고성 및 집단적 잠재 변수 효과 (Robustness &amp; Collective Effects)</h5>
+<ul>
+<li><strong>[사실]</strong> PMI 행렬에서 12개 월 간의 직접적인 공동 출현 데이터를 모두 0으로 인위적 삭제(Ablation)하더라도, 중간 임베딩 차원($d=1000 \ll V=25000$)에서 추출한 월 임베딩은 월의 순서와 원형 기하학을 완벽히 복원한다 (Figure 4). 반면 계절성이 없는 단순 숫자 어휘(&quot;one&quot;~&quot;seventeen&quot;)를 동원했을 때에는 월 순서 복원에 완전히 실패한다 (Figure 15).
+이러한 메커니즘을 설명하는 집단적 잠재 변수 모델(Section 4.1)의 수학적 유도 과정은 다음과 같다:
+계절성(시간)을 나타내는 연속적 잠재 변수 $t \in [-T/2, T/2]$가 존재하고, 각 어휘 $i$가 고유의 계절적 중심 $t_i$를 가질 때 어휘의 조건부 발생 확률은 다음과 같다:
+$$P(i|t) = P(i)(1 + g(t - t_i))$$
+여기서 $g(t)$는 $t=0$에서 최댓값을 가지는 대칭적 영평균 함수이다. 계절 $t$에 대해 평균을 취하면 두 단어의 결합 확률은 다음과 같이 순환 자가상관 함수(Circular Autocorrelation Function) $\tilde{K}(\Delta)$로 표현된다:
+$$P(i, j) = \int_{-T/2}^{T/2} \frac{dt}{T} P(i|t) P(j|t) = P(i)P(j) [1 + \tilde{K}(t_i - t_j)]$$
+$$\tilde{K}(\Delta) = \frac{1}{T} \int_{-T/2}^{T/2} g(u) g(u + \Delta) du$$
+이에 따른 PMI 행렬은 두 어휘의 계절적 간격에만 의존하는 순환 행렬(Circulant Matrix) 형태의 커널 $K(t_i - t_j)$로 유도된다:
+$$\text{PMI}(i, j) = \log(1 + \tilde{K}(t_i - t_j)) \approx K(t_i - t_j)$$
+이 순환 행렬의 푸리에 고유모드 $\phi_k(i) = \frac{1}{\sqrt{N}} e^{2\pi i k t_i / T}$에 대응하는 고유값 $\mu_k$는 다음과 같다:
+$$\mu_k = \sum_{j=0}^{N-1} e^{2\pi i k j / N} K(t_j) \implies \lim_{N \to \infty} \frac{\mu_k}{N} = \int e^{2\pi i k t / T} K(t) dt$$</li>
+<li><strong>[소스 주장]</strong> 코퍼스 내 수많은 어휘(&quot;ski&quot;, &quot;beach&quot;, &quot;hurricane&quot;, &quot;flower&quot; 등)가 '계절'이라는 공통의 연속적 잠재 변수 $t$를 공유한다. 어휘 수 $N$이 증가함에 따라 계절성 고유값 $\mu_k$와 고유값 간격(Eigengap)은 $N$에 비례하여 증가한다($\mu_k \propto N$). 따라서 윌 정리(Weyl's Theorem) 및 데이비스-카한 정리(Davis-Kahan Theorem)에 의해, 특정 월-월 간의 12개 셀 공동 출현 삭제와 같은 요소별 섭동(Perturbation)은 고유값 간격 대비 매우 미미하므로 상위 고유벡터 및 표현 기하학 매니폴드를 변형시키지 못한다.</li>
+<li><strong>[작성자 해석]</strong> 표현 기하학의 형성은 국소적인 개별 단어쌍의 통계에 의존하는 1대1 현상이 아니라, 전체 어휘 집합이 잠재 변수를 매개로 형성하는 집단적 현상(Collective Phenomenon)이다. 이로 인해 부분적인 통계 노이즈나 데이터 결손에도 불구하고 고차원 표현 기하학이 대단히 견고하게 유지될 수 있다.</li>
+</ul>
+<p>(소스 위치: Section 4, Section 4.1, Figure 4, Figure 15, Figure 16)</p>
+<hr />
+<h5 id="2-5-맥락에-따른-다의성-해소-및-모델-간-보편성">2.5. 맥락에 따른 다의성 해소 및 모델 간 보편성</h5>
+<ul>
+<li><strong>[사실]</strong> 단어 &quot;May&quot;와 같이 다의성(Month의 의미와 조동사 의미)을 갖는 어휘는 정적 임베딩 공간에서 이동 대칭성이 깨져 원형 궤도 밖으로 왜곡되어 삐져나온다. 그러나 Gemma 2 2B와 같은 심층 트랜스포머 모델에 맥락 프롬프트(&quot;The month of the year is x&quot;)를 주입하면, 트랜스포머의 순방향 연산 레이어(Layer 0 ~ 25)를 거침에 따라 &quot;May&quot;의 다의성 왜곡이 순차적으로 해소되며 완벽한 원형 기하학으로 수렴한다 (Figure 14).
+한편 Gemma 2 2B 모델에서 미국 48개 주의 지리적 표현을 추출할 때, 첫 번째 주성분(Mode 1)은 공간적 의미론이 아닌 토큰화 특성(두 개 이상의 토큰으로 분할되는 주 이름: &quot;West Virginia&quot;, &quot;New York&quot; 등)에 반응한다. 따라서 심층 모델의 지리 표현 분석 시에는 첫 번째 모드를 제외하고 상위 의미론적 모드(Mode 2, Mode 3)를 분석에 사용한다.</li>
+<li><strong>[소스 주장]</strong> 데이터 통계의 대칭성에 기반한 표현 기하학 형성은 단순 워드 임베딩(word2vec)뿐만 아니라 텍스트 임베딩 모델(EmbeddingGemma, 308M) 및 거대 언어 모델(Gemma 2 2B)의 내부 잔재 연결 흐름 전반에서 보편적으로 관찰된다. 심층 트랜스포머 모델은 맥락 정보를 통해 다의성을 정밀하게 해소함으로써 텍스트 데이터 고유의 이동 대칭성 통계를 기하학적 매니폴드로 더욱 뚜렷하게 표출시킨다.</li>
+<li><strong>[작성자 해석]</strong> 데이터의 기초 상관관계 통계 구조가 언어 모델의 층별 전진 연산(Forward Pass)을 거치면서 맥락을 결합해 다의성을 정화하고 완벽한 고차원 기하학적 매니폴드로 승화되는 심층 연산 메커니즘을 입증한다.</li>
+</ul>
+<p>(소스 위치: Section 5, Figure 1, Figure 3, Figure 14, Appendix A.1.1, Appendix A.1.3, Appendix A.3)</p>
+<hr />
+<h4 id="3-등장-인물-화자-figures-speakers">3. 등장 인물·화자 (Figures &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (한글 표기 및 원어)</th>
+<th style="text-align:left">소속 기관</th>
+<th style="text-align:left">소스 내 역할 / 기여</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">드루바 카르카다 (Dhruva Karkada)</td>
+<td style="text-align:left">UC Berkeley / Google DeepMind</td>
+<td style="text-align:left">공동 주저자 (Co-first author), 이론 유도, 수리적 수식화 및 실증 실험 분석 주도</td>
+</tr>
+<tr>
+<td style="text-align:left">다니엘 J. 코르친스키 (Daniel J. Korchinski)</td>
+<td style="text-align:left">EPFL</td>
+<td style="text-align:left">공동 주저자 (Co-first author), 이론 유도, 수리적 수식화 및 실증 실험 분석 주도</td>
+</tr>
+<tr>
+<td style="text-align:left">안드레스 나바 (Andres Nava)</td>
+<td style="text-align:left">Johns Hopkins</td>
+<td style="text-align:left">공동 저자, 연구 수행 및 논문 작성 기여</td>
+</tr>
+<tr>
+<td style="text-align:left">마티외 와이아트 (Matthieu Wyart)</td>
+<td style="text-align:left">EPFL / Johns Hopkins</td>
+<td style="text-align:left">공동 저자 및 교신 저자 (Corresponding Author), 연구 지도</td>
+</tr>
+<tr>
+<td style="text-align:left">야사만 바리 (Yasaman Bahri)</td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">공동 저자 및 교신 저자 (Corresponding Author), 연구 지도</td>
+</tr>
+<tr>
+<td style="text-align:left">미콜로프 외 (Mikolov et al.)</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">이전 연구자 (워드 임베딩 프리즘 기하학 구조 및 word2vec 모델 관련 기존 저자)</td>
+</tr>
+<tr>
+<td style="text-align:left">엔겔스 외 (Engels et al.)</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">이전 연구자 (언어 모델 내 루프 기하학 및 모듈러 연산 구조 문헌 저자)</td>
+</tr>
+<tr>
+<td style="text-align:left">거니 &amp; 테그마크 (Gurnee &amp; Tegmark)</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">이전 연구자 (언어 모델 내 공간·시간 좌표의 선형 디코딩 연구 저자)</td>
+</tr>
+</tbody>
+</table>
+<p>(소스 위치: Title Page, Section 1, Section 2.2, References)</p>
+<hr />
+<h4 id="4-수치-시점-numbers-coordinates-and-timestamps">4. 수치·시점 (Numbers, Coordinates, and Timestamps)</h4>
+<h5 id="학술대회-및-논문-출판-정보">학술대회 및 논문 출판 정보</h5>
+<ul>
+<li><strong>학술대회 명칭:</strong> 제43회 국제 머신러닝 학술대회 (Proceedings of the 43rd International Conference on Machine Learning, ICML 2026) (소스 위치: Page 1 하단)</li>
+<li><strong>개최지 및 출판:</strong> 대한민국 서울 (Seoul, South Korea), PMLR volume 306, Copyright 2026 (소스 위치: Page 1 하단)</li>
+</ul>
+<h5 id="데이터셋-및-데이터-전처리-수치">데이터셋 및 데이터 전처리 수치</h5>
+<ul>
+<li><strong>코퍼스 출처:</strong> 2023년 11월 영문 위키피디아 덤프 (English Wikipedia dump) (소스 위치: Appendix A.2)</li>
+<li><strong>정제 후 문서 수:</strong> 200토큰 미만 문서 제거 후 337만 개 문서 (3.37 million articles) (소스 위치: Appendix A.2)</li>
+<li><strong>총 토큰 수:</strong> 27억 2천만 개 토큰 (2.72 billion tokens) (소스 위치: Appendix A.2)</li>
+<li><strong>어휘 사전 크기 ($V$):</strong> 가장 자주 등장하는 상위 25,000개 단어 ($V = 25,000$) (소스 위치: Figure 4, Appendix A.2)</li>
+<li><strong>컨텍스트 윈도우 크기 ($L$):</strong> $L = 16$ (거리 가중치 $f(d) = L + 1 - d$ 적용) (소스 위치: Appendix A.2)</li>
+</ul>
+<h5 id="모델-구조-및-파라미터-차원-수치">모델 구조 및 파라미터 차원 수치</h5>
+<ul>
+<li><strong>Gemma 2 2B:</strong> 파라미터 수 20억 개 (2 Billion), 어휘집 크기 256K 토큰, 은닉 레이어 차원 $d = 2304$, 내부 레이어 수 $l \in {0, \dots, 25}$ (총 26개 블록) (소스 위치: Appendix A.3)</li>
+<li><strong>EmbeddingGemma:</strong> 파라미터 수 3억 8백만 개 (308 Million), 기본 임베딩 차원 768차원 (단위 정규화 적용) (소스 위치: Appendix A.4)</li>
+<li><strong>실험용 임베딩 차원 ($d$):</strong> 이론 및 실증 분석 시 $d = 1000$ 또는 $d = 25000$ 설정 사용 (소스 위치: Figure 3, Figure 4)</li>
+</ul>
+<h5 id="실험-대상-범주-및-평가-수치">실험 대상 범주 및 평가 수치</h5>
+<ul>
+<li><strong>역사적 연도 범주:</strong> 1700년 ~ 2020년 (소스 위치: Figure 1, Figure 2)</li>
+<li><strong>선형 디코딩 실험 범주:</strong> 1900년 ~ 2020년 (총 120개 연도 중 무작위 60개 훈련 / 60개 평가, 100회 무작위 반복) (소스 위치: Section 3.2, Appendix A.1.2)</li>
+<li><strong>지리적 좌표 범주 및 거리 모델 수식:</strong> 미국 인접 48개 주 (48 contiguous US states). 이론적 공동 출현 행렬 수식 $M^\star_{(ij)} = 10 \exp(-d_{ij} / 20)$ (단, 위도/경도 종횡비 조정 척도 인자 0.78을 적용한 거리 $d_{ij} := (x_i - x_j)^2 + 0.78(y_i - y_j)^2$) (소스 위치: Figure 3, Appendix A.1.3, Appendix A.4)</li>
+<li><strong>Gemma 2 2B 주(State) 표현 특이사항:</strong> 토큰화 특성(다중 토큰) 반응으로 인해 주 분석 시 첫 번째 주성분(Mode 1) 제외 처리 (소스 위치: Appendix A.1.3)</li>
+</ul>
+<p>(소스 위치: Page 1, Figure 1, Figure 2, Figure 3, Figure 4, Appendix A.1.3, Appendix A.2, Appendix A.3, Appendix A.4)</p>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<p>본 보고서가 기반하고 있는 소스 문서에서 명시적으로 밝히고 있는 이론적·실험적 한계점과 확인 불가능한 정보는 다음과 같다.</p>
+<ol>
+<li><strong>워드 임베딩 이론의 LLM 맥락 적응성 확장 한계:</strong>
+<ul>
+<li>본 연구의 수학적 이론은 닫힌 형태(Closed-form)의 정적 워드 임베딩 동역학 및 손실 함수 최소화 문제에서 엄밀하게 도출되었다. 거대 언어 모델(LLM)에서도 동일한 표현 기하학이 발현됨을 확인하였으나, LLM이 문맥 프롬프트에 따라 다의성을 동적으로 해소하며 표현을 변화시키는 맥락 적응(Contextual Adaptation) 동역학 전체를 수학적으로 설명하는 통합 이론 프레임워크까지는 완성하지 못했다 (Section 5 - Limitations).</li>
+</ul>
+</li>
+<li><strong>위계적·범주적 속성(Hierarchical &amp; Categorical Attributes) 설명 미흡:</strong>
+<ul>
+<li>본 연구는 시간, 공간과 같은 연속적 속성(Continuous Attributes) 및 이진 속성(Binary Attributes)에 의한 기하학 형성만을 분석 대상으로 삼았다. 위계적 개념(Hierarchical Concepts)이나 범주형 개념에서 관찰되는 매니폴드 기하학 구조를 다루는 통합 이론 체계는 포함되어 있지 않다 (Section 5 - Limitations).</li>
+</ul>
+</li>
+<li><strong>실제 데이터 스펙트럼의 비양정치성(Non-PSD) 및 절대 스케일 예측 한계:</strong>
+<ul>
+<li>이론적 엄밀성을 위해 정규화된 공동 출현 행렬 $M^\star$를 양의 반정치 행렬(PSD)로 가정(Assumption 3.1)하였으나, 실제 위키피디아 코퍼스의 $M^\star$ 행렬 스펙트럼은 음의 고유값을 다수 포함하는 대칭적 분포를 보인다 ($\text{rank } M^+ \approx \text{rank } M^-$) (Appendix B.3, Figure 7). 약화된 대칭성 가정(Assumption B.1)을 적용하더라도 상대적 모드 비율과 파수는 정확히 예측할 수 있으나, 모드 진폭의 절대 스케일(Absolute Scale)까지 완벽히 예측하는 데는 한계가 존재한다.</li>
+</ul>
+</li>
+<li><strong>확인 불가 항목 (Unconfirmable Items):</strong>
+<ul>
+<li>인용된 선행 연구자들(Mikolov et al., Engels et al., Gurnee &amp; Tegmark 등)의 세부 소속 기관 및 인적 사항은 소스 문서 내 언급이 없어 확인이 불가능하다.</li>
+<li>Gemma 모델 계열(Gemma 2 2B, EmbeddingGemma) 외의 타 상용 대형 언어 모델(예: GPT 계열, Claude 계열 등)에 대한 레이어별 정량적 모드 수치는 소스 문서에 제시되어 있지 않다.</li>
+</ul>
+</li>
+</ol>
+<p>(소스 위치: Section 5 - Limitations, Appendix A.1.1, Appendix B.3, Figure 7)</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

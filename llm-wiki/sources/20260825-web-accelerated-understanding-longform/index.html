@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI that can simulate and understand physics to invent and discover.</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>AI that can simulate and understand physics to invent and discover.</h1>
+<p class="page-meta">웹 · 2026-08-25</p>
+<h2 id="요약">요약</h2>
+<p>범용 Physical AI는 설계 탐색을 가속할 가능성이 있으나 정확도와 실험 대체 효과는 미검증이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=95xXxdPiu6c">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="범용-physical-ai의-시뮬레이션-실험-병목-해결-가능성-검토-accelerated-understanding-inc-기술-주장에-대한-심층-감사-보고서">범용 Physical AI의 시뮬레이션·실험 병목 해결 가능성 검토: Accelerated Understanding, Inc. 기술 주장에 대한 심층 감사 보고서</h3>
+<h4 id="1-서론-보고서의-목적-및-소스-정체성-감사-결과">1. 서론: 보고서의 목적 및 소스 정체성 감사 결과</h4>
+<p>본 보고서는 Accelerated Understanding, Inc.(이하 ‘회사’)가 공개한 기술 소개 페이지(https://acceleratedunderstanding.com/longform)의 내용을 바탕으로, 해당 기업이 주장하는 ‘범용 Physical AI’의 기술적 실체와 시뮬레이션 및 실험 병목 해결 가능성을 심층 검토한다.</p>
+<p><strong>소스 정체성 감사 결과:</strong>
+<code>source-identity-audit.md</code>에 따르면 본 감사의 대상은 동료 심사(Peer-review)를 거친 학술 논문이나 독립적인 성능 검증 자료가 아니다. 이는 기업의 비전과 기술적 지향점을 설명하는 ‘장문 홍보 페이지’로 분류된다. 문서 내에는 구체적인 모델 아키텍처, 훈련 데이터셋의 명세, 성능 지표의 오차 범위(Error bars), 재현 가능한 코드 및 로그가 전무하다. 따라서 본 보고서는 회사의 주장을 공학적 사실로 단정하지 않으며, “범용 Physical AI가 실제 실험과 시뮬레이션의 병목을 실질적으로 해소할 수 있는가?”라는 핵심 질문을 중심으로 기술적 개연성과 잠재적 위험 요소를 분석하는 ‘기술 감사’의 관점을 유지한다.</p>
+<h4 id="2-4d-physical-ai의-기술적-정의와-개념적-오해의-분리">2. 4D Physical AI의 기술적 정의와 개념적 오해의 분리</h4>
+<p>회사는 자사의 모델이 ‘4D Physical State Field’를 예측한다고 설명한다. 기술적으로 이는 **4D = 3차원 공간(x, y, z) + 시간(t)**으로 색인된 상태장 $u(x, y, z, t)$를 의미한다. 각 위치(point)에는 온도, 압력, 속도(3성분), 밀도 등 다변량 상태(Multivariate state)를 나타내는 여러 채널(Channel)이 포함될 수 있다.</p>
+<p><strong>기술적 비판 및 감사 의견:</strong></p>
+<ol>
+<li><strong>데이터 구조와 물리적 통찰의 구분:</strong> 4차원 텐서(Tensor) 구조를 생성하고 처리할 수 있다는 사실이 곧 물리 법칙의 내재적 이해를 보증하는 증거가 될 수 없다. 이는 데이터를 인덱싱하고 배치하는 방식의 문제일 뿐이며, 그 내부의 비선형적 상호작용과 보존 법칙을 정확히 모사하고 있는지는 별개의 검증 영역이다.</li>
+<li><strong>Broad Model의 잠재적 리스크:</strong> 회사는 한 모델이 여러 물리 영역을 다루는 ‘Broad model’이 개별 영역에 특화된 ‘Narrow model’보다 우수하다고 주장한다(C1). 그러나 수치 해석 전문가의 관점에서 이는 **부정적 전이(Negative transfer)**와 <strong>용량 경쟁(Capacity competition)</strong> 문제를 야기할 수 있다. 서로 다른 편미분 방정식(PDE), 단위계(Unit), 기하학적 이질성을 가진 데이터가 하나의 잠재 공간에서 충돌할 경우, 오히려 특정 물리 현상의 정밀도를 저하시킬 위험이 있다.</li>
+</ol>
+<h4 id="3-모델-및-컨텍스트-규모-주장에-대한-산술적-감사">3. 모델 및 컨텍스트 규모 주장에 대한 산술적 감사</h4>
+<p>회사는 1T/35T 파라미터 규모와 1T/5T 컨텍스트 규모를 주장하고 있다. 이에 대한 산술적 검증 및 감사 의견은 다음과 같다.</p>
+<h5 id="parameters-vs-context-elements-비교-테이블">Parameters vs. Context Elements 비교 테이블</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">회사의 주장 내용</th>
+<th style="text-align:left">기술적 해석 및 감사 의견</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Parameters</strong></td>
+<td style="text-align:left">최대 1T(1조) 규모의 pre-training run과 35T scaling experiment를 수행했다는 회사 설명</td>
+<td style="text-align:left">모델 내부 가중치 수. total/active/unique, 실제 업데이트된 범위, step 수, 수렴 여부가 공개되지 않았다. 35T는 완전 학습이나 성능 입증으로 해석할 수 없다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Context Elements</strong></td>
+<td style="text-align:left">훈련 시 1T, 추론 시 5T 이상 처리했다는 회사 설명</td>
+<td style="text-align:left">$1000^4 = 10^{12}$의 위치 조합 산술은 맞지만, context elements의 정확한 단위와 계산상 상호작용 범위가 없다. LLM token과 동등하다고 볼 수 없다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output 규모</strong></td>
+<td style="text-align:left">5T 출력 시 약 22TB 데이터 발생</td>
+<td style="text-align:left">FP32 스칼라 기준 약 20TB+오버헤드 산출은 타당하나, 정밀도(Dtype) 및 채널 수 정의가 불분명함.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>산술 검증 분석:</strong>
+회사가 제시한 $1000^4 = 10^{12}$(1T) 산술은 맞다. 그러나 물리 격자 위치와 언어 token은 의미, channel 구성, 연산자, 상호작용 범위가 서로 다르므로 정보량이나 계산 난이도를 직접 비교할 수 없다. 특히 35T parameters 주장은 회사가 ‘scaling experiment’로 표현한 범위를 넘지 않는다. 실제로 무엇을 몇 step 수행했는지 공개되지 않았으므로 완전한 수렴(Convergence), 프로덕션 모델, 성능 입증 또는 단순 시스템 시험 중 어느 수준인지 외부에서 판정할 수 없다.</p>
+<h5 id="핵심-용어-경계">핵심 용어 경계</h5>
+<ul>
+<li><strong>4D:</strong> <strong>3D</strong> space와 <strong>time</strong>으로 색인된 physical state field</li>
+<li><strong>parameters:</strong> 학습되는 모델 내부 수치. total과 active를 구분해야 한다.</li>
+<li><strong>context elements:</strong> 한 계산에서 다루는 위치·셀·자유도 등으로 보이지만 페이지에 엄밀한 정의가 없다.</li>
+<li><strong>one-shot rollout:</strong> 여러 미래 시점의 장을 한 모델 호출로 출력한다는 회사 설명</li>
+<li><strong>resolution invariance:</strong> 여러 이산화에서 같은 weights를 실행할 수 있다는 주장. arbitrary-resolution accuracy와 다르다.</li>
+<li><strong>PDE residual:</strong> 선택한 방정식의 위반 정도를 재는 신호</li>
+<li><strong>boundary / initial condition:</strong> PDE 내부식만큼이나 해를 정하는 핵심 조건</li>
+<li><strong>surrogate exploitation:</strong> optimizer가 대리모델의 오차를 실제 개선처럼 이용하는 실패 모드</li>
+<li><strong>uncertainty / sim-to-real / lab validation:</strong> 모델의 적용 범위와 현실 차이를 측정하고 최종 후보를 확인하기 위한 필수 게이트</li>
+</ul>
+<h4 id="4-핵심-기술-방법론의-가능성과-위험성-분석">4. 핵심 기술 방법론의 가능성과 위험성 분석</h4>
+<h5 id="4-1-one-shot-rollout-일시적-롤아웃">4.1 One-shot Rollout (일시적 롤아웃)</h5>
+<p>회사는 시공간 전체를 한 번에 예측하여 오차 누적을 방지한다고 주장한다.</p>
+<ul>
+<li><strong>가능성:</strong> 자기회귀(Autoregressive) 방식의 재주입 오차 경로를 차단할 잠재력이 있다.</li>
+<li><strong>위험성:</strong> 전역 일관성(Global consistency) 유지 실패, 인과율 위반(Causality violation), 보존 법칙의 드리프트(Conservation drift) 및 고정된 예측 시계(Fixed-horizon) 제한 문제가 여전히 해결되지 않은 난제로 남아 있다.</li>
+</ul>
+<h5 id="4-2-resolution-invariance-해상도-불변성">4.2 Resolution Invariance (해상도 불변성)</h5>
+<p>동일한 가중치로 다양한 격자 크기에서 실행 가능하다는 주장은 신경 연산자(Neural Operator) 계열의 목표와 양립한다. 다만 페이지가 자사 모델을 neural operator로 정의한 것은 아니다.</p>
+<ul>
+<li><strong>기술적 제약:</strong> '실행 가능성'이 '정확도'를 보장하지 않는다. 격자가 표현하지 못하는 나이퀴스트 한계(Nyquist limit) 밖의 고주파 현상은 **에일리어싱(Aliasing)**이나 <strong>스펙트럼 절단(Spectral truncation)</strong> 오류로 이어질 수 있다. 불연속면(Shock), 경계층, 난류(Turbulence)에서의 수렴성(Convergence)은 공개된 평가가 없어 확인되지 않는다.</li>
+</ul>
+<h5 id="4-3-pde-residual-편미분-방정식-잔차">4.3 PDE Residual (편미분 방정식 잔차)</h5>
+<p>예측값을 방정식 $F[\hat{u}]=0$에 대입하여 물리적 일관성을 평가하는 방식이다.</p>
+<ul>
+<li><strong>감사 의견:</strong> <strong>Low residual ≠ correct physics.</strong> 잔차가 작아도 경계 조건(BC) 위반, 초기 조건(IC) 오차, 다른 solution branch, 누락된 물리 또는 이산화 오류가 남을 수 있다. 또한 강성(Stiffness)이 큰 계의 구배 불균형(Gradient imbalance)은 별도의 최적화·검증 문제다.</li>
+</ul>
+<h4 id="5-differentiable-design과-self-improvement의-공학적-신뢰성">5. Differentiable Design과 Self-Improvement의 공학적 신뢰성</h4>
+<p>회사는 미분 가능한 대리 모델(Surrogate)을 통한 최적화 루프를 제시한다.</p>
+<p><strong>공학적 위험 요소:</strong></p>
+<ol>
+<li><strong>Surrogate Exploitation:</strong> 최적화 알고리즘이 대리 모델의 취약점이나 훈련 데이터가 부족한 영역을 이용해, 수치상으로는 우수해 보이나 실제 물리적으로는 구현 불가능한 설계를 제안할 수 있다(Optimizer's curse).</li>
+<li><strong>OOD(Out-of-Distribution) 및 인과성:</strong> 모델이 훈련 범위를 벗어난 영역에서 제시하는 설계 구배(Gradient)는 실제 세계의 인과관계를 설명하지 못할 수 있다.</li>
+<li><strong>원칙 준수:</strong> &quot;대리 모델을 최적화하는 것이 현실을 최적화하는 것은 아니다(Optimize the surrogate $\neq$ optimize reality)&quot;라는 원칙을 견지해야 하며, 불확실성 정량화(UQ)와 엄격한 검증 게이트(Validation gate)가 필수적이다.</li>
+</ol>
+<h4 id="6-실험-대체-가능성-진단-및-sim-to-real-간극">6. 실험 대체 가능성 진단 및 Sim-to-Real 간극</h4>
+<p>회사는 AI 시뮬레이터가 실험을 보조하거나 대체할 가능성을 시사한다.</p>
+<p><strong>진단 결과:</strong>
+AI 시뮬레이터는 방대한 설계 공간에서 유망한 후보를 좁히는 ‘지능형 나침반’ 역할은 수행할 수 있다. 그러나 실제 제조 공차, 재료의 비균질성, 센서 노이즈 및 미모델링 물리(Unmodeled physics) 문제를 해결하지 못한다. 따라서 최종 단계에서는 반드시 실험실 검증(Lab validation)과 엔지니어링 인증(Certification)이 유지되어야 하며, AI는 실험의 ‘대체제’가 아닌 ‘가속 도구’로 정의되어야 한다.</p>
+<h4 id="7-향후-공개-및-검증이-필요한-핵심-아티팩트-artifacts">7. 향후 공개 및 검증이 필요한 핵심 아티팩트(Artifacts)</h4>
+<p>본 감사를 통해 확인된 주장의 실효성을 입증하기 위해 회사는 다음과 같은 자료를 독립적으로 공개해야 한다.</p>
+<ol>
+<li><strong>모델 카드 및 데이터 카드:</strong> 훈련 데이터의 출처(Solver 종류)와 검증/테스트 데이터 분할 방식.</li>
+<li><strong>수렴 로그:</strong> 1T/35T 모델의 훈련 손실 곡선, MFU(Model Flops Utilization), 하드웨어 사양 및 벽시계 시간(Wall time).</li>
+<li><strong>물리적 지표:</strong> 단순 L2 에러 외에 보존 법칙(질량, 에너지 등) 준수 여부와 스펙트럼 정확도 분석.</li>
+<li><strong>독립 벤치마크:</strong> 기존의 정밀 솔버(Solver) 대비 계산 비용과 정확도 사이의 Pareto 효율성 입증.</li>
+<li><strong>실패 사례 보고:</strong> 충격파, 상변화, 접촉(Contact) 등 고난도 물리 현상에서의 실패 모드 공개.</li>
+</ol>
+<h4 id="8-종합-검증-매트릭스">8. 종합 검증 매트릭스</h4>
+<p>본 보고서의 분석 결과를 요약하고 향후 주장의 철회 기준을 정리한 매트릭스이다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">주요 내용 및 기술적 실패 모드</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>검증 시 기대 효과</strong></td>
+<td style="text-align:left">R&amp;D 사이클 가속화, 다중 물리(Multi-physics) 통합 설계, 고비용 시뮬레이션 비용 절감</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>현재 식별된 부족 요소</strong></td>
+<td style="text-align:left">공개 아키텍처, 훈련 로그, 독립 벤치마크, 파라미터/컨텍스트의 엄밀한 공학적 정의</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주장 철회 및 수정 기준</strong></td>
+<td style="text-align:left">고해상도에서의 에일리어싱 발생, 보존 법칙 위반 발견, 설계 구배가 실제 실험에서 재현되지 않을 경우</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>핵심 실패 시나리오</strong></td>
+<td style="text-align:left"><strong>Conservation drift</strong>(보존 법칙 위반), <strong>Surrogate exploitation</strong>(대리 모델 착취), <strong>Negative transfer</strong>(성능 저하)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>최종 감사 결론:</strong>
+Accelerated Understanding, Inc.의 기술 비전은 수치 해석과 머신러닝을 결합해 설계 탐색을 가속하려는 개연성 있는 연구 방향을 제시한다. 그러나 현재 공개된 정보만으로 ‘범용 Physical AI’의 정확도·비용·일반화·실험 대체 효과를 판단할 수 없다. 이 접근은 잠재적으로 유용한 ‘지도’가 될 수 있지만 실제 실험이라는 ‘영토’를 정복했다는 증거는 아니다. 실제 공학 현장에 적용하려면 불확실성 정량화, 격자 수렴과 보존성, 독립적인 Sim-to-Real 분석, 블라인드 실험 및 안전·인증 검증이 수반되어야 한다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li></ul></section>
+</main>
+</body>
+</html>

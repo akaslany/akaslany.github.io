@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRO-LONG: Programmatic Memory Enables Long-Horizon Reasoning</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>PRO-LONG: Programmatic Memory Enables Long-Horizon Reasoning</h1>
+<p class="page-meta">논문 · 2026-08-13</p>
+<h2 id="요약">요약</h2>
+<p>PRO-LONG은 전체 로그를 보존하고 검색해 ARC-AGI-3 공개 게임에서 평균 18.0%p 성능을 높였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://arxiv.org/pdf/2607.20064">출처</a> · <a href="https://www.youtube.com/watch?v=KHaKAJ3KwXw">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="pro-long-쉬운-풀이-ai-에이전트는-왜-모든-기록을-남겼을-때-더-오래-생각했나">PRO-LONG 쉬운 풀이: AI 에이전트는 왜 모든 기록을 남겼을 때 더 오래 생각했나</h3>
+<h4 id="핵심-아이디어">핵심 아이디어</h4>
+<p>장기 과제에서 AI 에이전트는 앞에서 본 단서가 수백 번의 행동 뒤에 중요해지는 문제를 만납니다. 지금 필요 없어 보인다고 요약에서 버린 정보는 나중에 되살릴 수 없습니다. PRO-LONG은 이 문제를 복잡한 벡터 데이터베이스나 학습된 memory controller 대신 아주 단순한 방식으로 풉니다. 모든 관찰, 행동, 결과와 요약 plan/analysis·tool-call 흔적을 구조화된 <code>logs.txt</code>에 계속 추가하고, 코딩 에이전트가 grep·정규식·Python으로 과거를 직접 검색하게 합니다.</p>
+<p>여기서 <code>모든 기록</code>은 환경이 harness에 제공한 구조화 observation/action/outcome을 요약 없이 보존한다는 의미입니다. 현실 세계 전체나 모델의 숨은 생각까지 무손실로 저장한다는 뜻은 아닙니다.</p>
+<h4 id="무엇을-시험했나">무엇을 시험했나</h4>
+<p>연구팀은 ARC-AGI-3 공개 25개 게임을 사용했습니다. 규칙을 알려주지 않는 64×64 색상 grid 게임에서 agent가 행동을 해 보고 규칙을 추론해야 합니다. 기본 설정은 game당 500 actions, high reasoning, 한 turn에 최대 20 actions입니다. vision 대신 16색 ASCII text grid를 사용했습니다.</p>
+<p>GPT 모델은 Codex, Claude 모델은 Claude Code harness에서 실행됐습니다. 비교의 핵심은 같은 base coding agent에 전체 log를 주는 PRO-LONG과, 별도 log를 주지 않는 no-log 조건입니다.</p>
+<h4 id="성능은-얼마나-올랐나">성능은 얼마나 올랐나</h4>
+<p>같은 base coding agent에서 PRO-LONG은 no-log보다 모델별 15.7~21.0 percentage points 높았고 평균 향상은 18.0pp였습니다.</p>
+<ul>
+<li>GPT-5.5: pass@1 41.2, best@5 60.1</li>
+<li>Opus 4.6: pass@1 42.4</li>
+<li>Fable 5, 500 actions: pass@1 60.4, best@2 76.1</li>
+<li>Fable 5, 2,000 actions: pass@1 94.6, best@2 97.4</li>
+</ul>
+<p>Fable 5의 97.4%는 모든 게임을 정확히 두 번 실행한 완전한 best@2가 아닙니다. 일부 게임은 한 번만 실행돼 저자들은 lower bound라고 부릅니다. 총 비용은 $1,750이었습니다.</p>
+<h4 id="토큰-효율이-의미하는-것">토큰 효율이 의미하는 것</h4>
+<p>GPT-5.5 PRO-LONG pass@1은 WorldModeler의 45.1보다 3.9pp 낮지만 billed tokens는 5.8배 적었습니다. Claude Code에서는 PRO-LONG best@2 82.1과 Schema 84.4가 가까웠고, 저자 계산상 4.2배 적은 tokens를 사용했습니다.</p>
+<p>그러나 <code>4.2~5.8배 저렴하다</code>는 숫자는 완전한 apples-to-apples 시스템 비용이 아닙니다. prior harness마다 run 선택법과 공개 범위가 다르고, Schema는 retained best runs만 공개했습니다. 모델 가격·캐시·action budget·run count도 다릅니다. 논문이 보여준 것은 billed model token 효율이지 storage, I/O, latency, privacy까지 포함한 총소유비용이 아닙니다.</p>
+<h4 id="왜-전체-log가-도움이-됐나">왜 전체 log가 도움이 됐나</h4>
+<p>도구 ablation은 read only 23.1에서 grep/regex를 더하면 27.2, Python을 더하면 38.3, write/edit까지 더하면 41.2였습니다. 단순히 log를 저장하는 것만 아니라 코딩 도구로 과거를 계산·검증할 수 있어야 효과가 컸습니다.</p>
+<p>GPT-5.5 best@5에서 full log 60.1, last 25 actions 51.9, no-log 34.2였습니다. 현재 board만 봐도 규칙을 알 수 있는 게임에서는 이득이 작았지만, 이전 경로를 되감아 ghost가 반복하는 g50t나 장기 상태를 추적하는 m0r0에서는 이득이 컸습니다. g50t의 한 run log는 32만 줄을 넘었습니다.</p>
+<h4 id="노트와-vector-db가-필요-없다는-뜻인가">노트와 vector DB가 필요 없다는 뜻인가</h4>
+<p>아닙니다. 이 논문은 ARC-AGI-3 설정에서 append-all log와 programmatic search가 강했다는 결과입니다. workspace를 매 call 지워도 PRO-LONG은 41.2에서 40.7로 거의 유지됐지만, 이는 scratchpad·vector retrieval·learned memory가 다른 과제에서 무용하다는 증명이 아닙니다. 과제의 구조, 개인정보, 검색 latency, 저장비용에 따라 압축과 selection이 필요할 수 있습니다.</p>
+<h4 id="가장-중요한-한계">가장 중요한 한계</h4>
+<p>평가는 ARC-AGI-3 공개 25개 게임에 집중됐고 일부 frontier model은 benchmark 공개 후 출시됐습니다. run variance가 크며 best@k는 여러 번 실행해 가장 좋은 결과를 고릅니다. 이는 한 번 실행했을 때의 reliability와 다릅니다. WorldModeler는 vision도 사용했고 prior harness의 replicate·selection procedure가 모두 공개된 것은 아닙니다.</p>
+<p>따라서 PRO-LONG이 모든 memory architecture를 이겼다거나, 모든 장기 과제에서 18pp 향상한다고 말하면 과장입니다. private/held-out games와 NetHack·web navigation·software engineering 같은 외부 과제에서 독립 재현이 필요합니다.</p>
+<h4 id="실무적-교훈">실무적 교훈</h4>
+<p>뒤늦게 어떤 정보가 중요할지 모르는 탐색형 과제에서는 처음부터 완벽한 요약을 만들려고 하기보다, 원로그를 보존하고 코딩 agent가 필요할 때 검색·재계산하도록 하는 설계가 강력할 수 있습니다. 핵심은 긴 context window 자체가 아니라 <strong>active context 밖에 원기록을 남기고, 프로그램으로 다시 찾아오는 능력</strong>입니다.</p>
+<h4 id="재현성-주의">재현성 주의</h4>
+<p>공개 저장소는 audit에 유용하지만 현재 HEAD의 game-version suffix는 논문 Appendix와 25개 중 16개가 다릅니다. 일부 ablation 원시 로그도 아직 전부 공개된 상태가 아닙니다. 따라서 “코드가 있으니 현재 HEAD로 논문 전체가 완전 재현된다”가 아니라, 논문 당시 commit·engine·game version을 고정해야 한다고 말해야 합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/arc-agi-3/">ARC-AGI-3</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

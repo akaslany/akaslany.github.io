@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlphaGenome 2: Deciphering how cells read DNA to better understand disease — Google DeepMind</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>AlphaGenome 2: Deciphering how cells read DNA to better understand disease — Google DeepMind</h1>
+<p class="page-meta">웹 · 2026-11-11</p>
+<h2 id="요약">요약</h2>
+<p>2026년 11월 11일, 구글 딥마인드(Google DeepMind)의 주요 연구진(Adam Gayoso, Natasha Latysheva, Pushmeet Kohli, Žiga Avsec 등)은 DNA 서열과 그 변이가 특정 인간 세포 유형 및 세포 상태에 미치는 영향을 높은 정밀도로 예측하는 차세대 AI 모델인…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://deepmind.google/blog/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease">출처</a> · <a href="https://www.youtube.com/watch?v=xeJLUAvV8ic">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-alphagenome-2-단일-세포-생물학과-인간-유전학을-잇는-차세대-dna-서열-예측-모델-심층-해설">[보고서] AlphaGenome 2: 단일 세포 생물학과 인간 유전학을 잇는 차세대 DNA 서열 예측 모델 심층 해설</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>2026년 11월 11일, 구글 딥마인드(Google DeepMind)의 주요 연구진(Adam Gayoso, Natasha Latysheva, Pushmeet Kohli, Žiga Avsec 등)은 DNA 서열과 그 변이가 특정 인간 세포 유형 및 세포 상태에 미치는 영향을 높은 정밀도로 예측하는 차세대 AI 모델인 'AlphaGenome 2'를 공식 발표했다. 인간의 모든 세포는 동일한 DNA 청사진을 공유하지만, 세포 유형과 생물학적 상태에 따라 활성화되는 유전자 조절 회로가 달라진다. 미세한 DNA 변이가 특정 세포 내 유전자 발현에 미치는 영향을 정확히 예측하는 것은 인간의 복합 형질과 질병 기전을 구명하는 계산생물학의 핵심 과제였다.</p>
+<p>구글 딥마인드는 전작인 AlphaGenome을 통해 광범위한 조직 수준(Bulk tissues)에서 유전 변이의 분자적 활동 영향을 예측하였으며, 인간 유전체 내 가능한 90억 개의 단일 자력 변이(Single-letter changes) 예측 결과를 담은 AlphaGenome Atlas로 확충하여 희귀 질환 및 복합 형질 연구를 지원해 왔다. 이번에 공개된 AlphaGenome 2는 광범위한 조직 평균 단위의 예측 해상도를 개별 세포 유형 및 변의적 세포 상태 단위로 유의미하게 정밀화하고 아키텍처를 근본적으로 재설계함으로써 유전 변이 예측 성능의 획기적 도약을 달성했다.</p>
+<p>AlphaGenome 2는 단일 세포 생물학(Single-cell biology)과 인간 유전학(Human genetics)을 직관적으로 연결하여, 기존 조직 평균 모델에서는 은폐되었던 질병 관련 세포 특이적 변이 효과를 식별하도록 설계되었다. 68개 조직에 걸친 1억 700만 개 이상의 단일 세포 프로필 데이터를 학습한 이 모델은 정적인 세포 지도(Cell atlas)를 예측 가능한 유전학 엔진으로 전환하며, 비상업적 연구용 API 및 상업적 연구를 위한 비공개 미리보기(Private preview) 형태로 제공된다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points-arguments">2. 주요 논점 (Key Points &amp; Arguments)</h4>
+<h5 id="2-1-모델-아키텍처-재설계-조건부-모델-conditional-model-방식으로의-전환">2.1. 모델 아키텍처 재설계: 조건부 모델(Conditional Model) 방식으로의 전환</h5>
+<p><code>[소스 위치: Redesigning AlphaGenome for specific cell types 문단 및 Analyzing new cell types and states without retraining 문단]</code></p>
+<p><code>[사실]</code> AlphaGenome 1은 100만 자(1-million-letter) 길의 DNA 서열을 입력받아 수천 가지 벌크 조직 및 세포주의 실험 결과를 병렬(Parallel) 방식으로 동시에 예측했다. 반면 AlphaGenome 2는 입력 DNA 서열과 함께 특정 생물학적 조건(조직, 세포 유형 또는 세포 상태)을 고유 입력값으로 받아서 동작하는 '조건부 모델(Conditional Model)' 방식을 채택했다. 또한 출력 예측 데이터 모달리티 측면에서 유전자 발현, 히스톤 수정, 염색질 접근성(Chromatin accessibility) 외에도 학계의 수요가 높았던 <strong>'DNA 메틸화(DNA methylation)'</strong> 예측 기능을 새롭게 통합하였다.</p>
+<p><code>[소스 주장]</code> AlphaGenome 1의 병렬 출력 구조는 모델의 전체 계산 용량을 분산시켜 기능적으로 밀접한 세포 유형 간의 미세한 조절 차이를 포착하기 어렵게 만들었다. AlphaGenome 2는 신경망 아키텍처의 전 과정에 걸쳐 표적 생물학적 조건을 입력받음으로써 동일한 DNA 서열이 세포 유형별로 어떻게 다르게 해독되는지 정밀하게 디코딩한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">AlphaGenome 1</th>
+<th style="text-align:left">AlphaGenome 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>입력 데이터</strong></td>
+<td style="text-align:left">100만 자 DNA 서열</td>
+<td style="text-align:left">100만 자 DNA 서열 + 특정 생물학적 조건 (조직/세포 유형/세포 상태)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>예측 방식</strong></td>
+<td style="text-align:left">광범위 조직 및 세포주 특성을 한 번에 병렬 예측</td>
+<td style="text-align:left">표적 생물학적 조건을 지정하여 일대일 조건부 예측</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>세포 유형 처리 방식</strong></td>
+<td style="text-align:left">고정된 벌크(Bulk) 조직 및 세포주 데이터 출력</td>
+<td style="text-align:left">참조 카탈로그 선택 또는 세포 인코더(Cell encoder)를 통한 실시간 생성 입력</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>예측 데이터 모달리티</strong></td>
+<td style="text-align:left">유전자 발현, 히스톤 수정, 염색질 접근성</td>
+<td style="text-align:left">유전자 발현, 히스톤 수정, 염색질 접근성 + <strong>DNA 메틸화 (DNA methylation)</strong> 추가</td>
+</tr>
+</tbody>
+</table>
+<p><code>[사실]</code> 조건부 아키텍처는 세포의 생물학적 상태와 출력 모달리티를 분리함으로써 '교차 모달리티 보충(Cross-modality imputation)'을 가능하게 한다. 입력 데이터로 단일 세포 유전자 활성도(scRNA-seq) 데이터만 제공하더라도, 모델은 직접 측정되지 않은 염색질 접근성이나 DNA 메틸화 수준과 같은 타 모달리티 특성을 예측해 낸다. 이때 사용자가 제공한 소수의 단일 세포 RNA-seq 데이터(단 몇 십 개 세포 수준)는 모델 내 '세포 인코더(Cell encoder)'를 통해 세포 상태 표현(Cell state representation) 벡터로 압축되어 조건부 입력으로 실시간 주입된다.</p>
+<p><code>[사실]</code> AlphaGenome 2는 모델 재학습(Retraining) 없이 새로운 단일 세포 실험 데이터에 직접 적응(Zero-shot)한다. COVID-19 mRNA 백신 연구 데이터를 검증한 사례에서, 모델은 재학습 없이 백신에 의해 활성화된 T세포와 휴지기 T세포를 명확히 구분해 냈다. 나아가 중증 COVID-19 연관 유전 변이가 휴지기 세포 상태보다 활성화된 T세포 상태에서 유전자 활성을 훨씬 강하게 교란한다는 사실을 밝혀냈다.</p>
+<p><code>[작성자 해석]</code> 연구자가 교차 모달리티 보충과 세포 인코더 기능을 활용하면, 미측정된 다중오믹스(Multi-omics) 데이터를 고정밀 인실리코(In silico) 예측으로 보완할 수 있다. 이는 고비용의 습식 실험(Wet-lab experiment) 수행 전 최우선 검증 대상 후보를 효율적으로 선별(Prioritization)하게 한다. 특히 자극이나 질병으로 유도된 미학습 세포 상태에서의 변이 효과를 별도의 파인튜닝 없이 즉각 추론할 수 있다는 점은 계산생물학적 응용 범위를 획기적으로 확장한다.</p>
+<h5 id="2-2-세포-유형-특-특이적-예측-성능-및-질병-관련-변이-식별-사례">2.2. 세포 유형 특 특이적 예측 성능 및 질병 관련 변이 식별 사례</h5>
+<p><code>[소스 위치: State-of-the-art cell-type predictions and variant recall 문단]</code></p>
+<p><code>[사실]</code> AlphaGenome 2는 학습 데이터셋에 포함되지 않은 독립 유전체 영역에서 세포 유형 간 유전자 발현 차이를 우수하게 설명한다. 구체적으로 조혈 과정(Hematopoiesis: 조혈모세포가 적혈구 및 다양한 면역 세포 계통으로 분화하는 연속 과정) 동안 발생하는 연속적인 발현 양상 변화를 높은 정확도로 추적한다.</p>
+<p><code>[사실]</code> 28개 1차 면역 세포 유형으로 구성된 대규모 단일 세포 지도 데이터셋인 TenK10K 평가에서, AlphaGenome 2는 단일 세포 데이터로 파인튜닝된 기존 AlphaGenome 및 타 전문 분석 도구 대비 월등한 성능을 기록했다.</p>
+<ul>
+<li><strong>원인 변이(Causal variants) 식별 비율:</strong> AlphaGenome 2 <strong>30%</strong> vs 기존 파인튜닝 모델 <strong>16%</strong> (약 2배 향상)</li>
+<li><strong>방향성 유전자 효과(Directional gene effects) 식별 비율:</strong> AlphaGenome 2 <strong>43%</strong> vs 기존 파인튜닝 모델 <strong>23%</strong> (약 2배 향상)</li>
+</ul>
+<p><code>[소스 주장]</code> AlphaGenome 2는 최근 연구를 통해 밝혀진 염증성 장질환(IBD) 병리 메커니즘—장 대식세포(Gut macrophages) 내 <em>ETS2</em> 유전자의 과활성화가 IBD를 유발한다는 사실—을 습식 실험 없이 계산 과학적으로 재현하고 검증했다.</p>
+<p><code>[작성자 해석]</code> 장 내 다양한 면역 세포군에 대한 조건부 예측을 수행했을 때, AlphaGenome 2는 타 세포 유형이나 유전자에는 연쇄 영향을 주지 않으면서 장 대식세포 내 <em>ETS2</em> 유전자 활성만을 특이적으로 증폭시키는 원인 변이를 단독 지목했다. 이는 세포 특이적 변이 예측 성능이 복합 질환의 병리 기전을 세세한 세포 수준에서 규명하는 데 실질적으로 기여함을 보여준다.</p>
+<h5 id="2-3-인간-유전학-gwas-과-단일-세포-생물학의-연결">2.3. 인간 유전학(GWAS)과 단일 세포 생물학의 연결</h5>
+<p><code>[소스 위치: Bridging human genetics and single-cell biology 문단]</code></p>
+<p><code>[사실]</code> 전장유전체 연관분석(GWAS)에서 발견되는 질병 연관 신호의 대부분은 유전자 단백질 부호화 영역이 아닌 멀리 떨어진 비부호화 조절 부위인 인핸서(Enhancer)에 위치한다. AlphaGenome 2는 예측 범위를 1차 인간 세포 유형(Primary human cell types) 수준으로 확장하여 인핸서-유전자 연결(Enhancer-gene links) 구조를 복원한다.</p>
+<p><code>[소스 주장]</code> 기존의 크리스퍼(CRISPR) 결손 스크리닝 실험은 주로 실험실에서 분리·배양된 정형화된 세포주(Cell lines)에 의존하므로, 실제 인간 신체 조직 내부의 정교한 유전자 조절 회로망을 완전하게 반영하지 못하는 한계가 있었다. AlphaGenome 2는 뇌 아스트로사이트(Brain astrocytes)와 같은 1차 인간 세포 유형에서 인핸서와 표적 유전자 간의 작용 연결망을 정밀하게 제시한다.</p>
+<p><code>[작성자 해석]</code> AlphaGenome 2는 신장(Height)부터 제2형 당뇨병에 이르는 다양한 복합 형질의 GWAS 신호에 대해 원인 변이, 표적 유전자, 그리고 작용 세포 유형을 사전에 계산된 변이 점수(Precomputed variant scores) 형태로 제공한다. 특히 해당 변이가 유전자 활성을 촉진(Up)시키는지 억제(Down)시키는지 조절 방향성을 제시함으로써, 샌거 연구소(Wellcome Sanger Institute) 등과의 협력 및 제노믹스 리미티드(Genomics Limited)의 Mystra 플랫폼 도입 사례처럼 약물 표적 발굴(Target discovery)과 신약 개발 파이프라인의 불확실성을 획기적으로 줄여준다.</p>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-speakers">3. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h4>
+<p>본 소스 텍스트에 명시된 주요 인물, 소속, 역할 및 기여 내용은 다음과 같다. 소스에서 명확히 확인되지 않는 기관 내 일반 인력의 세부 역할은 추측을 배제하고 사실 그대로 정리했다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 이름 (영문 표기)</th>
+<th style="text-align:left">역할 / 소속 / 기여 내용</th>
+<th style="text-align:left">소스 내 출처 및 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Adam Gayoso</strong></td>
+<td style="text-align:left">구글 딥마인드 연구진 / 논문 주요 저자 및 핵심 연구 기여</td>
+<td style="text-align:left">본문 상단 및 감사 글 (Acknowledgements)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Natasha Latysheva</strong></td>
+<td style="text-align:left">구글 딥마인드 연구진 / 논문 주요 저자 및 핵심 연구 기여</td>
+<td style="text-align:left">본문 상단 및 감사 글 (Acknowledgements)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Pushmeet Kohli</strong></td>
+<td style="text-align:left">구글 딥마인드 연구진 / 논문 주요 저자 및 핵심 연구 기여</td>
+<td style="text-align:left">본문 상단 및 감사 글 (Acknowledgements)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Žiga Avsec</strong></td>
+<td style="text-align:left">구글 딥마인드 연구진 / 논문 주요 저자 및 핵심 연구 기여</td>
+<td style="text-align:left">본문 상단 및 감사 글 (Acknowledgements)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sarah Teichmann</strong></td>
+<td style="text-align:left">켐브리지 대학교 줄기세포 의학 교수, 휴먼 셀 아틀라스(Human Cell Atlas) 컨소시엄 공동 창립자</td>
+<td style="text-align:left">본문 인용문 제공 (&quot;재학습 없이 새로운 단일 세포 데이터에 직접 적응하는 점이 매우 흥미로움&quot;)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Peter Donnelly</strong></td>
+<td style="text-align:left">제노믹스 리미티드(Genomics Limited) CEO</td>
+<td style="text-align:left">본문 인용문 제공 (&quot;AlphaGenome 2를 자사의 Mystra 플랫폼에 도입할 예정&quot;)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Anne Mottram, Alexander Karollus, Demis Hassabis 등</strong></td>
+<td style="text-align:left">구글 딥마인드 핵심 연구 기여진</td>
+<td style="text-align:left">감사 글 (Acknowledgements) 섹션</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gabriella Stanton, Charlie Taylor 등</strong></td>
+<td style="text-align:left">서포트 및 피드백 제공 인업진</td>
+<td style="text-align:left">감사 글 (Acknowledgements) 섹션</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Evie Gray, Danielle Breen 등</strong></td>
+<td style="text-align:left">커뮤니케이션 전문 연구진</td>
+<td style="text-align:left">감사 글 (Acknowledgements) 섹션</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-quantifiable-data-timelines">4. 수치 및 시점 (Quantifiable Data &amp; Timelines)</h4>
+<h5 id="주요-시점-timelines">주요 시점 (Timelines)</h5>
+<ul>
+<li><strong>2026년 11월 11일:</strong> AlphaGenome 2 모델, 논문 및 연구 결과 공식 발표일.</li>
+<li><strong>2026년 11월 30일:</strong> 구글 딥마인드의 피드백 접수 및 AlphaGenome 2 사용자 활용 사례 제출 마감일.</li>
+</ul>
+<h5 id="데이터-및-성능-수치-quantitative-metrics">데이터 및 성능 수치 (Quantitative Metrics)</h5>
+<ul>
+<li><strong>100만 자 (1-million-letter):</strong> AlphaGenome 2 모델이 입력으로 처리하는 DNA 서열의 연속 길이.</li>
+<li><strong>90억 개 (9 billion):</strong> AlphaGenome Atlas 플랫폼에 구축된 인간 유전체 내 가능한 모든 단일 자력 변이(Single-letter changes) 예측 수.</li>
+<li><strong>1억 700만 개 이상 (Over 107 million):</strong> AlphaGenome 2 모델 학습에 사용된 인간 및 마우스의 단일 세포 프로필(Single-cell profiles) 수.</li>
+<li><strong>68개:</strong> 모델 학습 데이터에 포함된 생체 조직 수.</li>
+<li><strong>28개:</strong> 성능 평가에 사용된 TenK10K 데이터셋 내 1차 면역 세포 유형 수.</li>
+<li><strong>30% 대 16%:</strong> TenK10K 데이터셋에서 AlphaGenome 2 대 이전 AlphaGenome(단일 세포 데이터 파인튜닝 버전)의 원인 변이(Causal variants) 식별 비율.</li>
+<li><strong>43% 대 23%:</strong> TenK10K 데이터셋에서 AlphaGenome 2 대 이전 AlphaGenome의 방향성 유전자 효과(Directional gene effects) 식별 비율.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>임상 및 진단 목적 사용 불가:</strong> AlphaGenome 및 AlphaGenome 2는 오직 연구용(Research use only)으로만 제공되며, 임상 치료나 질병 진단 목적으로 검증되거나 승인되지 않았다.</li>
+<li><strong>모델 파라미터 아키텍처 규모 미기재:</strong> 소스 텍스트에는 AlphaGenome 2의 세부 신경망 매개변수(Parameter) 수나 파라미터 아키텍처의 구체적 크기가 명시되어 있지 않다. (<strong>확인 불가</strong>)</li>
+<li><strong>구글 안티그라비티(Antigravity) 및 제미나이 4(Gemini 4) 연동 시점 미정:</strong> 에이전트 개발 플랫폼인 Google Antigravity 상의 AlphaGenome 2 Skills 및 Gemini 4 연동 일정은 '곧 출시(soon)'로만 명시되어 있으며 정확한 출시일은 밝혀지지 않았다. (<strong>확인 불가</strong>)</li>
+<li><strong>상업용 비공개 미리보기 이용 조건 미기재:</strong> 비상업 연구용 API 제공 외에 상업적 연구를 위한 비공개 미리보기(Private preview)의 구체적인 비용, 신청 자격 및 접근 조건은 본문에 기재되어 있지 않다. (<strong>확인 불가</strong>)</li>
+<li><strong>향후 협력 연구 확장:</strong> 웰컴 생어 연구소(Wellcome Sanger Institute) 등 외부 연구기관과의 협업을 통해 단일 세포 프로파일링 범위를 지속 확장하고 있으나, 전체 인간 세포 상태 커버리지 완성 시점은 명시되지 않았다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

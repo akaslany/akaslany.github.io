@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn Your Own Thoughts: Abstract Token Curriculum</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Learn Your Own Thoughts: Abstract Token Curriculum</h1>
+<p class="page-meta">논문 · 2026-09-24</p>
+<h2 id="요약">요약</h2>
+<p>Learn Your Own Thoughts: Abstract Token Curriculum</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/abs/2609.19717v2">출처</a> · <a href="https://www.youtube.com/watch?v=5wW0vGWic2A">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="기술-보고서-abstract-token-curriculum-atc-을-통한-연속-중간-표현-도출-및-학습-메커니즘-분석">기술 보고서: Abstract Token Curriculum (ATC)을 통한 연속 중간 표현 도출 및 학습 메커니즘 분석</h3>
+<p><strong>문서 정보 및 주의사항</strong></p>
+<ul>
+<li><strong>소스 URL:</strong> https://arxiv.org/pdf/2609.19717v2 (v2 PDF 기준)</li>
+<li><strong>신뢰성 고지:</strong> 본 보고서에서 설명하는 Abstract Token Curriculum (ATC) 연구는 현재 동료 평가(Peer Review)를 거치지 않은 상태이며, 독립적인 실험적 재현성이 외부에서 확인되지 않았음을 명시함.</li>
+</ul>
+<hr />
+<h5 id="1-연구-개요-및-배경">1. 연구 개요 및 배경</h5>
+<ol>
+<li>
+<p><strong>연구 배경 및 목적</strong>
+대규모 언어 모델(LLM)의 추론 성능을 견인해 온 Chain-of-Thought(CoT) 기법은 사고 과정을 명시적으로 기술하는 전문가 설계와 데이터 감독(Explicit Supervision)에 의존한다는 한계가 있음. 본 연구는 이러한 수동적인 스크래치패드 설계 없이, 정답 감독(Answer-only supervision)만으로 모델 스스로 '연속 중간 표현(Continuous Intermediate Representations)'을 도출하도록 유도하는 <strong>Abstract Token Curriculum (ATC)</strong> 프레임워크를 제안함.</p>
+</li>
+<li>
+<p><strong>핵심 가설: 어텐션 단순성 편향(Attention Simplicity Bias)</strong>
+본 연구는 Abbe et al. (2024)이 제시한 '글로벌도(Globality degree)' 개념에 기초함. 가설에 따르면, 학습 가능한 CoT는 낮은 글로벌도를 가짐. 즉, **&quot;다음 토큰을 예측하기 위해 컨텍스트 내의 수많은 토큰 중 오직 소수의 핵심 토큰에만 주의를 집중하면 되는 성질&quot;**이 존재하며, 모델은 이러한 '어텐션 단순성 편향'을 통해 복잡한 순차적 과제를 효율적으로 학습할 수 있음.</p>
+</li>
+</ol>
+<hr />
+<h5 id="2-abstract-token-curriculum-atc-프레임워크">2. Abstract Token Curriculum (ATC) 프레임워크</h5>
+<ol>
+<li>
+<p><strong>시스템 아키텍처 및 텐서 흐름</strong>
+ATC는 입력 시퀀스 $x$와 연속적인 CoT 벡터 $z = (z_1, \dots, z_k)$를 트랜스포머 아키텍처의 입력으로 사용함.</p>
+<ul>
+<li><strong>연속 토큰 처리:</strong> 이산적(Discrete) 입력 토큰은 임베딩 층을 거치지만, 연속 CoT 토큰은 초기 임베딩 단계를 생략하고 **첫 번째 어텐션 층 이전에 레이어 정규화(Layer Normalization)**를 거쳐 모델에 직접 입력됨.</li>
+<li><strong>토큰 생성 메커니즘:</strong> 각 단계 $i$에서 생성되는 다음 CoT 토큰은 $z_{i+1} := T_i(f_{tf}(x, z_1, \dots, z_i))$ 공식을 따름. 본 실험에서 변환 함수 $T_i$는 **항등 함수(Identity function)**로 설정되어, 마지막 레이어의 은닉 임베딩이 그대로 다음 단계의 CoT 토큰으로 사용됨.</li>
+</ul>
+</li>
+<li>
+<p><strong>커리큘럼 단계(Phases)</strong>
+학습은 난이도가 점진적으로 상승하는 데이터 분포($D_1, \dots, D_k$)에 따라 진행됨. 하위 단계의 과제를 해결하면 검증 성능에 따라 해당 단계의 마지막 은닉 임베딩을 다음 단계의 연속 CoT 토큰으로 컨텍스트에 추가하며, 이를 통해 추론 체인의 길이를 확장함.</p>
+</li>
+<li>
+<p><strong>학습 알고리즘의 특징</strong>
+본 프레임워크는 중간 추론 과정에 대한 가이드라인 없이 오직 최종 정답만을 감독함. 커리큘럼을 통한 난이도 조절이 모델 내부에서 추론에 필요한 추상적 표현을 스스로 형성하도록 강제하는 메커니즘을 가짐.</p>
+</li>
+</ol>
+<hr />
+<h5 id="3-이론적-분석-단층-softmax-attention의-parity-학습">3. 이론적 분석: 단층 Softmax Attention의 Parity 학습</h5>
+<ol>
+<li>
+<p><strong>정리 1(Theorem 1): 어텐션 집중 현상</strong>
+단층 softmax attention 모델에서 ATC를 통해 parity 함수를 학습할 때, 어텐션 메커니즘이 가장 최근에 생성된 CoT 토큰에 집중되는 현상이 수식적으로 증명됨. 이는 해당 토큰이 다음 비트를 예측하기 위한 최적의 요약 정보를 담고 있어 '가장 쉬운 경로'를 제공하기 때문임.</p>
+</li>
+<li>
+<p><strong>단 한 번의 경사 하강법(One-step Key GD) 업데이트</strong>
+Theorem 2와 3에 근거하여, <strong>Query($W_Q$)와 Value($W_V$) 파라미터를 고정하고 Key($W_K$) 파라미터만을 업데이트</strong>할 때, 단 한 번의 GD 업데이트만으로도 어텐션 점수가 최신 CoT 토큰에 <strong>99% 이상 집중</strong>됨이 확인됨. 이는 모델이 이전 단계의 연산 결과를 효율적으로 활용하려는 강력한 편향을 가짐을 시사함.</p>
+</li>
+<li>
+<p><strong>상관관계 가정(Correlation One Assumption)</strong>
+이 분석은 이전 단계에서 학습된 CoT 토큰($z_k$)이 해당 단계까지의 parity 정보와 완벽하게 상관(Correlation = 1)된다는 가정을 전제로 함. 이 가정이 충족될 때, 모델은 $k+1$ 단계의 비트 연산을 위해 이전의 요약 정보를 선택적으로 참조함.</p>
+</li>
+</ol>
+<hr />
+<h5 id="4-대규모-학습을-위한-최적화-기법">4. 대규모 학습을 위한 최적화 기법</h5>
+<ol>
+<li>
+<p><strong>커리큘럼 백트래킹(Curriculum Backtracking)</strong>
+연속 CoT 학습 시, 난이도가 높아짐에 따라 이전 단계에서 구축된 표현이 변질되는 <strong>표현 드리프트(Representation Drift)</strong> 현상이 발생함. 백트래킹은 성능 저하가 감지될 때 이전 난이도로 돌아가 재학습함으로써 학습의 안정성을 유지함. 특히 이는 <strong>절단된 역전파(Truncated BPTT)로 인한 초기 표현 변질을 수정하기 위한 필수 보완책</strong>임.</p>
+</li>
+<li>
+<p><strong>절단된 역전파(Truncated Backpropagation)</strong>
+메모리 효율을 위해 고정된 윈도우($b$) 내에서만 그래디언트를 전파함. 실험 결과, 백트래킹 없이 Truncated 방식을 사용할 경우 정확도가 <strong>51% 수준으로 급격히 붕괴</strong>(Table 2 참조)하는 현상이 관찰되었으나, 백트래킹과 결합 시 메모리 사용량은 27% 수준으로 절감하면서도 성능을 유지함.</p>
+</li>
+<li>
+<p><strong>후보군 드롭아웃(Candidate Dropout, $\rho=0.75$)</strong>
+모델이 프롬프트 내 정답 후보를 단순히 복사하는 **숏컷(Copying Shortcut)**에 빠지는 것을 차단하기 위해 훈련 데이터의 75%에서 후보군을 숨김. 이는 모델이 단순히 정답을 선택하는 대신 내부적으로 carry(올림) 정보를 보관하는 등 실제 연산을 수행하도록 강제함.</p>
+</li>
+</ol>
+<hr />
+<h5 id="5-주요-실험-및-결과-비교">5. 주요 실험 및 결과 비교</h5>
+<ol>
+<li>
+<p><strong>Parity 실험 (20비트 입력)</strong></p>
+<ul>
+<li><strong>ATC (CoT + Curriculum):</strong> 20개 단계 전체에서 거의 <strong>0에 가까운 Loss와 완벽한 정확도</strong>를 유지함.</li>
+<li><strong>Baseline (Data Curriculum 전용):</strong> CoT 토큰이 없을 경우, 비트 수가 증가함에 따라 <strong>Loss가 선형적으로 상승하며 정확도는 60%대</strong>로 하락함.</li>
+</ul>
+</li>
+<li>
+<p><strong>그래프 도달성(Graph Reachability)</strong></p>
+<ul>
+<li><strong>효율성:</strong> ATC는 중간 단계 감독이 필요한 Coconut(Frontier supervision) 모델 대비 <strong>2.6배에서 최대 9.2배 빠른 학습 속도</strong>를 보임 (ATC: 51 epoch vs Coconut: 132-468 epoch).</li>
+<li><strong>어텐션 검증:</strong> 실험 결과, 어텐션 질량의 <strong>약 50%가 마지막 CoT 토큰에 집중</strong>된 반면, 입력 프롬프트의 **그래프 에지(Edge) 토큰에는 오직 2.3%**의 주의만을 기울임이 확인됨. 이는 모델이 원시 데이터를 매번 재연산하지 않고 추상화된 중간 표현을 적극 활용함을 입증함.</li>
+</ul>
+</li>
+<li>
+<p><strong>여러 자리 덧셈(Multi-digit Addition)</strong></p>
+<ul>
+<li>연속 CoT 토큰이 carry 정보를 내부적으로 보관하여 순차적 연산을 수행함을 확인하였음.</li>
+<li>대조군 실험 결과, <strong>후보군 드롭아웃($\rho$)이 없을 경우 모델이 0단계(Stage 0)에 고착</strong>되어 학습이 전혀 진행되지 않았으나, $\rho=0.75$ 적용 시 99% 이상의 정확도를 달성함.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="6-결론-및-고찰">6. 결론 및 고찰</h5>
+<ol>
+<li>
+<p><strong>연구의 의의</strong>
+본 연구는 명시적인 중간 단계 감독 없이도 정답 감독과 커리큘럼 설계를 통해 자발적인 연속 중간 표현 학습이 가능함을 입증하였음. 이는 복잡한 추론 작업을 위한 효율적이고 자동화된 모델 훈련의 가능성을 제시함.</p>
+</li>
+<li>
+<p><strong>제한 사항</strong>
+본 결과는 특정 실험 조건 하에서 도출된 것이며, 모델이 사람과 유사한 의식적 사고를 수행함을 의미하지 않음. 모든 해석은 수학적 모델과 데이터의 범위 내로 한정되어야 함.</p>
+</li>
+<li>
+<p><strong>향후 과제</strong>
+ATC 프레임워크를 여러 중간 결론을 유기적으로 조합하고 이전의 선택을 수정해야 하는 **수학적 증명(Mathematical Proof)**과 같은 장기 추론(Long-horizon reasoning) 과제로 확장하여, 최신 토큰의 요약 능력 한계와 선택적 참조 메커니즘을 심화 분석할 필요가 있음.</p>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

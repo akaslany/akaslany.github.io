@@ -1,0 +1,108 @@
+{
+  "dist_bytes": 24498048,
+  "gates": {
+    "dist_current": {
+      "changed_files": 0,
+      "dist_changed_paths": [],
+      "ok": true
+    },
+    "escapes": {
+      "checked": 36,
+      "html_escapes": 0,
+      "html_paths": {},
+      "markdown_escapes": 0,
+      "markdown_paths": {},
+      "missing_html": [],
+      "ok": true
+    },
+    "grounding": {
+      "checked": 36,
+      "entity_source_links_checked": 172,
+      "invalid_extractions": {},
+      "issues": {},
+      "ok": true,
+      "pages_with_unsourced_numbers": 0
+    },
+    "links": {
+      "broken": 0,
+      "html_checked": 24174,
+      "issues": [],
+      "markdown_checked": 7741,
+      "ok": true
+    },
+    "links_recheck": {
+      "broken": 0,
+      "checked_associations": 1744,
+      "missing_associations": [],
+      "ok": true
+    },
+    "material": {
+      "checked": 22,
+      "issues": {},
+      "min_body_chars": 400,
+      "min_evidence_sources": 2,
+      "ok": true
+    },
+    "orphans": {
+      "edges": 7477,
+      "graph_valid": true,
+      "low_source_inbound": [],
+      "min_source_inbound": 3,
+      "nodes": 995,
+      "ok": true,
+      "orphan_pages": [],
+      "orphans": 0
+    },
+    "parity": {
+      "differences": {
+        "corpus_vs_normalized": [],
+        "home_catalog_vs_pages": [],
+        "inventory_vs_pages": [],
+        "search_vs_pages": [],
+        "source_catalog_vs_pages": [],
+        "source_files_vs_normalized": [],
+        "wiki_vs_html": []
+      },
+      "duplicates": {
+        "home_catalog": [],
+        "search": [],
+        "source_catalog": []
+      },
+      "expected_sources": 939,
+      "generated": 36,
+      "index": 4,
+      "kinds": 9,
+      "ok": true,
+      "sources": 939,
+      "symmetric_difference": 0,
+      "timeline": 7,
+      "total": 995
+    },
+    "placeholder": {
+      "occurrences": 0,
+      "ok": true,
+      "paths": {}
+    },
+    "reproducible": {
+      "changed_files": 0,
+      "changed_paths": [],
+      "compared_files": 999,
+      "first_sec": 10.159,
+      "ok": true,
+      "second_sec": 9.297
+    },
+    "schema": {
+      "checked": 995,
+      "invalid": 0,
+      "issues": {},
+      "ok": true,
+      "passed": 995
+    },
+    "selfcontained": {
+      "external_resources": 0,
+      "issues": [],
+      "ok": true
+    }
+  },
+  "verdict": "PASS"
+}

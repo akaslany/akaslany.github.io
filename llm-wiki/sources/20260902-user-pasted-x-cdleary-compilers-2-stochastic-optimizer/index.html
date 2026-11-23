@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compilers 2.0: AI를 확률적 최적화기로 보는 관점</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Compilers 2.0: AI를 확률적 최적화기로 보는 관점</h1>
+<p class="page-meta">소셜 · 2026-09-02</p>
+<h2 id="요약">요약</h2>
+<p>@cdleary의 X 글은 AI가 전통 컴파일러 전체를 대체했다는 선언이 아니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/social/">소셜</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://x.com/cdleary/status/2094878051238887834">출처</a> · <a href="https://www.youtube.com/watch?v=h1lyDjB-i8k">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="compilers-2-0-ai를-확률적-최적화기로-보는-관점">Compilers 2.0: AI를 확률적 최적화기로 보는 관점</h3>
+<h4 id="1-executive-summary">1. Executive summary</h4>
+<p>@cdleary의 X 글은 AI가 전통 컴파일러 전체를 대체했다는 선언이 아니다. 핵심은 고수준 커널 명세를 입력으로 받고, 모델이 후보 구현을 제안하며, 외부의 정확성 검사와 실제 하드웨어 성능 측정이 후보를 걸러 내는 반복 루프를 컴파일러의 새로운 최적화기로 보자는 주장이다. 이 관점에서 AI는 정답을 보증하는 심판이 아니라 넓은 후보 공간을 탐색하는 제안자다.</p>
+<p>공개 자료가 지지하는 범위는 제한적이다. OpenAI는 Jalapeño 개발과 프로그래밍에 AI를 사용했고, 선택된 GPT-OSS attention·MoE 블록에서 AI 생성 구현이 기존 인간 전문가 구현보다 1.5~1.8배 빨랐다고 발표했다. 그러나 @cdleary가 말한 MLA 커널의 정확한 48시간 탐색 과정, 외부 semantic-equivalence checker의 설계, 전체 후보 수, 실패율, 계산비용, 사람이 개입한 지점은 공개 자료로 확인되지 않는다. 따라서 이 보고서는 48시간, roofline 접근, 인간 전문가 초과를 모두 저자의 내부 경험에 근거한 주장으로 표시한다.</p>
+<p>STOKE는 2013년 ASPLOS 논문에서 loop-free x86-64 바이너리 최적화를 성능과 정확성의 비용함수로 만들고 Markov Chain Monte Carlo(MCMC)로 탐색했다. 후보 수정과 수용은 Metropolis-Hastings 계열의 확률적 탐색으로 설명되며, 이 탐색 절차 자체가 정답 증명은 아니다. 테스트케이스는 유망 후보를 빠르게 가려 내고, 검증 엔진은 최종 후보의 동등성을 증명하거나 반증한다. STOKE 자체가 완전성을 희생한다고 명시하므로 “시간을 무한히 주면 반드시 전역 최적 프로그램을 찾는다”는 식의 설명은 안전하지 않다.</p>
+<p>결론적으로 가장 현실적인 Compilers 2.0은 모든 컴파일 패스를 매번 느린 모델 추론으로 교체하는 형태가 아니다. 전통적 분석·변환·코드 생성은 빠르고 결정적이며 생산 환경에 필수다. AI 탐색은 커널 라이브러리 제작, 오프라인 autotuning, 신형 하드웨어 포팅처럼 후보 하나의 가치가 큰 구간에서 넓은 설계 공간을 탐색하고, 정형 검증·강한 계약·차등 테스트·실측 벤치마크가 그 결과를 봉인하는 하이브리드 구조가 더 설득력 있다.</p>
+<h4 id="2-제안된-루프의-아키텍처">2. 제안된 루프의 아키텍처</h4>
+<h5 id="2-1-입력-고수준-명세와-계약">2.1 입력: 고수준 명세와 계약</h5>
+<p>입력은 단순 자연어가 아니라 연산의 의미를 담은 고수준 표현이어야 한다. 예를 들면 NumPy 형태의 MLA 수학, tensor shape·dtype, 허용 오차, 메모리 alias 규칙, 동기화와 하드웨어 제약, 성능 목표다. IR은 이런 의미와 변환을 컴파일러가 다룰 수 있게 하는 중간 표현이다. OpenXLA 문서는 StableHLO 그래프에 대해 CSE, fusion, buffer analysis 같은 target-independent 패스를 적용하고, backend가 target-specific fusion·stream partition·library matching을 한 뒤 LLVM IR과 native code로 낮추는 다단계 구조를 설명한다.</p>
+<h5 id="2-2-제안자-모델이-후보-커널을-생성-수정">2.2 제안자: 모델이 후보 커널을 생성·수정</h5>
+<p>모델은 현재 후보, 성능 피드백, 컴파일 오류, 하드웨어 제약을 문맥으로 받아 다음 구현을 제안한다. 전통적인 peephole rewrite 목록보다 큰 변화—타일 크기, 데이터 배치, 통신, 병렬화, vectorization, scheduling을 함께 바꾸는 후보—를 낼 수 있다는 것이 저자의 기대다. 그러나 모델 제안은 확률적이며 학습 데이터와 프롬프트에 의존한다. 제안 자체에는 soundness 보증이 없다.</p>
+<h5 id="2-3-외부-게이트-컴파일-가능성-의미-보존-안전성">2.3 외부 게이트: 컴파일 가능성, 의미 보존, 안전성</h5>
+<p>후보는 최소한 다음 문을 통과해야 한다.</p>
+<ol>
+<li>문법·타입·IR well-formedness 검사</li>
+<li>메모리 범위, race, synchronization, undefined behavior 조건 검사</li>
+<li>가능한 경우 exhaustive 또는 SMT 기반 refinement/equivalence 검사</li>
+<li>정형 검증 범위를 벗어나면 property-based·differential·metamorphic testing과 넓은 입력 검증</li>
+<li>floating-point 연산이면 bitwise equality가 아니라 사전에 명시된 오차·NaN·Inf·reassociation 정책 확인</li>
+<li>정확성 문을 통과한 후보에 한해서 실제 목표 하드웨어에서 성능 측정</li>
+</ol>
+<p>LLVM verifier가 보장하는 것은 IR의 well-formedness이지 전체 프로그램의 기능적 정확성이나 보안이 아니다. Alive2도 LLVM 변환의 refinement/translation validation을 제공하지만 inter-procedural transformation을 지원하지 않는 등 명시된 범위가 있다. 따라서 “checker가 있다”는 한 문장만으로 임의 소프트웨어의 의미 동등성이 증명됐다고 말할 수 없다.</p>
+<h5 id="2-4-목적함수와-선택">2.4 목적함수와 선택</h5>
+<p>목적함수는 실행시간 하나가 아닐 수 있다. latency, throughput, energy, memory footprint, code size, compilation/tuning cost, 안정성을 함께 고려할 수 있다. Roofline 모델은 연산집약도와 메모리 대역폭·peak compute가 정하는 성능 상한을 시각화한다. “roofline에 가까워졌다”는 말은 특정 하드웨어와 커널, 측정 조건에서 병목 상한에 접근했다는 뜻이지 전역 최적성이나 다른 장치에서의 우월성을 증명하지 않는다.</p>
+<h4 id="3-고전-컴파일러-stoke-llm-유도-탐색-프로그램-합성-비교">3. 고전 컴파일러·STOKE·LLM 유도 탐색·프로그램 합성 비교</h4>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>후보 생성</th>
+<th>정확성 근거</th>
+<th>탐색 범위와 비용</th>
+<th>안전한 해석</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>고전 최적화 컴파일러</td>
+<td>명시적 분석, 변환 패스, cost model, 휴리스틱, 제한된 search, PGO/autotuning</td>
+<td>각 패스의 조건, IR 의미, 테스트와 검증</td>
+<td>빠르고 반복 가능하지만 phase ordering과 복합 최적화가 어렵다</td>
+<td>단순 local rewrite만 있는 것이 아니다</td>
+</tr>
+<tr>
+<td>STOKE</td>
+<td>loop-free x86-64 instruction sequence를 MCMC로 수정</td>
+<td>테스트케이스로 후보 선별 후 SMT 기반 검증</td>
+<td>넓은 공간을 탐색하지만 불완전하고 해당 ISA·프로그램 범위에 묶임</td>
+<td>확률적 탐색과 외부 검증을 결합한 선행 사례</td>
+</tr>
+<tr>
+<td>LLM 유도 확률적 최적화</td>
+<td>모델이 코드·피드백·문맥을 바탕으로 구조적 후보 제안</td>
+<td>별도의 계약·검증·테스트·실측이 필수</td>
+<td>제안당 비용은 크지만 인간이 설계한 rewrite를 벗어난 후보 가능</td>
+<td>모델은 제안자이지 soundness oracle이 아님</td>
+</tr>
+<tr>
+<td>프로그램 합성</td>
+<td>명세를 만족하는 프로그램을 탐색</td>
+<td>명세, solver, verifier 또는 examples</td>
+<td>원래 프로그램의 local transform에 덜 묶일 수 있으나 명세와 search space가 핵심</td>
+<td>“명세를 만족하는 프로그램 찾기”가 중심</td>
+</tr>
+</tbody>
+</table>
+<p>전통 컴파일러를 “local dataflow rule을 fixed point까지 돌리는 것뿐”이라고 요약하면 실제 체계를 지나치게 축소한다. LLVM과 XLA는 interprocedural analysis, profile-guided optimization, vectorization, instruction selection, register allocation, scheduling, fusion, buffer assignment, search와 cost model을 함께 사용한다. 저자의 비판은 중요한 경향—모듈식 패스와 phase ordering이 결합 최적화를 놓칠 수 있음—을 짚지만, 모든 기존 컴파일러의 완전한 정의가 아니다.</p>
+<h4 id="4-jalapeño-mla-사례-공개된-것과-공개되지-않은-것">4. Jalapeño MLA 사례: 공개된 것과 공개되지 않은 것</h4>
+<p>@cdleary는 자신이 NumPy 수준의 MLA를 기술할 수 있으며, AI가 emitter에 가까운 역할로 이를 낮추고 최적화해 48시간 뒤 같은 의미의 빠른 커널을 만들었다고 설명한다. 그는 OpenAI 하드웨어 팀의 관점에서 AI가 인간 전문가가 이미 잘 튜닝했다고 생각한 커널의 성능을 넘어서는 경우가 있다고 쓴다.</p>
+<p>OpenAI의 별도 공식 발표는 더 좁지만 일부 배경을 지지한다. OpenAI는 Jalapeño가 인간과 AI 모두에게 예측 가능한 programming target이 되도록 설계됐고, AI가 mapping·placement·scheduling·coordination을 최적화할 수 있다고 설명한다. 또한 Codex와 GPT-Astra를 이용해 원래 생산 계획에 없던 세 open-weight 모델을 두 달 안에 높은 성능으로 포팅했으며, 선택된 GPT-OSS attention·MoE 블록에서 AI 생성 구현이 기존 인간 전문가 구현보다 1.5~1.8배 빨랐다고 발표했다. 이 수치는 선택된 블록에 한정되고 full model speedup이 아니다.</p>
+<p>반면 공개 자료만으로는 다음을 확인할 수 없다.</p>
+<ul>
+<li>MLA가 정확히 어떤 모델·shape·dtype·hardware revision에서 실행됐는지</li>
+<li>“48 hours”의 시작·종료 기준, 모델 호출 수, 병렬 탐색 수와 비용</li>
+<li>후보 생성 모델과 prompt/context, 사람의 선택·수정 개입</li>
+<li>semantic-equivalence checker가 formal proof인지, exhaustive test인지, 강한 property test인지</li>
+<li>floating-point 오차 계약과 edge-case corpus</li>
+<li>“past human experts” 비교의 대상, sample size, 실패 후보와 통계</li>
+<li>roofline의 분모, 측정 반복, clock/power 상태, benchmark holdout</li>
+</ul>
+<p>따라서 Jalapeño 사례는 공개적으로 재현된 컴파일러 벤치마크가 아니라 OpenAI 공식 발표와 @cdleary의 1인칭 설명이 결합된 first-party 사례다. SemiAnalysis의 관련 논평은 독립 proof of internals로 사용하지 않는다.</p>
+<h4 id="5-soundness와-semantic-equivalence의-실제-의미">5. Soundness와 semantic equivalence의 실제 의미</h4>
+<h5 id="5-1-테스트는-일반적으로-증명이-아니다">5.1 테스트는 일반적으로 증명이 아니다</h5>
+<p>유한한 테스트 입력에서 source와 candidate가 같은 결과를 냈다는 사실은 테스트하지 않은 모든 입력에서도 같다는 보장이 아니다. STOKE는 이 문제를 분리해 테스트를 빠른 필터로 쓰고 SMT 기반 validation을 최종 검증에 사용했다. 임의의 대형 프로그램에서는 solver scalability, loops, memory model, library calls, concurrency 때문에 완전한 proof가 어려울 수 있다.</p>
+<h5 id="5-2-accelerator-kernel이-더-강한-계약을-가질-수-있는-이유">5.2 accelerator kernel이 더 강한 계약을 가질 수 있는 이유</h5>
+<p>많은 accelerator kernel은 shape가 제한되고, 연산이 순수한 tensor/dataflow에 가깝고, side effect와 control flow가 적으며, memory access와 synchronization이 명시적일 수 있다. 이런 제한은 입력 공간 열거, symbolic reasoning, refinement checking, differential testing을 강하게 만드는 데 유리하다. OpenAI는 Jalapeño를 local tensor, explicit communication, predictable synchronization이 드러나는 target으로 설명한다.</p>
+<p>그러나 이 장점은 설계 선택이지 자동 보증이 아니다. arbitrary C/C++, OS·network code, 외부 상태와 비결정성이 있는 프로그램으로 그대로 일반화할 수 없다.</p>
+<h5 id="5-3-놓치기-쉬운-경계">5.3 놓치기 쉬운 경계</h5>
+<ul>
+<li>Floating point: 연산 재배치만으로 rounding이 바뀐다. tolerance, accumulation order, reduced precision, overflow/underflow, NaN 정책이 계약에 포함돼야 한다.</li>
+<li>Undefined behavior: source semantics가 UB를 허용하면 최적화가 가능한 범위와 기대가 달라진다. 언어·IR의 정확한 semantics를 고정해야 한다.</li>
+<li>Race와 동기화: 데이터 race, weak memory, barrier 누락은 일반 입출력 테스트에서 드러나지 않을 수 있다.</li>
+<li>Memory safety: 값이 맞아도 out-of-bounds, alias 위반, lifetime 오류가 있으면 안전한 대체가 아니다.</li>
+<li>Hardware specificity: instruction semantics, synchronization, compiler/driver version, microarchitecture가 달라지면 검증과 성능 결과가 이동한다.</li>
+<li>Benchmark overfitting: 반복 피드백이 공개 benchmark shape에 과적합될 수 있다. holdout shape, unseen sizes, 다른 모델·workload에서 재검증해야 한다.</li>
+<li>Distribution shift: production request의 shape·sparsity·concurrency가 tuning corpus와 다르면 이득과 정확성 모두 달라질 수 있다.</li>
+</ul>
+<h4 id="6-경제-엔지니어링-논지-왜-하이브리드인가">6. 경제·엔지니어링 논지: 왜 하이브리드인가</h4>
+<p>전통 패스는 밀리초~초 수준에서 수없이 실행될 수 있고, 변화가 재현 가능하며, compiler bootstrap과 일반 개발 흐름에 맞는다. 반면 추론 모델은 후보 한 개를 만드는 데 더 느리고 비용이 크며 출력이 stochastic하다. 후보마다 compile, verify, benchmark를 반복하면 tuning 비용은 더 커진다.</p>
+<p>그럼에도 AI 탐색이 경제적일 수 있는 구간이 있다. 널리 재사용되는 kernel 하나가 데이터센터 전체의 inference 비용을 줄일 수 있고, 신형 accelerator의 software bring-up 시간을 단축할 수 있으며, scheduling·layout·communication처럼 사람이 동시에 다루기 어려운 조합 공간을 탐색할 수 있기 때문이다. 즉 per-proposal cost가 비싸도 successful artifact의 lifetime value가 크면 합리적이다.</p>
+<p>따라서 현실적인 배치는 다음과 같다.</p>
+<ul>
+<li>온라인 일반 컴파일: 전통 compiler pipeline이 기본 경로</li>
+<li>오프라인 고가치 커널: AI proposal loop와 강한 verifier, 실제 장치 autotuning</li>
+<li>승인된 결과: 검증된 kernel library·cache·rewrite rule로 고정해 빠르게 재사용</li>
+<li>새로운 shape/hardware/driver: 계약을 다시 확인하고 재탐색</li>
+<li>사람이 맡을 일: 명세·허용 오차·위험 예산·holdout·성능 기준 설계와 release 승인</li>
+</ul>
+<p>이 구조는 AI의 넓은 proposal 능력과 전통 compiler의 결정성·검증 가능성을 대체 관계가 아니라 역할 분담으로 본다.</p>
+<h4 id="7-evidence-table">7. Evidence table</h4>
+<table>
+<thead>
+<tr>
+<th>주장</th>
+<th>판정</th>
+<th>근거와 경계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@cdleary가 XLA를 시작했고 2년 넘게 OpenAI에서 compiler를 재구상했다</td>
+<td>author_claim_only</td>
+<td>X 글의 1인칭 경력 진술. 이번 조사에서 별도 인사 기록으로 검증하지 않음</td>
+</tr>
+<tr>
+<td>Jalapeño 프로그래밍·설계에 AI가 직접 사용됐다</td>
+<td>verified</td>
+<td>OpenAI 공식 2026-08-25 발표가 AI-assisted design, mapping, placement, scheduling을 명시</td>
+</tr>
+<tr>
+<td>선택된 GPT-OSS attention·MoE 블록이 인간 전문가 구현보다 1.5~1.8배 빨랐다</td>
+<td>verified</td>
+<td>OpenAI 공식 발표의 first-party measurement. 선택된 블록에 한정되고 독립 재현은 아님</td>
+</tr>
+<tr>
+<td>MLA 커널이 NumPy 수준 명세에서 생성됐다</td>
+<td>author_claim_only</td>
+<td>X 글의 설명. 정확한 생산 pipeline은 공개되지 않음</td>
+</tr>
+<tr>
+<td>MLA 커널을 48시간 최적화했다</td>
+<td>author_claim_only</td>
+<td>X 글의 주장. 시작·종료·호출 수·비용 미공개</td>
+</tr>
+<tr>
+<td>AI가 human experts를 넘어섰다</td>
+<td>partially_supported</td>
+<td>OpenAI는 선택 블록 1.5~1.8배를 공개했지만 X 글의 MLA·반복 빈도·비교 설계는 미공개</td>
+</tr>
+<tr>
+<td>semantic equivalence를 검사해 soundness를 세운다</td>
+<td>author_claim_only</td>
+<td>저자가 검사한다고 말하지만 구체 메커니즘은 future post 가능성만 언급</td>
+</tr>
+<tr>
+<td>accelerator kernel은 더 강한 계약을 만들기 유리하다</td>
+<td>partially_supported</td>
+<td>제한된 tensor/dataflow와 explicit synchronization은 검증에 유리하지만 arbitrary software 보증은 아님</td>
+</tr>
+<tr>
+<td>STOKE는 2013년 MCMC stochastic search와 equivalence checking을 결합했다</td>
+<td>verified</td>
+<td>ASPLOS 2013 논문</td>
+</tr>
+<tr>
+<td>STOKE는 무한 시간에 반드시 최적 프로그램을 찾는다</td>
+<td>not_verified</td>
+<td>논문은 completeness를 희생한다고 명시; 실용 구현의 전역 최적 보증이 아님</td>
+</tr>
+<tr>
+<td>전통 compiler는 local fixed-point rule만 사용한다</td>
+<td>not_verified</td>
+<td>실제 XLA/LLVM/MLIR은 다단계 분석, target-specific passes, scheduling, fusion, vectorization 등을 포함</td>
+</tr>
+<tr>
+<td>AI 제안은 자동으로 sound하다</td>
+<td>not_verified</td>
+<td>외부 검증·테스트·계약이 필요하며 모델 자체는 보증자가 아님</td>
+</tr>
+</tbody>
+</table>
+<h4 id="8-limits-and-falsifiers">8. Limits and falsifiers</h4>
+<p>이 논지를 강화할 공개 증거:</p>
+<ol>
+<li>MLA production brief와 허용 오차를 익명화해 공개</li>
+<li>checker의 formal semantics, coverage, solver 범위와 실패 유형 공개</li>
+<li>후보 수, 모델 호출·token·wall time·hardware cost 공개</li>
+<li>human baseline과 동일 budget의 비교, 다수 kernel 결과와 분산 공개</li>
+<li>training/tuning에 쓰지 않은 holdout shape·model·hardware에서 correctness와 speed 재측정</li>
+<li>bitwise·tolerance·probabilistic contract를 구분한 결과</li>
+<li>공개 가능한 artifact 또는 replayable benchmark로 독립 재현</li>
+</ol>
+<p>주장을 약화하거나 철회해야 할 신호:</p>
+<ul>
+<li>holdout에서 정확성 실패 또는 허용 오차 초과가 반복됨</li>
+<li>특정 공개 benchmark shape에만 성능 이득이 집중됨</li>
+<li>사람과 같은 compute budget에서 이득이 사라짐</li>
+<li>driver/compiler/hardware revision 변경으로 검증된 결과가 재현되지 않음</li>
+<li>verification 비용이 성능 이득의 lifetime value를 지속적으로 초과함</li>
+<li>narrow kernel 성공이 arbitrary software 또는 전체 compiler 대체로 과장됨</li>
+</ul>
+<p>유효기간은 짧다. OpenAI가 checker의 구체 설계, Hot Chips 자료, 공개 artifact를 추가하면 author_claim_only 항목을 재평가해야 한다.</p>
+<h4 id="9-safe-to-say-do-not-say">9. Safe to say / Do not say</h4>
+<p>안전하게 말할 수 있음:</p>
+<ul>
+<li>@cdleary는 AI를 넓은 후보 공간의 확률적 제안자로, correctness checker를 별도의 심판으로 보는 compiler architecture를 제안한다.</li>
+<li>STOKE는 stochastic search와 equivalence validation을 결합한 선행 연구다.</li>
+<li>OpenAI는 Jalapeño의 선택된 블록에서 AI 생성 구현이 기존 인간 전문가 구현보다 1.5~1.8배 빨랐다고 자체 발표했다.</li>
+<li>고가치 accelerator kernel의 offline tuning은 느린 모델 추론 비용을 정당화할 수 있다.</li>
+</ul>
+<p>말하면 안 됨:</p>
+<ul>
+<li>LLM이 작성한 코드는 자동으로 sound하다.</li>
+<li>일반 테스트만으로 임의 프로그램의 equivalence가 증명된다.</li>
+<li>STOKE 또는 AI 탐색은 전역 최적 프로그램을 보장한다.</li>
+<li>전통 compiler는 local rule밖에 쓰지 않는다.</li>
+<li>Jalapeño MLA의 48시간 과정과 checker가 공개 재현됐다.</li>
+<li>선택 블록 수치를 전체 모델·전체 칩·임의 소프트웨어로 일반화한다.</li>
+<li>이 글이나 영상이 OpenAI의 공식 endorsement다.</li>
+</ul>
+<h4 id="출처">출처</h4>
+<ul>
+<li>@cdleary, “Compilers 2.0: AI as stochastic optimizer,” X, 2026-09-01: https://x.com/cdleary/status/2094878051238887834</li>
+<li>OpenAI, “Jalapeño’s first results show industry-leading speed and efficiency in AI inference,” 2026-08-25: https://openai.com/index/jalapeno-first-results/</li>
+<li>Schkufza, Sharma, Aiken, “Stochastic Superoptimization,” ASPLOS 2013: https://theory.stanford.edu/~aiken/publications/papers/asplos13.pdf</li>
+<li>OpenXLA, “XLA architecture”: https://openxla.org/xla/architecture</li>
+<li>LLVM, “LLVM’s Analysis and Transform Passes”: https://llvm.org/docs/Passes.html</li>
+<li>MLIR, “MLIR Rationale”: https://mlir.llvm.org/docs/Rationale/Rationale/</li>
+<li>Alive2, LLVM optimization verification tools: https://github.com/AliveToolkit/alive2</li>
+<li>Gulwani, Polozov, Singh, “Program Synthesis,” 2017: https://www.microsoft.com/en-us/research/publication/program-synthesis/</li>
+<li>Williams, Waterman, Patterson, “Roofline: An Insightful Visual Performance Model for Multicore Architectures,” 2009: https://doi.org/10.1145/1498765.1498785</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/social/">소셜</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

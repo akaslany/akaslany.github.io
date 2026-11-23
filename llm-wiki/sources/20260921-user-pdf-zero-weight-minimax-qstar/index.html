@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zero-Weight Minimax Equilibrium: Resolving Q∗(s, a) on Compact Go Manifolds via Dihedral Bayesian Bitboards, Subspace Co</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Zero-Weight Minimax Equilibrium: Resolving Q∗(s, a) on Compact Go Manifolds via Dihedral Bayesian Bitboards, Subspace Co</h1>
+<p class="page-meta">PDF · 2026-09-21</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 바둑(Wei-Qi) 게임의 최적 행동 가치 함수인 $Q^*(s, a)$를 결정하기 위한 혁신적인 'Zero-Weight Minimax' 프레임워크를 심층 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=N-060_3pB-Q">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="기술-해설-보고서-zero-weight-minimax-equilibrium-기반의-go-manifold-해석-및-q-s-a-분석">[기술 해설 보고서] Zero-Weight Minimax Equilibrium 기반의 Go Manifold 해석 및 Q*(s, a) 분석</h3>
+<p><strong>공개 출처 표기:</strong> Zero_Weight_Minimax_Equilibrium_Q_Star.pdf — 사용자 제공 원문</p>
+<hr />
+<h5 id="1-서론-신경망-가중치-제로-zero-weight-환경에서의-최적-가치-함수-해석">1. 서론: 신경망 가중치 제로(Zero-Weight) 환경에서의 최적 가치 함수 해석</h5>
+<p>본 보고서는 바둑(Wei-Qi) 게임의 최적 행동 가치 함수인 $Q^*(s, a)$를 결정하기 위한 혁신적인 'Zero-Weight Minimax' 프레임워크를 심층 분석한다. AlphaZero 및 KataGo로 대표되는 기존 심층 신경망 기반 엔진은 $10^8$개에 달하는 파라미터와 18~40개의 레지듀얼 블록에 의존하며, 이로 인해 막대한 GPU 연산 오버헤드, 메가와트급 전력 소비, 100ms 이상의 의사결정 지연 시간을 초래한다.</p>
+<p>solidSF Autonomous Systems Lab은 부동 소수점 가중치를 완전히 제거한 아키텍처를 통해 7x7 및 9x9와 같은 컴팩트 매니폴드(Compact Manifolds)에서 분석적 미니맥스 해를 도출하는 패러다임 시프트를 제안한다. 본 프레임워크의 핵심은 $Q^*(s, a)$가 다음의 minimax Bellman 최적화 방정식을 엄밀하게 만족한다는 가설에서 출발한다.</p>
+<p>$$Q^<em>(s, a) = R(s, a) + \gamma \min_{a' \in A(s')} \max_{a'' \in A(s'')} Q^</em>(s'', a'')$$ (식 1)</p>
+<p>컴팩트 매니폴드는 계산 가능한 게임 트리와 복잡한 위상적 직관 사이의 기술적 경계로서, 신경망 없이도 최적에 근접한 평형 상태($\epsilon$-equilibrium)에 도달할 수 있음을 입증하는 최적의 실험실 역할을 수행한다.</p>
+<hr />
+<h5 id="2-게임-복잡도-및-공간-분석-compact-go-manifold의-특성">2. 게임 복잡도 및 공간 분석: Compact Go Manifold의 특성</h5>
+<p>보드 규격에 따른 상태 공간의 수학적 복잡도와 그에 따른 평형 상태의 해상도는 원문의 Table 1에 따라 다음과 같이 정의된다.</p>
+<p>| 보드 규격 | 상태 공간 ($|S|$) | 상태 복잡도 | 평형 상태 (Equilibrium Status) |
+| :--- | :--- | :--- | :--- |
+| <strong>7x7 (Compact)</strong> | $4.52 \times 10^8$ | $10^{42}$ | <strong>Minimax Solved ($Q^*$ Exact)</strong> |
+| <strong>9x9 (Tactical)</strong> | $1.04 \times 10^{15}$ | $10^{78}$ | <strong>Near-Optimal ($\epsilon \le 0.5$ pts)</strong> |
+| <strong>19x19 (Regulation)</strong> | $2.08 \times 10^{170}$ | $10^{360}$ | <strong>Deficit Compressed (0.5–13.5 pts)</strong> |</p>
+<p>이러한 방대한 공간을 제로 가중치로 처리하기 위해 두 가지 수학적 논리가 적용된다. 첫째, <strong>D4 Dihedral Group 대칭성</strong>(회전 및 대칭)을 활용하여 상태 매니폴드 볼륨을 정확히 1/8로 축소한다. 둘째, 데이터 분석 결과 축머리, 로컬 활로, 절단 등 전술적 상호작용의 **92.4%**가 맨해튼 거리 $r \le 3$ 이내의 <strong>로컬 다이아몬드 메트릭</strong>에 의존한다는 점을 발견하여 상태 표현의 효율성을 극대화했다.</p>
+<hr />
+<h5 id="3-핵심-아키텍처-5대-구조적-불변성-structural-invariants">3. 핵심 아키텍처: 5대 구조적 불변성(Structural Invariants)</h5>
+<h6 id="3-1-dihedral-bayesian-bitboards-및-해시-기반-사전-확률">3.1. Dihedral Bayesian Bitboards 및 해시 기반 사전 확률</h6>
+<p>상태 표현을 위해 64비트 정수 $b_{black}, b_{white}$를 사용하며, $D4$ 액션 하에서 다음과 같이 정준 상태(Canonical state) $s^*$를 투영한다.</p>
+<p>$$s^* = \arg \min_{g \in D4} \left( \sum_{i=0}^{K^2-1} 2^i \cdot \mathbf{b}_{occ}(g \cdot s)[i] \right)$$ (식 2)</p>
+<p>이 과정에서 생성된 전술적 패턴의 64비트 해시 $H_r(s, p)$는 <strong>39.4 GB 규모의 SQLite WAL</strong>(Write-Ahead Logging) 구조에 저장된 127,433개의 대국 데이터를 통해 베이지안 사전 확률 $P(a|s)$로 변환된다.</p>
+<p>$$P (a | s) = \frac{\alpha(s^<em>, a) + \sum_{r=1}^3 \omega_r \cdot \alpha_r(H_r)}{\alpha(s^</em>, a) + \beta(s^*, a) + \sum_{r=1}^3 \omega_r \cdot (\alpha_r(H_r) + \beta_r(H_r)) + N_{prior}}$$ (식 3)</p>
+<p>이때 의사 계수 집중도 $N_{prior} = 40.0$이며, 반경 방향 기하학적 가중치는 $\omega_1=1.0, \omega_2=0.5, \omega_3=0.25$로 설정되어 제로 레이턴시 데이터 접근을 가능하게 한다.</p>
+<h6 id="3-2-잠재-기계-고유-개념-투영-subspace-concept-projections">3.2. 잠재 기계 고유 개념 투영 (Subspace Concept Projections)</h6>
+<p>인간의 바둑 이론과 차별화되는 '기계 고유 개념'을 추출하기 위해, 151,872개의 상태 궤적 벡터 $\Phi(s, a)$를 인간의 휴리스틱 직교 서브스페이스($(M - H)$ Subspace)에 투영하고 특이값 분해(SVD)를 통해 개념 벡터 $v_k$를 도출한다. Table 2에서 식별된 5대 주요 개념은 다음과 같다.</p>
+<ul>
+<li><strong>Topological Harmony (Plan-5):</strong> Novelty 0.6996 / SVD Energy 7.1%. 코너 점유보다 중앙 세력 확장을 우선시하는 위상적 전개.</li>
+<li><strong>Topological Harmony (Plan-4):</strong> Novelty 0.3674 / SVD Energy 8.0%. 대각선 피벗과 변에서의 절단을 결합한 다중 쿼드런트 압박.</li>
+<li><strong>Vital Point Eye Puncture:</strong> Novelty 0.2986 / SVD Energy 6.8%. 의도적 희생을 통한 상대 안형(Eye shape)의 치명적 파괴.</li>
+<li><strong>Dynamic Flank Inversion:</strong> Novelty 0.2934 / SVD Energy 8.9%. 로컬 접전 효율 저하 시 즉각적인 원거리 손빼기(Tenuki).</li>
+<li><strong>Net Liberties Preservation:</strong> Novelty 0.1949 / SVD Energy 10.2%. 장문 및 회돌이를 방지하기 위한 선제적 활로 유지.</li>
+</ul>
+<h6 id="3-3-score-centered-policy-mirror-descent-klpo">3.3. Score-Centered Policy Mirror Descent (KLPO)</h6>
+<p>비평가(Critic) 없이 단일 롤아웃($N=1$)만으로 정책 경사의 분산을 제어한다. 로그 사전 확률의 평균값 대비 편차인 'Centered Surprise'($z_t$)를 정의한다.</p>
+<p>$$z_t = \log P(a^*<em>t) - \mu</em>{\log P}$$ (식 5)</p>
+<p>**Theorem 1 (Blame-Shielding Invariant)**에 따르면, 초반의 날카로운 수($z_t &gt; 0$)를 두었으나 후반 실수($R = -1$)로 패배할 경우, 초반 수에 대한 패널티는 $\exp(-z_t) &lt; 1.0$으로 엄격히 제한된다. 이는 후반의 실수가 초반의 탁월한 선택을 오염시키지 않도록 보호한다.</p>
+<h6 id="3-4-benson-settlement-및-pass-gating을-통한-수읽기-종료">3.4. Benson Settlement 및 Pass Gating을 통한 수읽기 종료</h6>
+<p>기존 엔진 'Jesse'는 19x19 대국 시 220수까지 대등하게 맞서다 종반에 패스를 거부하고 상대의 살아있는 대마(Eye) 속에 사석을 던져넣어 **평균 104.0점의 영토 붕괴(Collapse)**를 겪는 병리적 현상을 보였다. 이를 해결하기 위해 벤슨(Benson)의 무조건적 삶의 정리를 적용하여 착수 가능 집합을 제한한다.</p>
+<p>$$A_{viable}(s) = {p \in A(s) \setminus {pass} : p \notin T_{opp_living}(s) \land (\text{libs} &gt; 1 \lor \text{captures} &gt; 0)}$$ (식 8)</p>
+<p>상대 영토 내 자충수를 금지하고 보드가 결정(Settled)된 상태에서 상대를 따라 즉각 패스함으로써 104점 규모의 손실을 알고리즘적으로 완벽히 제거했다.</p>
+<hr />
+<h5 id="4-성능-평가-및-벤치마크-결과">4. 성능 평가 및 벤치마크 결과</h5>
+<p>solidSF Zero-Weight 엔진은 AlphaZero-KataGo v1.18.2 대비 압도적인 효율성을 입증했다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">성능 지표</th>
+<th style="text-align:left">AlphaZero-KataGo v1.18.2</th>
+<th style="text-align:left">solidSF Zero-Weight Engine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>가중치 파라미터</strong></td>
+<td style="text-align:left">$\sim 10^8$ (float32)</td>
+<td style="text-align:left"><strong>0 (Zero Weights)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>추론 지연 시간</strong></td>
+<td style="text-align:left">$\sim 120$ ms / move</td>
+<td style="text-align:left"><strong>&lt; 0.20 ms / move (600배 가속)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>에너지 비용</strong></td>
+<td style="text-align:left">GPU 오버헤드 ($\sim 150$ W)</td>
+<td style="text-align:left"><strong>0 W (저전력 CPU 단일 스레드)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지식 기반</strong></td>
+<td style="text-align:left">정적 가중치 텐서</td>
+<td style="text-align:left"><strong>관계형 SQLite WAL (39.4 GB)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>[SOURCE_IMAGE_1]의 실시간 텔레메트리에 따르면, 총 8,400회 이상의 대국 중 <strong>39회의 인증된 승리</strong>를 기록했다. 특히 19x19 규격에서 5회의 승리를 거두었으며, 벤슨 정리를 통해 종반전 영토 유출을 완전히 차단했음이 확인되었다.</p>
+<hr />
+<h5 id="5-에이전틱-리즈닝-agentic-reasoning-으로의-확장-및-결론">5. 에이전틱 리즈닝(Agentic Reasoning)으로의 확장 및 결론</h5>
+<p>본 보고서의 분석 결과는 차세대 거대언어모델(LLM) 에이전트 설계에 두 가지 핵심 시사점을 제공한다.</p>
+<ol>
+<li><strong>추론 비용 16배 절감:</strong> 단일 롤아웃 기반의 KLPO를 적용하면 기존 GRPO(16회 이상의 병렬 롤아웃) 대비 LLM 추론 연산량을 <strong>16배</strong> 줄일 수 있다.</li>
+<li><strong>핵심 논리 집중:</strong> Score centering 기법을 통해 '안녕', '반가워'와 같은 의례적인 텍스트(Centered surprise $\approx 0$)는 무시하고, <strong>도구 호출(Tool calls)이나 정규식 파싱</strong>과 같이 Centered surprise가 높은 결정적 행동에만 그래디언트 업데이트를 집중할 수 있다.</li>
+</ol>
+<p>결론적으로, Zero-Weight 프레임워크는 방대한 파라미터 없이도 고차원의 게임 이론적 평형을 달성할 수 있음을 입증하였으며, 이는 자원 제약이 극심한 자율 시스템의 핵심 아키텍처로 자리매김할 것이다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

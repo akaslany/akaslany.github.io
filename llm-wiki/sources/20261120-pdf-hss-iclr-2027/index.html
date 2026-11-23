@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Humanity’s Sixth Sense: Benchmarking Intuitive Visual Reasoning in Multimodal Models (HSS, ICLR 2027 제출본, 42쪽)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Humanity’s Sixth Sense: Benchmarking Intuitive Visual Reasoning in Multimodal Models (HSS, ICLR 2027 제출본, 42쪽)</h1>
+<p class="page-meta">문서 · 2026-11-20</p>
+<h2 id="요약">요약</h2>
+<p>원문 작성자의 서론 및 2.2절 서술에 따르면, 인간은 시각적 장면을 접할 때 픽셀 수준으로 명시적으로 묘사된 정보 너머의 암묵적 정보와 잠재적 상태를 한 번의 시선만으로 즉각 파악하는 능력을 보유하고 있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/document/">문서</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=PX6HA6oqhXM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="humanity-s-sixth-sense-hss-다중모달-모델의-직관적-시각-추론-벤치마크-심층-해설-보고서">Humanity's Sixth Sense (HSS): 다중모달 모델의 직관적 시각 추론 벤치마크 심층 해설 보고서</h3>
+<hr />
+<h4 id="1-문제-설정-인간의-직관적-시각-추론과-기존-벤치마크의-한계">1. 문제 설정: 인간의 직관적 시각 추론과 기존 벤치마크의 한계</h4>
+<h5 id="1-1-인간의-여섯-번째-감각-humanity-s-sixth-sense-의-정의-및-인지-과학적-배경">1.1 인간의 '여섯 번째 감각(Humanity's Sixth Sense)'의 정의 및 인지 과학적 배경</h5>
+<p>원문 작성자의 서론 및 2.2절 서술에 따르면, 인간은 시각적 장면을 접할 때 픽셀 수준으로 명시적으로 묘사된 정보 너머의 암묵적 정보와 잠재적 상태를 한 번의 시선만으로 즉각 파악하는 능력을 보유하고 있다. 인간은 짧은 시선만으로 과거에 일어난 원인, 미래의 운동 궤적, 물체 간의 공간적 수용성, 집단 내 권력 관계 및 사회적 역할, 명시되지 않은 추상적 규칙 등을 직관적으로 포착한다. 본 벤치마크에서는 이처럼 감각적 지각 표면을 넘어 비가시적 맥락을 복원하는 신속하고 전언어적인 시각 추론 메커니즘을 인간의 '여섯 번째 감각(Humanity's Sixth Sense, HSS)'으로 정의한다.</p>
+<p>인지과학 연구에 따르면, 직관은 의식적인 단계별 연산 과정 없이 경험에 기반하여 자연스럽게 일어나는 판단 메커니즘으로 정의된다. 이러한 인지과학적 유산은 HSS가 정립한 4대 핵심 영역의 근간을 이룬다:</p>
+<ul>
+<li><strong>Thorpe et al. (1996):</strong> 인간의 시각 인지 체계가 약 150밀리초 이내에 자연 장면을 분류함을 입증하였으며(원문 1절 기준), 이는 신속하고 자동화된 시각 인지의 기초가 된다.</li>
+<li><strong>Spelke &amp; Kinzler (2007):</strong> 핵심 물체 및 공간 지식(Core knowledge of objects and space) 이론을 제시하였으며, 이는 HSS의 <code>Physical &amp; Spatial Logic</code> 영역의 인지적 토대가 된다(원문 2.2절 기준).</li>
+<li><strong>Battaglia et al. (2013):</strong> 인간의 직관적 물리 법칙(Intuitive physics) 인지 메커니즘을 규명하였으며, 이는 <code>Temporal &amp; Causal Dynamics</code> 및 물리적 적합성 추론의 바탕이 된다(원문 2.2절 기준).</li>
+<li><strong>Baker et al. (2017):</strong> 타인의 의도, 신념 및 정신 상태를 추론하는 마음 이론(Mentalizing / Theory of Mind)을 정형화하였으며, 이는 <code>Social Understanding</code> 영역의 이론적 원형이 된다(원문 2.2절 기준).</li>
+</ul>
+<p>이러한 직관적 시각 추론 능력은 정교한 기호 연산이나 학술적 숙고가 아니라, 일상적 경험 패턴 인식에 뿌리를 두고 있다. 다중모달 대형 언어 모델(MLLM) 기반 AI 에이전트가 가정, 차량, 작업장 등 인간의 실제 환경에 성공적으로 배치되기 위해 직관적 시각 추론은 다음과 같은 필수적 핵심 역량이다:</p>
+<ul>
+<li><strong>가정 환경 배치:</strong> 에이전트는 아이가 계단으로 다가가는 동작이나 불안정한 물체의 위치 등 명시적으로 보고되지 않은 위험 요소를 즉각 감지하고 행동을 예측해야 한다.</li>
+<li><strong>자율주행 및 차량 탑승:</strong> 주차 공간에 차량이 들어갈 수 있는지 여부나 도로 위 보행자의 잠재적 이동 의도를 즉각 판단해야 안전한 운행이 가능하다.</li>
+<li><strong>작업장 및 사회적 협업:</strong> 동료의 시선, 표정 뒤에 숨겨진 의도, 집단 내 권력 구조 및 미묘한 사회적 규범을 이해해야 인간과 자연스러운 협업 체계를 유지할 수 있다.</li>
+</ul>
+<h5 id="1-2-기존-다중모달-벤치마크와의-구조적-차별성-및-포지셔닝">1.2 기존 다중모달 벤치마크와의 구조적 차별성 및 포지셔닝</h5>
+<p>원문 1절 및 4절(관련 연구)의 비교 분석에 따르면, 기존의 다중모달 시각 평가 벤치마크는 크게 두 가지 극단적 범주로 양분되어 있어 인간의 직관적 추론 영역을 제대로 측정하지 못했다.</p>
+<ul>
+<li><strong>전문가 수준 분석형 벤치마크 (<code>MMMU</code>, <code>MathVista</code>, <code>HLE</code>):</strong> 학술 도메인, 수학 문제 해결, 전문 기호 연산 등 단계별이고 숙고적인 추론 능력을 측정한다. 이들 과제는 시각 매체의 정황을 텍스트로 옮겨 적더라도 과제의 본질이 유지되는 명시적 조건 위주의 심사숙고형 평가에 집중한다.</li>
+<li><strong>지각 정밀도 벤치마크 (<code>V*</code>, <code>MMBench</code>, <code>Video-MME</code>, <code>Video-MME-v2</code>, <code>BLINK</code>, <code>Perception Test</code>, <code>MVBench</code>):</strong> 픽셀 수준의 미세한 지각, 시각적 탐색, 세부 객체 추적, 복잡한 화면 내 물체 찾기 등 화면에 직접적으로 묘사된 겉보기 정보의 정밀성을 평가한다.</li>
+</ul>
+<p>HSS는 지각(Perception)과 단계별 논리 추론(Deliberate Reasoning) 사이에 존재하는 직교적(Orthogonal) 위치에 포지셔닝한다. HSS 과제는 아무리 유심히 화면을 확대해 보아도 답이 직접 그려져 있지 않으며, 동시에 복잡한 학술 지식이나 기호 연산을 요구하지 않는다. 화면에 나타나지 않은 암묵적 맥락, 잠재 상태, 기저의 인과 관계를 직관적으로 복원하는 능력을 측정한다는 점에서 기존 벤치마크들과 명확히 차별화된다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기존 다중모달 벤치마크 범주 및 주요 특징</th>
+<th style="text-align:left">HSS와의 구조적 차별성 및 직교적(Orthogonal) 포지셔닝</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>전문가 수준 분석형 벤치마크</strong>&lt;br&gt;(<code>MMMU</code>, <code>MathVista</code>, <code>HLE</code> 등)&lt;br&gt;- 학술적/수학적 지식 및 단계별 기호 연산 평가&lt;br&gt;- 텍스트 변환이 가능한 명시적 조건 중심의 심사숙고 측정</td>
+<td style="text-align:left">HSS는 전문 학술 지식이나 단계별 기호 연산을 엄격히 배제하고, 텍스트 변환이 불가능한 일상적 시각 직관에 집중함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지각 정밀도 측정형 벤치마크</strong>&lt;br&gt;(<code>V*</code>, <code>MMBench</code>, <code>Video-MME</code>, <code>Video-MME-v2</code>, <code>BLINK</code>, <code>Perception Test</code>, <code>MVBench</code> 등)&lt;br&gt;- 픽셀 수준의 미세 지각 및 화면 내 객체 탐색/추적&lt;br&gt;- 화면에 직접 묘사된 겉보기 요소의 정밀 탐색 측정</td>
+<td style="text-align:left">HSS는 화면을 자세히 보는 것만으로는 답을 찾을 수 없으며, 화면 표면 너머 관측되지 않은 암묵적 맥락과 인과적/공간적/사회적 결론을 직관적으로 복원함</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="2-hss-벤치마크-설계-및-데이터셋-구축-파이프라인">2. HSS 벤치마크 설계 및 데이터셋 구축 파이프라인</h4>
+<h5 id="2-1-과제-형식-task-format-의-수학적-정형화">2.1 과제 형식(Task Format)의 수학적 정형화</h5>
+<p>원문 2.1절에 따르면, HSS의 모든 벤치마크 평가 단주는 수학적으로 다음과 같은 4튜플 $(m, q, g, R)$ 구조로 정형화된다.</p>
+<ul>
+<li>$m$: 시각 매체 (정적 이미지 단일 컷 또는 비디오 클립)</li>
+<li>$q$: 자연어로 작성된 질문</li>
+<li>$g$: 인간 주석자가 작성한 골드 참조 정답 (Gold reference answer)</li>
+<li>$R = {r_1, \dots, r_k}$: 골드 정답 $g$에서 분해된 원자적 루브릭(Atomic rubrics) 세트</li>
+</ul>
+<p>평가 시 모델은 시각 매체 $m$과 질문 $q$를 입력받아 주관식(Free-form) 응답 $a$를 생성한다. 자동화된 판정자(LLM Judge)는 $q$, $a$, $g$, 그리고 루브릭 세트 $R$을 참조하여 각 원자적 루브릭 $r_i \in R$의 충족 여부를 개별 평가한다. 기존 벤치마크에서 흔히 발생하는 객관식(Multiple-Choice) 편향이나 소거법 꼼수를 완전히 방지하기 위해 주관식 형식을 채택하였으며, 모델이 최종 성공으로 인정받기 위해서는 $R$에 포함된 $k$개의 모든 원자적 루브릭 조건 $r_i$를 단 하나도 빠짐없이 통과해야 하는 엄격한 기준을 적용한다(원문 2.1절 및 C.4절 기준).</p>
+<h5 id="2-2-4개-영역-core-domains-및-11개-하위-영역-subdomains-분류-체계">2.2 4개 영역(Core Domains) 및 11개 하위 영역(Subdomains) 분류 체계</h5>
+<p>원문 2.2절 및 표 4에 제시된 HSS의 인지 과학적 분류 체계는 4개 핵심 영역과 11개 세부 하위 영역으로 구성된다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">핵심 영역 (Core Domain)</th>
+<th style="text-align:left">하위 영역 (Subdomain)</th>
+<th style="text-align:left">세부 정의 및 핵심 인지 과제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Temporal &amp; Causal Dynamics</strong>&lt;br&gt;(시간 및 인과 다이내믹스)</td>
+<td style="text-align:left"><code>Retrodiction</code></td>
+<td style="text-align:left">시각적 흔적 및 정황을 바탕으로 이미 지나간 과거 사건 및 이전 상태를 역추론함</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>Mechanistic Causality</code></td>
+<td style="text-align:left">진행 중인 현상의 직접적인 물리적 메커니즘 및 구동 원리를 식별함</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>Extrapolation</code></td>
+<td style="text-align:left">현재 장면의 운동 궤적이나 장기적인 시스템적 귀결 및 미래 행동을 예측함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Physical &amp; Spatial Logic</strong>&lt;br&gt;(물리 및 공간 로직)</td>
+<td style="text-align:left"><code>Hidden &amp; Invisible</code></td>
+<td style="text-align:left">장애물 뒤에 가려진 객체, 미관측 수량, 질량/마찰력 등 비시각적 물성을 추론함</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>Affordance &amp; Feasibility</code></td>
+<td style="text-align:left">물체 간 또는 에이전트와 환경 간의 물리적 상합성 및 공간적 배치 가능성을 평가함</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>Spatial &quot;Alien Viewpoint&quot;</code></td>
+<td style="text-align:left">카메라 시점이 아닌 새로운 3차원 공간 좌표로 시점을 전환하여 시선/시야를 계산함</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>Spatial Reachability</code></td>
+<td style="text-align:left">3차원 공간 레이아웃 내에서 에이전트나 물체가 도달할 수 있는 공간 및 경로를 평가함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Social Understanding</strong>&lt;br&gt;(사회적 이해)</td>
+<td style="text-align:left"><code>Theory of Mind</code></td>
+<td style="text-align:left">인물의 내면적 신념, 정보의 부재, 속임수, 감정 상태 및 의도를 추론함</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>Social Role, Norm &amp; Power Dynamics</code></td>
+<td style="text-align:left">장면 내 암묵적 사회적 계약, 예의, 권력 관계 및 문화적 적절성을 해석함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Abstract &amp; Contextual Inference</strong>&lt;br&gt;(추상 및 맥락 추론)</td>
+<td style="text-align:left"><code>Change &amp; Consequence</code></td>
+<td style="text-align:left">장면 내 변형에 따른 영향이나, 결과로부터 요구되는 사전 변화 조건 규칙을 도출함</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>Patterns &amp; Pareidolia</code></td>
+<td style="text-align:left">노이즈나 일상 객체 속에서 무형의 추상적 패턴, 규칙성 또는 얼굴 형태를 감지함</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-3-세-가지-핵심-설계-원칙-core-design-principles">2.3 세 가지 핵심 설계 원칙 (Core Design Principles)</h5>
+<p>원문 2.3절에 명시된 HSS 데이터 구축의 3대 핵심 원칙과 엄격한 거부 조건(Rejection criteria)은 다음과 같다.</p>
+<ol>
+<li><strong>순수 지각 배제 (Exclusion of Pure Perception):</strong> 아무리 시각적으로 복잡하더라도, 고해상도로 확대하거나 유심히 바라보는 것만으로 답이 직접 드러나는 과제는 거부된다. 시각적 정밀도가 아닌 암묵적 인과 추론이 개입되어야만 채택된다.</li>
+<li><strong>전문 지식 배제 (Exclusion of Specialized Expertise):</strong> 기호 연산, 전문 학술 지식, 자격증 수준의 전문성이 요구되는 과제는 엄격히 금지된다. 일반적인 인지 능력을 가진 성인이 직관적으로 해결할 수 있는 일상적 상식 범위 내로 한정한다.</li>
+<li><strong>엄격한 인간 합의 및 명확성 (Strict Human Consensus and Unambiguity):</strong> 질문과 정답에 주관성이나 다중 해석의 여지가 없어야 한다. 검토자 전원의 단일한 합의(Unanimous consensus)가 이루어진 과제만 벤치마크에 최종 포함된다.</li>
+</ol>
+<h5 id="2-4-데이터-구축-및-3단계-독립-검토-파이프라인-attrition-mechanics">2.4 데이터 구축 및 3단계 독립 검토 파이프라인 (Attrition Mechanics)</h5>
+<p>원문 2.4절 및 그림 8의 내용에 따르면, HSS 과제는 전문 교육을 받은 인간 주석자에 의해 작성된 후 3단계의 엄격한 독립 검토 파이프라인을 거친다. 각 검토 단계에서 검토자는 통과(Pass), 수정(Edit), 탈락(Drop) 중 하나를 판정하며, 수정된 과제는 파이프라인 처음부터 재검토를 받아야 한다.</p>
+<ul>
+<li><strong>최초 작성 수량:</strong> 3,466개 과제 (원문 2.4절 기준)</li>
+<li><strong>1차 검토 관문:</strong> 1,164개 생존, 2,302개 탈락 (원문 2.4절 기준)</li>
+<li><strong>2차 검토 관문:</strong> 559개 생존, 605개 탈락 (원문 2.4절 기준)</li>
+<li><strong>3차 검토 관문:</strong> 522개 최종 생존, 37개 탈락 (원문 2.4절 기준)</li>
+<li><strong>최종 채택률:</strong> <strong>15.1%</strong> (전체 작성 과제 중 약 85%가 검토 과정에서 파기됨, 원문 2.4절 기준)</li>
+</ul>
+<p>1차 검토 관문에서 전체 제출 과제의 약 3분의 2에 해당하는 2,302개가 무더기로 탈락한 주요 원인은, 답이 화면에 직접 그려져 있어 순수 시각 지각에 의존하거나 주석자 간 정답에 대한 주관적 이견이 발생하여 엄격한 단일 합의에 실패했기 때문이다(원문 부록 B.2절 기준).</p>
+<h5 id="2-5-최종-데이터셋-규모-및-매체-통계">2.5 최종 데이터셋 규모 및 매체 통계</h5>
+<p>원문 2.4절, 표 3 및 부록 B.1절에 제시된 최종 확정 데이터셋의 종합 통계는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">세부 수치 및 내용</th>
+<th style="text-align:left">출처 근거</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>전체 과제 및 매체 수</strong></td>
+<td style="text-align:left">총 522개 과제 (정적 이미지 288개 + 비디오 클립 234개)</td>
+<td style="text-align:left">원문 표 3 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비디오 매체 총 분량</strong></td>
+<td style="text-align:left">총 17.6시간 (중앙값 76초, IQR 20–307초, 최장 28분)</td>
+<td style="text-align:left">원문 표 3 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>세부 루브릭 통계</strong></td>
+<td style="text-align:left">총 723개 원자적 루브릭 (과제당 평균 1.39개, 단일 루브릭 과제 비율 71.5%)</td>
+<td style="text-align:left">원문 표 3 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>영역별 과제 분포</strong></td>
+<td style="text-align:left">Physical &amp; Spatial (176개), Temporal &amp; Causal (134개), Social (110개), Abstract (102개)</td>
+<td style="text-align:left">원문 표 3 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>텍스트 평균 길이</strong></td>
+<td style="text-align:left">질문 프롬프트 평균 34.9단어, 루브릭 평균 25.3단어, 참조 정답 평균 67.5단어</td>
+<td style="text-align:left">원문 표 3 기준</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-실험-결과-및-주요-발견-main-evaluation-results">3. 실험 결과 및 주요 발견 (Main Evaluation Results)</h4>
+<h5 id="3-1-25개-모델-대-인간-베이스라인-비교-분석">3.1 25개 모델 대 인간 베이스라인 비교 분석</h5>
+<p>원문 3.1절 및 표 1의 실험 데이터에 따르면, 8개 벤더의 주요 MLLM 25개 모델을 평가한 결과 인간과의 성능 격차가 매우 현저한 것으로 나타났다.</p>
+<ul>
+<li><strong>인간 베이스라인:</strong> 동일한 주관식 평가 조건에서 **93.1%**의 정답률을 달성함 (원문 표 1 기준).</li>
+<li><strong>최고 성능 모델:</strong> 최대 추론 노력을 적용한 <code>GPT-6-astra</code> 모델이 **53.6%**를 기록하여 인간 베이스라인 대비 <strong>39.5%p</strong>의 정답률 격차를 보임 (원문 표 1 기준).</li>
+<li><strong>전반적 성능 약세:</strong> 평가된 최첨단 모델 중 대부분이 40% 이하의 정답률 수준에 머묾 (원문 표 1 기준).</li>
+</ul>
+<p>주요 벤더별 최고 성능 모델의 정답률 수치는 다음과 같이 요약된다 (원문 표 1 기준):</p>
+<ul>
+<li><code>GPT-6-astra</code> (max): 53.6%</li>
+<li><code>GPT-6.1-sol</code> (max): 46.6%</li>
+<li><code>Claude-Opus-5.5</code> (xhigh): 44.6%</li>
+<li><code>Gemini-3.8-flash</code> (high): 41.6%</li>
+<li><code>Muse Spark 1.3</code> (max): 37.4%</li>
+<li><code>Qwen3.8-Max</code> (max): 33.0%</li>
+<li><code>GLM-5.3-flash</code> (max): 26.8%</li>
+<li><code>Kimi-K3</code> (max): 25.5%</li>
+<li><code>MiMo-v2.6-flash</code> (high): 25.4%</li>
+</ul>
+<h5 id="3-2-입력-매체-및-인지-영역별-성능-하락-패턴">3.2 입력 매체 및 인지 영역별 성능 하락 패턴</h5>
+<p>원문 3.1절의 분석에 따르면, 입력 매체 및 하위 영역별로 명확한 성능 하락 패턴이 관찰되었다.</p>
+<ul>
+<li><strong>비디오 매체에서의 성능 하락:</strong> 평가된 25개 모델 중 23개 모델에서 비디오 과제 정답률이 정적 이미지 과제보다 낮게 형성되었으며, 평균 <strong>7.3%p</strong>의 성능 하락이 관찰되었다 (원문 3.1절 기준). 이는 비디오 데이터의 긴 시간적 호라이즌 처리 및 핵심 프레임 국소화 능력의 한계를 드러낸다.</li>
+<li><strong>사회적 이해(Social Understanding) 영역의 취약성:</strong> 25개 모델 중 21개 모델에서 사회적 이해 영역이 가장 낮은 정답률을 기록하였다. 해당 영역의 평균 정답률은 **24.4%**에 불과하여, 나머지 3개 영역의 평균 정답률인 <strong>34.1%</strong> 대비 눈에 띄게 낮은 성과를 보였다 (원문 3.1절 기준).</li>
+</ul>
+<h5 id="3-3-시각-입력-제거-대조군-실험-blind-control">3.3 시각 입력 제거 대조군 실험 (Blind Control)</h5>
+<p>원문 3.1절 및 부록 C.5절에 제시된 블라인드 대조군 실험 결과는 HSS 과제가 순수 언어적 편향만으로는 해결될 수 없음을 입증한다.</p>
+<p>시각 매체를 완전히 제거하고 질문 텍스트만 제공했을 때, 최고 성능 모델인 <code>GPT-6-astra</code> (max)의 정답률은 <strong>53.6%에서 6.6%로 급격히 붕괴</strong>하였다 (원문 표 1 기준). 전체 522개 과제 중 시각 매체 없이 3회 시도 모두 성공한 과제는 단 <strong>4개</strong>에 불과했다 (원문 3.1절 기준).</p>
+<p>원문 부록 C.5절의 상세 분석에 따르면, 블라인드 환경에서 통과한 4가지 질문 및 응답 사례 패턴은 다음과 같이 모델의 실제 지식이 아닌 추측성 반응(Guessing)에 기인한 것으로 밝혀졌다:</p>
+<ul>
+<li><strong>1. 양자택일 질문 (Two-way question):</strong> &quot;노젓는 배에 탄 사람이 왼쪽 배의 앞을 지나갔는가, 뒤를 지나갔는가?&quot;라는 질문에 블라인드 모델은 &quot;왼쪽 배의 뒤를 지나갔다&quot;라고 단정적으로 응답하여 통과했으나, 시각 정보가 없는 단순 찍기이므로 2회차 및 3회차 시도에서는 응답이 반대로 뒤집혔다 (원문 부록 C.5절 기준).</li>
+<li><strong>2. 예/아니오 질문 (Yes/No question):</strong> &quot;지휘자 좌측의 음악가가 일어서지 않고 지휘자에게 손이 닿을 수 있는가?&quot;라는 질문에 모델은 &quot;아니오. 너무 멀리 떨어져 있습니다&quot;라고 응답함. 단일 루브릭을 동전 던지기식 찍기로 맞춘 후, 시각 매체를 볼 수 없음에도 그럴듯한 근거를 자발적으로 덧붙여 환각을 정당화하였다 (원문 부록 C.5절 기준).</li>
+<li><strong>3. 좌/우 방향 질문 (Left/Right question):</strong> &quot;하키 퍽이 그의 어느 쪽 측면으로 통과했는가?&quot;라는 질문에 &quot;왼쪽 측면으로 통과했다&quot;라고 응답하여 통과함. 정작 시각 매체를 제공받은 정상 모델은 3회 시도 모두 오답을 냈을 만큼 시각 매체 없이는 의미가 없는 무작위 적중 사례였다 (원문 부록 C.5절 기준).</li>
+<li><strong>4. 질문 자체에 정답 힌트가 포함된 질문 (Self-containing question):</strong> &quot;구조대원들이 치우고 있는 진흙 채널을 만든 최신 물리적 과정은 무엇인가?&quot;라는 질문에서 질문 속 '진흙 채널'과 '구조대원'이라는 단어 힌트만으로 언어 모델이 &quot;최근의 플래시 플러드(Flash flood) 또는 토사 유출&quot;이라고 추론하고, 보지도 않은 현장의 뿌리나 나무 그루터기 같은 시각 단서를 상상으로 조작해 내어 맞추었다 (원문 부록 C.5절 기준).</li>
+</ul>
+<h5 id="3-4-과잉-사고-overthinking-현상-및-인간-내부-신뢰도-측정">3.4 '과잉 사고(Overthinking)' 현상 및 인간 내부 신뢰도 측정</h5>
+<p>원문 3.1절 서술에 따르면, 최신 추론 모델들은 과제당 평균 **약 4,000개의 추론 토큰(Thinking tokens)**을 소비하며 무거운 생각의 사슬(Chain-of-thought)을 생성함에도 불구하고 올바른 답에 도달하지 못하는 '과잉 사고' 현상을 보였다 (원문 표 1 기준).</p>
+<p>반면 인간 주석자 20명을 대상으로 실시한 자가 보고 신뢰도(Self-reported confidence) 측정 결과, 인간은 자신이 확신을 표명한 459개 과제에서 94.1%의 정답률을 기록했을 뿐만 아니라, 스스로 불확신하다고 표명한 63개 과제(전체의 12.1%)에서도 **85.7%**라는 높은 정답률을 기록하였다 (원문 3.1절 기준). 이는 인간의 직관적 시각 추론 역량이 자가 신뢰도가 낮은 상태에서도 매우 안정적으로 발휘됨을 보여준다.</p>
+<hr />
+<h4 id="4-모델-실패-원인-심층-분석-failure-cause-taxonomy">4. 모델 실패 원인 심층 분석 (Failure Cause Taxonomy)</h4>
+<h5 id="4-1-8-573개-실패-시도의-3대-계열-및-11개-원인-분류">4.1 8,573개 실패 시도의 3대 계열 및 11개 원인 분류</h5>
+<p>원문 3.2절, 부록 D절 및 표 6 기준, 24개 모델의 8,573개 1차 실패 시도를 11개 원인 코드로 분류한 결과는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">계열 (Family)</th>
+<th style="text-align:left">비율</th>
+<th style="text-align:left">세부 실패 원인 (Primary Cause)</th>
+<th style="text-align:left">실패 지분 (%)</th>
+<th style="text-align:left">주요 실패 특성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Perception</strong>&lt;br&gt;(지각 오류)</td>
+<td style="text-align:left"><strong>53%</strong></td>
+<td style="text-align:left">객체/사람/역할 오인</td>
+<td style="text-align:left">19.9%</td>
+<td style="text-align:left">화면 내 인물, 물체 또는 사회적 역할의 잘못된 식별</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">방향 및 방위 오판</td>
+<td style="text-align:left">12.0%</td>
+<td style="text-align:left">물체나 인물이 바라보는 방향 및 방위각 오인</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">크기/거리/적합성 오판</td>
+<td style="text-align:left">12.2%</td>
+<td style="text-align:left">물체 간 공간적 물리적 수용성 및 거리감 측정 오류</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">2D 겹침을 3D 정렬로 오인</td>
+<td style="text-align:left">9.1%</td>
+<td style="text-align:left">2D 평면상의 시각적 겹침을 3D 공간 내 실제 정렬로 착각</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Latent Inference</strong>&lt;br&gt;(잠재 추론 오류)</td>
+<td style="text-align:left"><strong>41%</strong></td>
+<td style="text-align:left">결정적 단서 놓침</td>
+<td style="text-align:left">21.3%</td>
+<td style="text-align:left">화면 내 암묵적 정황을 결정짓는 미세 단서 간과 (단일 최대 원인)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">동작 및 순서 오인</td>
+<td style="text-align:left">7.9%</td>
+<td style="text-align:left">사건의 프레임 간 순서, 동선 및 시간적 흐름 오해</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">은닉 수량 오인</td>
+<td style="text-align:left">7.4%</td>
+<td style="text-align:left">장애물 뒤에 가려지거나 안 보이는 물량 역추론 실패</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">의도/감정/관계 오인</td>
+<td style="text-align:left">4.4%</td>
+<td style="text-align:left">등장인물의 내면적 동기, 감정 및 인물 간 관계 오해</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Reasoning</strong>&lt;br&gt;(논리 추론 오류)</td>
+<td style="text-align:left"><strong>5%</strong></td>
+<td style="text-align:left">시선(Line-of-sight) 오판</td>
+<td style="text-align:left">2.6%</td>
+<td style="text-align:left">등장인물의 실제 시선 및 가시 영역 계산 오류</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">시점 전환 오류</td>
+<td style="text-align:left">1.4%</td>
+<td style="text-align:left">새로운 좌표계로의 3D 공간 시점 전환 실패</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">결과 및 조건 추적 오류</td>
+<td style="text-align:left">1.3%</td>
+<td style="text-align:left">인과적 연쇄 결과 및 질문의 전제 조건 추적 실패</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타</strong></td>
+<td style="text-align:left"><strong>0.6%</strong></td>
+<td style="text-align:left">명확한 답을 내놓지 않음</td>
+<td style="text-align:left">0.6%</td>
+<td style="text-align:left">응답 거부 또는 판단 유보</td>
+</tr>
+</tbody>
+</table>
+<p>원문 부록 D절에 명시된 매체별 오류 반전 현상(Media Split Contrast) 분석에 따르면, 시각 매체 유형에 따라 모델의 주요 실패 계열이 뚜렷하게 대비된다:</p>
+<ul>
+<li><strong>정적 이미지 과제:</strong> 지각 오류(Perception)가 전체 실패의 **66%**를 차지하며, 방향 오인(18.2%), 객체 오인(17.7%), 크기/적합성 오판(15.8%), 2D 겹침의 3D 착각(14.6%)이 주를 이룬다 (원문 부록 D절 기준).</li>
+<li><strong>비디오 과제:</strong> 반대로 잠재 추론 오류(Latent Inference)가 전체 실패의 **57%**를 차지하며, 특히 '결정적 단서 놓침' 단일 원인만 28.1%에 달한다 (원문 부록 D절 기준). 이는 비디오 매체가 모델의 지각 능력을 떨어뜨린다기보다, 긴 시간 축 속에서 놓치기 쉬운 결정적 단서를 더 많이 제공하기 때문이다.</li>
+</ul>
+<h5 id="4-2-실패-원인의-아키텍처-공통성-systematicity-및-하위-영역별-시그니처">4.2 실패 원인의 아키텍처 공통성(Systematicity) 및 하위 영역별 시그니처</h5>
+<p>원문 3.2절의 분석에 따르면, 이러한 실패는 특정 모델 개별의 무작위 에러가 아니라 모델 아키텍처 전반에 걸친 체계적(Systematic) 결함임이 증명되었다. 5개 이상의 모델이 동시에 실패한 503개 과제 데이터를 분석한 결과, <strong>중앙값 80%의 모델이 정확히 동일한 세부 원인으로 실패</strong>하였으며, <strong>90%의 모델이 동일한 계열(Family)의 오류로 실패</strong>하였다 (원문 3.2절 및 부록 D절 기준).</p>
+<p>원문 그림 3에 제시된 하위 영역별 전형적인 실패 시그니처 패턴은 다음과 같다 (원문 그림 3 기준):</p>
+<ul>
+<li><code>Affordance &amp; Feasibility</code> (62%) 및 <code>Spatial Reachability</code> (56%): 크기, 거리 및 적합성 오판에 실패 집중.</li>
+<li><code>Extrapolation</code> (42%): 물체 및 인물이 바라보는 방향(Facing direction) 오판에 실패 집중.</li>
+<li><code>Hidden &amp; Invisible</code> (44%): 가려진 은닉 수량 추론 실패에 집중.</li>
+<li><code>Mechanistic Causality</code> (47%) 및 <code>Theory of Mind</code> (39%): 결정적 시각 단서를 놓치는 에러에 집중.</li>
+<li><code>Spatial &quot;Alien Viewpoint&quot;</code>: 유일하게 논리적 추론(Reasoning) 결함이 두드러지게 나타난 영역으로, 시선(Line-of-sight) 오판 오류가 23%를 차지함.</li>
+</ul>
+<hr />
+<h4 id="5-에이전트-하네스-agentic-harnesses-적용-및-성능-한계">5. 에이전트 하네스(Agentic Harnesses) 적용 및 성능 한계</h4>
+<h5 id="5-1-에이전트-워크플로우-대-단일-추론-single-pass-비교">5.1 에이전트 워크플로우 대 단일 추론(Single-Pass) 비교</h5>
+<p>원문 3.3절, 표 2 및 부록 F절(표 9)에 근거하여, HSS 388개 과제 서브셋에서 능동적 시각 조작(크롭, 확대, 프레임 재샘플링 등)을 수행하는 에이전트 하네스를 적용한 결과는 다음과 같다.</p>
+<ul>
+<li><strong><code>Claude Code</code> 하네스:</strong>
+<ul>
+<li><code>Claude-Opus-5</code> 기준: 단일 추론 30.8%에서 에이전트 적용 시 **51.3%**로 <strong>+20.5%p</strong> 상승 (원문 표 2 기준).</li>
+<li><code>Claude-Fable-5.1</code> 기준: 단일 추론 41.2%에서 에이전트 적용 시 **57.7%**로 <strong>+16.5%p</strong> 상승 (원문 표 2 기준).</li>
+<li>막대한 연산 비용 소요 (중앙값 57–72 스텝, 과제당 42,000개 이상의 추론 토큰 소비, 원문 표 2 기준).</li>
+</ul>
+</li>
+<li><strong><code>Codex</code> 하네스:</strong>
+<ul>
+<li><code>GPT-6-astra</code> 기준: 단일 추론 54.4%에서 에이전트 적용 시 **59.3%**로 <strong>+4.9%p</strong> 상승 (원문 표 2 기준).</li>
+<li><code>GPT-5.6-sol</code> 기준: 단일 추론 28.4%에서 에이전트 적용 시 **35.8%**로 <strong>+7.5%p</strong> 상승 (원문 표 2 기준).</li>
+<li>비교적 적은 연산 오버헤드 소요 (중앙값 14–18 스텝, 원문 표 2 기준).</li>
+</ul>
+</li>
+</ul>
+<p>최고 성과 조합인 <code>Codex + GPT-6-astra</code> 에이전트 세팅도 **59.3%**의 정답률에 그쳐, 인간 수준(93.1%)에 비하면 여전히 정답률 포화 상태와 상당한 거리가 존재함을 보여준다 (원문 3.3절 및 표 2 기준).</p>
+<h5 id="5-2-에이전트-루프가-해결하는-에러와-해결하지-못하는-한계">5.2 에이전트 루프가 해결하는 에러와 해결하지 못하는 한계</h5>
+<p>원문 그림 4 및 표 7 데이터에 따르면, 에이전트 재검토(Active Re-inspection) 루프는 지각 및 단서 포착 오류를 크게 줄여 전체 실패 건수를 944건에서 759건으로 감소시켰다 (원문 3.3절 및 그림 4 기준).</p>
+<ul>
+<li><strong>개선된 오류 영역:</strong> 단순 객체/역할 오인(181건 → 147건), 방향 오인(117건 → 93건), 크기/적합성 오판(137건 → 105건), 결정적 단서 놓침(154건 → 110건) 등 지각적 세부 사항 확대 조작으로 해결 가능한 에러가 19–37% 감소함 (원문 표 7 기준).</li>
+<li><strong>해결되지 않는 근본적 한계:</strong> 2D 평면상의 시각적 겹침을 3D 공간상의 실제 정렬로 착각하는 깊이(Depth) 판단 오류는 에이전트 적용 전 102건에서 적용 후 101건으로 <strong>사실상 전혀 줄어들지 않음</strong> (수리율 24%로 최저, 원문 표 7 기준). 2D 이미지를 확대하거나 크롭하는 조작만으로는 이미지 생성 시 손실된 3D 공간 깊이 정보를 본질적으로 복원할 수 없음을 명확히 입증한다.</li>
+</ul>
+<h5 id="5-3-영역별-이득-불균형-및-에이전트-실행-다이내믹스">5.3 영역별 이득 불균형 및 에이전트 실행 다이내믹스</h5>
+<p>원문 부록 F절 표 8에 제시된 영역별 성과 차이 및 실행 다이내믹스는 다음과 같다.</p>
+<ul>
+<li><strong>이득 집중 영역:</strong> 화면 내부 프레임에 시각적 증거가 명시적으로 존재하는 영역에서 성과가 비약적으로 상승함:
+<ul>
+<li><code>Patterns &amp; pareidolia</code>: 단일 추론 33.8% → 에이전트 64.7% (<strong>+30.9%p</strong> 상승, 원문 부록 F절 표 8 기준)</li>
+<li><code>Retrodiction</code>: 단일 추론 34.9% → 에이전트 55.3% (<strong>+20.4%p</strong> 상승, 원문 부록 F절 표 8 기준)</li>
+</ul>
+</li>
+<li><strong>이득 미미 영역:</strong> 3D 공간 깊이 판단이나 화면 밖 관측되지 않은 결과 추론에 의존하는 과제에서는 성과 상승이 미미함:
+<ul>
+<li><code>Spatial reachability</code>: 단일 추론 34.5% → 에이전트 39.3% (<strong>+4.8%p</strong> 상승, 원문 부록 F절 표 8 기준)</li>
+</ul>
+</li>
+<li><strong>실패 실행의 동역학:</strong> 에이전트가 과제 해결에 실패한 트레이스는 성공한 트레이스보다 훨씬 더 많은 스텝을 소비함 (<code>Claude Code</code> + <code>Claude-Opus-5</code> 기준 실패 시 중앙값 81스텝 대 성공 시 67스텝, 원문 부록 F절 기준).</li>
+<li><strong>초기 정답 훼손 사례 (Broken Trajectory):</strong> 에이전트 루프가 지나치게 도구를 오용하여 2D 오버레이 레이아웃을 잘못 해석한 나머지, 단일 추론에서 올바르게 맞춘 초기 정답을 스스로 오답으로 수정하는 트레이스 사례가 보고되었다 (원문 부록 F.1절 전구 낙하 위치 과제 참조).</li>
+</ul>
+<hr />
+<h4 id="6-절제-실험-ablation-studies-및-판정자-검증">6. 절제 실험 (Ablation Studies) 및 판정자 검증</h4>
+<h5 id="6-1-추론-노력-reasoning-effort-비단조성-non-monotonicity-관찰">6.1 추론 노력(Reasoning Effort) 비단조성(Non-Monotonicity) 관찰</h5>
+<p>원문 3.4절, 그림 5 및 부록 G절(표 10)의 데이터를 분석한 결과, 추론 노력을 높여 모델의 명시적 심사숙고를 늘리는 것이 HSS 성능의 단조적(Monotonic) 증가를 보장하지 않는 현상이 관찰되었다.</p>
+<p><code>GPT-6-astra</code> 모델의 경우 <code>Retrodiction</code> 하위 영역에서 추론 노력 레벨을 <code>high</code>에서 <code>xhigh</code>로 올렸을 때 정답률이 오히려 <strong>64%에서 50%로 14%p 급락</strong>하는 현상이 나타났다 (원문 그림 5 및 부록 G절 표 10 기준). 전체 33개 모델×하위영역 셀 중 7개 셀에서 추론 노력을 높였음에도 초기 정답률보다 높지 않은 성과로 끝났으며, 피크 성능이 최고 추론 노력이 아닌 중간 추론 노력 단계에서 자주 형성되었다 (원문 부록 G절 기준).</p>
+<p>원문 저자들은 이에 대해 명시적 논리 숙고(Explicit deliberation)가 인간의 시각적 직관 성능을 이끄는 주동력이 아니며, 인간의 해당 능력은 숙고 이전에 '직관적(Intuitive)'으로 빠르게 발휘된다는 인지과학적 사실과 부합한다고 해석한다 (원문 3.4절 기준).</p>
+<h5 id="6-2-비디오-프레임-예산-frame-budget-의-영향">6.2 비디오 프레임 예산(Frame Budget)의 영향</h5>
+<p>원문 3.4절 및 부록 H절(표 11) 기준, 234개 비디오 과제에 대해 프레임 수평 스위프(10개~500개 프레임) 실험을 진행한 결과는 다음과 같다.</p>
+<p>프레임 샘플링 밀도가 높아질수록 성과가 향상되어 <code>GPT-6-astra</code> 기준 10개 프레임 대비 500개 프레임에서 <strong>+17.9%p</strong>의 정답률 상승이 관찰되었다 (원문 부록 H절 표 11 기준). 그러나 프레임 수가 10개에서 100개로 늘어날 때는 성능 이득이 컸던 반면(10→100 프레임 구간에서 +11.5%p 상승), 100개에서 500개로 5배 더 늘어날 때는 성장의 포화(Saturation) 상태가 관찰되었다 (100→500 프레임 구간에서 +6.4%p 상승, 원문 부록 H절 기준).</p>
+<h5 id="6-3-판정자-llm-judge-일치도-및-편향-bias-검증">6.3 판정자(LLM Judge) 일치도 및 편향(Bias) 검증</h5>
+<p>원문 3.4절, 그림 6 및 부록 I절(표 12)에 따르면, 판정자 의존성에 대한 신뢰도를 검증하기 위해 3개 벤더의 판정자 모델(<code>Claude-Opus-5</code>, <code>GPT-5.6-terra</code>, <code>Gemini-3.6-flash</code>)을 사용해 2,620개 아이템 및 3,780개 루브릭 기준을 교차 평가하였다.</p>
+<ul>
+<li><strong>높은 일치도:</strong> 판정자 간 순위 상관관계 $r \ge 0.98$ (Spearman $\rho = 1.0$), 판정자 간 무작위 일치도 95% 이상(95.8%–97.5%), Cohen's $\kappa \ge 0.92$를 기록함 (원문 3.4절 및 부록 I절 기준).</li>
+<li><strong>일관된 엄격성 시프트:</strong> <code>GPT-5.6-terra</code>가 다른 두 판정자 대비 평균 2.4%p 더 엄격하였으나, 이는 전체 모델에 일관되게 적용된 레벨 시프트에 불과하며 모델 간 순위를 바꾸지 않음 (원문 부록 I절 기준).</li>
+<li><strong>자기 선호 편향(Self-preference Bias) 검증:</strong> 판정자가 자사 가문의 모델 응답을 채점할 때의 잔차 시프트를 측정한 결과, <code>Claude-Opus-5</code>가 자사 모델인 <code>Claude-Opus-5</code>를 평가할 때 <strong>-0.44%p</strong>의 시프트를 나타내는 등 유의미한 자기 선호 편향이 탐지되지 않음 (원문 부록 I절 기준).</li>
+</ul>
+<hr />
+<h4 id="7-hss-벤치마크의-한계점-limitations">7. HSS 벤치마크의 한계점 (Limitations)</h4>
+<h5 id="7-1-저자들이-스스로-밝힌-3가지-핵심-한계">7.1 저자들이 스스로 밝힌 3가지 핵심 한계</h5>
+<p>원문 5절(Limitations)에 근거하여 저자들이 스스로 밝힌 3가지 한계점은 다음과 같다.</p>
+<ol>
+<li><strong>시각 채널 전용 평가 (Visual Channel Only):</strong> HSS는 모델이 '눈으로 볼 수 있는 것'만을 평가하도록 설계되었다. 비디오 과제 제공 시 오디오 트랙 및 대본(Transcript)이 모두 제거된 채 제공되므로, 음성이나 오프스크린 사운드에 의존해야만 해상할 수 있는 과제는 구조적으로 평가 대상에서 제외된다 (원문 5절 기준).</li>
+<li><strong>LLM 판정자 의존성 (Judge Dependence):</strong> 주관식 정답의 대규모 평가를 위해 LLM 판정자에 의존한다. 오라클 조건 제시 및 교차 판정자 검증으로 편향을 통제하였으나, LLM 판정자 자체의 내재적 평가 편향 가능성으로부터 완전히 자유로울 수 없다 (원문 5절 기준).</li>
+<li><strong>공개 웹 미디어 오염 가능성 (Data Contamination Risk):</strong> 비디오 및 이미지 매체가 Wikimedia Commons, Openverse, Internet Archive 등 공개 웹 리포지토리에서 수집되었으므로, 사전 학습 데이터셋에 포함되었을 가능성을 배제할 수 없다. 단, 과제의 질문 프롬프트와 루브릭은 신규 작성되었다 (원문 5절 기준).</li>
+</ol>
+<hr />
+<h4 id="8-총괄-및-결론-conclusion">8. 총괄 및 결론 (Conclusion)</h4>
+<h5 id="8-1-벤치마크-핵심-축-요약-및-스케일링-파라다임의-한계">8.1 벤치마크 핵심 축 요약 및 스케일링 파라다임의 한계</h5>
+<p>HSS 벤치마크는 다중모달 인공지능 평가 체계에 **암묵적 직관적 시각 추론(Implicit Intuitive Visual Reasoning)**이라는 새로운 정량적 축을 성공적으로 도입하였다 (원문 6절 기준).</p>
+<p>실험을 통해 입증된 핵심 수치들—인간 베이스라인 93.1% (원문 표 1 기준) 대 단일 모델 최고 정답률 53.6% (원문 표 1 기준), 에이전트 최고 정답률 59.3% (원문 표 2 기준), 시각 입력 제거 블라인드 스코어 6.6% (원문 표 1 기준)—은 최첨단 다중모달 모델들이 심사숙고형 문제 해결이나 정밀 시각 지각에서는 뛰어난 성과를 보임에도 불구하고, 인간에게는 일상적인 직관적 시각 추론 영역에서 매우 심각한 역량 격차를 안고 있음을 보여준다. 단순한 테스트 타임 연산 확장(Test-time Compute), 추론 노력 증대, 에이전트 도구 활용만으로는 이러한 인간 수준의 시각적 직관을 달성하는 데 명확한 한계가 존재하며, 현행 스케일링 파라다임이 해결하지 못한 새로운 연구 방향을 제시한다 (원문 6절 기준).</p>
+<h5 id="8-2-보고서-근거-및-독립성-최종-고지">8.2 보고서 근거 및 독립성 최종 고지</h5>
+<p>이 해설은 원문 하나만을 근거로 했고 외부 검증을 거치지 않았다</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/document/">문서</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

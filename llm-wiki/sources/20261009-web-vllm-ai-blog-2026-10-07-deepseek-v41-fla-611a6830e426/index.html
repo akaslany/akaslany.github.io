@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek-V4.1-Flash on vLLM: 5x Agentic Throughput Since Day 0 | vLLM Blog</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>DeepSeek-V4.1-Flash on vLLM: 5x Agentic Throughput Since Day 0 | vLLM Blog</h1>
+<p class="page-meta">웹 · 2026-10-09</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 2026년 10월 7일자 vLLM 공식 기술 블로그에 게재된 &quot;DeepSeek-V4.1-Flash on vLLM: 5x Agentic Throughput Since Day 0&quot; 문서를 바탕으로, DeepSeek-V4.1-Flash 모델을 vLLM 서빙 엔진 상에서 최적화한 기술적 과정과 성과를 종합…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://vllm.ai/blog/2026-10-07-deepseek-v41-flash">출처</a> · <a href="https://www.youtube.com/watch?v=OskE5SfKb4k">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="deepseek-v4-1-flash의-vllm-최적화-및-성능-분석-해설-보고서">DeepSeek-V4.1-Flash의 vLLM 최적화 및 성능 분석 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 2026년 10월 7일자 vLLM 공식 기술 블로그에 게재된 &quot;DeepSeek-V4.1-Flash on vLLM: 5x Agentic Throughput Since Day 0&quot; 문서를 바탕으로, DeepSeek-V4.1-Flash 모델을 vLLM 서빙 엔진 상에서 최적화한 기술적 과정과 성과를 종합 분석합니다. 해당 소스 문서는 모델 출시 후 3주 동안 Inferact와 vLLM 커뮤니티가 수행한 하이퍼스케일 서빙 최적화 엔지니어링 내역을 다루고 있습니다.</p>
+<p>DeepSeek-V4.1-Flash는 에이전틱(Agentic) 서빙 작업에 특화된 Causal Encoder-Decoder(CED) 아키텍처를 채택하여, 디코드(Decode) 단계에서 토큰당 16B, 프리필(Prefill) 단계에서 토큰당 8B 파라미터를 활성화합니다. 또한 CSA2(Compressed Sparse Attention 2), FP4 KV 캐시, 레이어 간 KV 캐시 공유 메커니즘을 복합적으로 활용하여 글로벌 KV 캐시 크기를 토큰당 890바이트 수준으로 극단적으로 압축했습니다. 본 보고서는 이러한 모델 아키텍처 측면의 효율성이 vLLM의 시스템 수준 최적화와 결합되어 어떠한 성능 시너지를 창출했는지 기술합니다.</p>
+<p>vLLM 최적화의 핵심은 <strong>SWA Bounded Replay(슬라이딩 윈도우 어텐션 제한적 재실행)</strong> 기법 및 CUDA 그래프(CUDA Graph)의 적용, 그리고 <strong>DeepSeek 오픈소스 커널 통합 및 선제적 커널 융합(Kernel Fusion)</strong> 기법의 도입입니다. SWA Bounded Replay는 디코더 측면의 과도한 프롬프트 프리필 연산을 효과적으로 생략하여 프리필 지연 시간(TTFT)을 크게 단축시켰으며, DeepSelect, DeepGEMM, FlashMLA 등 신규 커널 통합과 통신·연산 커널 융합 조치를 통해 저지연 및 고처리량 연산 경로 모두에서 성능을 극대화했습니다.</p>
+<p>결과적으로 SemiAnalysis AgentX 에이전틱 벤치마크 평가 결과, 초기 탑재 시점(Day 0) 대비 낮은 동시성 환경에서 1.9배의 지연 시간 개선을 달성하였고, 150 TPS 제약 조건 하에서 최대 5.3배(약 5배)의 에이전틱 처리량(Throughput) 향상 및 약 100K 처리량 지점 기준 약 70%의 TTFT 감소를 성취했음이 확인되었습니다.</p>
+<hr />
+<h4 id="2-주요-논점-main-arguments-evidence-and-cases">2. 주요 논점 (Main Arguments, Evidence, and Cases)</h4>
+<h5 id="2-1-swa-bounded-replay를-통한-kv-캐시-및-프롬프트-재작동-최적화">2.1. SWA Bounded Replay를 통한 KV 캐시 및 프롬프트 재작동 최적화</h5>
+<h6 id="1-global-kv와-swa-kv의-구조적-차이-및-기존-방식의-한계">1) Global KV와 SWA KV의 구조적 차이 및 기존 방식의 한계</h6>
+<ul>
+<li><strong>[사실]</strong> DeepSeek-V4.1-Flash는 이원화된 KV 캐시 구조를 운용합니다. <strong>Global KV</strong>는 압축되어 레이어 간에 공유되며 FP4 형식으로 토큰당 약 890바이트를 차지합니다. 반면 <strong>SWA(Sliding-Window Attention) KV</strong>는 압축되지 않은 FP8 형식으로, 총 40개 레이어 각각에서 마지막 128개 위치를 커버합니다.</li>
+<li><strong>[사실]</strong> SWA KV를 캐싱하려면 모든 히트 경계마다 이를 저장해야 하므로 Global KV 대비 10배 이상의 저장 용량이 소요됩니다. 반면 캐싱하지 않을 경우, 디코딩 단계에서는 마지막 128개 위치만 읽음에도 불구하고 프리필 단계에서 21~39번 레이어를 모든 프롬프트 토큰에 대해 실행해야 하는 막대한 연산 오버헤드가 발생합니다.</li>
+<li><strong>[소스의 주장]</strong> SWA KV를 캐싱하는 대신 정확하게 재계산(Exact Recomputation)하려면, $L$개 레이어에 대해 $L \times 128$ 토큰(V4.1-Flash 기준 $40 \times 128 = 5,120$ 토큰)을 다시 계산해야 하므로 재계산 비용이 매우 높습니다.</li>
+</ul>
+<h6 id="2-엔코더-및-디코더-측면의-swa-bounded-replay-작동-원리">2) 엔코더 및 디코더 측면의 SWA Bounded Replay 작동 원리</h6>
+<ul>
+<li><strong>[사실]</strong> <strong>엔코더 측면 (Prefix Hit 시 윈도우 재구성):</strong> vLLM은 Global KV만 캐싱하고 SWA KV는 캐싱 대상에서 제외합니다. 길이 $H$의 프리픽스 히트가 발생하면, $s = H - 128$ 지점에서 윈도우를 잘라내고(clip) 마지막 128개 토큰 $[H - 128, H)$ 구간만 재실행하여 SWA KV를 재구성합니다.</li>
+<li><strong>[사실]</strong> <strong>디코더 측면 (프롬프트 프리필 대폭 생략):</strong> CED 아키텍처 구조상 20번 레이어가 디코더의 Global KV를 생성하고 21~39번 레이어는 이를 재활용합니다. 따라서 vLLM은 모든 토큰에 대해 20번 레이어까지만 실행하여 Global KV를 생성하며, 21~39번 레이어는 각 요청의 마지막 128개 토큰에 대해서만 실행합니다. 긴 프롬프트 환경에서는 모델 연산량의 절반 가량을 생략할 수 있습니다.</li>
+<li><strong>[작성자 해석]</strong> 프리필 연산량이 절반 가량 축소됨에 따라 긴 컨텍스트 프롬프트를 처리할 때 인프라 병목이 GPU 디바이스 연산 한계에서 메모리 대역폭 및 커널 호출 제어로 전환되는 구조적 변화가 발생합니다.</li>
+</ul>
+<h6 id="3-트림된-레이어-trimmed-layers-대상-cuda-graph-적용">3) 트림된 레이어(Trimmed Layers) 대상 CUDA Graph 적용</h6>
+<ul>
+<li><strong>[사실]</strong> 21~39번 레이어를 128개 토큰으로 잘라내면(Trim) GPU 연산 작업량이 매우 적어져 이거(Eager) 모드 실행 시 CPU의 커널 호출(Kernel Launch) 오버헤드가 연산 시간을 압도하는 병목이 발생합니다.</li>
+<li><strong>[사실]</strong> 0~20번 레이어(전체 배치)와 21~39번 레이어(트림된 배치)는 입력 형상(Shape)이 달라 단일 CUDA 그래프로 캡처할 수 없습니다. vLLM은 분할 가능한 PIECEWISE 그래프 구조를 활용하여 0~20번 레이어는 전체 배치용으로, 21~39번 레이어는 트림된 배치용으로 별도 분리 캡처하여 적용했습니다.</li>
+<li><strong>[소스의 주장]</strong> CUDA 그래프를 적용하지 않을 경우 짧은 프롬프트(예: DEP2 1K 토큰)에서 커널 호출 오버헤드로 인해 베이스라인 대비 지연 시간이 최대 12% 증가하는 부작용이 발생합니다. 그러나 CUDA 그래프를 결합하면 오버헤드가 제거되어 연산 감소 이점을 완벽히 회수할 수 있습니다.</li>
+</ul>
+<h6 id="4-정확도-검증-및-ttft-성능-개선-결과">4) 정확도 검증 및 TTFT 성능 개선 결과</h6>
+<ul>
+<li><strong>[소스의 주장]</strong> SWA Bounded Replay는 비트 단위(Bit-exact)로 완벽히 동일한 연산을 수행하지는 않으나 품질 손실은 무시할 수 있는 수준입니다. vLLM 환경에서 GSM8K 및 GPQA 벤치마크로 검증한 결과 약 1.5 표준 오차 이내의 오차 범위 내에 위치하여 유의미한 정확도 저하가 없음이 확인되었습니다.</li>
+<li><strong>[사실]</strong> 단일 요청 기준 프리필 TTFT 개선 측정 결과 (NVIDIA GB200, 상대값 %, 낮은 수치가 우수):</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">병렬화 설정</th>
+<th style="text-align:left">프롬프트 길이</th>
+<th style="text-align:left">Replay OFF 기준 (100%)</th>
+<th style="text-align:left">Replay ON (Eager Decoder)</th>
+<th style="text-align:left">Replay ON (Decoder CUDA Graph)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>TP4</strong></td>
+<td style="text-align:left">1K</td>
+<td style="text-align:left">160.9 ms</td>
+<td style="text-align:left">+3.1%</td>
+<td style="text-align:left"><strong>-35.8%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">4K</td>
+<td style="text-align:left">165.4 ms</td>
+<td style="text-align:left">+4.3%</td>
+<td style="text-align:left"><strong>-35.3%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">8K</td>
+<td style="text-align:left">170.0 ms</td>
+<td style="text-align:left">+4.6%</td>
+<td style="text-align:left"><strong>-33.8%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">32K</td>
+<td style="text-align:left">540.1 ms</td>
+<td style="text-align:left">-30.4%</td>
+<td style="text-align:left"><strong>-39.3%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">128K</td>
+<td style="text-align:left">2,267 ms</td>
+<td style="text-align:left">-32.9%</td>
+<td style="text-align:left"><strong>-38.6%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DEP2</strong></td>
+<td style="text-align:left">1K</td>
+<td style="text-align:left">103.8 ms</td>
+<td style="text-align:left">+11.9%</td>
+<td style="text-align:left"><strong>-30.2%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">4K</td>
+<td style="text-align:left">135.3 ms</td>
+<td style="text-align:left">-13.2%</td>
+<td style="text-align:left"><strong>-31.8%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">8K</td>
+<td style="text-align:left">246.9 ms</td>
+<td style="text-align:left">-33.5%</td>
+<td style="text-align:left"><strong>-35.4%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">32K</td>
+<td style="text-align:left">983.1 ms</td>
+<td style="text-align:left">-37.2%</td>
+<td style="text-align:left"><strong>-38.0%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">128K</td>
+<td style="text-align:left">3,950 ms</td>
+<td style="text-align:left">-36.3%</td>
+<td style="text-align:left"><strong>-37.7%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[소스의 주장]</strong> 디코더 재실행 연산에 CUDA 그래프를 결합함으로써 프리필 연산 시간을 30~40% 단축했습니다.</li>
+</ul>
+<hr />
+<h5 id="2-2-오픈소스-기술-커널-통합-및-커널-융합-kernel-fusion">2.2. 오픈소스 기술 커널 통합 및 커널 융합(Kernel Fusion)</h5>
+<h6 id="1-통합된-deepseek-신규-오픈소스-커널">1) 통합된 DeepSeek 신규 오픈소스 커널</h6>
+<ul>
+<li><strong>[사실]</strong> vLLM은 DeepSeek가 공개한 3개 신규 리포지토리의 핵심 커널을 통합했습니다:
+<ul>
+<li><strong>DeepSelect:</strong> DeepSeek Sparse Attention을 위한 top-k 선택 라이브러리.</li>
+<li><strong>DeepGEMM:</strong> 희소 인덱서 커널 및 GEMM 관련 융합 커널 제공.</li>
+<li><strong>FlashMLA:</strong> NVFP4 KV 캐시 지원 및 융합 어텐션 커널인 <code>MegaAttention</code> 포함.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-저지연-및-고처리량-경로-상의-세부-커널-최적화-항목">2) 저지연 및 고처리량 경로 상의 세부 커널 최적화 항목</h6>
+<ul>
+<li><strong>Mega-mHC (#56962):</strong>
+<ul>
+<li><strong>[사실]</strong> post 단계, 지연된 pre 단계, RMSNorm을 단일 커널로 융합했습니다.</li>
+<li><strong>[소스의 주장]</strong> 기존 TileLang 융합 경로 대비 NVIDIA GB200 환경에서 1.14~1.51배 빠른 성능을 제공합니다.</li>
+</ul>
+</li>
+<li><strong>Mega-Gate (#56266):</strong>
+<ul>
+<li><strong>[사실]</strong> MoE 라우터 연산(Gate GEMM, 전문가 스코어링, 편향, top-k 선택)을 단일 커널로 융합했습니다.</li>
+<li><strong>[소스의 주장]</strong> 기존 GEMM 연산 후 별도 top-k 커널을 호출하던 방식에서 발생하던 메모리 왕복(Memory Round-trip)을 제거하여 중간 배치 크기에서 1.18~1.31배의 커널 속도 향상을 달성했습니다.</li>
+</ul>
+</li>
+<li><strong>mHC 멀티스트림 오버랩 (Multistream Overlap, #57603):</strong>
+<ul>
+<li><strong>[사실]</strong> V4.1의 mHC 계수는 1개 서브레이어만큼 시프트되어 있으므로 다음 심(seam)의 계수 GEMM은 어텐션이나 FFN이 실행되기 전에 존재하는 레지듀얼 스트림만 읽습니다.</li>
+<li><strong>[소스의 주장]</strong> vLLM은 다음 mHC 블록의 계수를 별도의 사이드 CUDA 스트림에서 어텐션/FFN과 병렬 연산하도록 구현하여, Latency-bound 디코드 상태에서 TP4 저지연 지연 시간을 약 4% 감소시켰습니다.</li>
+</ul>
+</li>
+<li><strong>Sparse MQA Logits (#56254):</strong>
+<ul>
+<li><strong>[사실]</strong> 인덱서 레이어는 고정된 16K 후보 위치에서 top-k를 선택합니다. DeepGEMM 희소 커널은 전체 컨텍스트를 스코어링하는 대신 후보 위치만 직접 스코어링합니다.</li>
+<li><strong>[소스의 주장]</strong> NVIDIA GB300 레이어당 연산 기준 8K 토큰에서 1.2배, 512K에서 14~23배 빠릅니다. 4개 GB300 기반 엔드투엔드 디코드는 3~6% 향상되며, 프리필은 512K 컨텍스트에서 1.43배, 1M 컨텍스트에서 2배 향상됩니다.</li>
+</ul>
+</li>
+<li><strong>MegaAttention 및 NVFP4 압축 KV (#56935):</strong>
+<ul>
+<li><strong>[사실]</strong> Query RoPE, 희소 어텐션, 출력 Inverse RoPE, FP8 형변환을 단일 호출로 융합하여 출력 프로젝션 버퍼에 직접 기입합니다. 기존 FP8 KV 캐시보다 45% 작아진 신규 NVFP4 압축 KV 형식을 읽습니다.</li>
+<li><strong>[소스의 주장]</strong> 공격적인 융합을 통해 HBM 쓰기 작업을 제거함으로써 커널 효율성을 1.45배 개선했습니다.</li>
+</ul>
+</li>
+<li><strong>저지연 융합 WO-A 커널 (#58634):</strong>
+<ul>
+<li><strong>[사실]</strong> Blackwell 아키텍처 기반 소형 디코드 배치를 위해 Inverse RoPE, FP8 양산화, WO-A 배치 GEMM, MXFP8 재양산화를 단일 CuTe-DSL 커널로 융합했습니다.</li>
+<li><strong>[소스의 주장]</strong> 중간 활성화를 칩 내부에 유지하여 WO-A 경로를 최대 ~2.1배 개선하였으며, 낮은 동시성 조건에서 토큰 간 지연 시간을 최대 ~6~7% 단축했습니다.</li>
+</ul>
+</li>
+<li><strong>All-Reduce 및 전후 연산 단일 커널 융합 (Fused All-Reduce with Preceding and Following Ops):</strong>
+<ul>
+<li><strong>[사실]</strong> 통신 병목을 최소화하기 위해 All-Reduce 통신 연산을 전후에 위치한 연산들(preceding and following ops)과 통합하여 단일 커널로 공격적으로 융합했습니다.</li>
+<li><strong>[소스의 주장]</strong> 통신 오버헤드와 커널 호출 오버헤드를 동시에 줄여 시스템 전체 처리량을 높이는 데 기여했습니다.</li>
+</ul>
+</li>
+<li><strong>Engram 최적화 (#56512, #57651, #56926, #59327):</strong>
+<ul>
+<li><strong>[사실]</strong> 해시된 토큰 n-그램 테이블 조회를 위해 CPU 오프로드된 Engram 조회를 비동기적으로 프리패치합니다. 통합 TP/DP 체계로 엔그램 헤드를 샤딩하여 DP 리플리카 간 동일 호스트 테이블을 공유함으로써 중복 복사와 DP 통신을 제거했습니다.</li>
+<li><strong>[소스의 주장]</strong> THP(Transparent Huge Pages)를 지원하여 프리필 시 테이블 조회 커널 속도를 최대 10배 향상시켰습니다.</li>
+</ul>
+</li>
+<li><strong>[작성자 해석]</strong> 다수의 연산(RMSNorm, RoPE, 양산화, All-Reduce 등)을 단일 커널로 수평·수직 통합함으로써 GPU L2 캐시 및 SRAM 내부에서 중간 활성화를 유지시켰으며, 이를 통해 HBM 대역폭 메모리 병목 현상을 근본적으로 완화한 것으로 분석됩니다.</li>
+</ul>
+<hr />
+<h5 id="2-3-에이전틱-성능-agentic-performance-검증">2.3. 에이전틱 성능(Agentic Performance) 검증</h5>
+<h6 id="1-semianalysis-agentx-벤치마크-기반-측정-조건-및-설정-이유">1) SemiAnalysis AgentX 벤치마크 기반 측정 조건 및 설정 이유</h6>
+<ul>
+<li><strong>[사실]</strong> 성능 평가는 에이전틱 서빙 워크로드를 대표하는 SemiAnalysis AgentX 벤치마크 환경에서 수행되었습니다.</li>
+<li><strong>[사실]</strong> <strong>저지연(Low-Latency) 환경에서의 어텐션 선택 (TP4 + FlashInfer):</strong> 소형 배치 디코딩은 연산보다는 메모리 대역폭 바운드(Memory-bandwidth bound) 특성을 강하게 보입니다. 모델 가중치를 4개 GPU에 샤딩하는 TP4 설정이 적합하며, 어텐션 커널로는 MegaAttention 대신 FlashInfer를 사용했습니다. TP4 소형 배치 디코드 환경에서는 메모리 대역폭 한계로 인해 MegaAttention이 제공하는 커널 융합의 한계 이득이 적어, FlashInfer가 더 빠른 실행 속도를 기록했기 때문입니다.</li>
+<li><strong>[사실]</strong> <strong>고처리량(High-Throughput) 환경에서의 병렬화 및 어텐션 선택 (DEP2 + MegaAttention + NVFP4):</strong> V4.1은 공유 KV 잠재(Shared KV latent) 아키텍처를 사용하므로 TP 적용 시 GPU 간 동일 KV 캐시가 중복 저장되는 문제가 발생합니다. 이에 따라 DEP2(2-way Data + Expert Parallel)를 적용하여 각 GPU가 자신이 담당하는 요청의 KV만 저장하도록 제한하고, 세션 유사성(Session affinity)으로 멀티턴 간 프리픽스 캐시 지역성을 유지했습니다.</li>
+<li><strong>[소스의 주장]</strong> DEP2 환경에서 MegaAttention과 NVFP4를 결합 적용함으로써 요청당 KV 캐시 공간을 FP8 대비 절반 가까이 줄여 GPU당 동시 처리 용량(Concurrency)을 획기적으로 확장했습니다.</li>
+<li><strong>[작성자 해석]</strong> DEP2 구조 선택은 TP 사용 시 발생하는 KV 캐시의 불필요한 GPU 간 중복을 제거함과 동시에 NVFP4 압축을 결합하여, 제한된 GPU 메모리 내에서 인프라 수준의 동시 처리 용량을 한계까지 끌어올린 전략적 배치로 해석됩니다.</li>
+</ul>
+<h6 id="2-성능-향상-종합-결과">2) 성능 향상 종합 결과</h6>
+<ul>
+<li><strong>[사실]</strong> Day-0 대비 저지연 연산 결과는 <strong>1.9배</strong>, 고처리량 연산 결과는 150 TPS 제약 조건 하에서 <strong>5.3배(약 5배)</strong> 향상되었습니다.</li>
+<li><strong>[사실]</strong> 약 <strong>100K 처리량(Throughput) 지점</strong>에서 TTFT가 약 <strong>70% 감소</strong>하는 유의미한 가속 성과가 관측되었습니다.</li>
+<li><strong>[소스의 주장]</strong> TTFT 70% 감소를 이끈 3가지 핵심 요인은 다음과 같습니다:
+<ol>
+<li>SWA Bounded Replay를 통해 상위 레이어(21~39번)가 마지막 128개 토큰만 처리함으로써 프리필 연산량을 절반 가량 단축.</li>
+<li>CUDA 그래프 적용을 통해 트림된 재실행 연산의 CPU 커널 호출 병목 완벽 제거.</li>
+<li>종합적인 커널 융합(MegaAttention, Fused All-Reduce 등) 및 사이드 스트림 오버랩을 통한 모델 연산 자체의 획기적 가속.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-people-speakers">3. 등장 인물 및 화자 (Key People &amp; Speakers)</h4>
+<p>소스 문서에 명시적으로 서술된 주요 조직 및 시스템 참여자 정보는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름/조직</th>
+<th style="text-align:left">역할 및 관련 내용</th>
+<th style="text-align:left">소스 내 확인 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Inferact</strong></td>
+<td style="text-align:left">vLLM 팀과 함께 초기 모델 탑재(bring-up) 및 최적화 작업을 수행한 개발 주체</td>
+<td style="text-align:left">본문 제목 하단 작성자란, Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>vLLM Team</strong></td>
+<td style="text-align:left">Inferact와 협력하여 SWA Bounded Replay 및 오픈소스 커널 통합을 개발하고 기술 블로그를 작성한 주체</td>
+<td style="text-align:left">본문 제목 하단 작성자란, TL;DR, Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek</strong></td>
+<td style="text-align:left">DeepSeek-V4.1-Flash 모델을 개발하고 관련 오픈소스 커널(DeepSelect, DeepGEMM, FlashMLA)을 공개한 주체</td>
+<td style="text-align:left">TL;DR, Kernels 섹션, Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NVIDIA</strong></td>
+<td style="text-align:left">GB200, GB300 하드웨어 기반 최적화 지원 및 협력 주체</td>
+<td style="text-align:left">Accuracy and performance results, Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SemiAnalysis</strong></td>
+<td style="text-align:left">에이전틱 서빙 벤치마크 평가 프레임워크인 AgentX를 제공한 주체</td>
+<td style="text-align:left">TL;DR, Agentic performance, Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>개인 작성자 성명</strong></td>
+<td style="text-align:left">소스 문서 내 개별 엔지니어/작성자 성명 미기재</td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-metrics-timeframes">4. 수치 및 시점 (Metrics &amp; Timeframes)</h4>
+<p>소스 문서에서 확인되는 정량적 수치 및 시점 정보는 아래와 같이 분류 정리됩니다.</p>
+<h5 id="1-시점-및-기간">1) 시점 및 기간</h5>
+<ul>
+<li><strong>기술 블로그 발행일:</strong> 2026년 10월 7일</li>
+<li><strong>최적화 집행 기간:</strong> DeepSeek-V4.1-Flash 모델 최초 출시(Day 0) 후 3주일 간</li>
+</ul>
+<h5 id="2-모델-및-구조-관련-정량-수치">2) 모델 및 구조 관련 정량 수치</h5>
+<ul>
+<li><strong>활성화 파라미터 수:</strong> 디코드(Decode) 시 토큰당 16B, 프리필(Prefill) 시 토큰당 8B</li>
+<li><strong>레이어 구성:</strong> 총 40개 레이어 ($L = 40$), Global KV 생성 레이어는 20번 레이어 (21~39번 레이어는 트림 대상)</li>
+<li><strong>Global KV 캐시 크기:</strong> 토큰당 약 890바이트 (FP4 형식)</li>
+<li><strong>SWA 윈도우 크기 및 형식:</strong> 마지막 128개 위치 ($W = 128$), FP8 형식 (Global KV 대비 10배 이상의 저장 용량 요구)</li>
+<li><strong>희소 인덱서 후보 위치 수:</strong> 고정 16K개 위치</li>
+</ul>
+<h5 id="3-시스템-성능-및-ttft-지연시간-수치">3) 시스템 성능 및 TTFT/지연시간 수치</h5>
+<ul>
+<li><strong>에이전틱 성능 개선 배수:</strong> Day-0 대비 저지연 1.9배, 고처리량 5.3배 (150 TPS 제약 조건)</li>
+<li><strong>TTFT 절감 폭 및 측정 지점:</strong> 약 <strong>100K 처리량(Throughput) 지점</strong>에서 TTFT 약 <strong>70% 감소</strong></li>
+<li><strong>프리필 연산 시간 절감:</strong> 디코더 재실행 연산에 CUDA 그래프 결합 시 프리필 연산 시간 30~40% 단축</li>
+<li><strong>Eager Replay 시 성능 저하:</strong> 1K 프롬프트 DEP2 환경에서 CUDA 그래프 미적용 시 오버헤드로 인해 지연 시간 최대 12% 증가</li>
+<li><strong>NVFP4 KV 캐시 크기 축소 폭:</strong> 기존 FP8 KV 캐시 대비 45% 축소</li>
+</ul>
+<h5 id="4-세부-커널별-가속-수치">4) 세부 커널별 가속 수치</h5>
+<ul>
+<li><strong><code>Mega-mHC</code>:</strong> TileLang 커널 대비 NVIDIA GB200 환경에서 1.14~1.51배 속도 향상</li>
+<li><strong><code>Mega-Gate</code>:</strong> 중간 배치 크기에서 1.18~1.31배 커널 속도 향상</li>
+<li><strong><code>mHC Multistream Overlap</code>:</strong> TP4 저지연 환경에서 디코드 지연 시간 약 4% 감소</li>
+<li><strong><code>Sparse MQA Logits</code>:</strong> GB300 레이어당 연산 기준 8K 토큰에서 1.2배, 512K에서 14~23배 가속 / 엔드투엔드 디코드 3~6% 향상 / 프리필 512K에서 1.43배, 1M에서 2배 가속</li>
+<li><strong><code>MegaAttention</code>:</strong> HBM 쓰기 제거를 통해 커널 효율성 1.45배 개선</li>
+<li><strong><code>Low-latency fused WO-A</code>:</strong> WO-A 연산 경로 최대 ~2.1배 개선, 낮은 동시성에서 토큰 간 지연 시간 ~6~7% 단축</li>
+<li><strong><code>Engram THP</code>:</strong> 프리필 단계 테이블 조회 커널 속도 최대 10배 향상</li>
+</ul>
+<h5 id="5-확인-불가-항목-및-맥락적-제한">5) 확인 불가 항목 및 맥락적 제한</h5>
+<ul>
+<li><strong>DeepSeek-V4.1-Flash 최초 출시일(Day 0)의 구체적 날짜:</strong> <strong>확인 불가</strong> (소스 상에는 2026년 10월 7일 블로그 작성일 기준 &quot;지난 3주간&quot;으로만 표기됨)</li>
+<li><strong>NVIDIA GB200/GB300 외 하드웨어(AMD Instinct, Apple Silicon, Google TPU 등) 성능 데이터:</strong> <strong>확인 불가</strong></li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 기술 보고서 분석을 통해 도출된 제약 사항, 조건부 적용 요소 및 불확실성은 다음과 같습니다.</p>
+<ol>
+<li>
+<p><strong>비트 단위 정확도의 수치적 불일치 (Non-Bit-Exactness)</strong></p>
+<ul>
+<li>SWA Bounded Replay 기법은 이전 계산 구간을 자르고(Clip) 128개 토큰만 제한적으로 재실행하므로 엄밀한 재계산(Exact Recomputation)과 비교할 때 비트 단위로 완벽하게 일치하지 않습니다. GSM8K 및 GPQA 평가 상 영향이 미비함(1.5 표준 오차 이내)이 확인되었으나 수학적 동일성이 보장되지는 않습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>하드웨어 및 병렬화 토폴로지별 커널 효과의 조건부 성립</strong></p>
+<ul>
+<li>MegaAttention 커널은 고처리량(DEP2) 설정에서는 KV 캐시 압축 및 융합 이점으로 큰 효과를 발휘하지만, TP4 저지연 환경에서는 소형 배치 디코드의 메모리 대역폭 바운드 특성으로 인해 FlashInfer보다 느린 결과를 보였습니다. 단일 커널 최적화가 모든 Execution Context에서 범용적으로 우월하지 않음을 보여줍니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>P/D 분리 환경 및 KV 캐시 오프로딩 미검증</strong></p>
+<ul>
+<li>DeepSeek-V4.1-Flash 모델의 높은 메모리 효율성으로 인해 본 AgentX 벤치마크 수행 시에는 KV 캐시 오프로딩(Offloading)이 요구되지 않았습니다. 소스 본문에서는 더 높은 동시성과 P/D(Prefill/Decode) 분리 아키텍처 환경에서 오프로딩의 유용성을 <strong>예측</strong>하고 있으나 실증적 데이터는 소스 상에 <strong>확인 불가</strong>합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>타 하드웨어 아키텍처에 대한 범용 성능 검증 부재</strong></p>
+<ul>
+<li>제시된 모든 정량적 측정 수치는 NVIDIA GB200 및 GB300 시스템(Blackwell 아키텍처) 환경에 국한되어 있습니다. 타사 AI 가속기나 이전 세대 GPU에서의 수치적 성과는 소스 문서 내에 기재되어 있지 않으며 <strong>확인 불가</strong>합니다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

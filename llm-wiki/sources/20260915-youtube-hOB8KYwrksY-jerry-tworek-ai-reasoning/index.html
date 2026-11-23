@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jerry Tworek: How AI Learned to Reason, Why Evals Are Breaking, and What Comes Next</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Jerry Tworek: How AI Learned to Reason, Why Evals Are Breaking, and What Comes Next</h1>
+<p class="page-meta">YouTube · 2026-09-15</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 OpenAI에서 Codex, o1, o3 개발을 주도했던 Jerry Tworek의 기술적 통찰을 바탕으로, AI 모델의 추론 패러다임 변화와 그가 설립한 Akore Automation이 지향하는 연구 자동화의 비전을 분석합니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=hOB8KYwrksY">출처</a> · <a href="https://www.youtube.com/watch?v=GKg0ND3YwYw">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="jerry-tworek-인터뷰-분석-ai-추론의-진화와-연구-자동화의-미래">Jerry Tworek 인터뷰 분석: AI 추론의 진화와 연구 자동화의 미래</h3>
+<p>본 보고서는 OpenAI에서 Codex, o1, o3 개발을 주도했던 Jerry Tworek의 기술적 통찰을 바탕으로, AI 모델의 추론 패러다임 변화와 그가 설립한 Akore Automation이 지향하는 연구 자동화의 비전을 분석합니다.</p>
+<hr />
+<h5 id="1-트레이딩-배경과-ai-연구-철학-알고리즘적-편집증과-추상화의-탑">1. 트레이딩 배경과 AI 연구 철학: 알고리즘적 편집증과 추상화의 탑</h5>
+<p>Jerry Tworek이 암스테르담의 퀀트 트레이딩 기업에서 보낸 5년은 그의 AI 연구 방법론에 깊은 흔적을 남겼습니다. 수조 원의 자산을 운용하며 얻은 경험은 단순한 기술력을 넘어 '태도'의 문제로 연결됩니다.</p>
+<ul>
+<li><strong>알고리즘적 편집증(Paranoia):</strong> 트레이딩 시스템의 미세한 버그는 즉각적인 P&amp;L(손익) 타격으로 이어집니다. 그는 이를 ML 연구에 대입하여, 하이퍼파라미터의 변화와 모델 내부 작동 기전을 완벽히 통제하려는 태도를 고수합니다.</li>
+<li><strong>이해의 내재화와 추상화:</strong> 그는 **&quot;이해(Understanding)는 외주를 줄 수 없다&quot;**고 단언합니다. AI가 실험 프로세스를 자동화하더라도, 연구자는 수많은 개념적 객체들을 '추상화의 탑(Towers of Abstractions)'으로 쌓아 올리고 이를 조망하는 'Bird's eye view'를 유지해야 합니다. 이는 복잡한 강화학습(RL) 시스템 내의 블랙박스를 수학적으로 모델링하고 통제하기 위한 필수 전제입니다.</li>
+</ul>
+<h5 id="2-코드-모델-codex-개발-검증-가능성-verifiability-을-통한-지능의-증명">2. 코드 모델(Codex) 개발: 검증 가능성(Verifiability)을 통한 지능의 증명</h5>
+<p>OpenAI가 초기 수직 시장으로 '코드'를 선택한 핵심 이유는 데이터의 양이 아닌 **'검증 가능성'**에 있었습니다.</p>
+<ul>
+<li><strong>텍스트의 모호함 극복:</strong> GPT-2 및 초기 GPT-3 시절, 모델이 생성하는 문장은 통계적 추론(Stochastic Parrots)과 진정한 사고 사이의 경계가 모호했습니다. 반면, 코드는 컴파일과 실행 결과가 '성공' 혹은 '실패'로 명확히 나뉩니다.</li>
+<li><strong>추론의 척도:</strong> Tworek은 모델이 올바른 프로그램을 작성할 수 있다면 그것이 곧 개념적 이해와 논리적 추론의 증거라고 보았습니다. 이 과정에서 탄생한 'HumanEval' 벤치마크는 모델의 실제 사고 능력을 정밀하게 측정하는 도구로 기능하며 현대 AI 추론 연구의 초석이 되었습니다.</li>
+</ul>
+<h5 id="3-벤치마크-eval-시대의-종말과-실세계-검증-패러다임">3. 벤치마크(Eval) 시대의 종말과 실세계 검증 패러다임</h5>
+<p>현재 AI 업계의 정적 벤치마크 시스템은 변별력을 상실했다는 것이 Tworek의 진단입니다.</p>
+<ul>
+<li><strong>벤치마크의 게임화(Gamed):</strong> 새로운 지표가 발표되면 불과 몇 세대 만에 점수가 90%를 상회하는 현상은 모델이 지능화된 것이 아니라 해당 지표에 최적화되었음을 의미합니다.</li>
+<li><strong>인과관계와 시간의 화살(Arrow of Time):</strong> 그는 AI 평가에 트레이딩의 <strong>백테스트(Backtest)</strong> 원칙을 도입해야 한다고 주장합니다. 과거 데이터로 학습하고 미래의 데이터로 테스트하되, 학습 데이터에 미래 정보가 유출되지 않도록 하는 '인과관계(Causality)' 확보가 핵심입니다. 결국 모델의 진정한 성능은 실세계 환경에서의 배포와 피드백을 통해서만 증명될 수 있습니다.</li>
+</ul>
+<h5 id="4-강화학습-rl-스케일링-o1-o3와-시스템-엔지니어링의-정점">4. 강화학습(RL) 스케일링: o1, o3와 시스템 엔지니어링의 정점</h5>
+<p>o1과 o3는 Ilya Sutskever가 제시했던 &quot;거대 생성 모델 후 RL 적용&quot; 로드맵의 실현입니다. 이 과정에서 'RL의 샘플 부적합성(Sample Inefficiency)'을 극복하기 위한 고도의 전략이 동원되었습니다.</p>
+<ul>
+<li><strong>단순함을 통한 스케일링:</strong> Tworek은 RL 스케일링의 성공 비결로 '단순함'을 꼽습니다. 수치적 안정성을 위해 PPO(Proximal Policy Optimization)에서 불필요한 복잡성을 제거한 것이 대규모 학습을 가능케 했습니다.</li>
+<li><strong>자발적 추론 행위의 발현:</strong> o1이 보여주는 '재고(Reconsideration)'나 '사고의 사슬(CoT)'은 특정 보상 설계의 결과가 아닙니다. RL 스케일링 과정에서 모델이 더 높은 보상을 얻기 위해 스스로 습득한 전략적 행동입니다.</li>
+<li><strong>거대 분산 시스템의 난관:</strong> o3 개발 시 도구 사용(Tool use)을 확장하는 과정은 알고리즘보다 시스템 엔지니어링의 문제였습니다. 데이터 동기화와 통신 병목 현상을 해결하기 위해 Netflix나 Amazon 규모를 상회하는 가상 머신(VM)과 데이터 이동 시스템을 구축해야 했으며, 이는 현대 소프트웨어 공학의 한계에 도전하는 작업이었습니다.</li>
+</ul>
+<h5 id="5-테스트-타임-컴퓨트-test-time-compute-와-시리얼-연산의-가치">5. 테스트 타임 컴퓨트(Test-time Compute)와 시리얼 연산의 가치</h5>
+<p>추론 시점에 연산 자원을 더 많이 투입하여 성능을 높이는 '싱킹 타임(Thinking time)' 전략은 강력하지만 명확한 물리적 제약에 직면해 있습니다.</p>
+<ul>
+<li><strong>시리얼(Serial) vs. 병렬(Parallel) 연산:</strong> 최근 서브 에이전트를 활용한 병렬 롤아웃이 시도되고 있으나, Tworek은 이것이 진정한 추론에는 덜 효율적이며 비용만 높인다고 지적합니다. 시간의 흐름을 따르는 '시리얼 연산'만이 깊은 사고와 추론으로 이어지지만, 이는 지연 시간(Latency)이라는 벽에 가로막혀 있습니다.</li>
+<li><strong>아키텍처적 한계:</strong> 트랜스포머는 긴 문맥에 대한 일반화 능력이 완벽하지 않아, 테스트 타임 컴퓨트를 무한정 확장하는 데 구조적 한계가 있습니다.</li>
+</ul>
+<h5 id="6-차세대-아키텍처와-테스트-타임-트레이닝-ttt">6. 차세대 아키텍처와 테스트 타임 트레이닝(TTT)</h5>
+<p>Tworek은 현재의 트랜스포머를 '암기 위주의 정적 모델'로 정의하며, 새로운 '지속 학습(Continual Learning)' 모델로의 전환을 제안합니다.</p>
+<ul>
+<li><strong>KV 캐시 대 가중치 업데이트:</strong> 트랜스포머는 KV 캐시를 통한 임시 메모리에 의존하지만, TTT는 추론 시점에 가중치(Weights)를 직접 업데이트합니다. 이는 '신선도 유지를 위한 미세 조정(Freshness fine-tunes)' 방식에서 벗어나 실시간 <strong>온라인 학습</strong>으로 진화함을 의미합니다.</li>
+<li><strong>기업의 '데이터 인질' 상황 해결:</strong> 많은 기업이 데이터 프라이버시 문제로 외부 모델 사용을 주저하거나 성능이 낮은 폐쇄형 모델을 사용하는 '인질(Hostage)' 상황에 처해 있습니다. TTT는 데이터를 외부로 유출하지 않고도 개별 기업의 데이터에 실시간으로 최적화되는 진정한 개인화를 가능케 합니다.</li>
+</ul>
+<h5 id="7-ai-연구-자동화-akore-automation의-비전">7. AI 연구 자동화: Akore Automation의 비전</h5>
+<p>Akore Automation은 AI 연구소 자체를 자동화하여 연구의 지평을 넓히고자 합니다.</p>
+<ul>
+<li><strong>연구 에이전트의 루프:</strong> 연구 엔지니어의 실험 코드 작성, 결과 분석, 가설 수립 과정을 AI 에이전트가 수행합니다. 이때 기존 에이전트를 활용해 '베이스라인'을 먼저 구축하고, 그 격차를 메우며 개선하는 루프를 반복합니다.</li>
+<li><strong>행동적 분석 방법론:</strong> 모델을 단순히 결과값으로 평가하지 않고 세밀하게 분석합니다. 미로 속에서 막히는 구간을 파악하는 <strong>'미로 속의 쥐(Behavioral Cataloging)'</strong> 방식과, 에너지 효율과 영법 기술을 분석하는 <strong>'올림픽 수영 선수(Efficiency Analysis)'</strong> 방식을 병행하여 모델의 성능을 극대화합니다.</li>
+</ul>
+<h5 id="8-agi-시대의-전망-에이전시-의-세계와-노동의-미래">8. AGI 시대의 전망: '에이전시'의 세계와 노동의 미래</h5>
+<p>Jerry Tworek은 향후 5년 내에 업무의 형태가 완전히 변할 것이라고 예측하며, OpenAI가 겪었던 <strong>'혁신자의 딜레마(Innovator’s Dilemma)'</strong>—기존 제품(ChatGPT)의 폼팩터에 새로운 추론 모델을 억지로 맞추려던 한계—를 넘어서는 새로운 에이전틱 서비스의 등장을 예고합니다.</p>
+<ul>
+<li><strong>World of Agency:</strong> 미래는 인간이 꿈꾸는 프로젝트를 AI가 즉각적으로 현실화하는 '에이전시(Agency)'의 시대가 될 것입니다.</li>
+<li><strong>고등학교 시절로의 회귀:</strong> 그는 미래의 삶을 &quot;책임과 노동의 의무에서 해방되어 오직 학습과 사회적 관계에만 집중하던 고등학교 시절&quot;에 비유합니다. AI가 고된 노동과 깊은 사고의 수고를 대신함으로써, 인간은 창의적 활동과 사회적 연결에 온전히 집중하게 될 것이라는 낙관적인 전망입니다.</li>
+</ul>
+<hr />
+<h4 id="핵심-요약">핵심 요약</h4>
+<ul>
+<li><strong>트레이딩 기반의 연구 철학:</strong> 알고리즘 버그에 대한 편집증적 관리와 수학적 추상화를 통한 모델 통제 역량이 AI 연구의 성패를 좌우함.</li>
+<li><strong>검증 가능성 중심의 발전:</strong> 모호한 텍스트 대신 실행 결과가 명확한 '코드'를 통해 AI의 실제 추론 능력을 측정하고 검증함.</li>
+<li><strong>벤치마크 무용론과 실세계 검증:</strong> 정적 지표는 게임화되기 쉬우므로, 인과관계와 시간의 화살을 고려한 실세계 데이터 기반 평가로 전환해야 함.</li>
+<li><strong>RL 스케일링의 산물:</strong> o1의 사고 과정(CoT)은 직접적인 보상 설계가 아닌, RL 알고리즘의 단순화와 스케일링을 통해 얻어진 자발적 행동임.</li>
+<li><strong>엔지니어링 중심의 혁신:</strong> o3 개발의 핵심 난관은 알고리즘이 아닌, 빅테크 기업의 인프라 규모를 능가하는 거대 분산 시스템의 데이터 동기화 문제였음.</li>
+<li><strong>시리얼 연산의 우위:</strong> 추론 시점에 자원을 투입하는 '테스트 타임 컴퓨트'에서는 병렬 롤아웃보다 시간의 흐름을 따르는 시리얼 연산이 고도화된 추론에 더 효과적임.</li>
+<li><strong>TTT를 통한 개인화 혁명:</strong> KV 캐시 기반의 정적 트랜스포머를 넘어, 추론 시 가중치를 업데이트하는 TTT 아키텍처가 기업의 데이터 프라이버시 및 개인화 문제를 해결할 것임.</li>
+<li><strong>연구 자동화 방법론:</strong> AI 에이전트를 실험 루프에 투입하고, 모델의 행동과 효율성을 세밀하게 분석하여 연구 속도를 비약적으로 가속화함.</li>
+<li><strong>에이전시 기반의 미래:</strong> 5년 내 AGI 도래와 노동 해방을 예측하며, 인간이 창의적 의도를 즉각 실현하고 사회적 관계에 집중하는 낙관적 미래 전망.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

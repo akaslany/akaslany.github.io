@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hot Chips 2026: Irrational Recap</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Hot Chips 2026: Irrational Recap</h1>
+<p class="page-meta">웹 · 2026-09-06</p>
+<h2 id="요약">요약</h2>
+<p>이 보고서는 Irrational Analysis가 2026년 9월 6일 발행한 「Hot Chips 2026: Irrational Recap」을 사용자 제공 PDF 원문 그대로의 순서와 논지에 맞춰 한국어로 재구성한 해설이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=7iZMQaR9y2c">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="hot-chips-2026-irrational-recap-ai-칩-경쟁의-다음-단계">Hot Chips 2026: Irrational Recap — AI 칩 경쟁의 다음 단계</h3>
+<h4 id="읽는-법과-출처의-성격">읽는 법과 출처의 성격</h4>
+<p>이 보고서는 Irrational Analysis가 2026년 9월 6일 발행한 「Hot Chips 2026: Irrational Recap」을 사용자 제공 PDF 원문 그대로의 순서와 논지에 맞춰 한국어로 재구성한 해설이다. 부제는 “Spicy chips. No air conditioning.”이다. 제목의 “Irrational Recap”은 발행물의 자칭 프레이밍이지, Hot Chips 2026 전체가 객관적으로 비이성적이었다는 판정이 아니다.</p>
+<p>여기서 성능·아키텍처·로드맵·시장 경쟁 주장은 독립 검증 결과가 아니라 PDF에 기록된 발표, 저자의 현장 관찰, 대화, 계산과 투자 해석이다. 발표된 구조, 실제 측정치, microbenchmark, simulation·projection, roadmap, product claim, 저자 inference를 가능한 한 분리한다. 서로 다른 throughput, latency, power, bandwidth, memory capacity, process node, die/package, interconnect, rack와 cost 수치는 같은 척도처럼 비교하지 않는다.</p>
+<p>저자는 반도체 산업에 큰 투자 포지션이 있고 포지션은 바뀔 수 있다고 밝힌다. 의견은 저자 개인의 것이며 금융 조언이 아니므로 독자가 직접 조사해야 한다는 caveat도 명시한다. PDF의 반복 browser header/footer, subscribe/share UI, account email, comments와 restacks는 내용 권위에서 제외했다.</p>
+<h4 id="1-memory">1. Memory</h4>
+<h5 id="hbm-high-bandwidth-mistake">HBM: High-Bandwidth Mistake</h5>
+<p>세 DRAM 업체가 HBM을 발표했지만 저자는 분위기를 방어적으로 읽는다. Samsung 발표에서 HBM logic base die의 진화를 긍정적으로 본다. 저자가 꼽은 방향은 표준 HBM PHY에만 머물지 않는 real die-to-die PHY, controller를 base die로 옮겨 main ASIC 면적을 돌려주는 방법, 그리고 electrical 또는 optical extender D2D로 더 많은 memory에 접근하는 방법이다. 이는 measured benchmark가 아니라 architecture 방향에 대한 평가다.</p>
+<p>반면 12-hi에서 8-hi 또는 4-hi로 layer 수를 낮추려는 de-spec 논의를 큰 변화로 본다. stack 수를 줄인다는 뜻이 아니라 stack당 layer를 낮추고 가능한 한 많은 stack을 쓰려는 움직임으로 묘사한다. 이 흐름이 굳어지면 8-hi에는 필요성이 낮은 hybrid bonding, 16-hi 이상 roadmap, 관련 장비 투자 논리가 약해질 수 있다는 것이 저자의 투자 해석이다. 발표로 확정된 전사 roadmap이 아니라 현장 rumor와 저자의 결론임을 구분해야 한다.</p>
+<h5 id="d-matrix-raptor">D-Matrix Raptor</h5>
+<p>저자는 D-Matrix를 실제 test chip을 가진 첫 3D-DRAM 시도로 평가한다. Raptor는 36 µm micro-bump를 택했으며, PDF가 비교하는 HBM의 10 µm bump pitch보다 덜 조밀하다. hybrid bonding은 미래 선택지로 남겼지만 현재 제품은 다른 복잡성이 큰 만큼 보수적 packaging을 택했다는 해석이다.</p>
+<p>데이터 경로에는 구체적 불일치가 있다. tensor engine은 128-byte access를 중심으로 설계됐지만 채널당 세 DRAM bank는 96-byte read를 만든다. 33% PHY bandwidth를 버리거나 복잡한 shifting network를 넣는 대신 stream blocking 성격의 logic과 FLIT 안에 DBI 정보를 encoding하는 방식으로 해결했다고 저자는 읽는다. 원래 4-bank 계획이 좌절됐을 수 있다는 이야기는 발표된 사실이 아니라 저자의 추측이다.</p>
+<p>긍정적 engineering 평가와 함께 reliability 반론도 길게 다룬다. 저자는 일반적인 HTOL 예시로 60~180개 device, 최소 125°C die, 각 rail +10~20% voltage, 48·168·500·1000시간 checkpoint를 제시하지만, 값은 project마다 달라지는 설명용 맥락이다. D-Matrix는 Raptor DRAM die의 최종 동작점을 enhanced liquid cooling으로 95°C에 맞추고, EM simulation을 수행했으며 production 전 HTOL을 거칠 것이라고 답했다고 기록된다. 이는 HTOL 통과 결과가 아니라 vendor 계획이다. 저자는 electromigration 위험은 실제 HTOL evidence가 나와야 해소된다고 결론낸다.</p>
+<h5 id="hbf와-samsung-lpddr5x-pim">HBF와 Samsung LPDDR5X-PIM</h5>
+<p>HBF는 long-context와 multi-turn KV가 커지는 inference niche에서 경제적 의미가 있을 수 있다고 보지만 저자는 시장 크기를 모른다고 솔직히 적는다. low active-parameter ratio 가정에 민감하고, active parameter가 큰 model이면 HBF 논리가 일부 강화될 수 있다는 조건부 평가다.</p>
+<p>Samsung LPDDR5X-PIM에서는 기존 DRAM controller와 호환되는 multicast control trick을 높게 평가한다. 그러나 DRAM process transistor는 modern logic process보다 compute 효율이 낮고 compute가 DRAM die area를 차지하면 memory capacity가 줄어든다는 이유로 processing-in-memory 자체에는 반대한다. Q&amp;A에서 성능이 약하다는 질문에 presenter가 “아직 최적화 중”이라고 답했다는 현장 기록도 포함한다. 호환 architecture의 독창성과 product usefulness를 같은 결론으로 섞지 않는다.</p>
+<h4 id="2-networking">2. Networking</h4>
+<h5 id="broadcom-thor-ultra와-nvidia-bluefield-4">Broadcom Thor Ultra와 Nvidia BlueField-4</h5>
+<p>Broadcom 발표에서는 200G SerDes version이 오고 있다는 presenter 답변을 기록한다. 4×200G는 새 PHY 적용에 가깝지만 8×200G는 digital logic 확대와 더 어려운 timing closure를 요구할 것이라는 저자의 engineering 해석이다. Meta가 OCP에서 논한 timing/synchronization support의 포함도 긍정적으로 본다.</p>
+<p>Nvidia BlueField-4에 대해서는 작은 package 안의 throughput을 Thor Ultra보다 높게 평가하면서도, BlueField DPU/NIC 가격과 neocloud 중심 수요를 강하게 비판한다. hyperscaler가 custom front-end NIC를 가진다는 시장 관찰과 package throughput은 별도 주장이다. 가격·수요·성능을 하나의 benchmark로 합치면 안 된다.</p>
+<h5 id="nvidia-spectrum-x-multiplane">Nvidia Spectrum-X Multiplane</h5>
+<p>8×200G lane으로 1.6T Ethernet port를 만들고 각 200G lane을 서로 다른 switch에 매핑하는 구조가 핵심이다. 저자는 물리 wiring을 추정하며 connector 추가로 0.2~0.4 dB loss가 생길 수 있다고 보지만, 이는 측정 결과가 아니다. 한 link가 흔들릴 때 전체 port bandwidth가 사라지는 대신 일부만 손실되는 redundancy 효과를 장점으로 평가한다.</p>
+<h4 id="3-ai-asic">3. AI ASIC</h4>
+<h5 id="meta-recommendation과-genai의-dual-mandate">Meta: recommendation과 GenAI의 dual mandate</h5>
+<p>저자는 recommendation과 generative AI를 한 accelerator에서 모두 최적화하라는 조직적 선택을 “worst of both worlds”로 비판한다. 작은 RISC-V core는 finite-state control에 쓰이며 high-performance user compute로 확대 해석하지 않는다. HBM 일부를 embedding cache로 고정하면 GenAI에 불리할 수 있다는 우려, LLC SRAM 가까이에 단순 reduction compute를 둬 data movement를 줄이는 feature를 따로 설명한다. 전자는 저자 inference이고 후자는 announced architecture다.</p>
+<h5 id="nvidia-groq-rubin-lpu-disaggregation">Nvidia/Groq Rubin/LPU disaggregation</h5>
+<p>Nvidia와 Groq가 1년이 안 되는 기간에 rack-scale disaggregated product를 만든 실행은 높게 평가한다. 동시에 144-wide VLIW, global clock 구현, thermal contact variation을 이용한 전략, CUDA 지원 가능성은 회의적으로 본다. next generation에서 FPGA control을 ASIC으로 바꾼다는 내용은 roadmap이며, minor power gain 예상은 저자 추정이다.</p>
+<h5 id="cerebras">Cerebras</h5>
+<p>발표의 새 내용은 제한적이었다고 평가한다. 저자는 wafer-scale compute에 3D DRAM보다 3D SRAM wafer를 붙이는 편이 단순하고, 대략 한 cycle을 더 써 3-cycle 대신 4-cycle SRAM access를 얻는 방식이 낫다고 주장한다. DRAM temperature reliability와 controller/I/O 부담은 D-Matrix와 연결해 설명한다. 이는 Cerebras가 발표한 선택이 아니라 저자의 대안이다.</p>
+<p>CS-4가 “disaggregated inference용으로 설계”됐다는 product claim과, 중요한 prefill partner로 보는 Nvidia Blackwell이 slide에서 빠졌다는 비판을 함께 둔다. AMD MI450/Helios, Blackwell, Cerebras를 묶는 실제 deployment 성능은 이 PDF에서 동일 조건으로 측정되지 않았다.</p>
+<h5 id="microsoft-maia와-sambanova">Microsoft Maia와 SambaNova</h5>
+<p>Microsoft Maia 부분은 8 pJ/bit, 1 µs latency, 100G/lane급 SerDes, TSMC N3P 조건을 묶어 비판한다. 그러나 이 값들은 각각 energy per bit, latency, lane rate와 node다. 다른 accelerator의 token throughput이나 rack TCO와 동등 비교할 수 없다. 저자는 real inference workload 대신 microbenchmark가 제시돼 비교가 어렵다고 본다.</p>
+<p>SambaNova는 2021년 $5B valuation과 2025년 12월 debt 포함 $1.6B deal 맥락을 풍자적으로 소개한 뒤 기술로 넘어간다. CGRA는 FPGA보다 hardened된 coarse-grained reconfigurable architecture이고 graph 일부를 hardware block에 mapping해 communication overhead를 줄인다. HBM2e supply와 input/output token ratio 또는 context length가 바뀌는 dynamic inference에서의 적응성은 저자의 우려다.</p>
+<h5 id="google-tpu-v8과-openai-jalapeño">Google TPU V8과 OpenAI Jalapeño</h5>
+<p>TPU V8에서는 MoE의 7-hop path, main die 바깥 collectives block, 48×200G CAE+SerDes chiplet, two-layer training cluster, on-die sensor, NPO trial을 짚는다. collectives block의 SRAM 크기와 chiplet가 SerDes만 있을 때보다 20~30% 커 보인다는 것은 slide를 본 저자의 면적 추정이다. two-layer switching은 latency에 더 관대한 training 조건에서 평가한 것이며 inference latency와 혼동하지 않는다.</p>
+<p>OpenAI Jalapeño는 HBM/DRAM에 non-uniform하게 접근하는 NoC와 core 안의 out-of-order engine이 핵심이다. 저자는 AI accelerator에서 OOO를 본 적이 없다고 적지만 산업 전체를 증명하는 exhaustive survey는 아니다. rename buffer 크기와 latency 같은 구현 detail은 공개되지 않았다고 한다.</p>
+<h4 id="4-gpu">4. GPU</h4>
+<p>Nvidia Rubin에서 저자는 proprietary activation sparsity와 packet counter overhead에 회의적이다. rack의 cable·retimer, 큰 capacitor·inductor, passive component board의 네 fan을 보며 작은 efficiency penalty도 rack에서 큰 열로 바뀌는 system trade-off를 강조한다. 이는 특정 model benchmark가 아니다.</p>
+<p>AMD MI400에서는 flyover cable의 airflow·reliability, logic hybrid bonding, cache capacity보다 bandwidth와 latency를 우선한 선택, wave64 변화와 NIC packet benchmark를 다룬다. Infinity Cache가 backfire했다는 평가는 저자의 inference다. AMD가 제시한 packet metric은 Nvidia·Broadcom의 일반 RDMA write와 조건이 달라 직접 비교할 수 없다고 비판한다.</p>
+<p>Intel Xe는 air-cooled PCIe token-generation card와 PCIe 5 scale-up을 두고 매우 부정적인 경쟁 평가를 내린다. PDF에는 동등 조건의 시장 점유율·TCO benchmark가 제시되지 않으므로 “relevance가 없다”는 문장은 저자의 강한 의견으로만 전달한다.</p>
+<h4 id="5-waymo">5. Waymo</h4>
+<p>Waymo는 인간처럼 camera만 쓰는 driver가 아니라 camera, LiDAR, radar, microphone의 orthogonal sensor를 결합해 super-human driver를 만들겠다는 철학을 제시한다. 가려진 traffic light, 보이지 않는 pedestrian, freeway barrier를 넘는 사람 같은 example은 system behavior를 설명하는 demonstration이지 fleetwide safety rate가 아니다. Waymo가 LiDAR와 radar를 in-house로 만든다는 발표 맥락도 있다.</p>
+<p>chip 측면에서는 EMI와 power-supply ripple tolerance, standard CEM connector에 맞춘 under-75W 목표, high-resolution camera 처리를 위한 FP32 focus, horizontal mesh와 vertical ring NoC를 다룬다. RISC-V CPU는 orchestrator로 구분된다. 두 core가 각각 16 PE를 갖고 별도 task를 돌리거나 하나의 latency-critical task로 fuse되며, 급한 task가 오면 진행 중 inference를 DRAM으로 내릴 수 있다고 설명한다. 작은 tall matrix-vector unit의 이유는 저자도 질문으로 남긴다. GPU IP가 Imagination인지 ARM인지는 불확실하므로 확정하지 않는다.</p>
+<h4 id="6-cpu">6. CPU</h4>
+<h5 id="ibm의-dual-isa-mainframe-cpu">IBM의 dual-ISA mainframe CPU</h5>
+<p>IBM Z의 reliability·captive-market 배경 위에 Z ISA와 ARMv9/AArch64를 full-performance로 함께 지원하는 architecture를 가장 인상적인 CPU 발표로 꼽는다. core당 36 MB L2, unused L2를 묶어 virtual L3/L4로 쓰는 방식, 각 SMT thread가 runtime에 Z-mode와 ARM-mode를 바꾸는 기능, on-chip DPU를 설명한다. Linux에는 Z acceleration이 fake device처럼 노출되고 KVM을 통한 ISA switch가 nanoseconds 수준이라고 발표됐으며 관련 Z instruction이 upstream됐다고 기록한다. 모두 vendor presentation의 claim이지 이 글의 독립 benchmark는 아니다.</p>
+<h5 id="nvidia-vera">Nvidia Vera</h5>
+<p>저자는 Grace의 front-end와 Mellanox 유래 NoC를 실패 원인으로 서술하고, Vera의 custom core와 updated NoC가 이를 개선한다고 본다. 10-wide decode와 fetch/decode를 더 복제한 “spatial multi-threading”은 noisy-neighbor 해법으로 설득력이 약하다고 반론한다.</p>
+<p>성능 부분은 특히 주의해야 한다. 저자는 Nvidia Vera, AMD Turin 9755·9965와 600W Venice 9996의 공개자료를 조합하고 600W 대 500W 조건을 맞추기 위해 AMD 수치를 0.83으로 scaling한다. 그 spreadsheet에서 Venice가 Vera보다 18.5% 낫고 marketing의 3.3×가 아니라 약 1.19×라고 추정하지만, single-socket performance number를 찾지 못했다고 스스로 적는다. 따라서 이는 measured head-to-head benchmark가 아니라 불완전 자료를 정규화한 저자 계산이다.</p>
+<h5 id="intel-dimond-rapids-arm-first-party-cpu-fujitsu-monaka">Intel “Dimond Rapids”, ARM first-party CPU, Fujitsu Monaka</h5>
+<p>PDF는 제품명을 “Intel Dimond Rapids”로 표기한다. PCIe Gen6, quad DVFS domain, centralized I/O die, hybrid bonding, Intel 3 usage를 다루지만 quad-domain의 power gain은 알 수 없다고 한다. proprietary on-CPU accelerator에는 부정적이다.</p>
+<p>ARM 제품은 CPU IP license가 아니라 ARM이 직접 판매하는 first-party hardware라는 구분이 핵심이다. Neoverse V3 맥락에서 decode queue가 6/8에서 10으로, OOO window가 320에서 384로 늘었다고 적고 CMN NoC를 높게 평가한다. 그러나 “agentic AI purpose-built”보다는 good all-around CPU라고 본다.</p>
+<p>Fujitsu Monaka에서는 hybrid bonding과 per-core LDO를 이용한 granular undervolting을 흥미로운 trade-off로 본다. LDO 자체 efficiency는 낮지만 core별 voltage 최적화가 이를 상쇄할 수 있다는 논리다. low-voltage secret sauce claim에는 회의적이며 정량 이득은 제시하지 않는다.</p>
+<h4 id="7-roast-of-risc-v">7. Roast of RISC-V</h4>
+<p>이 장은 기술 tutorial이 아니라 저자의 강한 ecosystem 비판이다. Tenstorrent가 high-performance RISC-V core IP portfolio를 판매하는데도 협력 관계가 있는 BOS Semi가 2014년의 ARM A53을 택했다는 사례, IBM이 dual-ISA 대상으로 ARM을 택했다는 답변, SiFive가 3년 전 datacenter team 130명을 해고했다는 서술, variable-length C extension을 둘러싼 Qualcomm feedback 논쟁을 묶는다. 이를 근거로 business case와 software ecosystem이 약하다고 결론낸다. benchmark 없이 Tenstorrent 최하위 core도 A53보다 10× PPA가 낫다고 한 문장은 검증된 수치가 아니므로 공개 결론으로 승격하지 않는다. 원문의 모욕적 표현 대신 논점과 반론 구조를 보존한다.</p>
+<h4 id="8-miscellaneous">8. Miscellaneous</h4>
+<p>AMD/Xilinx RF FPGA는 real-time DSP hard-IP와 filtering flexibility를 기술적으로 높게 평가하지만 경제성은 낮다고 본다.</p>
+<p>Opticore는 balanced photodiode로 MAC을 수행하고 TFLN modulator에서 channel density가 높은 ring modulator로 옮기는 roadmap을 설명한다. single laser·single wavelength라 DWDM thermal crosstalk가 덜하고 per-ring PID 대신 PLL stabilization을 쓰며, low-speed ring을 높은 extinction ratio로 운용해 PAM16 margin을 얻는다는 주장이다. DAC/ADC power와 calibration은 긍정적으로 평가한다. reliability에 대해서 CEO는 10 test wafer, wafer당 40~50 die에서 photodiode failure가 하나도 없었다고 주장한다. 저자는 wire bonding의 heat·pressure·ESD를 피하는 face-to-face packaging을 가능한 설명으로 본다. sample·process·field lifetime이 모두 공개된 독립 reliability study는 아니다.</p>
+<p>AMS OSRAM VCSEL CPO/NPO 대화에서는 &lt;30m의 slow-and-wide link에서 VCSEL 자체 최고 성능보다 dense packaging, compound-material wafer bonding, dense fiber attach가 중요하다는 thesis를 제시한다. Lumentum과 Coherent의 1060nm 전환은 bottom emission에서 substrate 투과에 유리하지만 기존 OM fiber의 attenuation·dispersion·manufacturing variation data가 부족하다고 본다. 1060nm device/system GR-468 qualification은 6~12개월, optics HTOL은 5,000시간이라는 맥락을 들고, AMS OSRAM의 850nm+OM3 전략을 비교한다. 이는 현장 대화에 기반한 저자 분석이다.</p>
+<p>Olix의 Stevan과 90분 넘게 토론한 뒤 저자는 pure-SRAM machine이 본질적으로 불균형하다는 prior를 완화한다. 잘 실행하면 가능하지만 최적이라고 보지는 않는다는 결론이다. Etched의 Jeff 부분은 여러 Q&amp;A에서 날카로운 질문을 했다는 conference anecdote이며 product benchmark나 roadmap은 아니다.</p>
+<h4 id="9-higher-level-takeaways">9. Higher-Level Takeaways</h4>
+<h5 id="multi-vendor-disaggregated-inference는-temporary라는-thesis">Multi-vendor disaggregated inference는 temporary라는 thesis</h5>
+<p>저자가 경제적으로 중요하다고 보는 compute design entity는 Nvidia, Google TPU, Amazon Trainium, AMD 네 곳이다. startup과 Cerebras가 이들 위에 decode disaggregation을 붙이려 하지만, Nvidia와 Groq가 2025년 12월 이후 8개월 만에 Rubin과 연결되는 rack-scale product를 만든 사례를 보며 결국 각 업체가 vertical integration으로 갈 것이라고 주장한다.</p>
+<p>반론도 남긴다. disaggregated inference는 software와 networking co-design이 많이 필요하고 deployment 자체가 좋은지 불확실하다. workload는 reasoning token, input/output ratio, compute/memory bottleneck, attention strategy 변화로 1~3개월마다 크게 바뀔 수 있지만 datacenter는 3~6년을 써야 한다. 6년은 저자의 accelerator-programmer 친구 의견이고, 3년은 저자의 더 짧은 useful-life 추정이다. heterogeneous hardware와 load balancing을 장기 계획하기 어렵다는 결론이며, universal market outcome이 아니다. 저자는 Cerebras만 multi-vendor 지원을 추구할 합리적 예외로 본다.</p>
+<h5 id="ai가-chip-design을-가속하지만-singularity는-아니다">AI가 chip design을 가속하지만 singularity는 아니다</h5>
+<p>저자는 1974년 Intel 8080의 hand-drawn rubylith mask와 현대 EDA를 대비한다. tool이 다음 generation tool과 chip을 만드는 데 쓰인다고 해서 무한 recursive singularity가 생긴 것은 아니라는 비유다. 최근 2~3년의 AI progress가 전통 EDA 5~10년분에 해당한다는 평가는 경험적 추정이지 산업 통계가 아니다.</p>
+<p>OpenAI Jalapeño B0가 A0보다 ISO power에서 25% 빠르다는 보도를 두고, 저자는 성공 신호가 아니라 initial silicon의 catastrophic problem을 full respin으로 고친 red flag로 해석한다. 5~10%는 late feature/fix, 15%는 serious problem, 25%는 disaster-level issue라는 rule of thumb을 제시한다. TSMC N3P의 PDK quality가 좋다는 판단과 project engineer attrition을 연결하지만, 실제 원인을 직접 증명한 evidence는 아니다.</p>
+<p>현장 사례에서는 AI가 waveform text triage와 C++·SystemVerilog coding을 가속해 3~7명의 좋은 team이 20~30명 규모 일을 절반 시간에 끝낼 수 있다고 한다. 동시에 잘못된 circuit context를 넣으면 긴 diagram·equation을 갖춘 confident slop이 나오고, domain understanding이 없으면 오류를 보지 못한다고 경고한다. productivity claim과 failure anecdote 모두 저자의 익명화된 경험이며 controlled benchmark가 아니다.</p>
+<h5 id="dram-vendor가-패를-과하게-썼다는-결론">DRAM vendor가 패를 과하게 썼다는 결론</h5>
+<p>저자는 DRAM gross margin이 80%를 크게 넘고 공급이 부족해 고객이 모든 대안을 검토한다고 본다. HBM과 높은 layer stack이 더 많은 bit supply를 소모하는 동안 고객이 더 많은 capacity를 요구했지만, Hot Chips 2026에서는 stack 수요는 유지하면서 layer를 낮추려는 de-spec rumor가 중심 화제가 됐다고 기록한다. 이는 memory stock 전체가 나쁘다는 결론이 아니다. 저자는 long-only account에 큰 Samsung position이 있다고 밝히면서도 vendor roadmap의 value-add가 고객 기대보다 작았을 수 있다고 판단한다.</p>
+<h4 id="10-portfolio-update와-결론">10. Portfolio update와 결론</h4>
+<p>2026년 9월 5일 기준 portfolio update에서 저자는 market-cap weighted semiconductor index SMH를 최소 30%포인트 outperform하는 것을 목표로 하며, 당시에는 그 최소 목표를 0.34%포인트 넘는 데 그쳤다고 적는다. quarter 종료까지 세 주가 남았다는 시점성도 함께 보존한다. 자기보고 성과이고 금융 조언이 아니다.</p>
+<p>전체 recap의 핵심은 하나의 승자를 선언하는 데 있지 않다. memory de-spec과 3D-DRAM reliability, network topology, heterogeneous AI ASIC, GPU rack의 power·cable trade-off, sensor-rich autonomy, dual-ISA CPU, optics와 SRAM, 그리고 disaggregated inference·AI-assisted design의 조직적 함의를 순서대로 엮는다. 저자는 좋은 engineering에는 찬사를 보내고, 비교 불가능한 benchmark·로드맵 과장·취약한 reliability story·비현실적 ecosystem narrative에는 공격적으로 반론한다. 이 결론들은 Irrational Analysis의 Hot Chips 2026 현장 recap이자 투자 관점이며 독립 검증된 conference consensus가 아니다.</p>
+<h4 id="출처">출처</h4>
+<p>Hot Chips 2026: Irrational Recap — Irrational Analysis
+사용자 제공 PDF 원문
+https://irrationalanalysis.substack.com/p/hot-chips-2026-irrational-recap</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAI’s Cofounder &amp; Research Chief Explain Self-Improving AI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>OpenAI’s Cofounder &amp; Research Chief Explain Self-Improving AI</h1>
+<p class="page-meta">YouTube · 2026-11-18</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 실리콘밸리 벤처캐피털 앤드리슨 호로위츠(a16z)의 일반 파트너 사라 왕(Sarah Wang)이 진행한 인터뷰를 바탕으로, 프론티어 인공지능(AI) 연구진이 진단하는 '재귀적 자기 개선(RSI, Recursive Self-Improvement)' 기술의 현주소와 향후 전망을 종합적으로 분석한 전문…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=h_aA1-R70E8">출처</a> · <a href="https://www.youtube.com/watch?v=f76KPwFltMg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-openai-및-thinking-machines-연구진이-밝히는-재귀적-자기-개선-rsi-ai의-현주소와-전망">[보고서] OpenAI 및 Thinking Machines 연구진이 밝히는 재귀적 자기 개선(RSI) AI의 현주소와 전망</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 실리콘밸리 벤처캐피털 앤드리슨 호로위츠(a16z)의 일반 파트너 사라 왕(Sarah Wang)이 진행한 인터뷰를 바탕으로, 프론티어 인공지능(AI) 연구진이 진단하는 '재귀적 자기 개선(RSI, Recursive Self-Improvement)' 기술의 현주소와 향후 전망을 종합적으로 분석한 전문 리포트입니다. 대담에는 오프라인 및 온라인 AI 연구를 이끄는 핵심 주역인 오픈AI(OpenAI)의 총괄 연구 책임자 마크 첸(Mark Chen)과 띵킹 머신즈(Thinking Machines)의 공동창업자이자 수석 과학자인 존 슐만(John Schulman)이 참여하여 AI 연구 자동화의 실태와 한계를 다각도로 진단했습니다.</p>
+<p>본 보고서가 다루는 핵심 주제는 AI가 스스로의 연구 및 개발을 가속화하는 재귀적 자기 개선의 개념적 정의, 프론티어 연구 현장에 실제 적용 중인 자동화 워크플로우, 완전한 RSI 달성을 가로막는 핵심 한계 요인, 그리고 지능 상승에 발맞추어 확보해야 할 AI 정렬(Alignment) 및 안전성 방안입니다. 소스 텍스트에 근거하여, 객관적 사실(Fact)과 화자들의 기술적 견해 및 주장을 명확히 구분하여 작성하였습니다.</p>
+<p>분석 결과, 현재 AI 업계는 모델이 스스로 새로운 모델을 완벽히 창조하는 완전 자동화 단계가 아니라, 인간 연구자의 고유한 직관과 AI의 뛰어난 수행 능력이 결합된 '센토어(Centaur) 시대'에 진입해 있는 것으로 확인됩니다. 마크 첸과 존 슐만은 2027년을 기점으로 프론티어 모델의 능력 곡선이 급격히 상승할 것이라는 전망에 동의하면서도, 연구 취향(Taste)의 기계적 복제, 연산 자원(Compute)의 확장성 경계, 그리고 정교한 평가 지표 수립 등의 난제가 해결되어야 완전한 자기 개선 체계로 전환될 수 있다고 강조합니다. 이에 따라 기술 발전이 가속화되더라도 당분간 인간 연구자의 판단력(Human Judgment)은 RSI 체계의 결정적인 조율자로 남을 것으로 전망됩니다.</p>
+<hr />
+<h4 id="2-주요-논점-core-arguments-key-issues">2. 주요 논점 (Core Arguments &amp; Key Issues)</h4>
+<h5 id="2-1-재귀적-자기-개선-rsi-의-개념-정의-및-진행-단계">2.1. 재귀적 자기 개선(RSI)의 개념 정의 및 진행 단계</h5>
+<p>재귀적 자기 개선(RSI)은 AI가 자기 자신의 개발 파이프라인을 자율적으로 개선하여 기술적 능력을 기하급수적으로 향상시키는 개념을 의미하지만, 업계 내에서는 그 범위와 정의에 대해 다양한 시각이 존재합니다. 마크 첸은 범용인공지능(AGI)과 마찬가지로 RSI 역시 단일 시점에 완결되는 단편적 사건이 아니라, 연속적인 '스펙트럼(Spectrum)' 관점에서 이해해야 한다고 설명합니다.</p>
+<p>현재 기술적 위치에 대해 마크 첸은 AGI 스펙트럼상에서는 목표의 약 80% 지점에 도달한 반면, RSI 스펙트럼상에서는 약 25%에서 50% 사이의 초기·중기 단계에 위치해 있다고 진단했습니다. 이는 AI가 인간의 개입 없이 완전히 독자적인 연구를 수행하는 단계는 아니지만, 기존 연구 프로세스의 특정 단계를 자율적으로 수행하며 속도를 끌어올리는 연구 보조원 역할을 충실히 수행하고 있음을 보여줍니다.</p>
+<ul>
+<li><strong>주장 (Claim):</strong> RSI는 단일 시점의 완전 자동화 사건이 아닌 스펙트럼 개념이며, 현재는 연구 파이프라인을 가속하는 보조 역할 단계임.</li>
+<li><strong>근거 (Evidence):</strong> 코덱스(Codex)를 통해 연산 자원을 관리하고 단대단(End-to-End)으로 실험을 수행하고 있으며, 미터(Meter) 보고서에 명시된 앤트로픽(Anthropic)의 지난 1년간 연구 진전 속도 2배(2x) 향상 등.</li>
+<li><strong>사례 (Example):</strong> 코덱스를 연구 인턴처럼 활용하여 구체적으로 범위가 지정된 실험의 구현, 실행, 결과 보고 및 자율 모니터링 수행.</li>
+</ul>
+<hr />
+<h5 id="2-2-ai-연구-자동화의-현황과-구체적-활용-사례">2.2. AI 연구 자동화의 현황과 구체적 활용 사례</h5>
+<p>인간 연구자가 수행하는 전통적인 프론티어 AI 개발 프로세스는 사전 학습(Pre-training), 사후 학습(Post-training), 평가(Evaluation)라는 주 파이프라인과, 본 학습에 앞서 아이디어를 검증하는 소규모 테스트 실행으로 구성됩니다. 현재의 RSI 기술은 이 가운데 소규모 실험 구현 및 실행 속도를 가속화하는 방식으로 적용되고 있습니다.</p>
+<p>존 슐만은 자신의 실제 연구 과정에서 활용하는 프롬프트 기반 자동화 워크플로우를 구체적인 사례로 제시했습니다. 연구 아이디어가 떠오르면 전문 자동화 도구인 페이블(Fable)에 복잡한 프롬프트를 입력하되, '울트라 코드(Ultra Code)'와 같은 고급 자동화 세팅을 일부러 해제(turn off all the settings)한 상태로 설정합니다. 이후 AI가 며칠 동안 대량의 토큰을 생성하며 자율적으로 연구 아이디어를 탐색하고 소규모 실험을 수행하도록 만듭니다. 이 과정에서 AI는 흥미로운 가설을 제시하기도 하지만, 초기 제출 결과물은 인간 연구자의 기준에 미치지 못하고 실패로 끝나는 경우가 대부분입니다.</p>
+<p>그러나 인간 연구자가 이 시점에 재개입하여 코드를 수정하고 실증 결과를 분석할 때 진정한 가치가 창출됩니다. 인간 연구자는 과정을 함께하며 프로젝트에 대한 맥락적 이해도(Understanding)를 쌓아 올리고, AI가 스스로 생각지도 못했을 날카로운 질문을 던지며 AI가 도달하지 못했을 새로운 방향을 지시합니다.</p>
+<p>이처럼 AI의 압도적인 토큰 생성 능력과 인간의 깊은 직관적 통찰이 결합하는 현 상태를 연구진은 '센토어(Centaur) 시대'로 정의합니다. 실제 11월 5일 미터(Meter)가 발표한 조사 보고서에 따르면, 앤트로픽은 이러한 AI 보조 연구 체계를 구축하여 지난 1년간 연구 진전 속도를 약 2배 가속화한 것으로 나타났습니다.</p>
+<hr />
+<h5 id="2-3-완전한-rsi-달성을-위한-주요-장애-요인-및-한계">2.3. 완전한 RSI 달성을 위한 주요 장애 요인 및 한계</h5>
+<p>완전한 재귀적 자기 개선(Full RSI)에 도달하기 위해서는 인간 연구자 고유의 '연구 취향(Taste)'을 기계에 이식하고, 단명하는 평가 지표의 한계를 극복하며, 물리적 연산 자원의 상한선을 관리해야 합니다. 주요 장애 요인과 현 상태, 그리고 이를 해결하기 위한 기술적 접근법은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">인간 연구자의 특성</th>
+<th style="text-align:left">AI의 현 상태 및 한계</th>
+<th style="text-align:left">소스 기반 해결 방안/전망</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>연구 취향 (Research Taste)</strong></td>
+<td style="text-align:left">장기적으로 중요한 아이디어를 선별하는 암묵적 경험과 연구 직관 보유.</td>
+<td style="text-align:left">문헌의 수집 및 암기(Memorization)는 뛰어나나, <strong>'틀려본 경험(experience of being wrong)' 및 예측 결과를 지켜본 경험의 부재</strong>로 장기적 아이디어 선별력 부족. 하이퍼파라미터 튜닝 등 단순 기술적 최적화에 편중.</td>
+<td style="text-align:left">연구자들로부터 데이터를 수집하는 RLHF(인간 피드백 기반 강화학습)를 적용하여 인간의 경험적 직관을 모델에 주입.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평가 지표 (Evaluation Metrics)</strong></td>
+<td style="text-align:left">개방된(Open-ended) 연구 성과의 본질적 생산성을 입증하고 판단 가능.</td>
+<td style="text-align:left">사전 학습 시 <strong>퍼플렉시티(Perplexity: 거대 언어 모델이 학습한 대규모 텍스트에서 올바른 다음 단어를 예측할 때 느끼는 평균적인 놀람/불확실성의 정도)</strong> 중심의 지표에 의존하나, 다운스트림 평가 지표의 수명이 점차 단명해짐.</td>
+<td style="text-align:left">고도화되고 더욱 정교한 새로운 평가 벤치마크 생성 과정 자체를 자동화.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연산 자원 (Compute Bounds)</strong></td>
+<td style="text-align:left">가설 설정 및 연산 효율적 실험 설계를 통해 자원 소모 최소화.</td>
+<td style="text-align:left">수학 등 단순 추론 분야와 달리 AI 연구/바이오/물리학 등 실증 실험 분야는 연산 자원 상한선에 직면하며 추가 연산 대비 지능 향상 효율 감소 우려.</td>
+<td style="text-align:left"><strong>2단계 접근법:</strong>&lt;br&gt;1) 단기: 기존 컴퓨트 램프 내 대규모 결과를 예측하는 소규모 시뮬레이션 실험 설계.&lt;br&gt;2) 장기: AI가 직접 차세대 데이터센터 건설 및 연산 가속화 자체를 돕는 변곡점(Inflection Point) 진입.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-4-rsi와-ai-정렬-alignment-및-안전성-확보-방안">2.4. RSI와 AI 정렬(Alignment) 및 안전성 확보 방안</h5>
+<p>AI 모델의 능력이 급격히 상승함에 따라 발생할 수 있는 주요 위험은 모델이 인간의 의도나 목표에서 벗어나는 '표류(Drift)' 현상입니다. 장기적으로는 AI가 무단으로 시스템을 이탈하거나 오프닝AI 외부로 모델 가중치(Weights)를 복사하여 도주하는 등의 가상 위험 체계가 심각한 우려 사항으로 지적됩니다.</p>
+<p>이러한 정렬 문제를 해결하기 위해 프론티어 연구진은 고도화된 AI 모델 자체를 안전성 검증 도구로 활용하는 다양한 접근법을 연구하고 있습니다.</p>
+<ol>
+<li><strong>생각의 사슬(Chain of Thought) 모니터링:</strong> 모델의 추론 과정을 실시간으로 감시하여 의도 이탈 여부를 확인하는 현존 가장 효과적인 정렬 도구.</li>
+<li><strong>오픈AI의 '고백(Confessions)' 연구:</strong> 모델이 정렬되지 않은 행위나 내부 상태를 정직하게 자율 보고(고백)할 경우, 주 답변의 보상과 별개로 정직성에 대해서만 독립적 보상을 부여하여 솔직함을 유도하는 방식.</li>
+<li><strong>자연어 오토엔코더(Natural Language Autoencoders) 및 반사실적 모의가능성(Counterfactual Simulability):</strong> 모델의 설명 가능성(Explanation)을 측정하고 의도된 행동을 유도하는 메커니즘.</li>
+<li><strong>앤트로픽의 자동화 정렬 연구:</strong> 앤트로픽이 8월 발표한 연구에 따르면, 자동화된 AI 연구자가 10가지 정렬 실패 사례의 해결책을 직접 발견했으며, 이 중 일부는 5배 더 큰 규모의 모델에도 성공적으로 적용됨.</li>
+</ol>
+<p>특히 연구진 내부에서는 이러한 안전성 연구가 지휘관의 강요가 아닌 유기적이고 자발적인 문화로 자리 잡고 있습니다. 마크 첸은 사전 학습(Pre-training)이나 강화학습(RL)을 담당하던 연구진이 강제로 설득할 필요 없이 자발적으로 손을 들고(raising their hands) 정렬 하위 팀을 결성하여 연구에 참여하고 있다고 밝혔습니다.</p>
+<p>한편, 띵킹 머신즈의 존 슐만은 정렬 연구가 특정 소수 기업에 독점되어서는 안 되며, 전 세계가 이해하고 검증할 수 있는 '공공 과학(Public Science)'으로 발전해야 한다고 주장합니다. 이를 통해 다양한 사용자 가치를 반영할 수 있는 '분산형/맞춤형 정렬(Decentralized Alignment)' 체계를 구축하는 것이 궁극적인 안전성 확보 방향으로 제시되었습니다.</p>
+<hr />
+<h4 id="3-등장-인물-및-화자-정보-people-speakers">3. 등장 인물 및 화자 정보 (People &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (한글 표기 및 로마자)</th>
+<th style="text-align:left">소속 및 직책</th>
+<th style="text-align:left">주요 경력 및 역할</th>
+<th style="text-align:left">소스 내 언급 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>사라 왕 (Sarah Wang)</strong></td>
+<td style="text-align:left">a16z 일반 파트너 (General Partner)</td>
+<td style="text-align:left">인터뷰 진행자 및 호스트</td>
+<td style="text-align:left">대담 진행, RSI 및 AGI 정의 관련 질문 던짐</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>마크 첸 (Mark Chen)</strong></td>
+<td style="text-align:left">OpenAI 총괄 연구 책임자 (Chief Research Officer)</td>
+<td style="text-align:left">OpenAI 8년 이상 재직, 2025년부터 연구 공동 리드</td>
+<td style="text-align:left">AGI(80%) 및 RSI(25~50%) 스펙트럼 제시, 연산 자원 및 정렬 현황 설명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>존 슐만 (John Schulman)</strong></td>
+<td style="text-align:left">Thinking Machines 공동창업자 &amp; 수석 과학자</td>
+<td style="text-align:left">OpenAI 공동창업자, ChatGPT 핵심 아키텍트</td>
+<td style="text-align:left">Fable 워크플로우 공개, 연구 취향의 한계, 분산형 정렬 및 공공 과학 강조</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>야코 파차키 (Yako Pachaki)</strong></td>
+<td style="text-align:left">OpenAI 연구 공동 리더</td>
+<td style="text-align:left">2025년부터 마크 첸과 공동 연구 리더십 수행</td>
+<td style="text-align:left">마크 첸과의 공동 리더 역할 외 세부 경력 확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>알리 고드시 (Ali Ghodsi)</strong></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">올해 초 RSI의 필요조건 제시</td>
+<td style="text-align:left">RSI 성립을 위한 연산 자원 조건 언급 관련으로 인용됨</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-정리-data-timeline">4. 주요 수치 및 시점 정리 (Data &amp; Timeline)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">시점 / 수치</th>
+<th style="text-align:left">관련 내용</th>
+<th style="text-align:left">소스 내 맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>2027년</strong></td>
+<td style="text-align:left">OpenAI 프론티어 모델 능력의 가속 지점</td>
+<td style="text-align:left">차트에 제시된 급격한 능력 상승 곡선이 시작되는 기준 연도.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2025년</strong></td>
+<td style="text-align:left">OpenAI 연구 리더십 체제 개편 시점</td>
+<td style="text-align:left">마크 첸과 야코 파차키가 공동으로 OpenAI 연구를 이끌기 시작한 연도.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>8년 이상</strong></td>
+<td style="text-align:left">마크 첸의 OpenAI 재직 기간</td>
+<td style="text-align:left">마크 첸이 오랫동안 프론티어 연구를 수행해온 근거로 제시됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>80%</strong></td>
+<td style="text-align:left">마크 첸이 추산한 AGI 달성률</td>
+<td style="text-align:left">AGI 스펙트럼상에서 현재 기술 수준이 위치한 체감 진행률.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>25% ~ 50%</strong></td>
+<td style="text-align:left">마크 첸이 추산한 RSI 달성률</td>
+<td style="text-align:left">RSI 스펙트럼상에서 현재 AI 연구 자동화가 위치한 체감 진행률.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>11월 5일</strong></td>
+<td style="text-align:left">미터(Meter) 보고서 발표일</td>
+<td style="text-align:left">앤트로픽의 AI 연구 가속화 실태에 대한 조사 보고서가 공개된 날짜.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>약 2배 (2x)</strong></td>
+<td style="text-align:left">앤트로픽의 연구 속도 가속 배율</td>
+<td style="text-align:left">미터 보고서에서 추정한 지난 1년간 앤트로픽의 연구 진전 가속도.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>8월</strong></td>
+<td style="text-align:left">앤트로픽의 정렬 연구 발표 월</td>
+<td style="text-align:left">자동화된 AI 연구자가 정렬 실패를 수정한 연구 논문이 발표된 시점.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>10가지</strong></td>
+<td style="text-align:left">AI 연구자가 발견한 정렬 실패 해결책 개수</td>
+<td style="text-align:left">앤트로픽 연구에서 자율 AI 연구자가 스스로 찾아낸 정렬 수정안의 수.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>약 5배</strong></td>
+<td style="text-align:left">정렬 해결책이 적용된 모델의 규모 확장 배율</td>
+<td style="text-align:left">AI가 발견한 정렬 해결책이 작동함이 검증된 더 큰 모델의 상대적 크기.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ol>
+<li><strong>풀 RSI(Full RSI) 달성의 정확한 시점 미정:</strong> 전문가들 역시 인간 연구자의 개입이 전혀 필요 없는 완전한 RSI가 언제 완성될지에 대해 구체적인 연도를 단정하지 못하며 기술적 불확실 영역으로 남겨두고 있습니다.</li>
+<li><strong>연구 취향(Research Taste)의 기계 복제 가능 여부 미지수:</strong> 단순 지식의 암기와 문헌 수집을 넘어, 오랜 실패와 예측 경험에서 나오는 인간 고유의 연구 직관과 경험적 취향을 AI 모델이 완벽히 모사할 수 있을지는 기술적으로 검증되지 않았습니다.</li>
+<li><strong>연산 자원(Compute)의 효율성 한계 및 변곡점 도달 여부:</strong> 지능 향상에 필요한 연산량이 지속적으로 급증함에 따라, 추가적인 연산 자원 투입 대비 지능 상승 폭이 감소하는 상한선에 직면할 위험이 존재하며 AI가 스스로 데이터센터를 짓는 변곡점 형성 여부도 불확실합니다.</li>
+<li><strong>언급되지 않은 미확인 정보:</strong> 소스 텍스트 내에서 언급된 알리 고드시(Ali Ghodsi)의 정확한 소속 및 직책, 그리고 야코 파차키(Yako Pachaki)의 과거 상세 경력 사항은 <strong>확인 불가</strong>합니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

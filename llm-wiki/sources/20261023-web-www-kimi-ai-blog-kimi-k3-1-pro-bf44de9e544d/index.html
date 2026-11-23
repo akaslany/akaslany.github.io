@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kimi K3.1 Pro Tech Blog: Advancing Open Intelligence</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Kimi K3.1 Pro Tech Blog: Advancing Open Intelligence</h1>
+<p class="page-meta">웹 · 2026-10-23</p>
+<h2 id="요약">요약</h2>
+<p>Kimi K3.1 Pro는 K3.1 시리즈의 첫 번째 모델이자 1백만 토큰(1-million-token) 컨텍스트 윈도우를 갖춘 최신 3T 클래스 오픈 웨이트(open-weight) AI 모델이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.kimi.ai/blog/kimi-k3-1-pro">출처</a> · <a href="https://www.youtube.com/watch?v=KWtt8P9779c">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="kimi-k3-1-pro-기술-해설-보고서-오픈-지능-open-intelligence-의-진보">Kimi K3.1 Pro 기술 해설 보고서: 오픈 지능(Open Intelligence)의 진보</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>Kimi K3.1 Pro는 K3.1 시리즈의 첫 번째 모델이자 1백만 토큰(1-million-token) 컨텍스트 윈도우를 갖춘 최신 3T 클래스 오픈 웨이트(open-weight) AI 모델이다. 본 모델은 코딩, 3D 생성, 금융 연구 및 기타 에이전트(agentic) 능력 전반에서 대폭적인 성능 향상을 제공한다. 이와 함께 더욱 신속한 상호작용 환경을 필요로 하는 사용자 및 애플리케이션을 위해 K3.1 Pro 대비 2~3배 빠른 응답 속도를 구현한 Kimi K3.1 Pro Highspeed 모델이 동시에 공개되었다.</p>
+<p>K3.1 Pro는 이전 Kimi K3의 사후 학습(post-trained) 버전으로, 사후 학습 컴퓨트 규모를 크게 확장하여 개발되었다. 수백 개의 다운스트림 도메인에 걸쳐 대규모 공동 강화학습(RL)을 안정적으로 적용하기 위해 RL 프레임워크, 장문 맥락 추론, 학습 효율성, 샌드박스 인프라, 롤아웃 스케줄링, 환경 품질 검사 공유 플랫폼 등 인프라 스택 전반을 최적화했다. 이를 통해 각 RL 컴퓨트의 증가가 안정적이고 예측 가능한 성능 향상으로 이어지도록 설계되었다.</p>
+<p>Kimi K3.1 Pro 및 K3.1 Pro Highspeed는 현재 Kimi.ai 웹사이트, 모바일 앱(iOS, Android, HarmonyOS), Kimi Work 데스크톱 앱(버전 3.1.0 이상, Windows 및 Apple silicon Mac 지원), Kimi Code(<code>/model</code> 명령어로 선택 가능), Kimi API를 통해 즉시 이용할 수 있다. Kimi API 플랫폼에서는 <code>kimi-k3.1-pro</code> 및 <code>kimi-k3.1-pro-highspeed</code> 모델명으로 제공되며 Zero Data Retention 옵션을 지원한다. 전체 모델 웨이트(full model weights)는 2026년 11월 4일까지 배포될 예정이다. 기업용 환경인 Kimi Business의 경우 조직 관리자 설정을 통해 활성화할 수 있으며 출시 시 기본 설정은 비활성화(off by default) 상태이다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-technical-achievements">2. 주요 논점 (Key Arguments &amp; Technical Achievements)</h4>
+<h5 id="2-1-대규모-강화학습-rl-기반의-인프라-최적화-및-성능-향상">2.1 대규모 강화학습(RL) 기반의 인프라 최적화 및 성능 향상</h5>
+<ul>
+<li><code>[Fact]</code> 사후 학습(post-training) 컴퓨트 규모를 대폭 확장하고 RL 프레임워크, 장문 맥락 추론, 학습 효율성, 샌드박스 인프라, 롤아웃 스케줄링, 환경 품질 검사 공유 플랫폼 등 인프라 스택의 모든 레이어를 최적화하여 수백 개 다운스트림 도메인에 걸친 대규모 공동 RL(joint RL)을 성공적으로 적용함.</li>
+<li><code>[Claim]</code> 인프라 최적화를 통해 사후 학습 컴퓨트 투입량이 증가하더라도 성능의 불확실성이나 저하 없이 예측 가능하고 안정적인 성능 향상(returns)을 보장함.</li>
+<li><code>[Interpretation]</code> 단일 도메인에 국한된 RL 적용을 넘어 전 분야 인프라 최적화를 병행함으로써, 대규모 컴퓨트 확장이 코딩·금융·에이전트 등 다각도 영역의 성능 상승으로 직접 전환되는 사후 학습 인프라 역량을 입증함.</li>
+</ul>
+<h5 id="2-2-코딩-및-장기-실행-long-horizon-에이전트-능력">2.2 코딩 및 장기 실행(Long-Horizon) 에이전트 능력</h5>
+<ul>
+<li><code>[Fact]</code> 리소스가 제한된 실제 터미널 환경 작업을 평가하는 Terminal-Bench 4.0(Claude-Code harness 적용)에서 65.7%를 기록하여 GPT-6 Astra(58.2%)를 상회하고 Claude Opus 5.5(66.4%) 수준에 근접함. 다단계 실행 및 엔드투엔드 문제 해결을 평가하는 자체 Kimi Code Bench 3.0 Long-horizon에서는 61.2%를 기록해 K3(55.95%) 대비 크게 향상됨.</li>
+<li><code>[Fact]</code> Unity, Unreal Engine, Godot 등 게임 엔진과 웹 검색, 3D 생성을 연동하여 상호작용 경험을 제작함. 296개 골격과 402개 근육 구성요소를 포함하는 오픈소스 인체 해부학 모델 <code>human-atlas</code> 기반 시뮬레이터 개발 테스트에서 167개 미션과 420회 독립 검토를 수행하며, 초기 수 초 내에 쓰러지던 시뮬레이션을 11.2초 동안 교차 걸음으로 연속 보행하도록 개선함. 리워드 shaping으로 팔 동작이 개선되지 않자 오픈루프 프로브(open-loop probes)를 실행해 어깨 근육 모멘트 암(moment-arm) 계산 오류 36개를 직접 찾아 수정한 후 컨트롤러를 재학습시킴.</li>
+<li><code>[Claim]</code> 사후 학습 단계의 대규모 RL을 통해 단순한 코드 작성을 넘어 장기 실행(long-horizon) 디버깅 및 복잡한 물리 시뮬레이션 환경 제어 능력까지 정밀하게 고도화함.</li>
+<li><code>[Interpretation]</code> 리워드 조절 실패 시 하위 동역학 수식의 오류를 역추적하여 수정한 사례는 에이전트가 단순 시행착오(trial-and-error)를 넘어 시스템 원인을 분석하고 문제를 해결하는 수준에 도달했음을 보여줌.</li>
+</ul>
+<h5 id="2-3-3d-모델링-디자인-및-파라메트릭-모델링">2.3 3D 모델링, 디자인 및 파라메트릭 모델링</h5>
+<ul>
+<li><code>[Fact]</code> 다중 시점 렌더링 기반 3D 복원을 평가하는 BenchCAD(툴 사용 시, Claude Code harness 적용)에서 92.7%를 기록해 Claude Opus 5.5(96.2%), GPT-6 Astra(95.9%) 수준에 근접함.</li>
+<li><code>[Fact]</code> MCP 커넥터 없이 Blender 및 CAD 소프트웨어용 스크립트를 직접 작성·실행하여 기계 부품, 건축 모델, 가구 등 파라메트릭 모델링을 수행함. Kimi.ai 및 Kimi 앱을 통해 '3D Make' 기능을 제공하며, 온라인 프리뷰/편집, 3D 프린팅용 파일 다운로드, 비디오 및 Live Photos 형태의 수출을 지원함.</li>
+<li><code>[Claim]</code> 텍스트 브리프, 스케치, 참조 이미지로부터 형상, 비율, 공간적 관계를 추론하여 실용적인 3D 자산을 구축할 수 있으며, 기존 자산 라이브러리에 대한 이해도가 뛰어남.</li>
+<li><code>[Interpretation]</code> 직접 스크립트를 작성하여 CAD 툴을 제어하는 파라메트릭 모델링 능력은 단순한 시각적 3D 형상 생성을 넘어 실무 정밀 설계 및 제작 파이프라인으로 AI 활용 범위를 확장시킴.</li>
+</ul>
+<h5 id="2-4-금융-워크플로우-처리-및-환각-hallucination-감소">2.4 금융 워크플로우 처리 및 환각(Hallucination) 감소</h5>
+<ul>
+<li><code>[Fact]</code> 실제 재무 문서 대상 다단계 수치 추론을 평가하는 OfficeQA Pro v2에서 64.4 점수를 기록함 (평가 시 전체 PDF 코퍼스를 텍스트 없이 이미지로만 렌더링하여 제공). Frontier Finance에서도 K3 대비 발전된 성능을 보임.</li>
+<li><code>[Fact]</code> 자체 금융 벤치마크 평가 결과: Financial Modeling(+7.2점 향상), Financial Research(+11.6점 향상), Business Operation(K3 대비 약 4.2배 성능 달성).</li>
+<li><code>[Fact]</code> 사실적 정확도 스트레스 테스트인 Kimi Hallu Bench Hard 평가에서 주장 단위 환각율(claim-level hallucination rate)이 기존 K3의 23.4%에서 8.3%로 감소함. 최소 1개 이상의 사실 오류를 포함하는 응답 비율 역시 K3 대비 42.4% 수준으로 감소함.</li>
+<li><code>[Claim]</code> 환각 현상의 획기적 감소와 추론 능력 강화를 바탕으로 엔드투엔드 금융 분석, 재무 모델링, 투자 연구 워크플로우를 완결성 있게 수행 가능함.</li>
+<li><code>[Interpretation]</code> 스트레스 테스트 조건에서 주장 단위 환각율을 8.3%까지 낮춘 성과는 고도의 수치적·사실적 정밀성이 요구되는 전문 산업군에 에이전트를 실무적으로 도입할 수 있는 기반을 마련함.</li>
+</ul>
+<h5 id="2-5-사이버-보안-능력-통제-및-오픈-웨이트-출시-정책">2.5 사이버 보안 능력 통제 및 오픈 웨이트 출시 정책</h5>
+<ul>
+<li><code>[Fact]</code> 중간 학습(mid-training) 코퍼스 및 RL 환경에 포함된 사이버 관련 데이터/태스크를 식별하고 이를 제거하는 위험 경감 조치를 적용함. 데이터 제거를 적용하지 않은 내부 모델은 코드 기반 취약점 발견 및 익스플로잇 평가 벤치마크인 xdev-bench-hard(pass@3)에서 90.5%를 해결했으나, 최종 K3.1 Pro는 81.0%로 정량적 능력이 조정됨.</li>
+<li><code>[Fact]</code> 추가 사이버 보안 벤치마크인 ExploitBench(300-turn budget)에서 pass@5 max capability score 평가를 진행했으며, ExploitGym(6-hour wall-clock budget per task) 평가도 실시됨. K3.1 Pro의 공격적 사이버 능력은 최소 3개월 이상 공개된 최상위 프론티어 독점 모델(GPT-6 Astra, Claude Opus 5.5, Claude Mythos 5.1 등)의 수준보다 낮게 통제됨.</li>
+<li><code>[Claim]</code> 오픈 웨이트 공개 정책: 절대적 공격 능력의 최첨단(frontier)을 확장하는 오픈 웨이트는 공개하지 않되, 방어 목적의 사용을 유도하기 위해 점진적으로 오픈 웨이트의 보안 검증 능력을 높임. 제어 가능한 인프라에서 레거시 시스템을 포함한 전체 소프트웨어 생태계의 안전을 제고하는 것을 목표로 함.</li>
+<li><code>[Interpretation]</code> 일반 코딩 및 장기 실행 능력이 발전함에 따라 사이버 작업 능력도 자동적으로 상승(전이)하지만, 사전/사후 학습 단에서의 타깃팅된 데이터 제거 조치를 통해 오남용 위험 능력을 효율적으로 제어할 수 있음을 보여줌.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-speakers">3. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h4>
+<ul>
+<li><strong>확인 불가</strong> (제공된 소스 내에 명시적으로 언급된 인물이나 화자의 이름이 없음)</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-key-metrics-timeline">4. 수치 및 시점 (Key Metrics &amp; Timeline)</h4>
+<h5 id="배포-및-가용성-일정-timeline-availability">배포 및 가용성 일정 (Timeline &amp; Availability)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">내용 및 세부 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>제품 배포일</strong></td>
+<td style="text-align:left">오늘 (Kimi.ai, 모바일 앱, Kimi Work v3.1.0+, Kimi Code, Kimi API 즉시 적용)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오픈 웨이트 공개일</strong></td>
+<td style="text-align:left">2026년 11월 4일 (전체 모델 웨이트 배포 예정)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>모바일 OS 지원</strong></td>
+<td style="text-align:left">iOS, Android, HarmonyOS 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>데스크톱 지원</strong></td>
+<td style="text-align:left">Kimi Work 앱 (Windows, Apple silicon Mac 지원)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>API 모델명 및 기능</strong></td>
+<td style="text-align:left"><code>kimi-k3.1-pro</code>, <code>kimi-k3.1-pro-highspeed</code> / Zero Data Retention 옵션 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>엔터프라이즈 (Kimi Business)</strong></td>
+<td style="text-align:left">조직 관리자가 직접 설정하여 활성화 (출시 시 기본 설정은 비활성화/off by default)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="주요-사양-벤치마크-및-평가-조건-key-metrics-benchmarks">주요 사양, 벤치마크 및 평가 조건 (Key Metrics &amp; Benchmarks)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목 / 벤치마크</th>
+<th style="text-align:left">Kimi K3.1 Pro 성과</th>
+<th style="text-align:left">평가 조건 / 하네스 (Harness) 및 비교 맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>컨텍스트 윈도우</strong></td>
+<td style="text-align:left">1,000,000 토큰</td>
+<td style="text-align:left">1-million-token context window</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Highspeed 모델 속도</strong></td>
+<td style="text-align:left">K3.1 Pro 대비 2~3배</td>
+<td style="text-align:left">빠른 상호작용 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Terminal-Bench 4.0</strong></td>
+<td style="text-align:left"><strong>65.7%</strong></td>
+<td style="text-align:left">Claude-Code harness 사용 / GPT-6 Astra (58.2%), Claude Opus 5.5 (66.4%)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kimi Code Bench 3.0 Long-horizon</strong></td>
+<td style="text-align:left"><strong>61.2%</strong></td>
+<td style="text-align:left">Claude-Code harness 사용 / K3 (55.95%) 대비 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BenchCAD (툴 사용 시)</strong></td>
+<td style="text-align:left"><strong>92.7%</strong></td>
+<td style="text-align:left">Claude-Code harness 사용 / GPT-6 Astra (95.9%), Claude Opus 5.5 (96.2%)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>OfficeQA Pro v2</strong></td>
+<td style="text-align:left"><strong>64.4</strong></td>
+<td style="text-align:left">Claude-Code harness 사용 / PDF 전체를 이미지로 렌더링(텍스트 없음)하여 평가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Financial Modeling</strong></td>
+<td style="text-align:left"><strong>+7.2점</strong></td>
+<td style="text-align:left">K3 대비 향상 (자체 재무 로직 및 워크북 품질 평가)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Financial Research</strong></td>
+<td style="text-align:left"><strong>+11.6점</strong></td>
+<td style="text-align:left">K3 대비 향상 (증거 및 단절 조건 내 연구 보고서 작성 평가)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Business Operation</strong></td>
+<td style="text-align:left"><strong>약 4.2배</strong></td>
+<td style="text-align:left">K3 대비 성능 달성 (시뮬레이션 환경 내 장기 경영 의사결정)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kimi Hallu Bench Hard</strong></td>
+<td style="text-align:left"><strong>8.3%</strong></td>
+<td style="text-align:left">주장 단위 환각율 (K3: 23.4%) / 오류 포함 응답 비율 K3의 42.4% 수준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>xdev-bench-hard (pass@3)</strong></td>
+<td style="text-align:left"><strong>81.0%</strong></td>
+<td style="text-align:left">KimiCode harness / 데이터 제거 전 내부 모델(90.5%) 대비 위험 감소</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ExploitBench</strong></td>
+<td style="text-align:left"><strong>Pass@5 Max</strong></td>
+<td style="text-align:left">공식 ExploitBench harness (300-turn budget, 16개 capability flags 기반)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ExploitGym</strong></td>
+<td style="text-align:left"><strong>6시간 제한</strong></td>
+<td style="text-align:left">KimiCode harness (태스크당 6-hour wall-clock budget 적용 평가)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>환각율 평가의 조건적 한계:</strong> Kimi Hallu Bench Hard 벤치마크 결과(주장 단위 환각율 8.3%)는 오류가 발생하기 쉬운 특수 상황을 의도적으로 유도한 스트레스 테스트 수치이다. 따라서 일상적인 일반 사용 환경에서의 전체 응답 오류율을 직접적으로 나타내지는 않는다.</li>
+<li><strong>사이버 공격 능력의 통제적 한계:</strong> 사이버 관련 데이터 및 RL 환경 제거 조치로 인해, K3.1 Pro의 공격적 사이버 능력은 최소 3개월 이상 공개된 최상위 프론티어 독점 모델의 수준에 미치지 못하도록 통제되었다.</li>
+<li><strong>평가 환경 및 하네스 조건 제약:</strong>
+<ul>
+<li><strong>기본 추론 설정:</strong> 별도 명시가 없는 한 모든 K3.1 Pro 평가 수치는 reasoning effort 'max', temperature = 1.0, top-p = 0.95 설정 하에 측정되었다.</li>
+<li><strong>하네스(Harness) 적용:</strong> Terminal-Bench 4.0, DeepSWE v1.1, SWE-Marathon v1.1, PostTrainBench, BenchCAD 등의 주요 코딩 평가 시 <code>Claude-Code harness</code>가 적용되었다.</li>
+<li><strong>시각적 멀티모달 제약:</strong> OfficeQA Pro v2 평가 시 각 작업의 전체 PDF 코퍼스는 기계 읽기 가능한 텍스트 없이 1,152픽셀 크기의 이미지로만 렌더링되어 제공되었다. (외부 모델 궤적 중 온라인 참조 답안을 검색한 경우 0점 처리함).</li>
+<li><strong>웹 탐색 제약:</strong> BrowseComp 테스트에서는 200K 토큰 시점 컨텍스트 압축(context compaction) 전략이 적용되었으며, 최대 500단계 제한 하에서 미완료 시 강제 답변을 제출받아 평가했다 (temperature=1.0, top-p=1.0).</li>
+<li><strong>타사 모델 비교:</strong> 타사 독점(proprietary) 모델 평가 시 일부 시스템 대체(fallback) 동작이 포함되었을 가능성이 존재한다.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Complete or Sparse: A Tale of Two Identifiabilities</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Complete or Sparse: A Tale of Two Identifiabilities</h1>
+<p class="page-meta">논문 · 2026-10-16</p>
+<h2 id="요약">요약</h2>
+<p>신경과학 분야에서 인간의 내측 측두엽 내 &quot;제니퍼 애니스톤 뉴런(Jennifer Aniston neuron)&quot;과 같이 특정 개념에만 전용으로 반응하는 '할머니 세포(grandmother cells)'의 발견은 전통적인 분산 코딩(distributed coding) 이론에 커다란 화두를 던졌다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.20851">출처</a> · <a href="https://www.youtube.com/watch?v=ywgtJKbB8so">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="complete-or-sparse-a-tale-of-two-identifiabilities-완전성과-희소성-신경망-표현-식별-가능성에-관한-이론적-및-실증적-해설-보고서">Complete or Sparse: A Tale of Two Identifiabilities (완전성과 희소성: 신경망 표현 식별 가능성에 관한 이론적 및 실증적 해설 보고서)</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>신경과학 분야에서 인간의 내측 측두엽 내 &quot;제니퍼 애니스톤 뉴런(Jennifer Aniston neuron)&quot;과 같이 특정 개념에만 전용으로 반응하는 '할머니 세포(grandmother cells)'의 발견은 전통적인 분산 코딩(distributed coding) 이론에 커다란 화두를 던졌다. 인공지능(AI)의 메커니즘 해석가능성(Mechanistic Interpretability) 연구에서도 비전 모델 및 대형 언어 모델(LLM) 내부에서 특정 인물이나 개념에 선택적으로 반응하는 단일 개념 뉴런(monosemanticity)이 관찰되고 있다. 하지만 개별 뉴런이 하나의 개념만을 전담하는 구조는 메모리 효율성이 떨어지고 손상에 취약하다고 간주되어 왔으며, 고도의 비선형 시스템이 잠재 정보를 무작위로 뒤섞어 복잡한 혼합 선택성(mixed selectivity/polysemanticity)을 보일 것이라는 비선형 독립 성분 분석(Nonlinear ICA) 및 표현 학습의 이론적 예측과 상충되어 왔다.</p>
+<p>본 연구는 이러한 이론적 예측과 실증적 관찰 간의 대립 구도를 정교하게 해명하기 위해, 라벨과 잠재 변수 간 인과 방향(Causal Direction)에 따라 구별되는 두 가지 데이터 생성 과정(DGP: 생성적 $Y \to Z$ 및 판별적 $Z \to Y$)을 정형화하고 신경망 용량(Capacity)에 따른 식별 가능성(Identifiability) 이론 틀을 제시한다. 지도학습 환경에서 신경망의 뉴런 개수(인코더 차원 $m$)가 데이터의 유효 잠재 차원($n' = \text{rank}(W^*)$) 이상일 때, 교차 엔트로피 손실을 최적화하는 인코더는 잠재 변수 공간을 선형 변환 범위 내에서 완벽히 복원함(Theorem 4.1)을 증명한다. 반대로 뉴런 수가 부족한 수축(undercomplete, $m &lt; n'$) 영역에서는 교차 엔트로피 최적해 분포가 일반적(generically)으로 비선형 왜곡을 발생시켜 선형 식별 가능성이 반드시 붕괴됨(Theorem 4.2)을 명확히 밝힌다.</p>
+<p>나아가 본 보고서에서는 단순한 선형 혼합을 넘어 개별 잠재 변수를 완벽히 개별 뉴런 단위로 복원(Monosemanticity)하는 두 가지 이론적 경로를 제시한다. 첫째, 생성적 설정에서는 비음수 활성화 함수(ReLU 또는 exp+BN), 클래스 내 인구 분산 고정, 활성화 에너지 최적화(또는 Weight Decay) 제약 조건이 결합하여 각 뉴런이 하나의 잠재 변수 축에 직접 정렬되는 '할머니 세포' 현상(Theorem 4.3)을 유도한다. 둘째, 판별적 설정에서는 잠재 변수의 희소성(Sparsity)과 참인 측정 행렬의 스파크 조건(Spark condition) 하에서 인코더가 압축 센싱 기하 구조를 형성하여, 희소 오토인코더(SAE) 및 기저 추적(Basis Pursuit)을 통해 고차원 잠재 변수를 완벽히 복원할 수 있음을 입증한다(Theorem 4.4). 이러한 이론적 예측은 합성 데이터셋뿐만 아니라 다양한 비전 모델(VGG-19, ResNet-50, ViT-b/16, DINOv2), 대형 언어 모델(GPT-2, Pythia-70m, TinyLlama), 그리고 마카크 원숭이 시각 피질(IT 피질)의 &quot;Chabo&quot;와 &quot;Tito&quot; 뉴런 데이터에 걸쳐 일관되게 검증된다.</p>
+<hr />
+<h4 id="2-주요-논점-및-핵심-정리-main-points-theoretical-foundations">2. 주요 논점 및 핵심 정리 (Main Points &amp; Theoretical Foundations)</h4>
+<h5 id="2-1-데이터-생성-과정-dgp-의-인과-구조와-정형적-정의">2.1. 데이터 생성 과정(DGP)의 인과 구조와 정형적 정의</h5>
+<ul>
+<li><strong>논점</strong>: 라벨($y$)과 잠재 변수($z$) 간 인과 방향에 따라 데이터 생성 과정(DGP)이 생성적($Y \to Z$)과 판별적($Z \to Y$)으로 구분되며, 각각의 잠재 공간 구조, 조건부 확률, 그리고 유효 차원 관계가 명확히 정형화된다.</li>
+<li><strong>근거</strong>:
+<ul>
+<li><strong>생성적 설정 (Generative, $Y \to Z$)</strong>: 라벨 $y \in \mathcal{Y}$가 먼저 생성된 후, 잠재 변수 $z \in \mathbb{R}^n_+$가 조건부 지수 분포 $p(z|y) = \prod_{i=1}^n \lambda_i(y) \exp(-\lambda_i(y)z_i) = \exp(\langle w^<em><em>y, z \rangle) \prod</em>{i=1}^n \lambda_i(y)$를 통해 생성된다. 여기서 참인 가중치 행 벡터는 $w^</em><em>y = -\lambda_y &lt; 0$로 정의된다. 특히 클래스 간 조건부 엔트로피 $H(p(z|y)) = n - \sum</em>{i=1}^n \log \lambda_i(y)$가 일정하도록 $\prod_{i=1}^n \lambda_i(y) = \text{const}$ 제약을 부과한다. 이 상 수 조건은 베이즈 정리에 따른 라벨 사후 확률 $p(y|z)$ 계산 시 정규화 상수를 클래스 독립적으로 만들어 로짓 표현을 순수 선형 형태 $p(y|z) = \text{softmax}(W^* z)$로 귀결시킨다. 이때 $W^* \in \mathbb{R}^{|\mathcal{Y}| \times n}$이며, 유효 차원 $n' = \text{rank}(W^*) = n$이 성립한다 (Section 3.1).</li>
+<li><strong>판별적 설정 (Discriminative, $Z \to Y$)</strong>: 잠재 변수 $z \in \mathbb{R}^n$가 임의의 사전 분포 $p(z)$에서 먼저 생성된 후, 조건부 라벨 확률 $p(y|z) = \text{softmax}(W^* z)_y$가 결정된다. 가중치 행렬 $W^<em>$는 측정을 담당하는 $A^</em> \in \mathbb{R}^{n' \times n}$와 판별 읽기 행렬 $U^* \in \mathbb{R}^{|\mathcal{Y}| \times n'}$의 결합인 $W^* = U^* A^<em>$로 분해된다. 라벨은 압축된 측정치 $A^</em> z \in \mathbb{R}^{n'}$에만 의존하므로, 유효 잠재 차원은 $n' = \text{rank}(W^*) \le n$의 관계를 가진다 (Section 3.2).</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 속성</th>
+<th style="text-align:left">생성적 설정 (Generative, $Y \to Z$)</th>
+<th style="text-align:left">판별적 설정 (Discriminative, $Z \to Y$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>인과 방향 (Causal Direction)</strong></td>
+<td style="text-align:left">라벨 $Y \to$ 잠재 변수 $Z$</td>
+<td style="text-align:left">잠재 변수 $Z \to$ 라벨 $Y$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>잠재 변수 영역 ($\mathcal{Z}$)</strong></td>
+<td style="text-align:left">비음수 실수 공간 $\mathbb{R}^n_+$</td>
+<td style="text-align:left">전체 실수 공간 $\mathbb{R}^n$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조건부 확률 분포 가정</strong></td>
+<td style="text-align:left">독립 지수 분포 $p(z|y)$, 일정 엔트로피</td>
+<td style="text-align:left">임의의 사전 분포 $p(z)$, Log-linear $p(y|z)$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선형 로짓 유도 메커니즘</strong></td>
+<td style="text-align:left">$\prod_{i=1}^n \lambda_i(y) = \text{const} \implies$ 분모 상수화</td>
+<td style="text-align:left">$W^* = U^* A^*$ 형태의 직렬 저차원 분해</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>행렬 구조 및 유효 차원</strong></td>
+<td style="text-align:left">$W^* \in \mathbb{R}^{|\mathcal{Y}| \times n}$, 유효 차원 $n' = n$</td>
+<td style="text-align:left">$W^* = U^* A^<em>$, 유효 차원 $n' = \text{rank}(W^</em>) \le n$</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-2-인코더-용량-capacity-에-따른-식별-가능성-경계-theorem-4-1-4-2">2.2. 인코더 용량(Capacity)에 따른 식별 가능성 경계 (Theorem 4.1 &amp; 4.2)</h5>
+<ul>
+<li><strong>논점</strong>: 신경망의 뉴런 수($m$)와 유효 잠재 차원($n'$)의 상대적 크기에 따라 잠재 변수의 선형 식별 가능성 성립 여부가 엄격하게 결정된다.</li>
+<li><strong>근거</strong>:
+<ul>
+<li><strong>Theorem 4.1 (선형 식별 가능성, $m \ge n'$)</strong>: 인코더 용량이 충분한 경우($m \ge n' = \text{rank}(W^<em>)$), 교차 엔트로피 손실을 최소화하는 모든 전역 최적해 인코더 $h = f \circ g$는 $h(z) = Az + \nu(z)$ 형태를 가진다. 여기서 $A \in \mathbb{R}^{m \times n}$는 $\text{rank}(A) = n'$ 및 $UA = W^</em>$를 만족하며, 잔여 항 $\nu(z)$는 읽기 행렬 $U$의 영공간 $\mathcal{N}(U)$에 속한다 ($\nu(z) \in \mathcal{N}(U)$). 즉, 분류에 유용한 표현은 잠재 변수 $z$의 선형 변환 $Az$ 범위 내에서 완벽히 복원된다.</li>
+<li><strong>Theorem 4.2 (비식별 가능성, $m &lt; n'$)</strong>: 뉴런 수가 부족한 수축(undercomplete) 영역에서는 선형 인코더가 전역 최적해가 될 수 없으며, 최적 인코더는 일반적(generically)으로 비선형 왜곡을 발생시킨다.
+<ul>
+<li><em>증명 개요</em>: 변분법(variational argument) 및 국소 섭동 논리에 기반한다. 전역 최적해 조건에 의해 잠재 공간 내부 $\Omega \subseteq \mathbb{R}^n$의 모든 점에서 점별 국소 정지성(pointwise stationarity) $\nabla_v \ell|<em>{v=h^<em>(z)} = 0$이 강제된다. 만약 선형 인코더 $h^</em>(z) = Az$가 최적해라고 가정하면, 영공간 $\mathcal{N}(A)$ 상에서 인코더 출력은 $0$이 되어 예측 확률이 균일 분포 $q(y|z) = 1/|\mathcal{Y}|$로 붕괴한다. 영공간 상의 미분 방정식 $\sum_y (u_y - \bar{u}) e^{\langle w^<em>_y, z \rangle} = 0$에서 지수 함수들의 선형 독립성에 의해 읽기 행렬의 모든 행이 동일해짐($u_y = \bar{u}$)을 강제받으며, $U^</em>$는 rank-1 행렬로 수축하고 손실은 최악의 엔트로피 상한인 $\log |\mathcal{Y}|$에 도달한다. 이때 편차-기대치 행렬 $\bar{C}</em>{y,j} = \mathbb{E}_z [(p(y|z) - 1/|\mathcal{Y}|) z_j]$의 특이값 분해(SVD) 섭동 행렬 $\tilde{C}_m = P_m \Sigma_m Q_m^\top$을 가하면 손실의 1차 미분값이 $f'(0) = -|\bar{C}_m|_F &lt; 0$가 되어 손실이 엄격히 감소하므로, 선형 최적해 가정에 모순이 발생한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>실증 사례</strong>: 유효 차원 $n'=8$ 조건에서 인코더 차원 $m \in {2, 4, 6, 8, 10}$ 수위를 체계적으로 변경하며 선형 인코더와 비선형 MLP 인코더의 학습 동역학 및 KL divergence 전이 양상을 평가하였다. 본문 실험 데이터(Figure 2) 및 훈련 동역학 그래프(Figure 9 / <code>[SOURCE_IMAGE_6]</code>)에 나타나듯, $m &lt; 8$ 영역에서는 MLP가 선형 인코더보다 확연히 낮은 교차 엔트로피 손실 및 KL divergence를 기록하여 비선형 왜곡의 필수성을 증명하며, $m \ge 8$ 임계값을 넘어서는 순간 선형 인코더와 MLP 모두 KL divergence가 0으로 수렴하며 선형 식별 가능성 영역으로 전환된다.</li>
+</ul>
+<h5 id="2-3-단축-정렬-뉴런과-할머니-세포의-출현-path-a-theorem-4-3">2.3. 단축 정렬 뉴런과 할머니 세포의 출현 (Path A: Theorem 4.3)</h5>
+<ul>
+<li><strong>논점</strong>: 완전 용량($m = n = n'$)과 생성적 설정 환경에서 비음수 활성화 및 에너지 최적화 제약 조건이 가해지면, 선형 혼합의 모호성이 완전히 깨지고 개별 뉴런이 잠재 변수의 각 축에 1대1로 직접 정렬(Monosemanticity)된다.</li>
+<li><strong>근거</strong>:
+<ul>
+<li><strong>Theorem 4.3 (단축 정렬 뉴런)</strong>: 생성적 설정($m = n = n'$)에서 (i) 비음수 활성화 함수($\mathcal{H} = \mathbb{R}^m_+$, 예: ReLU 또는 exp+BN), (ii) 고정된 클래스 내 인구 분산 $\mathcal{V}<em>{\text{within}}(h) = C$, (iii) 활성화 에너지를 최소화하는 조건 $\mathcal{R}(h) = \mathbb{E}<em>z |h(Z)|<em>2^2$ (또는 Weight Decay)을 부과할 경우, 최적 인코더는 단순 순열 및 스케일링 행렬 $h(z) = DP</em>\sigma z$의 형태를 가집니다 (여기서 $P</em>\sigma$는 순열 행렬, $D = \text{diag}(\beta_1, \dots, \beta_n), \beta_j &gt; 0$). 이 정리의 증명은 에너지 확장식 $\mathcal{R}(A) = 2C + 2 \sum</em>{j=1}^n \sum_{1 \le i &lt; k \le n} A_{ji} A_{jk} \mathbb{E}[r_i(Y) r_k(Y)]$에서 비음수성 $A_{ji} \ge 0$에 의해 각 행의 직교성이 강제되어 1-sparse 행렬로 수축함을 보여준다. 이는 개별 뉴런이 하나의 잠재 변수만을 전담 부호화하는 '할머니 세포' 현상에 대한 엄밀한 수학적 정당성을 제공한다.</li>
+</ul>
+</li>
+<li><strong>실증 사례 및 수렴 동역학</strong>:
+<ul>
+<li>기존 하이퍼스피어(Hyperspherical) DGP와 연구진이 제안한 희소(Sparse) DGP 간 축 정렬 지표(Mean Correlation Coefficient; MCC)를 비교한 결과, 희소 DGP와 비음수 출력층(ReLU 또는 exp+BN)이 결합된 경우에만 완벽한 단축 정렬(MCC $\to 1$)에 수렴함이 실증되었다 (Figure 1 / <code>[SOURCE_IMAGE_1]</code>, Figure 5 / <code>[SOURCE_IMAGE_4]</code>, Figure 7 / <code>[SOURCE_IMAGE_5]</code>).</li>
+<li>동역학 관점에서 ReLU 비음수 인코더는 무작위 초기화 의존성으로 인해 축 정렬 수렴 속도가 완만하지만, AdamW 옵티마이저에 Weight Decay($0.03$)를 적용하면 파워 스펙트럼의 편향이 평탄화되면서 10회 독립 실행 중 10회 모두 완벽한 단축 정렬(MCC $\ge 0.90$) 도달 속도와 신뢰성이 비약적으로 향상된다 (Figure 6, Figure 7 / <code>[SOURCE_IMAGE_5]</code>).</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-압축-센싱-복원과-희소-오토인코더-sae-의-이론적-정당성-path-b-theorem-4-4">2.4. 압축 센싱 복원과 희소 오토인코더(SAE)의 이론적 정당성 (Path B: Theorem 4.4)</h5>
+<ul>
+<li><strong>논점</strong>: 수축 영역 및 판별적 설정에서 잠재 변수가 희소성(Sparsity)을 가지면, 인코더는 압축 센싱 기하 구조를 형성하여 사전 학습 및 희소 오토인코더(SAE)를 통한 고차원 잠재 변수의 완벽 복원을 가능하게 한다.</li>
+<li><strong>근거</strong>:
+<ul>
+<li><strong>Theorem 4.4 (압축 센싱 복원)</strong>: 판별적 설정($W^* = U^* A^<em>, m \ge n'$)에서 잠재 변수 $z$가 $k$-희소($|z|_0 \le k$)이고, 참인 측정 행렬 $A^</em>$가 스파크 조건 $\text{spark}(A^<em>) &gt; 2k$를 만족하면, 학습된 인코더의 분류 가시적 표현 $\tilde{h}(z) = P_U h(z) = Az$는 참인 영공간을 완벽히 계승한다 ($\mathcal{N}(A) = \mathcal{N}(A^</em>)$). 결과적으로 $\text{spark}(A) = \text{spark}(A^<em>) &gt; 2k$가 성립하며, $A = B A^</em>$ (좌가역 행렬 $B$) 관계를 통해 $Az = \tilde{h}(z)$ 식의 유일한 $k$-희소 해로 $z$를 완벽 복원할 수 있다.</li>
+<li><strong>Theorem 4.4 따름정리 (Null Space Property &amp; Basis Pursuit)</strong>: 참인 측정 행렬 $A^<em>$가 차수 $k$의 영공간 성질(NSP)을 만족하면, $\mathcal{N}(A) = \mathcal{N}(A^</em>)$에 의해 학습된 행렬 $A$ 역시 동일한 NSP를 계승한다. 따라서 모든 $k$-희소 잠재 변수 $z$는 $\min_z |z|_1 \text{ subject to } Az = \tilde{h}(z)$ 형태의 기저 추적(Basis Pursuit) $\ell_1$-최적화를 통해 유일하게 복원된다. 이는 희소 오토인코더(SAE)가 LLM 및 비전 모델의 분산 표현에서 메커니즘적으로 해설 가능한 특징을 추출해내는 실증적 성공을 теорети적으로 완벽히 정당화한다.</li>
+</ul>
+</li>
+<li><strong>실증 사례</strong>:
+<ul>
+<li>학습 스텝이 진행됨에 따라 교차 엔트로피 KL divergence가 0으로 수렴하면서 학습된 행렬 $A$와 참인 $A^*$의 행 공간 일치도 $\cos(\theta_{\max})$가 1로 급격히 전이되는 위기 현상(phase transition)이 관찰되었다 (Figure 3A / <code>[SOURCE_IMAGE_2]</code>).</li>
+<li>지도형 Lasso는 모든 희소 수위 $k \in {1, 2, 3}$에서 $R^2 \approx 1$의 완벽한 복원율을 달성한 반면, 빽빽한 선형 디코더(OLS)는 이론적 한계인 $R^2 \approx n'/n$ 수준에 정체되었다 (Figure 3B / <code>[SOURCE_IMAGE_2]</code>). 비지도 사전 학습(Dictionary Learning + Lasso) 또한 극한의 희소성($k=1$) 조건 하에서 높은 MCC($\approx 0.86$)를 달성하였다 (Figure 3C / <code>[SOURCE_IMAGE_2]</code>).</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-5-인공신경망-모델-간-및-생물학적-뇌-간-표현-전이성-cross-system-generalization">2.5. 인공신경망 모델 간 및 생물학적 뇌 간 표현 전이성 (Cross-System Generalization)</h5>
+<ul>
+<li><strong>논점</strong>: 이론적 식별 가능성에 따라 고도로 해설 가능하게 분리된(disentangled) 개별 뉴런 단위 개념은 독립적으로 학습된 다른 인공신경망이나 생물학적 뇌 신경계에서도 동일한 구조로 재발견된다.</li>
+<li><strong>근거</strong>: 단일 뉴런의 선택적 반응성을 측정하는 메커니즘 해석가능성 점수(Mechanistic Interpretability Score; MIS)와 다른 시스템의 뉴런과의 최대 상관관계를 나타내는 최대 일치 유닛(Maximum Matching Unit; MMU) 점수 간의 양의 상관관계 분석.</li>
+<li><strong>실증 사례</strong>:
+<ul>
+<li><strong>비전 모델 (Vision Models)</strong>: ImageNet으로 학습된 4개 모델(VGG-19, ResNet-50, ViT-b/16, DINOv2) 간의 12개 방향성 쌍 전체에서 MIS 점수가 높을수록 MMU 점수가 유의미하게 높아지는 양의 상관관계를 확인하였다 (Figure 4A,C / <code>[SOURCE_IMAGE_3]</code>).</li>
+<li><strong>언어 모델 (Language Models)</strong>: Wikipedia 상위 100,000개 단어 토큰을 대상으로 평가한 GPT-2, Pythia-70m, TinyLlama 모델 간 비교에서도 MIS-MMU 양의 상관 패턴이 일관되게 관찰되었다 (Figure 4B,D / <code>[SOURCE_IMAGE_3]</code>).</li>
+<li><strong>생물학적 뇌 (Macaque IT Cortex)</strong>: 3,200장의 자연 이미지를 시청한 마카크 원숭이 2마리(&quot;Chabo&quot; 58개 뉴런, &quot;Tito&quot; 110개 뉴런)의 IT 피질 데이터를 분석한 결과, 한 개체의 해석가능성 높은 뉴런이 다른 개체의 뉴런과 방향성 양의 상관관계(Tito $\to$ Chabo: $r = 0.158, p = 0.0986$; Chabo $\to$ Tito: $r = 0.135, p = 0.312$)를 형성함을 실증하였다 (Figure 4E / <code>[SOURCE_IMAGE_3]</code>).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-persons-entities">3. 등장 인물 및 화자 (Persons &amp; Entities)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 / 주체</th>
+<th style="text-align:left">역할 및 소속</th>
+<th style="text-align:left">소스 내 출처 / 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Junze Zhou</strong></td>
+<td style="text-align:left">공동 저자 (Cold Spring Harbor Laboratory, juzhou@cshl.edu)</td>
+<td style="text-align:left">본 보고서 대상 논문의 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>David Klindt</strong></td>
+<td style="text-align:left">공동 저자 (Cold Spring Harbor Laboratory, klindt@cshl.edu)</td>
+<td style="text-align:left">본 보고서 대상 논문의 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Zimmermann et al.</strong></td>
+<td style="text-align:left">연구진</td>
+<td style="text-align:left">메커니즘 해석가능성 점수(MIS) 프레임워크 제안자 [40]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Majaj et al.</strong></td>
+<td style="text-align:left">연구진</td>
+<td style="text-align:left">마카크 원숭이 IT 피질 신경 데이터 수집 및 제공자 [41]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Quian Quiroga et al.</strong></td>
+<td style="text-align:left">연구진</td>
+<td style="text-align:left">인간 내측 측두엽 &quot;제니퍼 애니스톤 뉴런&quot; 발견자 [2]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>&quot;Chabo&quot;</strong></td>
+<td style="text-align:left">실험 대상 (마카크 원숭이 1)</td>
+<td style="text-align:left">IT 피질 58개 뉴런 데이터 수집 생물학적 주체 [41]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>&quot;Tito&quot;</strong></td>
+<td style="text-align:left">실험 대상 (마카크 원숭이 2)</td>
+<td style="text-align:left">IT 피질 110개 뉴런 데이터 수집 생물학적 주체 [41]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-quantitative-details-timelines">4. 수치 및 시점 (Quantitative Details &amp; Timelines)</h4>
+<ul>
+<li>
+<p><strong>실험 및 합성 모델 차원 수치</strong>:</p>
+<ul>
+<li>잠재 공간 차원 및 유효 차원: $n = 5$ (Section 9.1 합성 실험), $n = n' = 8$ (Section 9.2 수축 영역 실험), $n = 16, n' = 8$ (Section 9.3 압축 센싱 실험).</li>
+<li>클래스 개수 $|\mathcal{Y}|$: 64개 (Section 9.2 및 9.3), 100개 (Section 9.1).</li>
+<li>스파크 및 희소성 수준: $k \in {1, 2, 3}$, $2k \le n'=8$ 제약 충족 (Section 9.3).</li>
+<li>지수 분포 및 농도 파라미터: 희소 지수 분포 비율 $\lambda = 10$, 하이퍼스피어 von Mises–Fisher 집중도 $\kappa = 150$ (Section 9.1).</li>
+<li>순방향 관찰 생성 매핑 $g$: MLP 계층 구조 $5 \to 64 \to 64 \to 64 \to 5$, SiLU 활성화 함수, 직교 가중치 초기화 (Section 9.1).</li>
+<li>수축 영역 MLP 인코더 구조: 3개 은닉층(너비 128), ReLU 활성화, 선형 출력 (Section 9.2).</li>
+<li>Lasso 정규화 파라미터: $\alpha = 5 \times 10^{-3}$ (Section 9.3).</li>
+<li>데이터셋 샘플 규모: 합성 조건당 $N = 10,000$ 잠재 변수-라벨 쌍 (Section 9.1, 9.2).</li>
+</ul>
+</li>
+<li>
+<p><strong>실물 모델 및 데이터 세트 수치 (Section 9.4)</strong>:</p>
+<ul>
+<li>VGG-19 BN: fc6 레이어 (4,096 유닛).</li>
+<li>ResNet-50: 전역 평균 풀링 전 단 (2,048 유닛).</li>
+<li>ViT-b/16: 클래스 토큰 (768 차원).</li>
+<li>DINOv2 ViT-S/14: 클래스 토큰 (384 차원).</li>
+<li>GPT-2 small: 124M 파라미터, 임베딩 차원 768.</li>
+<li>Pythia-70m 및 TinyLlama-1.1B: 마지막 블록 MLP 활성화.</li>
+<li>Wikipedia 언어 평가 단어 수: 상위 100,000개 최빈 단어 unigrams.</li>
+<li>ImageNet-1K 검증 세트: 50,000개 이미지 (224×224 리사이즈).</li>
+<li>마카크 원숭이 IT 피질: 3,200개 자연 이미지 자극, Chabo(58개 뉴런), Tito(110개 뉴런).</li>
+</ul>
+</li>
+<li>
+<p><strong>하드웨어 및 소프트웨어 스펙 (Section 9)</strong>:</p>
+<ul>
+<li>GPU 하드웨어: NVIDIA Tesla V100 (32 GB) 1대.</li>
+<li>소프트웨어 환경: Python 3.12.3, PyTorch 2.2.2 (CUDA 12.1, cuDNN 8902 기반), scikit-learn 1.6.1.</li>
+<li>난수 시드(Random Seeds): 독립 실행 10회 고정 (<code>seed = 42 + i</code>, $i \in {0, \dots, 9}$).</li>
+</ul>
+</li>
+<li>
+<p><strong>최적화 하이퍼파라미터 및 학습 시점/스텝</strong>:</p>
+<ul>
+<li>Adam 옵티마이저 하이퍼파라미터: $\beta = (0.9, 0.999), \epsilon = 10^{-8}$.</li>
+<li>학습률(Learning Rate): $3 \times 10^{-4}$ (Section 9.1), $5 \times 10^{-4}$ (Section 9.2), $10^{-3}$ (Section 9.3, 코사인 아닐링 적용).</li>
+<li>배치 크기: 512.</li>
+<li>Weight Decay 수치 스윕(Sweep): $0, 0.003, 0.01, 0.03$ (Section 9.1, Figure 7).</li>
+<li>총 최적화 스텝 수: 12,000 스텝 (Section 9.2), 20,000 스텝 (Section 9.3), 50,000 스텝 (Section 9.1 기본), 최대 $1,000,000$($10^6$) 스텝 (Section 9.1 동역학 평가).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-assumptions">5. 한계와 불확실성 (Limitations &amp; Assumptions)</h4>
+<h5 id="5-1-주요-이론적-가정의-한계-및-훼손-효과-ablations">5.1. 주요 이론적 가정의 한계 및 훼손 효과 (Ablations)</h5>
+<ol>
+<li>
+<p><strong>클래스 간 일정 조건부 엔트로피 (Constant Conditional Entropy)</strong>:</p>
+<ul>
+<li><em>소스의 한계 인정</em>: 실제 데이터셋은 클래스별 조건부 엔트로피의 편차가 존재한다.</li>
+<li><em>훼손 효과</em>: 바이어스 없는 읽기(bias-free readout) 환경에서 클래스 간 엔트로피 표준편차가 2 nats 수준으로 커지면 단축 정렬 점수(MCC)가 $0.662 \pm 0.009$로 하락한다. 다만, 클래스별 로짓 오프셋을 흡수하는 어파인 읽기(affine readout)를 허용할 경우 MCC가 $0.962 \pm 0.002$로 복원된다 (Figure 8A / <code>[SOURCE_IMAGE_7]</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>비음수성 가정 (Non-negativity) 및 부호가 있는 잠재 변수</strong>:</p>
+<ul>
+<li><em>소스의 한계 인정</em>: 비음수성 제한은 구체 상의 양의 오르탕트(positive orthant)에 잠재 변수를 가두는 것과 같아 부호 정보를 잃는다. 라플라스 분포와 같이 부호가 존재하는(signed) 잠재 공간에서는 대칭성이 깨지므로 Theorem 4.3의 정리가 직접 적용되지 않는다.</li>
+<li><em>훼손 효과</em>: 잠재 변수의 부호가 독립적으로 뒤집힐 확률(Sign-flip prob)이 0.1일 때 MCC는 0.770으로 떨어지며, 0.5일 때(확률적 반전) MCC는 0.049로 완전히 붕괴된다 (Figure 8D / <code>[SOURCE_IMAGE_7]</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>균일 클래스 사전 확률 (Uniform Class Prior)</strong>:</p>
+<ul>
+<li><em>소스의 한계 인정</em>: $p(y) = 1/|\mathcal{Y}|$ 가정은 내적 등식을 단순화하기 위해 사용되었다.</li>
+<li><em>훼손 효과</em>: 불균일한 사전 확률은 로짓 행에 정수 오프셋 $-\log \pi_y$를 추가하는 효과를 낳으며, 극심한 클래스 불균형 조건에서는 이론적 예측 범위를 벗어난 최적화 난류를 일으킬 수 있다 (Section 6).</li>
+</ul>
+</li>
+<li>
+<p><strong>참인 희소 데이터 생성 과정(True Sparse DGP)의 존재성</strong>:</p>
+<ul>
+<li><em>소스의 한계 인정</em>: 현실 세계 데이터 내에 완벽히 참인 희소 DGP가 실제로 존재하는가에 대한 문제는 실증 데이터나 수학적 이론만으로는 완전히 규명할 수 없는 철학적 문제 영역으로 남는다 (Section 6).</li>
+</ul>
+</li>
+</ol>
+<h5 id="5-2-소스-내-확인-불가-항목-source-gaps">5.2. 소스 내 확인 불가 항목 (Source Gaps)</h5>
+<ul>
+<li><strong>외부 모델 파라미터 및 구체적 피질 세부 물리 구조</strong>: 실제 비전 및 언어 모델 실증에 사용된 특정 레이어 외의 전체 파라미터 세부 사양이나 실감형 생물학적 피질의 정밀 물리 구조 등 소스 텍스트에 구체적으로 명시되지 않은 항목은 **확인 불가 (소스 미기재)**로 정리된다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N C M Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>N C M Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation</h1>
+<p class="page-meta">논문 · 2026-11-09</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 이산 잠재 공간(Discrete Latent Space) 기반의 계층적 텍스트 생성 패러다임을 제안한 논문 **&quot;NCM Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation&quot; (arXiv:2610.14162v1, 2026년 10월 9일…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/html/2610.14162v1">출처</a> · <a href="https://www.youtube.com/watch?v=aaqB-TzCsDs">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="next-concept-modeling-ncm-기술-해설-및-성과-분석-보고서">Next-Concept Modeling (NCM) 기술 해설 및 성과 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 이산 잠재 공간(Discrete Latent Space) 기반의 계층적 텍스트 생성 패러다임을 제안한 논문 **&quot;NCM Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation&quot; (arXiv:2610.14162v1, 2026년 10월 9일 제출)**에 대한 수석 연구위원 관점의 기술적 해설 및 성과 평가 분석서이다. 최근 인공지능 분야에서 대규모 언어 모델의 추론 연산(Inference Compute)이 주요 부하로 떠오름에 따라, 단일 토큰 순차 생성 병목을 지닌 자기회귀(Autoregressive, AR) 모델의 대안으로서 확산 언어 모델(Diffusion Language Models, DLMs)에 대한 연구가 가속화되고 있다. 그러나 기존 확산 언어 모델 역시 실제 프러덕션 환경에 적용하는 과정에서 치명적인 구조적 제약을 드러내고 있다.</p>
+<p>기존 AR 모델이 $L$개 토큰 시퀀스를 생성하기 위해 $L$번의 순차적 전방향 연산(Forward Pass)을 필요로 하는 반면, DLM은 무작위 마스킹 토큰에 대한 반복적 디노이징(Denoising)을 통해 병렬 샘플링을 시도한다. 하지만 기존 DLM 패러다임은 세 가지 명확한 한계에 봉착해 있다. 첫째, 추론 속도를 위해 샘플링 단계(Number of Function Evaluations, NFE)를 축소할 경우 생성 텍스트의 품질이 급격히 저하된다. 둘째, 매 디노이징 단계마다 전체 시퀀스 길이 $L$을 고정적으로 재처리해야 하며, 양방향 어텐션(Bidirectional Attention) 특성상 기존 AR 모델의 Key-Value(KV) 캐싱 메커니즘을 직접 활용할 수 없어 단계당(Per-step) 연산 비용이 매우 높다. 셋째, 타깃 디노이징 궤적을 학습하기 위해 수천억 개 이상의 토큰 예산을 수백만 번 반복 노출해야 하는 과도한 학습 데이터 요구량이 존재한다.</p>
+<p>스탠퍼드 대학교와 Together AI 연구진이 제안한 **Next-Concept Modeling (NCM)**은 이러한 한계를 극복하기 위해 <strong>거친 수준에서 세밀한 수준으로(Coarse-to-Fine)</strong> 이행하는 2단계(Two-stage) 텍스트 생성 패러다임을 창안하였다. NCM은 1단계에서 다중 스케일 잔여 VQ-VAE(Multiscale Residual VQ-VAE)를 통해 텍스트를 거친 수준부터 세밀한 수준까지의 $K$개 이산 코드(Discrete Codes) 계층 구조로 부호화한다. 이어서 2단계에서는 NCM 트랜스포머 생성기가 이전 계층의 누적 재구성 정보를 조건(Conditioning)으로 받아, 해당 계층 내부의 모든 이산 코드를 단 한 번의 전방향 연산으로 병렬 예측한다. NCM은 복잡한 증류(Distillation) 절차 없이도 $K \ll L$ 단계만으로 고품질 및 고다양성의 텍스트를 생성하며, 초기 거친 계층에서의 압축된 코드 처리로 추론 연산 비용과 학습 토큰 예산을 격혁적으로 절감한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-기존-확산-언어-모델-dlm-의-한계와-ncm의-연구-동기">2.1 기존 확산 언어 모델(DLM)의 한계와 NCM의 연구 동기</h5>
+<h6 id="기존-dlm의-3가지-구조적-한계-분석">기존 DLM의 3가지 구조적 한계 분석</h6>
+<p>본 논문의 연구진은 기존 확산 언어 모델이 병렬성을 표방함에도 불구하고 실제 프러덕션 배치 환경에서 고효율을 달성하지 못하는 핵심 원인을 다음 3가지 메커니즘 관점에서 정리하고 있다 (Section 1).</p>
+<ol>
+<li><strong>샘플링 단계(NFE) 축소 시 품질 급락:</strong>
+반복적 디노이징 과정을 거치는 이산/연속 확산 모델(MDLM, DUO 등)은 추론 연산 시간을 줄이기 위해 디노이징 스텝 수를 줄이면 생성 텍스트의 유창성과 Generative Perplexity(Gen. PPL)가 비선형적으로 악화되는 현상을 보인다 (Figure 5).</li>
+<li><strong>높은 Per-step 연산 비용 및 KV 캐싱 활용 불가:</strong>
+기존 확산 모델은 디노이징 궤적의 모든 스텝에서 항상 전체 시퀀스 길이 $L$의 표현(Representation)을 고정적으로 연산해야 한다. 더욱이 양방향 어텐션 메커니즘을 채택하고 있어 AR 언어 모델이 추론 가속화의 핵심으로 사용하는 단방향 KV 캐싱(Key-Value Caching)을 직접 적용하기 어렵다.</li>
+<li><strong>막대한 학습 데이터 토큰 예산 산출:</strong>
+DUO, MDLM, CANDI 등 우수한 확산 베이스라인 모델들은 OpenWebText 데이터셋 기준으로 100만 스텝(Step) 이상, 500B(5,000억) 개 이상의 토큰을 반복적으로 노출하여 학습해야만 안정적인 성능에 도달한다 (Section 1, Section 4.6).</li>
+</ol>
+<h6 id="기존-절감-기법의-기술적-부작용-및-한계">기존 절감 기법의 기술적 부작용 및 한계</h6>
+<p>연구진은 이러한 한계를 극복하기 위해 시도된 기존의 축소 단계 샘플러(Few-step samplers) 및 증류(Distillation) 기법들을 비판적으로 분석한다. 교사 모델(Teacher Model)을 학생 모델(Student Model)로 축약하는 증류 방식은 이미 막대한 연산량이 소요된 모델 위에 추가적인 학습 스테이지를 요구할 뿐만 아니라, 생성 샘플의 다양성을 측정하는 유니그램 엔트로피(Unigram Entropy, $H$)를 크게 떨어뜨려 샘플의 다양성을 훼손한다.</p>
+<p>또한 블록-자기회귀 확산(Block-Autoregressive Diffusion) 기법은 블록 단위로 KV 캐싱을 허용하지만, 블록 간 순차적 대기 연산(Sequential Latency)이 발생하므로 완전한 병렬성을 보장할 수 없다는 한계를 지닌다 (Section 1, Section 2).</p>
+<h6 id="실험적-근거-및-문헌-비교">실험적 근거 및 문헌 비교</h6>
+<p>논문은 이러한 연구 동기를 시각적·수치적 근거로 뒷받침한다. Figure 1은 NCM이 LM1B 및 XSum 태스크에서 타 확산 모델 대비 동일/우수 품질을 유지하면서 각각 21배, 31배 빠른 벽시계 시간(Wall-clock time)을 달성함을 증명한다. 또한 Figure 2는 단일 토큰 순차 생성 방식(NTP, $L$ 스텝), 전체 위치 디노이징 방식(Masked Diffusion, $T$ 스텝), 그리고 NCM의 계층별 병렬 코드 생성 방식($K \ll L$ 스텝) 간의 구조적 연산 격차를 명확히 대조하여 제시한다.</p>
+<hr />
+<h5 id="2-2-next-concept-modeling-ncm-의-구조적-메커니즘">2.2 Next-Concept Modeling (NCM)의 구조적 메커니즘</h5>
+<p>NCM 프레임워크는 표현 학습(Representation Learning)을 담당하는 <strong>Stage 1 토크나이저</strong>와 계층적 생성을 담당하는 <strong>Stage 2 생성기</strong>의 2단계 구조로 구성된다.</p>
+<pre><code>[ Stage 1: 다중 스케일 잔여 VQ-VAE 토크나이저 ]
+입력 텍스트 x (길이 L) 
+   │
+   ▼ 인코더 E_ϕ
+잠재 표현 z ∈ ℝ^{L × d}
+   │
+   ├─► Level 1 (ℓ₁): r₁ = Quantize(Down₁(z)) ──────────► R₁(e₁(r₁))
+   ├─► Level 2 (ℓ₂): r₂ = Quantize(Down₂(z - ẑ⁽¹⁾)) ───► R₂(e₂(r₂)) + ẑ⁽¹⁾
+   │   ...
+   └─► Level K (ℓ_K=L): r_K = Quantize(z - ẑ⁽ᴷ⁻¹⁾) ───► R_K(e_K(r_K)) + ẑ⁽ᴷ⁻¹⁾ = ẑ⁽ᴷ⁾
+                                                              │
+                                                              ▼ 디코더 p_ψ
+                                                         복원 텍스트 x̂
+
+[ Stage 2: Next-Concept 트랜스포머 생성기 ]
+누적 재구성 ẑ⁽ᵏ⁻¹⁾ ──► 프로젝션 &amp; 리사이즈 ──► NCM Transformer (Block-diagonal Attn)
+                                                    │
+                                                    ▼ 단일 Forward Pass
+                                         Level k 코드 r_k^(1:ℓ_k) 병렬 예측
+</code></pre>
+<h6 id="stage-1-다중-스케일-잔여-vq-vae-토크나이저-multiscale-residual-vq-vae-tokenizer">Stage 1: 다중 스케일 잔여 VQ-VAE 토크나이저 (Multiscale Residual VQ-VAE Tokenizer)</h6>
+<p>입력 텍스트 시퀀스 $x \in \mathcal{T}^L$를 인코더 $E_\phi$를 통과시켜 연속 잠재 표현 $z = E_\phi(x) \in \mathbb{R}^{L \times d}$로 변환한다 (Equation 6). 초기 상태 $z^{(0)} = z$, $\hat{z}^{(0)} = 0$에서 시작하여, 각 계층 $k \in {1, \dots, K}$마다 이전 계층의 잔여 벡터(Residual) $z^{(k-1)}$를 $\ell_k$ 길이로 다운샘플링($\text{Down}_k$)한 후 이산 양자화를 수행한다 (Equation 7):</p>
+<p>$$u_k = \text{Down}<em>k(z^{(k-1)}) \in \mathbb{R}^{\ell_k \times d}, \quad r_k^i = \arg\min</em>{j \in {1, \dots, |\mathcal{V}<em>k|}} |u_k^i - e</em>{k,j}|_2^2$$</p>
+<p>양자화된 코드북 임베딩 $e_k(r_k)$는 재구성 연산자 $R_k$를 통해 입력 시퀀스 길이 $L$ 차원으로 복원되어 누적 재구성 벡터 $\hat{z}^{(k)}$에 합산되며, 잔여 벡터는 계속 업데이트된다 (Equation 8):</p>
+<p>$$\hat{z}^{(k)} = \hat{z}^{(k-1)} + R_k(e_k(r_k)), \quad z^{(k)} = z - \hat{z}^{(k)}$$</p>
+<p>이때 계층별 코드 길이는 거친 스케일에서 세밀한 스케일로 확장되는 $\ell_1 &lt; \ell_2 &lt; \dots &lt; \ell_K = L$ 관계를 형성한다.</p>
+<p>초기 거친 계층(Coarse levels)이 고차원 의미 정보를 우선적으로 담아내도록 유도하기 위해 학습 시 무작위 계층 컷오프 $k \in {1, \dots, K}$를 적용하는 **중첩 드롭아웃(Nested Dropout)**을 적용한다. 토크나이저의 학습 손실 함수 $\mathcal{L}_{\text{tok}}$는 교차 엔트로피 재구성 손실과 커미트먼트(Commitment) 및 양자화 MSE 손실의 합으로 정의된다 (Equation 9):</p>
+<p>$$\mathcal{L}<em>{\text{tok}} = -\frac{1}{L} \sum</em>{i=1}^L \log p_\psi(x^i \mid \hat{z}^{(k)}) + \beta \text{MSE}(z, \text{sg}[\hat{z}^{(k)}]) + \text{MSE}(\text{sg}[z], \hat{z}^{(k)})$$</p>
+<p>(여기서 $\text{sg}$는 Stop-gradient 연산자이며, $\beta$는 커미트먼트 손실 가중치이다).</p>
+<h6 id="stage-2-next-concept-트랜스포머-생성기-next-concept-transformer-generator">Stage 2: Next-Concept 트랜스포머 생성기 (Next-Concept Transformer Generator)</h6>
+<p>토크나이저를 동결(Freeze)한 상태에서 NCM 트랜스포머 $p_\theta$를 학습시킨다. 생성기는 이전 계층들의 누적 재구성 정보 $\hat{z}^{(k-1)}$를 입력 조건으로 받아 계층 $k$의 모든 이산 코드 $r_k = (r_k^1, \dots, r_k^{\ell_k})$를 단 한 번의 전방향 연산(Forward pass)으로 병렬 예측한다 (Equation 4, 5):</p>
+<p>$$p_\theta(r_{1:K}) = \prod_{k=1}^K p_\theta(r_k \mid \hat{z}^{(k-1)}) = \prod_{k=1}^K \prod_{i=1}^{\ell_k} p_\theta(r_k^i \mid \hat{z}^{(k-1)})$$</p>
+<p>모든 $K$개 계층에 대한 코드 예측이 완결되면, 최종 누적 재구성 표현 $\hat{z}^{(K)}$를 VQ-VAE 디코더 $p_\psi$에 입력하여 최종 텍스트 토큰 시퀀스로 복원한다.</p>
+<p>추론 시 발생할 수 있는 VQ 코드 오차 누적(Error Accumulation)에 대한 내성을 부여하기 위해, 학습 시 입력 코드의 일정 비율을 동일 코드북 내 타 코드로 무작위 교체하는 <strong>조건화 오염(Conditioning Corruption)</strong> 기법을 도입한다. 오염된 누적 재구성 $\tilde{z}^{(k-1)}$를 조건으로 사용하는 NCM 학습 손실 $\mathcal{L}_{\text{NCM}}$은 다음과 같다 (Equation 10):</p>
+<p>$$\mathcal{L}<em>{\text{NCM}} = -\sum</em>{k=1}^K w_k \sum_{i=1}^{\ell_k} \log p_\theta(r_k^i \mid \tilde{z}^{(k-1)}), \quad w_k = \frac{\ell_k^{-\alpha}}{\sum_{j=1}^K \ell_j^{1-\alpha}}$$</p>
+<p>(여기서 $\alpha=0$일 때 전체 코드 단위 균등 가중치가 부여되고, $\alpha=1$일 때 계층 단위 균등 가중치가 부여된다).</p>
+<p>또한 무조건 생성 시 입력 블록이 자기 자신의 블록 내부에서만 어텐션을 수행하도록 제한하는 <strong>Block-diagonal 어텐션 패턴</strong>을 도입한다. 입력으로 전달된 $\hat{z}^{(k-1)}$가 이미 이전 계층들의 모든 정보 요약치를 완벽히 내포하고 있으므로, 어텐션 연산을 대폭 단순화하여 추론 속도를 최적화할 수 있다 (Table 9, Figure 11).</p>
+<h6 id="컨텍스트-인코더-설계-선택-아블레이션-analysis">컨텍스트 인코더 설계 선택 아블레이션 Analysis</h6>
+<p>조건부 생성(XSum 요약 등)을 구현할 때 프롬프트를 인코딩하는 방식에 대한 실험적 아블레이션(Appendix F.2.2, Table 10) 결과, 외부의 사전 학습된 T5-small 인코더를 사용할 경우 자체 VQ-VAE 인코더 대비 ROUGE-L이 0.24점 향상(28.19 vs 27.95)되지만, 모델 파라미터가 40%(+35.3M) 증가하고 외부 모델 의존성이 발생하는 트레이드오프가 확인되었다. NCM 연구진은 모델의 자립성과 88M 파라미터 경량성을 유지하기 위해 자체 VQ-VAE 인코더를 채택하는 최적의 아키텍처 설계를 완성하였다.</p>
+<h6 id="ncm-이산-개념-concept-생성의-아키텍처적-및-학술적-의의">NCM 이산 개념(Concept) 생성의 아키텍처적 및 학술적 의의</h6>
+<p>기존의 연속 잠재 확산(Continuous Latent Diffusion)이나 단어 단위 단순 차원 축소 모델과 달리, NCM은 텍스트라는 이산적 기호 공간 내에 잔여 VQ-VAE를 결합하여 고차원 의미 구조를 '개념(Concept)' 단위의 이산 계층 코드로 명확히 분해하였다. 특히 자연스러운 이미지 다운샘플링과 달리 텍스트 데이터가 갖는 이산적 특성을 훼손하지 않으면서, $\ell_1 \ll L$ 스케일의 거친 계층에서 출발하여 $\ell_K = L$의 세밀한 계층으로 확산되는 계층적 병렬성을 구현해낸 점은 기존 패러다임과 궤를 달리하는 아키텍처적 진보라 평가할 수 있다.</p>
+<h6 id="동적-생성-궤적-generation-trajectory-의-비단조성-통찰">동적 생성 궤적(Generation Trajectory)의 비단조성 통찰</h6>
+<p>논문의 Appendix J.2(Table 12, Figure 3)에 제시된 WMT14 번역 생성 궤적을 심층 분석하면 매우 흥미로운 기술적 특성이 관찰된다. 계층 $k$가 1부터 11까지 진행됨에 따라 BLEU 지표가 단조 증가(Monotonic Increase)하는 것이 아니라, Intermediate Level에서 복잡한 수렴 궤적을 그린다.</p>
+<ul>
+<li>Level 1: 6.0 BLEU (거친 골격 형성)</li>
+<li>Level 3: 6.3 BLEU</li>
+<li>Level 4: 16.0 BLEU (구조적 도약)</li>
+<li>Level 8: 51.7 BLEU (핵심 의미 수립)</li>
+<li>Level 9: 38.9 BLEU (세부 문법/어휘 재정렬 과정에서의 일시적 하강)</li>
+<li>Level 11: 77.8 BLEU (최종 미세 복원 및 완벽 수렴)</li>
+</ul>
+<p>이러한 비단조적 궤적 특성은 NCM이 초기 계층에서 전역적 맥락과 서사 구조(Global Planning)를 먼저 확립한 후, 중간 계층에서 대대적인 어휘/문법 조율(Structural Correction)을 거쳐 최종 계층에서 정교한 국소 표현(Local Refinement)을 완결 짓는 동적 유연성을 지니고 있음을 명증한다.</p>
+<hr />
+<h5 id="2-3-영역별-성능-검증-및-효율성-평가">2.3 영역별 성능 검증 및 효율성 평가</h5>
+<h6 id="1-무조건-생성-unconditional-generation---tinystories-lm1b-openwebtext">1) 무조건 생성 (Unconditional Generation - TinyStories, LM1B, OpenWebText)</h6>
+<p>GPT-2-large를 참조 평가 모델로 설정하여 Generative Perplexity(Gen. PPL)와 유니그램 엔트로피($H$)를 복합 평가한 결과는 다음과 같다 (Section 4.2, Table 8, Figure 5).</p>
+<ul>
+<li><strong>LM1B 데이터셋:</strong> NCM(97M, 12 NFE)은 Gen. PPL <strong>93.05</strong>, 엔트로피 <strong>4.31</strong>을 달성하였다. 이는 확산 모델 분야의 대표적 베이스라인인 DUO(128 NFE, Gen. PPL 97.30, $H$ 4.30) 및 MDLM(128 NFE, Gen. PPL 115.45, $H$ 4.33) 대비 약 11배 적은 NFE 연산만으로 우수한 생성 품질을 확보한 결과이다.</li>
+<li><strong>OpenWebText (OWT) 데이터셋:</strong> NCM(32 NFE)은 Gen. PPL <strong>83.12</strong>, $H$ <strong>5.42</strong>를 기록하여, 1024 NFE의 극심한 연산을 요구하는 MDLM(105.15) 및 SEDD(101.43)를 가볍게 압도하였으며, FLM(62.23, $H$ 5.33) 등과 비등한 성과를 10배 빠른 속도로 도출하였다.</li>
+<li><strong>TinyStories 데이터셋:</strong> NCM(12 NFE)은 Gen. PPL <strong>15.41</strong>, $H$ <strong>3.98</strong>을 기록, 128 NFE를 사용하는 MDLM(17.89), DUO(19.63), CANDI(22.74)를 대폭 능가하였다.</li>
+</ul>
+<p>연구진은 NCM이 별도의 증류(Distillation) 절차 없이도 실제 원본 데이터의 엔트로피 수준을 완벽히 유지함으로써 샘플 다양성을 훼손하지 않고 고품질 텍스트 생성을 성공시켰다고 강조한다.</p>
+<h6 id="2-조건부-생성-conditional-generation---wmt14-de-en-xsum">2) 조건부 생성 (Conditional Generation - WMT14 De-En, XSum)</h6>
+<p>번역 및 요약 평가에서도 NCM은 압도적인 효율성을 입증하였다 (Section 4.3, Table 2).</p>
+<ul>
+<li><strong>XSum 요약 (Unguided):</strong> NCM(88M, 8 NFE)은 ROUGE-1 <strong>35.0</strong>, ROUGE-2 <strong>12.8</strong>, ROUGE-L <strong>28.0</strong>을 달성, 최상위 연속 확산 모델인 AURORA-LM(130M, 128 NFE, ROUGE-L 26.6) 대비 NFE를 <strong>16배 절감</strong>하면서 성능 역전을 이뤄냈다.</li>
+<li><strong>XSum 요약 (MBR 적용):</strong> NCM + MBR(128 NFE) 설정 적용 시 ROUGE-1 <strong>37.3</strong>, ROUGE-2 <strong>14.0</strong>, ROUGE-L <strong>29.6</strong>으로 대폭 상승하며, 가이던스가 적용된 모든 확산 베이스라인을 제치고 전체 1위를 차지하였다.</li>
+<li><strong>WMT14 번역 (Unguided):</strong> NCM(120M, 11 NFE)은 BLEU <strong>22.6</strong>을 기록, 비AR 모델 중 E2D2(64 NFE, BLEU 24.8)에 이어 2위를 차지했으나 연산 단계(NFE)는 <strong>5.8배</strong> 적었다. NCM + MBR(132 NFE) 적용 시 BLEU <strong>25.2</strong>를 기록하여 AR 기준 모델과 완벽히 동일한 성능 수준에 도달하였다.</li>
+</ul>
+<h6 id="3-복합-제약-추론-reasoning---sudoku">3) 복합 제약 추론 (Reasoning - Sudoku)</h6>
+<p>81개 칸의 전역적 상호 제약 조건을 동시에 충족해야 하는 스우도쿠(Sudoku) 추론 문제에서 NCM(25M, 12 NFE)은 난이도별 보드 완전 해결 비율(Accuracy %)에서 **Easy 99.5%, Medium 96.5%, Hard 86.1%**라는 최고 성과를 달성하였다 (Section 4.4, Table 3, Figure 20).</p>
+<h6 id="sudoku-성능-광범위-비교-데이터-accuracy">Sudoku 성능 광범위 비교 데이터 (Accuracy %)</h6>
+<ul>
+<li><strong>AR Sample (128 NFE):</strong> Easy 13.9% / Medium 5.1% / Hard 0.6%</li>
+<li><strong>AR Greedy (128 NFE):</strong> Easy 14.6% / Medium 5.1% / Hard 1.0%</li>
+<li><strong>CANDI (128 NFE):</strong> Easy 79.3% / Medium 45.9% / Hard 16.7%</li>
+<li><strong>MDLM (128 NFE):</strong> Easy 92.0% / Medium 77.1% / Hard 30.2%</li>
+<li><strong>FLM (128 NFE):</strong> Easy 94.2% / Medium 82.7% / Hard 44.5%</li>
+<li><strong>S-FLM (128 NFE):</strong> Easy 94.8% / Medium 85.2% / Hard 45.0%</li>
+<li><strong>DUO (128 NFE):</strong> Easy 96.3% / Medium 84.7% / Hard 58.4%</li>
+<li><strong>FMLM+ (16 NFE):</strong> Easy 97.7% / Medium 92.8% / Hard 81.3%</li>
+<li><strong>NCM (12 NFE, Ours):</strong> <strong>Easy 99.5% / Medium 96.5% / Hard 86.1%</strong></li>
+</ul>
+<p>좌측에서 우측으로 토큰을 생성하며 이전 오류를 수정할 수 없는 AR 모델과 달리, NCM의 Coarse-to-Fine 메커니즘은 초기 거친 계층에서 전체 판의 전역적 구조를 수립한 후 하위 계층에서 이를 단계적으로 수정·보완하므로 전역적 계획(Global Planning)이 요구되는 복합 추론 과제에 탁월함을 입증한다.</p>
+<h6 id="4-계산-및-학습-효율성-inference-speed-training-budget">4) 계산 및 학습 효율성 (Inference Speed &amp; Training Budget)</h6>
+<p>NVIDIA H100 SXM 80GB GPU 1대 환경(배치 크기 16, 1,024 시퀀스 길이 생성 기준)에서 실제 벽시계 시간을 측정한 결과, NCM은 획기적인 추론 가속을 달성하였다 (Section 4.6, Figure 1).</p>
+<ul>
+<li><strong>LM1B:</strong> DUO 대비 NFE 11배 절감, 벽시계 생성 속도 <strong>21배 향상</strong> ($21\times$).</li>
+<li><strong>XSum:</strong> AURORA-LM 대비 NFE 16배 절감, 벽시계 생성 속도 <strong>31배 향상</strong> ($31\times$).</li>
+<li><strong>OpenWebText:</strong> 타 확산 모델 대비 벽시계 생성 속도 <strong>10배 향상</strong> ($10\times$).</li>
+</ul>
+<p>학습 토큰 예산(Training Token Budget) 측면에서도 NCM은 토크나이저(Stage 1)와 생성기(Stage 2) 학습 토큰 노출량을 합산하더라도 기존 확산 모델 대비 월등한 데이터 효율성을 보여준다 (Appendix C.2, Figure 7).</p>
+<ul>
+<li><strong>LM1B 학습 예산 분해:</strong> 토크나이저 6.80B + 생성기 6.55B = <strong>총 13.36B 토큰</strong> (경쟁 모델 66B 대비 <strong>4.9배 절감</strong>).</li>
+<li><strong>OpenWebText 학습 예산 분해:</strong> 토크나이저 61.68B + 생성기 65.54B = <strong>총 127.22B 토큰</strong> (경쟁 모델 500B+ 대비 <strong>약 4배 절감</strong>).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 영역</th>
+<th style="text-align:left">데이터셋 / 조건</th>
+<th style="text-align:left">NCM 성과 지표</th>
+<th style="text-align:left">주요 비교 대상 및 대비 성과</th>
+<th style="text-align:left">핵심 소스 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>무조건 생성</strong></td>
+<td style="text-align:left">LM1B (12 NFE)</td>
+<td style="text-align:left">Gen. PPL <strong>93.05</strong> / $H$ <strong>4.31</strong></td>
+<td style="text-align:left">DUO (128 NFE, PPL 97.30) 대비 NFE 11배 절감 및 우수 PPL</td>
+<td style="text-align:left">Table 8, Figure 5</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조건부 생성</strong></td>
+<td style="text-align:left">XSum (8 NFE, Unguided)</td>
+<td style="text-align:left">ROUGE-L <strong>28.0</strong></td>
+<td style="text-align:left">AURORA-LM (128 NFE, ROUGE-L 26.6) 대비 NFE 16배 절감</td>
+<td style="text-align:left">Table 2</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조건부 생성</strong></td>
+<td style="text-align:left">XSum (128 NFE, MBR)</td>
+<td style="text-align:left">ROUGE-L <strong>29.6</strong></td>
+<td style="text-align:left">AURORA-LM + CFG (184 NFE, ROUGE-L 28.6) 능가 (전체 1위)</td>
+<td style="text-align:left">Table 2</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>복합 추론</strong></td>
+<td style="text-align:left">Sudoku (12 NFE)</td>
+<td style="text-align:left">Hard 해결률 <strong>86.1%</strong></td>
+<td style="text-align:left">FMLM+ (16 NFE, 81.3%), AR Greedy (128 NFE, 1.0%) 능가</td>
+<td style="text-align:left">Table 3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>추론 속도</strong></td>
+<td style="text-align:left">H100 GPU (LM1B / XSum)</td>
+<td style="text-align:left"><strong>21배</strong> / <strong>31배</strong> 속도 향상</td>
+<td style="text-align:left">DUO 및 AURORA-LM 대비 벽시계 시간(Wall-clock) 직접 비교</td>
+<td style="text-align:left">Figure 1, Section 4.6</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 예산</strong></td>
+<td style="text-align:left">LM1B / OWT</td>
+<td style="text-align:left"><strong>13.36B</strong> / <strong>127.22B</strong> 토큰</td>
+<td style="text-align:left">경쟁 확산 모델 대비 총 학습 토큰 예산 <strong>4.9배 / 약 4배 절감</strong></td>
+<td style="text-align:left">Figure 7, Appendix C.2</td>
+</tr>
+</tbody>
+</table>
+<p><em>(참고: Gen. PPL은 GPT-2-large 기준 생성 얽힘도, $H$는 유니그램 엔트로피, NFE는 생성 시 전방향 연산 횟수, 벽시계 속도는 동일 하드웨어 추론 시간 측정치임).</em></p>
+<hr />
+<h5 id="2-4-스케일링-특성-및-계층-탐색-scaling-qualitative-probing">2.4 스케일링 특성 및 계층 탐색 (Scaling &amp; Qualitative Probing)</h5>
+<h6 id="모델-스케일링-및-테스트-시간-스케일링-model-test-time-scaling">모델 스케일링 및 테스트 시간 스케일링 (Model &amp; Test-Time Scaling)</h6>
+<ul>
+<li><strong>모델 스케일링 (Model Scaling):</strong> 고정된 토크나이저 위에서 생성기 파라미터를 97M, 317M, 725M으로 확장함에 따라 동일한 학습 토큰 예산 조건하에서도 LM1B 데이터셋의 Gen. PPL이 93.05에서 지속적으로 하향 개선됨을 확인하였다 (Figure 6(a)).</li>
+<li><strong>테스트 시간 스케일링 및 추론 예산의 효율적 재배치 (Test-Time Scaling &amp; Compute Budget Reallocation):</strong> NCM의 적은 NFE와 계층별 짧은 시퀀스 처리에 따른 전반적인 추론 연산 절감 효과는, 남은 추론 시간 예산(Inference Compute Budget)을 다중 후보 생성 및 MBR(최소 베이즈 리스크) 검증으로 재투입(Re-invest)할 수 있는 결정적 기회를 제공한다. XSum 실험에서 MBR 후보 수 $K$를 1개에서 256개까지 확장할 때 ROUGE-1 점수는 4.48점 향상되었다 (Figure 6(b), Figure 15). 결과적으로 동일한 벽시계 추론 시간 예산 내에서 단일 고비용 디노이징을 수행하는 기존 DLM을 유의미하게 압도하는 **&quot;추론 예산 재배치 우위&quot;**를 확립하였다.</li>
+</ul>
+<h6 id="계층-구조-탐색-및定性-분석-qualitative-probing">계층 구조 탐색 및定性 분석 (Qualitative Probing)</h6>
+<p>TinyStories(12계층 모델) 기반의 거친 계층 코드 조작 실험(Appendix H, Figures 17–19)을 통해 NCM 표현 공간의 성질이 명백히 입증되었다.</p>
+<ol>
+<li><strong>거친 코드 고정 (Shared Structure):</strong> 초기 3개 거친 계층 코드를 고정한 상태에서 하위 9개 계층을 무작위 샘플링하면, 이야기의 거시적 서사 주제(예: 추위를 느껴 나무 아래 상자를 여는 소녀)는 완벽히 유지되면서 세부 요소(이름, 옷 종류, 대상)만 다양하게 변형된다 (Figure 17).</li>
+<li><strong>거친 코드 혼합 (Mixing Coarse Representations):</strong> 서로 다른 두 이야기의 거친 계층 표현을 혼합하여 생성하면 두 이야기의 핵심 플롯과 배경이 정교하게 융합된 텍스트가 생성된다 (Figure 18).</li>
+<li><strong>거친 코드 섭동 (Perturbing Early Codes):</strong> 초기 1계층 코드 2개를 무작위 코드로 교체하면 등장인물의 종류나 주요 오브젝트 등 서사의 근본적인 설정 자체가 변경된다 (Figure 19).</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-및-화자-entities-speakers">3. 등장 인물 및 화자 (Entities &amp; Speakers)</h4>
+<p>본 논문의 저자진 및 소속 기관 정보는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">성명 (Name)</th>
+<th style="text-align:left">소속 기관 (Affiliation)</th>
+<th style="text-align:left">역할 및 기여도 (Role / Contribution)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Hermann Kumbong</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Computer Science)</td>
+<td style="text-align:left">공동 주 저자 (Equal contribution) / 교신 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ishan S. Khare</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Computer Science)</td>
+<td style="text-align:left">공동 주 저자 (Equal contribution) / 교신 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Iddah Mlauzi</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Computer Science)</td>
+<td style="text-align:left">공동 저자 (Co-author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Andrew Woen</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Electrical Engineering)</td>
+<td style="text-align:left">공동 저자 (Co-author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Charles Ding</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Computer Science)</td>
+<td style="text-align:left">공동 저자 (Co-author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>E. Kelly Buchanan</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Computer Science)</td>
+<td style="text-align:left">공동 저자 (Co-author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Simran Arora</strong></td>
+<td style="text-align:left">Together AI</td>
+<td style="text-align:left">공동 시니어 저자 (Equal senior authorship)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Azalia Mirhoseini</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Computer Science)</td>
+<td style="text-align:left">공동 시니어 저자 (Equal senior authorship)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Christopher Ré</strong></td>
+<td style="text-align:left">Stanford University (Dept. of Computer Science)</td>
+<td style="text-align:left">공동 시니어 저자 (Equal senior authorship)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-quantities-timelines">4. 주요 수치 및 시점 (Quantities &amp; Timelines)</h4>
+<p>NCM 논문에 제시된 핵심 수치 지표, 모델 파라미터, 성능 향상 비율 및 타임라인을 정리한 종합 표는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목 (Category)</th>
+<th style="text-align:left">지표 및 수치 (Metric &amp; Value)</th>
+<th style="text-align:left">소스 기반 세부 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>논문 제출 시점</strong></td>
+<td style="text-align:left">2026년 10월 9일</td>
+<td style="text-align:left">arXiv:2610.14162v1 [cs.CL] 공식 등재</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기본 생성기 파라미터</strong></td>
+<td style="text-align:left">약 100M (88.02M ~ 119.96M)</td>
+<td style="text-align:left">Table 6 (OWT: 94.65M, LM1B: 97.07M, TinyStories: 88.61M, XSum: 88.02M, WMT14: 119.96M, Sudoku: 25.46M)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최대 모델 스케일링</strong></td>
+<td style="text-align:left">317M, 725M 파라미터</td>
+<td style="text-align:left">Section 4.5, Figure 6(a) (LM1B 데이터셋 기준 생성기 스케일링)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>추론 벽시계 속도 향상</strong></td>
+<td style="text-align:left">LM1B <strong>21배</strong> ($21\times$), XSum <strong>31배</strong> ($31\times$), OWT <strong>10배</strong> ($10\times$)</td>
+<td style="text-align:left">H100 GPU 기준, 기존 강력한 DLM 베이스라인 대비 생성 속도 향상 비율 (Figure 1, Section 4.6)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>샘플링 단계 수 (NFE)</strong></td>
+<td style="text-align:left">NCM: <strong>8 ~ 32 NFE</strong> (베이스라인: 64 ~ 1,024 NFE)</td>
+<td style="text-align:left">Table 2, Table 8, Table 3 (NCM은 4~16배 적은 NFE로 최상위 품질 달성)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 토큰 예산 절감</strong></td>
+<td style="text-align:left">LM1B: <strong>13.36B</strong> (vs 66B, <strong>4.9배 절감</strong>)&lt;br&gt;OWT: <strong>127.22B</strong> (vs 500B+, <strong>약 4배 절감</strong>)</td>
+<td style="text-align:left">토크나이저(Stage 1) 및 생성기(Stage 2) 학습 토큰 노출량 총합치 (Figure 7, Appendix C.2)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sudoku 추론 정확도</strong></td>
+<td style="text-align:left">Easy <strong>99.5%</strong>, Medium <strong>96.5%</strong>, Hard <strong>86.1%</strong></td>
+<td style="text-align:left">12 NFE 사용, 81개 칸 완벽 해결 비율 (Table 3, 타 확산 및 AR 모델 완전 제압)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>토크나이저 복원 정확도</strong></td>
+<td style="text-align:left">Sudoku <strong>100%</strong>, OWT <strong>99.99%</strong>, TinyStories <strong>99.98%</strong>, LM1B <strong>99.86%</strong>, XSum <strong>99.79%</strong>, WMT14 <strong>98.79%</strong></td>
+<td style="text-align:left">전체 계층 사용 시 정확한 토큰 복원 비율 (Table 1)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드북 활용률 (Utilization)</strong></td>
+<td style="text-align:left">TinyStories 90.12%, LM1B 89.31%, XSum 86.20%, OWT 83.10%, Sudoku 80.73%, WMT14 61.89%</td>
+<td style="text-align:left">계층별 코드북 사용 비율의 평균치 (Table 1)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>소스 텍스트(Appendix I Limitations &amp; Future Work 및 본문 분석)에 명시적으로 바탕을 둔 NCM 기술의 구조적 한계점 및 미해결 불확실성은 다음과 같다.</p>
+<ol>
+<li><strong>고정된 계층 깊이 및 길이 스케줄로 인한 입력 가변성 미비:</strong>
+NCM은 계층의 개수 $K$와 계층별 코드 길이 $\ell_k$를 사전 고정하여 사용한다. 이로 인해 짧은 문장을 생성하거나 단순한 입력을 처리할 때도 전체 $K$개 계층을 모두 거쳐야 하므로, 입력 예제의 난이도나 복잡도에 따라 연산량을 동적으로 조절하는 입력 의존적 가변 스케줄링(Input-dependent scheduling)이 구현되어 있지 않다.</li>
+<li><strong>2단계 분리 학습 구조의 한계 (단대단 학습 미적용):</strong>
+NCM은 다중 스케일 VQ-VAE 토크나이저를 먼저 학습시킨 후 고정(Freeze)하고, 그 위에 트랜스포머 생성기를 별도로 학습시키는 2단계 분리 구조를 취한다. 표현 학습(Representation Learning)과 생성 목표(Generative Objective)가 분리되어 있어, 단대단(End-to-End) 공동 학습을 통한 글로벌 성능 최적화가 이뤄지지 못했다.</li>
+<li><strong>거친 계층 전환 시 생성 아티팩트(Artifacts) 발생:</strong>
+생성 텍스트는 전반적으로 유창하지만, 초기 거친 계층(Coarse level)에서 세밀한 계층(Fine level)으로 전환되는 과정에서 간혹 국소적인 생성 아티팩트(Artifacts)나 어휘 왜곡 현상이 관찰된다.</li>
+<li><strong>초대형 스케일링(Multi-billion 이상) 검증 미비:</strong>
+본 논문의 핵심 실험은 주로 100M 파라미터 수준에서 수행되었으며, 모델 스케일링 실험도 최대 725M 파라미터(LM1B)에 그쳤다. 수십억(Multi-billion) 파라미터 이상의 초대형 언어 모델 및 수조 토큰 데이터셋 환경에서의 검증은 아직 수행되지 않았다.</li>
+<li><strong>확인 불가 사항 (소스에서 다루지 않음):</strong>
+<ul>
+<li><strong>모델 학습용 하드웨어 클러스터 구성:</strong> 소스에서 다루지 않음 (추론 성능 평가용 H100 GPU 1대 명시 외, 전체 모델 학습에 사용된 GPU 종류 및 클러스터 규모 정보는 기재되지 않음).</li>
+<li><strong>실시간 스트리밍 생성 지원 여부:</strong> 소스에서 다루지 않음 (계층별 전방향 생성을 수행하는 특성상 실시간 토큰 스트리밍 데코딩과의 호환성 여부는 언급되지 않음).</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

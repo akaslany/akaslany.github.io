@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archify 기술 심층 보고서 (고정 커밋: 0853a805003514776bef3593ecca091409828902)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Archify 기술 심층 보고서 (고정 커밋: 0853a805003514776bef3593ecca091409828902)</h1>
+<p class="page-meta">AI 대화 공유 · 2026-08-29</p>
+<h2 id="요약">요약</h2>
+<p>Archify 고정 커밋 감사는 다이어그램 검증 기능과 아키텍처 정확성 보장의 한계를 설명한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/ai-share/">AI 대화 공유</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://chatgpt.com/share/6a923de7-887c-83e9-8f2f-f0eedb974206">출처</a> · <a href="https://www.youtube.com/watch?v=3E2AogNy9_s">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="archify-기술-심층-보고서-고정-커밋-0853a805003514776bef3593ecca091409828902">Archify 기술 심층 보고서 (고정 커밋: 0853a805003514776bef3593ecca091409828902)</h3>
+<p>본 보고서는 <code>tt-a1i/archify</code> 저장소의 특정 커밋 상태(0853a80)를 대상으로 수행된 기술 감사 결과입니다. 수석 기술 감사관의 관점에서 시스템의 아키텍처 명세 방식, 검증 메커니즘의 무결성, 그리고 도구가 보장하는 기술적 사실의 한계를 엄격히 규명합니다.</p>
+<h5 id="1-제품-정의-및-운영-경계-product-boundary">1. 제품 정의 및 운영 경계 (Product Boundary)</h5>
+<p>Archify는 소스 코드로부터 아키텍처를 추출하는 ‘자동 발견(Discovery) 엔진’이 아닙니다. 이 시스템은 외부 인텔리전스와 기계적 검증기 사이의 엄격한 역할 분리를 운영 전제로 합니다.</p>
+<ul>
+<li><strong>에이전트와 도구의 분리:</strong> Cursor, Claude Code, Codex CLI, OpenCode 등 외부 코딩 에이전트가 소스 코드를 해석하여 시스템의 의미와 토폴로지를 담은 **제한된 JSON IR(Intermediate Representation)**을 작성합니다. Archify는 이 authored IR을 입력받아 후속 공정을 수행합니다.</li>
+<li><strong>핵심 기능 정의:</strong> Archify는 작성된 IR을 스키마, 기하학적 제약, 소스 코드 근거(Evidence) 관점에서 검증하고 렌더링/패키징하는 <strong>다이어그램 컴파일러</strong>이자 <strong>증거 검증기</strong>입니다.</li>
+<li><strong>운영 경계:</strong> 본 도구는 ‘AI가 이해했다고 주장하는 내용’을 기계적 규칙으로 통제하고 시각적 산출물로 변환하는 데 국한되며, 코드베이스의 의미를 스스로 판단하지 않습니다.</li>
+</ul>
+<h5 id="2-다섯-가지-다이어그램-타입의-스키마와-의미론-schema-semantics">2. 다섯 가지 다이어그램 타입의 스키마와 의미론 (Schema &amp; Semantics)</h5>
+<p>Archify는 모든 그래프를 단일 모델로 처리하지 않고, 목적에 따라 설계된 다섯 가지 독립적 문법을 제공합니다. 모든 스키마는 <code>schema_version: 1</code>을 따르며 <code>common.schema.json</code>을 통해 공통 정의를 관리합니다.</p>
+<ul>
+<li><strong>Architecture:</strong> 서비스, 데이터베이스, 보안/지역 경계(Boundaries) 및 구성요소(Components) 간의 물리적/논리적 연결과 기술적 근거를 정의합니다.</li>
+<li><strong>Workflow:</strong> 레인(Lanes)과 노드(Nodes)를 통해 작업 흐름, 분기, 오류 경로 및 역할별 책임을 명시합니다.</li>
+<li><strong>Sequence:</strong> 참여자(Participants) 간의 시간 순 메시지(Messages) 교환과 활성화 상태를 표현합니다.</li>
+<li><strong>Dataflow:</strong> 데이터가 단계(Stages)를 거치며 변환되는 이동 경로와 데이터 자산의 분류를 다룹니다.</li>
+<li><strong>Lifecycle:</strong> 객체나 서비스의 상태(States) 전이(Transitions)를 레인별로 관리합니다.</li>
+</ul>
+<p><strong>엄격성 정책:</strong> 모든 스키마는 <code>additionalProperties: false</code>를 적용하여 에이전트가 스키마에 정의되지 않은 필드를 생성하는 ‘문법적 환각’을 원천적으로 차단합니다.</p>
+<h5 id="3-제약된-레이아웃-문법-및-진단-시스템-layout-grammar-diagnostics">3. 제약된 레이아웃 문법 및 진단 시스템 (Layout Grammar &amp; Diagnostics)</h5>
+<p>Archify는 정보 전달의 무결성을 위해 미학적 자유도 대신 기계적으로 검증 가능한 ‘제약된 문법(Bounded Grammar)’을 채택합니다.</p>
+<ul>
+<li><strong>기하학적 검증 규칙 (<code>geometry.mjs</code>):</strong>
+<ul>
+<li><strong>Crossing/Corridor:</strong> 불필요한 선 교차와 동일 통로 내 선 겹침을 감지하여 시각적 모호성을 제거합니다.</li>
+<li><strong>Route Rhythm/Port Spread:</strong> 경로 굴곡의 일관성과 연결 포트 배치의 균등성을 검사합니다.</li>
+<li><strong>Border/Label Clearance:</strong> 컨테이너 경계와 텍스트 라벨 간의 최소 여백을 강제합니다.</li>
+</ul>
+</li>
+<li><strong>진단 메커니즘:</strong> <code>validator.mjs</code>는 입력된 IR이 '기계적 정확성(Mechanical Correctness)'을 만족하는지 진단합니다. 이는 레이아웃 취향(Layout Taste)의 문제가 아니라, 정보의 왜곡 없는 전달을 위한 물리적 제약 사항입니다.</li>
+<li><strong>규모의 제한:</strong> 본 시스템은 대규모 그래프 배치를 위한 범용 엔진이 아닙니다. 가독성을 위해 주요 노드를 <strong>12개 이내</strong>로 유지하도록 권장하는 설계 한계(Product Boundary)를 가집니다.</li>
+</ul>
+<h5 id="4-아키텍처-증거-evidence-와-의미론적-무결성-구분">4. 아키텍처 증거(Evidence)와 의미론적 무결성 구분</h5>
+<p>Archify는 다이어그램의 요소가 실제 소스 코드에 기인했음을 증명하는 참조 무결성 기능을 포함합니다.</p>
+<ul>
+<li><strong>참조 무결성 검증 (<code>repository-evidence.mjs</code>):</strong>
+<ul>
+<li>40자리 16진수 Git 커밋 객체 ID(감사한 저장소에서는 SHA-1 형식)와 정규화된 GitHub HTTPS URL의 정합성을 확인합니다.</li>
+<li><code>git cat-file</code> 등을 통해 지정된 파일과 줄 번호 범위(Line range)가 해당 리비전에 실제 존재하는지 물리적으로 검사하고 Receipt를 생성합니다.</li>
+</ul>
+</li>
+<li><strong>기술적 사실과 진실의 구분 (핵심 감사 포인트):</strong>
+<ul>
+<li><strong>Schema-valid vs. Architecture Truth:</strong> 스키마와 기하 규칙을 통과했다고 해서 실제 시스템의 서비스가 누락되지 않았거나 관계가 정확함을 보장하지 않습니다.</li>
+<li><strong>Referential Integrity vs. Semantic Proof:</strong> <code>repository-evidence.mjs</code>는 파일의 '존재'를 증명할 뿐, 해당 코드가 다이어그램의 주장을 논리적으로 뒷받침하는지는 증명하지 못합니다. (예: 에이전트가 관련 없는 설정 파일을 근거로 연결해도 물리적 존재가 확인되면 검증을 통과함)</li>
+<li><strong>Deterministic Output vs. Semantic Correctness:</strong> 동일 입력에 대해 항상 일정한 렌더링 결과가 보장되나, 이는 모델의 의미론적 정확성과 무관합니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-architecture-delta-및-변경-관리">5. Architecture Delta 및 변경 관리</h5>
+<p><code>delta/architecture-delta.mjs</code>를 통해 두 아키텍처 스냅샷 간의 구조적 차이를 분석합니다.</p>
+<ul>
+<li><strong>모델 기반 비교:</strong> 단순 텍스트 diff가 아닌, 안정적인 ID를 기반으로 컴포넌트, 연결, 경계의 추가/삭제/이동 및 증거(Evidence) 변화를 분류합니다.</li>
+<li><strong>판단 보류 원칙:</strong> Archify는 Delta 분석 결과에 대해 <code>SAFE</code>, <code>LOW RISK</code>, <code>MERGEABLE</code> 등 위험도를 단정하는 용어를 의도적으로 사용하지 않습니다. 이는 시스템이 변경의 의미론적 위험이나 병합 안전성을 판정할 능력이 없음을 명시적으로 인정하는 설계 철학입니다.</li>
+</ul>
+<h5 id="6-결정론적-렌더링과-대화형-뷰어-rendering-viewer">6. 결정론적 렌더링과 대화형 뷰어 (Rendering &amp; Viewer)</h5>
+<ul>
+<li><strong>출력 형식:</strong> PNG, JPEG, WebP, SVG와 영상 형식인 WebM 출력을 지원합니다.</li>
+<li><strong>뷰어 주요 기능:</strong> 정적 HTML 뷰어는 검색, Passport(노드 역할 및 근거 확인), Reachability(그래프 내 도달 가능성), Route Probe(최단 경로 탐색), Guided Story 기능을 제공합니다.</li>
+<li><strong>운영 관점:</strong> 본 뷰어는 실시간 협업이나 런타임 관측성(Observability) 도구가 아니며, 특정 시점의 아키텍처를 고정하여 전달하는 '정적 상호작용 문서'입니다.</li>
+</ul>
+<h5 id="7-원자적-전달-및-안전-장치-delivery-preservation">7. 원자적 전달 및 안전 장치 (Delivery &amp; Preservation)</h5>
+<p><code>commandDeliver()</code> 로직은 산출물 배포의 신뢰성을 위해 다음의 원자적 단계를 거칩니다.</p>
+<ol>
+<li><strong>Staging Cleanup:</strong> 임시 스테이징 영역을 정리하여 이전 작업의 간섭을 차단합니다.</li>
+<li><strong>Candidate Validation:</strong> 스테이징 영역에서 모든 검증 및 렌더링을 마칩니다.</li>
+<li><strong>Receipt Generation:</strong> 스펙과 결과물의 SHA-256 해시를 기반으로 영수증을 생성합니다.</li>
+<li><strong>Filesystem Rename:</strong> 모든 검증이 성공했을 때만 원자적인 <code>rename</code> 방식을 통해 최종 산출물을 교체합니다.</li>
+<li><strong>Last-good Preservation:</strong> 작업 실패 시 기존의 정상 산출물을 보존합니다. 이는 문서의 가용성을 위한 장치이며, 시스템 전체의 배포 롤백이나 보안을 보장하는 장치는 아닙니다.</li>
+</ol>
+<h5 id="8-구현-상태-및-신뢰-수준-분류-evidence-classes">8. 구현 상태 및 신뢰 수준 분류 (Evidence Classes)</h5>
+<p>본 감사는 다음의 환경에서 실행된 결과를 바탕으로 합니다: <strong>Linux, Node v22.22.2, npm 10.9.7, Chrome(/usr/bin/google-chrome).</strong></p>
+<ul>
+<li><strong>1. Implemented + Locally Tested:</strong> 고정 트리 코드 기반. 750개 테스트 중 746개 통과(남은 4개는 특정 환경 계약에 따른 Skip).</li>
+<li><strong>2. Inspection Only:</strong> 실행 경로가 확인되었으나 로컬 테스트에서 직접 구동되지 않은 일부 Export 세부 경로.</li>
+<li><strong>3. Documented Intention:</strong> <code>DESIGN.md</code> 및 <code>SKILL.md</code>에서 규정한 에이전트 협업 규범.</li>
+<li><strong>4. Upstream CI:</strong> GitHub Actions를 통한 Node 18~24 및 다중 OS(Ubuntu, macOS, Windows) 패키지 스모크 테스트 성공 보고.</li>
+<li><strong>5. Roadmap:</strong> <code>ROADMAP.md</code>에 기재된 미구현 계획.</li>
+<li><strong>6. ChatGPT Interpretation:</strong> 제공된 2차 분석 및 비교 데이터.</li>
+<li><strong>7. Unsupported/Overstated:</strong> 자동 아키텍처 발견, 런타임 진실 보장, 실제 장애 전파(Blast Radius) 분석 등은 지원하지 않음이 확인되었습니다.</li>
+</ul>
+<h5 id="9-도구-간-비교-분석-benchmark-축">9. 도구 간 비교 분석 (Benchmark 축)</h5>
+<ul>
+<li><strong>vs. Mermaid:</strong> Mermaid는 간결한 텍스트 기반 다이어그램에 집중하나, Archify는 타입화된 IR, 엄격한 진단, 소스 근거에 집중합니다. 특히 Archify는 Mermaid를 직접 파싱하지 않고 에이전트의 **'의미적 재해석(Semantic Reinterpretation)'**을 통해 IR을 새로 생성합니다.</li>
+<li><strong>vs. PlantUML/Graphviz:</strong> 범용 다이어그램 및 그래프 엔진과 달리, Archify는 아키텍처 가독성을 위해 의도적으로 제한된 문법과 기하학적 규칙을 적용합니다.</li>
+<li><strong>vs. Structurizr:</strong> C4 모델과 유사한 지향점을 가지나, Archify는 외부 AI 에이전트가 작성한 JSON IR의 검증과 패키징된 정적 산출물 전달에 최적화되어 있습니다.</li>
+</ul>
+<h5 id="10-보고서의-유효성-및-갱신-규정">10. 보고서의 유효성 및 갱신 규정</h5>
+<ul>
+<li><strong>유효 기준일:</strong> 2026-08-29</li>
+<li><strong>라이선스:</strong> MIT License (SHA-256: <code>2f724fa953b4eaa8ec75fa56919ce474b57adce54d2456a3791510bc53735cbd</code>)</li>
+<li><strong>실패 모드(Failure Modes) 권고:</strong> 에이전트가 핵심 컴포넌트를 누락하거나 오독할 수 있으며, 스키마를 통과한 '정교한 오답'이 신뢰를 과도하게 높일 위험이 있습니다. 사용자는 반드시 인간에 의한 최종 검토와 실제 런타임 증거를 병행해야 합니다.</li>
+<li><strong>갱신 트리거:</strong> 브랜치 이동, 스키마 변경, 보안 권고 발생, 또는 '자동 발견' 기능 추가 등 제품 경계의 변화가 있을 시 본 감사는 즉시 무효화되며 재검사가 필요합니다.</li>
+</ul>
+<p><strong>Chief Technical Auditor &amp; Toolchain Architect</strong>
+<strong>[Authorized on 2026-08-29]</strong></p>
+<h4 id="편집-검증-및-공개-경계">편집 검증 및 공개 경계</h4>
+<ul>
+<li>
+<p>기준일: 2026-08-29</p>
+</li>
+<li>
+<p>감사 고정 커밋: <code>0853a805003514776bef3593ecca091409828902</code></p>
+</li>
+<li>
+<p>라이선스: MIT</p>
+</li>
+<li>
+<p>로컬 실행 범위: Linux, Node v22.22.2, npm 10.9.7, Google Chrome. 750 tests 중 746 pass, 4 environment-contract skip, 0 fail; clean package smoke pass; DeepSeek Harness 23 pass. 다른 OS 결과는 upstream CI self-report이며 이 로컬 실행의 독립 증거가 아니다.</p>
+</li>
+<li>
+<p>스키마가 유효하다는 사실은 아키텍처가 참이라는 뜻이 아니다.</p>
+</li>
+<li>
+<p>파일과 줄 근거가 존재한다는 사실은 런타임 동작이 검증됐다는 뜻이 아니다.</p>
+</li>
+<li>
+<p>결정론적 출력은 작성된 모델의 의미가 정확하다는 보장이 아니다.</p>
+</li>
+<li>
+<p>고정 리비전·해시·원자적 전달·last-good 보존은 배포 성공이나 보안을 보장하지 않는다.</p>
+</li>
+<li>
+<p>Architecture Delta는 작성된 두 스냅샷의 필드 차이이며 의미적 위험 분석이나 safe-to-merge 판정이 아니다.</p>
+</li>
+<li>
+<p>대화형 HTML viewer는 live multi-user 협업 시스템이나 runtime observability가 아니다.</p>
+</li>
+<li>
+<p>에이전트가 작성한 JSON은 아키텍처를 누락하거나 오독할 수 있으므로 사람의 검토와 정적·런타임 증거가 필요하다.</p>
+</li>
+<li>
+<p>ROADMAP 항목은 구현된 현재 기능이 아니라 문서화된 계획이다.</p>
+</li>
+<li>
+<p>규모와 레이아웃 제한은 이 제품의 bounded design boundary이며 범용 graph engine 능력을 뜻하지 않는다.</p>
+</li>
+</ul>
+<h5 id="활용-실패-모드-비교-기준">활용, 실패 모드, 비교 기준</h5>
+<p>설계 리뷰·온보딩·변경 전후 authored snapshot 비교·evidence-bound 정적 문서 배포에 유용하다. 실패 모드는 agent omission/misread, schema-valid but semantically wrong model, evidence와 실제 의미의 불일치, 큰 graph의 readability 한계, Delta와 runtime blast radius의 혼동이다. Mermaid·PlantUML·Graphviz·Structurizr·manual diagram은 notation, 생태계, 범용 layout, model-as-code, 자유도에서 서로 다른 trade-off가 있다. 동일 조건 benchmark가 없으므로 Archify의 보편적 우월성을 주장하지 않는다.</p>
+<h5 id="유효기간과-갱신-철회">유효기간과 갱신·철회</h5>
+<p>이 평가는 2026-08-29과 위 고정 커밋에 유효하다. default branch, stable release/schema, evidence·Delta·viewer·delivery semantics, test matrix, license 또는 security advisory가 바뀌면 재감사한다. 공개 설명과 구현이 충돌하거나 중대한 권리·보안 문제가 확인되면 교정 또는 철회한다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/ai-share/">AI 대화 공유</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

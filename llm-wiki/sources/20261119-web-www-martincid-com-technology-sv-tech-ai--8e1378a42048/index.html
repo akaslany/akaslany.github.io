@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elon Musk says a from-scratch C/C++ rewrite is why Grok 4.8 ran late – Martin Cid Magazine</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Elon Musk says a from-scratch C/C++ rewrite is why Grok 4.8 ran late – Martin Cid Magazine</h1>
+<p class="page-meta">웹 · 2026-11-19</p>
+<h2 id="요약">요약</h2>
+<p>[사실] xAI(현재 SpaceX의 일부)의 대형 언어 모델인 Grok 4.8의 출시 일정이 지연되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.martincid.com/technology-sv/tech-ai/elon-musk-grok-4-8-c-cpp-rewrite-delay">출처</a> · <a href="https://www.youtube.com/watch?v=RJxkYnlCcV4">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="elon-musk의-grok-4-8-지연-원인-및-c-c-자체-스택-재작성-해설-보고서">Elon Musk의 Grok 4.8 지연 원인 및 C/C++ 자체 스택 재작성 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p><strong>[사실]</strong> xAI(현재 SpaceX의 일부)의 대형 언어 모델인 Grok 4.8의 출시 일정이 지연되었습니다. 이번 지연의 근본 원인은 xAI가 기존 모델 학습 및 서빙에 사용하던 오픈소스 도구인 JAX와 SGLang을 전면 폐기하고, C/C++ 언어를 바탕으로 자체 강화학습(RL) 및 추론(Inference) 스택을 바닥부터 재작성했기 때문입니다.</p>
+<p><strong>[소스 주장/발언]</strong> xAI를 이끄는 일론 머스크(Elon Musk)는 Grok 4.8의 성능에 대해 &quot;아직 놀라울 정도는 아니다(not yet incredible)&quot;라고 솔직하게 평가하면서도, 시스템의 기반을 올바르게 구축했다는 점을 강조했습니다. 그는 경쟁사인 앤스로픽(Anthropic)의 Opus 5.5를 &quot;걸작(masterpiece)&quot;이라고 높게 평가하며 Grok 4.8이 이에 미치지 못함을 인정했으나, 새로 작성된 스택을 기반으로 약 2~3개월 후 출시될 Grok 5가 Opus 5.5를 능가할 것이라고 공언했습니다.</p>
+<p><strong>[사실]</strong> 본 보고서는 Martin Cid Magazine의 에이드리언 케슬러(Adrian Kessler) 기자가 작성한 분석 기사(2026년 11월 10일 자)를 바탕으로 정리되었습니다. 본문은 정보의 정확성과 객관성을 확보하기 위해 <strong>[사실]</strong>, <strong>[소스 주장/발언]</strong>, <strong>[작성자/기자 해석]</strong> 범주를 엄격히 구별하여 기술합니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-deep-dive">2. 주요 논점 (Key Arguments &amp; Deep Dive)</h4>
+<h5 id="2-1-오픈소스-프레임워크-폐기-및-인하우스-c-c-스택-전환">2.1. 오픈소스 프레임워크 폐기 및 인하우스 C/C++ 스택 전환</h5>
+<ul>
+<li><strong>[사실] 폐기된 도구</strong>: xAI는 모델 사전 학습에 사용하던 파이썬(Python) 기반 수치 계산 라이브러리 <code>JAX</code>와 대형 언어 모델 서빙 프레임워크인 <code>SGLang</code>을 전면 폐기했습니다.</li>
+<li><strong>[사실] 신규 스택 및 아키텍처적 의미</strong>: xAI는 강화학습(RL) 및 추론 스택 전체를 C/C++ 언어로 직접 바닥부터 재작성했습니다.</li>
+<li><strong>[소스 주장/발언] 머스크의 언어 설명 및 성능 주장</strong>: 머스크는 새로 작성된 코드가 &quot;약간의 C++이 포함되어 있지만 대부분 C 언어로 구성되어 있다&quot;고 설명했습니다. 외부 고수준 추상화 라이브러리를 제거함으로써 엔비디아(Nvidia) GB300 칩 220,000개 클러스터 하드웨어에 소프트웨어를 1:1 직접 매핑(exact-maps)할 수 있게 되었으며, 이를 통해 대규모 학습 실행 시(for large training runs) 기존 JAX 대비 10배 이상(over an order of magnitude)의 속도 향상이 가능하다고 주장했습니다.</li>
+<li><strong>[소스 주장/발언] 기술적 배경 및 코드 작성 주체</strong>: 머스크에 따르면 해당 소프트웨어 스택은 SpaceX의 Starlink 엔지니어 팀이 작성한 시스템 유산에 기반합니다. Starlink 팀은 &quot;자체 헤더를 작성하고 자체 시간을 계산하는&quot; 개발 방식을 취합니다. 머스크는 사전 학습 코드가 Starlink 팀에 의해 직접 인공 작성(Not written by AI)되었으며, &quot;고성능 소프트웨어 분야에서 AI는 아직 충분히 뛰어나지 못하다&quot;는 이유를 제시했습니다.</li>
+</ul>
+<h5 id="2-2-개발-일정-경과-및-지연의-구체적-원인">2.2. 개발 일정 경과 및 지연의 구체적 원인</h5>
+<ul>
+<li><strong>[사실] 단계별 추진 경과</strong>: Grok 4.8의 개발 및 지연 과정은 아래의 구체적인 순서에 따라 진행되었습니다.
+<ol>
+<li>사전 학습(Pre-training) 완료 및 지도 미세조정(SFT) 데이터 세트에 대한 대대적인 정제(Cleanup) 작업 수행.</li>
+<li>사전 학습 코드는 신규 작성되었으나, 모델의 행동을 다듬는 RL 영역이 기존에 여러 서드파티 소프트웨어 시스템이 얽혀 있는 &quot;레거시 더미(legacy pile)&quot; 상태임을 확인.</li>
+<li>모델의 행동을 학습시키는 RL 스택과 사용자 응답을 처리하는 추론 스택 전체를 C/C++로 바닥부터 전면 재작성 결정.</li>
+<li>재작성 완료 후 RL 단계에 진입하여 평가 수치(evals) 상승 확인.</li>
+</ol>
+</li>
+<li><strong>[사실] 지연 기간</strong>: 머스크가 6월 말에 &quot;약 3개월 후 학습 및 추론 스택 전체 재작성을 통해 대부분의 소프트웨어 레이어를 삭제하고 대대적인 성과를 내겠다&quot;고 발표했으나, 실제 완료는 예정보다 약 6주(6 weeks) 지연되었습니다.</li>
+</ul>
+<h5 id="2-3-grok-4-8-및-grok-4-7-성능-평가와-경쟁-모델-비교">2.3. Grok 4.8 및 Grok 4.7 성능 평가와 경쟁 모델 비교</h5>
+<ul>
+<li><strong>[소스 주장/발언] Grok 4.7 평가</strong>: 머스크는 2026년 9월 21일 출시했던 기존 모델 Grok 4.7에 대해 &quot;Grok 4.8은 4.7과 전혀 닮지 않을 것(다행히도)&quot;이라며 내부 모델에 대해 비판적으로 평가했습니다.</li>
+<li><strong>[소스 주장/발언] Grok 4.8 성능 인정</strong>: 머스크는 Grok 4.8이 &quot;아직 놀라운 수준은 아니다&quot;라고 인정했습니다. 특히 앤스로픽(Anthropic)의 <code>Opus 5.5</code>와 비교하는 질문에 &quot;Opus 5.5는 걸작(masterpiece)이며, Grok 4.8은 그 정도로 좋지는 않다&quot;고 공개적으로 솔직한 평가를 내놓았습니다.</li>
+<li><strong>[소스 주장/발언] Grok 5 목표</strong>: 머스크는 이번 C/C++ 자체 스택 전환을 통해 올바른 기반을 구축했으므로, 약 2개월 또는 3개월 후 출시될 <code>Grok 5</code>가 Opus 5.5를 능가할 것이라고 공언했습니다.</li>
+</ul>
+<h5 id="2-4-스택-자체-소유화의-이점과-위험-요소-기자-작성자-해석-분석">2.4. 스택 자체 소유화의 이점과 위험 요소 (기자/작성자 해석 분석)</h5>
+<ul>
+<li><strong>[작성자/기자 해석] 인하우스 스택의 이점</strong>: xAI가 JAX와 SGLang을 abandonment함으로써 타사의 소프트웨어 추상화 레이어나 외부의 출시 일정 의존성에서 완벽히 탈피했습니다. 22만 개의 엔비디아 GB300 칩셋이라는 특정 하드웨어에 소프트웨어를 직접 1:1 매핑하여 속도 최적화를 이룰 수 있습니다.</li>
+<li><strong>[작성자/기자 해석] 인하우스 스택의 위험 요소</strong>: 외부 커뮤니티가 사용하거나 검증하지 않은 독자적인 코드베이스를 사용하기 때문에, 학습 루프와 서빙 경로에서 발생하는 모든 소프트웨어 버그를 타사의 탓으로 돌릴 수 없으며 전적으로 xAI 내부 인력이 자체 책임져야 하는 리스크가 있습니다.</li>
+<li><strong>[작성자/기자 해석] 결론적 진단</strong>: 이번 소프트 롤아웃(Soft rollout)은 모델 자체의 성능 평가보다 C/C++ 파이프라인 전체(plumbing)를 시험하는 무대입니다. 실제 Grok Bot 트래픽을 모델이 성공적으로 견뎌낸다면 이번 재작성 스택은 Grok 5를 학습시키는 핵심 플랫폼이 되겠지만, 시스템이 흔들릴 경우 더 이상 탓할 상류 오픈소스 프레임워크(upstream framework)가 전혀 남지 않게 됩니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-persons-and-speakers">3. 등장 인물 및 화자 (Persons and Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 / 화자 이름</th>
+<th style="text-align:left">역할 및 소속</th>
+<th style="text-align:left">소스 상 언급 내용 및 확인 범위</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>일론 머스크 (Elon Musk)</strong></td>
+<td style="text-align:left">xAI / SpaceX 대표 (화자)</td>
+<td style="text-align:left"><strong>[사실]</strong> xAI 및 SpaceX의 리더로서 개발 상황을 발표함. <strong>[소스 주장/발언]</strong> C/C++ 바닥 재작성 배경, Grok 4.8 개발 지연 인정, 2.5조 파라미터 주장, 대규모 학습 시 10배 속도 향상 주장, Opus 5.5 대비 성능 인정, Grok 5 출시 전망 발표.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>에이드리언 케슬러 (Adrian Kessler)</strong></td>
+<td style="text-align:left">Martin Cid Magazine 기고자 (작성자)</td>
+<td style="text-align:left"><strong>[사실]</strong> 2026년 11월 10일 자 소스 기사 작성자. <strong>[작성자/기자 해석]</strong> xAI의 C/C++ 자체 스택 구축에 대한 시스템적 장단점 평가, 하드웨어 매핑 분석, 프레임워크 백업 상실에 따른 리스크 분석 제시.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 등장인물</strong></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left"><strong>[사실]</strong> 소스 기사 내에 이름이 언급된 다른 등장인물이나 세부 역할은 없음 (확인 불가).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-타임라인-data-and-timeline">4. 수치 및 타임라인 (Data and Timeline)</h4>
+<h5 id="4-1-주요-수치-데이터-목록">4.1. 주요 수치 데이터 목록</h5>
+<ul>
+<li><strong>[소스 주장/발언] 모델 파라미터 규모</strong>: 2.5조 개(2.5-Trillion Parameters) (일론 머스크의 주장이며 외부 미검증).</li>
+<li><strong>[소스 주장/발언] 하드웨어 클러스터 규모</strong>: 엔비디아(Nvidia) GB300 칩 220,000개.</li>
+<li><strong>[소스 주장/발언] 성능 향상 주장</strong>: 대규모 학습 실행 시(for large training runs) 기존 JAX 프레임워크 대비 10배 이상(over an order of magnitude) 속도 향상 가능성 (외부 미검증).</li>
+<li><strong>[사실] 개발 지연 기간</strong>: 6월 말 약속 일정 대비 약 6주(6 weeks) 지연.</li>
+<li><strong>[소스 주장/발언] Grok 5 출시 예상 기간</strong>: 2개월 또는 3개월 후(2 or 3 months).</li>
+</ul>
+<h5 id="4-2-개발-및-발표-타임라인-chronology">4.2. 개발 및 발표 타임라인 (Chronology)</h5>
+<ol>
+<li><strong>2026년 5월 하순</strong>: <strong>[사실]</strong> 머스크, 220,000개의 엔비디아 GB300 칩 클러스터에 직접 매핑되는 C 기반 인하우스 학습 스택의 거의 완성된 단계 발표. (<strong>[소스 주장/발언]</strong> 대규모 학습 실행 시 JAX 대비 10배 이상의 속도 향상 주장)</li>
+<li><strong>2026년 6월 말</strong>: <strong>[사실]</strong> 머스크, 학습 및 추론 스택 전체 재작성 및 대부분의 소프트웨어 레이어 삭제를 통해 약 3개월 후 대대적인 성능 향상 달성을 약속.</li>
+<li><strong>2026년 9월 중순</strong>: <strong>[사실]</strong> 머스크, C++ 스택으로 학습된 2.5조 파라미터 모델(Grok 4.8)을 소개하고 RL 진입 발표. 서드파티 시스템으로 구성되었던 기존 RL 영역의 &quot;레거시 더미&quot; 상태 개선 필요성 언급.</li>
+<li><strong>2026년 9월 21일</strong>: <strong>[사실]</strong> xAI, Grok 4.7 모델 공식 출시.</li>
+<li><strong>2026년 10월 하순</strong>: <strong>[사실]</strong> 머스크, 소셜 미디어를 통해 개발이 예상보다 지연되고 있음을 인정하며 기대치 관리 발언 작성. (<strong>[소스 주장/발언]</strong> 소프트 롤아웃 요청의 대부분은 초고속 버전의 Grok 4.8로 처리될 것이라고 설명)</li>
+<li><strong>2026년 11월 10일 (기사 작성일)</strong>: <strong>[사실]</strong> 머스크, C/C++ 전면 재작성으로 인한 지연을 공식 확인, SFT 데이터 정제 완료 및 RL 평가 수치 상승 발표. 금주 내 Grok Bot 사용자 대상 소프트 롤아웃(Soft rollout) 진행 예정 발표.</li>
+</ol>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<ul>
+<li><strong>[사실] 공식 기술 문서 및 공시 부재</strong>: xAI의 공식 뉴스 페이지 및 개발자 문서에는 Grok 4.8 관련 항목이 등록되어 있지 않습니다. 모델 카드(Model Card), 벤치마크 평가 점수, 가격 정책, API 리스팅 정보가 일체 존재하지 않습니다.</li>
+<li><strong>[작성자/기자 해석] 외부 검증 부재</strong>: 2.5조 개에 달하는 파라미터 규모, 대규모 학습 시 10배 이상의 속도 향상, 그리고 RL 평가 수치 상승 주장은 전적으로 머스크 개인의 발표일 뿐 xAI 외부에서 객관적으로 검증된 바 없습니다.</li>
+<li><strong>[사실] 소프트 롤아웃 및 구동 방식 세부사항 미비</strong>: 기사 작성 주간에 Grok Bot 사용자들을 대상으로 진행된다는 소프트 롤아웃의 정확한 요일이나 시간표는 공개되지 않았습니다. 또한 머스크가 10월에 언급한 &quot;초고속 버전의 Grok 4.8(a lightning-fast version of Grok 4.8)&quot;이 구체적으로 어떤 구조로 구동되는지에 대한 기술적 정보가 부재합니다.</li>
+<li><strong>[작성자/기자 해석] 외부 프레임워크 상실에 따른 불안정성</strong>: 자체 C/C++ 스택 전환으로 외부 커뮤니티의 검증을 거친 코드가 없기 때문에, 소프트 롤아웃 과정에서 기술적 오류가 발생할 경우 책임이나 원인을 돌릴 외부 상류 프레임워크(Upstream framework)가 존재하지 않는 구조적 위험이 존재합니다.</li>
+<li><strong>[사실] 소스 미다룸 영역 (확인 불가)</strong>: 소스 텍스트에는 xAI의 세부 재무 상태, SpaceX와의 지분 결합 구조, 재작성된 C/C++ 소스 코드의 상세 아키텍처 정보가 포함되어 있지 않아 해당 내용은 확인이 불가합니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursive Self-Improvement via On-Policy Distillation for Reasoning</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Recursive Self-Improvement via On-Policy Distillation for Reasoning</h1>
+<p class="page-meta">논문 · 2026-09-28</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 인공지능 추론 모델의 사후 학습(Post-training) 과정에서 발생하는 지도 신호의 미스매치와 출력 비대화 문제를 해결하기 위해 제안된 최신 연구 논문 Recursive Self-Improvement via On-Policy Distillation for Reasoning을 정밀 분석한 기술…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.30652v1">출처</a> · <a href="https://www.youtube.com/watch?v=VW_pHiN-7lU">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="기술-분석-보고서-재귀적-온폴리시-증류를-통한-추론-모델의-자기-개선-dce와-srcl-중심의-논문-분석-arxiv-2609-30652v1">[기술 분석 보고서] 재귀적 온폴리시 증류를 통한 추론 모델의 자기 개선: DCE와 SRCL 중심의 논문 분석 (arXiv:2609.30652v1)</h3>
+<h4 id="1-보고서-개요-및-문헌-기본-정보">1. 보고서 개요 및 문헌 기본 정보</h4>
+<p>본 보고서는 인공지능 추론 모델의 사후 학습(Post-training) 과정에서 발생하는 지도 신호의 미스매치와 출력 비대화 문제를 해결하기 위해 제안된 최신 연구 논문 <em>Recursive Self-Improvement via On-Policy Distillation for Reasoning</em>을 정밀 분석한 기술 보고서입니다.</p>
+<ul>
+<li><strong>논문 제목:</strong> Recursive Self-Improvement via On-Policy Distillation for Reasoning</li>
+<li><strong>저자 및 소속:</strong> Shangjian Yin et al. (Meta AI, UC Riverside)</li>
+<li><strong>공개일:</strong> 2026년 9월 11일</li>
+<li><strong>출처 URL:</strong> https://arxiv.org/pdf/2609.30652v1</li>
+</ul>
+<blockquote>
+<p><strong>문서 상태 경고 (Preprint Warning)</strong><br />
+본 보고서가 다루는 논문은 학술지나 학회 동료심사(Peer Review)를 거치지 않은 arXiv 프리프린트(Preprint)입니다. 본 보고서의 내용은 출처 논문에 명시된 실험 조건과 결과에 철저히 기반하여 작성되었으나, 외부 타 연구진에 의한 독립적인 재현 및 검증이 아직 완료되지 않았음을 독자에게 명시합니다.</p>
+</blockquote>
+<hr />
+<h4 id="2-핵심-연구-질문-및-배경-research-questions-context">2. 핵심 연구 질문 및 배경 (Research Questions &amp; Context)</h4>
+<p>최근 거대 언어 모델(LLM)의 복잡한 추론 능력을 강화하기 위한 사후 학습 방법론은 크게 세 가지로 나뉩니다. 그러나 기존 접근 방식들은 각각 명확한 한계를 지니고 있습니다.</p>
+<h5 id="기존-방식의-한계">기존 방식의 한계</h5>
+<ol>
+<li><strong>Sparse Outcome Rewards (RLVR, 검증 가능한 보상 기반 강화학습):</strong>
+<ul>
+<li>최종 정답 유무만 평가하여 보상을 부여하므로, 중간 추론 과정의 어느 지점에서 오류가 발생했는지, 혹은 이를 어떻게 수정해야 하는지에 대한 촘촘한 지도 신호(Dense Supervision)를 제공하지 못합니다.</li>
+</ul>
+</li>
+<li><strong>Process Supervision (과정 지도):</strong>
+<ul>
+<li>추론의 단계별(Step-level) 오류를 지도할 수 있으나, 단계별 고비용 레이블링이나 별도로 학습된 검증 모델(Verifier)이 필요하여 확장성이 떨어집니다.</li>
+</ul>
+</li>
+<li><strong>On-Policy Distillation (OPD, 온폴리시 증류):</strong>
+<ul>
+<li>학생 모델이 생성한 궤적에 대해 토큰 수준의 촘촘한 지도 신호를 제공하지만, 외부 교사 모델(External Teacher)이 필요하며 교사 모델 역시 검증된 정답(Ground Truth)을 직접 참작하여 지도하지 못하는 한계가 있습니다.</li>
+</ul>
+</li>
+<li><strong>On-Policy Self-Distillation (OPSD, 온폴리시 자기 증류):</strong>
+<ul>
+<li>외부 교사 대신 동일한 베이스 모델의 복사본에 정답을 특권 문맥(Privileged Context)으로 제공하여 교사로 사용합니다. 기존 연구에서는 학습 안정성을 위해 교사 모델을 동결(Frozen)하여 사용했습니다.</li>
+</ul>
+</li>
+</ol>
+<p>이러한 배경하에 본 논문은 다음 두 가지 핵심 연구 질문(RQ)을 설정하고 해결책을 모색합니다.</p>
+<ul>
+<li><strong>연구 질문 1 (RQ1):</strong> 동결된 특권 교사(Frozen Privileged Teacher)를 사용하는 기존 OPSD 구조에서, 학생 모델이 학습됨에 따라 성찰 및 수정 능력을 새롭게 획득함에도 불구하고 교사 모델이 초기 체크포인트로 동결되어 발생하는 '지도 신호의 미스매치(Mismatch)' 문제를 어떻게 해결할 것인가?<br />
+<em>동결된 교사는 정답을 참조함에도 불구하고, 오답 궤적 끝에서 종결 토큰(EOS)을 출력할 확률이 94.5%에 달하는 반면 성찰 토큰(Wait 등)을 출력할 확률은 22.0%에 불과하여 학생이 오답으로부터 회복하는 과정을 효과적으로 지도하지 못합니다.</em></li>
+<li><strong>연구 질문 2 (RQ2):</strong> 학생 모델의 자기 수정(Reflection/Revision) 및 백트래킹 능력이 강화됨에 따라 생성이 과도하게 길어지고 삼천포로 빠지는(Verbose Detour) 현상을 성능 하락 없이 어떻게 제어할 것인가?</li>
+</ul>
+<hr />
+<h4 id="3-핵심-개념의-정밀-구분-concept-clarification">3. 핵심 개념의 정밀 구분 (Concept Clarification)</h4>
+<p>기존 증류 기법과 본 논문에서 제안하는 신규 방법론을 명확히 구분하기 위한 비교 구조는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">개념명</th>
+<th style="text-align:left">정의 및 특징</th>
+<th style="text-align:left">지도 신호의 특성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>On-Policy Distillation (OPD)</strong></td>
+<td style="text-align:left">학생 모델이 생성한 궤적(Trajectory) 상에서 별도의 뛰어난 외부 교사(External Teacher)의 다음 토큰 예측 확률 분포를 매칭하는 방식.</td>
+<td style="text-align:left">외부 교사의 토큰 수준 확률 분포. (단, 교사가 문제의 정답을 참조하지는 않음)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>On-Policy Self-Distillation (OPSD)</strong></td>
+<td style="text-align:left">외부 교사 없이 동일 베이스 체크포인트의 복사본을 교사로 사용. 교사는 정답(Ground Truth)이 포함된 특권 문맥을 받음.</td>
+<td style="text-align:left">정답 기반 특권 문맥을 참조하는 동결된 교사의 토큰 수준 확률 분포.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>특권 정보를 가진 동결 교사 (Frozen Privileged Teacher)</strong></td>
+<td style="text-align:left">OPSD의 교사 역할로, 학습 초기 체크포인트($\theta_0$)로 **동결(Frozen)**되어 학습 안정성을 제공함.</td>
+<td style="text-align:left">학습 동안 교사가 업데이트되지 않으므로, 오답 궤적 끝에서 종결 토큰(EOS)을 과도하게 선호(94.5%)하며 성찰 토큰(22.0%) 지도가 미흡함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Dynamic Co-Evolution (DCE)</strong></td>
+<td style="text-align:left">매 라운드 업데이트된 체크포인트를 다음 학생 및 분리된(Detached) 특권 교사로 동시에 초기화하여 교사와 학생이 함께 진화하는 재귀적 자기 개선 프레임워크.</td>
+<td style="text-align:left">라운드마다 성장하는 교사가 제공하는 정답 기반의 진화된 토큰 수준 지도 신호. 잘못된 궤적에서 성찰 토큰 지도 능력 동시 향상.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Self-Refined Concise Learning (SRCL)</strong></td>
+<td style="text-align:left">외부 정답 없이 스스로 작성한 검증된 짧은 재작성본(Rewrite)에 대해 오토레그레시브 크로스 엔트로피 손실을 학습하는 상보적 목표.</td>
+<td style="text-align:left">스스로 정제한 간결하고 정답이 검증된 궤적에 대한 시퀀스 토큰 수준의 크로스 엔트로피 지도 신호.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-제안-방법론-dce와-srcl의-작동-메커니즘">4. 제안 방법론: DCE와 SRCL의 작동 메커니즘</h4>
+<p>본 논문은 동결 교사의 한계를 극복하는 <strong>DCE</strong>와 출력 폭주를 제어하는 <strong>SRCL</strong>을 결합한 재귀적 자기 개선 프레임워크를 제안합니다.</p>
+<h5 id="4-1-동적-공진화-dynamic-co-evolution-dce">4.1. 동적 공진화 (Dynamic Co-Evolution, DCE)</h5>
+<p>DCE는 매 라운드 $k$마다 파라미터 $\theta_k$를 이용해 온폴리시 롤아웃을 수행하고, 업데이트된 체크포인트 $\theta_{k+1}$로 학생과 특권 교사를 동시에 재초기화합니다.</p>
+<h6 id="1-문맥-구조화-및-프롬프팅-assistant-side-prefill">1. 문맥 구조화 및 프롬프팅 (Assistant-Side Prefill)</h6>
+<ul>
+<li><strong>학생 문맥 (Student Context):</strong> 문제 $x$ 및 이전에 생성된 롤아웃 프랙탈 $\tilde{y}^{(k)}_{&lt;t}$만 조건으로 부여받습니다.</li>
+<li><strong>교사 문맥 (Teacher Context):</strong> 문제 $x$, 정답 $g$, 전환 지시문 $\tau$, 롤아웃 프랙탈 $\tilde{y}^{(k)}_{&lt;t}$을 받습니다.</li>
+<li><strong>Assistant-side prefill의 우수성:</strong> 본 연구는 정답 $g$를 User 턴에 넣는 대신 Assistant 턴의 선두(<code>Here is a reference solution: g ...</code>)에 배치합니다. 이는 모델이 정답을 외부 입력이 아닌 '자신의 사고 과정 일부'로 인지하게 만들어 초기 경로 형성 및 수정을 훨씬 강력하게 유도합니다.</li>
+</ul>
+<h6 id="2-토큰-수준-지도-수식화-token-level-guidance-formulation">2. 토큰 수준 지도 수식화 (Token-Level Guidance Formulation)</h6>
+<p>라운드 $k$ 및 토큰 위치 $t$에서 학생 모델과 특권 교사의 다음 토큰 예측 확률 분포는 다음과 같이 정의됩니다.</p>
+<p>$$p_{k,t} := p_{\theta_k}(\cdot \mid x, \tilde{y}^{(k)}_{&lt;t})$$</p>
+<p>$$q_{k,t} := \text{stopgrad}\left[p_{\theta_k}(\cdot \mid C_{t}^{\text{prev}})\right]$$</p>
+<p>여기서 $C_{t}^{\text{prev}}$는 문제 $x$, 정답 $g$, 전환 지시문 $\tau$, 이전 토큰 궤적 $\tilde{y}^{(k)}<em>{&lt;t}$가 결합된 특권 문맥입니다. 교사 분포 $q</em>{k,t}$에는 그래디언트 역전파가 중단(<code>stopgrad</code>)됩니다.</p>
+<p>DCE는 학생 분포 $p_{k,t}$가 교사 분포 $q_{k,t}$를 모방하도록 아래의 손실 함수를 최적화합니다.</p>
+<p>$$\mathcal{L}<em>G^{(k)} = \mathbb{E}</em>{(x,g), y^{(k)} \sim p_{\theta_k}(\cdot \mid x)}\left[\frac{1}{m}\sum_{t=1}^m \mathcal{D}<em>{KL}(q</em>{k,t} \parallel p_{k,t})\right]$$</p>
+<h6 id="3-손실-함수-방향성-분석-forward-kl-vs-reverse-kl-vs-jsd">3. 손실 함수 방향성 분석 (Forward KL vs. Reverse KL vs. JSD)</h6>
+<p>본 연구는 DCE 지도 손실 함수로 **Forward KL Divergence ($\mathcal{D}_{KL}(q \parallel p)$)**를 채택했습니다.</p>
+<ul>
+<li><strong>Forward KL (65.97% Average@12):</strong> 교사의 확률 분포 $q$가 높은 확률을 배정한 정답 및 성찰 토큰 영역을 학생 $p$가 커버하도록 강제하는 Mode-covering 특성을 갖습니다. 이에 따라 학생이 초기에는 고려하지 못했던 교사의 오류 수정 및 성찰 경로를 효과적으로 모방하게 됩니다.</li>
+<li><strong>Reverse KL (60.42% Average@12):</strong> Mode-seeking 특성으로 인해 학생이 이미 잘 생성하는 모드에 집중하며 교사가 새로 제시하는 성찰 길을 과소평가하여 성능이 5.55%p 하락하고 생성 토큰 수가 6,187개 늘어납니다.</li>
+<li><strong>JSD (17.99% Average@12):</strong> 대칭적 손실 구조로 인해 수렴 전 성찰 지도 신호의 전달력이 급격히 약화되어 성능이 붕괴합니다.</li>
+</ul>
+<h6 id="4-재귀적-업데이트">4. 재귀적 업데이트</h6>
+<p>학습된 $\theta_{k+1}$은 다음 라운드의 학생뿐만 아니라 특권 교사의 기본 가중치가 되므로, 한 라운드에서 학습된 자기 수정 능력이 다음 라운드 교사의 지도 능력으로 축적됩니다.</p>
+<hr />
+<h5 id="4-2-자가-정제-간결-학습-self-refined-concise-learning-srcl">4.2. 자가 정제 간결 학습 (Self-Refined Concise Learning, SRCL)</h5>
+<p>DCE가 성찰 및 오류 수정 능력을 강화하는 동안, SRCL은 군더더기 없는 직접적인 솔루션을 학습시켜 토큰 효율성을 확보합니다. SRCL은 학생 모델이 정답 $g$를 보지 않고 스스로 작성한 재작성본(Rewrite) $c_i^{(k)} = R_{\theta_k}(x_i, y_i^{(k)})$ 중 아래 **4단계 필터링 파이프라인(Acceptance Gates)**을 통과한 데이터만 학습 목표로 사용합니다.</p>
+<ol>
+<li><strong>종결 및 압축 (Termination &amp; Compression):</strong> 자연스럽게 종결(EOS)되어야 하며, 비어있지 않고, 최대 토큰 제한(12K) 내에 존재해야 하며, <strong>원본 온폴리시 롤아웃보다 토큰 길이가 짧아야 함</strong>.</li>
+<li><strong>성찰 표현 제거 (Reflection-free):</strong> &quot;Wait&quot;, &quot;Actually&quot;, &quot;Correction&quot;, &quot;Let me reconsider&quot;, &quot;double-check&quot; 등 명시적인 수정, 재시도, 주저함(Hesitation)을 나타내는 문구가 포함되지 않아야 함.</li>
+<li><strong>정답 유효성 (Answer Validity):</strong> 최소 32토큰 이상이어야 하며, 답변 끝에 정답이 올바른 <code>\boxed{}</code> 형식을 갖추어야 하고, 이전 과정에 오답이 담긴 잘못된 상자가 없어야 함 (<code>math_verify</code> 기반 검증).</li>
+<li><strong>자립성 및 반복 금지 (Self-containment &amp; Non-repetition):</strong> 파편화된 문장이 아니며, 생략된 텍스트나 이전 롤아웃을 언급하지 않아야 하고, 동일 문구나 줄의 반복이 기준치를 초과하지 않아야 함.</li>
+</ol>
+<p>통과 여부를 나타내는 지시 함수를 $A_i^{(k)} \in {0, 1}$이라 할 때, 통과된 재작성본 데이터셋에 대한 SRCL 크로스 엔트로피 손실은 다음과 같습니다.</p>
+<p>$$\mathcal{L}<em>{\text{SRCL}}^{(k)} = -\frac{1}{N_k}\sum</em>{i \in \mathcal{B}} A_i^{(k)} \sum_{t=1}^{|c_i^{(k)}|} \log p_{\theta_k}(c_{i,t}^{(k)} \mid x_i, c_{i,&lt;t}^{(k)}), \quad \text{where } N_k = \sum_{i \in \mathcal{B}} A_i^{(k)} |c_i^{(k)}|$$</p>
+<p>만약 미니배치 내 통과된 샘플이 없을 경우($N_k = 0$) SRCL 손실은 제외됩니다. 최종 결합 손실 함수는 다음과 같이 정의됩니다.</p>
+<p>$$\mathcal{L}_{\text{DCE+SRCL}}^{(k)} = \lambda_G \mathcal{L}<em>G^{(k)} + \lambda_S \mathcal{L}</em>{\text{SRCL}}^{(k)}$$</p>
+<hr />
+<h4 id="5-실험-결과-및-성능-검증-experimental-verification">5. 실험 결과 및 성능 검증 (Experimental Verification)</h4>
+<p>본 논문의 모든 평가 결과는 <strong>Non-thinking 모드</strong>, <strong>32K 디코딩 캡</strong>, <strong>4개 고난도 수학 벤치마크(AIME24, AIME25, AIME26, HMMT Feb 2025)</strong> 대상 샘플당 12회 평가 후 평균을 낸 <strong>Average@12</strong> 지표를 기반으로 합니다.</p>
+<h5 id="5-1-qwen3-8b-기준-핵심-정량-성과">5.1. Qwen3-8B 기준 핵심 정량 성과</h5>
+<ul>
+<li><strong>DCE+SRCL 성능:</strong> Qwen3-8B 모델에서 <strong>65.97% Average@12</strong>를 달성함.</li>
+<li><strong>OPSD 대비 향상 폭:</strong> 기존 OPSD(30.35%) 대비 <strong>+35.62%p</strong>라는 매우 큰 폭의 정확도 향상을 기록함.</li>
+<li><strong>출력 길이 절감 효과:</strong> DCE 단독 적용 시(65.76% 정확도, 평균 19,046 토큰)와 비교할 때, DCE+SRCL(65.97% 정확도, 평균 17,561 토큰)은 정확도를 상승시키면서 평균 생성 토큰 길이를 <strong>7.80% 감소</strong>시킴.</li>
+</ul>
+<hr />
+<h5 id="5-2-모델-규모-및-타-모델-패밀리-확장성-결과">5.2. 모델 규모 및 타 모델 패밀리 확장성 결과</h5>
+<p>다양한 모델 크기 및 가중치 패밀리에서의 통합 성능 비교 결과는 아래 표와 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 (Model)</th>
+<th style="text-align:left">기법 (Method)</th>
+<th style="text-align:center">Average@12 정확도 (%)</th>
+<th style="text-align:center">평균 생성 토큰 수 (Mean Tokens)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Qwen3-8B</strong></td>
+<td style="text-align:left">Base (Non-thinking)</td>
+<td style="text-align:center">19.51%</td>
+<td style="text-align:center">3,922</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">SFT</td>
+<td style="text-align:center">20.00%</td>
+<td style="text-align:center">4,088</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GRPO</td>
+<td style="text-align:center">20.28%</td>
+<td style="text-align:center">3,705</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">OPSD</td>
+<td style="text-align:center">30.35%</td>
+<td style="text-align:center">6,009</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DCE</td>
+<td style="text-align:center">65.76%</td>
+<td style="text-align:center">19,046</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DCE + SRCL</strong></td>
+<td style="text-align:center"><strong>65.97%</strong></td>
+<td style="text-align:center"><strong>17,561</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-4B</strong></td>
+<td style="text-align:left">Base</td>
+<td style="text-align:center">17.57%</td>
+<td style="text-align:center">3,805</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">SFT</td>
+<td style="text-align:center">18.68%</td>
+<td style="text-align:center">3,718</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GRPO</td>
+<td style="text-align:center">18.47%</td>
+<td style="text-align:center">3,363</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">OPSD</td>
+<td style="text-align:center">22.85%</td>
+<td style="text-align:center">8,350</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DCE</td>
+<td style="text-align:center">60.00%</td>
+<td style="text-align:center">19,360</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DCE + SRCL</strong></td>
+<td style="text-align:center"><strong>61.88%</strong></td>
+<td style="text-align:center"><strong>17,265</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen3-1.7B</strong></td>
+<td style="text-align:left">Base</td>
+<td style="text-align:center">9.17%</td>
+<td style="text-align:center">3,085</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">SFT</td>
+<td style="text-align:center">10.14%</td>
+<td style="text-align:center">3,177</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GRPO</td>
+<td style="text-align:center">10.90%</td>
+<td style="text-align:center">3,053</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">OPSD</td>
+<td style="text-align:center">10.35%</td>
+<td style="text-align:center">5,380</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DCE</td>
+<td style="text-align:center">23.33%</td>
+<td style="text-align:center">12,600</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DCE + SRCL</strong></td>
+<td style="text-align:center"><strong>26.88%</strong></td>
+<td style="text-align:center"><strong>19,504</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gemma-4-12B-IT</strong></td>
+<td style="text-align:left">Base</td>
+<td style="text-align:center">56.18%</td>
+<td style="text-align:center">8,516</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">SFT</td>
+<td style="text-align:center">55.14%</td>
+<td style="text-align:center">8,878</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GRPO</td>
+<td style="text-align:center">55.63%</td>
+<td style="text-align:center">8,435</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">OPSD</td>
+<td style="text-align:center">51.04%</td>
+<td style="text-align:center">8,112</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DCE</td>
+<td style="text-align:center">62.01%</td>
+<td style="text-align:center">8,812</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DCE + SRCL</strong></td>
+<td style="text-align:center"><strong>63.61%</strong></td>
+<td style="text-align:center"><strong>8,526</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="srcl의-모델-규모별-토큰-변화-양상-구분">SRCL의 모델 규모별 토큰 변화 양상 구분</h6>
+<p>SRCL이 생성 길이에 미치는 영향은 모델의 기본 추론 역량과 규모에 따라 이원화됩니다.</p>
+<ul>
+<li><strong>8B 및 4B 중·대형 모델:</strong> 기본 추론 인프라가 형성되어 있으므로, SRCL이 불필요한 성찰 우회로(Detours)를 제거하여 토큰 길이를 <strong>7.80% ~ 10.82% 압축</strong>하면서 성능을 유지/상승시킵니다.</li>
+<li><strong>1.7B 극소형 모델:</strong> 기본 모델의 추론 능력이 미진하므로, 정답을 유도하기 위한 최소한의 성찰 및 검증 인프라를 형성을 우선시하여 DCE 단독(12,600 토큰) 대비 DCE+SRCL(19,504 토큰)의 토큰 수가 오히려 증가하면서 성능이 향상(23.33% $\rightarrow$ 26.88%)됩니다.</li>
+</ul>
+<h6 id="단순-추론-시간-확장-test-time-scaling-opsd-tts-통제-실험">단순 추론 시간 확장(Test-Time Scaling, OPSD-TTS) 통제 실험</h6>
+<p>성능 향상이 단순히 출력이 길어진 데서 기인한 것인지 검증하기 위해, OPSD 모델에 &quot;Wait&quot; 구문을 강제로 주입하여 16K 토큰까지 생성을 연장한 OPSD-TTS 통제 실험을 실시했습니다.</p>
+<ul>
+<li><strong>결과:</strong> Qwen3-8B 30.76%, Qwen3-4B 22.99%, Qwen3-1.7B 9.24%에 불과하여 표준 OPSD와 차이가 거의 없었습니다.</li>
+<li><strong>결론:</strong> 단순한 길이 연장이 아니라, DCE+SRCL을 통한 재귀적 학습 과정에서 <strong>모델 내부 파라미터로 정교한 오류 수정 알고리즘이 내재화되었음</strong>을 입증합니다.</li>
+</ul>
+<hr />
+<h5 id="5-3-재귀적-개선-과정의-다이내믹-분석-고정-궤적-탐침-fixed-trace-probe">5.3. 재귀적 개선 과정의 다이내믹 분석: 고정 궤적 탐침 (Fixed-Trace Probe)</h5>
+<p>교사가 학생과 함께 동적으로 진화함을 입증하기 위해, 연구진은 AIME 2024~2026의 고정된 오답 궤적 $Y^-$ 상에서 스텝 변화에 따른 학생과 교사의 예측 확률 분포를 추적했습니다.</p>
+<pre><code>[고정 궤적 탐침 지표 변화 (Step 0 → Step 200)]
+- 잘못된 궤적 끝에서의 종결 확률 p(EOS):
+  * Student:        92.6%  ───────────────►  26.3%
+  * Frozen Teacher: 90.4%  ───────────────►  41.3% (동적 공진화 증거)
+
+- 성찰 토큰 지점에서의 성찰 확률 p(r_t) [Wait 등]:
+  * Student:        30.1%  ───────────────►  77.0%
+  * Frozen Teacher: 32.8%  ───────────────►  77.4% (동적 공진화 증거)
+</code></pre>
+<ul>
+<li><strong>종결 확률 $P(\text{EOS})$의 급감:</strong> 오답 궤적의 끝부분에서 종결 토큰을 출력할 매크로 평균 확률은 초기 스텝 0에서 학생 92.6%, 교사 90.4%에 달했으나, 스텝 200에 이르러 **학생 26.3%, 교사 41.3%**로 급격히 하락했습니다.</li>
+<li><strong>성찰 확률 $P(r_t)$의 급증:</strong> 오답 후 성찰 구문(Wait 등)이 시작되는 위치에서의 예측 확률은 초기 약 30.1%/32.8%에서 스텝 200 시점 **학생 77.0%, 교사 77.4%**로 대폭 상승했습니다.</li>
+<li><strong>핵심 시사점:</strong> 이는 교사 모델이 동결되어 있지 않고 학생의 성장을 실시간으로 흡수하면서, 잘못된 추론 경로를 접했을 때 멈추지 않고 스스로 재검토하도록 유도하는 강력한 지도 신호를 생성하게 됨을 정량적으로 증명합니다.</li>
+</ul>
+<hr />
+<h4 id="6-논문의-한계점-및-독자의-비판적-판단-기준-limitations-evaluation-criteria">6. 논문의 한계점 및 독자의 비판적 판단 기준 (Limitations &amp; Evaluation Criteria)</h4>
+<p>본 논문의 연구 성과를 현업에 적용하거나 학술적으로 평가할 때 고려해야 할 4가지 비판적 판단 기준 및 한계점은 다음과 같습니다.</p>
+<ol>
+<li><strong>프리프린트 및 독립 재현 미검증:</strong>
+<ul>
+<li>2026년 9월 공개된 논문으로 동료심사(Peer Review)를 거치지 않았으며, Meta AI 및 UC Riverside 저자진 외의 타 연구 기관에 의한 독립적인 재현성이 아직 확인되지 않았습니다.</li>
+</ul>
+</li>
+<li><strong>평가 영역의 한계 (과잉 일반화 금지):</strong>
+<ul>
+<li>본 논문의 검증 성과는 AIME 2024~2026, HMMT 2025 등 고난도 경시 수학 벤치마크 및 MATH-500, AMC23, GPQA-Diamond 등 정답 검증이 명확한 수학/과학 과제에 국한됩니다. 비구조화된 일반 추론, 요약, 자유 대화형 NLP 과제 등으로 효과를 과잉 일반화해서는 안 됩니다.</li>
+</ul>
+</li>
+<li><strong>소형 모델에서의 학습 불안정성 및 조기 종료(Early Stopping) 의존성:</strong>
+<ul>
+<li>Qwen3-1.7B와 같은 소형 모델에서는 학습 스텝 50(26.88%)까지 빠르게 성장한 후 스텝 200(1.53%)에서 성능이 급격히 붕괴하는 불안정성을 보였습니다. 또한 Qwen3-14B에서도 스텝 30(66.39%) 이후 출력이 비대해지며 효율성이 하락하는 현상이 관찰되어, 실무 적용 시 정밀한 조기 종료(Early Stopping) 기법 설정이 필수적입니다.</li>
+</ul>
+</li>
+<li><strong>Non-thinking 모드 제약 조건:</strong>
+<ul>
+<li>본 연구의 모든 실험(학생 모델의 롤아웃 및 교사 모델의 지도)은 논문에서 정의한 <strong>Non-thinking 모드</strong> 환경하에서 수행되었습니다. 모델 자체에 특화된 고유의 Thinking 프로토콜이나 다른 시스템 프롬프트 환경에서의 동작 양상은 다를 수 있습니다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

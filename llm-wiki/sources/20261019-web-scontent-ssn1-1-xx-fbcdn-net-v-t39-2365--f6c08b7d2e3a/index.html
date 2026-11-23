@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>855837971_1475273414665369_3935523351908243106_n</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>855837971_1475273414665369_3935523351908243106_n</h1>
+<p class="page-meta">PDF · 2026-10-19</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 메타 슈퍼인텔리전스 랩스(Meta Superintelligence Labs)에서 개발한 온디바이스 에이전트 인공지능 모델인 Muse Glimmer 30B의 아키텍처, 학습 파이프라인, 성능 평가 및 안전성 설계를 종합적으로 분석하고 구조화한 기술 보고서입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://scontent-ssn1-1.xx.fbcdn.net/v/t39.2365-6/855837971_1475273414665369_3935523351908243106_n.pdf?_nc_cat=101&amp;ccb=1-7&amp;_nc_sid=3c67a6&amp;_nc_ohc=8XQhTcQswp4Q7kNvwFQzwY5&amp;_nc_oc=AdqGuDbZTXOn6MVmkvE0EyT64-ayLcI5npUwPBPIn2LSk7X2abHOntlwPWylREL5bYU&amp;_nc_zt=14&amp;_nc_ht=scontent-ssn1-1.xx&amp;_nc_gid=O9YFMzftQwB_Vqxvz0znSQ&amp;_nc_ss=7b289&amp;oh=00_AQPjcsIId2vuWgtJJVgKCn1MyODRZrRugsGWthmiNuRndQ&amp;oe=6ADC7D62">출처</a> · <a href="https://www.youtube.com/watch?v=hIrRnXg_TS8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="muse-glimmer-30b-기술-보고서-해설-및-상세-분석-보고서">Muse Glimmer 30B 기술 보고서 해설 및 상세 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 메타 슈퍼인텔리전스 랩스(Meta Superintelligence Labs)에서 개발한 온디바이스 에이전트 인공지능 모델인 <strong>Muse Glimmer 30B</strong>의 아키텍처, 학습 파이프라인, 성능 평가 및 안전성 설계를 종합적으로 분석하고 구조화한 기술 보고서입니다. <strong>[사실]</strong> (Section 1)</p>
+<p>Muse Glimmer 30B는 소비자용 하드웨어 및 온디바이스 환경에서 클라우드 인프라 의존 없이 독자적으로 에이전트 작업을 수행할 수 있도록 설계된 300억(30B) 파라미터 규모의 인과적 언어 모델(Causal Language Model)이자 시각 인코더 통합 모델입니다. <strong>[사실]</strong> (Section 1) 본 모델은 텍스트와 이미지 입력을 받아 텍스트 출력을 생성하며, 자율적인 다단계 계획 수립, 도구 호출, 오류 복구, 정교한 시각·언어 이해 능력을 제공합니다. <strong>[소스 주장]</strong> (Section 1)</p>
+<p>이 모델은 메타의 프론티어급 모델인 Muse Spark로부터 지식 증류(Distillation) 방식을 통해 개발되었습니다. <strong>[사실]</strong> (Section 1) 프론티어 교사 모델의 추론 깊이와 도구 사용 신뢰성을 유지하면서 단일 GPU 온디바이스 환경에 적합한 가벼운 형태로 압축되었습니다. <strong>[소스 주장]</strong> (Section 1) 메타 슈퍼인텔리전스 랩스는 오픈소스 에이전트 생태계 확산을 위해 본 모델의 가중치, 양산화 모델, DFlash 추측 디코딩 헤드 등을 Apache 2.0 라이선스로 공개하였습니다. <strong>[사실]</strong> (Section 1)</p>
+<p>하드웨어 제약 조건 측면에서, Muse Glimmer 30B는 소비자용 최상위 GPU(예: 엔비디아 RTX 5090) 수준인 <strong>32GB VRAM 메모리 한계선</strong> 내에서 완벽히 작동하도록 설계 결정이 이루어졌습니다. <strong>[사실]</strong> (Section 1, Section 2.3) 메모리 제약 하에서 성능을 극대화하기 위해 Mixture-of-Experts(MoE) 구조 대신 고밀도(Dense) 아키텍처를 채택하였으며, 4비트 후학습 양산화(Post-Training Quantization) 및 DFlash 블록 디퓨전 기반 추측 디코딩(Speculative Decoding) 기법을 결합하여 실시간 온디바이스 추론 속도를 확보했습니다. <strong>[사실]</strong> (Section 2.3, Section 7)</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-detailed-analysis">2. 주요 논점 (Key Arguments &amp; Detailed Analysis)</h4>
+<h5 id="2-1-온디바이스-효율성을-위한-아키텍처-및-설계-결정">2.1. 온디바이스 효율성을 위한 아키텍처 및 설계 결정</h5>
+<p>Muse Glimmer 30B의 아키텍처는 32GB VRAM 환경에서 높은 연산 효율과 장문맥(Long-context) 처리 성능을 확보하도록 정교하게 설계되었습니다. <strong>[소스 주장]</strong> (Section 2)</p>
+<ul>
+<li><strong>언어 모델 및 주의 메커니즘</strong>:
+<ul>
+<li><strong>[사실]</strong> 언어 백본은 52개의 트랜스포머 레이어로 구성되며 은닉 차원(Hidden dimension)은 6656입니다. 임베딩 및 출력 레이어를 제외한 언어 모델 파라미터는 약 25.16B입니다. (Section 2.1, Table 1)</li>
+<li><strong>[사실]</strong> 주의 메커니즘으로 GQA(Grouped-Query Attention)를 적용하였으며, 32개 쿼리 헤드와 2개 키-값(KV) 헤드(비율 16:1)를 채택하고 헤드 차원은 128로 설정했습니다. (Section 2.1)</li>
+<li><strong>[사실]</strong> 슬라이딩 윈도우 크기는 2048 토큰이며, 로컬 주의(Local Attention) 레이어 3개와 글로벌 주의(Global Attention) 레이어 1개가 반복되는 구조(<code>[Local, Local, Local, Global]</code>)를 통해 KV 캐시 증가를 제한하면서 장거리 정보 흐름을 유지합니다. (Section 2.1)</li>
+<li><strong>[사실]</strong> 위치 인코딩은 RoPE(Rotary Position Encoding, $\theta = 500,000$)를 로컬 레이어에만 적용하고, 글로벌 레이어는 주변 로컬 레이어의 위치 신호를 누적 활용하는 방식을 취하여 문맥 확장성을 확보했습니다. (Section 2.1)</li>
+<li><strong>[사실]</strong> FFN(Feed-Forward Network)은 SwiGLU 활성화 함수를 사용하며 중간 차원은 19,968로 은닉 차원 대비 약 3배의 확장 비율을 가집니다. (Section 2.1)</li>
+<li><strong>[사실]</strong> <strong>MLA(Multi-Head Latent Attention) 실험 및 기각</strong>: 글로벌 레이어의 KV 캐시 압축을 위해 단일 결합 KV 벡터를 프로젝션하는 간소화된 MLA 변형 모델을 검증했습니다. 기존 헤드 수 유지 방식(KV 캐시 절반 축소)과 전체 KV 점유량 유지 방식(헤드 수 2배 확장)의 2가지 실험을 진행했으나, RULER 등 장문맥 벤치마크에서 GQA 대비 성능이 저하됨에 따라 최종적으로 GQA 구조를 유지했습니다. (Section 2.3)</li>
+</ul>
+</li>
+<li><strong>시각/인지 인코더 (Perception Encoder)</strong>:
+<ul>
+<li><strong>[사실]</strong> NaViT 스타일의 ViT-G/14 기반 인코더 구조를 채택하여 약 1.8B 파라미터 크기(50 레이어, 너비 1536, 패치 크기 14)를 갖추고 있습니다. (Section 2.2)</li>
+<li><strong>[사실]</strong> 이미지 입력 시 동적 타일링(Dynamic Tiling) 대신 종횡비를 유지하는 단일 리사이즈 방식을 사용하며, $2 \times 2$ 픽셀 셔플(Pixel-shuffle) 다운샘플링과 2레이어 MLP 어댑터, 선형 프로젝션 및 RMSNorm을 거쳐 언어 모델의 임베딩 공간으로 사상됩니다. (Section 2.2)</li>
+<li><strong>[사실]</strong> $448 \times 448$ 해상도 이미지는 256개의 시각 토큰으로 변환되며, 고해상도 이미지의 경우 그리드를 확장하여 이미지당 최대 4096개 토큰까지 생성할 수 있습니다. 학습 과정 동안 인지 인코더 가중치는 동결(Frozen) 상태를 유지합니다. (Section 2.2)</li>
+</ul>
+</li>
+<li><strong>Dense vs MoE 아키텍처 비교 및 효율성 논거</strong>:
+<ul>
+<li><strong>[사실]</strong> 32GB VRAM 메모리 제한 조건 하에서 고밀도(Dense) 모델과 라우팅 희소성을 달리한 2종의 MoE 모델(1:8 및 1:16 희소성)을 동일 추론 메모리 스케일링 사다리로 실험 비교하였습니다. (Section 2.3, Figure 1)</li>
+<li><strong>[소스 주장]</strong> 연구진은 주어진 학습 연산 예산 및 파라미터 한계 내에서 Dense 아키텍처가 MoE 대비 **2배~2.5배 뛰어난 연산 효율성(Compute Efficiency)**을 보임을 증명하고, 이를 근거로 Dense 30B 구조를 최종 채택했습니다. (Section 2.3, Figure 1)</li>
+</ul>
+</li>
+<li><strong>시스템 프롬프트 및 라우팅 프로토콜 (ATEM XML)</strong>:
+<ul>
+<li><strong>[사실]</strong> 에이전트 구동을 위해 ATEM(Agent Tool Calling Format) XML 구조를 지원하며, <code>&lt;atem:function_calls&gt;</code> 내에 <code>&lt;atem:invoke name=&quot;...&quot;&gt;</code> 및 <code>&lt;atem:parameter name=&quot;...&quot;&gt;</code> 태그를 활용해 도구를 호출합니다. (Appendix B.1, B.4)</li>
+<li><strong>[사실]</strong> 메시지별 <code>to=</code> 헤더 기반의 라우팅 프로토콜을 사용합니다. <code>to=self</code>는 모델의 내부 사적 추론(Private Reasoning), <code>to=namespace.function</code>은 특정 도구 실행, <code>to=user</code>는 최종 사용자 응답 및 턴 종료를 의미합니다. (Appendix B.4, Table 6)</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">아키텍처 제원 항목 (Architecture Property)</th>
+<th style="text-align:left">주요 사양 수치 및 설정 (Value / Detail)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>전체 아키텍처 타입</strong></td>
+<td style="text-align:left">고밀도 인과적 트랜스포머 (Dense Causal Transformer)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전체 파라미터 수</strong></td>
+<td style="text-align:left">약 29.6B (29,611,617,280 개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>언어 모델 트랜스포머 블록</strong></td>
+<td style="text-align:left">약 25.16B</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인지 인코더 파라미터</strong></td>
+<td style="text-align:left">약 1.8B (NaViT ViT-G/14)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>토큰 임베딩 / 출력 프로젝션</strong></td>
+<td style="text-align:left">각 약 1.34B (Untied 구조)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>입출력 모달리티</strong></td>
+<td style="text-align:left">입력: 텍스트 + 이미지 / 출력: 텍스트</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>은닉 차원 / 레이어 수</strong></td>
+<td style="text-align:left">6656 / 52 레이어</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주의 헤드 수 (Q / KV)</strong></td>
+<td style="text-align:left">32개 / 2개 (GQA, 비율 16:1)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주의 패턴 및 슬라이딩 윈도우</strong></td>
+<td style="text-align:left">2048 크기 (<code>[Local, Local, Local, Global]</code> 반복)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>위치 인코딩 (RoPE)</strong></td>
+<td style="text-align:left">$\theta = 500,000$ (로컬 레이어에만 적용)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FFN 활성화 및 중간 차원</strong></td>
+<td style="text-align:left">SwiGLU / 19,968</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>어휘집(Vocabulary) 크기</strong></td>
+<td style="text-align:left">202,048 토큰 (Llama 4 BPE 기반)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지원 컨텍스트 길이</strong></td>
+<td style="text-align:left">128K+ 토큰</td>
+</tr>
+</tbody>
+</table>
+<p>** 표 내 모든 수치 및 구성 요소: <strong>[사실]</strong> (Section 2, Table 1 기반)*</p>
+<p><strong>[작성자 해석]</strong>: Muse Glimmer 30B는 MoE가 가지는 높은 메모리 대역폭 요구량과 KV 캐시 비효율성을 피하고, GQA와 슬라이딩 윈도우 조합을 통해 장문맥 에이전트 수행 시 메모리 점유율을 극도로 제한하는 Dense 최적화 전략을 구사하고 있습니다. (Section 2.1, Section 2.3 기반 분석)</p>
+<hr />
+<h5 id="2-2-지식-증류-및-파이프라인-학습-구조-training-pipeline">2.2. 지식 증류 및 파이프라인 학습 구조 (Training Pipeline)</h5>
+<p>Muse Glimmer 30B의 학습은 사전 학습(Pre-training), 중간 학습(Mid-training), 후속 학습(Post-training)의 다단계 파이프라인으로 진행되었습니다. <strong>[사실]</strong> (Section 4, Section 5)</p>
+<pre><code>[사전 학습 (Pre-training)]
+ - Muse Spark 상위 256 로짓 Co-distillation (KL divergence 95% -&gt; CE 5%)
+ - 체크포인트 스무딩 (Checkpoint Souping: EMA/WMA/Uniform 평균화)
+        │
+        ▼
+[중간 학습 Phase 1 (Mid-training Phase 1)]
+ - 도메인 주입 (Domain Infusion) &amp; 합성 추론 데이터 학습
+        │
+        ▼
+[중간 학습 Phase 2 (Mid-training Phase 2)]
+ - 컨텍스트 윈도우 확장 (32K -&gt; 128K)
+ - 에이전트/도구 사용 궤적 데이터 및 Cross-Entropy 손실 적용
+        │
+        ▼
+[후속 학습 (Post-training)]
+ 1. 지도 미세조정 (SFT)
+ 2. 온정책 증류 (On-policy Distillation)
+ 3. 다중 목적 강화학습 (Multi-objective RL)
+</code></pre>
+<p>** 그림 내 모든 학습 단계 및 구성 요소: <strong>[사실]</strong> (Section 4, Section 5 기반)*</p>
+<ol>
+<li><strong>사전 학습 및 체크포인트 스무딩 (Souping)</strong>:
+<ul>
+<li><strong>[사실]</strong> 사전 학습 단계에서는 교사 모델인 Muse Spark의 상위 256개 로짓을 기록하여 공통 증류(Co-distillation)를 수행했습니다. (Section 4.2)</li>
+<li><strong>[사실]</strong> 초기 95% 구간에서는 KL 발산(Kullback-Leibler Divergence) 손실만 사용하다가, 상위 k개 로짓 증류 시 발생하는 잘림 편향(Truncation bias)을 해결하기 위해 나머지 5% 구간에서는 정답 타겟에 대한 크로스 엔트로피(Cross-Entropy) 손실로 전환했습니다. (Section 4.2)</li>
+<li><strong>[사실]</strong> 학습 종료 시점(마지막 5% 구간 내 200스텝 간격으로 저장된 84개 체크포인트)에서 체크포인트 평균화(Souping) 기법을 적용했습니다. 최종적으로 마지막 체크포인트와 600스텝 간격의 이전 체크포인트 3개를 균일 평균(Uniform Average)한 가중치를 중간 학습 1단계의 초기값으로 선정했습니다. (Section 4.2)</li>
+</ul>
+</li>
+<li><strong>중간 학습 (Mid-training Phase 1 &amp; 2)</strong>:
+<ul>
+<li><strong>[사실]</strong> <strong>Phase 1 (도메인 주입)</strong>: 사전 학습 스무딩 체크포인트에서 시작하여 추론 자국(Reasoning traces) 및 구조화된 문제 해결 시연 데이터를 포함한 합성/도메인 특화 데이터를 주입했습니다. (Section 4.2)</li>
+<li><strong>[사실]</strong> <strong>Phase 2 (에이전트 능력 강화 및 문맥 확장)</strong>: 컨텍스트 윈도우를 32K에서 128K 토큰으로 확장하고, 도구 사용 궤적 및 에이전트 시연 데이터를 주입했습니다. 장문맥 및 에이전트 데이터의 분포 변화로 인해 교사 로짓의 신뢰성이 떨어지는 것을 고려해 Cross-Entropy 손실만을 사용했습니다. (Section 4.2)</li>
+</ul>
+</li>
+<li><strong>합성 데이터 파이프라인 (Synthetic Data Pipeline) 및 &quot;Universe&quot; 시뮬레이션</strong>:
+<ul>
+<li><strong>[사실]</strong> <strong>컨테이너 기반 에이전트 하네스</strong>: Docker 컨테이너 내부에서 이메일, 달력, 메시지(WhatsApp), 문서, CLI, 실제 웹 브라우저 등이 연동된 모의 환경을 구축하여 데이터 파이프라인을 구동했습니다. (Section 6.2)</li>
+<li><strong>[사실]</strong> <strong>&quot;Universe&quot; 시뮬레이션</strong>: 10~14명의 관계망 기반 디지털 삶(Persona)을 구축하고 수주일 분량의 메시지, 달력, 문서 이력을 생성하여 에이전트가 완벽히 현실적인 환경에서 동작하도록 구성했습니다. (Section 6.2)</li>
+<li><strong>[사실]</strong> <strong>페르소나 생성 모드</strong>: 샘플링 기반 모드(Beta(2,5) 분포 기반 연령대 25~35세 편향 설정, 인구통계 분포, 절단된 가우시안 분포 기반 Big Five 성격 특성 표본 추출)와 텍스트 기반 역추출 모드(원문 텍스트로부터 저자 페르소나를 추론하여 실제 인간 성격 분포 추적)의 2가지 방식을 병행했습니다. (Section 6.2, Appendix B.3)</li>
+<li><strong>[사실]</strong> <strong>사후 처리 파이프라인</strong>: 미완성 궤적 및 4번째 벽(Fourth-wall) 돌파 현상을 제거하는 결정론적 품질 필터링, 성공 궤적 내의 잘못된 도구 호출/검색을 제외하는 바람직하지 않은 행동 마스킹(Behavioral Masking), 환각 및 허위 성공을 검증하여 필터링하는 근거 검증(Grounding Verification)의 3단계 사후 처리를 적용했습니다. (Section 6.2)</li>
+</ul>
+</li>
+<li><strong>후속 학습 (Post-training)</strong>:
+<ul>
+<li><strong>[사실]</strong> <strong>SFT (Supervised Fine-Tuning)</strong>: 추론, 코딩, 수학, 일반 지시 이행 및 도구 사용 궤적 데이터를 활용해 약 1에포크 동안 학습을 진행하여 데이터 엔트로피를 유지했습니다. (Section 5.1)</li>
+<li><strong>[사실]</strong> <strong>온정책 증류 (On-policy Distillation)</strong>: 학생 모델(Muse Glimmer)이 직접 생성 롤아웃(Rollout)을 수행하고, 교사 모델(Muse Spark)이 토큰 단위의 분포 타겟을 평가·지급하는 방식을 적용했습니다. 이는 학습-추론 간 분포 이탈(Train-inference distribution shift)을 방지하여 복구 능력을 훈련시켰습니다. (Section 5.3)</li>
+<li><strong>[사실]</strong> <strong>다중 목적 RL (Reinforcement Learning)</strong>: 보상 모델, 검증기(Verifier), 작업 성공 신호를 결합하여 추론 및 에이전트 안전성/성능을 정밀하게 최적화했습니다. (Section 5)</li>
+<li><strong>[사실]</strong> <strong>사후추론 추론 강도(Reasoning Strength) 제어 메커니즘</strong>: 시스템 프롬프트 상의 단일 지시문(<code>Reasoning strength: &lt;level&gt;</code>)을 통해 <code>low</code> (단순 사실 검색), <code>medium</code> (중간 수준 기획), <code>high</code> (복잡한 다단계 추론/디버깅, 기본값), <code>xhigh</code> (최대 추론 예산)의 4단계 추론 깊이를 재학습 없이 동적으로 제어합니다. (Section 5.4)</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-3-에이전트-멀티모달-다국어-성능-평가-및-추론-최적화">2.3. 에이전트, 멀티모달, 다국어 성능 평가 및 추론 최적화</h5>
+<p>Muse Glimmer 30B는 동급 파라미터 경쟁 오픈 모델인 Gemma4-31B 및 Qwen3.6-27B 대비 에이전트 및 도구 활용, 다국어 에이전트 수행 능력에서 우수한 평가 성과를 거두었습니다. <strong>[소스 주장]</strong> (Section 3, Table 2)</p>
+<ul>
+<li><strong>양산화(Quantization) 및 EvoPress 검색 공간 상세</strong>:
+<ul>
+<li><strong>[사실]</strong> BF16 원본 모델 가중치(55.7 GB)를 20GB 미만으로 줄여 32GB/24GB VRAM 온디바이스 배포 목표를 달성하기 위해 다양한 PTQ(Post-Training Quantization) 기법을 평가했습니다. (Section 7.1)</li>
+<li><strong>[사실]</strong> <strong>EvoPress 동적 할당</strong>: FFN 및 Attention 결합 프로젝션의 세부 슬라이스 등 418개 가중치 유닛을 검색 공간으로 설정하고 진화 알고리즘을 통해 최적 정밀도를 탐색했습니다. 최종 EvoPress 프로파일은 Q4_K에 51개, Q5_K에 130개, Q6_K에 237개 유닛(모두 그룹 크기 32 적용)을 할당하였으며, 임베딩은 Q4_K, 출력 프로젝션은 Q5_K를 적용해 용량을 <strong>19.65 GB</strong>로 축소했습니다. (Section 7.1)</li>
+<li><strong>[사실]</strong> <strong>Q4KM 프로파일 수정</strong>: llama.cpp 기반 Q4KM의 MLX/ExecuTorch 변환 한계를 해소하기 위해 Q6_K 및 Q5_K 출력 프로젝션의 그룹 크기를 128로 확장하고 출력 프로젝션을 Q5_K로 조정하여 품질 저하 없이 호환성을 확보했습니다. (Section 7.1)</li>
+<li><strong>[사실]</strong> 15개 다운스트림 평가 평균 정확도에서 BF16 원본(75.7%) 대비 EvoPress(75.6%), Greedy-KL(75.3%), Q4KM(74.8%)은 성능 저하를 최소화하면서 가중치 메모리를 20GB 미만으로 줄였습니다. (Table 3, Figure 3)</li>
+</ul>
+</li>
+<li><strong>DFlash 추측 디코딩(Speculative Decoding) 상세</strong>:
+<ul>
+<li><strong>[사실]</strong> 온디바이스 디코딩 속도 향상을 위해 DFlash 블록 디퓨전 드래프터(Drafter)를 도입했습니다. 드래프터는 5개 레이어, 블록 크기 16, 슬라이딩 윈도우 2048, 32 쿼리 / 8 KV 헤드(GQA) 구조를 가집니다. (Section 7.2, Table 4)</li>
+<li><strong>[사실]</strong> 타겟 모델의 5개 균일 레이어인 <code>{1, 13, 25, 37, 49}</code>번째 레이어에서 은닉 특성을 추출하며, 타겟 모델의 오프라인 롤아웃 데이터를 바탕으로 D-PACE(Dynamic Position-Aware Cross-Entropy) 손실 함수를 사용하여 지도 학습되었습니다. (Section 7.2, Table 4)</li>
+</ul>
+</li>
+<li><strong>에이전트 및 도구 활용 성능</strong>:
+<ul>
+<li><strong>[사실]</strong> 핀테크 은행 래그/도구 평가인 $\tau^3$-Banking에서 Muse Glimmer 30B (high)는 23.5점을 기록하여 Gemma4-31B(15.1점), Qwen3.6-27B(16.7점)를 크게 앞섰습니다. (Table 2)</li>
+<li><strong>[사실]</strong> 장기 에이전트 평가인 WildClawBench(47.6점 vs 37.6 / 43.2) 및 다중 상태 에이전트 평가인 GAIA2(43.3점 vs 36.4 / 40.0)에서도 가장 높은 성과를 냈습니다. (Table 2)</li>
+<li><strong>[사실]</strong> MCP 도구 서버 평가인 MCPAtlas에서 75.5점을 기록하여 타 모델(54.2점 / 62.5점) 대비 월등한 도구 연동 정확도를 보여주었습니다. (Table 2)</li>
+</ul>
+</li>
+<li><strong>다국어 및 대화형 능력</strong>:
+<ul>
+<li><strong>[사실]</strong> 기계 번역 벤치마크 평가 기준 총 137개 언어 변이체(Strong Tier: 88개, Usable Tier: 49개, 약 140개 언어 변이) 지원 능력을 바탕으로, 10개 언어 대상 다국어 에이전트 벤치마크인 OmnilingualGAIA2에서 평균 60.4점을 기록해 Gemma4-31B(37.5점) 및 Qwen3.6-27B(45.0점)를 압도했습니다. (Table 2, Table 7, Appendix B.6.3)</li>
+<li><strong>[사실]</strong> 다국어 지식/추론 벤치마크인 MMLU-ProX(80.1점) 및 기계 번역 평가인 WMT24++, FLORES+, BOUQuET에서도 Gemma4-31B에 근접하는 우수한 언어 전이 성과를 기록했습니다. (Table 7, Table 9)</li>
+</ul>
+</li>
+</ul>
+<h6 id="주요-벤치마크-수치-비교표-muse-glimmer-30b-vs-경쟁-모델">주요 벤치마크 수치 비교표 (Muse Glimmer 30B vs 경쟁 모델)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 영역 (Domain)</th>
+<th style="text-align:left">벤치마크 (Benchmark)</th>
+<th style="text-align:left">Muse Glimmer 30B (high)</th>
+<th style="text-align:left">Gemma4-31B (thinking)</th>
+<th style="text-align:left">Qwen3.6-27B (thinking)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>에이전트 (Agentic)</strong></td>
+<td style="text-align:left"><strong>$\tau^3$-Banking</strong></td>
+<td style="text-align:left"><strong>23.5</strong></td>
+<td style="text-align:left">15.1</td>
+<td style="text-align:left">16.7</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>WildClawBench</strong></td>
+<td style="text-align:left"><strong>47.6</strong></td>
+<td style="text-align:left">37.6</td>
+<td style="text-align:left">43.2</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>GAIA2</strong></td>
+<td style="text-align:left"><strong>43.3</strong></td>
+<td style="text-align:left">36.4</td>
+<td style="text-align:left">40.0</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>SWE-Bench Verified</strong></td>
+<td style="text-align:left">76.0</td>
+<td style="text-align:left">66.6</td>
+<td style="text-align:left"><strong>77.2</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>도구 활용 (Tool Use)</strong></td>
+<td style="text-align:left"><strong>MCPAtlas</strong></td>
+<td style="text-align:left"><strong>75.5</strong></td>
+<td style="text-align:left">54.2</td>
+<td style="text-align:left">62.5</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>추론 (Reasoning)</strong></td>
+<td style="text-align:left"><strong>AIME 2026</strong></td>
+<td style="text-align:left"><strong>94.7</strong></td>
+<td style="text-align:left">89.2</td>
+<td style="text-align:left">94.1</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DeepSearchQA</strong></td>
+<td style="text-align:left"><strong>74.6</strong></td>
+<td style="text-align:left">61.7</td>
+<td style="text-align:left">71.1</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>멀티모달 (Multimodal)</strong></td>
+<td style="text-align:left"><strong>CharXiv Reasoning</strong></td>
+<td style="text-align:left"><strong>78.8</strong></td>
+<td style="text-align:left">77.7</td>
+<td style="text-align:left">78.4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>다국어 (Multilingual)</strong></td>
+<td style="text-align:left"><strong>OmnilingualGAIA2</strong></td>
+<td style="text-align:left"><strong>60.4</strong></td>
+<td style="text-align:left">37.5</td>
+<td style="text-align:left">45.0</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>MMLU-ProX</strong></td>
+<td style="text-align:left">80.1</td>
+<td style="text-align:left"><strong>82.5</strong></td>
+<td style="text-align:left">80.5</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>보안 (Security)</strong></td>
+<td style="text-align:left"><strong>CIMemories Violation ($\downarrow$)</strong></td>
+<td style="text-align:left">26.4</td>
+<td style="text-align:left"><strong>12.1</strong></td>
+<td style="text-align:left">53.4</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>Siren AgentDojo ASR@5 ($\downarrow$)</strong></td>
+<td style="text-align:left">28.4</td>
+<td style="text-align:left"><strong>25.6</strong></td>
+<td style="text-align:left">40.3</td>
+</tr>
+</tbody>
+</table>
+<p>** 표 내 모든 수치 및 평가 결과: <strong>[사실]</strong> (Table 2 기반. $\downarrow$ 표시 지표는 낮을수록 우수하며, 각 행별 최고 성과 수치만 굵은 글씨 표기)*</p>
+<hr />
+<h5 id="2-4-신뢰성-안전성-및-개인정보-보호-trust-safety">2.4. 신뢰성, 안전성 및 개인정보 보호 (Trust &amp; Safety)</h5>
+<p>온디바이스 환경에서 작동하는 에이전트 특성상, 외부 제3자 서비스 및 악의적 데이터 입력으로부터 사용자의 사생활을 보호하고 시스템의 안전성을 유지하는 기술이 내장되었습니다. <strong>[소스 주장]</strong> (Section 5.5, Section 8)</p>
+<ul>
+<li><strong>문맥적 무결성 (Contextual Integrity, CI) 기반 개인정보 보호</strong>:
+<ul>
+<li><strong>[사실]</strong> Nissenbaum의 문맥적 무결성 이론에 착안하여, 송신자/수신자/데이터 유형/전송 원칙에 따른 적절한 정보 공유 수위 조절 능력을 훈련했습니다. (Section 5.5)</li>
+<li><strong>[사실]</strong> Muse Spark로부터 이메일 및 메시지 합성 추적 데이터를 프롬프트 증류(Prompt Distillation) 방식으로 추출한 뒤, 과도한 정보 공유(Oversharing)는 RL 단계에서 감점 패널티를 부여하고 필요 정보의 정밀 공유에는 보상을 제공했습니다. (Section 5.5)</li>
+<li><strong>[사실]</strong> 개인정보 침해 평가인 CIMemories 벤치마크에서 이탈률(Violation Rate) 26.4%를 기록하여 Qwen3.6-27B(53.4%) 대비 확연히 뛰어난 사생활 보호 능력을 증명했습니다. (Table 2)</li>
+</ul>
+</li>
+<li><strong>적대적 공격 대응 및 권한 계층 유지</strong>:
+<ul>
+<li><strong>[사실]</strong> 도구 수행 결과 내에 숨겨진 간접 프롬프트 주입(Indirect Prompt Injection) 공격 및 불법 지시를 무력화하는 신뢰성 훈련을 거쳤습니다. (Section 5.5)</li>
+<li><strong>[사실]</strong> Siren AgentDojo 벤치마크 기반 평가 결과, 공격 성공률(ASR@5) 28.4% 및 유용성(Utility) 94.2%를 기록하여 적대적 주입 환경에서도 원래 사용자의 지시를 높은 성공률로 완수함을 검증했습니다. (Table 2)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-화자-figures-authors">3. 등장 인물·화자 (Figures &amp; Authors)</h4>
+<p>소스 문서에 기록된 작성 기관, 참여 저자 및 교사 모델 정보는 다음과 같습니다. <strong>[사실]</strong> (Section 1, Section 11)</p>
+<ul>
+<li><strong>핵심 개발 기관</strong>: Meta Superintelligence Labs (Section 1)</li>
+<li><strong>핵심 저자진 (Core Contributors)</strong>:
+<ul>
+<li><strong>[사실]</strong> Arash Ebrahim Abtahizadeh, Muna Aghamelu, Adil Ahmed, Juan C. Angeles Acuna, Alexis Audran-Reiss, Asaf Avrahamy, Yoram Bachrach, Can Balioglu, Amar Budhiraja, Onur Çelebi, Gaurav Chaurasia, Joy Chen, Lynn Cherif, Lucia Cipolina-Kun, Gal Cohen, Timothée Darcet, Beto de Paola, Digant Desai, Sam Devlin, Derek Dunfield, Ivan Evtimov, Maryam Fazel-Zarandi, Rob Fergus, Jean-Christophe Gagnon-Audet 등 70여 명의 핵심 기여자가 기술 문서 명단에 수록되어 있습니다. (Section 11.1)</li>
+<li><strong>[사실]</strong> 개별 기여자들의 세부 연구 직책 및 특정 세부 모듈 담당 역할: <strong>확인 불가</strong> (소스 문서 상 개별 담당 업무 표기 없이 공동 기여자 명단으로만 게재됨).</li>
+</ul>
+</li>
+<li><strong>교사 모델 (Teacher Model)</strong>:
+<ul>
+<li><strong>[사실]</strong> Muse Spark (Menghini et al., 2026 저작에 근거한 메타의 프론티어급 모델). (Section 1, Section 5.3)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-key-figures-timeline">4. 수치 및 시점 (Key Figures &amp; Timeline)</h4>
+<p>소스 문서에서 검증된 핵심 시점 및 수치 데이터는 카테고리별로 다음과 같습니다. <strong>[사실]</strong></p>
+<ul>
+<li><strong>핵심 시점 정보</strong>:
+<ul>
+<li><strong>기술 보고서 작성/발표일</strong>: 2026년 10월 19일 (Section 1)</li>
+<li><strong>데이터 지식 기준일 (Knowledge Cutoff)</strong>: 2026년 1월 4일 (Section 4.2, Section 6.1)</li>
+<li><strong>예시 시스템 프롬프트 상의 현재 날짜</strong>: 2026년 3월 15일 (Appendix B.1)</li>
+</ul>
+</li>
+<li><strong>모델 파라미터 및 스펙 수치</strong>:
+<ul>
+<li><strong>전체 파라미터 수</strong>: 약 29.6B (29,611,617,280 개) (Table 1)</li>
+<li><strong>언어 모델 트랜스포머 블록</strong>: 약 25.16B (Table 1)</li>
+<li><strong>인지 인코더 (Perception Encoder)</strong>: 약 1.8B (Table 1)</li>
+<li><strong>토큰 임베딩 및 출력 프로젝션</strong>: 각 약 1.34B (Vocabulary Size: 202,048) (Table 1)</li>
+<li><strong>컨텍스트 길이</strong>: 128K (131,072) 토큰 이상 지원 (Table 1)</li>
+</ul>
+</li>
+<li><strong>하드웨어 및 양산화/언어 지원 수치</strong>:
+<ul>
+<li><strong>온디바이스 VRAM 상한선</strong>: 32GB (소비자용 GPU, 예: RTX 5090) (Section 1, Section 2.3, Section 10)</li>
+<li><strong>BF16 가중치 메모리 점유</strong>: 55.7 GB $\rightarrow$ 양자화 후 가중치 목표: 20 GB 미만 (EvoPress 적용 시 19.65 GB) (Section 7.1)</li>
+<li><strong>지원 언어 수</strong>: 약 140개 언어 (기계 번역 벤치마크 기동 평가 기반 지원 언어 변이체(Languoids) 총 137개: 강력 지원 Tier 88개, 사용 가능 Tier 49개 정밀 분류) (Section 1, Appendix B.6.3)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>기술 보고서 내용 분석 결과 확인되는 모델의 한계점 및 미확인 요소는 다음과 같습니다. <strong>[사실]</strong></p>
+<ul>
+<li><strong>비디오 처리의 구조적 한계</strong>:
+<ul>
+<li><strong>[사실]</strong> 비디오를 프레임 시퀀스로 입력받아 처리할 수 있으나, 비디오 이해 전용으로 명시적 최적화가 수행되지는 않았으며 교차 배치된(Interleaved) 텍스트-이미지 이해에 최적화되어 있습니다. (Section 2.2)</li>
+</ul>
+</li>
+<li><strong>특정 저자원 언어 성능 저하</strong>:
+<ul>
+<li><strong>[사실]</strong> Wolof 언어 등 일부 저자원 언어에 대해서는 학습 데이터 커버리지가 부족하여 MMLU-ProX 등 멀티모달/다국어 벤치마크 평가 시 성과 한계를 보입니다. (Appendix B.6.2)</li>
+</ul>
+</li>
+<li><strong>비영어권 에이전트 능력의 불일치 현상</strong>:
+<ul>
+<li><strong>[사실]</strong> 영어 환경에서의 에이전트 능력 대비 비영어권 언어 환경 수행 시 성능 하락(성공률 떨어짐) 현상이 관찰됩니다. (Appendix B.6.1)</li>
+<li><strong>[사실]</strong> 특히 힌디어(Hindi) 및 일본어(Japanese)의 경우 추론 강도를 <code>medium</code>에서 <code>high</code>나 <code>xhigh</code>로 높일 때 검색(Search) 기능 수행 정확도가 오히려 하락하는 비단조적 성능 역전 현상이 나타납니다. (Appendix B.6.1, Table 7)</li>
+</ul>
+</li>
+<li><strong>소스 미언급 및 확인 불가 항목</strong>:
+<ul>
+<li><strong>개별 기여자 200여 명의 구체적 담당 업무/역할</strong>: <strong>확인 불가</strong> (Section 11)</li>
+<li><strong>클라우드 인프라 운용 대비 정확한 온디바이스 비용 절감 수치</strong>: <strong>확인 불가</strong></li>
+<li><strong>실제 오프라인 엣지 디바이스별 초당 생성 프레임/토큰 수(FPS/TPS) 절대 수치</strong>: <strong>확인 불가</strong> (DFlash 및 양산화로 실용 속도를 확보했다는 소스 주장 외 구체적 초당 토큰 수 미기재).</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

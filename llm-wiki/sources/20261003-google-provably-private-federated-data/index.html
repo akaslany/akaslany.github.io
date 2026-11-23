@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toward provably private learning from federated data</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Toward provably private learning from federated data</h1>
+<p class="page-meta">웹 · 2026-10-03</p>
+<h2 id="요약">요약</h2>
+<p>구글 리서치(Google Research)의 캐서린 데일리(Katharine Daly) 소프트웨어 엔지니어와 대니얼 레미지(Daniel Ramage) 리서치 디렉터는 2026년 10월 2일 발표를 통해, 서버 측 연산 처리를 활용하여 모델 학습 속도, 정확도 및 디바이스 커버리지를 크게 향상시키는 동시에 외부에서 검증…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://research.google/blog/toward-provably-private-learning-from-federated-data/">출처</a> · <a href="https://www.youtube.com/watch?v=kkiXY08x2ho">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="구글의-tee-기반-연합학습-fl-시스템-및-검증-가능한-프라이버시-기술-해설-보고서">구글의 TEE 기반 연합학습(FL) 시스템 및 검증 가능한 프라이버시 기술 해설 보고서</h3>
+<h4 id="1-개요-및-배경-구글의-연합학습-진화와-4대-프라이버시-원칙">1. 개요 및 배경: 구글의 연합학습 진화와 4대 프라이버시 원칙</h4>
+<p>구글 리서치(Google Research)의 캐서린 데일리(Katharine Daly) 소프트웨어 엔지니어와 대니얼 레미지(Daniel Ramage) 리서치 디렉터는 2026년 10월 2일 발표를 통해, 서버 측 연산 처리를 활용하여 모델 학습 속도, 정확도 및 디바이스 커버리지를 크게 향상시키는 동시에 외부에서 검증 가능한 프라이버시 보장을 제공하는 차세대 연합학습(Federated Learning, FL) 시스템을 공개했습니다.</p>
+<p>2017년 구글이 최초로 제안한 연합학습은 중앙 서버로 개인 데이터를 직접 수집하지 않고, 분산된 기기상에서 머신러닝 모델을 협업 방식으로 학습시키는 프라이버시 보존형 머신러닝 기술입니다. 연합학습 기술은 Gboard의 다음 단어 예측(next-word prediction) 및 스마트 답장(Smart Compose), 구글 메시지의 답장 추천(reply suggestions), 안드로이드의 스마트 텍스트 선택(Smart Text Selection) 등 수많은 사용자의 일상 속 핵심 서비스의 기반 기술로 동작해 왔습니다.</p>
+<p>구글의 연합학습 시스템 연구 및 개발은 다음 <strong>4대 핵심 프라이버시 원칙</strong>을 엄격한 기준으로 삼아 진행됩니다.</p>
+<ul>
+<li><strong>데이터 최소화 (data minimization)</strong></li>
+<li><strong>데이터 익명화 (data anonymization)</strong></li>
+<li><strong>투명성과 제어 (transparency and control)</strong></li>
+<li><strong>검증 가능성과 감사 가능성 (verifiability and auditability)</strong></li>
+</ul>
+<p>구글은 장기간에 걸친 데이터 익명화 기술 연구를 통해 행렬 분해 기반 차분 프라이버시(MF-DP-FTRL) 알고리즘과 보안 집계(Secure Aggregation)에 결합된 분산 차분 프라이버시 등 상용 프로덕션 모델에 적용 가능한 강력한 차분 프라이버시(Differential Privacy, DP) 보장 체계를 구축했습니다. 나아가 2025년에는 이러한 4대 원칙을 근간으로 확장된 연합학습의 정무적 정의를 정립했습니다. 이 정의에 따르면, 완결된 연합학습 시스템은 클라이언트가 자신의 개인 데이터, 해당 데이터에 접근할 수 있도록 허용된 워크로드 집합, 그리고 해당 워크로드가 가지는 익명화 속성에 대해 완전한 제어권을 직접 유지할 수 있도록 보장해야 합니다.</p>
+<hr />
+<h4 id="2-문제와-변화-기존-연합학습의-한계와-tee-도입-배경">2. 문제와 변화: 기존 연합학습의 한계와 TEE 도입 배경</h4>
+<p>초기 온디바이스 중심의 연합학습 체계는 분산 기기 자원에 전적으로 의존하는 구조적 병목과 외부 관찰자의 검증 불가능성이라는 명확한 한계를 안고 있었습니다. 구글은 이러한 문제를 근본적으로 해결하기 위해 신뢰 실행 환경(Trusted Execution Environment, TEE) 기반의 서버 측 연산 처리 구조로의 전환을 단행했습니다.</p>
+<p>기존 연합학습 방식에서는 클라이언트가 업로드한 데이터가 서버에서 로깅되거나 임의로 검사되지 않는다는 사실을 외부 관찰자나 감사자가 암호학적으로 검증할 방법이 부재했습니다. 전송 구간 암호화를 지원하는 보안 집계 기술의 경우 데이터 수집 단계의 프라이버시는 보호했으나, 최신 중앙형 차분 프라이버시(DP) 보장 메커니즘과 직접 호환되지 않는 기술적 제약이 있었습니다. 또한 모바일 기기의 컴퓨팅 자원 한계, 일주기 변동성(diurnal variations)에 따른 기기 참여율의 급격한 변동, 동일한 기기 자원을 두고 다수의 워크로드가 벌이는 자원 경합 등으로 인해 단일 모델을 학습시키는 데 1~2개월에 달하는 장시간이 소요되는 심각한 병목이 존재했습니다.</p>
+<p>새롭게 도입된 TEE 기반 연합학습 시스템은 단일 하드웨어 수준에서 제공되던 TEE의 핵심 속성인 원격 증명 가능성(remote attestability), 기밀성(confidentiality), 무결성(integrity)을 엔드투엔드 시스템 전체로 확장했습니다. 이를 통해 중앙 서버 운영자를 무조건 신뢰할 필요성을 완전히 제거(Zero-Trust)하고 외부에서 검증 가능한 강력한 프라이버시 시스템을 구현했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기존 연합학습 한계</th>
+<th style="text-align:left">TEE 기반 신 연합학습의 변화</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>외부 검증 불가능</strong>: 데이터의 비로깅 및 미검사 상태를 외부 관찰자가 암호학적으로 검증할 수 없음</td>
+<td style="text-align:left"><strong>외부 검증 가능</strong>: TEE의 원격 증명 기능을 통해 서버 측 데이터 처리 로직을 외부 감사자가 명확히 검증</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DP 기술과의 호환성 제약</strong>: 보안 집계 방식이 최신 중앙형 차분 프라이버시(DP) 보장 메커니즘과 호환되지 않음</td>
+<td style="text-align:left"><strong>최신 DP 보장 및 기밀성</strong>: TEE 격리 영역 내부에서만 복호화가 진행되며, 차분 프라이버시가 적용된 결과만 방출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>디바이스 자원 및 시간 병목</strong>: 기기 성능 한계와 일주기 변동성으로 인해 단일 모델 학습에 1~2개월 소요</td>
+<td style="text-align:left"><strong>서버 중심 병렬 처리</strong>: 연산 병목을 서버 TEE 클러스터로 이전하여 TEE 자원 가용성에 비례한 고속 학습 구현</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>서버 운영자 신뢰 필요</strong>: 서버 측의 데이터 처리 수집 및 프라이버시 수칙 준수를 전적으로 신뢰해야 함</td>
+<td style="text-align:left"><strong>신뢰 배제(Zero-Trust)</strong>: 서버 운영자조차 TEE 내부 상태를 관찰하거나 실행 중인 프라이버시 로직을 방해할 수 없음</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-시스템-아키텍처-tee-기반-연합학습의-4대-핵심-운용-요소">3. 시스템 아키텍처: TEE 기반 연합학습의 4대 핵심 운용 요소</h4>
+<p>TEE 기반 연합학습 시스템은 4가지 핵심 운용 구성요소가 유기적으로 코디네이션을 이루어 안전한 데이터 처리 파이프라인을 형성합니다.</p>
+<h5 id="3-1-데이터-업로드-data-upload">3.1 데이터 업로드 (Data upload)</h5>
+<p>클라이언트 기기는 로컬에서 학습 예제 데이터를 암호화한 후 서버로 전송합니다. 암호화 전 클라이언트 기기는 해당 데이터를 처리할 수 있는 TEE 연산의 집합인 '접근 정책(access policy)'을 사전 승인합니다. 이 접근 정책은 오직 차분 프라이버시가 적용되어 익명화된 결과만을 외부로 방출하도록 엄격히 제한되어 있으며, 클라이언트 기기는 해당 접근 정책이 외부 공개 투명성 로그에 먼저 게재되었는지를 확인한 후 데이터를 업로드합니다.</p>
+<h5 id="3-2-kms-및-정책-검증-kms-and-policy-verification">3.2 KMS 및 정책 검증 (KMS and policy verification)</h5>
+<p>키 관리 시스템(Key Management System, KMS)은 RAFT 합의 프로토콜을 구현하는 TEE 클러스터 기반으로 작동합니다. KMS는 데이터 복호화 키를 엄격히 관리하며, 요청을 보낸 서버 측 TEE 워크로드가 공개 투명성 로그를 통해 검증된 접근 정책과 정확히 일치하는 연산만을 수행함이 입증된 경우에만 해당 TEE에 복호화 키를 분배합니다.</p>
+<h5 id="3-3-워크로드-실행-workload-execution">3.3 워크로드 실행 (Workload execution)</h5>
+<p>데이터 처리를 전담하는 루트(root) TEE는 전체 모델 학습 루프를 제어하는 Python 프로그램을 실행합니다. 루트 TEE는 병렬 연산이 가능한 하위 학습 작업들을 여러 워커(worker) TEE 노드로 구성된 클러스터에 위임하여 분산 처리합니다. 전체 시스템의 분산 오케스트레이션 로직은 기존 TensorFlow Federated에서 유래된 오픈소스 프레임워크 독립형 언어인 Federated Language로 구현됩니다. 전체 학습 루프 진행 과정에서 외부 데이터 분석가에게는 오직 차분 프라이버시 노이즈가 추가된 모델 가중치와 메트릭 스탯만 분출됩니다.</p>
+<h5 id="3-4-장애-복구-fault-tolerant-recovery">3.4 장애 복구 (Fault-tolerant recovery)</h5>
+<p>학습 라운드가 성공적으로 완료될 때마다 Python 프로그램은 KMS에 의해 암호화된 복구 상태(recovery state) 데이터를 안전한 저장소에 기록합니다. 이를 통해 루트 노드나 워커 노드에 일시적인 인프라 장애가 발생하더라도 민감한 개인 데이터의 누출 위험 없이 마지막 학습 라운드 상태로부터 시스템을 안전하게 복구할 수 있습니다.</p>
+<hr />
+<h4 id="4-검증-방식-공개-투명성-재현-가능성-및-동적-사이드로딩">4. 검증 방식: 공개 투명성, 재현 가능성 및 동적 사이드로딩</h4>
+<p>외부 감사자와 학습 참여 기기가 서버 측 연산의 프라이버시 보장 준수 여부를 기술적으로 직접 검증할 수 있도록 시스템은 3가지 명확한 검증 메커니즘을 제공합니다.</p>
+<blockquote>
+<p><strong>공개 투명성 로그 (Public transparency log)</strong><br />
+디바이스 데이터가 참여할 수 있는 모든 미래의 서버 워크로드 접근 정책은 Sigstore 프로젝트의 공개 투명성 로그 시스템인 Rekor에 불변의 기록으로 게재됩니다. 외부 감사자와 클라이언트는 Rekor 로그를 상시 관찰함으로써 기기 데이터가 투입될 수 있는 전체 서버 워크로드의 목록과 변경 이력을 명확히 추적할 수 있습니다.</p>
+</blockquote>
+<blockquote>
+<p><strong>재현 가능한 빌드 (Reproducible builds)</strong><br />
+키 관리 시스템(KMS) 및 데이터 처리 TEE 내부에서 실행되는 바이너리 이미지 전체는 Confidential Federated Compute GitHub 저장소에 공개된 오픈소스 소스코드로부터 누구나 동일한 결과물로 재현 가능하게(reproducibly) 빌드하여 검증할 수 있습니다.</p>
+</blockquote>
+<blockquote>
+<p><strong>검증 가능한 실행과 동적 사이드로딩 (Dynamic sideloading)</strong><br />
+Rekor에 게재되는 접근 정책은 FL 학습 로직의 프라이버시 규격을 규정하는 Python 프로그램을 직접 명시합니다. 기업의 핵심 지적 재산(IP)인 독자적인 모델 아키텍처 및 데이터 전처리 로직을 보호하는 동시에 외부 감사 가능성을 완벽히 유지하기 위해, TEE 내부 파이썬 환경은 런타임 시 직렬화된 모델 코드를 동적으로 사이드로딩(dynamic sideloading)하는 기능을 지원합니다. 노이즈 추가 및 클리핑 등 프라이버시와 직결된 모든 핵심 로직은 Rekor로 검증된 Python 프로그램 내에 엄격히 하드코딩되어 고정되므로, 동적 사이드로딩을 통해 독자적 알고리즘을 수행하더라도 외부 검증 가능성과 프라이버시 보장 수준은 철저히 유지됩니다.</p>
+</blockquote>
+<hr />
+<h4 id="5-실전-적용-사례-gboard-모델-학습-및-성능-개선">5. 실전 적용 사례: Gboard 모델 학습 및 성능 개선</h4>
+<p>구글은 TEE 기반 연합학습 시스템을 글로벌 모바일 키보드 서비스인 Gboard의 프로덕션 환경에 성공적으로 실전 적용했습니다. 적용 대상은 Gboard의 핵심 기능인 영어 및 일본어 다음 단어 예측(next-word prediction) 모델 학습 과정이었습니다. 새로운 시스템 도입을 통해 구글은 프라이버시 보장 강도를 획기적으로 향상시키는 동시에 모델 정확도 및 학습 효율성 측면에서 커다란 성능 개선을 달성했습니다.</p>
+<p>기존 온디바이스 연합학습 체계에서는 글로벌 시간대별 기기 활성화 차이로 인해 발생하는 일주기 변동성(diurnal variations)이 데이터 수집 및 학습 진행에 큰 걸림돌이 되었습니다. 그러나 TEE 기반 연합학습 시스템에서는 클라이언트 기기들의 업로드 데이터를 서버 TEE 내부 안전한 영역으로 먼저 수집한 후 학습 워크로드를 실행하는 구조를 채택함으로써 일주기 변동성 제약을 완벽히 완화했습니다. 특히 TEE 내부 프로그램은 사전 수집된 데이터를 바탕으로 최적의 기기 참여 스케줄(device participation schedule)을 동적으로 산출할 수 있게 되었습니다.</p>
+<p>이러한 동적 참여 스케줄링 기술은 동일한 차분 프라이버시 예산 내에서 프라이버시 보장 곡선을 대폭 강화하는 결과를 가져왔습니다. 원문의 실제 실험 조건인 5,000 라운드 학습 및 라운드당 6,500대 기기 코호트(cohort) 설정에서, 새로운 TEE 시스템은 기존 연합학습 시스템 대비 차분 프라이버시 노이즈 계수(noise multiplier)를 크게 줄이면서도 수치 문맥 보존 능력과 모델 예측 정확도를 획기적으로 개선시켰습니다.</p>
+<p>또한 모델 학습 속도 면에서도 비약적인 진전을 이루었습니다. 과거 온디바이스 학습 방식에서는 모바일 기기의 컴퓨팅 성능 부족, 배터리 및 네트워크 상태에 따른 참여 제약, 다수의 워크로드 간 자원 경합으로 인해 단일 모델 학습에 보통 1~2개월의 긴 시간이 소요되었습니다. 반면 새로운 시스템은 데이터 처리와 그래디언트 연산 병목을 온디바이스에서 서버 측 TEE 클러스터로 전격 이전하고 다중 노드 병렬 처리를 구현했습니다. 이를 통해 모델 학습에 소요되는 시간을 획기적으로 단축시켰으며, 현재 학습 속도는 모바일 기기의 제약이 아닌 서버 측 TEE 자원의 가용성에 의해서만 제한되는 수준으로 발전했습니다.</p>
+<hr />
+<h4 id="6-보장과-가정의-경계-입증-가능한-프라이버시-provably-private-의-의미와-한계">6. 보장과 가정의 경계: &quot;입증 가능한 프라이버시(Provably Private)&quot;의 의미와 한계</h4>
+<p>&quot;입증 가능한 프라이버시&quot;라는 개념은 모든 종류의 보안 위협을 무조건 방어하거나 절대적인 익명성을 환상적으로 제공한다는 뜻이 아니며, 명확한 하드웨어적 가정과 기술적 전제조건 위에서 성립하는 수식어입니다.</p>
+<ul>
+<li>
+<p><strong>기술적 보장 사항 (Technical Guarantees)</strong></p>
+<ul>
+<li><strong>원격 검증 가능성:</strong> 외부 관찰자 및 감사자가 서버 TEE에서 실제 실행 중인 코드가 승인된 프로그램과 일치하는지 명확히 증명할 수 있습니다.</li>
+<li><strong>엄격한 데이터 접근 통제:</strong> 데이터 분석가는 TEE 내부 연산을 거쳐 차분 프라이버시 노이즈가 적용된 모델 가중치와 통계 메트릭만 관찰할 수 있으며, 원본 데이터는 TEE 내부에만 일시적으로 복호화되어 처리됩니다.</li>
+<li><strong>운영자 신뢰 배제(Zero-Trust):</strong> 구글을 포함한 서버 운영자가 시스템 내부 데이터를 무단 로깅하거나 실행 상태를 관찰·개입할 가능성을 기술적으로 차단합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>기술적 가정 및 남은 한계 (Assumptions and Limitations)</strong></p>
+<ul>
+<li><strong>하드웨어 보안 가정 의존성:</strong> 프라이버시 보장 강도는 현재 세대 TEE 하드웨어 제조업체가 제공하는 기밀성 및 무결성 보안 수준과 물리적 한계에 직접적으로 의존합니다.</li>
+<li><strong>프라이버시 로직의 고정 조건:</strong> 파이썬 프로그램 내 노이즈 추가 및 차분 프라이버시 관련 로직이 수정 없이 명확히 하드코딩되어 고정되어 있어야만 외부 검증의 효력이 유지됩니다.</li>
+<li><strong>사이드채널 관찰 위험 완화 과제:</strong> 동적으로 사이드로딩되는 워크로드 실행 과정에서 발생할 수 있는 사이드채널 관찰(side-channel observations) 공격을 완벽히 방어하기 위한 연구가 지속적으로 요구됩니다.</li>
+<li><strong>소프트웨어 구현의 수학적 증명 과제:</strong> 차분 프라이버시 알고리즘과 시스템 전체 소스코드 구현체에 대한 완벽한 수학적·기술적 정확성 증명(full proofs of correctness)은 향후 연구를 통해 달성해야 할 과제로 남아있습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="7-향후-과제-및-발전-방향">7. 향후 과제 및 발전 방향</h4>
+<p>구글은 TEE 기반 연합학습 아키텍처를 바탕으로 프라이버시 보존형 시스템의 범위를 확장하기 위해 다음 3가지 핵심 향후 과제를 추진하고 있습니다.</p>
+<ol>
+<li><strong>대형 언어 모델(LLM) 연합학습으로의 확장:</strong> 연산 부담이 큰 그래디언트 계산 과정이 서버 TEE로 이전됨에 따라, 시스템을 가속기(GPU/TPU 등 Accelerator) 연동 TEE 기술과 결합하여 대형 언어 모델(LLM)을 연합학습 방식으로 학습시키는 확장 연구를 진행합니다.</li>
+<li><strong>임의 워크로드 실행 및 추론 TEE 결합:</strong> Python 기반의 임의 워크로드(예: 프라이버시 보존형 합성 데이터 생성)를 TEE 내부에서 검증 가능한 방식으로 실행하는 실험을 추진 중이며, 일반 데이터 처리 TEE와 LLM 추론 전용 TEE를 결합하는 다중 TEE 복합 아키텍처를 연구하고 있습니다.</li>
+<li><strong>서버 측 프라이버시 보존 처리의 기술적 이정표 정립:</strong> 외부 감사 가능성을 완벽히 갖춘 TEE 기반 연합학습 구축은 중앙 서버 환경에서도 개인 프라이버시를 완벽히 보존하며 대규모 데이터를 처리할 수 있음을 입증하는 중요한 기술적 이정표가 됩니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

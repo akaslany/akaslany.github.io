@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[AINews] SpaceXAI Grok 4.6 and Grok @Bot</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>[AINews] SpaceXAI Grok 4.6 and Grok @Bot</h1>
+<p class="page-meta">웹 · 2026-08-13</p>
+<h2 id="요약">요약</h2>
+<p>초기 베타 Grok Bot의 업무 자동화 기능과 Grok 4.6의 평가 성적을 살피고 실사용 검증 과제를 짚는다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.latent.space/p/ainews-spacexai-grok-46-and-grok">출처</a> · <a href="https://www.youtube.com/watch?v=WL7ALK-E-bM">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/product-business/">제품·사업</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="grok-bot은-진짜-ai-동료일까-grok-4-6-독립-감사">Grok Bot은 진짜 AI 동료일까? Grok 4.6 독립 감사</h3>
+<p>Latent.Space의 2026년 8월 13일 AINews는 Grok Bot과 Grok 4.6을 AI teammate 시장의 큰 신규 진입으로 소개한다. 그러나 기사에는 제품 발표, 회사 주장, 제3자 benchmark, 편집자의 시장 평가, 다른 모델 roundup이 한데 섞여 있다. 이 보고서는 Grok Bot 제품과 Grok 4.6 모델만 분리해 살펴본다.</p>
+<h4 id="먼저-구분해야-할-것">먼저 구분해야 할 것</h4>
+<p>Grok Bot은 업무를 맡기는 early-beta 제품이다. Grok 4.6은 그 안에서 이용 가능한 모델이다. SpaceXAI는 발표 주체이고, Cursor와 Devin은 통합·배포 채널이며, Artificial Analysis는 제3자 평가기관이다. 이들을 하나로 묶어 “Grok 4.6이 모든 업무를 끝내는 AI 직원”이라고 표현하면 안 된다.</p>
+<h4 id="grok-bot이-약속하는-방식">Grok Bot이 약속하는 방식</h4>
+<p>공식 발표와 문서는 Bot마다 지속형 클라우드 컴퓨터를 제공하고, 사용자가 쓰는 앱·웹사이트·파일·터미널에서 일을 수행하도록 설계됐다고 설명한다. 사용자는 데스크톱이나 휴대폰으로 일을 맡길 수 있고, 여러 Bot을 병렬로 실행하거나 서로 메시지와 맥락을 넘기게 할 수 있다. 시연한 브라우저 작업을 skill과 routine으로 저장해 일정이나 이벤트에 따라 반복하는 기능도 문서화돼 있다.</p>
+<p>하지만 <code>finished work</code>와 24/7은 무조건적인 성공 보장이 아니다. 비밀번호, passkey, 2FA, CAPTCHA, 결제와 신원확인은 사람 takeover가 필요할 수 있다. 사이트가 자동화를 막거나 세션이 만료되고, 승인·장애·사용량 제한 때문에 작업이 멈출 수도 있다. 내부 sales·operations·bug-fix 사례 역시 회사가 제시한 사례이지 독립 성공률 통계가 아니다.</p>
+<p>여러 Bot이 같은 사용자 컴퓨터의 파일과 로그인 세션을 공유할 수 있다는 점은 편리하지만 권한 분리와 감사 측면에서는 중요한 위험이다. 발송·게시·구매·삭제·권한 변경에는 명확한 승인 경계, 취소, 로그, 복구 설계가 필요하다.</p>
+<h4 id="grok-4-6에서-확인된-것">Grok 4.6에서 확인된 것</h4>
+<p>SpaceXAI는 2026년 8월 12일 Grok 4.6을 출시했다. 공식 API는 500k context window와 입력 100만 token당 2달러, 출력 100만 token당 6달러를 표시한다. fast variant는 두 배 가격이다.</p>
+<p>회사는 장기 agent와 interactive·visual work를 중점으로 삼았다고 설명한다. 장기 보충 훈련, 모델 생성 데이터, 개선된 optimizer와 recipe, Grok 4.5가 재생성한 SFT trajectory, knowledge work·coding·kernel optimization·web development·CAD의 agentic RL도 공개했다. 이는 회사의 training disclosure이며 각 변화가 성능 향상의 원인이라는 독립 실험은 아니다.</p>
+<h4 id="수치는-조건과-함께-봐야-한다">수치는 조건과 함께 봐야 한다</h4>
+<p>Artificial Analysis에서 Grok 4.6 high는 Intelligence Index 61을 받았다. 이 값은 GDPval-AA v2, Terminal-Bench v2.1 등 9개 평가를 묶은 composite다. 전체 인간 지능이나 모든 업무 성능을 뜻하지 않는다.</p>
+<p>Terminal-Bench v2.1의 88.4%는 89개 terminal task, Terminus 2 agent harness, E2B sandbox, 과제별 3회 반복 평균 pass@1 조건이다. 실제 기업 SaaS, 장기 운영, Grok Bot의 end-to-end 성공률과는 다른 측정이다.</p>
+<p>GDPval-AA v2는 SpaceXAI 출시 페이지에서 1753 Elo로 제시됐지만 2026년 8월 13일 현재 Artificial Analysis leaderboard는 1749, 신뢰구간 -20/+20으로 표시한다. 평가 snapshot이 바뀔 수 있으므로 숫자를 고정된 절대 순위처럼 말하면 안 된다. 이 평가는 220개 task, 44개 직업, 9개 산업을 Stirrup agent loop와 blind pairwise comparison으로 평가한다.</p>
+<p>SpaceXAI 출시 페이지의 AA-Briefcase는 1577이다. 이 평가는 현실적인 spreadsheet·presentation·memo 같은 장기 지식업무를 다루지만 test set은 비공개다. 오염 방지에는 유리해도 외부 독자가 문항과 채점을 완전히 감사하기 어렵고, 실제 조직의 권한·데이터·검수·실패 비용까지 포함하지 않는다.</p>
+<h4 id="확인되지-않은-최상급">확인되지 않은 최상급</h4>
+<p>Latent.Space는 Grok 4.6을 세계 두 번째 지식업무 모델, 효율 최상위처럼 평가한다. 하지만 순위는 benchmark, effort, harness, 가격비율, 조회 시점에 따라 달라진다. 따라서 안전한 결론은 “일부 독립 agentic·knowledge-work 평가에서 상위권이며 headline token 가격이 frontier 동급 모델보다 낮은 편”이라는 정도다.</p>
+<p><code>1.5T model</code>도 공식 명세가 아니다. Cursor 공동창업자의 X 언급은 있으나 SpaceXAI 공식 기술문서는 parameter count와 total/active parameter 의미를 공개하지 않았다.</p>
+<h4 id="기사에서-제외해야-할-것">기사에서 제외해야 할 것</h4>
+<p>Qwen3.8-Max, DeepSeek V4 Pro, MAI-Thinking-1, Solar Pro 4와 이후 멀티모달·인프라·Reddit 항목은 같은 날의 종합 recap이다. 그것들의 수치와 기능은 Grok Bot의 증거가 아니므로 이 영상에 섞지 않는다. 유료벽 뒤 세부 내용도 미열람·미감사 상태다.</p>
+<h4 id="결론">결론</h4>
+<p>Grok Bot은 AI가 채팅창을 넘어 실제 도구와 컴퓨터에서 일하는 방향을 보여주는 주목할 early beta다. Grok 4.6은 일부 agentic benchmark에서 강한 성능과 비교적 낮은 headline 가격을 보였다. 하지만 제품 성공은 모델 점수만으로 결정되지 않는다. 권한 분리, 사람 승인, 자격증명 보호, 감사 로그, 실패 복구, 독립 실사용 성공률과 총비용을 확인해야 비로소 “AI 동료”라는 이름의 실제 가치를 평가할 수 있다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/product-business/">제품·사업</a></li></ul></section>
+</main>
+</body>
+</html>

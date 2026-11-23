@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>공유 문서 taO2bVCtRmcz</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>공유 문서 taO2bVCtRmcz</h1>
+<p class="page-meta">AI 대화 공유 · 2026-11-19</p>
+<h2 id="요약">요약</h2>
+<p>인공지능(AI) 컴퓨팅 시대의 격변 속에서 개방형 명령어 집합 아키텍처(ISA)인 RISC-V는 엔비디아(NVIDIA) GPU 및 x86·아키텍처(Arm) 호스트 CPU가 구축해 온 단일 절대 패권을 전면 대체하기는 현실적으로 어렵다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/ai-share/">AI 대화 공유</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://share.gemini.google/taO2bVCtRmcz">출처</a> · <a href="https://www.youtube.com/watch?v=boOuAcyFxzo">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-risc-v-기반-ai-컴퓨팅-생태계의-기술-시장-구조-및-한국-반도체-밸류체인-영향-분석">[보고서] RISC-V 기반 AI 컴퓨팅 생태계의 기술·시장 구조 및 한국 반도체 밸류체인 영향 분석</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>인공지능(AI) 컴퓨팅 시대의 격변 속에서 개방형 명령어 집합 아키텍처(ISA)인 RISC-V는 엔비디아(NVIDIA) GPU 및 x86·아키텍처(Arm) 호스트 CPU가 구축해 온 단일 절대 패권을 전면 대체하기는 현실적으로 어렵다. 그러나 AI 가속기 내부의 제어 장치, 커스텀 인공지능 전용 주문형 반도체(ASIC), 엣지 AI 영역에서는 계층 분화형 사실상 표준(De Facto Standard) 패브릭으로 자리 잡는 대세가 될 가능성이 매우 높다.</p>
+<p>2026년 현재 AI 인프라 확장의 핵심 병목은 범용 CPU의 ISA 규격 자체에 있는 것이 아니라, 고대역폭 메모리(HBM) 대역폭 확보, 칩 간 초고속 인터커넥트, 그리고 쿠다(CUDA)로 대표되는 소프트웨어 생태계의 락인(Lock-in) 효과에 있다. 이러한 구조적 상황 속에서 RISC-V는 로열티가 전혀 발생하지 않는 경제성과 자유로운 커스텀 명령어 확장성이라는 원천적 우위를 바탕으로, 엔비디아 GPU 내부 제어 코어부터 메타(Meta)의 MTIA 추론 칩에 이르기까지 가속기 내부 제어 평면(Device &amp; Control Plane)을 이미 실질적으로 지배하고 있다.</p>
+<p>2025년 하반기 엔비디아가 RISC-V 호스트 CPU용 쿠다 지원을 공식 발표하고, 메타와 퀄컴(Qualcomm)이 고성능 RISC-V 스타트업을 잇달아 인수하였으며, 2026년 텐스토렌트(Tenstorrent)와 사이파이브(SiFive)가 대규모 자금 조달에 성공했다. 이는 RISC-V가 단순 보조 컨트롤러 역할을 넘어 데이터센터 호스트 CPU 및 독자 AI 가속기 시장 진입이라는 주요 변곡점에 진입했음을 보여준다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-ai-컴퓨팅-3계층과-risc-v-작동-메커니즘">2.1. AI 컴퓨팅 3계층과 RISC-V 작동 메커니즘</h5>
+<p>AI 컴퓨팅 인프라는 역할과 물리·논리적 구조에 따라 3가지 계층으로 분화되며, 계층별 RISC-V의 적용 현황과 작동 메커니즘은 차별적으로 나타난다.</p>
+<h6 id="가속기-내부-장치-제어-계층-device-control-plane-이미-지배적-단계">가속기 내부 장치·제어 계층 (Device &amp; Control Plane) — 이미 지배적 단계</h6>
+<ul>
+<li><strong>작동 메커니즘:</strong> 대규모 AI 가속기(GPU, NPU, TPU형 ASIC)는 시스톨릭 어레이(Systolic Array)나 텐서 코어와 같은 행렬 연산기 외에도 메모리 스케줄링, 전력 관리, 보안 부팅, DMA 데이터 이동, 비정형 활성화(Activation) 레이어 처리를 위한 소형 범용 코어를 필수적으로 필요로 한다. RISC-V는 기본 ISA가 간결하고 커스텀 확장 명령어를 자유롭게 추가할 수 있어 벤더 전용 제어 파이프라인 설계에 최적화되어 있다.</li>
+<li><strong>실제 적용 사례:</strong> 엔비디아는 기존 독자 아키텍처였던 팔콘(Falcon) 코어를 퇴출하고 GPU 칩당 10~40개의 RISC-V 코어와 20개 이상의 커스텀 확장을 탑재하여 2024년 한 해에만 10억 개 이상의 RISC-V 코어를 출하했다. 메타 역시 추천 알고리즘 추론용 칩인 MTIA 2i에 RISC-V 코어를 적용하여 10만 개 이상을 데이터센터에 배치했다.</li>
+</ul>
+<h6 id="데이터센터-호스트-cpu-계층-host-plane-2026년-진입-원년">데이터센터 호스트 CPU 계층 (Host Plane) — 2026년 진입 원년</h6>
+<ul>
+<li><strong>작동 메커니즘:</strong> 데이터센터 호스트 CPU는 GPU 클러스터에 데이터를 공급하고(PCIe/CXL 일관성 유지), 분산 통신(NCCL)과 가상화 및 OS 운영을 총괄한다. 64비트 애플리케이션 프로세서 표준인 RVA23 규격이 확정되고 2026년 첫 RVA23 기반 서버 하드웨어가 출하되면서 표준 호환성 기반이 마련되었다.</li>
+<li><strong>실제 적용 사례:</strong> 엔비디아가 2025년 9월 RISC-V 호스트 CPU용 쿠다 지원을 발표한 데 이어, 2026년 10월에는 RVA23, ACPI, PCIe 일관성, DOCA, NCCL을 엔비디아 GPU 호스트 결합 공식 요구 사양으로 명문화함에 따라 기술적 진입 관문이 열렸다.</li>
+</ul>
+<h6 id="자체-호스팅-엣지-에이전틱-ai-계층-self-hosted-edge-plane">자체 호스팅·엣지·에이전틱 AI 계층 (Self-Hosted &amp; Edge Plane)</h6>
+<ul>
+<li><strong>작동 메커니즘:</strong> 별도 GPU 없이 CPU 내부의 벡터·행렬 엔진만으로 온디바이스 AI나 경량 거대언어모델(LLM)을 직접 구동하는 영역이다. RVA23 규격이 벡터 확장 표준인 RVV 1.0을 필수 요건으로 채택함에 따라 단일 CPU 기반 SIMD 병렬 연산의 성능 기준선이 확립되었다.</li>
+</ul>
+<hr />
+<h5 id="2-2-기술적-병목-구조적-제약-및-역설">2.2. 기술적 병목, 구조적 제약 및 역설</h5>
+<p>RISC-V 확산과 고성능 AI 영역 진입을 저해하는 하드웨어·소프트웨어적 구조적 제약 요소는 다음과 같이 분석된다.</p>
+<ol>
+<li><strong>행렬 연산 확장(Matrix Extension) 표준화의 지연:</strong>
+<ul>
+<li>경쟁 아키텍처인 Arm은 SME2, 인텔은 AMX를 상용화하여 2D 행렬 곱셈(GEMM) 연산을 지원하고 있다.</li>
+<li>반면 RISC-V 진영은 벡터 레지스터를 재활용하는 IME, 독립 행렬 유닛을 부착하는 AME, 구글 등이 추진하는 VME(2026년 10월 기준 v0.4 단계, 2026년 말 v1.0 목표) 등 복수 트랙으로 규격이 분산되어 있어 표준 수렴 속도가 상대적으로 느리다.</li>
+</ul>
+</li>
+<li><strong>소프트웨어 스택의 계층적 미성숙:</strong>
+<ul>
+<li>리눅스 재단 산하 RISE 프로젝트를 통해 2026년 8월 riscv64용 파이토치(PyTorch) 2.13.0 공식 휠 패키지가 배포되었고, CPython의 공식 지원과 함께 2026년 10월 RVA23 기반 안드로이드 17(Android 17) 빌드 및 콘다(Conda) 생태계 이식이 진행되었다.</li>
+<li>그러나 CPython 지원 등급이 여전히 'Tier 3(비핵심·커뮤니티 유지보수 수준)'에 머물러 있어, Tier 1 등급인 x86이나 Arm 대비 엔터프라이즈 프로덕션 환경 적용에 현실적 간극이 존재한다. 다만 UC 버클리의 SALTyRN 프로젝트(LLM을 활용해 Arm Neon 커널을 검증된 RVV 코드로 자동 변환하는 프로젝트) 등 차세대 AI 컴파일러 접근법이 소프트웨어 전환 장벽을 허물 가능성도 제시된다.</li>
+</ul>
+</li>
+<li><strong>'무료 ISA ≠ 무료 칩' 검증 비용 및 파운드리 NRE 비용의 역설:</strong>
+<ul>
+<li>ISA 라이선스 비용은 0원이지만, 데이터센터급 비순차 실행(Out-of-Order) 고성능 CPU를 설계·검증하고 선단 공정에 올리기 위해서는 수억 달러의 비반복 개발비(NRE)와 수년의 시간이 소요된다. 이에 따라 개발 기간(Time-to-Market) 측면에서 검증된 IP(예: Arm CSS)를 도입하는 것 대비 실행 리스크가 존재한다.</li>
+</ul>
+</li>
+<li><strong>커스텀 명령어 파편화(Fragmentation) 및 미·중 기술 패권 갈등:</strong>
+<ul>
+<li>RVA23 규격이 기본 CPU 아키텍처 파편화를 일부 봉합했으나, AI 가속용 커스텀 확장 영역에서 벤더별 독자 명령어 추가가 지속되고 있어 소프트웨어 이식성이 훼손될 수 있다.</li>
+<li>또한 미국 상무부 산업안보국(BIS)이 2026년 11월 16일 AI 컴퓨팅 추가 수출 통제(IFR)를 발동하는 등 지정학적 규제가 강화됨에 따라 글로벌 생태계가 서방과 중국 진영으로 양분될 리스크가 상존한다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-3-시장-경제적-동인-및-주요-플레이어-자본-이동">2.3. 시장·경제적 동인 및 주요 플레이어 자본 이동</h5>
+<ul>
+<li><strong>Arm의 로열티 인상 및 탈출 유인:</strong>
+<ul>
+<li>2026년 데이터센터 CPU 전체 수요에서는 x86이 약 78.0%의 점유율을 유지하고 있으나, 신규 하이퍼스케일러 서버 CPU 배치의 상당 부분을 Arm Neoverse가 흡수함에 따라 데이터센터 내 Arm 점유율은 20~25% 구간으로 확대되었다.</li>
+<li>그러나 Arm이 Armv9 및 CSS(Compute Subsystems) 전환을 계기로 칩당 로열티 요율을 인상함에 따라, 자체 AI 칩을 대량 생산하는 빅테크 기업들의 ISA 종속성 탈피 시도와 RISC-V 진영으로의 자본 유입이 가속화되고 있다.</li>
+</ul>
+</li>
+<li><strong>시장 규모 및 침투율 통계 (SHD Group 보고서, 2026년 4월 기준):</strong>
+<ul>
+<li><strong>AI 가속기 내 RISC-V 침투율:</strong> 2024년 19.8% → 2025년 27.4% → 2031년 72.6% (전망)</li>
+<li><strong>RISC-V 기반 SoC 출하량 및 매출:</strong> 2031년 출하량 359억 개, 관련 매출 3,180억 달러 추산</li>
+<li><strong>순수 RISC-V IP·실리콘 시장 규모:</strong> 2025년 23억 달러 → 2026년 30억 달러 → 2035년 347억 달러 (전망)</li>
+</ul>
+</li>
+<li><strong>중국의 국가 단위 투입:</strong>
+<ul>
+<li>중국 정부는 서방의 x86 및 Arm 규제를 우회하기 위해 2025년 3월 RISC-V 칩 보급 장려 국가 정책 지침을 수립했다. 알리바바 다모아카데미(DAMO)는 RVA23 기반 서버용 CPU인 '시안티에 C930(XuanTie C930)'과 행렬 연산 코어를 출시하여 내수 생태계를 확충하고 있다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-글로벌-4대-risc-v-ai-플레이어-전략-비교">2.4. 글로벌 4대 RISC-V AI 플레이어 전략 비교</h5>
+<p>RISC-V AI 생태계를 주도하는 글로벌 4대 진영은 비즈니스 모델, 주력 기술, 밸류체인 연계 방식에서 뚜렷한 차이를 보인다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">텐스토렌트 (Tenstorrent)</th>
+<th style="text-align:left">사이파이브 (SiFive)</th>
+<th style="text-align:left">메타 + 리보스 (Meta / Rivos)</th>
+<th style="text-align:left">퀄컴 + 벤타나 (Qualcomm / Ventana)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>핵심 비즈니스 모델</strong></td>
+<td style="text-align:left">개방형 AI 가속기 + 칩렛 및 IP 라이선싱 병행</td>
+<td style="text-align:left">순수 RISC-V CPU 및 AI 벡터 IP 라이선싱</td>
+<td style="text-align:left">100% 자체 데이터센터용 수직 통합 (비매각)</td>
+<td style="text-align:left">엣지·전장·데이터센터용 자체 SoC (탈Arm 옵션)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주력 기술 자산 및 로드맵</strong></td>
+<td style="text-align:left">TT-Ascalon CPU, Tensix NPU, TT-Forge / TT-Metalium SW&lt;br&gt;(Wormhole → Blackhole → Quasar / Grendel)</td>
+<td style="text-align:left">Performance P870/P870-D, Intelligence X280/X390/XM, Automotive IP</td>
+<td style="text-align:left">고성능 서버 RISC-V CPU + AI 가속기 통합 칩렛 (MTIA 연계)</td>
+<td style="text-align:left">Veyron 서버 CPU 칩렛 + Hexagon NPU + 전장 플랫폼</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>자본 및 밸류에이션</strong></td>
+<td style="text-align:left">기업가치 62억 달러 (2026.10, 15억 달러 시리즈 E 조달)</td>
+<td style="text-align:left">기업가치 36.5억 달러 (2026.04, 4억 달러 조달)</td>
+<td style="text-align:left">메타가 Rivos를 20억 달러에 인수 (2025년 9/10월)</td>
+<td style="text-align:left">퀄컴이 Ventana 인수 (2025.12), 퀸투리스 합작 병행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>한국 밸류체인 접점</strong></td>
+<td style="text-align:left">삼성 파운드리(4nm SF4X)·투자, LG·현대차 IP 및 투자 협력</td>
+<td style="text-align:left">삼성 SAFE IP 파트너, 국내 팹리스·디자인하우스(DSP) 연계</td>
+<td style="text-align:left">간접적 접점 (HBM 및 서버 DRAM 수요 다극화)</td>
+<td style="text-align:left">삼성 파운드리 기회, 시스템LSI 경쟁, 전장 협력</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최대 리스크 요인</strong></td>
+<td style="text-align:left">62억 달러 가치 대비 상용 대량 양산 매출 검증 필요</td>
+<td style="text-align:left">자체 완제품 부재로 고객사 채택 속도에 종속</td>
+<td style="text-align:left">메타 내부 통합 및 개발 일정 지연 보도 (2026.06)</td>
+<td style="text-align:left">Arm과의 관계 회복 시 주력 라인업 전환 지연 가능성</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>텐스토렌트 (Tenstorrent):</strong> 짐 켈러(Jim Keller)가 이끄는 텐스토렌트는 고성능 CPU IP(TT-Ascalon)와 AI 가속 코어(Tensix)를 칩렛 형태로 모듈화해 공급한다. 가속기 제품군(Wormhole에서 Blackhole, 차세대 Quasar/Grendel로 이어지는 로드맵)을 독자 공급함과 동시에 소프트웨어 락인을 해제하기 위해 컴파일러(TT-Forge)와 커널 프레임워크(TT-Metalium)를 오픈소스로 공개했다.</li>
+<li><strong>사이파이브 (SiFive):</strong> 검증된 코어 IP 포트폴리오(Performance P870/P870-D, Intelligence X280/X390/XM, Automotive)를 제공하는 순수 IP 벤더다. 구글 TPU 내부 스칼라/벡터 제어 코어 공급 실적을 보유하고 있다.</li>
+<li><strong>메타 + 리보스 (Meta / Rivos):</strong> 메타가 20억 달러에 인수한 리보스(Rivos)를 통해 고성능 서버 CPU 및 가속기 칩렛을 자체 데이터센터(MTIA)에 수직 통합하여 전력 당 총소유비용(TCO)을 낮추는 전략을 취한다.</li>
+<li><strong>퀄컴 + 벤타나 (Qualcomm / Ventana):</strong> 퀄컴이 벤타나(Ventana)를 인수하여 Veyron 계열 고성능 칩렛 CPU 기술을 확보했으며, 보쉬(Bosch), 인피니언(Infineon), NXP, 노르딕(Nordic)과 함께 차량용 합작사 퀸투리스(Quintauris)를 설립하여 탈Arm 전장 생태계를 구축하고 있다.</li>
+</ul>
+<hr />
+<h5 id="2-5-한국-3대-그룹-및-반도체-밸류체인-영향-분석">2.5. 한국 3대 그룹 및 반도체 밸류체인 영향 분석</h5>
+<p>RISC-V 확산은 한국 반도체, 전자, 모빌리티 산업군에 파운드리 수주, 메모리 수요 다변화, 자체 AI 칩 내재화라는 기회를 제공함과 동시에 기술적 실증이라는 과제를 안겨준다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">한국 기업 및 생태계</th>
+<th style="text-align:left">핵심 수혜 및 기회 요인</th>
+<th style="text-align:left">구조적 리스크 및 선결 과제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>삼성전자 (DS / DX)</strong></td>
+<td style="text-align:left">· TSMC 캐파 병목에 따른 파운드리/첨단 패키징(2nm GAA, 4nm SF4X) 수주 기회&lt;br&gt;· 삼성카탈리스트펀드를 통한 투자 및 SAFE 파트너십 활용&lt;br&gt;· 커스텀 ASIC 확산에 따른 cHBM, LPDDR5X/6, GDDR7 수요 다극화&lt;br&gt;· Exynos 및 가전 SoC 내 RISC-V 도입을 통한 IP 원가 절감</td>
+<td style="text-align:left">· 2nm/3nm GAA 선단 공정 및 패키징 수율·신뢰성 확보 필수&lt;br&gt;· TSMC 대비 EDA 툴체인 및 에코시스템 완결성 입증 필요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LG전자 (H&amp;A / HE / VS)</strong></td>
+<td style="text-align:left">· 가전, TV(webOS), 차량용 인포테인먼트 모듈의 Arm 로열티 절감&lt;br&gt;· 텐스토렌트 IP 활용 온디바이스 AI 칩(DQ-C 후속 라인업) 내재화</td>
+<td style="text-align:left">· 온디바이스 AI 전용 소프트웨어 스택 최적화 역량 확보&lt;br&gt;· 대량 양산 타임투마켓 확보 및 안정성 검증</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>현대차그룹 (SDV / 로봇)</strong></td>
+<td style="text-align:left">· SDV 및 피지컬 AI(로보틱스) 독자 AI 칩렛 개발 역량 확보&lt;br&gt;· 엔비디아, 퀄컴 등 글로벌 칩 공급사에 대한 단가 협상력 제고</td>
+<td style="text-align:left">· 차량용 기능안전 최고 등급(ASIL-D) 인증 획득 장벽&lt;br&gt;· 엔비디아 DriveOS 등 기존 소프트웨어 생태계 대비 개발 환경 열위 극복</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>국내 AI 팹리스 및 DSP</strong></td>
+<td style="text-align:left">· NPU 스타트업(리벨리온, 퓨리오사AI, 딥엑스)의 제어 코어 RISC-V 채택을 통한 로열티 최소화&lt;br&gt;· 디자인하우스/DSP(에이디테크놀로지, 가온칩스, 세미파이브)의 삼성 파운드리 연계 커스텀 ASIC 턴키 수주 파이프라인 확보</td>
+<td style="text-align:left">· 글로벌 하이퍼스케일러 대상 양산 트랙 레코드 및 수주 경쟁력 입증 필요</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-6-글로벌-및-한국-밸류체인-미래-시나리오">2.6. 글로벌 및 한국 밸류체인 미래 시나리오</h5>
+<h6 id="글로벌-ai-컴퓨팅-시장-5대-시나리오-확률-합계-100">[글로벌 AI 컴퓨팅 시장 5대 시나리오] (확률 합계 100%)</h6>
+<ol>
+<li><strong>계층 분화형 공존 (Base Case) [40%]:</strong> 하이퍼스케일러가 추론 ASIC 내부 제어 코어로 RISC-V를 전면 채택하여 가속기 내 침투율이 2031년 70% 내외에 도달하지만, 호스트 CPU 점유율은 5% 미만에 머물고 대규모 학습은 기존 x86·Arm·엔비디아가 유지함.</li>
+<li><strong>개방형 호스트·가속기 돌파 (Accelerated Breakthrough) [20%]:</strong> 메타, 퀄컴, 텐스토렌트의 RVA23 서버 CPU 양산 성공 및 행렬 확장 표준화로 2030년대 초반 RISC-V가 데이터센터 서버 CPU 점유율 15~20%를 확보하고, 텐스토렌트 연간 매출이 10억 달러를 돌파함.</li>
+<li><strong>지정학적 양분 (Geopolitical Bifurcation) [20%]:</strong> 미국의 대중 수출 통제로 중국이 내수 AI 인프라 전체를 RISC-V로 강제 전환하여 서방(x86/Arm+NVIDIA)과 중국(RISC-V+자체 NPU)으로 기술 규격이 분절됨.</li>
+<li><strong>파편화 정체 (Bear Case) [15%]:</strong> 고성능 RISC-V 서버 칩 개발 지연, 행렬 확장 표준 분열, 개발비 부담으로 저전력 MCU 및 보조 컨트롤러 등 틈새 시장에 정체됨.</li>
+<li><strong>AI 컴파일러발 붕괴 (Tail-Risk Disruption) [5%]:</strong> UC 버클리의 SALTyRN 프로젝트와 같은 LLM 및 차세대 컴파일러 기반 커널 자동 변환 기술이 상용화되어 소프트웨어 전환 비용이 소멸함에 따라 로열티 제로인 RISC-V로 시장이 통합됨.</li>
+</ol>
+<h6 id="한국-반도체-밸류체인-5대-시나리오-확률-합계-100">[한국 반도체 밸류체인 5대 시나리오] (확률 합계 100%)</h6>
+<ol>
+<li><strong>실리적 이원화 (Base Case) [35%]:</strong> 메모리는 비(非)엔비디아 다극화 수혜를 누리고, LG·현대차는 보조 제어부 내재화를 달성하며, 삼성 파운드리는 중견 RISC-V ASIC 물량을 점진 수주함.</li>
+<li><strong>비(非)NVIDIA·비TSMC 연합 대성공 (Accelerated Breakthrough) [25%]:</strong> 삼성 2nm GAA 수율 회복을 바탕으로 글로벌 RISC-V 설계, 한국 제조 턴키, 한국 완제품 상용화로 이어지는 수직 연합이 구축되어 전방위 수혜를 입음.</li>
+<li><strong>메모리 독식·파운드리 소외 (Memory-Only Decoupling) [20%]:</strong> RISC-V 시장 확대에도 불구하고 삼성 파운드리 수율 열위로 양산 물량이 TSMC에 쏠려 SK하이닉스 및 삼성 메모리 사업부만 수혜를 봄.</li>
+<li><strong>실행 난항 및 Arm 역공 (Bear Case) [15%]:</strong> Rivos, 텐스토렌트 등 핵심 파트너의 상용화가 지연되고 Arm이 로열티 정책을 타협함에 따라 기존 엔비디아·퀄컴 체제로 회귀함.</li>
+<li><strong>제조 강국 오픈 AI 블록화 (Tail-Risk Disruption) [5%]:</strong> 미·중 갈등 격화 시 한·일·유럽 완성차 및 가전 기업이 텐스토렌트·사이파이브·퀸투리스를 축으로 독자 오픈 RISC-V 컨소시엄을 출범시킴.</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-화자-및-주요-조직-entities-key-characters-speakers">3. 등장 인물·화자 및 주요 조직 (Entities, Key Characters &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">성명 / 조직명</th>
+<th style="text-align:left">역할 및 소스 내 확인된 주요 행적</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>인물</strong></td>
+<td style="text-align:left">짐 켈러 (Jim Keller)</td>
+<td style="text-align:left">텐스토렌트(Tenstorrent) 수장 / 개방형 칩렛 및 RISC-V CPU IP 사업 주도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">엔비디아 (NVIDIA)</td>
+<td style="text-align:left">GPU 내부 Falcon 코어를 RISC-V로 대체(2024년 10억 개 이상 출하), 2025년 9월 RISC-V 호스트 CPU용 CUDA 지원 발표 및 2026년 10월 요구 사양 명문화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">메타 (Meta)</td>
+<td style="text-align:left">추천 추론 칩 MTIA 2i 10만 개 이상 배치, 2025년 9~10월 RISC-V 스타트업 리보스(Rivos)를 20억 달러에 인수, 2026년 6월 내부 Rivos 통합 난항 보도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">퀄컴 (Qualcomm)</td>
+<td style="text-align:left">2025년 12월 벤타나(Ventana) 인수, 차량용 RISC-V 합작사 퀸투리스(Quintauris) 설립 참여, 탈Arm 전략 추진</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">텐스토렌트 (Tenstorrent)</td>
+<td style="text-align:left">2026년 10월 15억 달러 시리즈 E 투자 유치(기업가치 62억 달러), TT-Ascalon CPU 및 Tensix NPU 공급, Wormhole/Blackhole/Quasar 로드맵 운용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">사이파이브 (SiFive)</td>
+<td style="text-align:left">2026년 4월 4억 달러 투자 유치(기업가치 36.5억 달러), Performance P870, Intelligence X280/X390/XM 및 Automotive pure IP 공급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">삼성전자</td>
+<td style="text-align:left">파운드리/HBM 파트너, 텐스토렌트 전략적 투자자(삼성카탈리스트펀드) 및 SF4X 4nm 양산 협력, SAFE IP 파트너십 보유</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">LG전자</td>
+<td style="text-align:left">텐스토렌트 전략적 투자자, 가전·TV·전장용 온디바이스 AI SoC(DQ-C 후속)에 RISC-V IP 통합 추진</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업</strong></td>
+<td style="text-align:left">현대차그룹</td>
+<td style="text-align:left">텐스토렌트 전략적 투자자, SDV, 자율주행 및 로보틱스(보스턴 다이내믹스)용 독자 AI 칩렛 확보 추진</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기업/기관</strong></td>
+<td style="text-align:left">알리바바 다모아카데미 / 중국 정부</td>
+<td style="text-align:left">2025년 3월 중국 정부 RISC-V 보급 정책 지침 수립 / RVA23 기반 서버 CPU XuanTie C930 및 행렬 코어 출시</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기관/프로젝트</strong></td>
+<td style="text-align:left">RISE 프로젝트 / SHD Group / UC 버클리</td>
+<td style="text-align:left">리눅스 재단 산하 SW 생태계 구축 프로젝트 / 2026년 4월 RISC-V 시장 보고서 발간 기관 / SALTyRN 프로젝트 주도 기관</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>국내 팹리스/DSP</strong></td>
+<td style="text-align:left">리벨리온, 퓨리오사AI, 딥엑스 / 에이디테크놀로지, 가온칩스, 세미파이브</td>
+<td style="text-align:left">RISC-V 제어 코어 채택 NPU 개발 팹리스 / 삼성 파운드리 연계 커스텀 ASIC 턴키 디자인하우스(DSP)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 기업/연합</strong></td>
+<td style="text-align:left">Rivos, Ventana, Quintauris (보쉬, 인피니언, NXP, 노르딕), TSMC, Arm</td>
+<td style="text-align:left">인수 대상 스타트업(Rivos, Ventana), 전장 합작사(Quintauris 파트너사), 파운드리(TSMC) 및 주요 ISA 라이선서(Arm)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-key-metrics-timeline-data">4. 수치 및 시점 (Key Metrics &amp; Timeline Data)</h4>
+<h5 id="4-1-시점별-주요-사건-및-마일스톤-chronological-milestones">4.1. 시점별 주요 사건 및 마일스톤 (Chronological Milestones)</h5>
+<ul>
+<li><strong>2024년:</strong> 엔비디아, GPU 내 제어용 RISC-V 코어 10억 개 이상 출하. 텐스토렌트 기업가치 26억 달러 기록 및 누적 계약 약 1.5억 달러 달성.</li>
+<li><strong>2025년 3월:</strong> 중국 정부, 서방 규제 우회용 RISC-V 칩 보급 장려 국가 정책 지침 수립.</li>
+<li><strong>2025년 9월:</strong> 엔비디아, RISC-V 호스트 CPU용 쿠다(CUDA) 지원 공식 발표.</li>
+<li><strong>2025년 9~10월:</strong> 메타, 고성능 RISC-V CPU 스타트업 리보스(Rivos)를 20억 달러에 인수.</li>
+<li><strong>2025년 12월:</strong> 퀄컴, 고성능 서버용 RISC-V CPU 설계사 벤타나(Ventana) 인수.</li>
+<li><strong>2026년 4월:</strong> SHD Group 보고서 발표. 사이파이브, 4억 달러 투자 유치 (기업가치 36.5억 달러).</li>
+<li><strong>2026년 6월:</strong> 메타 내부 Rivos 프로젝트 통합 및 개발 난항 보도.</li>
+<li><strong>2026년 8월:</strong> riscv64용 PyTorch 2.13.0 공식 휠 패키지 배포.</li>
+<li><strong>2026년 10월:</strong> 엔비디아, RVA23·ACPI·PCIe 일관성·DOCA·NCCL 요구 사양 명문화. Android 17 RVA23 빌드 및 Conda 이식 가시화.</li>
+<li><strong>2026년 10월 19일:</strong> 텐스토렌트, 15억 달러 시리즈 E 투자 유치 (기업가치 62억 달러, 누적 투자 약 26.8억 달러).</li>
+<li><strong>2026년 11월 16일:</strong> 미국 상무부(BIS), 대중 AI 컴퓨팅 추가 수출 통제(IFR) 발동.</li>
+<li><strong>2026년 말 (목표):</strong> RISC-V VME 행렬 연산 표준 v1.0 승인 목표 (현재 v0.4 단계).</li>
+<li><strong>2031년 / 2035년 (전망 시점):</strong> SHD Group 시장 전망치 달성 목표 연도.</li>
+</ul>
+<h5 id="4-2-주요-수치-및-시장-통계-key-statistics-metrics">4.2. 주요 수치 및 시장 통계 (Key Statistics &amp; Metrics)</h5>
+<ul>
+<li><strong>시장 점유율 및 침투율:</strong>
+<ul>
+<li>2026년 데이터센터 CPU 시장 점유율: x86 약 78.0%, Arm 20~25% 구간.</li>
+<li>AI 가속기 내 RISC-V 침투율: 2024년 19.8% → 2025년 27.4% → 2031년 72.6% (전망).</li>
+</ul>
+</li>
+<li><strong>출하량 및 시장 규모:</strong>
+<ul>
+<li>2031년 RISC-V 기반 SoC 출하량: 359억 개 / 관련 매출: 3,180억 달러.</li>
+<li>순수 RISC-V IP 및 실리콘 시장 규모: 2025년 23억 달러 → 2026년 30억 달러 → 2035년 347억 달러.</li>
+</ul>
+</li>
+<li><strong>기업 거래 및 밸류에이션:</strong>
+<ul>
+<li>메타의 Rivos 인수 금액: 20억 달러.</li>
+<li>텐스토렌트: 시리즈 E 15억 달러 조달, 기업가치 62억 달러 (2024년 말 26억 달러 대비 2.4배 상승, 누적 투자 약 26.8억 달러, 누적 계약액 약 1.5억 달러).</li>
+<li>사이파이브: 4억 달러 조달, 기업가치 36.5억 달러.</li>
+<li>텐스토렌트 Blackhole 제품 가격: $999 (p100a), $110,000 이상 (32칩 Galaxy 서버).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 보고서 작성에 활용된 데이터 분석을 통해 확인된 구조적 한계, 불확실한 요소 및 소스상 미확인 영역은 다음과 같이 정립된다.</p>
+<ol>
+<li><strong>소스 텍스트 결함 및 정보 누락:</strong>
+<ul>
+<li>제공된 원문 소스의 일부 단락(예: GPU 칩당 탑재 코어 수 문단, 데이터센터 Arm 점유율 문단, 파운드리 수율 문단 등)에서 문단 잘림 현상이 존재하여 완벽한 원문 풀텍스트 확인이 불가함. 이에 따라 명시된 수치 범위 내에서만 서술을 제한함.</li>
+</ul>
+</li>
+<li><strong>삼성 파운드리 수율 데이터 미비:</strong>
+<ul>
+<li>삼성전자의 2nm 및 3nm GAA 공정 수율, 첨단 패키징(2.5D/3D)에 대한 객관적 수치 데이터는 소스 컨텍스트 내에 명시되어 있지 않아 파운드리 수수 경쟁력을 정량적으로 비교하는 데 한계가 있음.</li>
+</ul>
+</li>
+<li><strong>상용 매출 전환 및 밸류에이션 검증 미흡:</strong>
+<ul>
+<li>텐스토렌트의 62억 달러 기업가치는 시장 옵션 프리미엄이 반영된 수치이나, 공개된 누적 계약액이 2024년 말 기준 약 1.5억 달러 수준에 머물러 있어 대량 양산 매출로의 실제 전환 여부는 지속적인 검증이 필요함.</li>
+</ul>
+</li>
+<li><strong>Rivos 프로젝트 등 고성능 실리콘 실행 리스크:</strong>
+<ul>
+<li>메타가 20억 달러에 인수한 Rivos 프로젝트가 2026년 6월 내부 통합 및 개발 난항을 겪고 있다는 보도에서 보듯, 최첨단 데이터센터급 RISC-V 칩 상용 양산에는 기술적·경영적 실행 리스크가 존재함.</li>
+</ul>
+</li>
+<li><strong>지정학적 및 규제 불확실성:</strong>
+<ul>
+<li>미국 상무부(BIS)의 향후 오픈소스 ISA 및 EDA 툴 제재 범위 확장 여부, 스위스 소재 RISC-V International에 대한 직접 규제 적용 가능성 등은 향후 시장의 주요 예측 불가능한 변수로 남아 있음.</li>
+</ul>
+</li>
+<li><strong>CPython 지원 등급 한계:</strong>
+<ul>
+<li>소프트웨어 생태계 확장 노력에도 불구하고 CPython 지원 등급이 Tier 3에 머물러 있어, 실제 엔터프라이즈 프로덕션 환경에 완전 적용되기까지 시간적 지연 요소가 존재함.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/ai-share/">AI 대화 공유</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

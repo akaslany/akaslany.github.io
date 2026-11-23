@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VISTA: A Visual Harness for Reasoning in an Interactive World</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>VISTA: A Visual Harness for Reasoning in an Interactive World</h1>
+<p class="page-meta">논문 · 2026-10-04</p>
+<h2 id="요약">요약</h2>
+<p>복잡한 대화형 환경에서 에이전트가 상태를 인식하고 자율적으로 판단하여 문제를 해결하는 기존 방식은 크게 언어 에이전트(Language agent)와 멀티모달 에이전트(Multimodal agent)로 나뉩니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.02200">출처</a> · <a href="https://www.youtube.com/watch?v=-M8teMYmle0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="비스타-vista-논문-해설-보고서-대화형-환경에서의-시각-하네스-구조와-추론-메커니즘-분석">비스타(VISTA) 논문 해설 보고서: 대화형 환경에서의 시각 하네스 구조와 추론 메커니즘 분석</h3>
+<hr />
+<h4 id="1-연구-배경-및-기존-멀티모달-에이전트의-한계">1. 연구 배경 및 기존 멀티모달 에이전트의 한계</h4>
+<h5 id="1-1-기존-에이전트-구조의-주요-한계-분석">1.1 기존 에이전트 구조의 주요 한계 분석</h5>
+<p>복잡한 대화형 환경에서 에이전트가 상태를 인식하고 자율적으로 판단하여 문제를 해결하는 기존 방식은 크게 언어 에이전트(Language agent)와 멀티모달 에이전트(Multimodal agent)로 나뉩니다.</p>
+<ul>
+<li><strong>언어 에이전트 (Language agent)</strong>: 환경의 관찰 정보를 텍스트, 코드, 또는 숫자 그리드와 같은 기호적 표상으로 변환한 뒤 대형 언어 모델(LLM)에 전달하여 추론 및 행동을 도출합니다. 그러나 동적이고 복잡한 시각적 환경을 기호나 텍스트로 손실 없이 완벽하게 추상화하는 데는 원천적인 한계가 존재합니다.</li>
+<li><strong>기존 멀티모달 에이전트 (Multimodal agent)</strong>: 시각-언어 모델(VLM)을 활용하여 입력 이미지를 시각 인코더(ViT 등)를 통해 단 한 번 시각 표현으로 인코딩합니다. 그러나 이러한 단일 인코딩 방식은 상호작용 초기에 향후 추론에 어떤 세부 시각 정보가 결정적으로 작동할지 예측하기 어렵기 때문에 손실적 압축(Lossy compression) 문제를 야기합니다. 그 결과, 전개되는 추론 과정에서 요구되는 미세한 시각적 상세 정보가 누락되어 정교한 연속 추론 능력이 저해됩니다.</li>
+</ul>
+<p>또한 상호작용 이력이 길어지는 장기 작업(Long-horizon interaction) 환경에서는 모델이 수용할 수 있는 문맥(Context) 크기의 한계로 인해 과거의 시각 관찰 정보가 문맥 창에서 완전히 제거되거나 단순한 텍스트 요약문으로 대체됩니다. 이로 인해 모델은 과거에 확보한 시각적 증거에 재접근할 수 없게 되며, 장기적 시각 추론 지속성이 크게 제한됩니다.</p>
+<h5 id="1-2-비스타-vista-의-제안-목적-및-저자-보고-명시">1.2 비스타(VISTA)의 제안 목적 및 저자 보고 명시</h5>
+<p>연구진(Qiushi Han, Keya Hu, Linlu Qiu, Cathy Wu, Kaiming He)은 기존 에이전트 구조의 한계를 극복하고자 <strong>비스타(VISTA: Visual Harness for Reasoning in an Interactive World)</strong> 구조를 제안하였습니다.</p>
+<p>비스타는 환경의 상태를 텍스트나 숫자 그리드로 변환하거나 코드 형태의 기호 프로그램(Symbolic program)을 구축하는 프로그램 합성(Program synthesis) 방식에 의존하지 않습니다. 대신 렌더링된 시각 관찰 정보를 직접 활용하며, 전체 상호작용 과정에서 반환되는 모든 시각 프레임을 원본 그대로 보존하고 모델이 능동적으로 조회·재구성할 수 있도록 지원하는 무손실 시각 하네스(Visual harness) 메커니즘을 제공합니다.</p>
+<hr />
+<h4 id="2-비스타-vista-시각-하네스의-3대-핵심-구성-요소">2. 비스타(VISTA) 시각 하네스의 3대 핵심 구성 요소</h4>
+<p>비스타의 시각 하네스는 장기 상호작용 환경에서 모델이 시각적 증거를 능동적으로 재방문하고 조작할 수 있도록 돕는 3가지 핵심 요소로 구성됩니다.</p>
+<h5 id="2-1-시각-관찰-visual-observation">2.1 시각 관찰 (Visual Observation)</h5>
+<p>환경으로부터 렌더링된 고해상도 이미지를 직접 전달받아 관찰 공간을 구성합니다. 렌더링된 이미지는 환경 내 객체의 외형과 공간적 배치 및 상호 관계를 있는 그대로 보존하므로, 모델은 사전 학습 단계에서 축적한 시각적 사전 지식(Visual priors)을 직접 활용하여 물리적·공간적 구조를 직관적으로 파악할 수 있습니다.</p>
+<h5 id="2-2-무손실-시각-기억-lossless-visual-memory">2.2 무손실 시각 기억 (Lossless Visual Memory)</h5>
+<p>환경이 반환하는 모든 시각 프레임을 압축이나 해상도 저하 없이 원본 그대로 저장하는 무손실 기억 저장소입니다.</p>
+<ul>
+<li><strong>중간 프레임 보존</strong>: 에이전트의 액션 실행 결과로 발생하는 동적 중간 애니메이션 프레임(Intermediate animation frames)까지 원본 상태로 완전히 저장합니다.</li>
+<li><strong>색인화 및 문맥 독립성</strong>: 모든 프레임은 상호작용 턴(Turn) 번호와 프레임(Frame) 번호(예: t67 f0~f5)로 색인화되어 관리됩니다. 이 저장소는 모델의 대화 문맥 제한과 물리적으로 독립된 외부 저장소로 작동하므로, 장기 상호작용 이력 전체를 정보 손실 없이 유효하게 유지합니다.</li>
+</ul>
+<h5 id="2-3-능동적-조회-및-입력-재구성-active-retrieval-visual-inspection">2.3 능동적 조회 및 입력 재구성 (Active Retrieval &amp; Visual Inspection)</h5>
+<p>모델은 추론 과정에서 필요한 시각적 증거를 능동적으로 조회하고 입력을 재구성하는 도구 호출 메커니즘을 통해 공간 및 시간에 걸친 재주의(Re-attention across space and time)를 수행합니다.</p>
+<ul>
+<li><strong>시간·공간적 재주의 사례 (원문 그림 10a 참조)</strong>: 중력 반전(Red click) 및 게임 리셋이 발생한 상황에서, 에이전트는 이전 22개 턴에 걸쳐 저장된 4개의 과거 프레임(t125, t128, t139, t145 등)을 단 1회의 <code>inspect</code> 도구 호출로 동시 조회하여 전체 지형 구조와 낙하 위치를 재구성합니다.</li>
+<li><strong>국소 시각 상세 조회 사례 (원문 그림 10b 참조)</strong>: 512x512 전체 이미지 관찰 시 확인하기 어려운 세밀한 영역을 원본 해상도 대비 약 13배 확대 조회(<code>inspect</code>)합니다. 이를 통해 빨간색 가드(Red guard) 블록 A(1,2), B(1,3), C(3,0)의 측면에 부착된 보라색 표식(Purple marker)의 정확한 방향(각각 오른쪽, 아래, 오른쪽)을 판별하고, 방어되지 않은 안전한 방향을 파악하여 올바른 파괴 순서(A $\rightarrow$ B $\rightarrow$ C)를 도출합니다.</li>
+<li><strong>픽셀 값 읽기 (<code>read pixels</code>)</strong>: 선택한 국소 영역 내 픽셀들의 정밀한 RGB 수치를 직접 반환받습니다. 이는 모델의 대화 문맥에 고해상도 전체 이미지를 반복 입력하지 않고도 국소 영역의 시각적 모호성을 정량적으로 완전히 해소하는 기술적 이점을 제공합니다.</li>
+</ul>
+<h5 id="구성-요소-비교-표">구성 요소 비교 표</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기능 명칭</th>
+<th style="text-align:left">동작 방식</th>
+<th style="text-align:left">제공 효과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>시각 관찰</strong>&lt;br&gt;(Visual Observation)</td>
+<td style="text-align:left">환경에서 렌더링된 2D 이미지를 직접 입력받아 지각 공간 구성</td>
+<td style="text-align:left">객체의 외형 및 공간적 관계를 보존하여 모델의 사전 학습 시각적 사전 지식 활용 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>무손실 시각 기억</strong>&lt;br&gt;(Lossless Visual Memory)</td>
+<td style="text-align:left">중간 애니메이션 프레임을 포함한 모든 반환 프레임을 턴 및 프레임 번호로 색인화하여 원본 저장</td>
+<td style="text-align:left">모델의 문맥 크기 한계와 독립적으로 전체 상호작용 이력을 손실 없이 유효하게 유지</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>능동적 조회 및 입력 재구성</strong>&lt;br&gt;(Active Retrieval &amp; Visual Inspection)</td>
+<td style="text-align:left">필요에 따라 과거 프레임 조회(<code>inspect</code>), 영역 확대 및 정밀 픽셀 값 읽기(<code>read pixels</code>) 수행</td>
+<td style="text-align:left">공간 및 시간에 따른 재주의(Re-attention)를 가능하게 하여 세부 시각 정보를 재구성 및 정량 검증</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-비스타-vista-의-상호작용-파이프라인-및-메모-구조">3. 비스타(VISTA)의 상호작용 파이프라인 및 메모 구조</h4>
+<h5 id="3-1-턴-turn-별-대화-파이프라인-과정">3.1 턴(Turn)별 대화 파이프라인 과정</h5>
+<p>비스타의 하네스는 학습된 별도의 모델이 아닌 순수 기계적(Mechanical) 인터페이스로 작동하며, 모델과 하네스 간의 다중 턴 대화 구조로 상호작용을 진행합니다.</p>
+<ol>
+<li><strong>관찰 (Observe)</strong>: 턴 시작 시 에이전트는 최신 관찰 프레임과 실행 가능한 액션 목록을 전달받습니다.</li>
+<li><strong>추론 (Reason)</strong>: 자유 형식의 자연어(Free-form natural language)를 통해 현재 상태를 분석하고 가설을 설정하며 계획을 수립합니다. 액션을 실행하기 전, 에이전트는 횟수 제한 없이 시각 기억 조회(<code>inspect</code>) 및 픽셀 읽기(<code>read pixels</code>) 도구를 자유롭게 호출할 수 있습니다.</li>
+<li><strong>행동 (Act)</strong>: 추론이 완료되면 도구를 호출하여 액션을 실행합니다. ARC-AGI-3 환경에서는 <code>play</code> 도구를 사용하여 1회 게임 액션을 수행하며, GameWorld와 같은 확장 대화형 환경에서는 <code>act</code> 도구를 통해 키 조합 및 시간 지연 매개변수(예: <code>act W+D 0.5 s</code> 또는 <code>act wait 0.4 s</code>)를 정밀하게 제어합니다. 액션 실행 결과로 반환된 프레임들은 무손실 시각 기억에 색인화되어 즉시 저장되며, 마지막 프레임이 다음 턴의 관찰 정보가 됩니다.</li>
+</ol>
+<h5 id="3-2-지속적-노트-파일-활용-guide-md-및-working-md">3.2 지속적 노트 파일 활용 (GUIDE.md 및 WORKING.md)</h5>
+<p>에이전트는 환경에 대한 지식을 체계적으로 축적하고 유지하기 위해 두 가지 지속성 노트 파일을 자율적으로 관리합니다.</p>
+<ul>
+<li><strong>GUIDE.md</strong>: 레벨이 변경되어도 유효하게 유지되는 게임의 내구성 있는 규칙, 메커니즘 및 환경 상호작용 법칙을 기록합니다.</li>
+<li><strong>WORKING.md</strong>: 현재 진행 중인 레벨의 상태 분석, 특정 구역의 지형 파악, 단기 작업 계획 등을 기록하는 일종의 연습장(Scratchpad) 역할을 수행합니다.</li>
+</ul>
+<h5 id="3-3-문맥-인계-및-지속성-관리">3.3 문맥 인계 및 지속성 관리</h5>
+<p>상호작용이 길어져 모델의 최대 대화 문맥 제한에 도달할 경우, 에이전트는 핵심 추론 상태와 진행 상황을 요약한 요약 인계(Handoff summary)를 작성합니다.
+이후 완전히 새로운 문맥(Fresh context)에서 대화를 재개할 때, 작성된 요약 인계문과 함께 기존 노트 파일(<code>GUIDE.md</code>, <code>WORKING.md</code>), 무손실 시각 기억 저장소, 액션 이력이 그대로 인계되므로 정보 손실 없이 장기 추론을 지속할 수 있습니다.</p>
+<hr />
+<h4 id="4-실험-조건-평가-지표-및-주요-결과-분석">4. 실험 조건, 평가 지표 및 주요 결과 분석</h4>
+<h5 id="4-1-평가-벤치마크-및-지표-조건">4.1 평가 벤치마크 및 지표 조건</h5>
+<ul>
+<li><strong>ARC-AGI-3</strong>: 명시적인 규칙이나 목표가 제공되지 않는 25개 공개 대화형 시각 게임으로 구성됩니다.
+<ul>
+<li><strong>평가 지표 (RHAE)</strong>: 상대적 인간 액션 효율성(Relative Human Action Efficiency)을 측정합니다. 완료된 레벨은 처음 참여한 인간 플레이어의 액션 수와 동일할 경우 100% 점수를 받으며, 더 적은 액션을 사용할 경우 최대 115%까지 부여받습니다. 더 많은 액션을 소모하면 부분 점수가 부여되고, 미완료 레벨은 0점 처리됩니다. 점수 산출 시 후반 레벨일수록 가중치가 높게 부여되며, 각 게임별 최종 점수는 완료한 레벨의 가중 비율(Weighted fraction of levels completed)에 의해 캡(Cap)이 적용됩니다.</li>
+</ul>
+</li>
+<li><strong>기타 확장 벤치마크</strong>:
+<ul>
+<li><strong>GameWorld</strong>: 34개 브라우저 게임 (성공률 및 진행도 측정).</li>
+<li><strong>AI GameStore</strong>: 10개 브라우저 게임 (인간 중간값 100 기준 정규화 점수의 기하평균).</li>
+<li><strong>BabyVision</strong>: 39개 시각 추적 문제 (정확도 측정).</li>
+</ul>
+</li>
+<li><strong>기반 백엔드 모델 및 추론 노력(Effort) 조건</strong>:
+<ul>
+<li>Claude Opus 5.0 (Claude Code CLI 적용, extra-high 추론 노력)</li>
+<li>GPT-5.6 Sol (Codex CLI 적용, max 추론 노력)</li>
+<li>GLM-5.3 Flash 320B (오픈소스 기반 모델)</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-2-주요-성능-평가-결과">4.2 주요 성능 평가 결과</h5>
+<p>실험 보고에 따른 비스타의 주요 시스템 성과는 다음과 같습니다.</p>
+<ul>
+<li><strong>Claude Opus 5.0 기반 VISTA</strong>: ARC-AGI-3의 25개 공개 게임을 모두 완료하여 <strong>RHAE 점수 100.00</strong>의 완벽한 성과를 달성하였습니다. 총 사용 액션 수는 7,302회로, 처음 참여한 인간 기준(17,135회) 대비 <strong>57.4% 적은 액션</strong>만을 소모하였습니다.</li>
+<li><strong>GPT-5.6 Sol 기반 VISTA</strong>: 25개 공개 게임을 모두 완료하며 <strong>RHAE 점수 99.00</strong>을 달성하였습니다.</li>
+<li><strong>GLM-5.3 Flash 320B 기반 VISTA</strong>: 오픈소스 모델 환경에서도 <strong>RHAE 점수 66.93</strong>을 기록하여 공식 기본 하네스 대비 압도적인 성능 향상을 입증하였습니다.</li>
+</ul>
+<p>비스타는 명시적인 코드 기반 프로그램 합성(Program synthesis) 없이 시각 하네스만으로 완벽하거나 완벽에 가까운 성과를 달성한 최초의 시스템입니다.</p>
+<h5 id="시스템-성과-비교-표">시스템 성과 비교 표</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">System</th>
+<th style="text-align:left">Program</th>
+<th style="text-align:left">Model</th>
+<th style="text-align:left">Effort</th>
+<th style="text-align:left">RHAE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Official impl.</td>
+<td style="text-align:left">No</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:left">max</td>
+<td style="text-align:left">13.33</td>
+</tr>
+<tr>
+<td style="text-align:left">Official impl.</td>
+<td style="text-align:left">No</td>
+<td style="text-align:left">Opus 5.0</td>
+<td style="text-align:left">high</td>
+<td style="text-align:left">40.68</td>
+</tr>
+<tr>
+<td style="text-align:left">Schema</td>
+<td style="text-align:left">Yes</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:left">xhigh $\rightarrow$ max</td>
+<td style="text-align:left">95.35</td>
+</tr>
+<tr>
+<td style="text-align:left">Schema</td>
+<td style="text-align:left">Yes</td>
+<td style="text-align:left">Opus 4.8 $\rightarrow$ Fable 5</td>
+<td style="text-align:left">max</td>
+<td style="text-align:left">98.98</td>
+</tr>
+<tr>
+<td style="text-align:left">ewma sv v1.6</td>
+<td style="text-align:left">Yes</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:left">xhigh</td>
+<td style="text-align:left">98.97</td>
+</tr>
+<tr>
+<td style="text-align:left">Retrodict</td>
+<td style="text-align:left">Yes</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:left">max</td>
+<td style="text-align:left">99.86</td>
+</tr>
+<tr>
+<td style="text-align:left">Tycho</td>
+<td style="text-align:left">Yes</td>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:left">max</td>
+<td style="text-align:left">100.00</td>
+</tr>
+<tr>
+<td style="text-align:left">Tycho</td>
+<td style="text-align:left">Yes</td>
+<td style="text-align:left">Opus 5.0</td>
+<td style="text-align:left">xhigh</td>
+<td style="text-align:left">100.00</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>VISTA</strong></td>
+<td style="text-align:left"><strong>No</strong></td>
+<td style="text-align:left"><strong>GPT-5.6 Sol</strong></td>
+<td style="text-align:left"><strong>max</strong></td>
+<td style="text-align:left"><strong>99.00</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>VISTA</strong></td>
+<td style="text-align:left"><strong>No</strong></td>
+<td style="text-align:left"><strong>Opus 5.0</strong></td>
+<td style="text-align:left"><strong>xhigh</strong></td>
+<td style="text-align:left"><strong>100.00</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-소거-연구-ablation-study-및-주요-한계점">5. 소거 연구(Ablation Study) 및 주요 한계점</h4>
+<h5 id="5-1-하네스-구성-요소별-단계적-성과-기여도">5.1 하네스 구성 요소별 단계적 성과 기여도</h5>
+<p>GPT-5.6 Sol (max effort, 200K context) 모델을 바탕으로 비스타의 하네스 구성 요소를 단계적으로 확장함에 따른 성과 변화는 다음과 같습니다 (원문 그림 5 참조).</p>
+<ol>
+<li><strong>공식 구현 (텍스트 그리드)</strong>: RHAE 13.33 (총 액션 10,619회, 완료율 4%)</li>
+<li><strong>이미지 관찰 전환 (i)</strong>: RHAE 47.32 (총 액션 16,343회, 완료율 36%) — 2D 시각 관찰 도입의 기여도 입증.</li>
+<li><strong>액션 및 시간 제한 완화 (ii)</strong>: RHAE 51.66 (총 액션 22,544회, 완료율 44%)</li>
+<li><strong>연속 대화 및 문맥 압축 (iii)</strong>: RHAE 65.82 (총 액션 28,626회, 완료율 60%)</li>
+<li><strong>노트 파일(<code>GUIDE.md</code>, <code>WORKING.md</code>) 추가 (iv)</strong>: RHAE 70.05 (총 액션 23,702회, 완료율 76%)</li>
+<li><strong>무손실 시각 기억 및 조회(<code>inspect</code>) 추가 (v)</strong>: RHAE 94.10 (총 액션 12,261회, 완료율 96%)</li>
+<li><strong>정확한 픽셀 값 읽기(<code>read pixels</code>) 추가 (vi, 전체 VISTA)</strong>: RHAE 99.00 (총 액션 9,126회, 완료율 100%)</li>
+</ol>
+<h5 id="5-2-관찰-표현-문맥-크기-이미지-스케일-변화-분석">5.2 관찰 표현, 문맥 크기, 이미지 스케일 변화 분석</h5>
+<ul>
+<li>
+<p><strong>텍스트 그리드 vs 2D 이미지 관찰</strong>:
+64x64 텍스트 그리드 방식(RHAE 96.75, 액션 10,614회, 게임당 71.9M 토큰소모)과 512x512 2D 이미지 방식(RHAE 99.00, 액션 9,126회, 게임당 30.7M 토큰소모)을 비교할 때, 2D 이미지 방식이 더 적은 액션으로 우수한 점수를 기록하였습니다. 특히 토큰 소비 측면에서 텍스트 그리드는 프레임당 약 4,000 토큰을 소모하는 반면, 2D 이미지는 프레임당 약 308 비전 토큰만을 소모하여 토큰 효율성을 2배 이상 개선하였습니다.</p>
+</li>
+<li>
+<p><strong>최대 문맥 크기 영향</strong>:</p>
+<ul>
+<li><strong>100K 설정</strong>: RHAE 98.60, 게임당 약 18.5M 토큰 소비. 토큰 사용량이 절반으로 감소하면서도 RHAE 점수 하락은 0.4에 불과하여 짧은 문맥 환경에서의 뛰어난 효율성을 입증하였습니다.</li>
+<li><strong>200K 설정 (기본)</strong>: RHAE 99.00, 게임당 30.7M 토큰 소비, 총 액션 9,126회로 가장 최적화된 연산 대비 성과 효율을 달성하였습니다.</li>
+<li><strong>780K 설정</strong>: RHAE 99.00, 총 액션 8,812회, 게임당 105.7M 토큰 소비. 문맥 크기를 대폭 확대하더라도 성능 향상 효과는 미미한 반면 토큰 소비량만 급증하였습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>입력 이미지 스케일 영향</strong>:</p>
+<ul>
+<li><strong>$2\times$ 스케일 (128x128)</strong>: 프레임당 $\approx 20$ 비전 토큰, 총 액션 12,590회, 게임당 39.8M 토큰 소비. 해상도 부족으로 인해 추론 정밀도가 떨어지고 액션 수가 증가하였습니다.</li>
+<li><strong>$4\times$ 스케일 (256x256)</strong>: 프레임당 $\approx 77$ 비전 토큰, 총 액션 8,849회, 게임당 28.2M 토큰 소비. 기본 설정 대비 비전 토큰을 75% 절감하면서 동등 이상의 높은 성능을 보였습니다.</li>
+<li><strong>$8\times$ 스케일 (512x512, 기본)</strong>: 프레임당 $\approx 308$ 비전 토큰, 총 액션 9,126회, 게임당 30.7M 토큰 소비.</li>
+<li><strong>$16\times$ 스케일 (1024x1024)</strong>: 프레임당 $\approx 1,229$ 비전 토큰, 총 액션 15,331회, 게임당 71.1M 토큰 소비. 해상도를 지나치게 높일 경우 비전 토큰 소비가 폭증할 뿐만 아니라 문맥 내 불필요한 시각 정보가 늘어나 오히려 총 액션 수가 증가하고 추론 효율성이 저해됨을 확인하였습니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-3-논문의-평가-조건-상-한계-및-시사점">5.3 논문의 평가 조건 상 한계 및 시사점</h5>
+<ul>
+<li><strong>관찰 해상도와 비전 토큰 간의 균형</strong>: 관찰 해상도를 높이는 것이 성능 향상과 직결되지 않으며, 적절한 이미지 스케일을 설정해야 연산 자원 및 추론 효율성을 극대화할 수 있습니다.</li>
+<li><strong>상호작용 연산 비용</strong>: 모델이 상호작용 턴마다 자유 형식 언어로 추론하고 반복적인 시각 도구 호출(<code>inspect</code>, <code>read pixels</code>)을 수행함에 따라 발생하는 실행 시간 및 추가 비전 토큰 비용에 대한 고려가 필요합니다.</li>
+</ul>
+<hr />
+<h4 id="6-결론-및-요약">6. 결론 및 요약</h4>
+<p>비스타(VISTA)는 대화형 환경에서 복잡한 시각 추론 문제를 해결하기 위해 <strong>시각 관찰(Visual Observation)</strong>, <strong>무손실 시각 기억(Lossless Visual Memory)</strong>, **능동적 조회 및 입력 재구성(Active Retrieval &amp; Visual Inspection)**을 체계적으로 통합한 범용 시각 하네스 구조입니다.</p>
+<p>비스타는 기존의 코드 기반 프로그램 합성(Program synthesis)이나 기호 환경 모델링 방식에 의존하지 않고, 무손실 시각 기억 저장소와 도구 호출 기반 재주의(Re-attention) 메커니즘만으로 ARC-AGI-3 벤치마크에서 Claude Opus 5.0 기반 RHAE 100.00점(25개 공개 게임 전체 완료, 인간 대비 57.4% 적은 액션 소모)을 달성하였습니다. 본 연구 결과는 적절하게 설계된 시각 하네스 구조가 결합될 때 멀티모달 모델이 복잡한 장기 대화형 환경에서도 완벽에 가까운 추론 능력을 발휘할 수 있음을 성공적으로 입증합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

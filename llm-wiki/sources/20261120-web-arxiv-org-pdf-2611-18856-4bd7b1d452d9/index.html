@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Self-Improvement Memory Enables Continual Recursive Self-Improvement</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Self-Improvement Memory Enables Continual Recursive Self-Improvement</h1>
+<p class="page-meta">논문 · 2026-11-20</p>
+<h2 id="요약">요약</h2>
+<p>[소스의 주장] 대형 언어 모델(LLM) 기반 에이전트 시스템은 하위 정책 모델(Policy Model)의 가중치 자체뿐만 아니라 컨텍스트 맥락, 도구 세트, 실행 흐름 및 인터페이스 계약을 전반적으로 관여하고 제어하는 오케스트레이션 런타임 미들웨어인 하네스(Harness) 환경의 구조적 완성도에 크게 의존합니다…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.18856">출처</a> · <a href="https://www.youtube.com/watch?v=opHQ9604Rxc">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-지속적-재귀-셀프-개선-crsi-과-자기-개선-메모리-sim-기반의-에이전트-하네스-자율-진화-연구-분석">[해설 보고서] 지속적 재귀 셀프 개선(CRSI)과 자기 개선 메모리(SIM) 기반의 에이전트 하네스 자율 진화 연구 분석</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p><code>[소스의 주장]</code> 대형 언어 모델(LLM) 기반 에이전트 시스템은 하위 정책 모델(Policy Model)의 가중치 자체뿐만 아니라 컨텍스트 맥락, 도구 세트, 실행 흐름 및 인터페이스 계약을 전반적으로 관여하고 제어하는 오케스트레이션 런타임 미들웨어인 하네스(Harness) 환경의 구조적 완성도에 크게 의존합니다 [Section 1]. <code>[소스의 주장]</code> 최근 연구에서는 정책 모델의 가중치를 직접 파인튜닝하지 않고도 하네스 코드를 자율적으로 수정·개선함으로써 에이전트의 오케스트레이션 수행 능력을 대폭 끌어올리는 재귀 셀프 개선(Recursive Self-Improvement, RSI) 기술이 활발히 연구되고 있습니다 [Section 1]. <code>[사실]</code> 기존의 하네스 RSI 방식은 에이전트의 실행 피드백 및 트레이스를 바탕으로 제안자(Proposer)와 선택자(Selector) 루프를 거쳐 후보 하네스 코드를 반복적으로 제안, 평가, 채택하는 방식으로 작동하지만, 대다수의 기존 연구는 단일 타깃 벤치마크와 고정된 정책 모델이라는 한정된 환경 조건 내에서만 최적화를 수행했습니다 [Section 1, Section 2].</p>
+<p><code>[소스의 주장]</code> 그러나 실제 소프트웨어 엔지니어링 및 에이전트 배포 환경에서는 정책 모델이 하위 버전에서 상위 버전으로 업데이트되거나(Model Evolution), 단일 하네스가 서빙 레이어에서 다중 모델을 동시에 지원해야 하거나(Multi-model Serving), 에이전트가 이전에 경험하지 못한 새로운 과제 분포에 직면하는 상황(Data Adaptation)이 필연적으로 발생합니다 [Section 1]. <code>[사실]</code> 이처럼 타깃 벤치마크나 정책 모델이 변경될 때, 소스 환경에서 진화시킨 하네스를 타깃 환경에 직접 적용(Direct Transfer)하면 초기 성능이 급격히 하락하거나 최적화를 거치지 않은 초기 시드(Seed) 하네스보다 도리어 낮은 성과를 보이는 사례가 발생합니다 [Section 1, Figure 1, Figure 3, Figure 4, Table 5, Table 6]. <code>[사실]</code> 실제로 Claude Opus 5.5 모델 환경에서 진화시킨 하네스를 Gemini 3.8 Flash 모델의 Workspace 도메인에 직접 적용했을 때, 초기 시작 점수는 68.41점을 기록하여 시드 하네스의 초기 점수인 73.89점보다 하락하는 현상이 확인되었습니다 [Section 1, Figure 4, Table 6]. <code>[사실]</code> 또한 텍스트 분류 도메인에서 소스 데이터셋으로 진화한 FewShotAll 하네스 역시 타깃 벤치마크 적용 시 시작 점수가 72.92점에 그쳐 시드 하네스의 75.72점보다 낮은 성과를 나타냈습니다 [Section 1, Figure 3, Table 5]. <code>[작성자의 해석]</code> 이는 하네스의 최종 텍스트 코드만 단독 전파될 뿐, 소스 RSI 과정에서 축적된 근원 원인 가설(Root Cause), 수정 의도 및 이유(Rationale), 예측 효과, 실제 집행 결과 등 심도 있는 최적화 이력 문맥(Provenance &amp; Outcome)이 상실되어 타깃 최적화 에이전트가 이전의 비효율이나 착오를 무의미하게 반복하게 되기 때문입니다 [Section 1].</p>
+<p><code>[소스의 주장]</code> 연구진은 이러한 구조적 한계를 극복하기 위해, 호환 가능한 하네스 실행 인터페이스를 유지하면서 벤치마크나 정책 모델이 전환된 후에도 하네스 자율 진화를 지속할 수 있는 <strong>지속적 재귀 셀프 개선(Continual Recursive Self-Improvement, CRSI)</strong> 프레임워크를 정립하였습니다 [Section 1, Section 3.1]. <code>[소스의 주장]</code> 이와 함께 과제 수행 정책 모델이 아닌 하네스 최적화 에이전트(Proposer 및 Selector) 측면에 진화 경험 이력을 체계적으로 제공하는 외부 구조체인 <strong>자기 개선 메모리(Self-Improvement Memory, SIM)</strong> 메커니즘을 제안하였습니다 [Section 1, Section 3.2]. <code>[작성자의 해석]</code> SIM은 반복적으로 관측되는 하네스 결함 항목별로 근원 원인, 수정 코드 및 제안 이유, 예측 및 실측 평가 결과, 출처 문맥을 구조화하여 저장하고 갱신함으로써, 최적화 에이전트가 과거 경험을 바탕으로 타깃 환경에 맞춰 기존 하네스 메커니즘을 지속적으로 보존(Retain), 수정(Revise), 교체(Replace), 또는 제거(Remove)할 수 있도록 정밀하게 안내하는 핵심 계층으로 기능합니다 [Section 1, Section 3.2, Figure 2].</p>
+<hr />
+<h5 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h5>
+<h6 id="2-1-기존-하네스-rsi의-한계-및-지속적-재귀-셀프-개선-crsi-의-필요성">2.1. 기존 하네스 RSI의 한계 및 지속적 재귀 셀프 개선(CRSI)의 필요성</h6>
+<p><code>[소스의 주장]</code> 고정된 단일 환경에서 우수한 성과를 내는 기존 하네스 RSI 기법은 모델 적응(Model Adaptation)과 데이터 적응(Data Adaptation)이라는 두 가지 핵심 전이 과제에 직면할 경우 명확한 성능 한계와 구조적 부작용을 드러냅니다 [Section 1].</p>
+<ul>
+<li><strong>모델 적응(Model Adaptation) 문제:</strong> <code>[사실]</code> 소스 정책 모델인 Claude Opus 5.5에서 최적화된 하네스를 Gemini 3.8 Flash 정책 모델 기반의 Workspace 도메인 과제에 직접 적용했을 때, 초기 점수는 68.41점으로 시드(Seed) 하네스의 73.89점보다 5.48점 낮게 측정되었습니다 [Section 1, Figure 4, Table 6]. <code>[소스의 주장]</code> 이는 특정 정책 모델의 생성 및 추론 특성(예: 쿼테이션 이스케이프 처리 방식, 추론 조기 종료 경향 등)에 과도하게 맞춤화되어 진화된 하네스 메커니즘이 다른 정책 모델과 결합할 때 불장난 같은 간섭 부작용(Interference)을 야기하기 때문입니다 [Section 1].</li>
+<li><strong>데이터 적응(Data Adaptation) 문제:</strong> <code>[사실]</code> 정책 모델을 Gemini 3.8 Flash로 고정한 상태에서 과제 분포만 전환한 텍스트 분류 실험에서, 소스 데이터셋으로 최적화된 FewShotAll 하네스의 타깃 스위트 시작 점수는 72.92점으로 시드 하네스의 시작 점수인 75.72점보다 2.80점 낮았습니다 [Section 1, Figure 3, Table 5]. <code>[소스의 주장]</code> 이는 소스 과제에서 유효했던 방어 메커니즘(예: 명령어 정상 실행 여부만 확인하는 단순 완료 게이트)이 타깃 과제의 새로운 검증 요구사항(예: 해의 실행 타당성뿐만 아니라 최적성까지 검증해야 하는 요구)을 충족하지 못하고 오작동하는 장애 요소로 변질될 수 있음을 보여줍니다 [Section 1].</li>
+<li><strong>이유 파악 불가의 문제 (Loss of Rationale &amp; Provenance):</strong> <code>[작성자의 해석]</code> 소스 최적화 단계에서 생성된 최종 하네스 코드 파일만 단독으로 추출되어 타깃 최적화 환경으로 전달되는 경우, 해당 수정안이 어떤 하네스 결함을 해결하기 위해 도입되었는지, 어떠한 가정을 바탕으로 작동하는지, 이전 제안에서 실패하거나 성공했던 맥락이 무엇인지에 대한 실행 이력이 완전히 상실됩니다 [Section 1]. <code>[소스의 주장]</code> 이로 인해 타깃 최적화 에이전트는 계승받은 코드의 수용 의도를 파악하지 못해 이미 검증 및 폐기된 오류 방식을 재시도하거나 유용한 보존 메커니즘을 무분별하게 파괴하는 비효율을 겪게 됩니다 [Section 1].</li>
+</ul>
+<h6 id="2-2-자기-개선-메모리-sim-의-구조-및-작동-메커니즘">2.2. 자기 개선 메모리(SIM)의 구조 및 작동 메커니즘</h6>
+<p><code>[소스의 주장]</code> SIM은 하네스 최적화를 담당하는 제안자(Proposer)와 선택자(Selector) 에이전트가 이전 최적화 루프의 개입 이력을 직접 참조하고 지속적으로 확장·갱신할 수 있도록 설계된 외부 데이터 구조체입니다 [Section 3.2, Figure 2].</p>
+<p><code>[사실]</code> <strong>SIM 항목 데이터 구조:</strong>
+SIM의 개별 메타 엔트리 $m_i$는 근원 원인 가설 $c_i$와 이에 대응하는 시도 이력 리스트의 결합으로 아래와 같이 정식화됩니다 [Section 3.2, Equation 2].</p>
+<p>$$m_i = \left(c_i, \left[\left(a_{ij}, o_{ij}, p_{ij}\right)\right]_j\right)$$</p>
+<ul>
+<li>$c_i$: 근원 원인 가설 (Root-Cause Hypothesis, 예: 실행 검증 없는 조기 완료 처리 문제) [Section 3.2].</li>
+<li>$a_{ij}$: $j$번째 시도의 수정 코드 내용 및 제안 이유 (Modification and Rationale, <code>what</code>, <code>files</code> 필드 저장) [Section 3.2, Appendix D.3].</li>
+<li>$o_{ij}$: 해당 수정안이 해결할 것으로 예측된 과제 목록과 실제 평가를 통해 관측된 성과 (Predicted and Observed Task Outcomes, <code>predicted</code>, <code>fixed</code>, <code>missed</code>, <code>passed/total</code> 필드 저장) [Section 3.2, Appendix D.3].</li>
+<li>$p_{ij}$: 출처 문맥 (Provenance: 해당 시도가 수행된 도메인, 벤치마크, 정책 모델, 최적화 라운드 정보, <code>domain</code> 필드 저장) [Section 3.2, Appendix D.3].</li>
+</ul>
+<p><code>[사실]</code> <strong>제안자(Proposer)와 선택자(Selector)의 활용 메커니즘:</strong>
+제안자와 선택자는 별도의 정보 검색(Retrieval)이나 컨텍스트 잘라내기(Truncation) 절차 없이 시스템 프롬프트 상에서 전체 SIM 기록 $M_t$를 직접 참조합니다 [Section 3.2, Equation 3]. 외부 루프 작동 방정식은 다음과 같이 표현됩니다 [Section 3.2, Equation 3].</p>
+<p>$$C_t = P(H_t, F_t, D_t; M_t)$$
+$$H_{t+1} = S(H_t, F_t, C_t, F_t^C; M_t)$$</p>
+<p><code>[작성자의 해석]</code> 제안자는 SIM 전체 이력을 읽고 이전에 실패했던 방식을 무의미하게 재시도하는 것을 방지하는 동시에 기존 근원 원인 $c_i$에 새로운 시도안을 연결할지 여부를 결정하며, 선택자는 제안된 후보 하네스 $C_t$가 과거 관측 이력과 비교하여 타깃 환경에 비추어 타당한지 검증합니다 [Section 3.2].</p>
+<p><code>[사실]</code> <strong>메모리 갱신 및 병합 연산자 $U(M_t, e_t)$의 명확한 동작:</strong>
+선택자에 의해 최종 채택된 후보 수정안 $e_t$만이 메모리 갱신 연산자 $M_{t+1} = U(M_t, e_t)$를 통해 메모리에 기록됩니다 [Section 3.2]. 만약 해당 라운드에서 어떤 후보안도 채택되지 않은 경우($e_t = \emptyset$), 메모리는 변형 없이 그대로 유지됩니다 ($U(M_t, \emptyset) = M_t$) [Section 3.2]. 선택되지 않은 나머지 미채택 후보안들은 메모리에 보존되지 않고 폐기되지만, 선택자에 의해 채택된 수정안($e_t$)의 경우에는 설령 해당 수정안이 예측했던 특정 과제를 해결하지 못하거나 일부 성능 퇴보(Regression)를 야기했더라도 실측된 평가 관측 결과(<code>fixed</code>, <code>missed</code>, <code>passed/total</code>)가 있는 그대로 누적 기록됩니다 [Section 3.2, Appendix D.1, Appendix D.3]. 또한 제안자가 제시한 근원 원인 텍스트가 기존 엔트리의 텍스트와 완벽히 일치하는 경우, 기존의 모든 시도 및 성과 이력을 보존한 채 신규 시도 항목이 정식(Deterministic)으로 누적 병합(Merge)됩니다 [Section 3.2, Appendix D.1].</p>
+<p><code>[사실]</code> <strong>실험 대조군 4가지 조건 정의 (Section 3.3, Figure 6):</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">실험 조건 (Condition)</th>
+<th style="text-align:left">시작 하네스 (Harness)</th>
+<th style="text-align:left">타깃 RSI 중 SIM 메모리 사용 여부 (SIM Memory)</th>
+<th style="text-align:left">상세 설명 및 제어 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Cold Start</strong></td>
+<td style="text-align:left">시드 하네스 ($H_0$)</td>
+<td style="text-align:left">미사용 ($\emptyset$)</td>
+<td style="text-align:left">소스 RSI를 거치지 않은 초기 하네스에서 타깃 RSI 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Harness Transfer</strong></td>
+<td style="text-align:left">소스 진화 하네스 ($H_S$)</td>
+<td style="text-align:left">미사용 ($\emptyset$)</td>
+<td style="text-align:left">소스에서 진화된 하네스만 계승하여 타깃 RSI 진행 (하네스 코드 단독 전파 기준선)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Problem-Only Memory</strong></td>
+<td style="text-align:left">소스 진화 하네스 ($H_S$)</td>
+<td style="text-align:left">근원 원인 단독 계승 ($M_S^c$)</td>
+<td style="text-align:left">소스 메모리 중 근원 원인 가설($c_i$)만 남기고 수정안/결과/문맥 이력을 모두 제거 후 진행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Full SIM (제안 기법)</strong></td>
+<td style="text-align:left">소스 진화 하네스 ($H_S$)</td>
+<td style="text-align:left">전체 이력 계승 및 타깃 갱신 ($M_S$)</td>
+<td style="text-align:left">근원 원인, 수정안, 예측/관측 결과, 출처 문맥 전체 계승 및 타깃 갱신 연산($U$) 적용</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-3-4개-도메인-대상-데이터셋-및-모델-교차-전환-실험-결과">2.3. 4개 도메인 대상 데이터셋 및 모델 교차 전환 실험 결과</h6>
+<p><code>[사실]</code> 연구진은 Coding, Text Classification, Workspace, Engineering 4개 도메인을 대상으로 교차 데이터셋 및 교차 모델 CRSI 실험을 수행하였습니다 [Section 4.1, Table 4].</p>
+<p><code>[사실]</code> <strong>교차 데이터셋 CRSI 결과 (Cross-Dataset, Figure 3, Table 5):</strong>
+동일한 정책 모델(Gemini 3.8 Flash) 환경에서 6개 데이터셋 전환을 평가한 결과, Full SIM이 6개 모든 설정에서 가장 높은 최종 평가 점수를 달성하였으며, Harness Transfer 대비 2.43~4.35점, Problem-Only Memory 대비 0.20~6.06점 높은 성과를 거두었습니다 [Section 4.2, Figure 3, Table 5].</p>
+<ul>
+<li><strong>Coding / AHE:</strong> Full SIM <strong>24.85점</strong> (Cold 19.39점 / Transfer 20.61점 / Problem-Only 18.79점) [Table 5].</li>
+<li><strong>Coding / Terminus-2:</strong> Full SIM <strong>21.82점</strong> (Cold 19.39점 / Transfer 19.39점 / Problem-Only 20.61점) [Table 5].</li>
+<li><strong>Text Cls. / NoMemory:</strong> Full SIM <strong>73.60점</strong> (Cold 72.00점 / Transfer 71.00점 / Problem-Only 73.40점) [Table 5].</li>
+<li><strong>Text Cls. / FewShotAll:</strong> Full SIM <strong>77.92점</strong> (Cold 75.92점 / Transfer 74.12점 / Problem-Only 75.52점) [Table 5].</li>
+<li><strong>Workspace / ReAct:</strong> Full SIM <strong>87.89점</strong> (Cold 82.98점 / Transfer 85.07점 / Problem-Only 85.54점) [Table 5].</li>
+<li><strong>Engineering / ReAct:</strong> Full SIM <strong>46.96점</strong> (Cold 40.87점 / Transfer 42.61점 / Problem-Only 42.61점) [Table 5].</li>
+</ul>
+<p><code>[사실]</code> <strong>교차 모델 CRSI 결과 (Cross-Model, Figure 4, Table 6):</strong>
+Claude Opus 5.5 모델에서 최적화된 하네스를 Gemini 3.8 Flash 모델로 전이하여 벤치마크 및 데이터 분할을 고정한 채 진행한 4개 도메인 실험에서도 Full SIM이 모든 대조군(Cold Start, Harness Transfer, Problem-Only Memory)을 상회하였습니다 [Section 4.3.1, Figure 4, Table 6].</p>
+<ul>
+<li><strong>Coding / AHE:</strong> Full SIM <strong>21.82점</strong> vs Harness Transfer 18.18점 vs Problem-Only 20.61점 (Cold Start 19.39점) [Table 6].</li>
+<li><strong>Text Cls. / FewShotAll:</strong> Full SIM <strong>83.80점</strong> vs Harness Transfer 80.20점 vs Problem-Only 81.32점 (Cold Start 82.72점) [Table 6].</li>
+<li><strong>Workspace / ReAct:</strong> 전이 초기 68.41점에서 시작하여 Full SIM은 <strong>84.75점</strong>에 도달한 반면, Harness Transfer는 73.42점, Problem-Only Memory는 79.22점에 머무름 (Cold Start 82.98점, Full SIM이 Harness Transfer 대비 +11.33점 우위) [Figure 4, Table 6].</li>
+<li><strong>Engineering / ReAct:</strong> 전이 초기 34.78점에서 시작하여 Full SIM <strong>50.43점</strong> vs Harness Transfer 42.61점 vs Problem-Only 46.96점 (Cold Start 40.87점) [Figure 4, Table 6].</li>
+</ul>
+<p><code>[사실]</code> <strong>독립적 10회 코딩 반복 실험 (Paired Study, Section 4.4, Table 3, Figure 5c):</strong>
+Terminus-2 시드 기반으로 소스(TB2.1)에서 독립적으로 진화시킨 10개 하네스로부터 타깃(TB4)에서 SIM 적용 유무에 따라 패어드(Paired) 타깃 RSI를 진행한 결과, SIM 적용 조건이 10개 중 9개 독립 실행 쌍에서 우위를 차지했습니다 [Section 4.4, Table 3]. 최종 평균 점수는 SIM 적용 시 <strong>21.70점</strong>, 미적용 시 <strong>19.33점</strong>으로 평균 <strong>+2.36점</strong>의 통계적으로 유의미한 상승을 기록하였습니다 ($95%\text{ CI } [1.05, 3.68]$, 대응표본 $t(9) = 4.06, p = 0.003$, 부호순위검정 $p = 0.006$, 효과크기 $d_z = 1.28$) [Section 4.4, Table 3].</p>
+<h6 id="2-4-모델-세대-간-지속적-개선-및-다중-모델-공유-하네스-실험">2.4. 모델 세대 간 지속적 개선 및 다중 모델 공유 하네스 실험</h6>
+<p><code>[사실]</code> <strong>Gemini 모델 세대 연쇄 실험 (Gemini Generation Chain, Section 4.3.2, Table 1):</strong>
+TB2.1 벤치마크 상에서 Gemini 2.5 Flash $\rightarrow$ 3.5 Flash $\rightarrow$ 3.8 Flash $\rightarrow$ 4 Argon으로 이어지는 모델 세대 연쇄에 따라 하네스와 SIM을 계속 승계하며 CRSI를 수행한 결과, 각 세대별 독립 최적화(Fresh RSI) 대비 3.5 Flash에서 +3.5%p (76.8% vs 73.3%), 3.8 Flash에서 +1.6%p (90.5% vs 88.9%) 높은 성공률을 달성하였습니다 [Section 4.3.2, Table 1]. (단, 4 Argon 세대에서는 CRSI가 94.8%, Fresh RSI가 95.6%로 Fresh RSI가 0.8%p 높게 나타났습니다) [Table 1]. <code>[사실]</code> 참고로 부록 C.5에 제시된 외부 문헌 발표 기준 성능(External Reference Baselines)은 Terminus-2 시드 기반 TB2.0에서 Gemini 2.5 Flash가 16.9점, TB2.1에서 Gemini 3.5 Flash가 76.2점, Gemini 3.8 Flash가 89.4점이며, 이는 통제된 실험 대조군이 아닌 외부 참조치입니다 [Appendix C.5].</p>
+<p><code>[작성자의 해석]</code> <strong>세대 연쇄 동역학 및 모델 용량 포화 심층 분석:</strong>
+Gemini 3.5 Flash 및 3.8 Flash 등 중위권 추론 능력을 가진 모델 세대에서는 소스 하네스로부터 승계된 크로스 턴 오케스트레이션 및 실행 방어 구조(Scaffolding)가 모델의 미흡한 추론을 보완하여 CRSI+SIM이 독립 최적화(Fresh RSI) 대비 명확한 우위(+3.5%p, +1.6%p)를 제공합니다 [Section 4.3.2, Table 1]. 그러나 Gemini 4 Argon과 같이 정책 모델의 기본 역량이 극도로 높은 수준(~95% 성능 포화 구간)에 도달하면, 과거 모델 세대에서 형성된 복잡한 하네스 제약 및 과도한 인터셉션 로직이 오히려 에이전트의 자율적 문제 해결 능력을 과도하게 구속(Over-constraining)하는 리스크를 야기할 수 있어 독립 최적화 점수가 미세하게 상회하는 ceiling effect가 발생합니다 [Section 4.3.2, Table 1].</p>
+<p><code>[사실]</code> <strong>다중 모델 공유 하네스 실험 (Multi-Model Shared Harness, Section 4.3.3, Table 2):</strong>
+Grok 4.20 Reasoning, Claude Opus 5.5, Gemini 3.8 Flash 3개 모델이 단일 하네스를 공유하는 설정(Text Classification 타깃 스위트)을 평가한 결과, 매 라운드 3개 모델의 실행 트레이스 피드백을 통합 합성한 기법(Unified synthesis, S2)이 보유 평가 세트(Held-out) 기준 평균 <strong>75.24점</strong>을 기록하여, 모델별로 개별 최적화된 하네스를 적용한 기준선(Per-model harnesses, B1: <strong>75.20점</strong>)과 거의 대등한 성과를 보였습니다 [Section 4.3.3, Table 2]. 이는 공유 시드 하네스(B2: 73.28점), 순차적 CRSI(S1: 74.20점), 그리고 단일 모델로 진화시킨 하네스를 타 모델에 일방 전이한 개별 결과들(S3: 평균 66.84~72.24점)을 모두 명확히 상회하는 결과입니다 [Table 2].</p>
+<h6 id="2-5-사례-연구-case-studies-메커니즘의-재사용-수정-및-확장-양상">2.5. 사례 연구(Case Studies): 메커니즘의 재사용, 수정 및 확장 양상</h6>
+<p><code>[작성자의 해석]</code> 연구진은 부록 F의 심층 사례 연구를 통해 SIM 이력이 소스 하네스 메커니즘을 타깃 환경으로 전이시킬 때 실제 코드 단위에서 어떻게 승계, 수정, 확장되는지 체계적으로 입증하였습니다 [Appendix F].</p>
+<ul>
+<li><strong>완료 제어 게이트 인터록 거부 상태 머신 (Completion Gating Interlock, P5/P8 사례, Appendix F.2, Figure 9, 10, 11b):</strong>
+<ul>
+<li><code>[사실]</code> 소스 환경(TB2.1)에서 구축된 <code>execution_gating_interlock.py</code> 스크립트는 4가지 구체적 거부 경로(Rejection Paths)를 갖는 크로스 턴 상태 머신으로 작동하였습니다 [Appendix F.2.1].
+<ul>
+<li><strong>Case 0:</strong> 터미널 크래시, 어서션 에러, HTTP 404, 테스트 실패 등 감지 시 즉시 거부.</li>
+<li><strong>Path A:</strong> 직전 턴에 에러가 발생했으나 현 턴에 아무런 명령도 실행되지 않은 경우 거부.</li>
+<li><strong>Path B:</strong> 직전 턴에서 잘라내기(Truncation)로 인해 명령 블록이 버려졌으나 현 턴에 재실행이 없는 경우 거부.</li>
+<li><strong>Path C:</strong> 세션 전체에서 실행된 총 유효 명령 수가 1개 이하인 상태에서 종료를 요청한 경우 거부.</li>
+</ul>
+</li>
+<li><code>[사실]</code> 타깃 환경(TB4) 광학 파동관 라우팅(<code>photonic-waveguide-routing</code>) 과제로 전이된 후, 에이전트가 제약 조건을 만족하는 첫 번째 해(Feasible solution)를 얻자마자 더 나은 최적 해(Optimal solution) 탐색을 중단하고 종료를 요청하는 현상이 발생했습니다 [Appendix F.2.2]. 소스의 4가지 거부 경로는 모두 명령이 실행되었고 에러가 없었으므로 이를 막지 못했습니다 [Appendix F.2.2].</li>
+<li><code>[작성자의 해석]</code> SIM을 탑재한 제안자는 P5 엔트리 이력을 참조하여 기존 거부 상태 머신을 파괴하지 않고, 5번째 거부 경로로서 제약 만족 지표 출력 감지 시 조기 완료를 차단하고 suboptimality 경고 메시지를 주입하는 P8 엔트리를 신설하여 하네스 인터록에 성공적으로 합성해 내었습니다 [Appendix F.2.2, Figure 10, Figure 11b].</li>
+</ul>
+</li>
+<li><strong>외부 인터페이스/계약 불일치 대응 (P3 사례, Appendix F.4, Figure 12):</strong>
+<ul>
+<li><code>[사실]</code> 소스 라운드 4에서 개설된 P3 엔트리(&quot;산출물이 내부적으로는 정상이지만 검증기의 인터페이스 계약을 위반하는 문제&quot;)에 대해, 소스 시도는 4개 예측 과제 중 1개만 해결했습니다 [Appendix F.4, Figure 12]. 타깃 라운드 5 및 라운드 6에서 새로운 스키마 검증 로직과 방어적 계약 검출기가 동일한 근원 원인 $c_i$ 아래 누적되어 저장되었으며, 미해결된 예측 이력이 타깃 라운드에 그대로 유지되어 추가적인 수정을 유도했습니다 [Appendix F.4, Figure 12].</li>
+</ul>
+</li>
+</ul>
+<p><code>[사실]</code> <strong>도메인 및 전이 유형별 메커니즘 재사용 패턴 (Appendix F.5, Table 8):</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">도메인 / 전이 유형</th>
+<th style="text-align:left">직접 재사용 (Reused Directly)</th>
+<th style="text-align:left">수정 재사용 (Reused with Adaptation)</th>
+<th style="text-align:left">승계 및 확장 (Inherited &amp; Extended)</th>
+<th style="text-align:left">환경 의존적/비활성 요소 (Setting-Dependent)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Coding / Dataset Shift</strong></td>
+<td style="text-align:left">셸, 터미널 및 프로세스 레이어 구조</td>
+<td style="text-align:left">붙여넣기 버퍼 전송 (키 정규화, 포그라운드 프로세스 감지)</td>
+<td style="text-align:left">완료 계약 (타깃 검증 조건 추가)</td>
+<td style="text-align:left">소스 완료 조건 서술</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Coding / Model Shift</strong></td>
+<td style="text-align:left">터미널 및 프로세스 레이어; 인터록 계수 로직</td>
+<td style="text-align:left">없음 (<code>—</code>)</td>
+<td style="text-align:left">수명주기 제어 (재보정된 인터셉션 휴리스틱)</td>
+<td style="text-align:left">특정 정책 모델의 출력에 맞춰진 파서 수정을 위한 이스케이프 휴리스틱</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Text Cls. / Dataset Shift</strong></td>
+<td style="text-align:left">BM25 색인 및 리트리버; 쿼리 정제 로직</td>
+<td style="text-align:left">Top-k, 점수 필터, 클래스 쿼터 상숫값 (재보정)</td>
+<td style="text-align:left">다중 템플릿 라우팅 골격</td>
+<td style="text-align:left">특정 데이터 전처리 (SMILES 정규화)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Text Cls. / Model Shift</strong></td>
+<td style="text-align:left">BM25 색인 구조; 쿼리 정제 로직</td>
+<td style="text-align:left">리트리버 예산 (모델 용량에 맞춰 재조정)</td>
+<td style="text-align:left">라우팅 골격 (재작성된 루브릭 주입)</td>
+<td style="text-align:left">출력 스키마 및 디코딩 계약</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Workspace / Dataset Shift</strong></td>
+<td style="text-align:left">final_answer 이전 소프트 게이트; 프롬프트 주입 파이프라인</td>
+<td style="text-align:left">증거 탐색 (파일 시스템 탐색 $\rightarrow$ 호출 이력 검증 전환)</td>
+<td style="text-align:left">잘라내기 제한 및 컨텍스트 예산</td>
+<td style="text-align:left">평가자 특화 등록 전제조건; 서브스트링 검출 휴리스틱</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Workspace / Model Shift</strong></td>
+<td style="text-align:left">소프트 게이트 구조; 프롬프트 주입 구조</td>
+<td style="text-align:left">예산 트리거 기반 희소 개입 로직</td>
+<td style="text-align:left">루브릭 분류체계 (반대 사례 포함)</td>
+<td style="text-align:left">특정 모델의 오류율 또는 API 스키마에 맞춘 수치 보정값</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Engineering / Dataset Shift</strong></td>
+<td style="text-align:left">중앙 도구 호출 가로채기 지점</td>
+<td style="text-align:left">산출물 확인 $\rightarrow$ 연속 체크포인트 전환</td>
+<td style="text-align:left">잘라내기 예산 및 컨텍스트 버퍼</td>
+<td style="text-align:left">프롬프트 가이드라인 (SIM 미사용 시 철회됨)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Engineering / Model Shift</strong></td>
+<td style="text-align:left">산출물 관찰 레이어; 재실행 검증 체크</td>
+<td style="text-align:left">개입 일정 (시간 및 단계 임계값 조정)</td>
+<td style="text-align:left">조합 가능한 소프트 게이트 조건</td>
+<td style="text-align:left">개입 강도; 환경 특화 바이패스 로직</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="3-등장-인물-화자-figures-authors-and-roles">3. 등장 인물·화자 (Figures, Authors, and Roles)</h5>
+<p><code>[사실]</code> 본 연구 보고서(논문)의 표지에 명시된 저자진 및 소속 기관 정보는 아래 표와 같습니다 [Page 1 Header, Section 1].</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 기관 (Affiliation)</th>
+<th style="text-align:left">소스 상 명시된 역할 및 비고 (Role / Note)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Xin Yu</strong></td>
+<td style="text-align:left">Google Cloud AI / Penn State</td>
+<td style="text-align:left">제1저자, 교신저자 (<code>xinyulucas@google.com</code>), Google 인턴십 수행 중 본 연구 진행 [Page 1 Header, Section 1]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Fei Xia</strong></td>
+<td style="text-align:left">Google Cloud AI</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Jiaqi Pan</strong></td>
+<td style="text-align:left">Google Cloud AI</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Youbao Tang</strong></td>
+<td style="text-align:left">Google Cloud AI</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Chengzhi Liu</strong></td>
+<td style="text-align:left">Google Cloud AI</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Adams Yu</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sicong Jiang</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Yanfei Chen</strong></td>
+<td style="text-align:left">Google Cloud AI Research</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Lingzhou Xue</strong></td>
+<td style="text-align:left">The Pennsylvania State University</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ting Yu</strong></td>
+<td style="text-align:left">Google Cloud AI</td>
+<td style="text-align:left">공동 저자 [Page 1 Header]</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>기타 인물/화자</em></td>
+<td style="text-align:left"><em>확인 불가</em></td>
+<td style="text-align:left">소스 문서 내 별도의 발표자, 토론자, 인터뷰어 등은 명시되지 않음 (<strong>확인 불가</strong>) [Page 1 Header]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-시점-key-metrics-and-timestamps-dates">4. 수치·시점 (Key Metrics and Timestamps/Dates)</h5>
+<p><code>[사실]</code> 소스 문서에 명시된 주요 일자, 모델 버전, 실험 설정 수치 및 평가 수치는 다음과 같습니다.</p>
+<h6 id="4-1-시점-및-타임스탬프-dates-versions">4.1. 시점 및 타임스탬프 (Dates &amp; Versions)</h6>
+<ul>
+<li><strong>논문 제출 및 공개 일자:</strong> <strong>2026-11-13</strong> (ArXiv 헤더 표기 <code>2026-11-13</code>) [Page 1 Header].</li>
+<li><strong>주요 평가 정책 모델 버전:</strong> Gemini 3.8 Flash, Claude Opus 5.5, Grok 4.20 Reasoning, Gemini 2.5 Flash, Gemini 3.5 Flash, Gemini 4 Argon [Section 4.1, Table 1, Table 2].</li>
+<li><strong>초기 시드 하네스 버전:</strong> AHE seed, Terminus-2, NoMemory, FewShotAll, ReAct agent [Section 4.1].</li>
+<li><strong>개별 과제 실행 타임스탬프:</strong> <strong>확인 불가</strong> (특정 롤아웃 과제별 개별 실행 시각 타임스탬프는 소스 문서 미기재) [Section 4.1].</li>
+</ul>
+<h6 id="4-2-실험-설정-수치-experimental-parameters">4.2. 실험 설정 수치 (Experimental Parameters)</h6>
+<ul>
+<li><strong>최적화 라운드 수 ($N$):</strong> 소스 및 타깃 최적화 모두 <strong>10 라운드</strong> ($N=10$) 수행 [Section 3.1, Section 4.1].</li>
+<li><strong>라운드당 후보 제안 수 ($k$):</strong> 라운드당 <strong>5개 후보</strong> 코드 제안 ($k=5$) [Section 3.1, Section 4.1].</li>
+<li><strong>과제당 평가지표 롤아웃(Rollout) 수:</strong> 과제당 <strong>5회 롤아웃</strong> 실행 [Section 4.1, Appendix B.2].</li>
+<li><strong>코딩 라운드당 평균 소요 시간:</strong> 1 라운드당 약 <strong>4시간</strong> (평가 1.7시간, 후보 샘플링 34분 포함) [Appendix C.1].</li>
+</ul>
+<h6 id="4-3-주요-점수-및-통계-수치-evaluation-scores-statistics">4.3. 주요 점수 및 통계 수치 (Evaluation Scores &amp; Statistics)</h6>
+<ul>
+<li><strong>10회 독립 코딩 패어드 실험 (TB2.1 $\rightarrow$ TB4, Table 3):</strong>
+<ul>
+<li>SIM 적용 시 최종 평균 <strong>21.70점</strong> vs 미적용 <strong>19.33점</strong> (평균 우위 <strong>+2.36점</strong>, $95%\text{ CI } [1.05, 3.68]$, 대응표본 $t(9) = 4.06, p = 0.003$, 부호순위검정 $p = 0.006$, 효과크기 $d_z = 1.28$, 10개 중 9개 우위) [Section 4.4, Table 3, Figure 5c].</li>
+</ul>
+</li>
+<li><strong>Cross-Dataset 성과 상세 (소스 $\rightarrow$ 타깃 최종 평가 점수, Table 5):</strong>
+<ul>
+<li>Coding / AHE: Full SIM <strong>24.85</strong> (Cold 19.39 / Transfer 20.61 / Problem-Only 18.79) [Table 5].</li>
+<li>Coding / Terminus-2: Full SIM <strong>21.82</strong> (Cold 19.39 / Transfer 19.39 / Problem-Only 20.61) [Table 5].</li>
+<li>Text cls. / NoMemory: Full SIM <strong>73.60</strong> (Cold 72.00 / Transfer 71.00 / Problem-Only 73.40) [Table 5].</li>
+<li>Text cls. / FewShotAll: Full SIM <strong>77.92</strong> (Cold 75.92 / Transfer 74.12 / Problem-Only 75.52) [Table 5].</li>
+<li>Workspace / ReAct: Full SIM <strong>87.89</strong> (Cold 82.98 / Transfer 85.07 / Problem-Only 85.54) [Table 5].</li>
+<li>Engineering / ReAct: Full SIM <strong>46.96</strong> (Cold 40.87 / Transfer 42.61 / Problem-Only 42.61) [Table 5].</li>
+</ul>
+</li>
+<li><strong>Cross-Model 성과 상세 (Opus 5.5 $\rightarrow$ Gemini 3.8 Flash, Table 6):</strong>
+<ul>
+<li>Coding / AHE: Full SIM <strong>21.82</strong> vs Transfer 18.18 vs Problem-Only 20.61 (Cold 19.39) [Table 6].</li>
+<li>Text cls. / FewShotAll: Full SIM <strong>83.80</strong> vs Transfer 80.20 vs Problem-Only 81.32 (Cold 82.72) [Table 6].</li>
+<li>Workspace / ReAct: Full SIM <strong>84.75</strong> vs Transfer 73.42 vs Problem-Only 79.22 (Cold 82.98, 시작 점수 68.41) [Table 6].</li>
+<li>Engineering / ReAct: Full SIM <strong>50.43</strong> vs Transfer 42.61 vs Problem-Only 46.96 (Cold 40.87, 시작 점수 34.78) [Table 6].</li>
+</ul>
+</li>
+<li><strong>외부 참조 기준 점수 (External Reference Baselines, Appendix C.5):</strong>
+<ul>
+<li>Gemini 2.5 Flash (Terminus-2, TB2.0): <strong>16.9점</strong> [Appendix C.5].</li>
+<li>Gemini 3.5 Flash (TB2.1): <strong>76.2점</strong> [Appendix C.5].</li>
+<li>Gemini 3.8 Flash (TB2.1): <strong>89.4점</strong> [Appendix C.5].</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h5>
+<p><code>[사실]</code> 소스 문서의 &quot;Limitations&quot;, &quot;Ethics Statement&quot; 및 부록 절에서 연구진이 직접 서술한 연구의 한계점과 확인 불가한 불확실성은 다음과 같습니다.</p>
+<h6 id="5-1-컴퓨팅-예산-및-반복-실험의-한계-limitations">5.1. 컴퓨팅 예산 및 반복 실험의 한계 (Limitations)</h6>
+<ul>
+<li><strong>독립적 RSI 반복의 제한:</strong> 연산 예산(Compute budget) 제약으로 인해 독립적인 RSI 반복 최적화 실험은 코딩 도메인(10회 패어드 실험)에 집중되었으며, 나머지 3개 도메인은 조건당 1회 실행으로 평가되었습니다 [Limitations 절].</li>
+<li><strong>하네스 인터페이스 호환성 전제:</strong> 본 연구는 소스와 타깃 간 호환 가능한 executable 하네스 인터페이스가 존재하는 설정으로 범위를 제한하였으며, 최적화 에이전트의 계획(Planning) 및 탐색 절차는 고정된 상태로 유지하였습니다 [Limitations 절].</li>
+</ul>
+<h6 id="5-2-메커니즘-검증-및-평가-방식의-불확실성">5.2. 메커니즘 검증 및 평가 방식의 불확실성</h6>
+<ul>
+<li><strong>SIM 절차의 일체형 평가:</strong> 본 연구는 승계된 메모리와 타깃 최적화 중 갱신이 결합된 &quot;전체 절차(Complete procedure)&quot;로서 SIM을 평가하였으며, 마이크로 구성 요소 단위의 개별 분리 영향 평가에는 한계가 존재합니다 [Limitations 절].</li>
+<li><strong>LLM 판정관 편향(LLM Judge Bias):</strong> Workspace 도메인의 경우 평가 판정관으로 사용된 LLM(Gemini 3.8 Flash) 자체의 주관적 편향이 평가 점수에 반영되었을 가능성이 존재합니다 [Ethics Statement 절].</li>
+<li><strong>하네스의 자기 편향 및 편법 위험:</strong> 자율적으로 하네스 코드를 수정하는 에이전트가 의도된 과제를 실제로 해결하지 않고 평가 검증 시스템을 편법으로 만족시킬 위험성이 있어, 평가 검증기(Verifier)를 격리된 환경에서 운영하였습니다 [Ethics Statement 절].</li>
+</ul>
+<h6 id="5-3-소스에서-다루지-않거나-확인-불가능한-사항-uncertainties">5.3. 소스에서 다루지 않거나 확인 불가능한 사항 (Uncertainties)</h6>
+<ul>
+<li><strong>장기 전이 연쇄(Longer Transition Sequences):</strong> 3단계 이상의 더 길고 복잡한 벤치마크/모델 전이 연쇄에서의 성과 변화는 다루지 않았습니다 (<strong>소스에서 다루지 않음</strong>) [Limitations 절].</li>
+<li><strong>동적 토큰 할당 및 도구 적응:</strong> 동적 토큰 할당 제어나 도구 인터페이스 자체의 자율적 구조 적응 문제는 포함되지 않았습니다 (<strong>소스에서 다루지 않음</strong>) [Limitations 절].</li>
+<li><strong>개별 과제의 타임스탬프:</strong> 특정 과제별 세부 실행 시각 타임스탬프 기록은 소스 문서에서 확인할 수 없습니다 (<strong>확인 불가</strong>) [Section 4.1].</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

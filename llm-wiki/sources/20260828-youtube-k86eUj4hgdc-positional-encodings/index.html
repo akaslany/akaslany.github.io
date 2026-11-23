@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Positional Encoding과 군론 — 조건을 붙여 읽는 쉬운 해설</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Positional Encoding과 군론 — 조건을 붙여 읽는 쉬운 해설</h1>
+<p class="page-meta">YouTube · 2026-08-28</p>
+<h2 id="요약">요약</h2>
+<p>상대 위치 인코딩의 군론적 분류에 필요한 가정과 기존 기법에 적용할 때의 한계를 설명한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=k86eUj4hgdc">출처</a> · <a href="https://www.youtube.com/watch?v=6EXZWjlVGoI">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="positional-encoding과-군론-조건을-붙여-읽는-쉬운-해설">Positional Encoding과 군론 — 조건을 붙여 읽는 쉬운 해설</h3>
+<h4 id="1-무엇을-분류하는가">1. 무엇을 분류하는가</h4>
+<p>Grant Sanderson(3Blue1Brown)과 Alok Puranik(Jane Street)의 대화와 companion 글은 attention score에 위치를 넣는 한 가지 엄격한 틀을 다룬다. 유한차원에서 차원을 보존하는 정사각 선형 query/key 변환이 정확한 상대위치 법칙, 가역 equal-time 정규화, 실수 시간 연속성을 만족한다고 둔다. 이 조건 아래 상대 연산자 A(t)는 A(0)=I와 A(s+t)=A(s)A(t)를 만족하는 연속 one-parameter group이다. 따라서 고정 생성자 X가 있어 A(t)=exp(tX)로 쓸 수 있다.</p>
+<p>이 결론은 모든 positional encoding을 무조건 분류한다는 뜻이 아니다. 비선형 방식, 원래 공간에서 additive bias를 더하는 방식, content-dependent 생성자, 절대 위치, singular equal-time kernel은 범위 밖일 수 있다. 또한 허용되는 시간독립 basis change 뒤에서 같은 구조로 보는 분류다.</p>
+<h4 id="2-네-가정과-숨은-경계">2. 네 가정과 숨은 경계</h4>
+<ul>
+<li>선형성: 계산 가능한 bilinear query-key 변환을 고른 모델링 가정이다. 보편 법칙이 아니다.</li>
+<li>translation invariance: 두 위치를 함께 옮겨도 score 수정이 같다는 뜻이며 상대 위치만 남긴다. 길이 일반화 성능을 보장하지 않는다.</li>
+<li>equal-time normalization: F(t)^T G(t)=I로 두려면 일반 equal-time 행렬이 가역이어야 한다. 이 비퇴화성이 숨은 조건이다.</li>
+<li>continuity: 실수 시간에서 병적인 불연속 해를 제외한다. token 위치가 정수뿐이면 A(n)=B^n이 기본 분류이며 모든 B가 실수 exp(X)로 연속 보간되는 것은 아니다.</li>
+</ul>
+<h4 id="3-생성자-x가-보여-주는-계열">3. 생성자 X가 보여 주는 계열</h4>
+<p>X가 diagonalizable이면 실수 고유값은 exp(ut) 형태의 지수 감쇠·증폭을, 켤레 복소 고유값은 exp(ut)R(theta t) 형태의 감쇠 회전을 만든다. X=0은 score에 별도 위치 변환이 없는 NoPE다. u=0인 2차원 회전 블록은 RoPE 구조다. u&lt;0을 더하면 damped RoPE가 된다. 여기서 ‘영향’은 softmax 뒤 attention weight가 아니라 content-bilinear logit에 곱해지는 항이라는 점을 지켜야 한다.</p>
+<p>X가 defective이면 Jordan block의 nilpotent 부분 때문에 exp(tX)에 t, t²/2 같은 다항식이 생긴다. 블로그가 이 계열의 실용성에 회의적인 것은 탐색적 판단이지 불가능성 정리가 아니다. 복소 defective case와 실제 모델 효용도 완전히 해결됐다고 말할 수 없다.</p>
+<h4 id="4-기존-방법과의-관계">4. 기존 방법과의 관계</h4>
+<ul>
+<li>RoPE: R(theta s)^T R(theta t)=R(theta(t-s))이므로 회전 블록과 직접 맞는다.</li>
+<li>RetNet: 원 논문의 고정 gamma^(n-m)와 고정 위상은 exp((n-m)(log gamma+i theta))로 써서 fixed damped rotation과 식 수준에서 대응한다. 모델 전체가 같다는 뜻은 아니다.</li>
+<li>Mamba-3: 원 논문은 data-dependent scalar decay와 2차원 rotation, 누적 rotation의 RoPE equivalence를 다룬다. 시간마다 달라지는 selective SSM이므로 고정 X의 translation-invariant one-parameter group과 문자 그대로 동일하다고 하면 과장이다.</li>
+<li>ALiBi: q^T k-m Delta라는 additive logit penalty다. exp(u Delta)q^T k인 multiplicative damping과 같지 않다. 다만 상수 좌표를 붙인 homogeneous d+2 공간에서는 nilpotent Jordan generator로 정확히 선형화할 수 있다. 이는 원래 공간의 선형 가정을 확장한 결과다.</li>
+<li>GRAPE: one-parameter group, homogeneous coordinate, unipotent action으로 RoPE·ALiBi 등을 연결한 관련 연구다. GRAPE v1이 블로그보다 먼저 공개됐으므로 어느 한쪽을 다른 쪽의 역사적 파생으로 말하지 않는다. 논문별 benchmark 우위도 이 개념적 대응만으로 성립하지 않는다.</li>
+</ul>
+<h4 id="5-무엇이-아직-남는가">5. 무엇이 아직 남는가</h4>
+<p>이 분류는 좋은 질문을 줄여 주지만 ‘어떤 encoding이 실제 workload에서 가장 좋은가’를 답하지 않는다. stability, finite precision, optimization, head별 혼합, 긴 문맥 외삽, 계산비용, benchmark 조건은 별도 실험 문제다. ‘sensible한 계열이 이미 사용된다’는 문장은 저자의 탐색적 결론이며 완전성·최적성 정리가 아니다.</p>
+<h4 id="6-출처와-자막-한계">6. 출처와 자막 한계</h4>
+<p>기본 기록은 Jane Street 영상이며 Grant Sanderson와 Alok Puranik을 공동 화자로 보존한다. 영어 en-orig 자동자막은 수식, 고유명사, 화자 전환에서 오류가 날 수 있어 provenance와 검색 보조로만 사용했다. 중요한 문구는 Jane Street companion과 원 논문으로 확인했으며, 불명확한 ASR은 묵시적으로 고치지 않고 생략하거나 조건을 붙였다. 이 해설은 성능, 투자, 취업·경력 결과를 보장하지 않는다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

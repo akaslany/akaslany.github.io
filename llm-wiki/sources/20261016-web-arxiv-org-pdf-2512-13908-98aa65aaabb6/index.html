@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>초전도 양자 프로세서 기반 매직 상태 재배(Magic State Cultivation) 기술 해설 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>초전도 양자 프로세서 기반 매직 상태 재배(Magic State Cultivation) 기술 해설 보고서</h1>
+<p class="page-meta">논문 · 2026-10-16</p>
+<h2 id="요약">요약</h2>
+<p>[사실] 본 보고서는 2025년 12월 17일 발표된 연구(arXiv:2512.13908)를 바탕으로, 구글의 윌로우(Willow) 초전도 양자 프로세서 상에서 구현된 '매직 상태 재배(Magic State Cultivation)' 프로토콜 및 이를 거리-5 표면 코드(Surface Code)로…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2512.13908">출처</a> · <a href="https://www.youtube.com/watch?v=51C333q2UAU">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="초전도-양자-프로세서-기반-매직-상태-재배-magic-state-cultivation-기술-해설-보고서">초전도 양자 프로세서 기반 매직 상태 재배(Magic State Cultivation) 기술 해설 보고서</h3>
+<h4 id="1-개요">1. 개요</h4>
+<p>[사실] 본 보고서는 2025년 12월 17일 발표된 연구(arXiv:2512.13908)를 바탕으로, 구글의 윌로우(Willow) 초전도 양자 프로세서 상에서 구현된 '매직 상태 재배(Magic State Cultivation)' 프로토콜 및 이를 거리-5 표면 코드(Surface Code)로 이식(Grafting)하는 기술적 성과를 다룹니다.</p>
+<p>[소스의 주장] 결함 허용 양자 컴퓨팅(Fault-tolerant Quantum Computing)을 달성하기 위해서는 비-클리포드(Non-Clifford) 게이트 구현이 필수적이나, 기존의 매직 상태 증류(Distillation) 프로토콜은 막대한 양자 자원 오버헤드를 발생시키는 주요 병목이었습니다. 매직 상태 재배 기술은 결함 허용 측정과 사후 선택(Post-selection)을 결합하여 단일 논리 큐비트 내에서 고충실도 매직 상태를 직접 생성함으로써, 증류 절차를 대폭 줄이거나 완전히 대체할 수 있는 효율적인 자원 절감 방안을 제공합니다.</p>
+<p>[사실] 연구진은 윌로우 프로세서 상에서 재배 프로토콜을 성공적으로 구현하여 기존 상태 주입(Injection) 방식 대비 논리 오류율을 약 40배 감소시켰으며, 0.9999(1)의 매직 상태 충실도(상태 오류 상한 $1(1) \times 10^{-4}$)를 달성했습니다. 해당 성과는 추가적인 2회의 재배 및 3회의 양자 오류 정정(QEC) 사이클을 포함한 전체 사후 선택 회로에서 목표 polar 각도 $\theta = \pi/4$ 기준 약 8%의 데이터 유지율(Data retainment rate)을 기록했습니다. 아울러 재배된 매직 상태를 거리-5 표면 코드로 성공적으로 이식하여 비-클리포드 상태의 코드 전환 및 확장 가능성을 실증했습니다.</p>
+<p>[작성자의 해석] 본 연구는 클리포드 서킷 시뮬레이션 한계(거리 3 이하)에 머물던 기존 이론 연구를 넘어, 실제 물리적 하드웨어 상에서 매직 상태의 재배·검증·코드 전환을 전주기(End-to-end)로 실증함으로써 대규모 결함 허용 양자 컴퓨팅 구현을 위한 실질적인 공학적 이정표를 제시한 것으로 평가됩니다.</p>
+<hr />
+<h4 id="2-주요-논점">2. 주요 논점</h4>
+<h5 id="2-1-논점-1-매직-상태-주입-injection-및-재배-cultivation-프로토콜">2.1. 논점 1: 매직 상태 주입(Injection) 및 재배(Cultivation) 프로토콜</h5>
+<p>매직 상태 재배는 저거리 색상 코드(Color Code)에서 잡음이 있는 논리 상태를 초기화한 후, 헬퍼(Helper) 큐비트와의 위상 킥백(Phase Kickback)을 통해 논리 상태를 매직 상태 축으로 결함 허용적으로 투영하는 원리로 작동합니다.</p>
+<ul>
+<li><strong>원리 및 분해</strong>: 논리 하다마르 연산자 $\hat{H}_L$ 측정 과정은 물리적 큐비트 상에서 transversal 게이트인 $\hat{H} = \hat{T}^\dagger \hat{X} \hat{T}$ (단, $\hat{T} \equiv e^{-i\pi\sigma_y/8}$) 연산으로 분해됩니다. 비조건부 $\hat{T}$ 게이트 적용 시 회로는 잠시 색상 코드를 이탈하지만, 조건부 $\hat{X}_L$ 연산의 관측 대상 parity가 단일 물리적 큐비트 측정으로 접힘(Folding)되어 실행됩니다.</li>
+<li><strong>시간 역전(Time-reversal) 및 오류 검출</strong>: 연산 수행 후 회로는 시간 역전 과정을 거칩니다. 이 역연산은 세 가지 핵심 역할을 수행합니다:
+<ol>
+<li>색상 코드 스태빌라이저를 초기 상태로 완전 복원하여 이전/후속 QEC 사이클과의 호환성 유지.</li>
+<li>논리 관측량을 2차 재측정(Double-check)하여 오류 검증 강화.</li>
+<li>시간 역전 과정에서 $\hat{H}_L$ 관측량이 3개의 플래그 큐비트상 $\hat{X}^{\otimes 3}$으로 매핑됨으로써 헬퍼 큐비트가 오류 검출기(Flag) 역할을 수행하여 전체 회로의 결함 거리(Fault distance)를 3으로 확장.</li>
+</ol>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">단계 (Stage)</th>
+<th style="text-align:left">주요 수행 작업 (Key Actions)</th>
+<th style="text-align:left">오류 검출 방식 (Error Detection Methods)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>주입 (Injection)</strong></td>
+<td style="text-align:left">단일 물리적 큐비트의 $</td>
+<td style="text-align:left">g\rangle$ 상태를 거리-3 색상 코드의 논리적 큐비트로 확장 및 6개 스태빌라이저 동시 준비</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>재배 (Cultivation)</strong></td>
+<td style="text-align:left">transversal $\hat{T}$ 게이트 적용 후, 헬퍼 큐비트 위상 킥백으로 $\hat{H}_L$ 연산을 $\hat{X}$ 측정으로 투영 및 접힘(Folding) 연산 수행; 시간 역전을 통해 $\hat{H}_L \rightarrow \hat{X}^{\otimes 3}$ 플래그 매핑 및 스태빌라이저 복원</td>
+<td style="text-align:left">헬퍼 큐비트를 통한 관측량 2차 검증(Double-check), 시간 역전 플래그(Flag) 큐비트 측정 및 복원된 색상 코드 스태빌라이저 검출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 전환 (Code-Switching / Grafting)</strong></td>
+<td style="text-align:left">기하 구조 변경 및 신규 표면 코드 데이터 큐비트 초기화를 수행하는 확장(Extend) 사이클과, 표면 코드 스태빌라이저를 형성하는 그래프트(Grafted) 사이클을 통해 거리-5 구조로 이식</td>
+<td style="text-align:left">테서랙트($A^*$ 검색 기반 최우선 오류 디코더) 및 표면 코드 스태빌라이저 측정을 통한 오류 검출</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-2-논점-2-킥백-토모그래피-kickback-tomography-및-오류-감소-검증">2.2. 논점 2: 킥백 토모그래피(Kickback Tomography) 및 오류 감소 검증</h5>
+<ul>
+<li><strong>표준 논리 상태 토모그래피의 한계</strong>: 저주파 위상 잡음이나 저항성 결맞음 잡음(Coherent Noise)이 존재할 때 사후 선택 기반 논리 토모그래피를 수행하면, 기지(Basis)별 오류 감도의 불균형으로 인해 블로흐 벡터의 노름이 1을 초과하는 비물리적 결과($|X|^2 + |Y|^2 + |Z|^2 &gt; 1$)가 발생할 수 있습니다. 또한 직교 기지 측정 시 이항 분포의 분산이 $p(1-p) \approx 0.25$ 수준이므로, $\epsilon \sim 10^{-4}$ 수준의 미세 오류를 정밀 측정하려면 투영 잡음(Projection Noise) 한계로 인해 $O(10^8)$ 회에 달하는 막대한 샷(Shot) 수가 요구됩니다.</li>
+<li><strong>킥백 토모그래피(KT)의 작동 원리 및 수학적 근거</strong>: 이를 극복하기 위해 재배 회로 자체를 측정 장치로 활용하는 킥백 토모그래피(KT)가 채택되었습니다. KT는 정립된 매직 상태 축($|T\rangle$)을 따라 직접 결함 허용 측정을 수행합니다. 수학적으로 준비된 상태 축에서 측정이 이루어지므로 측정 결과의 오류 확률 $p \approx 10^{-4}$이 0에 매우 가까워지고, 이항 분포의 분산 $p(1-p)$가 $p$ 수준($\approx 10^{-4}$)으로 대폭 감소합니다. 그 결과 투영 잡음이 획기적으로 낮아져, 단일 회로 구성만으로 불확실성 $\sigma \sim \epsilon$ 범위 내에서 $O(10^4)$ 샷만으로 상태 오류 상한을 정밀 측정할 수 있습니다.</li>
+<li><strong>실험적 오류 감소 성과</strong>: 재배 프로토콜 적용 시 단순 주입 방식(오류율 $4.4(2) \times 10^{-3}$) 대비 논리 오류 확률이 약 40배 개선되었습니다. 최종 상태 오류 상한은 $1(1) \times 10^{-4}$에 도달했으며, 목표 각도 $\theta = \pi/4$에서 추가 재배 2회 및 QEC 3사이클을 포함한 포스트 셀렉션 데이터 유지율은 약 8%를 기록했습니다.</li>
+<li><strong>QEC 사이클의 필수적 역할</strong>: 재배 회로 내부의 QEC 사이클(스태빌라이저 측정)을 제거하면 오류율이 약 100배 악화됩니다. QEC 사이클당 30개의 2큐비트 게이트와 6개의 측정을 수행하여 스태빌라이저 상태를 지속적으로 검증하는 것이 결함 거리 3을 유지하고 단일 물리적 오류의 논리 오류 전파를 차단하는 핵심 구동 원리입니다.</li>
+</ul>
+<hr />
+<h5 id="2-3-논점-3-거리-5-표면-코드-surface-code-로의-그래프팅-grafting-및-코드-전환">2.3. 논점 3: 거리-5 표면 코드(Surface Code)로의 그래프팅(Grafting) 및 코드 전환</h5>
+<p>소형 색상 코드는 방치(Idling) 시 논리 오류율이 높아 고충실도 매직 상태를 장시간 보존하기 어렵습니다. 따라서 높은 임계값과 매칭 기반 디코더 활용이 가능한 거리-5 표면 코드로 매직 상태를 이식(Grafting)합니다. 이 절차는 구조적으로 다음과 같이 이분화되어 진행됩니다.</p>
+<ul>
+<li><strong>확장 사이클 (Extension Cycle)</strong>: 색상 코드의 데이터/측정 큐비트 쌍 교환 방식을 변경하여 표면 코드 스태빌라이저와 호환되는 기하 구조로 재배치하고, 신규 도입되는 표면 코드 데이터 큐비트들을 초기 사이클의 검출기 수를 최대화하는 기지로 초기화합니다.</li>
+<li><strong>그래프트 사이클 (Grafted Cycles)</strong>: 확장 사이클 이후 $N-1$ 회 동안 하이브리드 격자 구조 상에서 QEC 사이클을 반복 구동하여 표면 코드 스태빌라이저를 완결 형성하고 논리 상태의 유지를 도모합니다.</li>
+<li><strong>디코딩 기술</strong>: 그래프트 코드는 색상 코드와 표면 코드가 혼합된 비매칭(Non-matchable) 구조를 가지므로, $A^*$ 검색 기법을 기반으로 최우선 오류 경로를 탐색하는 '테서랙트(Tesseract)' 디코더를 사용하여 데이터를 디코딩했습니다.</li>
+<li><strong>이론 한계 극복의 의의</strong>: 기존 이론 연구(Gidney et al., 2024)가 거리 3 이하의 클리포드 서킷 시뮬레이션에 한정되었던 반면, 본 실험은 비-클리포드 매직 상태를 실제 54큐비트 규모의 거리-5 표면 코드 격자로 이식하는 전과정을 물리적 하드웨어 상에서 완증했습니다.</li>
+</ul>
+<hr />
+<h5 id="2-4-논점-4-강화학습-rl-기반-제어-보정-및-공학적-최적화">2.4. 논점 4: 강화학습(RL) 기반 제어 보정 및 공학적 최적화</h5>
+<ul>
+<li><strong>강화학습 제어 프레임워크</strong>: QEC 회로 내부의 제어 파라미터를 미세 조정하기 위해 강화학습(RL) 기반 보정 기술이 적용되었습니다. RL 에이전트는 본 실험 데이터 수집 직전 약 4시간 동안 사전 학습을 거쳤으며, QEC 회로 내 오류 검출 사건(Error Detection Events)의 발생 비율을 직접적으로 최소화하도록 파라미터를 최적화했습니다.</li>
+<li><strong>공학적 개선 성과</strong>: 기존의 전통적인 캘리브레이션 기술 대비 오류 검출율(EDR)이 약 30% 개선되었습니다. 그 결과 킥백 토모그래피로 측정한 전체 회로의 논리 오류 확률 및 사후 선택 데이터 유지율이 약 1자릿수(10배) 향상되었습니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-화자">3. 등장 인물·화자</h4>
+<p>소스 텍스트의 저자 기여(Acknowledgments and Contributions) 섹션에서 명시적으로 확인된 인물 및 소속 기관은 다음과 같습니다.</p>
+<ul>
+<li><strong>교신저자 (Corresponding Authors)</strong>:
+<ul>
+<li>케빈 사칭저 (K. J. Satzinger, Google Research): 연구 구상 및 연구 지휘 (Conceived study and directed research)</li>
+<li>엠마 로젠펠드 (E. Rosenfeld, Google Research): 회로 구성, 실험, 시뮬레이션 및 분석 수행 (Constructed circuits, performed experiments, simulations, and analyses)</li>
+</ul>
+</li>
+<li><strong>주요 기여 저자 (Key Contributors)</strong>:
+<ul>
+<li>크레이그 기드니 (C. Gidney, Google Research): 회로 구성 및 재배 프로세스 멘토링, 킥백 토모그래피 및 주입 회로 공동 설계</li>
+<li>오스틴 바우라사 (A. Bourassa), 기욤 로버츠 (G. Roberts), 노에 라크루아 (N. Lacroix), 알렉시 모방 (A. Morvan) (Google Research): 실험 지원 및 피드백 제공</li>
+<li>하르트무트 네벤 (H. Neven, Google Research): 저자 목록 수록 (개별 세부 역할: 확인 불가)</li>
+<li>세르지 보이초 (S. Boixo, Google Research): 저자 목록 수록 (개별 세부 역할: 확인 불가)</li>
+<li>기타 명시 저자: D. Kafri, J. Marshall, M. Li, V. Sivak, D. Abanin, A. Abbas, R. Acharya 등 Google Research 및 협력 기관 소속 저자진 (개별 세부 역할: 확인 불가)</li>
+</ul>
+</li>
+<li><strong>참여 및 협력 기관 (Institutions)</strong>:
+<ul>
+<li>구글 리서치 (Google Research)</li>
+<li>NASA 에임스 연구 센터 (NASA Ames Research Center / QuAIL)</li>
+<li>매사추세츠 대학교 애머스트 (University of Massachusetts, Amherst)</li>
+<li>커네티컷 대학교 (University of Connecticut, Storrs)</li>
+<li>어번 대학교 (Auburn University)</li>
+<li>캘리포니아 대학교 산타바바라 (University of California, Santa Barbara)</li>
+</ul>
+</li>
+<li><strong>세부 역할 미기재 저자</strong>: 소스 본문에서 구체적인 개인별 작업 내용이 기술되지 않은 기타 저자들의 세부 역할은 &quot;확인 불가&quot;로 명시합니다.</li>
+</ul>
+<hr />
+<h4 id="4-수치-시점">4. 수치·시점</h4>
+<p>소스 텍스트에서 명시된 주요 수치 데이터, 하드웨어 파라미터 및 시점 정보는 다음과 같습니다.</p>
+<ul>
+<li><strong>문헌 발표 시점</strong>: 2025년 12월 17일</li>
+<li><strong>프로세서 사양 (Willow Processor)</strong>:
+<ul>
+<li>총 105개의 가변 트랜스몬(Transmon) 큐비트 (정사각 격자 배열, 가변 트랜스몬 커플러 적용)</li>
+<li>중앙값 $T_1$ 이완 시간: $89,\mu\text{s}$</li>
+<li>중앙값 $T_2$ 결맞음 시간 (CPMG): $64,\mu\text{s}$</li>
+<li>단일 큐비트 게이트 작동 시간 및 평균 오류: 시간 35 ns, 중앙값 클리포드 오류 $5.6 \times 10^{-4}$</li>
+<li>2큐비트(CZ) 게이트 작동 시간 및 평균 오류: 시간 35 ns, 중앙값 오류 $2.1 \times 10^{-3}$</li>
+</ul>
+</li>
+<li><strong>성능 개선 및 충실도 지표</strong>:
+<ul>
+<li>오류 감소율: 단순 주입 방식($4.4(2) \times 10^{-3}$) 대비 약 40배 감소</li>
+<li>매직 상태 충실도: 0.9999(1) 달성</li>
+<li>상태 오류 상한(State Error Upper Bound): $1(1) \times 10^{-4}$</li>
+<li>데이터 유지율(Data Retainment Rate): Target polar angle $\theta = \pi/4$ 영역에서 약 8% (2회 추가 재배 및 3회 QEC 사이클 포함 사후 선택 시)</li>
+</ul>
+</li>
+<li><strong>소음 스케일링 관계 (Noise Scaling Relation)</strong>:
+<ul>
+<li>$SI1000$ 탈분극 잡음 모델 하에서 매직 상태 불충실도는 물리적 소음 세기 $p$의 3제곱($p^3$)에 비례하여 감소</li>
+<li>물리적 소음 세기 $p$를 2배 개선할 경우 매직 상태 오류 상한은 $\sim 2 \times 10^{-5}$ 수준으로 하향</li>
+</ul>
+</li>
+<li><strong>강화학습(RL) 제어 보정 성과</strong>:
+<ul>
+<li>4시간 사전 학습 적용으로 오류 검출율(EDR) 약 30% 개선</li>
+<li>KT 기준 회로 논리 오류 확률 및 데이터 유지율 약 1자릿수(10배) 향상</li>
+</ul>
+</li>
+<li><strong>회로 규모 및 소요 연산 수</strong>:
+<ul>
+<li>전체 킥백 토모그래피 회로: 216개의 물리적 2큐비트 게이트, 54개의 측정 연산</li>
+<li>QEC 사이클당 연산: 30개의 2큐비트 게이트, 6개의 측정 연산</li>
+<li>그래프팅 실험 동작 격자 규모: 54개 큐비트</li>
+</ul>
+</li>
+<li><strong>응용 분야별 요구 충실도 오차</strong>:
+<ul>
+<li>RSA2048 키 소인수분해 알고리즘 요구 오차: $\sim 10^{-10}$</li>
+<li>양자 시뮬레이션 및 최적화 요구 오차: $10^{-6} \sim 10^{-8}$</li>
+</ul>
+</li>
+<li><strong>기타 수치</strong>: 그래프팅 메모리 실험 논리 오류율(LER): 사이클당 5.3% (시뮬레이션 0.8% 대비 약 7배 높음)</li>
+<li><strong>확인 불가 항목</strong>: 소스에서 별도로 언급되지 않은 세부 시점이나 추가 측정 파라미터는 &quot;확인 불가&quot;로 명시합니다.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성">5. 한계와 불확실성</h4>
+<p>본 논문의 소스 텍스트 자체에서 명시적으로 지적하고 있는 실험적 한계, 이론과의 격차 및 불확실성 요소는 다음과 같습니다.</p>
+<ol>
+<li><strong>누설 오류(Population Leakage) 및 하드웨어적 제약</strong>:
+<ul>
+<li>거리-5 그래프팅 메모리 실험에서 실험적 논리 오류율(LER = 5.3%)이 시뮬레이션(0.8%)에 비해 약 7배 높게 나타났습니다. 이에 대한 구체적 하드웨어 원인은 다음과 같습니다.
+<ol>
+<li><strong>누설 제거 유닛(LRU)의 부재</strong>: 회로 내에 누설 제거 유닛이 포함되지 않아, 비연산 상태인 $|2\rangle$ 에너지 수준으로의 상태 누설이 QEC 사이클 진행에 따라 지속적으로 축적됨.</li>
+<li><strong>주파수 충돌(Frequency Collisions)</strong>: 색상 코드에서 표면 코드로 전환 시 데이터-측정 큐비트 서브라티스를 재정의하는 과정에서 판독(Readout) 제어 파라미터가 미최적화되어 $|2\rangle$ 상태와 관련된 주파수 충돌이 발생함.</li>
+<li><strong>시공간적 검출기 상관관계(Spatiotemporal Detector Correlations)</strong>: 공분산 행렬($p_{ij}$) 분석 결과, 시간에 따라 큐비트 격자 전체로 전파되는 '블리딩(Bleeding)' 현상이 확인되었으며 이는 제어되지 않은 누설 오류의 전형적인 서명임.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>시작 상태 및 교정 표류(Drift)</strong>:
+<ul>
+<li>시간에 따른 제어 파라미터의 캘리브레이션 표류, 플럭스 과도 현상(Flux transients), 시간에 비례한 저주파/시간 상관 위상 잡음(Time-correlated phase noise)이 존재합니다.</li>
+<li>이로 인해 약 1시간의 측정 시간 동안 논리 오류율이 $\sim 1 \times 10^{-4}$ 수준에서 변동하는 현상이 관찰되었습니다.</li>
+</ul>
+</li>
+<li><strong>비물리적 노름 발생 및 토모그래피 검증의 한계</strong>:
+<ul>
+<li>저주파 위상 잡음 등 비저항 일관성 잡음 환경에서 포스트 셀렉션 논리 토모그래피를 수행할 경우, 기지별 오류 감도 차이로 인해 블로흐 벡터 노름이 1을 초과하는 비물리적 상태 결과($|X|^2 + |Y|^2 + |Z|^2 &gt; 1$)가 나타납니다.</li>
+<li>이 한계 때문에 기존 토모그래피 방식으로는 정밀한 상태 충실도를 부여할 수 없었으며, 단일 회로 기반의 킥백 토모그래피(KT) 방식으로 우회하여 측정해야 했습니다.</li>
+</ul>
+</li>
+<li><strong>미구현 영역 및 향후 과제</strong>:
+<ul>
+<li>실시간(Real-time) $|T\rangle$ 게이트 적용이 이루어지지 않았습니다.</li>
+<li>매직 상태를 실제 게이트 텔레포테이션에 소비하기 위한 격자 수술(Lattice surgery) 연산 및 완전한 매칭 가능 코드(Matchable code)로의 최종 전이는 본 실험 범위에 포함되지 않고 향후 과제로 남겨졌습니다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

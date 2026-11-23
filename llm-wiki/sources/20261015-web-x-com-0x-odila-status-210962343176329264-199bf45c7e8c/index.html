@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reverse Engineering: How to Get Anything for FREE With Most Dangerous Repo &amp; Opus 5.5 (Full Course)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Reverse Engineering: How to Get Anything for FREE With Most Dangerous Repo &amp; Opus 5.5 (Full Course)</h1>
+<p class="page-meta">소셜 · 2026-10-15</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 X(구 트위터)의 기술 분석가 @0xCodila가 공개한 'REA(Reverse Engineer Anything)' 도구와 이를 둘러싼 AI 기반 소프트웨어 역공학(Reverse Engineering) 생태계를 종합 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/social/">소셜</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://x.com/0xCodila/status/2109623431763292649">출처</a> · <a href="https://www.youtube.com/watch?v=zWqaQZ2B44A">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-rea-reverse-engineer-anything-기술-분석-및-ai-기반-역공학-reverse-engineering-생태계-해설-보고서">[보고서] REA(Reverse Engineer Anything) 기술 분석 및 AI 기반 역공학(Reverse Engineering) 생태계 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 X(구 트위터)의 기술 분석가 @0xCodila가 공개한 'REA(Reverse Engineer Anything)' 도구와 이를 둘러싼 AI 기반 소프트웨어 역공학(Reverse Engineering) 생태계를 종합 분석한다. REA는 소스 코드가 없는 완성된 소프트웨어의 내부 작동 메커니즘을 추적하고 분석할 수 있도록 지원하는 오픈소스 기술이다.</p>
+<p>[사실 (Fact)] REA는 MCP(Model Context Protocol) 서버 및 CLI(Command Line Interface) 형태로 제공되며, 사용자의 로컬 환경에서 실행되어 분석 대상 앱의 데이터나 파일이 외부로 유출되지 않는 구조를 가진다. Claude Code, Codex, Cursor, Gemini CLI 등 주요 AI 에이전트와 연동되어 작동하며, 자연어로 질문을 입력하면 앱의 바이너리, 실행 파일, 스크립트를 탐색하여 구체적인 함수(Function), 파일(File), 호출 경로(Call Path), 미확인 잔여 요소(Unknowns)를 증거(Evidence)와 함께 제시한다.</p>
+<p>[주장 (Claim)] 소스 저자에 따르면, REA의 등장으로 인해 독점적 상용 소프트웨어의 기능 보호 장벽이 허물어지고 있으며, 사용자는 월 구독료를 지불하는 대화형/데스크톱 앱의 기능을 로컬 디스크 내 코드를 기반으로 분석하여 직접 재구축할 수 있는 시대에 진입했다.</p>
+<p>[해석 (Interpretation)] AI 에이전트와 역공학 기술의 결합은 단순한 코드 분석을 넘어 클린룸(Clean-room) 설계를 자동화하는 단계로 진화하고 있다. 이는 상용 소프트웨어 개발사들의 기존 비즈니스 모델에 큰 도전 과제를 제시하는 한편, 보안 연구, 상호운용성 확보, 유산(Legacy) 소프트웨어 이관 및 보존 분야의 대중화를 가속화할 것으로 전망된다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-details">2. 주요 논점 (Key Arguments &amp; Details)</h4>
+<h5 id="2-1-rea의-정의-및-작동-원리">2.1. REA의 정의 및 작동 원리</h5>
+<h6 id="역공학의-정의-및-rea의-기술-사양">역공학의 정의 및 REA의 기술 사양</h6>
+<ul>
+<li><strong>[사실 (Fact)] 역공학의 본질적 정의</strong>: 역공학은 소스 코드가 제공되지 않는 완성된 애플리케이션의 동작 방식을 분석하여 내부 작동 구조를 파악하는 기술 과정이다. 목적은 기능을 이해하여 설명하거나, 수정하거나, 자체 버전을 재구축(Rebuild)하는 데 있다.</li>
+<li><strong>[사실 (Fact)] REA의 기술 구조</strong>: REA(Reverse Engineer Anything)는 AI 에이전트가 역공학의 복잡한 작업을 수행하도록 지원하는 MCP 서버 및 CLI 도구다.</li>
+<li><strong>[사실 (Fact)] 로컬 실행 및 근거 제시</strong>: 사용자의 로컬 컴퓨터에서 작동하며 분석 대상 파일이나 앱을 외부 서버로 업로드하지 않는다. 추론 결과 제시 시 분석 기준이 된 함수, 파일, 호출, 미확인 잔여 요소 등 명확한 근거를 함께 출력한다.</li>
+<li><strong>[사실 (Fact)] 개발 및 출시 정보</strong>: @morluto에 의해 개발되었으며 MIT 라이선스 기반의 오픈소스로 공개되었다. 최초 출시일은 2026년 7월 12일이며, 출시 3개월 만에 깃허브(GitHub) 스타 10만 개(100K+)를 돌파했다.</li>
+</ul>
+<h6 id="실제-작동-분석-예시">실제 작동 분석 예시</h6>
+<ul>
+<li><strong>[사실 (Fact)] Windows 계산기 연산 로직 분석</strong>: Windows 계산기에서 <code>200 + 10%</code> 입력 시 <code>220</code>이 출력되는 원리를 코드 수준에서 분석한 결과, <code>+</code> 연산자 이후 입력된 <code>%</code> 버튼은 첫 번째 수의 백분율을 계산한다(200의 10%인 20을 계산하여 <code>200 + 20 = 220</code> 도출). 반면 <code>×</code> 연산자 이후의 <code>%</code> 버튼은 단순히 <code>0.1</code>로 전환된다.</li>
+<li><strong>[사실 (Fact)] Chrome 공룡 게임 속도 증가 규칙 분석</strong>: 크롬 브라우저의 공룡 게임 속도 규칙 분석 결과, 초기 속도는 <code>6</code>으로 시작하며, 매 업데이트 시마다 <code>0.001</code>씩 증가하고, 최대 속도 상한선은 <code>13</code>으로 설정되어 있다.</li>
+</ul>
+<hr />
+<h5 id="2-2-rea의-분석-가능-대상-및-필요-엔진">2.2. REA의 분석 가능 대상 및 필요 엔진</h5>
+<p>REA가 분석할 수 있는 애플리케이션 형태 및 이에 요구되는 외부 도구와 시스템 환경은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">분석 대상</th>
+<th style="text-align:left">필요 도구/엔진 및 요구 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Electron / JavaScript 데스크톱 앱</strong>&lt;br&gt;(Notion, Slack, Discord, Obsidian 등)</td>
+<td style="text-align:left">추가 도구 설치 불필요 (로컬 디스크의 <code>.asar</code> 파일 직분석)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>웹사이트 및 HAR 파일</strong></td>
+<td style="text-align:left">Chrome 계열 브라우저 (페이지 구조, 스크립트, 저장된 HAR 네트워크 트래픽 분석)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>바이너리, 프로그램 및 게임</strong>&lt;br&gt;(.exe, Mac 앱, DOS 게임)</td>
+<td style="text-align:left">Ghidra (NSA 개발 오픈소스, JDK 21+ 필요), Hopper (Mac/Linux), 또는 IDA (상용 라이선스 필요)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>.NET 기반 애플리케이션 및 Unity 게임</strong></td>
+<td style="text-align:left">추가 도구 설치 불필요 (Unity 게임 로직이 .NET 코드로 배포된 경우 30분 이내 직분석 지원)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>안드로이드 앱 (APK)</strong></td>
+<td style="text-align:left">JDK (17+) 및 <code>jadx-headless-mcp</code> (0.7.1)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>스마트 계약 바이트코드 (Smart Contracts)</strong></td>
+<td style="text-align:left">Linux x64 환경 필수 (EVM 바이트코드 기능 복원)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 (펌웨어, WASM, Go 바이너리)</strong></td>
+<td style="text-align:left">해당 환경 바이너리 분석 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>런타임 런처 요구 사양</strong></td>
+<td style="text-align:left">Node.js 버전: <code>22.19+</code>, <code>24.11+</code>, <code>26+</code> 지원 (버전 <code>23</code>, <code>25</code>는 미지원)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-3-법적-윤리적-쟁점과-클린룸-clean-room-설계">2.3. 법적·윤리적 쟁점과 클린룸(Clean-room) 설계</h5>
+<h6 id="all-in-팟캐스트-논란과-커뮤니티-노트-community-note">All-In 팟캐스트 논란과 커뮤니티 노트(Community Note)</h6>
+<ul>
+<li><strong>[사실 (Fact)] Chamath의 발언과 커뮤니티 노트</strong>: REA가 확산되는 과정에서 All-In 팟캐스트의 Chamath가 &quot;Adobe 제품군 전체가 디컴파일(Decompiled)되었다&quot;고 발언하여 논란이 확산되었다. 그러나 해당 X(구 트위터) 영상에는 &quot;Adobe 대체재들은 디컴파일된 것이 아니라 개발자에 의해 클린룸 재구현(Clean-room reimplementation)된 것&quot;이라는 커뮤니티 노트가 추가되어 정정되었다.</li>
+<li><strong>[해석 (Interpretation)]</strong>: 이 사건은 소프트웨어 역공학을 둘러싼 불법 디컴파일과 합법적 클린룸 재구축 간의 법적 선을 명확히 보여주는 대표적 사례다.</li>
+</ul>
+<h6 id="저작권-논란과-소스의-입장">저작권 논란과 소스의 입장</h6>
+<ul>
+<li><strong>[사실 (Fact)] 법적·윤리적 구분</strong>: 소스 저자는 타인의 코드를 무단 복사하거나 결제 장치를 해제(Crack)하여 배포하는 행위는 명백한 불법 행위라고 명시한다.</li>
+<li><strong>[주장 (Claim)] 정당한 관행으로서의 학습</strong>: 로컬 컴퓨터에 존재하는 앱의 작동 방식을 이해하기 위해 코드를 읽는 것은 학습 행위이며, 원본 코드 없이 행동 명세만을 바탕으로 자신만의 코드를 재작성하는 것은 지난 40년간 통용되어 온 정당한 개발 관행이다.</li>
+</ul>
+<h6 id="클린룸-clean-room-설계-프로세스">클린룸(Clean-room) 설계 프로세스</h6>
+<ul>
+<li><strong>[사실 (Fact)] 클린룸 설계를 통한 소프트웨어 재구축</strong>: 클린룸 설계는 원본 소스 코드를 직접 복제하지 않고 동일한 기능을 수행하도록 새롭게 개발하는 2단계 프로세스다.
+<ol>
+<li><strong>1단계 (명세 작성 팀)</strong>: 원본 소프트웨어의 동작 체계와 기능적 행동(Behavior)만을 분석하여 명세서(Spec)를 작성한다. 원본 소스 코드는 수집하거나 개발 팀에 제공하지 않는다.</li>
+<li><strong>2단계 (개발 팀)</strong>: 원본 소스 코드를 전혀 보지 않은 별도의 개발팀이 전달받은 명세서만을 바탕으로 독립적인 코드를 작성하여 새 제품을 구현한다.</li>
+</ol>
+</li>
+</ul>
+<h6 id="역사적-판례-및-사건">역사적 판례 및 사건</h6>
+<ul>
+<li><strong>[사실 (Fact)] Compaq의 IBM BIOS 재구축 (1980년대 초)</strong>: Compaq은 약 100만 달러($1M)를 투입하여 클린룸 설계 방식으로 IBM BIOS를 성공적으로 재구축했으며, 이는 IBM 호환 PC 시장이 형성되는 계기가 되었다.</li>
+<li><strong>[사실 (Fact)] Sega v. Accolade (1992년)</strong>: 법원은 소프트웨어의 작동 원리를 이해하기 위한 유일한 방법일 경우 코드를 분해 분석하는 행위는 공정 이용(Fair Use)에 해당한다고 판결했다.</li>
+<li><strong>[사실 (Fact)] Sony v. Connectix (2000년)</strong>: Sony가 에뮬레이터 개발사 Connectix를 상대로 제기한 소송에서 법원은 Connectix의 손을 들어주었으며(3-0 판결), 해당 에뮬레이터에는 Sony의 코드가 전혀 포함되지 않았음이 인정되었다.</li>
+<li><strong>[사실 (Fact)] Sony v. George Hotz (2010~2011년)</strong>: PS3 보안 시스템을 해제하고 루트 키를 공개한 해커 조지 호츠(George Hotz)를 상대로 Sony가 소송을 제기했으며, 2011년 4월 조지 호츠가 향후 Sony 제품에 대한 해킹을 중단하는 조건으로 합의 종결되었다.</li>
+</ul>
+<h6 id="rea-팀의-공식-디스클레이머-disclaimer">REA 팀의 공식 디스클레이머(Disclaimer)</h6>
+<ul>
+<li><strong>[사실 (Fact)] 면책 조항</strong>: REA 개발팀은 해당 도구가 합법적인 연구, 교육, 상호운용성(Interoperability) 확보, 유산 소프트웨어 보존, 그리고 사용자 본인이 소유하거나 분석 권한을 가진 소프트웨어의 검토 목적으로만 사용되어야 함을 공식적으로 명시하고 있다.</li>
+</ul>
+<hr />
+<h5 id="2-4-실제-재구축-rebuild-및-적용-사례">2.4. 실제 재구축(Rebuild) 및 적용 사례</h5>
+<p>AI 에이전트와 REA를 활용하여 소프트웨어 및 게임을 재구축한 실제 사례는 다음과 같다.</p>
+<h6 id="상용-소프트웨어-대체재-구현">상용 소프트웨어 대체재 구현</h6>
+<ul>
+<li><strong>[사실 (Fact)] Adobe 제품군 대체 프로젝트 (ArtCraft)</strong>: Claude Opus 5.5 모델과 Rust 언어를 활용하여 Adobe의 7개 주요 앱(Photoshop, Illustrator, Premiere, Lightroom, After Effects, InDesign, Acrobat)을 오픈소스 클린룸 재구현 방식으로 개발 중이다.</li>
+<li><strong>[사실 (Fact)] MS Office 대체 프로젝트</strong>: Word, Excel, PowerPoint를 대체하기 위해 WordCraft, GridCraft, DeckCraft 프로젝트가 각각 추진되어 재구축이 진행되고 있다.</li>
+<li><strong>[사실 (Fact)] TradingView 차팅 엔진</strong>: TradingView 플랫폼의 동작을 추적하여 Opus 5.5로 명세서를 작성한 후 자체 차팅 엔진 및 백테스터를 구현한 사례가 존재한다.</li>
+</ul>
+<h6 id="게임-포팅-및-정적-재컴파일">게임 포팅 및 정적 재컴파일</h6>
+<ul>
+<li><strong>[사실 (Fact)] Super Mario Sunshine PC 포팅</strong>: Claude 및 Codex 에이전트를 활용하여 PC 네이티브 포팅을 완료했다. (투입 자원: 약 365 에이전트 시간, 173억 토큰 소비).</li>
+<li><strong>[사실 (Fact)] 톰바!(Tomba!) PC 실행</strong>: Ghidra와 Claude Code를 결합한 정적 재컴파일러(Static Recompiler) 방식을 사용했다. 사전 경험이 없는 개발자가 작업하였으며 약 3주가 소요되었다.</li>
+<li><strong>[사실 (Fact)] 동방 프로젝트(Touhou) 게임 재구축</strong>: 전체 697개 함수 중 696개 함수를 정확히 일치(Exact Match)시켰으며, 플레이 가능한 상태로 재구축하는 데 12일이 소요되었다.</li>
+<li><strong>[주장 (Claim) / 해석 (Interpretation)] 웹브라우저 포팅 게임의 저작권 위험</strong>: Kotaku 보도에 따르면 AI 디컴파일 지원을 통해 헤일로(Halo), GTA: Vice City, 더 심슨: 히트 앤 Run 게임이 웹브라우저 버전으로 변환되었다. 그러나 이러한 비공식 포팅물은 원저작권자의 저작권 침해 중단 요청(Takedown)을 받을 위험이 매우 높다.</li>
+</ul>
+<h6 id="보안-분석-ipc-추적-및-산업적-적용-사례">보안 분석, IPC 추적 및 산업적 적용 사례</h6>
+<ul>
+<li><strong>[사실 (Fact)] Notion IPC 복사 메커니즘 분석</strong>: REA를 활용해 Notion 앱에서 텍스트 복사(Copy) 동작이 실행될 때, 웹페이지(Page/Renderer)에서 IPC 브릿지(Preload)를 거쳐 메인 프로세스(Main) 및 시스템 클립보드(System Clipboard)로 전달되는 전체 호출 경로를 정밀 분석했다.</li>
+<li><strong>[사실 (Fact)] Aegis 인증 앱 (Aegis Authenticator)</strong>: 3,077개 클래스를 가진 OTP 인증 앱을 분석하여 6자리 로그인 코드 생성 로직을 재구축했으며, 133개 테스트 케이스를 모두 통과했다.</li>
+<li><strong>[사실 (Fact)] DX-Ball 사운드 팬(Sound-pan) 기능 복원</strong>: 1996년작 DX-Ball 게임의 사운드 이동 로직을 분석하여 C언어로 재구축했다. 원본 x86 기반 3,205개 테스트 케이스를 통과하고 컴파일된 63바이트를 완벽히 재현했다.</li>
+<li><strong>[사실 (Fact)] 가짜 GTA 6 악성코드 감지</strong>: 유포된 113 GB 용량의 가짜 GTA 6 설치 파일을 역공학 분석하여 해당 파일이 가짜이며 악성코드로 가득 차 있음을 입증했다.</li>
+<li><strong>[사실 (Fact)] 보안 연구원의 파이프라인 구축 및 수익화</strong>: 한 보안 연구원은 8개의 MCP 서버와 300개 이상의 분석 도구(Ghidra, radare2, Frida 등)를 AI 에이전트와 결합한 시스템을 구축했으며, 버그 바운티(Bug Bounty) 수입을 통해 해당 파이프라인의 구축 비용을 완전히 회수했다.</li>
+</ul>
+<hr />
+<h5 id="2-5-사용-수준별-활용-가이드-및-전문-워크플로우">2.5. 사용 수준별 활용 가이드 및 전문 워크플로우</h5>
+<h6 id="초보자-활용-가이드">초보자 활용 가이드</h6>
+<ol>
+<li><strong>앱 내부 동작 확인</strong>: 안드로이드 APK 분석을 통해 앱이 모바일 기기 내에서 실제 수행하는 동작 추적.</li>
+<li><strong>파일 안전성 검사</strong>: 다운로드한 파일의 역공학을 통한 악성코드 포함 여부 판별.</li>
+<li><strong>스캠 토큰 검증</strong>: 소스 코드가 공개되지 않은 스마트 계약의 바이트코드를 분석하여 잠재적 위협 요소 도출. (<strong>[사실 (Fact)] 단, 스마트 계약 분석 기능은 현재 Linux x64 환경에서만 실행 가능함</strong>).</li>
+<li><strong>기능 독립 재구축</strong>: 유료 앱의 특정 기능 작동 원리를 분석한 후 AI 에이전트를 통해 공개 데이터 기반의 자체 코드 작성.</li>
+</ol>
+<h6 id="전문가-워크플로우-및-핵심-개발-수칙">전문가 워크플로우 및 핵심 개발 수칙</h6>
+<ul>
+<li>
+<p><strong>[해석 (Interpretation)] REA 가이디드 워크플로우의 파급력</strong>: 단순 디컴파일러와 달리 '증거 기반 추론(Evidence-based reasoning)'을 제공하는 전문 명령어는 AI의 환각(Hallucination)을 방지하고 분석 정확도를 비약적으로 향상시킨다.</p>
+<ul>
+<li><code>investigate_feature</code>: 기능 탐색부터 구체적 함수 도출까지 전체 경로 추적.</li>
+<li><code>compare_application_versions</code>: 앱의 두 버전을 비교하여 업데이트 시 변경된 실제 코드 차이점 분석.</li>
+<li><code>verify_reconstruction</code>: 수집된 증거 데이터를 기준으로 재구축된 코드가 올바른지 검증.</li>
+<li><code>trace_crash</code>: 발생한 크래시 현상을 관련된 코드 실행 경로와 연결하여 분석.</li>
+<li><code>audit_residual_unknowns</code>: 현재 분석에서 명확히 증명되지 않은 잔여 불확실 요소를 목록화.</li>
+<li><code>prepare_bounded_process_capture</code>: 런타임 실험을 안전하게 실행하기 위한 제한적 프로세스 캡처 계획 수립.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실 (Fact)] REA 기반 실무 개발 시 필수 준수 수칙 (Touhou 재구축 교훈)</strong>:</p>
+<ol>
+<li><strong>명확한 목표 설정</strong>: 에이전트에게 명확한 목표와 합격 기준(Acceptance Criteria)을 제시한다.</li>
+<li><strong>Git 기반 이력 관리</strong>: 다음 세션과의 연동을 위해 작업 상태와 검증 결과를 지속적으로 Git에 기록한다.</li>
+<li><strong>가설 검증 원칙</strong>: 에이전트의 모든 설명과 코드는 반드시 검증해야 할 '가설'로 취급한다.</li>
+<li><strong>테스트 체계 자체 검증</strong>: 잘못된 비교 로직으로 인해 오류 함수가 검증을 통과하는 현상을 방지하기 위해 테스트 자체를 검증한다.</li>
+</ol>
+</li>
+</ul>
+<h6 id="1일-one-evening-실행-프로토콜-순서">1일(One-Evening) 실행 프로토콜 순서</h6>
+<ol>
+<li><strong>1단계</strong>: REA setup 프롬프트를 통한 도구 설치 (약 5분 소요).</li>
+<li><strong>2단계</strong>: 공식 연습용 Notes 예제 앱을 이용한 동작 추적 실습 (약 2분 소요).</li>
+<li><strong>3단계</strong>: 사용자가 보유한 분석 대상 애플리케이션 1종 선택.</li>
+<li><strong>4단계</strong>: 특정 주요 기능 동작 원리에 대한 질문 작성 및 분석 실행.</li>
+<li><strong>5단계</strong>: 기능 수행 단계와 근거가 포함된 기능 명세서(Spec) 추출.</li>
+<li><strong>6단계</strong>: 추출된 명세서를 바탕으로 새로운 폴더에서 복붙 가능 프롬프트 팩(Prompt Pack)을 활용하여 AI로 자체 버전 코드 생성.</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-및-화자-entities-speakers">3. 등장 인물 및 화자 (Entities &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 / 계정</th>
+<th style="text-align:left">역할 및 기술 내용</th>
+<th style="text-align:left">소스 내 확인 여부</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>@0xCodila (codila)</strong></td>
+<td style="text-align:left">본 리포트의 원문 게시글 저자 및 서브스택(Substack) 채널 운영자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>@morluto</strong></td>
+<td style="text-align:left">REA(Reverse Engineer Anything) 오픈소스 프로젝트의 개발자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Chamath</strong></td>
+<td style="text-align:left">All-In 팟캐스트에서 Adobe 제품군이 디컴파일되었다고 발언했으나 커뮤니티 노트를 통해 정정된 인물</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>George Hotz (geohot)</strong></td>
+<td style="text-align:left">2010~2011년 PS3 보안 시스템을 해제하고 루트 키를 공개했으며 Sony와 법적 합의를 진행한 해커</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 인물 정보</strong></td>
+<td style="text-align:left">소스 내에 기술되지 않은 기타 개발자 및 관련자의 인적 사항</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-timestamps">4. 주요 수치 및 시점 (Key Metrics &amp; Timestamps)</h4>
+<h5 id="시점-데이터-timestamps">시점 데이터 (Timestamps)</h5>
+<ul>
+<li><strong>게시물 작성 시각</strong>: 2026년 10월 12일 12:33:15 UTC</li>
+<li><strong>데이터 수집 시각</strong>: 2026년 10월 15일 20:13:36 UTC</li>
+<li><strong>REA 최초 출시일</strong>: 2026년 7월 12일</li>
+<li><strong>Compaq BIOS 재구축 시기</strong>: 1980년대 초</li>
+<li><strong>Sega v. Accolade 판결 시점</strong>: 1992년</li>
+<li><strong>Sony v. Connectix 판결 시점</strong>: 2000년</li>
+<li><strong>PS3 보안 해제 및 합의 시점</strong>: 2010년 ~ 2011년 4월</li>
+</ul>
+<h5 id="수치-데이터-key-metrics">수치 데이터 (Key Metrics)</h5>
+<ul>
+<li><strong>게시물 반응 지표</strong>: 좋아요 3.2K, 리트윗 437, 답글 121, 북마크 5.8K, 조회수 0 (소스 시스템 수집 표기값 기준)</li>
+<li><strong>REA 깃허브 스타 수</strong>: 출시 3개월 만에 100K+ (10만 개 이상) 달성</li>
+<li><strong>지원 Node.js 버전</strong>: <code>22.19+</code>, <code>24.11+</code>, <code>26+</code> (버전 <code>23</code> 및 <code>25</code>는 미지원)</li>
+<li><strong>Super Mario Sunshine 포팅 자원</strong>: 365 에이전트 시간(Agent Hours), 173억 토큰(17.3B Tokens)</li>
+<li><strong>Tomba! 재구축 소요 기간</strong>: 약 3주</li>
+<li><strong>동방 프로젝트 재구축 데이터</strong>: 전체 697개 함수 중 696개 정확 일치, 소요 기간 12일</li>
+<li><strong>Aegis 앱 분석 규모 및 검증</strong>: 3,077개 클래스 분석, 133개 테스트 케이스 통과</li>
+<li><strong>DX-Ball 분석 및 재현 데이터</strong>: 3,205개 원본 테스트 케이스 통과, 63바이트 완벽 재현</li>
+<li><strong>가짜 GTA 6 감지 파일 용량</strong>: 113 GB</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<h5 id="기술적-한계점">기술적 한계점</h5>
+<ul>
+<li><strong>서버 측 로직 분석 불가</strong>: REA는 사용자의 로컬 디스크에 존재하는 파일과 코드만 분석할 수 있다. 중앙 서버에서 실행되는 서비스 로직(예: 은행 서버 내부 로직 등)은 수집 및 분석이 불가능하다.</li>
+<li><strong>디컴파일 코드의 한계</strong>: 역공학을 통해 얻은 디컴파일 코드는 원본 소스 코드가 아니며 '재구성된 결과물'에 불과하다. 따라서 검증 단계(<code>verify</code>)가 필수적이다.</li>
+<li><strong>C++ 스트립(Stripped) 바이너리의 난이도</strong>: 심볼 정보가 제거된(Stripped) C++ 바이너리는 Unity 기반 .NET 게임에 비해 분석 난이도가 매우 높다.</li>
+<li><strong>AI 모델의 안전성 규칙 제한</strong>: 일부 펌웨어 및 콘솔 대상을 분석할 때 사용하는 AI 모델의 자체 안전 규칙(Safety Rules)에 걸려 분석 작업이 거부될 수 있다.</li>
+<li><strong>상용 도구 라이선스 미제공</strong>: IDA, Hopper, JEB 등 상용 분석 도구의 라이선스는 REA에서 자체적으로 제공하지 않으며 사용자가 직접 정품 라이선스를 보유해야 한다.</li>
+</ul>
+<h5 id="정보의-불확실성-및-확인-불가-항목">정보의 불확실성 및 확인 불가 항목</h5>
+<ul>
+<li><strong>게시물 조회수(Views) '0' 표기 원인</strong>: 원문 스냅샷 데이터상 조회수가 '0'으로 표기되어 있으나, 이는 데이터 수집 시스템상의 오류 가능성이 존재하며 소스 텍스트만으로는 정확한 원인을 확인할 수 없다.</li>
+<li><strong>ArtCraft 및 WordCraft 개발 주체의 상세 정보</strong>: 해당 프로젝트를 수행한 개발팀 또는 개발자의 개별적 인적 사항은 소스 상에 명시되지 않아 확인이 불가능하다.</li>
+<li><strong>프롬프트 실행 결과의 구체적 코드 전문</strong>: 소스 내에는 프롬프트 입력 예시와 결과 요약 수치만 제시되어 있으며, 실제 실행을 통해 생성된 전체 코드 전문은 기술되어 있지 않다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/social/">소셜</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

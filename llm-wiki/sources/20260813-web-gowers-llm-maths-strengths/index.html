@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What sort of maths are LLMs good at?</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>What sort of maths are LLMs good at?</h1>
+<p class="page-meta">웹 · 2026-08-13</p>
+<h2 id="요약">요약</h2>
+<p>LLM 수학의 강점은 검증 가능한 넓은 탐색이며, 깊은 탐색에서의 방향 선택은 남은 과제다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://gowers.wordpress.com/2026/08/12/what-sort-of-maths-are-llms-good-at/">출처</a> · <a href="https://www.youtube.com/watch?v=SrU-HKF0uLg">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/llm/">LLM</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/openai/">OpenAI</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="llm은-어떤-수학에-강한가-반례보다-중요한-것은-탐색의-구조다">LLM은 어떤 수학에 강한가: 반례보다 중요한 것은 탐색의 구조다</h3>
+<p>기준일: 2026년 8월 13일</p>
+<h4 id="결론부터">결론부터</h4>
+<p>Timothy Gowers의 글은 “LLM은 반례 찾기에 특화됐다”는 선언이 아니다. 오히려 그 분류가 왜 너무 단순한지를 길게 해체한다. 존재명제와 보편명제는 표현을 바꿀 수 있고, 수학자가 예시나 반례라고 부르는 것은 논리기호만이 아니라 발견 과업의 성격과 기대의 역사에 달려 있기 때문이다.</p>
+<p>Gowers가 제안하는 더 유력한 설명은 이렇다. 현재 모델은 폭넓은 수학 지식과 빠른 시행착오를 활용해 많은 후보 경로를 탐색할 수 있다. 그래서 기성 예시를 시험하고, 표준 구성을 조합하고, 검증 가능한 후보를 대량으로 탐색하는 문제에서 강점이 드러날 수 있다. 반대로 인간이 당분간 우위를 갖는 영역이 남는다면, 깊고 분기가 큰 증명 탐색트리에서 가능성이 낮은 방향을 일찍 버리는 연구적 판단이 중요한 문제일 수 있다. 다만 이것도 실험으로 확립된 법칙이 아니라 저자의 잠정 가설이다.</p>
+<h4 id="1-왜-반례-라는-분류가-흔들리는가">1. 왜 “반례”라는 분류가 흔들리는가</h4>
+<p>형식논리만 보면 어떤 존재명제도 그 부정을 보편명제로 만들 수 있고, 어떤 보편–존재 명제도 Skolemization을 통해 함수의 존재로 바꿀 수 있다. 그러면 거의 모든 정리를 예시 찾기나 반례 찾기로 다시 이름 붙일 수 있다. 그러나 실제 수학에서는 그렇게 분류하지 않는다.</p>
+<p>Gowers는 Vinogradov의 세 소수 정리와 Gluskin의 Banach–Mazur compactum 결과를 비교한다. 두 결과 모두 양화사가 교차하지만 Vinogradov의 과업은 주어진 큰 수를 세 소수의 합으로 표현하는 보편적 증명이다. 반면 Gluskin의 핵심은 각 차원에서 서로 매우 멀리 떨어진 노름공간을 구성하거나 존재를 보이는 것이다. 논리식의 겉모양보다 어떤 대상을 실제로 찾아야 했는지가 분류를 좌우한다.</p>
+<p>non-sofic group도 모든 군이 sofic일 것이라는 강한 믿음을 깨뜨린 ‘반례’라기보다, 전문가들이 존재할 수 있다고 본 대상을 처음 구성한 ‘예시’라고 부르는 편이 자연스러울 수 있다. multicolour Ramsey 결과도 기존 기대가 사람마다 달랐기 때문에 누군가에게는 반례이고 다른 사람에게는 기대한 예시가 된다.</p>
+<h4 id="2-예시를-찾는-방법은-하나가-아니다">2. 예시를 찾는 방법은 하나가 아니다</h4>
+<p>Gowers는 예시 찾기를 여덟 가지로 나눈다. 기성 예시를 시험하기, 표준 재료를 조합하기, metavariable을 두고 제약을 채우기, 반대 명제를 증명해 장애물을 찾기, successive approximation, 조건별 inductive construction, 확률적 예시, generic example이다.</p>
+<p>이 구분의 핵심은 모든 존재문제가 같은 계산 구조를 갖지 않는다는 점이다. 답을 빠르게 검사할 수 있고 후보를 대량 생성할 수 있는 문제는 컴퓨터의 속도와 LLM의 지식 폭을 활용하기 쉽다. 반대로 한 방향을 오래 밀어야 하고 실패의 의미를 해석해야 하며 중간 단계에서 ‘이 길은 아니다’라고 판단해야 하는 문제는 탐색 폭보다 pruning의 질이 더 중요할 수 있다.</p>
+<h4 id="3-openai의-10개-결과를-어떻게-읽어야-하나">3. OpenAI의 10개 결과를 어떻게 읽어야 하나</h4>
+<p>Gowers 글은 OpenAI가 수학과 이론컴퓨터과학의 주요 문제 10건에 관한 결과를 발표한 직후에 쓰였다. OpenAI 공식 설명의 정확한 표현은 10건 모두가 장기간 미해결 문제를 ‘해결하거나 상당한 진전을 냈다’는 것이다. 따라서 “AI가 난제 10개를 완전히 해결했다”고 한 문장으로 평준화하면 과장이다.</p>
+<p>OpenAI의 자기보고에 따르면 내부 모델 Astra가 수학적 논증을 생성했고, 인간이 같은 모델을 이용해 원고를 준비했으며, 모델이 Lean certificate를 만들었다. OpenAI는 정확성에 책임을 진다고 밝혔다. non-sofic group 구성과 multicolour triangle Ramsey number의 superexponential lower bound는 그 목록에 포함된다.</p>
+<p>이 공개는 매우 강한 검증자료를 제공하지만 회사 발표와 형식화 공개가 항목별 독립 동료평가 완료를 자동으로 뜻하지는 않는다. 또한 결과 생산은 ‘모델만의 고립된 작업’이라기보다 문제 선정, 실행, 원고 준비, 검증 인프라, 공개에 인간과 도구가 결합된 시스템으로 봐야 한다.</p>
+<h4 id="4-연구-문헌이-보여주는-강점">4. 연구 문헌이 보여주는 강점</h4>
+<p>형식정리증명에서는 proof assistant가 후보의 정합성을 즉시 판정한다. DeepSeek-Prover-V1.5의 RMaxTS처럼 모델 생성과 proof-assistant feedback, tree search를 결합하면 여러 증명 경로를 탐색할 수 있다. 이는 검증 가능한 탐색이 왜 강력한지를 보여준다.</p>
+<p>AlphaEvolve도 LLM이 프로그램을 제안하고 자동 evaluator가 실행·점수화하며 유망한 후보를 다시 변형하는 구조다. Google DeepMind는 자동으로 정확도와 품질을 평가할 수 있는 수학·컴퓨터과학 문제에서 특히 유용하다고 설명한다. 이 사례는 넓은 탐색과 빠른 피드백의 결합을 지지한다.</p>
+<p>하지만 PutnamBench나 FrontierMath 같은 benchmark는 특정 데이터셋, 형식화 언어, 도구, 시간, 샘플링 예산 아래의 성능이다. benchmark에서 높은 점수를 얻는 것과 수개월 동안 좋은 연구문제를 선택하고, 새로운 정의를 만들고, 문헌과의 중복을 배제하고, 실패를 해석해 연구계획을 바꾸는 능력은 같지 않다.</p>
+<h4 id="5-gowers가-말하는-인간의-코">5. Gowers가 말하는 인간의 ‘코’</h4>
+<p>Gowers는 자신의 ChatGPT 5.6 Pro 경험에서 처음에는 유망해 보이지만 자세히 보면 덜 유망한 접근, 문제를 더 좁혔다고 반복하지만 실제 진전은 없는 답을 관찰했다고 쓴다. 이것은 통제된 benchmark가 아니라 한 수학자의 직접 경험이다.</p>
+<p>그가 말하는 ‘코’는 신비한 직관을 찬양하는 표현이라기보다 탐색비용을 관리하는 능력이다. 깊고 분기가 큰 탐색트리에서 어떤 경로가 진짜 진전인지 판단하고, 가능성이 낮은 가지를 빨리 자르는 능력이다. 모델이 속도와 병렬성으로 지금까지 이 문제를 가렸을 가능성도 있고, 스케일이나 새로운 reward structure로 곧 극복할 가능성도 그는 열어둔다.</p>
+<h4 id="6-더-나은-분류법">6. 더 나은 분류법</h4>
+<p>LLM의 수학 능력은 <code>정리냐 반례냐</code>보다 다음 축으로 보는 편이 안전하다.</p>
+<ul>
+<li>결과를 자동 또는 형식적으로 검증할 수 있는가</li>
+<li>후보를 빠르게 생성하고 실행할 수 있는가</li>
+<li>기존 정리와 표준 구성을 재사용하기 쉬운가</li>
+<li>탐색트리의 깊이와 분기가 얼마나 큰가</li>
+<li>실패가 다음 후보를 고치는 유용한 피드백을 주는가</li>
+<li>도구와 인간 검증자가 어느 단계에 개입하는가</li>
+<li>해결법이 문헌의 변형인지, 실제로 새롭고 자연스러운 아이디어인지 판별 가능한가</li>
+</ul>
+<h4 id="최종-판단">최종 판단</h4>
+<p>현재 LLM 수학의 가장 설득력 있는 강점은 ‘반례’라는 결과 형식이 아니라 <strong>검증 가능한 넓은 탐색</strong>이다. 남은 핵심 시험은 더 많은 후보를 만드는 것이 아니라, 깊은 탐색에서 좋은 방향을 고르고 실패를 의미 있게 해석하며 우연히 찾기 어려운 새 방법을 만들어내는 것이다.</p>
+<p>Gowers의 기준에서 더 넓은 인간 수준에 도달했다는 강한 신호는 단지 어려운 답을 맞히는 것이 아니다. 처음에는 놀랍지만 뒤돌아보면 아름답고 자연스럽고, 우연한 대량탐색만으로 발견하기 어려운 새 증명 방법을 제시하는 것이다. 이 기준은 정량 benchmark가 아니라 수학적 독창성에 대한 저자의 질적 제안이며, 향후 모델과 평가법이 발전하면 다시 검토해야 한다.</p>
+<h4 id="출처">출처</h4>
+<ul>
+<li>Timothy Gowers, “What sort of maths are LLMs good at?”, 2026-08-12: https://gowers.wordpress.com/2026/08/12/what-sort-of-maths-are-llms-good-at/</li>
+<li>OpenAI, “Ten advances in mathematics and theoretical computer science”: https://openai.com/index/ten-advances-in-mathematics/</li>
+<li>OpenAI Lean certificates: https://github.com/openai/ten-proofs</li>
+<li>PutnamBench, arXiv:2407.11214: https://arxiv.org/abs/2407.11214</li>
+<li>DeepSeek-Prover-V1.5, arXiv:2408.08152: https://arxiv.org/abs/2408.08152</li>
+<li>Google DeepMind, AlphaEvolve: https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/llm/">LLM</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/openai/">OpenAI</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li></ul></section>
+</main>
+</body>
+</html>

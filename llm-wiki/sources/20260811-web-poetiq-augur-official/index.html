@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Augur: Model Routing, Training Data, and Benchmark Creation for LLMs</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Augur: Model Routing, Training Data, and Benchmark Creation for LLMs</h1>
+<p class="page-meta">웹 · 2026-08-11</p>
+<h2 id="요약">요약</h2>
+<p>Poetiq의 Augur는 동적 질문으로 모델의 실패 경계를 찾아 모델 선택과 학습 데이터 생성에 활용한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://poetiq.ai/posts/augur/">출처</a> · <a href="https://www.youtube.com/watch?v=m-I0nafcfW4">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="심층-브리핑-augur-llm-모델-라우팅-학습-데이터-및-벤치마크-생성-프레임워크-분석">[심층 브리핑] Augur: LLM 모델 라우팅, 학습 데이터 및 벤치마크 생성 프레임워크 분석</h3>
+<p><strong>1. 문서 개요 및 독립 검증 제약 사항 명시</strong></p>
+<ul>
+<li><strong>원제:</strong> Augur: Model Routing, Training Data, and Benchmark Creation for LLMs</li>
+<li><strong>게시자:</strong> Poetiq</li>
+<li><strong>게시일:</strong> 2026년 8월 10일</li>
+<li><strong>문서 성격:</strong> 본 보고서는 Poetiq사가 자사 제품 및 벤치마크를 홍보하기 위해 작성한 1차 자료(First-party article)를 바탕으로 분석되었습니다. 원문에는 별도의 저자(Byline)가 명시되어 있지 않습니다.</li>
+<li><strong>검증 제약 사항:</strong> 엔터프라이즈 솔루션 아키텍트의 관점에서, 본 문서에 인용된 로우 데이터셋(Raw dataset), 프로브 코드(Probe code), 정확한 모델 스냅샷 및 외부 재현 여부에 대해 독립적인 검증이 수행되지 않았음을 즉시 명시합니다. 따라서 본 보고서의 수치와 주장은 Poetiq사의 내부 측정 결과에 기반하고 있음을 유의해야 합니다.</li>
+</ul>
+<p><strong>2. Augur가 해결하려는 문제: 고정형 벤치마크의 한계와 도메인 특화 배포</strong></p>
+<p>기존의 '고정된 리더보드(Fixed leaderboard)'는 실제 기업의 '도메인 특화 배포(Domain-specific deployment)' 환경에서 발생하는 성능 병목을 진단하는 데 한계가 있습니다. 공개 리더보드에서 상위를 차지한 모델이 언더라이팅, 임상시험 문서, 고객 운영 등 고도의 전문성을 요하는 비즈니스 도메인의 실질적 성패를 예측하기 어렵기 때문입니다. Augur는 특정 도메인 내에서 각 모델의 성공과 실패 지점을 동적으로 파악하여, 기업이 실제 과업에 적합한 모델을 선택할 판단 근거를 제공하고자 합니다.</p>
+<p><strong>3. 동적 프로브(Dynamic Probe)를 통한 모델 경계 탐색 방식</strong></p>
+<p>Augur는 고정된 질문 세트에 의존하지 않고, 모델의 능력이 끝나는 지점(Capability boundary)을 찾기 위해 질문을 점진적으로 정교화하는 '날카롭게 만들기(Sharpening)' 메커니즘을 사용합니다.</p>
+<ul>
+<li><strong>기술적 차별점과 경계:</strong> Poetiq은 동적으로 생성되는 benchmark는 모델이 암기할 수 없다고 강하게 주장합니다. 동적 질문은 고정 question set 암기 위험을 낮출 수 있지만, 그것만으로 사전학습 노출, 생성기 leakage, contamination, 반복 probe의 패턴 학습이 불가능하다고 입증되지는 않습니다. 따라서 여기서는 제품 설명상 모델이 '어디까지 견딜 수 있는지'를 찾는 스트레스 테스트로 이해하되, 오염 내성은 독립 검증 과제로 남깁니다.</li>
+</ul>
+<p><strong>4. 능력 측정의 세 가지 차원: 지식, 도구, 추론</strong></p>
+<p>Poetiq은 모델의 실패를 명확히 구분하기 위해 다음 세 가지 핵심 차원을 정의합니다.</p>
+<ul>
+<li><strong>지식(Knowledge):</strong> 외부 도구의 도움 없이 내부 메모리(Internal memory)만으로 팩트를 인지하고 있는지 여부.</li>
+<li><strong>도구(Tools):</strong> 모델 간 의견이 불일치할 때 실시간 검색 등 외부 도구로 해결 가능한지, 아니면 팩트 자체가 출처 간에 경합 중(Contested)인지 여부.</li>
+<li><strong>추론(Reasoning):</strong> 개별 팩트를 논리적으로 조합하여 하나의 정답을 도출하는 능력.</li>
+</ul>
+<p><strong>5. '3 대 verified 2' 도식: Five-Right-Facts-One-Wrong-Answer</strong></p>
+<p>Poetiq은 원자적 팩트는 인지하고 있으나 조합에 실패하는 '추론 실패' 사례를 다음과 같이 도식화하여 설명합니다.</p>
+<ul>
+<li><strong>[질문]</strong> 특정 시점(Year-Y)에 재임 중이던 A~E사 CEO 중 N년 후에도 직을 유지 중인 인원은 몇 명인가?</li>
+<li><strong>[검증된 개별 응답]</strong> 5명의 CEO와 각각의 재임 여부에 관한 원자적 질문에는 모두 정확히 답변함. 이는 숨은 사고 과정을 재현한 것이 아니라 공개된 입출력 수준의 schematic입니다.</li>
+<li><strong>[모델 답변]</strong> &quot;총 3명입니다.&quot;</li>
+<li><strong>[실제 정답]</strong> &quot;2명&quot; (Verified answer)</li>
+<li><strong>[실패 원인]</strong> 개별 지식은 보유했으나, 이를 카운트하거나 논리적으로 연결하는 '추론 과정'의 붕괴.</li>
+</ul>
+<p><strong>6. Poetiq의 모델 라우팅 휴리스틱(Company Routing Heuristic)</strong></p>
+<p>Augur는 실패 유형에 따라 모델 개선 경로를 제안합니다.</p>
+<ul>
+<li><strong>지식 격차(Knowledge Gap):</strong> SFT(지도 미세 조정) 또는 프리트레이닝 데이터로 활용.</li>
+<li><strong>추론 실패(Reasoning Failure):</strong> 강화학습(RL) 과제로 전환. Poetiq은 위 CEO 사례처럼 검증 가능한 exact-match reward가 있고 모델이 원자적 지식을 보유한 사례를 RL에 적합한 후보라고 설명합니다. 이것은 회사의 routing heuristic이며, 모든 reasoning failure에 자동으로 최적인 학습법이라는 독립 결론은 아닙니다.</li>
+<li><strong>경합 소스(Contested Source):</strong> 데이터셋 오염 방지를 위해 폐기(Discard).</li>
+</ul>
+<p><em>주의: '팩트를 모르면 RL 리워드가 항상 0이라 학습이 불가능하다'는 주장은 도구 사용이 배제된 단순화된 논리이며, 일반적인 강화학습의 모든 사례에 적용되는 보편 법칙은 아닙니다.</em></p>
+<p><strong>7. 도메인별 불일치 분석 데이터 (Poetiq 자체 측정치)</strong></p>
+<p>다음은 Poetiq이 DeepSeek-V4와 여러 OpenAI closed model을 비교했다고 설명한 자체 측정 결과입니다. 정확한 모델 version·snapshot, evaluation set 크기와 sampling은 공개되지 않았습니다.</p>
+<ul>
+<li><strong>단일 팩트 불일치 중 실제 지식 격차(Genuine Knowledge Gap) 비율:</strong>
+<ul>
+<li>하드웨어 68%, 비디오 게임 52%, 소프트웨어 51%, 법률 34%, 음악 30%.</li>
+</ul>
+</li>
+<li><strong>도구 사용 후에도 남은 disputed facts:</strong>
+<ul>
+<li>음악 27%, 법률 9%, 소프트웨어 9%.</li>
+<li><em>비판적 분석:</em> 글은 앞선 single-fact disagreement의 나머지를 contested source 또는 재샘플링 시 뒤집히는 instability로 구분하지만, 위 27%·9%·9%의 정확한 분모, sample 수, 검색 도구와 source adjudication 절차를 공개하지 않습니다.</li>
+</ul>
+</li>
+<li><strong>전체 불일치 중 '추론 능력 차이' 비율 (원자적 팩트는 같으나 종합 답안이 다른 경우):</strong>
+<ul>
+<li>법률 58%, 비디오 게임 48%, 음악 43%, 소프트웨어 40%, 하드웨어 32%.</li>
+</ul>
+</li>
+<li><strong>모델 간 불일치가 전혀 없었던 질문 비율:</strong>
+<ul>
+<li>하드웨어 약 20%(1/5), 음악 약 40%(2/5).</li>
+</ul>
+</li>
+</ul>
+<p><strong>8. 모델 쌍의 도메인 특화 유사성 및 상호운용성</strong></p>
+<p>Poetiq은 모델 간 '교체 가능성(Interchangeable)'이 고정된 속성이 아니라 '특정 과업'에 종속된다고 주장합니다. 특정 도메인에서 두 모델이 유사한 성능을 보일지라도, 다른 도메인에서는 성능 차이가 급격히 벌어질 수 있으므로 과업별로 상호운용성을 재측정해야 한다는 시각입니다.</p>
+<p><strong>9. 케이스 스터디: Kimi K3 vs K2.6 및 금융 과업</strong></p>
+<p>Kimi K3 모델에 대한 분석 결과는 엔터프라이즈 배포 시 중요한 시사점을 제공합니다.</p>
+<ul>
+<li><strong>K3의 성능 특징:</strong> Poetiq은 단순 팩트 회상이 테스트한 대부분 도메인에서 major frontier model과 유사했으나, **기후 변화(Climate change)**는 그 유사성이 성립하지 않은 notable exception이라고 보고합니다. 원문만으로 성능 하락의 절대 크기나 원인은 알 수 없습니다.</li>
+<li><strong>추론 실패의 본질:</strong> K3가 추론에 실패하는 사례 중 75% 이상은 이미 모든 원자적 팩트를 알고 있는 상태였습니다.</li>
+<li><strong>세대 간 비교:</strong> K2.6 대비 실제 지식 격차는 약 3/4 감소했습니다. 그러나 <strong>난독화된 C 및 파이썬 코드(Obfuscated C and Python)</strong> 영역은 이미 한계치에 도달했던 K2.6와 유사한 수준을 유지했습니다.</li>
+<li><strong>금융 과업:</strong> 임원 이력이나 M&amp;A 관련 과업에서 팩트 보유량은 높으나, 이를 조합하여 통계를 내거나 체인을 추적하는 능력이 부족했습니다.</li>
+</ul>
+<p><strong>10. 아키텍처 패턴: 동적 벤치마크, LoRA 및 RSI 루프</strong></p>
+<ul>
+<li><strong>Benchmarking / Model Routing:</strong> 모델 평가 및 선택 프로세스.</li>
+<li><strong>Training-data Generation:</strong> SFT/RL용 고신호 데이터 추출.</li>
+<li><strong>Augur + LoRA:</strong> 지식 및 추론 맵에 따라 경량 어댑터를 동적으로 교체하는 아키텍처를 제안합니다. 이는 '비용 효율성'과 '모듈성' 측면에서 가치가 있으나, 아직 엔드투엔드 벤치마크로 성능이 완전히 입증된 것은 아닙니다.</li>
+<li><strong>Recursive Self-Improvement (RSI):</strong> Poetiq은 <code>경계 mapping → data generation → training → re-measurement</code>를 자율 loop로 설명하고 Metasystem이 Augur의 probing efficiency도 최적화한다고 주장합니다. 그러나 benchmarking, model routing, data generation, 실제 SFT/RL 성능 향상, 개선 절차 자체의 반복 개선은 서로 다른 단계입니다. 이 글만으로 strong RSI가 구현·입증됐다고 볼 수 없습니다.</li>
+<li><strong>Catastrophic Forgetting:</strong> Augur는 학습으로 인해 파괴된 기존 능력을 탐지하고 이를 복구하기 위한 데이터를 제공한다고 설명합니다.</li>
+</ul>
+<p><strong>11. 구현 및 검토 체크리스트 (Reproduction Checklist)</strong></p>
+<p>실제 도입 검토를 위해 아키텍트가 확인해야 할 핵심 항목들을 카테고리별로 제안합니다.</p>
+<p><strong>[데이터 및 모델 검증]</strong></p>
+<ul>
+<li>Exact model version &amp; snapshot</li>
+<li>Sample size &amp; Domain sampling</li>
+<li>Contamination &amp; Holdout test</li>
+<li>Confidence interval (신뢰 구간)</li>
+</ul>
+<p><strong>[학습 및 최적화 검증]</strong></p>
+<ul>
+<li>Prompt generator &amp; Sharpening depth 분포</li>
+<li>Resampling strategy, repeated runs &amp; Instability 판정 규칙</li>
+<li>Source trust hierarchy &amp; Contested-source adjudication</li>
+<li>Target gain vs Unrelated-domain regression (목표 외 영역 성능 저하 여부)</li>
+<li>Reward hacking prevention</li>
+</ul>
+<p><strong>[운영 및 보안 검증]</strong></p>
+<ul>
+<li>Tool/search budget &amp; Latency</li>
+<li>Cost-effectiveness of LoRA swap</li>
+<li>Privacy/Access control/Deletion/Audit logging</li>
+<li>Human-in-the-loop audit protocol</li>
+</ul>
+<p><strong>12. 최종 주의사항</strong></p>
+<p>본 브리핑은 Poetiq의 1차 자료를 분석한 것으로, '동적 생성'만으로 오염이 원천적으로 불가능하다고 단정할 수 없습니다. 'Single most efficient', 'Autonomous', 'Exact data', 'Real errors' 등의 표현은 Poetiq사의 주장으로 귀속하여 해석해야 합니다. Augur가 제안한 중요한 아이디어는 점수표보다 실패 경계를 찾아 훈련 데이터로 연결하는 것입니다. 아직 확인할 것은 그 경계 판정과 실제 개선이 독립적으로 재현되는가입니다. 본 문서는 투자나 제품 구매 권유가 아니며 숨은 chain-of-thought를 재현하지 않고 공개된 상위 메커니즘 분석에 집중합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/recursive-self-improvement/">Recursive Self-Improvement</a></li>
+<li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

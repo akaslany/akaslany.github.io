@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apodex 1.1: Scaling Agentic Intelligence for Complex Work</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Apodex 1.1: Scaling Agentic Intelligence for Complex Work</h1>
+<p class="page-meta">웹 · 2026-08-26</p>
+<h2 id="요약">요약</h2>
+<p>Apodex 1.1의 검증 가능한 작업 수행 구조와 저자 측 성능 평가의 재현 한계를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=B7Hjm5jkg_g">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="apodex-1-1-답변형-ai에서-검증-가능한-복잡-작업-수행으로">Apodex 1.1: 답변형 AI에서 검증 가능한 복잡 작업 수행으로</h3>
+<h5 id="1-서론-기술-보고서의-정체성과-신뢰-범위-고지">1. 서론: 기술 보고서의 정체성과 신뢰 범위 고지</h5>
+<p>본 문서는 2026년 8월 24일 공개된 기술 보고서 **&quot;Apodex 1.1: Scaling Agentic Intelligence for Complex Work&quot; (arXiv:2608.23283v1)**를 분석한 기술 명세입니다. 본 자료는 학술지나 학회의 <strong>peer review</strong>를 거치지 않은 프리프린트이며, 제3자에 의한 <strong>independent</strong> 성능 재현이 이루어지지 않았음을 독자에게 명확히 고지합니다. Apodex 결과는 저자 측 운영 평가이며, 비교 baseline은 외부 보고값과 Apodex 내부 재현이 섞여 있어 행별 provenance와 실행 조건이 동일하지 않습니다.</p>
+<p><strong>[표 1] 소스 식별 및 아티팩트 감사 결과</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">세부 정보</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>문서 식별자</strong></td>
+<td style="text-align:left">arXiv:2608.23283v1</td>
+<td style="text-align:left">2026-08-24 제출본 (v1 고정)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라이선스</strong></td>
+<td style="text-align:left">arXiv Non-exclusive (문서) / Apache-2.0 (코드/모델)</td>
+<td style="text-align:left">권리 범위 분리 주의</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저자 그룹</strong></td>
+<td style="text-align:left">집단 저자 Apodex Team 및 메타데이터상 개인 기여자 70명</td>
+<td style="text-align:left">개인별 소속·직책·역할 미표기</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 저장소</strong></td>
+<td style="text-align:left"><a href="https://github.com/ApodexAI/FrontierAgent">GitHub: ApodexAI/FrontierAgent</a></td>
+<td style="text-align:left">커밋: ef326d0 (v1 제출 이후 버전)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>모델 배포</strong></td>
+<td style="text-align:left"><a href="https://huggingface.co/collections/apodex/apodex-11">Hugging Face: Apodex-1.1 Collection</a></td>
+<td style="text-align:left">Mini 35B 포함 4개 변체</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-패러다임의-전환-답변-에서-완수된-작업-으로">2. 패러다임의 전환: &quot;답변&quot;에서 &quot;완수된 작업&quot;으로</h5>
+<p>Apodex 1.1은 AI의 성능 지표를 단순한 언어 생성에서 **'실행 능력(Working Capability)'**으로 전환하고자 합니다. 이는 텍스트 형태의 답변(Answer)을 내놓는 것에 그치지 않고, 정의된 목표를 향해 검증 가능한 진전을 지속하여 최종적인 작업 결과물을 인도하는 능력을 의미합니다.</p>
+<ul>
+<li><strong>건축 프로젝트 비유:</strong>
+<ul>
+<li><strong>기존 AI:</strong> &quot;건물을 어떻게 지어야 하는가?&quot;라는 질문에 화려한 '설계도(답변)'를 그려주는 설계사입니다. 설계도는 완벽해 보일 수 있으나 실제 건물이 지어질지는 보장하지 않습니다.</li>
+<li><strong>Apodex 1.1:</strong> 설계도를 바탕으로 실제 부지에서 자재를 조달하고, 공정을 관리하며(작업 수행), 감리관의 검사(검증)를 통과하여 최종적으로 '완공된 건물'을 건축주에게 인도하는 현장 소장과 시공팀의 역할을 목표로 합니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-작업-계약-task-contract-의-수학적-이해와-일상어-풀이">3. 작업 계약(Task Contract)의 수학적 이해와 일상어 풀이</h5>
+<p>시스템은 복잡한 작업을 실행 가능한 계약 구조인 $E=(W,W0,q,A,T,Ω,B,D,VD)$로 정의합니다. 기술 아키텍트의 관점에서 이를 일상적인 건축 언어로 번역하면 다음과 같습니다.</p>
+<ul>
+<li>$W, W0$ (Workspace &amp; Initial State) — 공사 현장 및 부지의 초기 상태.</li>
+<li>$q$ (Normalized Goal) — 완공될 건물의 표준 규격 및 요구 사양.</li>
+<li>$A$ (Allowed Actions) — 현장에서 허용된 공법 및 중장비 사용 권한.</li>
+<li>$T$ (State Transitions) — 작업 단계별로 발생하는 현장 상태의 변화.</li>
+<li>$Ω$ (Observations) — 센서 및 육안을 통해 수집되는 현장 모니터링 데이터.</li>
+<li>$B$ (Resource Budget) — 투입 가능한 총예산과 약속된 공사 기간.</li>
+<li>$D$ (Delivery Contract) — 결과물 인도 양식 및 최종 보고서 작성 요건.</li>
+<li>$VD$ (Terminal Verifier) — 준공 검사를 수행하여 합격 여부를 판정하는 검사관.</li>
+</ul>
+<hr />
+<h5 id="4-확장-전략-1-환경-확장-environment-scaling">4. 확장 전략 1: 환경 확장(Environment Scaling)</h5>
+<p>성능 확장을 위해 단순히 프롬프트 길이를 늘리는 대신, 에이전트가 상호작용하는 <strong>환경의 깊이와 검증 가능성</strong>을 물리적으로 확장하는 전략입니다.</p>
+<ul>
+<li><strong>구조적 깊이:</strong> 단순한 API 호출을 넘어 파일 시스템, 웹 검색, 실시간 코드 실행 환경 등이 유기적으로 결합된 다층적 워크스페이스를 구축합니다.</li>
+<li><strong>검증 가능성(Verifiability):</strong> 도구 실행의 결과와 명시된 검사 규칙이 피드백으로 돌아오는 환경을 조성합니다. 검증기 자체도 오류·누출·편향이 있을 수 있으므로 그 출력이 언제나 객관적 진실이라는 뜻은 아닙니다.</li>
+</ul>
+<hr />
+<h5 id="5-확장-전략-2-에이전트-협업-확장-agentic-coordination-scaling">5. 확장 전략 2: 에이전트 협업 확장(Agentic Coordination Scaling)</h5>
+<p>단순히 에이전트 개수를 늘리는 것이 아니라, 분업과 검증의 효율성을 최적화하는 구조입니다.</p>
+<ul>
+<li><strong>비동기 팬인(Asynchronous fan-in):</strong> 병렬로 흩어져 작업하던 하위 에이전트들의 결과를 비동기적으로 취합하여 병목 현상을 최소화합니다.</li>
+<li><strong>비대칭 검증(Asymmetric verification):</strong> 전체 작업을 다시 수행하기보다 결론을 떠받치는 특정 주장·수치·근거를 별도 역할이 좁게 공격적으로 검토합니다.</li>
+<li><strong>무의미한 분기 종료:</strong> 진행 가능성이 없거나 예산을 낭비하는 작업 경로(Stale branches)를 조기에 식별하여 강제 종료함으로써 연산 자원을 효율화합니다.</li>
+</ul>
+<hr />
+<h5 id="6-시스템-인프라-agentos와-지속적-상태-관리">6. 시스템 인프라: AgentOS와 지속적 상태 관리</h5>
+<p>보고서가 설명하는 장기 작업의 파일·증거·실행 로그·작업판 일부는 대화 컨텍스트 외부의 운영 계층인 <strong>AgentOS</strong>에서 관리됩니다.</p>
+<ul>
+<li><strong>현장 사무소(Site Office) 비유:</strong> AgentOS는 공사 현장의 '워크스페이스'를 유지하고, 모든 작업 내역을 '작업 보드(Task Board)'와 '증거 기록(Work Ledger)'에 남깁니다. 이를 통해 데이터의 출처(Provenance)를 추적할 수 있습니다.</li>
+<li><strong>기술적 한계:</strong> 현 사무소 체제에서는 현재 진행 중인 공정의 기록은 철저히 관리되나, 과거의 특정 시점으로 공사 현장 전체를 되돌리는 '임의 회복(Historical Rewind)'이나 완벽한 '프로세스 재시작' 기능은 계약상 보장되지 않습니다.</li>
+</ul>
+<hr />
+<h5 id="7-모델-훈련-및-진화-sft-rl-그리고-자기-진화의-경계">7. 모델 훈련 및 진화: SFT, RL, 그리고 자기 진화의 경계</h5>
+<p>Apodex 1.1은 지도 학습(SFT)과 <strong>PIVOT-RL</strong>이라는 강화 학습 기법을 통해 고도화되었습니다.</p>
+<ul>
+<li><strong>관리된 자기 진화(Managed self-evolution):</strong> 이는 AI가 스스로를 무제한 수정하는 SF적 개념이 아니라, 정교하게 설계된 공학적 루프 내에서 데이터를 생성하고 정책을 개선하는 과정을 의미합니다.</li>
+<li><strong>블랙박스(Black-box)의 한계:</strong> 저자들은 PIVOT-RL이 실패 지점의 의사결정을 개선한다고 주장하나, 구체적인 훈련 데이터, 하이퍼파라미터, 훈련 과정에서의 원본 롤아웃(Rollouts) 데이터나 절제 실험(Ablation) 결과가 공개되지 않았습니다. 따라서 PIVOT-RL의 실제 우월성은 과학적으로 검증되지 않은 저자들의 주장 영역에 머물러 있습니다.</li>
+</ul>
+<hr />
+<h5 id="8-실행-프레임워크-비교-react-vs-agent-team">8. 실행 프레임워크 비교: ReAct vs Agent Team</h5>
+<p>단순한 도구 사용 스캐폴딩(ReAct)과 다중 에이전트 협업 시스템(Agent Team)의 차이는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">ReAct (단일 정책)</th>
+<th style="text-align:left">Agent Team (복합 구조)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>턴(Turn) 제한</strong></td>
+<td style="text-align:left">최대 200 메인 턴</td>
+<td style="text-align:left">코디네이터 200 + 하위 에이전트 각 100턴</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>컴퓨팅 자원</strong></td>
+<td style="text-align:left">낮음 (단일 추론)</td>
+<td style="text-align:left">매우 높음 (병렬 추론 및 대기 시간 발생)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>역할 분담</strong></td>
+<td style="text-align:left">단일 모델이 수행/검토 겸임</td>
+<td style="text-align:left">하위 에이전트, 검증자, 보고자 전담 배치</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>구조적 강점</strong></td>
+<td style="text-align:left">가볍고 빠른 응답</td>
+<td style="text-align:left">비대칭 검증 및 지능적 재계획 가능</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="9-벤치마크-결과-분석-및-귀속">9. 벤치마크 결과 분석 및 귀속</h5>
+<p>Apodex Team이 제시한 여덟 개 헤드라인 비교 행에서는 Agent Team 점 추정치가 ReAct보다 높았습니다. 이는 동일한 계산량의 모델 절제인 <strong>matched compute</strong> 비교가 아니라 모델·스캐폴드·추가 조직화 계산을 합친 시스템 비교입니다. 단위는 벤치마크마다 다르므로 서로 평균 내지 않습니다.</p>
+<p><strong>[데이터 시각화: ReAct 대비 Agent Team 점수 상승 폭]</strong>
+<em>참고: 막대 길이는 100점 만점 기준의 비례적 크기를 나타냄</em></p>
+<ol>
+<li>
+<p><strong>APEX-Agents (작업 성공률)</strong></p>
+<ul>
+<li>ReAct: [###       ] 34.4</li>
+<li>Team:  [####      ] 38.5 (+4.1)</li>
+</ul>
+</li>
+<li>
+<p><strong>GDPVal (승률)</strong></p>
+<ul>
+<li>ReAct: [#######   ] 69.5</li>
+<li>Team:  [########  ] 78.8 (+9.3)</li>
+</ul>
+</li>
+<li>
+<p><strong>FrontierFinance (금융 분석)</strong></p>
+<ul>
+<li>ReAct: [#####     ] 48.7</li>
+<li>Team:  [#####     ] 54.3 (+5.6)</li>
+</ul>
+</li>
+</ol>
+<p><em>출처: Apodex 1.1 Technical Report (Operator-reported point estimates)</em></p>
+<hr />
+<h5 id="10-모델-배포-및-실무적-고려사항-mini-35b-포함">10. 모델 배포 및 실무적 고려사항 (Mini 35B 포함)</h5>
+<p>효율적인 배포를 위해 제공되는 Apodex 1.1 Mini(35B) 모델의 기술 사양은 다음과 같습니다.</p>
+<ul>
+<li><strong>구조:</strong> Qwen3.5 기반 MoE (총 35B 파라미터), 토큰당 8개의 전문가(Experts) 활성화.</li>
+<li><strong>현실적인 하드웨어 요구사항:</strong> &quot;로컬 배포 가능&quot;이라는 표현이 일반적인 노트북 사용을 의미하지 않습니다.
+<ul>
+<li><strong>BF16 정밀도 운용:</strong> Tensor Parallelism(TP=8) 환경과 고용량 VRAM이 필수적입니다.</li>
+<li><strong>GPTQ-Int4 양자화:</strong> 공개 호환성 문서는 기반 Qwen 계열의 32GB RTX 5090 프로파일을 제시하지만, 정확한 Apodex 1.1 Mini 체크포인트와 논문 성능을 그 장비에서 재현했다는 증거는 아닙니다. 실제 요구량은 체크포인트 revision, 양자화, KV 캐시, 문맥 길이, 동시성, 런타임에 따라 달라집니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="11-벤치마크-공정성-및-통계적-검증">11. 벤치마크 공정성 및 통계적 검증</h5>
+<p>보고된 결과들은 통계적 관점에서 신중하게 해석되어야 합니다.</p>
+<ul>
+<li><strong>통계적 유의성 결여:</strong> 결과 대부분이 단일 지점 추정치로 제시되었으며, 반복 횟수나 오차 막대(CI)가 누락되었습니다.</li>
+<li><strong>신뢰 구간 중첩:</strong>
+<ul>
+<li><strong>FrontierScience-Research:</strong> 성공 사례가 33건에서 38건으로 증가했으나, 60건의 적은 표본 수로 인해 Wilson 95% 신뢰 구간이 넓게 형성되어 통계적 우위를 확언하기 어렵습니다.</li>
+<li><strong>BioMysteryBench:</strong> 단 2건의 작업 성공 차이(4/17 → 6/17)이며 두 독립 Wilson 구간도 넓게 겹칩니다. 같은 17개 문항의 item-level 전환표와 paired test가 없으므로 통계적 우위를 확정할 수 없습니다.</li>
+</ul>
+</li>
+<li><strong>평가 편향:</strong> 자체 구축한 벤치마크(FrontierSearchBench)와 내부 AI 판독기(Judge)를 사용한 평가는 객관성 검증이 추가로 필요합니다.</li>
+</ul>
+<hr />
+<h5 id="12-재현-가능성-및-오픈소스-아티팩트의-한계">12. 재현 가능성 및 오픈소스 아티팩트의 한계</h5>
+<p>공개된 GitHub 코드와 Hugging Face 가중치는 시스템의 일부만을 대변합니다.</p>
+<ul>
+<li><strong>부분 확인(Runtime):</strong> 에이전트 실행 엔진, 샌드박스 구조, 작업 보드 인터페이스가 공개되어 있으며 감사에서 선택한 테스트는 <strong>46 passed</strong>였습니다.</li>
+<li><strong>재현 불가(Performance):</strong> 이 테스트 통과는 선택한 런타임 기능이 해당 환경에서 작동했다는 뜻일 뿐, 논문의 벤치마크 점수나 훈련 과정을 재현한 것은 아닙니다. 특히 PIVOT-RL 훈련 레시피와 전체 데이터셋은 비공개 상태입니다.</li>
+</ul>
+<hr />
+<h5 id="13-내부-불일치-보고-사례-연구-case-studies-의-진실">13. 내부 불일치 보고: 사례 연구(Case Studies)의 진실</h5>
+<p>문서 내부에서 발견된 불일치는 기술적 신뢰도에 의문을 제기합니다.</p>
+<ul>
+<li><strong>사례 정체성의 내부 불일치:</strong> 본문은 임상 생존 분석·분자 도킹·전기화학 부식 분석을 열거하지만, 부록 A의 실제 세 사례는 단백질 hexamer coarse-graining/energy minimization, TUNEL/DAPI apoptosis image quantification, 돼지 RNA-seq WGCNA입니다. 공개 자료만으로 어느 설명이 의도된 사례 목록인지 확정하지 않고 불일치 그대로 보존합니다.</li>
+<li><strong>데이터 소실:</strong> '사례 3'의 경우, 에이전트 수준의 실행 기록(Trace)이 보존되지 않았다고 명시되어 있어 저자들의 주장을 사후 검증할 방법이 없습니다.</li>
+</ul>
+<hr />
+<h5 id="14-결론-강점-누락된-증거-그리고-향후-관전-포인트">14. 결론: 강점, 누락된 증거, 그리고 향후 관전 포인트</h5>
+<p>Apodex 1.1은 AI를 단순한 채팅 도구에서 공학적으로 설계된 '작업 수행 시스템'으로 격상시키려는 시도에서 명확한 강점을 보입니다. 특히 AgentOS와 작업 계약 구조는 에이전트 지능의 확장성을 확보하기 위한 유의미한 청사진을 제공합니다.</p>
+<p>하지만 본 기술이 보편적 성능으로 인정받기 위해서는 <strong>▲독립적인 제3자의 벤치마크 재현, ▲통계적 유의성이 확보된 대규모 반복 실험, ▲훈련 데이터 오염 여부에 대한 투명한 검증</strong>이 반드시 선행되어야 합니다.</p>
+<p><strong>최종 경고:</strong> 본 분석은 동료 검토를 거치지 않은 **프리프린트(v1)**를 기반으로 합니다. 기술적 개념의 가능성과 보고된 성능 수치를 동일시하지 않도록 주의가 필요합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

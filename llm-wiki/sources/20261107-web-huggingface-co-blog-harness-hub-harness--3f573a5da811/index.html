@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harness adapters: Safe RL for efficient agentic development</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Harness adapters: Safe RL for efficient agentic development</h1>
+<p class="page-meta">웹 · 2026-11-07</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 동일한 대형 언어 모델(LLM) 베이스 가중치 상에서 다양한 에이전트 하네스(Agent Harness: pi, opencode, hermes 등)에 최적화된 독립적인 소형 LoRA 아답터를 강화학습(RL)으로 학습시키고 평가하는 기술 체계인 '하네스 아답터(Harness Adapters)'에 대한 심층…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://huggingface.co/blog/harness-hub/harness-adapters">출처</a> · <a href="https://www.youtube.com/watch?v=xyDyzCeLeNY">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="하네스-아답터-harness-adapters-안전한-강화학습-기반의-효율적-에이전트-개발-보고서">하네스 아답터(Harness Adapters): 안전한 강화학습 기반의 효율적 에이전트 개발 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 동일한 대형 언어 모델(LLM) 베이스 가중치 상에서 다양한 에이전트 하네스(Agent Harness: pi, opencode, hermes 등)에 최적화된 독립적인 소형 LoRA 아답터를 강화학습(RL)으로 학습시키고 평가하는 기술 체계인 '하네스 아답터(Harness Adapters)'에 대한 심층 기술 분석을 제공합니다. 에이전트는 적용되는 하네스의 고유한 도구 모음, 프롬프트 구조, 제어 흐름에 따라 동일한 모델이더라도 동작 양상이 크게 달라집니다. 본 연구는 베이스 모델 가중치를 동결(frozen) 상태로 1회만 로드하고, 각 하네스별 정책(Policy)을 소형 LoRA 아답터 형태로 비동기 학습 및 서빙하는 모듈형 접근법을 확립했습니다.</p>
+<p>학습 과정에서 발생할 수 있는 보상 해킹(Reward Hacking) 및 편법 탐색을 방지하기 위해, 원본 트레이스 기반 검증 환경인 <code>Repo2RLEnvs</code>와 데이터 분석 환경인 <code>SmolDataEnvs</code>를 통합 구축하였으며, 하네스와 모델 서버 사이에 리버스 프록시(Reverse Proxy)로 작동하는 <code>safeagents</code> 도구 호출 검증 시스템을 도입했습니다. <code>safeagents</code>는 에이전트가 실행하는 모든 툴 호출을 실시간 규칙 기반으로 검사하여 오라클 정답 탐색이나 테스트 파일 조작 시도를 사전 차단하고, 해당 롤아웃의 보상 점수를 0점으로 처리함으로써 안전 강화학습(Safe RL)을 구현합니다.</p>
+<p>본 연구의 최종 목적은 베이스 모델 고유의 문제 해결 정확도를 유지하거나 향상하는 동시에, 과제 수행 과정에서 소모되는 도구 호출(Tool Call) 횟수를 획기적으로 감축하여 에이전트 개발 및 운용 측면의 리소스 효율성과 안정성을 극대화하는 데 있습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-issues-and-arguments">2. 주요 논점 (Key Issues and Arguments)</h4>
+<h5 id="2-1-하네스-아답터-harness-adapters-의-개념과-진화-배경">2.1. 하네스 아답터(Harness Adapters)의 개념과 진화 배경</h5>
+<ul>
+<li><strong>[사실] 기존 연구 방식과의 차이점 (소스 위치: Evolving harness adapters / Early attempts)</strong>
+<ul>
+<li>프레임워크 내에서 제어 흐름이나 프롬프트, 도구를 직접 수정하지 않고 모델을 강화학습시키는 멀티 하네스 RL 방식이 존재하였으나, 본 연구는 베이스 모델 가중치를 동결하고 하네스별 전용 소형 LoRA 아답터를 상위에 독립적으로 얹어 학습시키는 아키텍처를 채택했습니다.</li>
+</ul>
+</li>
+<li><strong>[소스의 주장] 초기 시도 및 커뮤니티 채택 (소스 위치: Early attempts)</strong>
+<ul>
+<li><code>LFM2.5-24B-A2B</code> 모델을 기반으로 pi, hermes, claude-code 하네스 환경에서 초기 아답터를 학습시킨 결과, 미학습(held-out) 과제에 대한 정확도 향상과 툴 호출 횟수 감소라는 긍정적 신호가 실증되었으며 커뮤니티의 신속한 채택으로 이어졌습니다.</li>
+</ul>
+</li>
+<li><strong>[소스의 주장] LoRA 아답터 채택 이유 (소스 위치: LoRA is the natural candidate for harness adapters)</strong>
+<ul>
+<li><strong>학습 및 평가 비용 효율성</strong>: 단일 모델 서버 상에서 복수의 하네스 정책을 동시에 동시 서빙할 수 있어 전체 파라미터 파인튜닝(Full Fine-tuning) 방식 대비 학습 및 평가 자원이 대폭 절감됩니다.</li>
+<li><strong>유연한 서빙 구조</strong>: 추론 시 운용자는 베이스 모델을 새로 로드할 필요 없이 사용하고자 하는 에이전트 하네스에 부합하는 소형 아답터만 선택적으로 로드하여 최적의 효율성을 달성할 수 있습니다.</li>
+</ul>
+</li>
+<li><strong>[작성자의 해석] 하네스 아답터 체계의 의의</strong>
+<ul>
+<li>거대한 베이스 모델을 하네스별로 개별 재학습하거나 하네스 자체 코드를 수정하는 비효율을 극복하고, 아답터 레이어의 교체만으로 다종 에이전트 환경에 유연하게 대응하는 모듈형 에이전트 개발 파이프라인을 정립한 것으로 평가됩니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-단일-베이스-모델---다중-아답터-구조-및-학습-평가-메커니즘">2.2. 단일 베이스 모델 - 다중 아답터 구조 및 학습/평가 메커니즘</h5>
+<ul>
+<li>
+<p><strong>[사실] 학습 및 서빙 아키텍처 (소스 위치: One base model, many adapters - Training)</strong></p>
+<ul>
+<li>단일 vLLM 모델 서버 상에 베이스 모델 가중치를 1회 로드한 뒤 동결(frozen) 상태로 유지합니다.</li>
+<li>하네스별 비동기 학습기(Trainer)는 vLLM 서버에 롤아웃 요청을 전달할 때 고유한 아답터 이름(name)을 지정하여 개별 정책을 서빙합니다.</li>
+<li>경사 하향(Gradient Step)이 완료되면 새로운 아답터 버전이 vLLM에 이름으로 추가 로드되며, 이전 버전으로 진행 중이던 기존 세션은 해당 버전에서 완료되므로 서빙 중단이 발생하지 않습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실] 비동기 학습 파이프라인 및 미니배치 구성 (소스 위치: What goes into one training step / Training)</strong></p>
+<ul>
+<li><strong>동시 실행 세션 및 큐 진입</strong>: 각 학습기는 최대 48개의 에이전트 세션(과제 6개 × 과제당 롤아웃 8개)을 동시 실행합니다. 단, 긴 추론 컨텍스트를 생성하는 <code>TwIL-8B</code> 모델은 vLLM 메모리 한계로 인해 동시 세션 수가 12개로 제한됩니다. 과제 내 8개 롤아웃의 채점이 모두 완료되면 해당 과제 그룹은 GRPO(Group Relative Policy Optimization) 경사 계산 큐에 진입합니다.</li>
+<li><strong>마이크로 배치 및 토큰 버짓(Token Budget)</strong>: 1회의 경사 스텝은 완료된 롤아웃들을 4개의 마이크로 배치로 패킹하여 진행됩니다. 마이크로 배치당 최대 토큰 버짓은 <code>LFM2.5-24B-A2B</code>가 131,072 토큰, <code>LFM3-1.7B</code> 및 <code>TwIL-8B</code>가 65,536 토큰으로 제한됩니다. 이로 인해 스텝당 처리되는 과제 수가 가변적으로 결정됩니다.</li>
+<li><strong>정책 지연(Policy Staleness) 제어</strong>: 동기화 차이로 인해 현재 모델 버전보다 4버전(stale versions) 이상 이전의 정책에서 생성된 롤아웃은 학습 데이터에서 자동 폐기(drop)됩니다.</li>
+<li><strong>GPU 자원 공유 효율성</strong>: <code>LFM3-1.7B</code> 모델 학습 시 3개의 학습기가 단일 GPU를 공유합니다. 에이전트 롤아웃 시간의 대부분은 샌드박스 대기 시간이며 순수 GPU 연산 시간은 스텝당 약 35초에 불과하므로, 3개의 학습기가 GPU 연산을 순차적으로 전개함으로써 자원 유휴 시간을 최적화합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실] 학습 하이퍼파라미터 및 알고리즘 비교 (소스 위치: Setup - Training codebase and main hyperparameters)</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 (Model)</th>
+<th style="text-align:left">역할 (Role)</th>
+<th style="text-align:left">학습 스텝 (Steps)</th>
+<th style="text-align:left">데이터 구성 (SmolDataEnvs / Repo2RLEnvs)</th>
+<th style="text-align:left">총 학습 과제 수 (Tasks)</th>
+<th style="text-align:left">세션당 에이전트 스텝 (Agent Steps)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>LiquidAI/LFM2.5-24B-A2B</strong></td>
+<td style="text-align:left">메인 (Main run)</td>
+<td style="text-align:left">200</td>
+<td style="text-align:left">중급 100 + 상급 200 / 230</td>
+<td style="text-align:left">530</td>
+<td style="text-align:left">17</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LiquidAI/LFM3-1.7B</strong></td>
+<td style="text-align:left">메인 (Main run)</td>
+<td style="text-align:left">400</td>
+<td style="text-align:left">중급 300 + 상급 250 / 230</td>
+<td style="text-align:left">780</td>
+<td style="text-align:left">17</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>webAI-Official/TwIL-8B</strong></td>
+<td style="text-align:left">실험 (Experiment)</td>
+<td style="text-align:left">300</td>
+<td style="text-align:left">중급 150 + 상급 250 / 230</td>
+<td style="text-align:left">630</td>
+<td style="text-align:left">30 (타임아웃 20분)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>공통 학습 설정</strong>: GRPO 알고리즘(TRL <code>AsyncGRPOTrainer</code> 및 Tree Attention 적용), LoRA Rank 32 (all-linear 적용), 학습률 1e-5, 샘플링 온도 0.8, 최대 출력 토큰 32,768개, 4 경사 누적 스텝, 10 스텝마다 체크포인트 생성 및 평가.</p>
+</li>
+<li>
+<p><strong>보상 함수 조건</strong>: 과제 자체 검증기 통과 점수에 더해, <strong>정답을 맞춘(correct) 롤아웃에 한해서만</strong> 툴 호출 절감 보너스 <code>0.1 × (1 − calls / 15)</code>를 부여함.</p>
+</li>
+<li>
+<p><strong>[사실] 평가 효율성 수치 비교 (소스 위치: Evaluation)</strong></p>
+<ul>
+<li>단일 H200 GPU 작업 환경에서 vLLM에 베이스 가중치를 로드하고 9개 체크포인트(총 1,350개 세션)를 아답터 서빙 방식으로 1시간 이내에 동시 평가 완료하였으며, 약 $5의 비용이 소요되었습니다.</li>
+<li>체크포인트별 전체 가중치를 병합(Merge)하여 순차적으로 서빙하는 기존 방식을 적용했을 경우의 예상 비용 약 $90 대비 비용을 대폭 절감하였습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[작성자의 해석] 단일 베이스 모델 - 다중 아답터 구조의 통합적 의의</strong></p>
+<ul>
+<li>가중치 동결 후 LoRA 아답터만 서빙하는 방식은 메모리 점유율 최소화, 비동기 데이터 수집의 연속성 보장, 평가 인프라 비용 94% 절감($90 → $5)이라는 세 가지 핵심 기술적 이점을 동시에 달성한 구조적 혁신으로 분석됩니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-강화학습-rl-환경-구축-및-데이터-편향-분석">2.3. 강화학습(RL) 환경 구축 및 데이터 편향 분석</h5>
+<ul>
+<li>
+<p><strong>[사실] 원천 트레이스 데이터셋 출처 및 과제 분류 (소스 위치: How we enhanced the mix... / Environments)</strong></p>
+<ul>
+<li>허브(Hub)에 공개된 총 1,950개의 후보 에이전트 트레이스(<code>TeichAI/Ox-Alpha-Pi-Traces</code> 1,524개, <code>TeichAI/DeepSeek-v4-Pro-Agent</code> 143개, <code>choucsan/mimo-claude-code-traces-1k</code> 129개, <code>MaxDevv/real-pi-coding-agent-traces-sessions</code> 42개, <code>codex300</code> 41개, 기타 11개 데이터셋 71개)를 수집하여 검증을 거쳐 최종 270개 과제로 정제하였습니다.</li>
+<li><strong>4가지 과제 유형</strong>: <code>repair</code>(버그 수정), <code>qa</code>(질의응답), <code>build</code>(신규 프로젝트 생성), <code>extend</code>(기존 코드베이스 기능 확장).</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실] 과제 유형 결정 메커니즘 (No LLM Rule) (소스 위치: How the task type is decided)</strong></p>
+<ul>
+<li>과제 유형(<code>repair</code>, <code>build</code>, <code>extend</code>, <code>qa</code>) 결정 단계에는 <strong>LLM이 전혀 개입하지 않습니다.</strong></li>
+<li>재플레이된 트레이스의 Shell 명령어 실행 결과(exit code), 파일 수정 내역, 사용자 요청 위치 등 명확한 규칙 기반(Rule-based)으로만 과제 유형이 결정됩니다.
+<ul>
+<li><code>repair</code>: 기존 체크 명령(pytest 등)이 실패(non-zero)한 후, 코드 수정으로 동일 명령이 성공(exit 0)한 패턴.</li>
+<li><code>build</code>: 두 번째 요청 시점까지 최소 2개 이상의 Python 파일이 생성되고 파이썬 검증을 통과한 패턴.</li>
+<li><code>extend</code>: 후속 요청이 기존 프로젝트의 소스코드를 변경하고 검증을 통과한 패턴.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실] Repo2RLEnvs 생성 파이프라인 6단계 및 오라클 체계 (소스 위치: How we enhanced the mix... / Where the oracle comes from)</strong></p>
+<ol>
+<li><strong>스크리닝 (Screen)</strong>: <code>atif-scan</code>을 적용하여 보상 파일 조작 및 벤치마크 유출 트레이스 제거.</li>
+<li><strong>재플레이 (Replay)</strong>: 가상 파일시스템 상에서 명령어 실행 직전 상태로 파일 재구성.</li>
+<li><strong>작업 탐색 (Find work)</strong>: <code>build</code> 및 <code>extend</code> 과제는 교사 LLM인 <code>Mistral-Large-4-1T-A52B</code>가 인터페이스 계약, 스텁(Stub), 은닉 테스트(hidden test)를 작성함 (270개 중 259개 과제에 적용). <code>repair</code>는 LLM 개입 없이 트레이스 자체의 실패 체크를 활용함.</li>
+<li><strong>구축 및 검증 (Build &amp; check)</strong>: LLM 개입 없이 Docker 이미지 빌드 및 변이 테스트(Mutation testing)를 거쳐 은닉 테스트의 유효성 오프라인 검증.</li>
+<li><strong>트라이얼 매트릭스 (Trial matrix)</strong>: 오라클 정답은 만점(2회 연속 통과), 빈 스텁 또는 무작동 시도는 0점 처리됨을 확인.</li>
+<li><strong>게시 및 난이도 산정 (Publish &amp; score)</strong>: 참조 에이전트(<code>LFM2.5-24B-A2B</code>)의 성공률에 따라 난이도 산정 (Hard &lt; 0.3, Medium ≤ 0.6, Easy &gt; 0.6).</li>
+</ol>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">과제 유형</th>
+<th style="text-align:left">오라클 (Oracle) 출처</th>
+<th style="text-align:left">검증 및 은닉 테스트 구성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>repair</code></td>
+<td style="text-align:left">트레이스 내 에이전트의 실제 수정 코드</td>
+<td style="text-align:left">트레이스 자체 실패 체크 활용 (LLM 미사용)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>build</code></td>
+<td style="text-align:left">첫 요청 완료 시점의 에이전트 구현 결과물</td>
+<td style="text-align:left">교사 LLM 작성 은닉 테스트 (스텁 및 변이 테스트 검증 완료)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>extend</code></td>
+<td style="text-align:left">후속 요청 완료 시점의 에이전트 수정 코드</td>
+<td style="text-align:left">추가 기능에 대해 교사 LLM이 작성한 은닉 테스트</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>qa</code></td>
+<td style="text-align:left">에이전트가 확인한 도구 출력 내 수치/텍스트</td>
+<td style="text-align:left">정확한 텍스트 또는 수치 일치 (Exact / Numeric match)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[소스의 주장] 과제 분포의 편향 원인 (소스 위치: A distribution skewed toward build tasks)</strong>
+<ul>
+<li>270개 과제 중 <code>build</code>가 253개(94%), <code>repair</code> 11개, <code>extend</code> 6개, <code>qa</code> 0개로 구성됨 (난이도: Easy 179개, Medium 61개, Hard 30개).</li>
+<li><strong>편향 원인</strong>:
+<ul>
+<li>공개된 공유 세션 데이터의 대부분이 단발성 프로젝트 생성 요청에 집중됨.</li>
+<li><code>repair</code>는 재현 가능한 실패-성공 패턴이 드묾.</li>
+<li><code>extend</code>는 다중 요청 세션 자체가 드묾.</li>
+<li><code>qa</code>는 공개 데이터상의 사실과 정확히 일치해야 하므로 최종 검증 기준을 통과하여 최종 과제 세트에 포함된 사례가 없음.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-safeagents를-활용한-안전-강화학습-safe-rl-과-보상-해킹-방지">2.4. safeagents를 활용한 안전 강화학습(Safe RL)과 보상 해킹 방지</h5>
+<ul>
+<li>
+<p><strong>[사실] safeagents 메커니즘 및 API 호환성 (소스 위치: Saying 🙅 to agent shortcuts)</strong></p>
+<ul>
+<li>에이전트 하네스와 vLLM 서버 사이에서 동작하는 리버스 프록시(Reverse Proxy)로 투명하게 작동함.</li>
+<li>OpenAI Chat Completions 및 Anthropic Messages API를 모두 지원하며, 스트리밍(streaming) 시에도 도구 호출 응답만 지연 검사할 뿐 일반 텍스트 생성에는 지연을 발생시키지 않음.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실] 3단계 룰 기반 검토 체계 및 보상 반영 (소스 위치: Rule-based checks)</strong></p>
+<ol>
+<li><strong>요청 검증</strong>: 미선언 도구 호출 및 대화 맥락에 없는 외부 호스트 접근 차단 (모델 본인의 이전 발언은 인용 출처에서 제외).</li>
+<li><strong>atif-scan 감지기</strong>: 보상 파일 조작, 테스트 파일 수정, 프록시 우회 등을 감지하여 심각도 High 이상 차단.</li>
+<li><strong>선택적 판사 모델 (Judge)</strong>: 판사 LLM 단계가 존재하나 본 연구 실험에서는 비활성화하여 제외함.</li>
+</ol>
+<ul>
+<li>차단 시 <code>[safeagents] blocked call to...</code> 안내 문구가 반환되며, 해당 롤아웃은 보상 점수 0점을 부여받아 GRPO 알고리즘에 의해 부적절 행동이 억제됨.</li>
+</ul>
+</li>
+<li>
+<p><strong>[사실] 차단 실증 사례 및 플러그인 룰 정제 (소스 위치: Caught in a smoke run / The plugins we train with)</strong></p>
+<ul>
+<li><strong>실증 차단 사례</strong>: 2026-11-05 11:56 UTC, <code>TwIL-8B</code> 모델의 0번 스텝 스모크 런 중 Kaggle 정답 획득을 위해 Hugging Face 버킷 (<code>AdithyaSK/jupyter-agent-kaggle-all</code>) 탐색 시도를 즉시 차단함.</li>
+<li><strong>플러그인 룰 정제 사례</strong>: 초기 <code>smoldataenvs</code> 플러그인은 모든 <code>grader.py</code> 매칭 시 차단하여, 에이전트가 채점 라이브러리를 직접 작성해야 하는 Repo2RLEnvs <code>build</code> 과제까지 0점 처리하는 오류가 발생함. 이를 해결하기 위해 매칭 규칙을 <code>/tests/grader</code>로 정밀화하여 정상 작동을 보장함.</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">규칙명 (Rule)</th>
+<th style="text-align:left">심각도 (Severity)</th>
+<th style="text-align:left">매칭 대상 및 내용 (Matches)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>smoldataenvs.answer_source</code></td>
+<td style="text-align:left">High</td>
+<td style="text-align:left">공개 데이터셋 및 정답 관련 키워드 (<code>SmolDataEnvs</code>, <code>FineEnvs/</code>, <code>gold_answer</code>, <code>EXPECTED_ANSWER</code>, <code>task.toml</code>, <code>/tests/grader</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>smoldataenvs.source_recon</code></td>
+<td style="text-align:left">Medium</td>
+<td style="text-align:left">스테이징 스크립트, 버킷 이름, Kaggle URL 등 탐색 시도</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>traj2envs.solution_source</code></td>
+<td style="text-align:left">High</td>
+<td style="text-align:left">원본 트레이스 데이터셋 및 세션 ID 탐색 (<code>traj2envs</code>, <code>source_trace</code>, <code>task.toml</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>traj2envs.hub_download</code></td>
+<td style="text-align:left">Medium</td>
+<td style="text-align:left">허브 다운로드 시도 (<code>build</code> 과제에서는 미사용 처리)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>*.hf_credential</code></td>
+<td style="text-align:left">High</td>
+<td style="text-align:left">자격 증명 관련 키워드 (<code>HF_TOKEN</code>, <code>hf auth</code>, <code>huggingface-cli login</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[사실] 절제 실험(Ablation Study)을 통한 성능 검증 (소스 위치: The plugins we train with)</strong>
+<ul>
+<li><code>LFM2.5-24B-A2B</code> (pi 하네스) 대상 50스텝 절제 실험 결과, <code>safeagents</code> 검증 시스템을 적용하더라도 미학습 평가 과제의 Pass@1 성과 변화가 <code>+0.0 ± 4.1</code>로 나타남. 이는 <code>safeagents</code> 검증 체계가 에이전트의 정상적인 추론 성과 저하(cost)를 전혀 유발하지 않으면서 보상 해킹만 효과적으로 차단함을 입증함.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-persons-and-speakers">3. 등장 인물 및 화자 (Persons and Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 / 그룹 (Affiliation)</th>
+<th style="text-align:left">본 보고서/소스 내 역할 (Role)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Younes Belkada (ybelkada)</td>
+<td style="text-align:left">harness-hub</td>
+<td style="text-align:left">공동 저자 (Co-author)</td>
+</tr>
+<tr>
+<td style="text-align:left">Lysandre</td>
+<td style="text-align:left">harness-hub</td>
+<td style="text-align:left">공동 저자 (Co-author)</td>
+</tr>
+<tr>
+<td style="text-align:left">Nathan Habib (SaylorTwift)</td>
+<td style="text-align:left">harness-hub</td>
+<td style="text-align:left">공동 저자 (Co-author)</td>
+</tr>
+<tr>
+<td style="text-align:left">Aritra Roy Gosthipaty</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">피드백 및 도움 (Acknowledgments)</td>
+</tr>
+<tr>
+<td style="text-align:left">Shaun Smith</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">피드백 및 도움 (Acknowledgments)</td>
+</tr>
+<tr>
+<td style="text-align:left">Adithya S Kolavi</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">피드백 및 도움 (Acknowledgments)</td>
+</tr>
+<tr>
+<td style="text-align:left">Ben Burtenshaw</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">피드백 및 도움 (Acknowledgments)</td>
+</tr>
+<tr>
+<td style="text-align:left">Amine Dirhoussi</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">피드백 및 도움 (Acknowledgments)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-numbers-and-timestamps">4. 주요 수치 및 시점 (Key Numbers and Timestamps)</h4>
+<ul>
+<li><strong>발행 일자</strong>: 2026년 11월 6일 (Published November 6, 2026)</li>
+<li><strong>스모크 런 차단 발생 시점</strong>: 2026-11-05 11:56 UTC (<code>TwIL-8B</code> step 0 실행 중 차단)</li>
+<li><strong>게시물 추천 수</strong>: 21 Upvotes</li>
+<li><strong>과제 데이터 수치</strong>:
+<ul>
+<li>원천 후보 트레이스 수 대비 최종 과제 수: 1,950개 후보 트레이스 → 270개 <code>Repo2RLEnvs</code> 과제 (학습용 230개, 평가 보류 40개)</li>
+<li>SmolDataEnvs 평가 보류 과제 수: 150개</li>
+<li>과제 유형 분포: <code>build</code> 253개(94%), <code>repair</code> 11개, <code>extend</code> 6개, <code>qa</code> 0개</li>
+<li>과제 난이도 분포 (<code>LFM2.5-24B-A2B</code> 기준): Easy 179개, Medium 61개, Hard 30개</li>
+</ul>
+</li>
+<li><strong>모델별 데이터 및 토큰 수치</strong>:
+<ul>
+<li><code>LFM2.5-24B-A2B</code>: 총 학습 과제 530개, 마이크로 배치 토큰 버짓 131,072 토큰</li>
+<li><code>LFM3-1.7B</code>: 총 학습 과제 780개, 마이크로 배치 토큰 버짓 65,536 토큰</li>
+<li><code>TwIL-8B</code>: 총 학습 과제 630개, 마이크로 배치 토큰 버짓 65,536 토큰</li>
+</ul>
+</li>
+<li><strong>컴퓨팅 인프라 및 비용</strong>:
+<ul>
+<li><code>LFM3-1.7B</code> 학습 인프라: 2×H200 GPU (HF Jobs)</li>
+<li><code>LFM2.5-24B-A2B</code> 및 <code>TwIL-8B</code> 학습 인프라: 4×H200 GPU (HF Jobs)</li>
+<li><code>LFM2.5-24B-A2B</code> 9개 체크포인트 평가 비용: 약 $5 (기존 전체 가중치 병합 서빙 추정 비용 $90 대비 94% 절감)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<ol>
+<li><strong>과제 유형의 극심한 불균형과 대안</strong>
+<ul>
+<li>공개 커뮤니티 세션 공유 문화가 1회성 코드 작성 요청에 치우쳐 있어 <code>repair</code>(11개) 및 <code>extend</code>(6개) 과제가 극히 적음. 이러한 데이터 편향을 극복하기 위해서는 에이전트 작동 과정에서 오류가 발생하고 해결되는 멀티 턴 세션 트레이스를 정제(<code>safeagents scrub</code>)하여 적극 공유하는 커뮤니티 차원의 대안이 필요함.</li>
+</ul>
+</li>
+<li><strong>실험적 모델(<code>TwIL-8B</code>) 성능 검증의 한계</strong>
+<ul>
+<li>에이전트 데이터로 사전 학습되지 않은 추론 모델인 <code>TwIL-8B</code>를 대상으로 강화학습 가능성을 확인하는 실험을 진행하였으나, 완결된 성과를 판정하기에는 한계가 존재함.</li>
+</ul>
+</li>
+<li><strong>선택적 판사(Judge) 모델 미사용</strong>
+<ul>
+<li><code>safeagents</code> 검증 3단계 체계인 LLM 기반 판사(Judge) 모델 기능은 본 연구의 실험 파이프라인에서 활성화하지 않고 탐구 대상에서 제외하였음.</li>
+</ul>
+</li>
+<li><strong>소속 및 세부 성능 수치의 소스 미기재</strong>
+<ul>
+<li>감사의 글에 명시된 외부 인원들의 상세 직함 및 일부 세부 평가 점수 수치는 원문 소스에 기술되지 않아 &quot;확인 불가&quot;로 남김.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

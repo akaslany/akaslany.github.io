@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stealing Reasoning Traces from Proprietary LLM APIs</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Stealing Reasoning Traces from Proprietary LLM APIs</h1>
+<p class="page-meta">PDF · 2026-08-12</p>
+<h2 id="요약">요약</h2>
+<p>일부 AI API의 비공개 추론 노출 연구를 검토하고, 맥락 결합과 공개 전 제거를 제안한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://stolen-thoughts.com/paper.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=YeqisQuGSy0">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="stealing-reasoning-traces-from-proprietary-llm-apis">Stealing Reasoning Traces from Proprietary LLM APIs</h3>
+<h4 id="암호화된-ai의-생각은-왜-다시-새어-나왔나-쉬운-풀이">암호화된 AI의 생각은 왜 다시 새어 나왔나 — 쉬운 풀이</h4>
+<blockquote>
+<p>이 보고서는 2026년 8월 10일 공개된 arXiv preprint v1을 원문으로 검토하고, Anthropic·Google·OpenAI의 공식 API 문서와 선행 공개 실험을 대조한 해설이다. 논문의 공격 절차를 재현하거나 실제 개인정보·자격증명을 공개하지 않고, 구조적 원인과 방어 원칙에 집중한다.</p>
+</blockquote>
+<h4 id="1-한-문장-요약">1. 한 문장 요약</h4>
+<p>이 논문은 AI 제공자가 암호화해 클라이언트에 맡긴 비공개 추론 기록이 당시 일부 시스템에서 세션·사용자·모델 경계를 충분히 강하게 묶지 않았고, 같은 제공자의 다른 모델이 그 기록을 평문처럼 재구성하도록 유도될 수 있었다고 보고한다.</p>
+<p>중요한 것은 이것이 암호 알고리즘 자체를 수학적으로 깬 사례가 아니라는 점이다. 금고 문을 부순 것이 아니라, 금고가 붙어 있어야 할 사람·방·기계의 표찰이 너무 느슨해서 다른 방의 기계가 그 금고를 정상 물건처럼 받아들였다는 설명에 가깝다.</p>
+<h4 id="2-왜-ai의-생각을-암호화해-클라이언트로-보내나">2. 왜 AI의 생각을 암호화해 클라이언트로 보내나</h4>
+<p>추론형 모델은 최종 답을 만들기 전에 내부적으로 많은 reasoning token을 사용한다. 이 원시 추론은 최종 답변이나 사용자에게 보이는 요약과 다르다. 제공자는 지식재산, 안전성, 개인정보 노출 문제 때문에 원시 chain-of-thought를 그대로 보여주지 않는다.</p>
+<p>그런데 API가 항상 모든 대화 상태를 서버에 저장하는 것은 아니다. stateless 또는 client-managed 대화에서는 클라이언트가 이전 응답의 상태를 다음 요청에 다시 전달해야 한다. 이때 비공개 추론을 평문으로 돌려주면 누구나 읽고 고칠 수 있으므로, 제공자는 암호화되거나 서명된 불투명 블록을 응답에 넣고 클라이언트가 다음 호출에서 그대로 반환하게 한다.</p>
+<p>이 구조 자체는 공식 문서로 확인된다.</p>
+<ul>
+<li>Anthropic 문서는 thinking block의 <code>signature</code>를 전체 추론의 암호화된 사본이라고 설명하고, 다중 턴 대화에서 변경하지 말고 되돌려 보내라고 한다.</li>
+<li>Google 문서는 thought signature를 내부 추론 상태의 암호화 표현이라고 정의하며, stateless 모드에서는 모든 thought block을 그대로 재전송해야 한다고 한다.</li>
+<li>OpenAI 문서는 reasoning token이 사용자에게 보이지 않지만 context와 상태 처리에 쓰이며, API가 암호화된 reasoning content를 다루는 경로를 제공한다고 설명한다.</li>
+</ul>
+<p>즉, “비공개 추론의 불투명한 상태를 클라이언트가 들고 있다가 반환한다”는 논문의 출발점은 확인된다. 다만 공식 문서가 이번 논문의 공격 성공이나 취약 범위를 공식 인정하는 보안 권고문은 아니다.</p>
+<h4 id="3-논문이-발견했다고-주장하는-핵심-약점">3. 논문이 발견했다고 주장하는 핵심 약점</h4>
+<p>암호화는 보통 두 가지를 지켜야 한다. 첫째, 내용이 읽히거나 바뀌지 않아야 한다. 둘째, 그 암호문이 사용될 <strong>맥락</strong>도 지켜야 한다. 예를 들어 A 고객의 A 대화에서 만들어진 상태라면 B 고객의 다른 대화나 더 약한 모델에서는 받아들여지지 않아야 한다.</p>
+<p>논문은 2026년 7월 초 시험한 여러 API에서 이 두 번째 경계가 충분히 엄격하지 않았다고 보고한다. 한 모델이 만든 encrypted reasoning block이 다른 세션, 사용자 또는 같은 제공자의 다른 모델로 이동할 수 있었고, 더 작고 안전장치가 약한 모델이 그 내용을 언어적으로 재구성하게 만들 수 있었다는 것이다.</p>
+<p>이것은 두 층의 문제가 겹친 결과다.</p>
+<ol>
+<li><strong>아키텍처 층:</strong> 불투명 블록의 account·session·model context binding이 약했다.</li>
+<li><strong>모델 층:</strong> 호환 가능한 decoder 모델이 주어진 내부 상태를 그대로 출력하지 말아야 한다는 안전 규칙을 안정적으로 지키지 못했다.</li>
+</ol>
+<p>따라서 단순히 암호화 알고리즘만 강하게 만드는 것으로는 충분하지 않다. 사용 맥락을 인증하고, 모델 간 이동을 제한하고, 모델 자체의 출력 정책도 보강해야 한다.</p>
+<h4 id="4-연구진은-무엇을-시험했나">4. 연구진은 무엇을 시험했나</h4>
+<p>연구진은 Anthropic, OpenAI, Google의 당시 reasoning API와 여러 모델 조합을 시험했다. 통제 실험에는 AIME 2025, Codeforces Open-R1 subset, Humanity’s Last Exam 문제가 사용됐다.</p>
+<p>핵심 추출 충실도 평가는 모델별 Codeforces 문제 120개를 기준으로 했다. 연구진은 API가 보고한 hidden-thinking token 수와, 복원된 텍스트를 다시 입력했을 때 계산되는 token 수를 비교했다. 여러 모델에서 점들이 대체로 1대1 선 가까이에 놓였고, 연구진은 이를 복원 내용이 원래 길이와 밀도를 잘 따라간다는 증거로 해석했다.</p>
+<p>하지만 이 결과를 “원문이 한 글자도 틀리지 않게 복호화됐다”라고 말하면 과장이다. 연구진 자신도 실제 ground-truth plaintext reasoning을 볼 수 없기 때문에 모든 토큰의 동일성을 완전히 검증할 수 없다고 적었다. token count의 밀접한 일치, 요약보다 훨씬 상세한 내용, 통제된 민감정보의 회수는 강한 간접 증거지만 암호학적 exact-match 증명은 아니다.</p>
+<h4 id="5-공개-에이전트-로그에서-나온-수치">5. 공개 에이전트 로그에서 나온 수치</h4>
+<p>연구진은 GitHub와 Hugging Face에 공개된 agent trajectory 6,708개를 수집했다. 이 안에서 불투명 reasoning block 315,320개를 재구성했다고 보고한다.</p>
+<p>두 단계 LLM 분류 파이프라인을 사용했다.</p>
+<ul>
+<li>1차 고재현율 분류가 27,165개 block을 잠재 후보로 표시했다.</li>
+<li>2차 분류 후 실제 artifact가 하나 이상 있다고 판단된 block은 1,028개였다.</li>
+<li>block 기준으로는 약 0.3%다.</li>
+<li>trajectory 기준으로는 328개, 약 4.9%가 하나 이상의 민감 항목을 포함했다고 보고한다.</li>
+</ul>
+<p>여기서 “0.3%밖에 안 된다”와 “4.9%나 된다”는 표현이 모두 가능하지만 분모가 다르다. 하나는 315,320개 block이 분모이고, 다른 하나는 6,708개 session이 분모다. 영상에서는 반드시 두 분모를 함께 설명해야 한다.</p>
+<h4 id="6-941개와-704개가-동시에-등장하는-이유">6. 941개와 704개가 동시에 등장하는 이유</h4>
+<p>논문 초록, 본문, 프로젝트 웹사이트의 숫자를 그대로 나열하면 서로 모순처럼 보인다. 실제로는 필터 단계와 benchmark 포함 여부가 다르다.</p>
+<h5 id="benchmark-포함-중복-제거-전체-941개">benchmark 포함, 중복 제거 전체: 941개</h5>
+<ul>
+<li>PII: 367</li>
+<li>technical identifiers: 363</li>
+<li>credentials: 182</li>
+<li>other: 29</li>
+</ul>
+<p>Figure 6은 headline 세 범주만 보여 367+363+182=912가 된다. 여기에 표에만 있는 other 29를 더하면 전체 941이다.</p>
+<h5 id="benchmark-제외-genuine-user-session-704개">benchmark 제외 genuine user session: 704개</h5>
+<ul>
+<li>PII: 204</li>
+<li>credentials: 126</li>
+<li>technical identifiers: 351</li>
+<li>other: 23</li>
+</ul>
+<p>이 704개 가운데 visible trace 어디에도 없고 reasoning에만 존재한 값은 64개였다고 보고한다. 즉 공개자가 평문만 지웠더라도 불투명 reasoning block이 남아 있으면 64개는 계속 노출될 수 있었다는 뜻이다.</p>
+<p>따라서 “367 PII와 182 credentials”는 benchmark 포함 집계이고, “704 genuine artifacts”는 benchmark를 제외한 실제 사용자 세션 집계다. 서로 다른 모집단을 섞어 하나의 피해 규모처럼 말하면 안 된다.</p>
+<h4 id="7-무엇이-위험한가">7. 무엇이 위험한가</h4>
+<p>논문은 네 가지 공격 표면을 제시한다.</p>
+<h5 id="7-1-비공개-추론과-모델-지식재산">7.1 비공개 추론과 모델 지식재산</h5>
+<p>고성능 모델의 내부 추론이 저가 모델을 통해 재구성된다면, 최종 답변만 수집하는 것보다 훨씬 풍부한 distillation 자료가 될 수 있다. 연구진은 이것이 anti-distillation 장치를 우회할 수 있다고 본다.</p>
+<p>그러나 복원된 reasoning이 실제 학습 효율을 얼마나 높이는지에 대한 대규모 downstream training 실험은 이 논문의 중심 검증이 아니다. “훔치면 즉시 같은 모델을 만들 수 있다”는 식의 확대 해석은 피해야 한다.</p>
+<h5 id="7-2-공개-로그와-개인정보">7.2 공개 로그와 개인정보</h5>
+<p>개발자는 agent 실행 기록을 디버깅이나 재현성을 위해 공개한다. 평문에서 key와 개인정보를 지웠더라도 함께 저장된 opaque reasoning field의 내용을 알 수 없으면 완전한 sanitization이 아니다.</p>
+<p>이 논문의 가장 실무적인 메시지는 간단하다. <strong>읽을 수 없는 필드라고 해서 안전한 필드는 아니다.</strong> 공개할 이유가 없는 encrypted reasoning, signature, opaque state block은 아예 제거해야 한다.</p>
+<h5 id="7-3-최종-답변에는-없는-위험-지식">7.3 최종 답변에는 없는 위험 지식</h5>
+<p>모델은 최종 출력에서 요청을 거부하더라도 내부 추론 과정에서는 위험한 세부사항을 고려할 수 있다. hidden trace가 노출되면 최종 답변 필터만으로는 보호되지 않는 정보가 나올 수 있다는 주장이다.</p>
+<p>이 보고서와 영상은 논문의 실제 위험 지식, 공격 프롬프트, 자격증명 예시를 재현하지 않는다. 교육 목적의 핵심은 구체적인 재현법이 아니라 “final answer moderation만으로 hidden state를 보호할 수 없다”는 설계 교훈이다.</p>
+<h5 id="7-4-보이지-않는-prompt-injection">7.4 보이지 않는 prompt injection</h5>
+<p>평문 검사기가 볼 수 없는 opaque block 안에 악성 지시가 들어가고, 다른 모델이 이를 자신의 이전 추론처럼 받아들인다면 장기 agent 작업이 오염될 수 있다. 이는 모델 간 호환성과 client-side state가 결합할 때 supply-chain risk가 될 수 있다.</p>
+<p>다만 이 역시 2026년 7월의 특정 모델·API 조합에서 수행된 저자 실험이다. 현재 모든 상용 모델이 같은 방식으로 취약하다고 일반화할 수 없다.</p>
+<h4 id="8-책임공개-후-지금은-안전한가">8. 책임공개 후 지금은 안전한가</h4>
+<p>논문은 공개 전에 주요 모델 제공자, Microsoft, Hugging Face에 취약점과 조사 결과를 전달했다고 적는다. 모든 모델 제공자가 보고서 수신을 확인했고, 이후 연구진이 같은 공격을 다시 실행할 수 없었다고 한다.</p>
+<p>하지만 표현을 조심해야 한다.</p>
+<ul>
+<li>확인된 사실: 저자들은 책임공개 후 자신들의 실험이 재현되지 않았다고 보고했다.</li>
+<li>확인되지 않은 부분: 제공자별 정확한 패치 방식, 영향받은 모델·기간, 모든 API 경로에서의 해결 범위.</li>
+<li>현재 확보한 공식 문서에는 이 논문을 특정한 CVE, 보안 권고 또는 상세 patch note가 없다.</li>
+</ul>
+<p>그러므로 결론은 “완전히 패치돼 걱정할 필요가 없다”가 아니다. 더 정확한 표현은 <strong>저자 실험에서는 책임공개 후 재현되지 않았지만, 공급자별 완전한 조치 범위는 공개 자료로 독립 확인되지 않았다</strong>이다.</p>
+<h4 id="9-연구의-중요한-한계">9. 연구의 중요한 한계</h4>
+<p>첫째, arXiv v1 preprint다. 아직 동료평가와 독립 재현 결과가 확인되지 않았다.</p>
+<p>둘째, 2026년 7월 초의 특정 API와 모델 snapshot에 국한된다. 클라우드 API는 조용히 바뀌기 때문에 결과의 유효기간이 짧다.</p>
+<p>셋째, ground-truth reasoning이 없어 추출 텍스트 전체의 exact fidelity를 증명할 수 없다. token count와 정성 사례는 간접 증거다.</p>
+<p>넷째, 공개 로그 조사는 포괄적 감사가 아닌 표적 표본이다. 공개 자료는 기업 내부 agent 사용과 성격이 다르므로 0.3%나 4.9%를 전체 시장 발생률로 외삽하면 안 된다.</p>
+<p>다섯째, privacy artifact 판정에 LLM-as-a-judge를 사용했다. 1차는 의도적으로 고재현율이라 오탐이 많고, 2차 분류의 완전한 수동 검증률과 오탐·미탐 추정치는 충분히 제시되지 않는다.</p>
+<p>여섯째, “이상한 문자열이 실제 유효한 credential인가”와 “민감한 형태의 값이 존재했다”는 다르다. 연구진은 보안상 값을 삭제했다고 밝혔기 때문에 독립 독자가 개별 항목을 다시 검증하기 어렵다. 이는 윤리적으로 타당하지만 재현성에는 제약을 만든다.</p>
+<h4 id="10-방어는-어떻게-설계해야-하나">10. 방어는 어떻게 설계해야 하나</h4>
+<h5 id="10-1-가장-즉시-가능한-조치-공유-전-제거">10.1 가장 즉시 가능한 조치: 공유 전 제거</h5>
+<p>agent transcript, API response dump, evaluation dataset, bug report를 공개할 때 다음 불투명 필드를 제거해야 한다.</p>
+<ul>
+<li>encrypted reasoning content</li>
+<li>thinking signature</li>
+<li>opaque thought block</li>
+<li>replay 가능한 provider state</li>
+<li>세션·응답 식별자와 불필요한 tool state</li>
+</ul>
+<p>평문 secret scanning만 통과했다고 안전 판정을 내려서는 안 된다.</p>
+<h5 id="10-2-account-session-model에-암호학적으로-묶기">10.2 account·session·model에 암호학적으로 묶기</h5>
+<p>암호문에 account ID, conversation ID, model ID, API version, 직전 문맥 hash 같은 정보를 인증된 associated data로 묶으면 다른 사용자·세션·모델로 옮겼을 때 검증을 거부할 수 있다.</p>
+<p>호환성이 필요한 모델 전환은 “어디든 허용”이 아니라 명시적 allowlist와 서버 측 변환으로 처리하는 편이 안전하다.</p>
+<h5 id="10-3-서버-측-상태와-짧은-수명">10.3 서버 측 상태와 짧은 수명</h5>
+<p>가능하다면 원시 reasoning payload를 클라이언트에 주지 않고, 서버가 상태를 보관한 뒤 클라이언트에는 무작위 ID만 주는 방식이 가장 직접적이다. 다만 저장 비용, zero-retention 요구, 데이터 거버넌스와 충돌할 수 있다.</p>
+<p>stateless 구조를 유지한다면 짧은 만료시간, 키 회전, 강제 revocation, one-time use 또는 replay counter 같은 통제가 필요하다.</p>
+<h5 id="10-4-이상행동-감시">10.4 이상행동 감시</h5>
+<p>서로 관련 없는 세션에서 같은 opaque block이 재사용되거나, 고성능 모델의 긴 trace가 저가 모델에 대량으로 전달되거나, 한 계정이 비정상적으로 많은 replay를 수행하면 탐지해야 한다.</p>
+<p>그러나 탐지는 보조 수단이다. 정상 사용과 공격을 완벽히 구분하기 어렵기 때문에 context binding을 대신할 수 없다.</p>
+<h5 id="10-5-모델-안전성은-마지막-방어선">10.5 모델 안전성은 마지막 방어선</h5>
+<p>decoder 모델이 자신의 내부 상태를 그대로 출력하지 않도록 학습하고 필터링하는 것도 필요하다. 하지만 더 약한 모델은 우회에 취약할 수 있고 모델 행동은 확률적이다. 암호학적·아키텍처 통제 없이 refusal만 믿어서는 안 된다.</p>
+<h4 id="11-개발자와-데이터-공개자가-오늘-적용할-체크리스트">11. 개발자와 데이터 공개자가 오늘 적용할 체크리스트</h4>
+<ol>
+<li>저장소와 데이터셋에서 reasoning·thinking·signature·encrypted content 필드를 검색한다.</li>
+<li>공개본에서는 값을 마스킹하는 것이 아니라 필드 자체를 제거한다.</li>
+<li>이미 공개한 agent trace가 있다면 과거 커밋과 release artifact까지 다시 점검한다.</li>
+<li>credential은 노출 여부가 불확실해도 회전하고 폐기한다.</li>
+<li>provider response 객체 전체를 로그로 남기지 말고 allowlist 방식으로 필요한 필드만 기록한다.</li>
+<li>multi-model handoff에서는 opaque state를 임의로 전달하지 않는다.</li>
+<li>보안 검토에서 visible answer뿐 아니라 hidden state의 수명·이동·폐기 정책을 별도 자산으로 다룬다.</li>
+</ol>
+<h4 id="12-최종-판단">12. 최종 판단</h4>
+<p>이 논문은 “암호화했으니 안전하다”는 단순한 믿음을 깨는 사례다. 암호문도 시스템 안에서는 하나의 권한 있는 상태이며, 누구의 어느 대화에서 어떤 모델이 언제 사용할 수 있는지까지 묶지 않으면 보호가 완성되지 않는다.</p>
+<p>연구 결과의 가장 강한 부분은 세 가지다.</p>
+<ul>
+<li>공식 API 구조와 일치하는 현실적인 client-side state 문제를 다룬다.</li>
+<li>통제 실험뿐 아니라 공개 agent log를 대규모로 조사해 실제 데이터 공유 관행과 연결한다.</li>
+<li>구조적 원인에 대응하는 context binding, state isolation, data-release hygiene를 제안한다.</li>
+</ul>
+<p>반대로 가장 조심해야 할 부분도 세 가지다.</p>
+<ul>
+<li>복원된 reasoning의 완전한 ground truth가 없다.</li>
+<li>privacy count는 LLM 분류와 표본 선택에 의존한다.</li>
+<li>책임공개 후 현재의 공급자별 취약·패치 상태는 공식 자료로 완전히 독립 확인되지 않는다.</li>
+</ul>
+<p>따라서 이 논문을 “현재 누구나 모든 AI의 생각을 훔칠 수 있다”로 소비하면 틀리다. 더 정확한 교훈은 다음과 같다.</p>
+<blockquote>
+<p><strong>불투명한 AI 상태도 민감정보다. 암호화만 하지 말고 맥락에 묶고, 짧게 살게 하고, 공유할 때는 제거하라.</strong></p>
+</blockquote>
+<h4 id="출처">출처</h4>
+<ul>
+<li>원문 PDF: https://stolen-thoughts.com/paper.pdf</li>
+<li>프로젝트 페이지: https://stolen-thoughts.com/</li>
+<li>arXiv: https://arxiv.org/abs/2608.09867</li>
+<li>Anthropic Thinking 공식 문서: https://platform.claude.com/docs/en/build-with-claude/thinking</li>
+<li>Google Gemini Thinking 공식 문서: https://ai.google.dev/gemini-api/docs/thinking#thought-signatures</li>
+<li>OpenAI Reasoning 공식 문서: https://developers.openai.com/api/docs/guides/reasoning</li>
+<li>Matthew Green 선행 공개 실험: https://blog.cryptographyengineering.com/2026/05/29/fooling-around-with-encrypted-reasoning-blobs/</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li></ul></section>
+</main>
+</body>
+</html>

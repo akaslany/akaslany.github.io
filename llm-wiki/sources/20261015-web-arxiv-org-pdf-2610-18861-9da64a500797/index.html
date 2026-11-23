@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[해설 보고서] 하이브리드 추론 에이전트(HybridAgent)의 구조와 성과 분석</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>[해설 보고서] 하이브리드 추론 에이전트(HybridAgent)의 구조와 성과 분석</h1>
+<p class="page-meta">논문 · 2026-10-15</p>
+<h2 id="요약">요약</h2>
+<p>[객관적 사실] 기존의 텍스트 기반 대형 언어 모델(LLM) 에이전트는 추론 연산과 외부 환경과의 상호작용을 모두 명시적인 이산 텍스트 토큰 생성에 의존합니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.18861">출처</a> · <a href="https://www.youtube.com/watch?v=EgVghH1mp6Y">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-하이브리드-추론-에이전트-hybridagent-의-구조와-성과-분석">[해설 보고서] 하이브리드 추론 에이전트(HybridAgent)의 구조와 성과 분석</h3>
+<hr />
+<h5 id="1-개요">1. 개요</h5>
+<p><strong>[객관적 사실]</strong>
+기존의 텍스트 기반 대형 언어 모델(LLM) 에이전트는 추론 연산과 외부 환경과의 상호작용을 모두 명시적인 이산 텍스트 토큰 생성에 의존합니다. 이로 인해 모든 중간 추론 과정을 토큰 단위로 디코딩해야 하여 심각한 연산 비효율성과 가파른 추론 비용이 발생합니다. 반면, 연속적인 은닉 공간(Continuous Hidden Space)에서 연산을 수행하는 기존 잠재 추론(Latent Reasoning) 모델들은 텍스트 디코딩을 생략함으로써 내부 추론 속도를 대폭 향상시키지만, 도구(Tool) 호출 및 외부 환경과의 직접적인 연동이 불가능하고, 내부 연속 벡터의 의미를 인간이 직관적으로 해석하거나 감사(Audit)하기 어렵다는 근본적인 한계를 지닙니다.</p>
+<p><strong>[소스의 주장]</strong>
+<code>HybridAgent</code>(하이브리드 추론 에이전트)는 단일 생성 과정(Single Generation Process) 내에서 연속적인 잠재 추론 공간과 명시적인 텍스트 기반 외부 환경 상호작용을 동적으로 전환하는 통합 아키텍처를 제시하여 이러한 난제를 해결합니다. 하이브리드 아키텍처의 핵심인 경량 어댑터 <code>HybridLink</code>는 마지막 레이어의 은닉 상태를 입력 임베딩 공간으로 매핑하여 잠재 모드 내 순환 추론을 가능하게 하며, 연속 작업 기억(<code>Working Memory</code>)은 다중 턴(<code>Multi-turn</code>) 환경 상호작용 전반에 걸쳐 텍스트, 잠재 생각, 도구 실행 결과를 정보 손실 없이 보존합니다.</p>
+<p><strong>[작성자 해석]</strong>
+하이브리드 추론 능력을 극대화하기 위해 전용 포스트 트레이닝 알고리즘인 <code>HybridSFT</code>(Self-Conditioned SFT)와 <code>HybridRL</code>(하이브리드 정책 강화학습)이 적용됩니다. <code>HybridSFT</code>는 자가 조건화 학습 구조를 통해 모델이 자신이 생성한 잠재 생각을 안정적으로 다루도록 보정하며, <code>HybridRL</code>은 잠재 추론과 텍스트 상호작용 간의 최적의 전환 시점을 스스로 학습시킵니다. 11개 주요 벤치마크 평가 결과, <code>HybridAgent</code>는 기존 텍스트 및 잠재 베이스라인 대비 평균 10.4%의 성능 향상을 기록하는 동시에 텍스트 토큰 사용량 35.5%~54.7% 감소, 추론 속도 1.8배~2.6배 향상, 연산 비용 2.7배~3.7배 절감 성과를 달성함으로써 성능과 효율성의 극적 절충을 가능하게 합니다.</p>
+<hr />
+<h5 id="2-주요-논점">2. 주요 논점</h5>
+<h6 id="2-1-하이브리드-아키텍처-및-연속-작업-기억-장치-hybridlink-working-memory">2.1. 하이브리드 아키텍처 및 연속 작업 기억 장치 (HybridLink &amp; Working Memory)</h6>
+<p><strong>[객관적 사실]</strong>
+<code>HybridAgent</code>는 잠재 모드와 텍스트 모드 간의 표현 방식 격차(Representation Mismatch)를 줄이기 위해 경량 어댑터 <code>HybridLink</code>($\mathcal{R}$)를 도입합니다. <code>HybridLink</code>는 마지막 레이어의 은닉 상태 $h_t$를 입력 임베딩 공간으로 매핑하는 2레이어 잔차 구조로, 수학적으로 다음과 같이 정의됩니다.
+$$\mathcal{R}(h_t) = h_t + W_2 \sigma(W_1 h_t)$$
+여기서 $W_1, W_2$는 선형 투영 행렬이며, $\sigma$는 GELU 활성화 함수입니다. 잔차 연결(Residual Connection)을 통해 $h_t$의 원래 의미론적 정보를 보존하면서 분포 차이만을 정렬하므로, 파라미터 규모는 4B 모델 기준 약 10M($2d_h^2$)으로 매우 경량화되어 있습니다.</p>
+<p><strong>[소스의 주장]</strong></p>
+<ul>
+<li><strong>동적 모드 전환 메커니즘</strong>: 텍스트 모드에서 모델은 일반적인 토큰 생성을 수행하다가 앵커 토큰인 <code>&lt;latent&gt;</code>를 생성하면 잠재 모드로 진입합니다. 잠재 모드에서는 언어 모델 헤드(LM Head)와 토큰 임베딩 레이어 대신 <code>HybridLink</code>를 거쳐 생성된 연속 벡터를 다음 입력으로 직접 재사용합니다. 잠재 모드의 종료는 은닉 상태의 <code>HybridLink</code> 투영 결과와 가장 가까운 단어집(Vocabulary) 토큰을 최우선 코사인 유사도로 검증할 때 <code>&lt;/latent&gt;</code> 앵커 토큰이 도출되는 시점에 동적으로 결정됩니다.
+$$\text{argmax}_{v \in \mathcal{V}} \cos(\mathcal{R}(h_t), \text{Emb}(v)) = \text{&lt;/latent&gt;}$$</li>
+<li><strong>손실 없는 다중 턴 연속 작업 기억 장치 ($\mathcal{M}$)</strong>: 정리 A.1(Theorem A.1, Lossless Multi-Turn Working Memory)에 따르면, 텍스트 토큰, 잠재 벡터, 도구 실행 반응으로 구성된 하이브리드 궤적의 키-값(KV) 엔트리를 연속 작업 기억장치($\mathcal{M}$)에 누적 보존합니다. 이 방식은 잠재 생각을 텍스트로 재구성하는 불필요한 과정 없이 다중 턴 환경 상호작용 간 하이브리드 문맥을 정보 손실 없이 완벽하게 유지합니다.</li>
+</ul>
+<p><strong>[작성자 해석]</strong>
+<code>HybridLink</code>의 잔차 구조는 매 단계 정밀한 벡터 매핑을 수행하면서도 연산 오버헤드를 극단적으로 낮춥니다. 또한 기존 잠재 모델이 다중 턴 대화 시 연속 표현을 이산 텍스트로 환원하는 과정에서 발생하던 심각한 정보 왜곡 및 손실 문제를 'KV 캐시 수준의 연속 작업 기억'으로 일체화하여 완벽히 해결한 점에 핵심적인 기술적 의의가 있습니다.</p>
+<p><strong>[표: 텍스트 모드 vs. 잠재 모드 특성 비교]</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">텍스트 모드 vs. 잠재 모드 세부 특성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>생성 매체</strong></td>
+<td style="text-align:left"><strong>[텍스트]</strong> 이산적 언어 토큰 (Discrete Text Tokens)&lt;br&gt;<strong>[잠재]</strong> 연속적 은닉 상태 벡터 (Continuous Hidden Vectors)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 역할</strong></td>
+<td style="text-align:left"><strong>[텍스트]</strong> 외부 환경 상호작용(도구 호출), 최종 답변 출력, 감사 가능성 확보&lt;br&gt;<strong>[잠재]</strong> 내부 고속 추론, 깊은 연산(Deep Thinking) 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>입력 방식</strong></td>
+<td style="text-align:left"><strong>[텍스트]</strong> 토큰 임베딩 함수 $\text{Emb}(y_{t+1})$ 사용&lt;br&gt;<strong>[잠재]</strong> <code>HybridLink</code> 투영 출력 $\mathcal{R}(h_t)$ 직접 재입력</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>진입 조건</strong></td>
+<td style="text-align:left"><strong>[텍스트]</strong> 일반 텍스트 생성 흐름 및 외부 환경 반응 수신 시&lt;br&gt;<strong>[잠재]</strong> <code>&lt;latent&gt;</code> 앵커 토큰 생성 시</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>종료 조건</strong></td>
+<td style="text-align:left"><strong>[텍스트]</strong> <code>&lt;latent&gt;</code> 토큰 생성 또는 턴 종료 시&lt;br&gt;<strong>[잠재]</strong> 은닉 상태 투영 결과의 코사인 유사도 상 <code>&lt;/latent&gt;</code> 도출 시</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h6 id="2-2-전용-포스트-트레이닝-파이프라인-hybridsft-및-hybridrl">2.2. 전용 포스트 트레이닝 파이프라인 (HybridSFT 및 HybridRL)</h6>
+<p><strong>[객관적 사실]</strong>
+기존 교사 강제(Teacher-forcing) 학습 방식은 모델에게 정답(Ground-truth) 임베딩만을 입력으로 제공합니다. 그러나 자율 생성 추론(Inference) 시에는 모델 자신이 <code>HybridLink</code>로 만든 예측 벡터 $\mathcal{R}(h)$를 다음 입력으로 재입력받으므로, 오차가 연속 공간에서 오차 복원 없이 누적되는 학습-추론 불일치(노출 편향, Exposure Bias)가 발생합니다. <code>HybridSFT</code>는 이를 해결하기 위해 2-Pass 자가 조건화(Self-Conditioned) 구조를 도입했습니다. 1차 패스(Teacher-forced)에서 <code>HybridLink</code>가 한 단계 앞선 잠재 입력을 예측하고, 2차 패스(Self-conditioned)에서는 정답 임베딩 대신 1차 패스에서 생성된 자가 잠재 입력을 사용하여 텍스트 위치에는 교차 엔트로피(CE) 손실을, 잠재 위치에는 회귀(Regression) 손실을 적용하여 공동 학습시킵니다.</p>
+<p><code>HybridSFT</code>의 Warm-start 활성화 단계에서 사용되는 <code>HybridLink</code> 손실 함수는 다음과 같이 정의됩니다:
+$$\mathcal{L}<em>{\text{HybridLink}} = \lambda</em>{\text{cos}}(1 - \cos(\mathcal{R}(h_{\text{lat}}), \text{Emb}(y_{\text{lat}}))) + \lambda_{\text{mse}}|\mathcal{R}(h_{\text{lat}}) - \text{Emb}(y_{\text{lat}})|<em>2^2$$
+그리고 전체 <code>HybridSFT</code> 2-Pass 학습 손실 함수는 다음과 같습니다:
+$$\mathcal{L}</em>{\text{HybridSFT}} = \mathcal{L}<em>{\text{Backbone}} + \mathcal{L}</em>{\text{HybridLink}}$$</p>
+<p><strong>[소스의 주장]</strong></p>
+<ul>
+<li><strong>자동 데이터 큐레이션 파이프라인 (Appendix E)</strong>: 54,000개(54K) 하이브리드 궤적을 구축하기 위해 4단계 자동 파이프라인(단계 분할, 모드 할당, 시각성 감사, 하이브리드 궤적 생성)을 적용합니다. 특히, LLM Expert의 판단과 베이스 모델의 예측 엔트로피($H_s$)를 결합하여 고신뢰도 추론 단계를 잠재 모드로 할당하고, 독립된 LLM Critic에 의한 '시각성 감사(Visibility Audit)'를 통해 핵심 결정 단계를 텍스트 모드로 복원 보존합니다.</li>
+<li><strong>하이브리드 정책 인수분해 (Hybrid Policy Factorization, Proposition 4.1)</strong>: 잠재 모드에서는 토큰 확률값이 존재하지 않아 강화학습의 중요도 샘플링 비율($\rho_t$)을 정의할 수 없습니다. 연구진은 하이브리드 궤적 $\tau$의 전체 확률 정책이 샘플링된 텍스트 위치 $\mathcal{T}$의 조건부 확률 곱으로 완전히 인수분해됨을 증명했습니다.
+$$\pi_\theta(\tau | x) = \prod_{t \in \mathcal{T}} \pi_\theta(y_t | x, \tau_{&lt;t})$$</li>
+<li><strong>정확한 롤아웃 리플레이 (Exact Rollout Replay) 및 보상 구조</strong>: 롤아웃 단계에서 기록된 잠재 벡터와 도구 관찰값을 고정한 채 단일 미분 가능 패스로 단어 확률만을 재계산합니다. 보상 함수는 정답 정확도($r_{\text{correct}}$), 포맷 준수($r_{\text{format}}$), 다중 도구 활용 촉진($r_{\text{tool}}$)의 합으로 구성되며, 모드 선택 자체에 대한 인위적인 보상 형성을 배제함으로써 모델이 정답률 극대화를 위해 잠재 추론과 텍스트 상호작용의 균형을 자율적으로 학습하도록 유도합니다.</li>
+</ul>
+<p><strong>[작성자 해석]</strong>
+<code>HybridSFT</code>의 2-Pass 자가 조건화는 연속 공간 상의 미세한 예측 편차 오차가 연쇄적으로 증폭되는 노출 편향 현상을 미분 가능한 형태로 완화시켰습니다. 또한 <code>HybridRL</code>에서 모드 선택 보상을 제거하고 정확도와 도구 활용 결과에만 보상을 부여한 점은, 모델이 인위적 편향 없이 최적의 연산 경로(텍스트 관찰 vs 잠재 고속 연산)를 스스로 탐색하여 도출하도록 만든 매우 뛰어난 강화학습 설계입니다.</p>
+<hr />
+<h6 id="2-3-성능-및-효율성-평가-결과">2.3. 성능 및 효율성 평가 결과</h6>
+<p><strong>[객관적 사실]</strong>
+Qwen3-Base(4B, 8B, 14B)를 기반으로 11개 주요 벤치마크 평가를 수행한 상세 결과는 다음과 같습니다.</p>
+<ul>
+<li><strong>성능 향상 폭</strong>: 기존 텍스트 및 잠재 베이스라인 대비 평균 10.4% 성능 향상 (14B 모델 기준 기존 최상위 에이전트 베이스라인 대비 평균 17.4% 향상).</li>
+<li><strong>토큰 사용량 감소</strong>: 텍스트 토큰 사용량 35.5%~54.7% 감소 (전체 평균 텍스트 토큰 2.7배 감소).</li>
+<li><strong>생성 단계 단축</strong>: 전체 생성 단계(Step) 최대 54% 단축.</li>
+<li><strong>추론 속도 향상</strong>: 벽시계 시간(Wall-clock time) 기준 1.8배~2.6배 (전체 스케일 평균 2.1배, 샘플당 평균 63초 vs 134초) 빠른 추론.</li>
+<li><strong>연산 비용 절감</strong>: 총 연산 비용 2.7배~3.7배 절감.</li>
+</ul>
+<p><strong>[작성자 해석]</strong>
+동일한 모델 스케일 및 학습 예산 하에서 <code>HybridAgent</code>가 달성한 압도적인 성과는, 잠재 추론이 단순한 토큰 절약 수단에 그치지 않고 표면적 텍스트 디코딩 제약에서 벗어나 연산 유연성을 극대화함으로써 표현력을 획기적으로 확장함을 증명합니다.</p>
+<p><strong>[표 1: 수학 및 지식 탐색 벤치마크 평가 결과 (정확도 %)]</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 및 방법론</th>
+<th style="text-align:center">AIME25</th>
+<th style="text-align:center">AIME26</th>
+<th style="text-align:center">MATH500</th>
+<th style="text-align:center">GPQA-D</th>
+<th style="text-align:center">MedQA</th>
+<th style="text-align:center">MuSiQue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>8B-Scale Methods</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Coconut (Latent)</td>
+<td style="text-align:center">13.1</td>
+<td style="text-align:center">9.6</td>
+<td style="text-align:center">51.4</td>
+<td style="text-align:center">26.8</td>
+<td style="text-align:center">61.7</td>
+<td style="text-align:center">14.0</td>
+</tr>
+<tr>
+<td style="text-align:left">SoftCoT (Latent)</td>
+<td style="text-align:center">16.5</td>
+<td style="text-align:center">17.9</td>
+<td style="text-align:center">63.6</td>
+<td style="text-align:center">28.9</td>
+<td style="text-align:center">62.0</td>
+<td style="text-align:center">19.5</td>
+</tr>
+<tr>
+<td style="text-align:left">Standard Text SFT</td>
+<td style="text-align:center">30.0</td>
+<td style="text-align:center">28.3</td>
+<td style="text-align:center">78.2</td>
+<td style="text-align:center">32.3</td>
+<td style="text-align:center">69.7</td>
+<td style="text-align:center">23.5</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HybridAgent (SFT)</strong></td>
+<td style="text-align:center"><strong>30.8</strong></td>
+<td style="text-align:center"><strong>29.2</strong></td>
+<td style="text-align:center"><strong>78.4</strong></td>
+<td style="text-align:center"><strong>31.8</strong></td>
+<td style="text-align:center"><strong>70.0</strong></td>
+<td style="text-align:center"><strong>26.5</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">GRPO (Text Agent)</td>
+<td style="text-align:center">36.3</td>
+<td style="text-align:center">39.4</td>
+<td style="text-align:center">82.0</td>
+<td style="text-align:center">43.9</td>
+<td style="text-align:center">74.3</td>
+<td style="text-align:center">27.5</td>
+</tr>
+<tr>
+<td style="text-align:left">ARPO (Text Agent)</td>
+<td style="text-align:center">37.1</td>
+<td style="text-align:center">41.5</td>
+<td style="text-align:center">82.8</td>
+<td style="text-align:center">46.5</td>
+<td style="text-align:center">74.7</td>
+<td style="text-align:center">28.5</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HybridAgent (RL)</strong></td>
+<td style="text-align:center"><strong>39.2</strong></td>
+<td style="text-align:center"><strong>43.3</strong></td>
+<td style="text-align:center"><strong>84.6</strong></td>
+<td style="text-align:center"><strong>48.0</strong></td>
+<td style="text-align:center"><strong>75.3</strong></td>
+<td style="text-align:center"><strong>32.0</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>14B-Scale Methods</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Coconut (Latent)</td>
+<td style="text-align:center">16.3</td>
+<td style="text-align:center">15.2</td>
+<td style="text-align:center">61.2</td>
+<td style="text-align:center">29.3</td>
+<td style="text-align:center">65.3</td>
+<td style="text-align:center">17.5</td>
+</tr>
+<tr>
+<td style="text-align:left">SoftCoT (Latent)</td>
+<td style="text-align:center">22.7</td>
+<td style="text-align:center">23.8</td>
+<td style="text-align:center">74.0</td>
+<td style="text-align:center">36.4</td>
+<td style="text-align:center">67.7</td>
+<td style="text-align:center">20.0</td>
+</tr>
+<tr>
+<td style="text-align:left">Standard Text SFT</td>
+<td style="text-align:center">30.8</td>
+<td style="text-align:center">31.7</td>
+<td style="text-align:center">83.8</td>
+<td style="text-align:center">43.9</td>
+<td style="text-align:center">78.0</td>
+<td style="text-align:center">28.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HybridAgent (SFT)</strong></td>
+<td style="text-align:center"><strong>32.5</strong></td>
+<td style="text-align:center"><strong>31.7</strong></td>
+<td style="text-align:center"><strong>84.2</strong></td>
+<td style="text-align:center"><strong>45.5</strong></td>
+<td style="text-align:center"><strong>78.7</strong></td>
+<td style="text-align:center"><strong>29.5</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">GRPO (Text Agent)</td>
+<td style="text-align:center">40.8</td>
+<td style="text-align:center">42.5</td>
+<td style="text-align:center">87.4</td>
+<td style="text-align:center">52.5</td>
+<td style="text-align:center">81.0</td>
+<td style="text-align:center">32.0</td>
+</tr>
+<tr>
+<td style="text-align:left">ARPO (Text Agent)</td>
+<td style="text-align:center">42.1</td>
+<td style="text-align:center">43.3</td>
+<td style="text-align:center">87.0</td>
+<td style="text-align:center">54.0</td>
+<td style="text-align:center">80.3</td>
+<td style="text-align:center">31.5</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HybridAgent (RL)</strong></td>
+<td style="text-align:center"><strong>43.3</strong></td>
+<td style="text-align:center"><strong>45.8</strong></td>
+<td style="text-align:center"><strong>88.2</strong></td>
+<td style="text-align:center"><strong>55.1</strong></td>
+<td style="text-align:center"><strong>81.7</strong></td>
+<td style="text-align:center"><strong>34.5</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>[표 2: 에이전트 추론 벤치마크 평가 결과 (주요 지표 %)]</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 및 방법론</th>
+<th style="text-align:center">GAIA (Avg)</th>
+<th style="text-align:center">WebWalker (Avg)</th>
+<th style="text-align:center">HLE (Avg)</th>
+<th style="text-align:center">SealQA (Hard)</th>
+<th style="text-align:center">DSQA (Acc)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>8B-Scale Methods</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Coconut (Latent)</td>
+<td style="text-align:center">3.9</td>
+<td style="text-align:center">0.5</td>
+<td style="text-align:center">1.2</td>
+<td style="text-align:center">1.6</td>
+<td style="text-align:center">1.7</td>
+</tr>
+<tr>
+<td style="text-align:left">SoftThinking (Latent)</td>
+<td style="text-align:center">14.6</td>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">4.0</td>
+<td style="text-align:center">3.9</td>
+<td style="text-align:center">2.3</td>
+</tr>
+<tr>
+<td style="text-align:left">GRPO (Text Agent)</td>
+<td style="text-align:center">32.0</td>
+<td style="text-align:center">30.0</td>
+<td style="text-align:center">7.8</td>
+<td style="text-align:center">23.6</td>
+<td style="text-align:center">17.3</td>
+</tr>
+<tr>
+<td style="text-align:left">ARPO (Text Agent)</td>
+<td style="text-align:center">38.8</td>
+<td style="text-align:center">32.0</td>
+<td style="text-align:center">8.8</td>
+<td style="text-align:center">26.0</td>
+<td style="text-align:center">18.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HybridAgent (8B)</strong></td>
+<td style="text-align:center"><strong>43.7</strong></td>
+<td style="text-align:center"><strong>42.5</strong></td>
+<td style="text-align:center"><strong>14.4</strong></td>
+<td style="text-align:center"><strong>35.8</strong></td>
+<td style="text-align:center"><strong>20.0</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>14B-Scale Methods</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Coconut (Latent)</td>
+<td style="text-align:center">6.8</td>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">4.2</td>
+<td style="text-align:center">2.8</td>
+<td style="text-align:center">2.0</td>
+</tr>
+<tr>
+<td style="text-align:left">SoftThinking (Latent)</td>
+<td style="text-align:center">15.5</td>
+<td style="text-align:center">5.5</td>
+<td style="text-align:center">5.2</td>
+<td style="text-align:center">6.3</td>
+<td style="text-align:center">5.7</td>
+</tr>
+<tr>
+<td style="text-align:left">GRPO (Text Agent)</td>
+<td style="text-align:center">36.9</td>
+<td style="text-align:center">38.5</td>
+<td style="text-align:center">8.6</td>
+<td style="text-align:center">24.4</td>
+<td style="text-align:center">18.6</td>
+</tr>
+<tr>
+<td style="text-align:left">ARPO (Text Agent)</td>
+<td style="text-align:center">43.7</td>
+<td style="text-align:center">40.5</td>
+<td style="text-align:center">10.0</td>
+<td style="text-align:center">22.8</td>
+<td style="text-align:center">16.3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HybridAgent (14B)</strong></td>
+<td style="text-align:center"><strong>52.4</strong></td>
+<td style="text-align:center"><strong>49.5</strong></td>
+<td style="text-align:center"><strong>16.0</strong></td>
+<td style="text-align:center"><strong>37.8</strong></td>
+<td style="text-align:center"><strong>21.7</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h6 id="2-4-잠재-모드의-인과적-의존성-및-텍스트-모드의-감사-가능성-auditability">2.4. 잠재 모드의 인과적 의존성 및 텍스트 모드의 감사 가능성 (Auditability)</h6>
+<p><strong>[객관적 사실]</strong>
+연구진은 MATH500 데이터셋에서 잠재 벡터에 인과적 개입(Causal Intervention)을 가하는 실험을 수행했습니다 (Table 5 참조).</p>
+<ul>
+<li><strong>노이즈 주입 / 무작위 교체</strong>: 가우시안 노이즈 주입($\sigma=2.0$) 시 정확도가 84.6%에서 66.4%(8B 기준)로 하락했으며, 다른 문제의 잠재 벡터로 교체(Cross-problem Replacement) 시 정확도가 44.8%(8B) / 48.6%(14B)로 급감했습니다.</li>
+<li><strong>순서 치환 및 1단계 제한</strong>: 블록 내 순서 치환(Permutation)이나 잠재 연산을 1단계로 제한할 경우에도 13.4%~15.0%의 성능 저하가 발생했습니다. 이는 모델이 잠재 벡터의 수식적 단순 형태가 아닌 실제 정교한 인과적 의미 정보에 의존함을 입증합니다.</li>
+</ul>
+<p><strong>[소스의 주장]</strong>
+텍스트 모드의 노출 토큰 수가 43%~49% 줄어들었음에도 불구하고 100 토큰당 핵심 추론 단계 비중은 오히려 높아져(0.72~0.86 vs 기존 0.57~0.67), 외부 감사 가능성(Auditability)이 완벽히 유지됩니다 (Table 7 참조).</p>
+<ul>
+<li><strong>외부 모니터링</strong>: 외부 감시 모델(GPT-4o-mini, GPT-5.6-Luna)을 통한 정답 예측 성능(AUROC)이 0.840~0.989로 기존 텍스트 에이전트 수준을 유지했습니다.</li>
+<li><strong>디버깅 및 오류 특정</strong>: 오류가 발생한 첫 번째 위치를 정확히 찾아내는 비율이 98.1%~99.2%에 달하며, 오류 진단 일치율도 97.2%~97.6%를 기록했습니다.</li>
+</ul>
+<p><strong>[작성자 해석]</strong>
+인과적 개입 실험은 잠재 생각이 단순한 빈 연산 공간이 아닌 의미 있는 정보 처리 과정임을 실증하며, 텍스트 모드의 높아진 정보 밀도는 내부 생각을 잠재 모드로 숨김으로써 발생하는 블랙박스 위험을 완전히 제거하여 안전한 실전 배치를 가능하게 만듭니다.</p>
+<hr />
+<h5 id="3-등장-인물-및-역할-persons-speakers">3. 등장 인물 및 역할 (Persons &amp; Speakers)</h5>
+<p><strong>[객관적 사실]</strong></p>
+<ul>
+<li><strong>프로젝트 리더 (Project Lead)</strong>: Jiaru Zou (Stanford University, Together AI)</li>
+<li><strong>핵심 기여 자 (Core Contributors)</strong>: Yunzhe Qi (UIUC, Meta), Sirui Chen (UIUC)</li>
+<li><strong>공동 저자</strong>: Federico Bianchi (Together AI), Shang Zhu (Together AI), Pan Lu (Stanford University), Jingrui He (UIUC), James Zou (Stanford University, Together AI - 교신저자: <code>jiaru@stanford.edu</code>, <code>jamesz@stanford.edu</code>)</li>
+<li><strong>참여 기관</strong>: Stanford University, Together AI, UIUC, Meta</li>
+<li><strong>발표자 / 인터뷰이 / 방송 진행자 등</strong>: 해당 없음</li>
+</ul>
+<hr />
+<h5 id="4-주요-수치-및-시점-정리-key-figures-timeframes">4. 주요 수치 및 시점 정리 (Key Figures &amp; Timeframes)</h5>
+<p><strong>[객관적 사실]</strong></p>
+<ul>
+<li><strong>기반 모델 및 스케일</strong>: Qwen3-Base (4B, 8B, 14B 스케일)</li>
+<li><strong>학습 데이터 규모</strong>:
+<ul>
+<li><code>HybridSFT</code>: 자동 큐레이션 파이프라인으로 구축된 하이브리드 궤적 54,000개 (54K)</li>
+<li><code>HybridRL</code>: 심층 추론 예제 12,000개 (12K), 에이전트 검색 예제 1,000개 (1K)</li>
+</ul>
+</li>
+<li><strong>스케일별 효율성 수치 세부 정리</strong>:
+<ul>
+<li><strong>4B 스케일</strong>: 텍스트 토큰 사용량 35% 감소, 전체 단계 중 잠재 단계 비율 29%</li>
+<li><strong>8B 스케일</strong>: 텍스트 토큰 사용량 52% 감소, 전체 단계 중 잠재 단계 비율 37%</li>
+<li><strong>14B 스케일</strong>: 텍스트 토큰 사용량 54% 감소, 전체 단계 중 잠재 단계 비율 35%</li>
+</ul>
+</li>
+<li><strong>전체 정량 지표</strong>:
+<ul>
+<li>텍스트 토큰 사용량: 2.7배 감소 (35.5%~54.7% 절감)</li>
+<li>생성 단계(Step) 감소: 최대 54% 단축</li>
+<li>추론 속도(Wall-clock Time): 1.8배~2.6배 (전체 평균 2.1배) 속도 향상 (샘플당 63초 vs 134초)</li>
+<li>연산 비용: 2.7배~3.7배 절감</li>
+</ul>
+</li>
+<li><strong>에이전트 실행 제약 조건</strong>: 궤적당 도구 호출 횟수 최대 10회 제한, 검색 쿼리당 상위 10개(Top-10) 스니펫 수집</li>
+<li><strong>논문 등록 시점 및 출처</strong>: arXiv 프리프린트 (등록 번호: <code>arxiv.org/abs/2610.18861</code>)</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<p><strong>[확인 불가 / 한계점]</strong>
+현재 상용 서빙 엔진(Serving Engines)이 다중 턴 하이브리드 생성을 직접 지원하지 않기 때문에, 연구진이 서빙 및 트레이닝 인프라를 직접 확장하여 텍스트-잠재-도구 전환 및 KV 작업 기억 지속성 평가를 진행해야 했습니다.</p>
+<p><strong>[소스가 다루지 않은 내용]</strong>
+실제 상용 멀티 에이전트 서비스 환경에서의 실시간 보안 검증, 엔드포인트 사용자 입력과의 직접적인 인터랙티브 UI 구현 방식은 본 논문의 범위에 포함되지 않았습니다.</p>
+<p><strong>[불확실성 표시]</strong>
+잠재 모드의 블랙박스 특성은 유사도 기반 토큰 매핑(Pseudo-text)을 통해 시각화 및 검증되었으나, 극도로 복잡하고 비선형적인 잠재 추론 단계에서의 모든 미세한 뉘앙스가 텍스트 언어로 100% 정보 손실 없이 환원 가능한지 여부는 논문 내에 명시되지 않았습니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

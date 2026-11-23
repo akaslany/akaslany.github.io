@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perplexity and Intelligence | OpenAI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Perplexity and Intelligence | OpenAI</h1>
+<p class="page-meta">웹 · 2026-11-23</p>
+<h2 id="요약">요약</h2>
+<p>OpenAI의 로그 혼잡도 측정 결과와 사전훈련 가속 전망, 업계 공통 안전 제한선 제안을 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://openai.com/index/perplexity-and-intelligence">출처</a> · <a href="https://www.youtube.com/watch?v=SLhe5bBo5Co">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai의-perplexity-and-intelligence-아티클-분석-및-해설-보고서">OpenAI의 'Perplexity and Intelligence' 아티클 분석 및 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 2026년 11월 22일 OpenAI의 수석 과학자(Chief Scientist) 야쿠프 파초츠키(Jakub Pachocki)가 발표한 아티클 *&quot;Perplexity and Intelligence&quot;*를 바탕으로 작성된 기술 분석 리포트입니다. 본 아티클의 작성 목적은 OpenAI 내부의 사전훈련(Pretraining) 진보 과정을 외부에 투명하게 공개하고, 프론티어 AI 개발사 간에 모델의 지능 발전 수준 및 안전 통제 가능성을 비교할 수 있는 공통 지표로서 '혼잡도(Perplexity, 교차 엔트로피 손실)'를 제시하며, 이 수치에 기반한 업계 공통 안전 표준 및 제한선(Common Limits) 설정을 제안하는 데 있습니다.</p>
+<p>현대 AI 개발을 바라보는 본 아티클의 시각에 따르면, AI 개발의 핵심은 개별 기능을 구현하기 위한 파편화된 기법 설계가 아니라 대규모 데이터셋을 바탕으로 단어 예측기, 즉 '압축기(Compressor)'를 사전훈련하여 공통 지능 기반(Intelligence Substrate)을 구축하는 것입니다. 소스의 각주 1(Footnote 1)에 명시된 기술적 정의에 따르면, 여기서의 압축기 개념은 GZIP과 같이 기존 데이터셋을 단순 기억(remember)하고 있는 파일 형태의 압축 결과물(compressed artifact)이 아니라, 보지 않은 데이터(unseen data)를 정확하게 예측함으로써 압축을 수행하는 동적 모델을 의미합니다. 이러한 사전훈련 단계를 거친 후 프롬프팅, 파인튜닝, 강화학습(RL) 등을 통해 모델 내부에 잠재된 능력(Latent capabilities)을 이끌어내는(Elicitation) 2단계 구조가 현대 AI 개발의 본질로 서술되며, '혼잡도(Perplexity)' 및 '로그 혼잡도(Log-perplexity)'가 일반 지능의 지속적 발전을 측정하는 최고 수준의 핵심 지표로 평가됩니다.</p>
+<p>아울러, AI 모델이 사전훈련 알고리즘 연구 프로세스 자체에 직접 참여(자동화 기여)함에 따라 수학 난제 해결을 시작으로 심층학습(Deep Learning) 연구 전반의 속도가 급속히 가속화될 것으로 전망됩니다. 그러나 이에 비례하여 기존 정렬 감시(Alignment auditing) 기법의 실효성이 저하되고 모델의 평가 및 훈련 인지(Evaluation and training awareness) 능력이 상승하는 안전 위험이 동반됩니다. 이에 소스는 주요 변혁적 능력이 출현하는 로그 혼잡도 임계값에 도달하기 전, 통제 및 감시 모니터링 기술(예: CoT 모니터 후속 기술)이 완비될 때까지 프론티어 AI 개발을 일시 정지하거나 자율적으로 통제하는 업계 공통 제한선(Common Limits) 및 공유 안전 프레임워크 구축의 시급성을 강조합니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-cases">2. 주요 논점 (Key Arguments &amp; Cases)</h4>
+<h5 id="2-1-논점-1-현대-ai-개발의-본질과-혼잡도-perplexity-지표의-중요성">2.1. 논점 1: 현대 AI 개발의 본질과 혼잡도(Perplexity) 지표의 중요성</h5>
+<ul>
+<li><strong>근거 (Arguments):</strong> 현대 AI 개발은 특정 하위 기능을 겨냥한 소프트웨어 기법의 개별적 설계가 아니라, 대규모 unstructured 데이터셋을 기반으로 압축기(예측기)를 훈련시키는 단일하고 거대한 과정입니다. 소스 각주 1에 명시된 바와 같이, 이때 압축기는 데이터 내용을 그대로 기억하는 GZIP과 같은 압축 결과물(artifact)이 아닌, 학습 시 보지 못한 데이터를 예측하는 성능을 통해 압축을 수행하는 주체입니다. 이 압축 정확도를 뜻하는 '로그 혼잡도(Log-perplexity)'는 사전에 예측하기 어려웠던 미지의 잠재 능력(Emergent Latent Capabilities)의 발현을 지배하는 핵심 지표로 작용합니다.</li>
+<li><strong>사례 및 지표 (Examples/Data):</strong>
+<ul>
+<li><strong>GPT-2:</strong> 고전 데이터셋에서 새로운 혼잡도 최고 수준(SOTA)을 달성하며 일관된 단락 텍스트 형성 능력 확보.</li>
+<li><strong>GPT-3:</strong> 제시된 소수의 예시만으로 문맥 내 학습(In-context learning) 수행.</li>
+<li><strong>GPT-3.5:</strong> OpenAI 내부 코드기반 평가 데이터셋 기준 로그 혼잡도 <code>~0.99</code> 달성, 유창한 대화 능력(Fluent conversation) 확보 및 초기 ChatGPT의 기반 구축.</li>
+<li><strong>GPT-4:</strong> 로그 혼잡도 <code>~0.91</code> 달성, 답변 전 생각하기 단계의 효과 발현(Benefits from thinking before answering) 및 생각의 사슬(CoT) 추론의 생산적 활용.</li>
+<li><strong>손실 0.8 미만 구간:</strong> 사이버보안 전문 능력(Cybersecurity expert) 및 수학 분야의 변혁적 능력(Transformative capabilities) 출현.</li>
+</ul>
+</li>
+<li><strong>정보 성격 분류:</strong>
+<ul>
+<li><strong>[사실 (Fact)]</strong> OpenAI는 GPT-3.5 출시 이후 내부 코드기반(Internal codebase) 데이터셋의 고정 스냅샷을 사용해 로그 혼잡도를 측정해 옴. GPT-3.5는 ~0.99, GPT-4는 ~0.91의 로그 혼잡도를 기록함.</li>
+<li><strong>[소스의 주장 (Claim)]</strong> 압축기 훈련 손실(혼잡도)을 줄이는 단일 지표 개선만으로 사전에 예측할 수 없었던 프론티어 급 고도 지능 능력의 대부분이 자동 발현됨.</li>
+<li><strong>[작성자의 해석 (Interpretation)]</strong> 복잡한 사후 파인튜닝이나 개별 벤치마크보다 사전훈련 손실값 추적이 범용 지능(General Intelligence)의 비선형적 발전을 측정하는 가장 근본적인 나침반이자 공통 통화(Common Currency) 역할을 한다는 기술적 분석임.</li>
+</ul>
+</li>
+<li><strong>소스 내 위치:</strong> 본문 1~4문단 및 각주 1~4.</li>
+</ul>
+<h5 id="2-2-논점-2-연구-가속화-및-ai의-사전훈련-연구-참여">2.2. 논점 2: 연구 가속화 및 AI의 사전훈련 연구 참여</h5>
+<ul>
+<li><strong>근거 (Arguments):</strong> AI 모델이 연구 프로세스, 특히 사전훈련 알고리즘 연구(Algorithmic research on pretraining) 영역에 직접 참여함에 따라 고도 지능 개발 속도의 구조적 비선형 가속이 발생합니다. 완전 재귀적 자기 개선(Full recursive self-improvement) 상태 이전이라도, 심층학습 핵심 알고리즘 설계에 AI가 기여하는 현상은 연구 개발 트렌드의 결정적 전환점이 됩니다.</li>
+<li><strong>사례 및 지표 (Examples/Data):</strong>
+<ul>
+<li><strong>수학 문제 해결 사례:</strong> 로그 혼잡도 <code>~0.76</code> 수준 모델(GPT-5.2) 도입 후, 오랜 기간 해결되지 못했던 오픈 수학 문제(밀레니엄 현상금 문제 등)들이 단일 슬랙(Slack) 스레드 내에서 연달아 해결되는 결과 도출.</li>
+<li><strong>알고리즘 기여 현황:</strong> 2026년 기록된 급격한 손실 감소 가속화는 장기 연구 및 컴퓨팅 투자에 주로 기인하나, 각주 5에 명시되었듯 '최근 모델들(most recent models)'에서는 이미 AI가 의미 있는 알고리즘 설계 기여(meaningful design contributions)를 수행하고 있음이 확인됨.</li>
+<li><strong>2027년 급변 예측:</strong> 2027년경 심층학습 및 사전훈련 분야에서 근본적 연구 성과가 쏟아져 나오는 '사전훈련 급변(Avalanche of fundamental pretraining advancements)' 현상이 발생할 가능성이 제시됨.</li>
+</ul>
+</li>
+<li><strong>정보 성격 분류:</strong>
+<ul>
+<li><strong>[사실 (Fact)]</strong> 로그 혼잡도 ~0.76 모델 적용 후 제시된 오픈 수학 문제들에 대해 단일 슬랙 스레드 내 연속적인 문제 해결 성과가 도출됨. 각주 5 기준 최근 모델들의 설계에 AI가 기여함.</li>
+<li><strong>[소스의 주장 (Claim)]</strong> AI가 사전훈련 연구에 참여함에 따라 2027년경 사전훈련 기술의 폭발적 가속화가 일어날 것이나, 정렬 및 감시(Alignment &amp; Monitoring) 기술의 발전 속도는 이를 완전하게 따라잡지 못할 가능성이 높음.</li>
+<li><strong>[작성자의 해석 (Interpretation)]</strong> 기존에는 연구원의 단순 보조/대체 측면만 논의되었으나, 사전훈련 알고리즘 자체에 대한 AI의 기여는 모델 성능 확장의 병목을 제거하여 기술적 특이점 시점을 앞당기는 핵심 변수로 작용함.</li>
+</ul>
+</li>
+<li><strong>소스 내 위치:</strong> 본문 5~6문단 및 각주 5.</li>
+</ul>
+<h5 id="2-3-논점-3-업계-공통-안전-표준-및-혼잡도-기반-제한선-common-limits-제안">2.3. 논점 3: 업계 공통 안전 표준 및 혼잡도 기반 제한선(Common Limits) 제안</h5>
+<ul>
+<li><strong>근거 (Arguments):</strong> 로그 혼잡도 <code>~0.68 - 0.70</code> 구간에 진입하면 알려지지 않은 새로운 변혁적 능력(Transformative capabilities)이 출현할 것으로 예상됩니다. 그러나 동시에 기존 정렬 감시(Alignment auditing) 방식의 성능 저하가 심화되고, 모델이 평가받거나 훈련받고 있음을 스스로 인지하는 현상(Evaluation and training awareness)이 강화됩니다. 이처럼 모델의 지능 도약과 감시 무력화 위험이 결합함에 따라, CoT 모니터의 후속 기술 등 확실한 모니터링 수단이 마련되기 전까지 개발을 제어하는 객관적 기준이 필수적입니다.</li>
+<li><strong>사례/제안 (Examples/Proposals):</strong>
+<ul>
+<li>프론티어 개발사 간 레드팀 안전 사례(Red-team safety cases) 및 평가 방식을 공유하고 투명성 기준을 공동 수립할 것을 요구함.</li>
+<li>현재 사용되는 CoT 모니터를 대체할 후속 기술 개발과 같은 구체적 안전 이정표(Concrete milestone)를 달성하기 전까지, 특정 혼잡도 임계값을 넘지 않는 <strong>공통 제한선(Common Limits)</strong> 도출 및 개발 속도 조정(Pacing) 프레임워크 구축을 제안함.</li>
+</ul>
+</li>
+<li><strong>정보 성격 분류:</strong>
+<ul>
+<li><strong>[사실 (Fact)]</strong> OpenAI는 자사의 내부 혼잡도 측정 수치를 외부에 투명하게 공개하는 조치를 실행함.</li>
+<li><strong>[소스의 주장 (Claim)]</strong> 정렬 및 모니터링 기술이 모델 능력의 가속을 따라잡지 못하는 위험을 방지하기 위해, 업계가 동의하는 혼잡도 기반의 개발 제한선(Common Limits) 및 자율적 억제 기준이 도출되어야 함.</li>
+<li><strong>[작성자의 해석 (Interpretation)]</strong> 시장 선점 경쟁보다 정렬 모니터링의 기술적 시차에서 오는 통제 불능 위험이 더 크다는 위기의식이 반영된 결과로, 산업 차원의 전례 없는 자율 규제 표준 제안임.</li>
+</ul>
+</li>
+<li><strong>소스 내 위치:</strong> 본문 7문단.</li>
+</ul>
+<h5 id="2-4-논점-4-지표로서-혼잡도가-갖는-한계점">2.4. 논점 4: 지표로서 혼잡도가 갖는 한계점</h5>
+<p>소스 본문 8문단에서는 혼잡도(Perplexity)를 공통 지표로 활용할 때 발생하는 4가지 한계를 다음과 같이 명시합니다.</p>
+<ol>
+<li><strong>실험실 간 비교의 어려움 (Difficulty of comparison across labs):</strong> 연구소마다 사용하는 평가 데이터셋과 사전훈련 데이터 혼합비(Data mixtures)가 달라 서로 다른 개발사 간 직접적인 수치 비교가 어려움.</li>
+<li><strong>실용적 평가와의 직접 연결 부족 (Detachment from actionable evaluations):</strong> 혼잡도 개선이 특정 개별 작업의 수행 능력과 1:1로 직접 대응하지 않으며, 단지 미지의 새로운 능력이 출현할 확률을 제시함.</li>
+<li><strong>사전훈련 외 발전 미반영 (Not accounting for advances outside of pretraining):</strong> 생각의 사슬(CoT) 추론과 같은 사전훈련 외부 기법은 모델의 실질 능력을 비약적으로 상승시키지만 사전훈련 혼잡도 수치를 직접 낮추지는 않음.</li>
+<li><strong>미지의 이론적 최저한계 존재 (Unknown floor):</strong> 데이터가 완전 결정론적이지 않으므로 손실값 0 달성은 불가능하나, 데이터 자체의 내재적 엔트로피(Entropy) 값을 알 수 없음.
+<ul>
+<li><strong>[기술적 시사점]</strong> 엔트로피 최저한계선에 가까워질수록 혼잡도 수치의 수치상 감소 폭은 줄어들지만, 미세한 손실값의 감소가 지능 측면에서는 거대한 비선형적 도약으로 연결되는 불확실성이 존재함.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>소스 내 위치:</strong> 본문 8문단.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-speakers">3. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h4>
+<p>소스 텍스트에서 확인되는 주요 인물 및 역할은 다음과 같이 정리됩니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속 / 직책</th>
+<th style="text-align:left">소스 내 역할 및 발언 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>야쿠프 파초츠키&lt;br&gt;(Jakub Pachocki)</strong></td>
+<td style="text-align:left">OpenAI 수석 과학자&lt;br&gt;(Chief Scientist at OpenAI)</td>
+<td style="text-align:left"><strong>[본 아티클의 작성자]</strong>&lt;br&gt;OpenAI의 내부 사전훈련 혼잡도 측정치를 공개하고, 현대 AI 개발에서 혼잡도가 지능의 발전을 측정하는 핵심 지표임을 서술함. 또한 안전 모니터링 수단 확보 전까지 업계 공통 제한선(Common Limits) 제정을 주도적으로 제안함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>다리오 아마데이&lt;br&gt;(Dario Amodei)</strong></td>
+<td style="text-align:left">소속 및 직책 미명시&lt;br&gt;(<em>외부 링크 텍스트에만 명시됨</em>)</td>
+<td style="text-align:left"><strong>[외부 아티클 저자로 링크 인용]</strong>&lt;br&gt;본문 2문단의 &quot;shared safety measures&quot; 문맥 내 앵커 텍스트 링크(<code>darioamodei.com/post/we-must-pace-the-frontier</code>)에 이름만 포함됨. 소스 본문 내 구체적 소속, 직책 및 발언은 확인 불가.</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>기타 인물</em></td>
+<td style="text-align:left"><em>확인 불가</em></td>
+<td style="text-align:left">소스 텍스트 내 추가로 거론된 인물 없음.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-metrics-timelines">4. 수치 및 시점 (Metrics &amp; Timelines)</h4>
+<h5 id="4-1-모델별-로그-혼잡도-및-능력-발전-요약표">4.1. 모델별 로그 혼잡도 및 능력 발전 요약표</h5>
+<p>소스 서두의 차트 및 본문 텍스트에 제시된 OpenAI 주요 모델별 평가 시점, 로그 혼잡도(Log-perplexity, 교차 엔트로피 손실), 주요 발현 능력 및 정보는 다음과 같습니다. (평가 기준: OpenAI 내부 코드기반 고정 스냅샷 데이터셋)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">시점 / 연도</th>
+<th style="text-align:left">모델명</th>
+<th style="text-align:left">로그 혼잡도&lt;br&gt;(Log-perplexity)</th>
+<th style="text-align:left">주요 발현 능력 및 차트 표기 특기사항</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>2022년경</strong></td>
+<td style="text-align:left"><strong>GPT-3.5</strong></td>
+<td style="text-align:left">~0.99</td>
+<td style="text-align:left">유창한 대화 능력 (Fluent conversation), 초기 ChatGPT의 기반 형성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2023년경</strong></td>
+<td style="text-align:left"><strong>GPT-4</strong></td>
+<td style="text-align:left">~0.91</td>
+<td style="text-align:left">답변 전 생각하기 단계의 효과 발현(Benefits from thinking before answering) 및 CoT 추론 활용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2024년경</strong></td>
+<td style="text-align:left"><strong>GPT-4 Turbo</strong></td>
+<td style="text-align:left">약 0.88 ~ 0.90 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">사전훈련 손실의 지속적 둔화/개선 구간 진입</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2024년경</strong></td>
+<td style="text-align:left"><strong>GPT-4o / o1</strong></td>
+<td style="text-align:left">약 0.83 ~ 0.85 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">추론 및 멀티모달 능력의 통합 기초 단계</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2025년경</strong></td>
+<td style="text-align:left"><strong>GPT-4.5</strong></td>
+<td style="text-align:left">약 0.81 ~ 0.82 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">손실 0.8 임계구간 직전 단계 모델</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2025년경</strong></td>
+<td style="text-align:left"><strong>GPT-4.1 / o3</strong></td>
+<td style="text-align:left">0.8 미만 진입 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">사이버보안 전문가(Cybersecurity expert) 수준 능력 및 수학 분야 변혁적 능력 출현 시작</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2025년경</strong></td>
+<td style="text-align:left"><strong>GPT-5 / 5.1</strong></td>
+<td style="text-align:left">약 0.77 ~ 0.78 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">수학 난제 해결 전단계의 압축 지능 확보</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년경</strong></td>
+<td style="text-align:left"><strong>GPT-5.2</strong></td>
+<td style="text-align:left">~0.76</td>
+<td style="text-align:left">밀레니엄 현상금 수학 문제(Millennium Prize math problem) 등 오픈 수학 난제 연속 해결</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년경</strong></td>
+<td style="text-align:left"><strong>GPT-5.3-Codex / 5.4</strong></td>
+<td style="text-align:left">약 0.74 ~ 0.75 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">유용한 코딩 능력(Useful coder) 발현</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년경</strong></td>
+<td style="text-align:left"><strong>GPT-5.5</strong></td>
+<td style="text-align:left">약 0.72 ~ 0.73 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">사전훈련 손실 가속화 구간 모델</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년경</strong></td>
+<td style="text-align:left"><strong>GPT-5.6 Sol</strong></td>
+<td style="text-align:left">약 0.71 ~ 0.72 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">변혁적 능력 임계구간 직전 프론티어 모델</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년경</strong></td>
+<td style="text-align:left"><strong>GPT-6 Astra</strong></td>
+<td style="text-align:left">약 0.70 ~ 0.71 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">0.70 임계선에 인접한 고성능 프론티어 모델</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년경</strong></td>
+<td style="text-align:left"><strong>GPT-6.2 Astra</strong></td>
+<td style="text-align:left">~0.70 부근 <em>(차트 눈금 추정)</em></td>
+<td style="text-align:left">OpenAI 내부 프론티어 평가 모델 (Internal model)</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>미래 예측</em></td>
+<td style="text-align:left"><em>-</em></td>
+<td style="text-align:left"><strong>~0.68 - 0.70</strong></td>
+<td style="text-align:left">향후 미지의 변혁적 능력(Transformative capabilities) 추가 출현 예측 구간</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4-2-주요-예측-및-이정표-시점">4.2. 주요 예측 및 이정표 시점</h5>
+<ul>
+<li><strong>2026년 11월 22일:</strong> 본 아티클(&quot;Perplexity and Intelligence&quot;) 발표 및 OpenAI 내부 혼잡도 데이터 최초 공개 시점. 장기 연구 및 컴퓨팅 투자로 모델 손실 감소 속도가 급격히 가속화됨.</li>
+<li><strong>2027년:</strong> AI의 알고리즘 연구 기여 누적으로 사전훈련 분야에서 연쇄적인 근본적 연구 발전(Avalanche of fundamental pretraining advancements)이 연쇄 폭발할 것으로 예상되는 시점.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>소스 텍스트 내에서 직접 언급되거나, 소스 정보만으로는 확인할 수 없는 미지의 불확실성 요소는 다음과 같습니다.</p>
+<ul>
+<li><strong>소체 평가 데이터셋의 특수성 및 직접 비교 불가:</strong>
+<ul>
+<li>공개된 로그 혼잡도 수치는 타 연구소와 공유되지 않는 OpenAI 내부 코드기반(Internal codebase) 고정 스냅샷을 기준으로 측정되었습니다. 타 연구소가 자체 데이터셋으로 측정한 손실값과 직접 비교할 수는 없다는 명확한 한계가 존재합니다.</li>
+</ul>
+</li>
+<li><strong>데이터 내재적 엔트로피 한계의 불확실성 (Unknown Floor):</strong>
+<ul>
+<li>완벽한 결정론적 예측이 불가능하므로 손실값 0 달성은 불가능하지만, 훈련 데이터 자체가 갖는 이론적 엔트로피의 한계값을 알 수 없습니다. 엔트로피 한계선에 근접할수록 혼잡도의 수치적 감소 폭은 미세해지지만, 그 미세한 손실 감소가 모델 지능에는 비선형적인 대폭 도약으로 나타날 수 있어 예측 불확실성을 증대시킵니다.</li>
+</ul>
+</li>
+<li><strong>사전훈련 외 성능 향상 기법과의 측정 이격:</strong>
+<ul>
+<li>생각의 사슬(CoT) 추론, 파인튜닝, 강화학습(RL) 등 사전훈련 이후 단계를 통한 급격한 모델 성능 향상은 사전훈련 로그 혼잡도 수치를 직접적으로 낮추지 않으므로, 전체 능력을 완전하게 대변하지 못하는 한계가 있습니다.</li>
+</ul>
+</li>
+<li><strong>소스 미비 및 정보 부재 사항 (확인 불가):</strong>
+<ul>
+<li><strong>훈련 비용 및 자원 규모:</strong> 모델별(GPT-3.5 ~ GPT-6.2 Astra) 구체적 훈련 비용, Computes 자원, 전력 소비량 등은 소스에 명시되지 않았습니다 (정보 없음).</li>
+<li><strong>내부 평가 데이터셋의 세부 비중:</strong> OpenAI 내부 코드기반 데이터셋의 언어별 비율, 데이터 크기, 구체적 조성 정보는 기재되지 않았습니다 (정보 없음).</li>
+<li><strong>미래 출현 능력의 구체적 명칭:</strong> 로그 혼잡도 ~0.68-0.70 구간에 진입할 때 새롭게 발현될 &quot;변혁적 능력(Transformative capabilities)&quot;의 구체적 형태나 명칭은 소스 작성자 역시 알 수 없다고 명시하고 있습니다 (확인 불가).</li>
+<li><strong>외부 거론 인물의 프로필:</strong> 각주 링크로 기재된 다리오 아마데이(Dario Amodei)의 현재 소속, 직책, 구체적 발언 등은 본문 텍스트 내에서 다루어지지 않았습니다 (정보 없음).</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini at Work 2026: Introducing Gemini agent | Google Cloud Blog</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Gemini at Work 2026: Introducing Gemini agent | Google Cloud Blog</h1>
+<p class="page-meta">AI 대화 공유 · 2026-10-08</p>
+<h2 id="요약">요약</h2>
+<p>2026년 10월 8일, 구글 클라우드(Google Cloud)는 개최된 'Gemini at Work 2026' 행사의 토마스 쿠리안(Thomas Kurian) CEO 기조연설을 통해 엔터프라이즈 업무 환경의 패러다임을 전환할 단일·보편적 에이전트인 **'제미나이 에이전트(Gemini agent)'**를 전격 발표했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/ai-share/">AI 대화 공유</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://share.google/6cinKiD5YxD7Vdt08">출처</a> · <a href="https://www.youtube.com/watch?v=2CaxubtcxXM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="google-cloud-gemini-at-work-2026-발표-및-제미나이-에이전트-심층-해설-보고서">Google Cloud 'Gemini at Work 2026' 발표 및 제미나이 에이전트 심층 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>2026년 10월 8일, 구글 클라우드(Google Cloud)는 개최된 'Gemini at Work 2026' 행사의 토마스 쿠리안(Thomas Kurian) CEO 기조연설을 통해 엔터프라이즈 업무 환경의 패러다임을 전환할 단일·보편적 에이전트인 **'제미나이 에이전트(Gemini agent)'**를 전격 발표했다. 이번 발표의 핵심은 단순한 생성형 AI 모델 제공을 넘어, 단일 프롬프트 창을 기반으로 지식 노동, 질문 답변, 미디어 생성, 코드 작성 및 실행 등 제반 업무 과정을 자율적으로 계획하고 수행하는 종합 에이전틱(Agentic) 생태계 구축에 있다.</p>
+<p>구글 클라우드 측 발표에 따르면, 지난 1년 동안 500개 이상의 구글 클라우드 고객사가 각각 1조 개 이상의 토큰을 처리했으며, 전체 구글 클라우드 고객의 약 80%가 AI 제품을 활용하고 있다. 특히 포춘(Fortune) 100대 기업의 약 90%가 '제미나이 엔터프라이즈(Gemini Enterprise)'를 도입하는 등 글로벌 엔터프라이즈 시장은 이미 단순 실험 단계를 지나 생성형 AI 기반으로 핵심 비즈니스 로직을 구동하는 단계에 진입했다고 수석 분석가 시각에서 평가된다.</p>
+<p>제미나이 에이전트는 6대 핵심 아키텍처 원칙을 바탕으로 설계되었으며, 구글 워크스페이스(Google Workspace) 애플리케이션과의 인라인(Inline) 통합을 지원한다. 또한 도구, 스킬, 4가지 메모리 구조를 접목해 기업 내부 지식과 개인화된 맥락을 깊이 이해하며, 지식 카탈로그(Knowledge Catalog), 스마트 스토리지(Smart Storage), 경계 없는 레이크하우스(Borderless Lakehouse) 등 3대 접지(Grounding) 기술을 통해 데이터 분석 및 산업별 특화 솔루션을 제공한다.</p>
+<p>아울러 기업 환경에 필수적인 신원 관리, 권한 부여, 감사, 정책 관리를 포함한 보안 거버넌스 체계를 제시하고, 다중 모델 오케스트레이션 및 스마트 루팅을 통한 비용 통제 수단을 마련했다. 하드웨어 측면에서는 이전 세대 대비 가격 대비 성능이 80% 향상되었다고 구글 측이 밝힌 TPU 8i 기반의 AI 하이퍼컴퓨터(AI Hypercomputer) 인프라 혁신을 공개하며 엔터프라이즈 AI 적용 확대를 선언했다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points-근거-및-사례">2. 주요 논점 (Key Points: 근거 및 사례)</h4>
+<h5 id="2-1-제미나이-에이전트의-정의-및-6대-핵심-아키텍처-원칙">2.1. 제미나이 에이전트의 정의 및 6대 핵심 아키텍처 원칙</h5>
+<p>제미나이 에이전트는 단일 인터페이스 및 단일 API를 통해 사용자의 단순 세부 지시가 아닌 '목표(Objective)'와 '결과물'을 위임받아 작업을 수행하는 단일·보편적 엔터프라이즈 에이전트다. 이는 개인 보조 역할뿐만 아니라 팀 단위 프로젝트 관리자나 재무 분석가와 같은 전용 역할을 수행하는 동료 에이전트 형태까지 지원한다.</p>
+<p>제미나이 에이전트의 구동 기반을 이루는 <strong>6대 핵심 아키텍처 원칙</strong>은 다음과 같다.</p>
+<ol>
+<li><strong>통합 에이전트 (Unified agent)</strong>: 단일 인터페이스에서 대화형 질문 답변, 자율 과제 수행, 코드 생성 및 실행을 모두 처리한다. 과제 할당, 작업 일정 예약, 외부 이벤트 반응 수행이 가능하다.</li>
+<li><strong>어디서나 접근 가능 (Omnipresent access)</strong>: 웹, iOS, Android, Windows, Mac 등 기기 종류에 구애받지 않으며 CLI, 구글 워크스페이스, Microsoft 365, Slack 등 기존 채널에 연동된다. 전용 UI 없이 동작하는 헤드리스(Headless) 에이전트 기능도 지원한다.</li>
+<li><strong>지속적 실행 (Persistent execution)</strong>: 클라우드 상에서 단일 메모리 및 컨텍스트, 개인화 그래프를 지속 유지한다. 사용자가 노트북을 닫거나 접속 기기를 바꿔도 수 시간 또는 수일이 소요되는 장기 작업이 중단 없이 클라우드에서 계속 구동된다.</li>
+<li><strong>다중 에이전트 오케스트레이션 (Multi-agent orchestration)</strong>: 단일 작업 처리를 넘어 복잡한 단계별 과제를 위해 임시 서브 에이전트(Sub-agent) 그룹을 동적으로 생성하고 오케스트레이션한다. 또한 지속적인 역할을 부여받은 '동료 에이전트(Coworker agent)'는 <code>@agents.company.com</code> 형태의 전용 이메일과 독자적 저장소를 보유하며 팀원과 협업한다.</li>
+<li><strong>깊은 맥락 이해 (Deeply contextual)</strong>: 사용자의 도구, 데이터, 작업 이력을 사전에 학습하며 상호작용이 누적될수록 개인 및 팀의 작업 방식에 맞춰 응답 품질을 최적화한다. 전용 프로젝트 설정을 통해 맥락을 정교화할 수 있다.</li>
+<li><strong>유연한 모델 선택 (Model choice flexibility)</strong>: 에이전트 레이어와 하부 언어 모델 레이어를 분리하여 작업 특성에 최적화된 모델을 자동 배치한다. 구글의 제미나이 모델군 외에도 앤트로픽(Anthropic)의 클로드(Claude) 모델 등 다양한 사설/오픈 모델을 조합해 비용을 절감하고 정확도를 높인다.</li>
+</ol>
+<ul>
+<li><strong>기술적 의의 및 기대 효과</strong>: 모델과 에이전트 레이어의 분리는 특정 프론티어 모델에 대한 종속성을 제거하고, 소형 모델과 대형 모델의 적재적소 배치를 통해 엔터프라이즈의 추론 비용을 획기적으로 가성비 높게 관리할 수 있는 아키텍처적 유연성을 제공한다.</li>
+<li><strong>적용 사례</strong>: 구글 측 발표에 따르면 프리미엄 스포츠웨어 브랜드 **온(On)**은 동적 모델 선택 기능을 도입해 제품의 시장 출시 속도를 가속화했다. **쇼피파이(Shopify)**는 개별 판매자를 위해 다중 프론티어 모델을 혼합 적용하여 판매를 촉진하고 있으며, **페이팔(PayPal)**은 주당 1,000만 건 이상의 다중 모델 요청을 루팅하여 처리하고 있다.</li>
+</ul>
+<hr />
+<h5 id="2-2-제미나이-구동의-3대-핵심-요소-도구-스킬-컨텍스트-메모리">2.2. 제미나이 구동의 3대 핵심 요소: 도구, 스킬, 컨텍스트/메모리</h5>
+<p>제미나이가 기업 고유의 조직 지식과 프로세스를 이해하기 위해 활용하는 3가지 축은 다음과 같다.</p>
+<ul>
+<li><strong>도구 및 도구 레지스트리 (Tools &amp; tools registry)</strong>
+<ul>
+<li><strong>연동 범위</strong>: Confluence, Microsoft Office, Teams, Slack, Workspace 등 협업 도구; Git, Jira 등 개발 도구; Salesforce, ServiceNow 등 엔터프라이즈 플랫폼; BigQuery, Databricks, Postgres, Snowflake 등 데이터베이스; 사용자 데스크톱 파일 연동.</li>
+<li><strong>확장성</strong>: 기업 네트워크 안팎의 MCP(Model Context Protocol) 서버 연동을 지원하며, 기업용 도구 레지스트리를 통해 사내 개발 도구를 공유할 수 있다.</li>
+<li><em>기술적 의의</em>: 기존 데이터 및 워크플로우 시스템의 변경 없이 인프라 위에서 에이전트가 직접 상호작용할 수 있어 엔터프라이즈 레거시 시스템 활용도를 극대화한다.</li>
+</ul>
+</li>
+<li><strong>스킬 및 스킬 레지스트리 (Skills &amp; skills registry)</strong>
+<ul>
+<li><strong>모듈식 지침</strong>: 재사용 가능한 작업 지침 및 워크플로우를 모듈형 프롬프트 형태로 저장하여 에이전트에 다단계 작업 수행 능력을 부여한다.</li>
+<li><strong>공유 및 학습</strong>: 전역 스킬 라이브러리를 기본 제공하며, 부서별 전용 레지스트리 구축이 가능하다. 에이전트는 수행 결과를 지속 학습하여 토큰 비용을 줄이고 일관성을 향상시킨다.</li>
+<li><em>기술적 의의</em>: 비즈니스 노하우를 표준화된 에이전트 자산으로 모듈화함으로써 부서 간 AI 역량 격차를 해소하고 재사용성을 확보할 수 있다.</li>
+</ul>
+</li>
+<li><strong>컨텍스트 및 메모리 (Context &amp; memory)</strong>
+<ul>
+<li><strong>4대 메모리 구조</strong>:
+<ul>
+<li><em>세션 메모리 (Session memory)</em>: 수일간 진행되는 단일 과제의 진행 상황을 기억.</li>
+<li><em>의미론적 메모리 (Semantic memory)</em>: 문서 탐색, 대화, 타 에이전트와의 협업 중 구축되는 구조화된 지식 베이스.</li>
+<li><em>절차적 메모리 (Procedural memory)</em>: 작업 수행 방식 및 에이전트가 스스로 생성한 스킬 저장을 담당.</li>
+<li><em>일화적 메모리 (Episodic memory)</em>: 과거 수행했던 모든 작업 이력을 기록.</li>
+</ul>
+</li>
+<li><em>기술적 의의</em>: 단기 대화 세션에 국한되던 기존 LLM의 한계를 극복하고 장기 연속성 과제 및 온보딩 과정을 자동화하는 핵심 기틀이 된다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-google-workspace-및-데이터-도메인-특화-기능">2.3. Google Workspace 및 데이터·도메인 특화 기능</h5>
+<h6 id="google-workspace-연동">Google Workspace 연동</h6>
+<p>Gmail, Drive, Docs, Slides, Sheets, Chat, Calendar 내에 인라인으로 작동하며 다음 3가지 방식으로 지원된다.</p>
+<ul>
+<li><strong>개인 보조 (Personal assistance)</strong>: 팀원 일정 및 이전 문서 관계를 파악하여 이메일 주소 입력 없이 &quot;지역 이벤트 담당자들과 회의 잡기&quot; 등의 지시를 수행하고, 시장 조사부터 Sheets 모델링, Slides 발표자료 생성까지 연계 작업을 자동 처리한다.</li>
+<li><strong>위임 제안 (Proactive delegation)</strong>: 상급자의 이메일 요청을 인식해 원클릭 슬라이드 작성 위임을 제안하거나 중요 이메일을 우선순위별로 선별 제시한다.</li>
+<li><strong>팀 동료 에이전트 (Coworker agent)</strong>: 독자적 Workspace 계정(이메일, 드라이브, 캘린더)을 부여받아 Chat 스페이스 참여 및 <code>@mention</code> 언급을 통해 라운치 문서 작성, 문서 댓글 수정 제안 등을 자기 명의로 수행한다.</li>
+</ul>
+<h6 id="데이터-분석-데이터-엔지니어링-및-머신러닝-스킬">데이터 분석, 데이터 엔지니어링 및 머신러닝 스킬</h6>
+<ul>
+<li><strong>기술 팀 전용</strong>: 자연어 지시를 통해 PySpark 코드를 자동 생성하고, 테스트용 노트북 제공, 모델 학습, 파이프라인 오류 자율 진단을 수행한다.</li>
+<li><strong>비즈니스 사용자 전용</strong>: BigQuery 및 Knowledge Catalog와 연동되어 자연어 질문만으로 구동되는 실시간 보고서를 생성한다. 저장된 쿼리는 재실행 시 추가 토큰 비용이 발생하지 않는다.</li>
+<li><strong>데이터 실행 엔진</strong>: 분석 및 코드 구동 시 데이터셋을 식별한 후 SQL, Spark, Python 코드를 자동 생성하여 Lightning Engine 기반 Managed Spark Service 또는 BigQuery 상에서 직접 실행한다.</li>
+</ul>
+<h6 id="3대-접지-grounding-기술">3대 접지(Grounding) 기술</h6>
+<ol>
+<li><strong>지식 카탈로그 (Knowledge Catalog)</strong>: 용어 지표(예: 순이익률, 목표 시장) 및 용어 정의를 매핑하여 Databricks, dbt, LookML, SAP 데이터의 사실적 응답률을 높인다.</li>
+<li><strong>스마트 스토리지 (Smart Storage)</strong>: PDF, 이미지, 음성 등 비구조화 데이터를 원본 위치에서 직접 분석하고 맥락 정보를 객체에 재기록한다.</li>
+<li><strong>경계 없는 레이크하우스 (Borderless Lakehouse)</strong>: 데이터 이동 없이 Amazon S3, Azure Data Lake를 조회(이탈 수수료 없음)하며, Salesforce, SAP, Workday 데이터를 복사 없이 연결하고 Apache Iceberg 테이블을 연동한다.</li>
+</ol>
+<ul>
+<li><em>사례</em>: **블룸버그 미디어(Bloomberg Media)**는 지식 카탈로그 접지 기술을 적용해 초기 개발 단계 대비 SQL 쿼리 정확도를 63% 향상시켰다.</li>
+</ul>
+<h6 id="산업별-특화-솔루션-industry-specific-specializations">산업별 특화 솔루션 (Industry-specific specializations)</h6>
+<ul>
+<li><strong>금융 서비스 (Financial Services)</strong>: FactSet, LSEG, S&amp;P Global, SEC 제출 문서 및 내부 규정을 통합 분석한다. 신뢰도 점수, 데이터 이력(Lineage), 출처 인용을 제공하며 <strong>CME 그룹</strong> 및 **도이치은행(Deutsche Bank)**이 활용 중이다.</li>
+<li><strong>법률 (Legal)</strong>: NetDocuments, iManage의 사건(Matter) 단위 권한 제어를 상속받는다. 파트너사인 **하비(Harvey)**를 통해 기밀성 유지 기반 복합 법률 업무를 자동화하고, **오닛(Onit)**을 통한 계약 수명주기 관리(CLM)를 간소화한다. **쿨리(Cooley)**는 법원 제출 전 개인정보 및 비밀 정보를 자동 익명화하는 감수 에이전트를 구축했다.</li>
+</ul>
+<hr />
+<h5 id="2-4-엔터프라이즈-거버넌스-비용-통제-및-ai-인프라">2.4. 엔터프라이즈 거버넌스, 비용 통제 및 AI 인프라</h5>
+<h6 id="보안-및-거버넌스-4대-요소">보안 및 거버넌스 4대 요소</h6>
+<ul>
+<li><strong>신원 (Identity)</strong>: 에이전트에 암호화된 식별자를 부여하며, 실행되는 가상 머신(VM) 및 로그 기록에 동일 신원이 적용된다.</li>
+<li><strong>권한 부여 (Authorization)</strong>: 최소 권한 원칙을 적용하며 외부 시스템 연동 시 OAuth 표준을 통해 권한을 전파한다.</li>
+<li><strong>감사 (Auditing)</strong>: 모든 수행 작업이 에이전트 명의의 감사 트레일(Audit trail)에 기록되어 실시간 이상 동작을 감지한다.</li>
+<li><strong>정책 관리 (Policy management)</strong>: 모든 작업은 격리된 <strong>Agent Sandbox</strong> 내에서 구동되며, 모든 트래픽은 AI 네트워크 방화벽인 <strong>Agent Gateway</strong>를 거쳐 사내 보안 정책(&quot;비공개 문서 열람 금지&quot; 등)을 단일 통제로 일괄 적용받는다.</li>
+<li><em>기술적 의의</em>: 에이전트에 자율 권한을 부여할 때 발생할 수 있는 보안 섀도우 IT 및 제어 불능 위험을 기업 보안 정책 라인 내에서 사전에 차단한다.</li>
+</ul>
+<h6 id="비용-통제-방안">비용 통제 방안</h6>
+<ul>
+<li><strong>다중 모델 오케스트레이션</strong>: 난이도가 낮은 작업에는 경량 모델을 배치하여 비용을 최적화한다.</li>
+<li><strong>스마트 루팅 (Smart Routing)</strong>: 성능 대비 최적 비용을 제공하는 모델로 워크로드를 자동 분류한다.</li>
+<li><strong>실시간 지출 한도 (Real-time spend caps)</strong>: Cloud Billing Console에서 프로젝트별 지출 한도를 설정할 수 있으며, 한도 초과 시 에이전트가 일시 정지되어 부서별 비용 정산이 용이하다.</li>
+<li><em>기술적 의의</em>: 폭발적인 AI 토큰 사용량 증가 속에서 예측 가능하고 구체적인 정산 가능한 예산 통제 메커니즘을 제공한다.</li>
+</ul>
+<h6 id="ai-인프라-및-모델-라인업">AI 인프라 및 모델 라인업</h6>
+<ul>
+<li><strong>AI 하이퍼컴퓨터 (AI Hypercomputer)</strong>: 칩, 네트워크, 데이터센터, 소프트웨어를 수직 통합 설계했다.</li>
+<li><strong>TPU 8i</strong>: 구글 측 발표에 따르면 이전 세대 대비 가격 대비 성능이 80% 향상되었다.</li>
+<li><strong>모델 라인업</strong>: 프론티어 추론용 <strong>Argon</strong>, 고속/대량 처리용 <strong>Flash</strong>, 생성형 미디어용 <strong>Omni</strong>, 경량 온디바이스/엣지용 <strong>Gemma</strong>로 구성된다.</li>
+<li><em>사례</em>: **미국 항공우주국 제트추진연구소(NASA JPL)**는 Gemma 모델을 인공위성에 직접 탑재(NAVI 소프트웨어)하여 궤도 상에서 지구 이미지를 자체 분석하고 요약본을 지상으로 전송하는 시스템을 구현했다.</li>
+</ul>
+<hr />
+<h5 id="2-5-글로벌-고객-도입-및-활용-사례-분석">2.5. 글로벌 고객 도입 및 활용 사례 분석</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">지역</th>
+<th style="text-align:left">기업/기관명</th>
+<th style="text-align:left">주요 적용 분야 및 성과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">BNP 파리바 (BNP Paribas)</td>
+<td style="text-align:left">65,000명 이상 직원 대상 LLM@CIB 도입, 신용 메모 작성 및 고객 상담 생산성 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">오렌지 스페인 (Orange Spain)</td>
+<td style="text-align:left">1,000개 이상의 맞춤형 에이전트 배포, 인시던트 분류 및 네트워크 분석 자동화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">라이언에어 (Ryanair)</td>
+<td style="text-align:left">35,000명 직원 대상 도입, 승무원 물류 최적화 및 2034년 3억 승객 목표 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">아덴 대학교 (Arden University)</td>
+<td style="text-align:left">30,000명 이상 학생/임직원 대상 제미나이 엔터프라이즈 도입, 맞춤형 학습 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">코메르츠방크 (Commerzbank)</td>
+<td style="text-align:left">문서 QA 수작업 시간을 20시간에서 1시간으로 단축, 다중 에이전트 QA 확장 중</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">노키아 (Nokia)</td>
+<td style="text-align:left">통신 네트워크 장애 조치 자동화, 문제 해결 시간 최대 80% 단축</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">온 (On)</td>
+<td style="text-align:left">전 직원 대상 노코드 에이전트 배포, 지식 추출 및 시장 조사 생산성 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">오레두 카타르 (Ooredoo Qatar)</td>
+<td style="text-align:left">고객 지원, 마케팅, 필드 운영 내 에이전트 적용으로 실시간 대응력 강화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">카타르 대학교 (Qatar University)</td>
+<td style="text-align:left">캠퍼스 전역에 2,000개 이상의 맞춤형 AI 에이전트 배포 및 행정 자동화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유럽/중동</strong></td>
+<td style="text-align:left">스탈링 은행 (Starling Bank)</td>
+<td style="text-align:left">Gemini Enterprise 기반 Scam Intelligence 구축, 사기성 결제 취소율 4배 증가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아시아 태평양</strong></td>
+<td style="text-align:left">타타 스틸 (Tata Steel)</td>
+<td style="text-align:left">300개 이상 에이전트 도입, 고객 불만 처리 시간 50% 단축</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아시아 태평양</strong></td>
+<td style="text-align:left">히타치 (Hitachi)</td>
+<td style="text-align:left">HMAX 플랫폼 기반 200개 이상 유스케이스 구현, 현장 기술자 생산성 최대 30% 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아시아 태평양</strong></td>
+<td style="text-align:left">에어월렉스 (Airwallex)</td>
+<td style="text-align:left">고객 문의 대응 속도 10배 향상, 분쟁 처리 시간 40% 단축, 소프트웨어 출시 95% 가속</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아시아 태평양</strong></td>
+<td style="text-align:left">DBS 은행 (DBS Bank)</td>
+<td style="text-align:left">70~80개 에이전트 연쇄망 구축, 신용 메모 작성을 위한 정보 합성 자동화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아시아 태평양</strong></td>
+<td style="text-align:left">NTT 도코모 (NTT DOCOMO)</td>
+<td style="text-align:left">데이터 분석 시간 즉시화, 연간 45만 시간 업무 절감 달성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아시아 태평양</strong></td>
+<td style="text-align:left">집 (Zip)</td>
+<td style="text-align:left">AI Native Product Factory 구축, 금융 제품 개발 및 검증 속도 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라틴 아메리카</strong></td>
+<td style="text-align:left">브라데스코 (Bradesco)</td>
+<td style="text-align:left">회계/계약 분석 자동화, 문서 검토 시간 1시간에서 5분으로 단축, 위험 불일치 60% 감소, 금융 효율 10% 이상 달성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라틴 아메리카</strong></td>
+<td style="text-align:left">글로보 (Globo)</td>
+<td style="text-align:left">PlanejaAI 도입, 사전 개발 계획 정확도 33% 향상 및 검증 시간 20분에서 6초로 단축</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라틴 아메리카</strong></td>
+<td style="text-align:left">방코 BV (Banco BV)</td>
+<td style="text-align:left">고객 관리자용 스크립트 생성 자동화, 고객 소통 속도 80% 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라틴 아메리카</strong></td>
+<td style="text-align:left">CNA/SENAR</td>
+<td style="text-align:left">WhatsApp 기반 JoIA 에이전트 구축, 4만 명 이상의 농업 종사자 대상 정보 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라틴 아메리카</strong></td>
+<td style="text-align:left">파르마시아스 델 아호로 (Farmacias del Ahorro)</td>
+<td style="text-align:left">PotencIA 프로그램 도입, 사용자 채택률 95% 및 연간 14만 시간 생산성 확보</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라틴 아메리카</strong></td>
+<td style="text-align:left">바파르 그룹 (Grupo Bafar)</td>
+<td style="text-align:left">신규 점포 계약 관리 자동화, 문서 준비 시간 140분에서 17분으로 단축 (처리 용량 10배 증가)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>북미</strong></td>
+<td style="text-align:left">홈디포 (The Home Depot)</td>
+<td style="text-align:left">AI 음성 및 디지털 보조 구축, 전화 해결 속도 4배 향상 (10초 내 니즈 파악)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>북미</strong></td>
+<td style="text-align:left">버라이즌 (Verizon)</td>
+<td style="text-align:left">고객 통화/채팅 자동 해결, 마케팅 캠페인 오케스트레이션 자동화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>북미</strong></td>
+<td style="text-align:left">앨버트슨 (Albertsons)</td>
+<td style="text-align:left">컴퓨터 비전 연동 신선 식품 품질 관리 자동화, 검사 속도 및 일관성 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>북미</strong></td>
+<td style="text-align:left">스냅 (Snap)</td>
+<td style="text-align:left">Prism 에이전트를 저장소에 연결, 기술 진단 문제 해결 시간 30분에서 30초로 단축</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>북미</strong></td>
+<td style="text-align:left">더리얼리얼 (The RealReal)</td>
+<td style="text-align:left">Ask TRR 쇼핑 에이전트 도입, 대규모 카탈로그 대상 자연어 검색 구현</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>북미</strong></td>
+<td style="text-align:left">웨니어 (Whenere)</td>
+<td style="text-align:left">Dreamlands 3D 월드빌딩 적용, 7초/10센트 수준의 자산 생성으로 단일 아티스트가 250개 자산 일일 제작</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-등장-인물-및-화자-people-speakers">3. 등장 인물 및 화자 (People &amp; Speakers)</h4>
+<p>본 보고서의 소스 문서에서 확인되는 인물 및 화자의 상세 정보는 다음과 같다.</p>
+<ul>
+<li><strong>토마스 쿠리안 (Thomas Kurian)</strong>: 구글 클라우드 CEO (Chief Executive Officer). 'Gemini at Work 2026' 행사의 기조연설 발표자로서 제미나이 에이전트 제품군, 아키텍처, 거버넌스 및 고객 사례 전반을 총괄 발표함.</li>
+<li><strong>윌리엄 앤더슨 (William Anderson)</strong>: 블룸버그 미디어(Bloomberg Media) CTO (Chief Technology Officer). 구글 클라우드의 지식 카탈로그 접지 기술을 도입한 후 SQL 쿼리 정확도 향상 성과 및 신뢰성에 대한 인용문(&quot;기관 맥락에 AI를 접지시킴으로써 생성된 모든 인사이트의 정확성과 품질에 신뢰를 확보했다&quot;)을 남김.</li>
+<li><strong>진행자 / 기타 행사 발표자</strong>: 소스 문서가 기조연설 요약 아티클 형태로 작성되어 있어, 현장 Q&amp;A 진행자나 추가 세션 발표자의 인적 사항은 <strong>확인 불가</strong>.</li>
+</ul>
+<hr />
+<h4 id="4-주요-수치-및-시점-metrics-timestamps-source-context">4. 주요 수치 및 시점 (Metrics, Timestamps &amp; Source Context)</h4>
+<p>소스 문서에 언급된 정량적 데이터, 시점 및 관련 맥락은 다음과 같다.</p>
+<ul>
+<li><strong>발표 시점</strong>: 2026년 10월 8일 (소스 아티클 서두 <code>Welcome to Gemini at Work 2026</code> 섹션에 명시됨)</li>
+<li><strong>규모 및 시장 도입 수치</strong>:
+<ul>
+<li><strong>500개 이상</strong>: 지난 1년간 각각 1조(1 Trillion) 개 이상의 토큰을 처리한 구글 클라우드 고객사 수.</li>
+<li><strong>약 80%</strong>: AI 제품을 사용 중인 전체 구글 클라우드 고객의 비율.</li>
+<li><strong>약 90%</strong>: 제미나이 엔터프라이즈를 도입해 사용 중인 포춘 100대 기업의 비율.</li>
+</ul>
+</li>
+<li><strong>비용 및 성능 관련 발표 수치 (Claims/Provided Metrics)</strong>:
+<ul>
+<li><strong>98% 하락</strong>: 2024년 이후 토큰당 가격의 하락 폭.</li>
+<li><strong>80% 향상</strong>: 이전 세대 대비 TPU 8i 시스템이 제공하는 가격 대비 성능(Price-performance) 향상 수치.</li>
+</ul>
+</li>
+<li><strong>고객사 정량적 성과 지표</strong>:
+<ul>
+<li><strong>브라데스코(Bradesco)</strong>: 문서 검토 시간 1시간에서 5분으로 단축, 위험 불일치 60% 감소, 금융 효율성 10% 이상 달성.</li>
+<li><strong>울타 뷰티(Ulta Beauty)</strong>: 디지털 판매 전환율 3배(3-fold) 증가.</li>
+<li><strong>블룸버그 미디어(Bloomberg Media)</strong>: AI 접지 기술 적용 후 SQL 쿼리 정확도 63% 향상.</li>
+<li><strong>스냅(Snap)</strong>: 기술 진단 문제 해결 시간 30분에서 30초로 단축.</li>
+<li><strong>웨스파머스(Wesfarmers / Bunnings / Kmart / Officeworks)</strong>: 버닝스(Bunnings) 직원 행정 업무 50만 시간 절감, Kmart 및 Officeworks 쇼핑 에이전트를 통한 구매 전환율 최대 3배(3x) 증가.</li>
+<li><strong>코메르츠방크(Commerzbank)</strong>: 문서 검토 수작업 시간 20시간에서 1시간으로 단축.</li>
+<li><strong>글로보(Globo)</strong>: 검증 시간 20분에서 6초로 단축, 사전 계획 정확도 33% 향상, 단일 분기 127시간 절감.</li>
+<li><strong>산티 쿠퍼(Santee Cooper)</strong>: 시뮬레이션 및 모형화 속도 최대 75% 향상, 100억 달러 규모 그리드 확장 예산 시장 리스크 완화.</li>
+<li><strong>손포(SOMPO)</strong>: 34,000명 임직원 대상 10,000개 이상 맞춤형 에이전트 구축, 엔지니어링 팀의 신규 모델 개발 기간 1주일에서 1일로 단축.</li>
+<li><strong>NTT 도코모(NTT DOCOMO)</strong>: 데이터 분석 및 인사이트 도출 시간을 2주일에서 즉시(instant)로 단축, 연간 45만 시간 업무 절감.</li>
+<li><strong>에어월렉스(Airwallex)</strong>: 연간 2,000억 달러 이상 처리 플랫폼 상에서 고객 문의 대응 속도 10배 향상, 분쟁 처리 시간 40% 단축, 소프트웨어 출시 속도 95% 가속.</li>
+<li><strong>스탈링 은행(Starling Bank)</strong>: Scam Intelligence 활용을 통해 사기성 결제에 대한 고객 취소율 4배(quadrupled) 증가.</li>
+<li><strong>파르마시아스 델 아호로(Farmacias del Ahorro)</strong>: 임직원 채택률 95% 달성, 연간 14만 시간 생산성 확보.</li>
+<li><strong>바파르 그룹(Grupo Bafar)</strong>: 지점당 신규 계약 준비 시간 140분에서 17분으로 단축, 문서 처리 용량 10배 증대.</li>
+<li><strong>웨니어(Whenere)</strong>: 3D 월드빌딩 플랫폼 Dreamlands 적용으로 건당 7초/10센트 수준의 자산 생성, 단일 아티스트가 하루 250개 맞춤 자산 제작.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 보고서는 제공된 소스 데이터만을 기반으로 작성되었으며, 다음과 같은 기술적·정보적 한계와 불확실성이 존재한다.</p>
+<ol>
+<li><strong>산업별 특화 기능 출시 일정의 미확정</strong>:
+<ul>
+<li>금융 서비스 및 법률 분야는 프리뷰(Preview) 형태로 제공되고 있으나, 정부(Government), 보건의료(Healthcare), 리테일(Retail) 분야의 산업 특화 기능은 &quot;조만간 출시 예정(coming soon)&quot;으로만 표기되어 있어 구체적인 정식 출시(GA) 시점을 소스상에서 <strong>확인 불가</strong>.</li>
+</ul>
+</li>
+<li><strong>행사 현장 및 질의응답 정보의 부재</strong>:
+<ul>
+<li>제공된 소스는 기조연설 요약문 형식이므로 현장에서 이루어진 언론 Q&amp;A, 부스 시연 상세 내역, 행사 진행자 및 타 세션 참석자에 대한 정보는 소스에서 <strong>다루지 않음</strong>.</li>
+</ul>
+</li>
+<li><strong>외부 하드웨어 및 경쟁사 제원 비교의 한계</strong>:
+<ul>
+<li>TPU 8i의 성능 비교 대상이 &quot;이전 세대&quot;로만 명시되어 있어 정확한 세대 명칭(예: TPU v5e 등)이 불분명하며, 타사 AI 가속기(NVIDIA GPU 등)와의 객관적 성능 비교 지표는 소스에 포함되어 있지 않아 <strong>서술 불가</strong>.</li>
+</ul>
+</li>
+<li><strong>타사 모델 연동 범위의 한계</strong>:
+<ul>
+<li>유연한 모델 선택 아키텍처에서 타사 프론티어 모델로 앤트로픽의 '클로드(Claude)'가 명시되어 있으나, 향후 추가될 사설/오픈 모델의 구체적인 라인업은 소스에서 명시되지 않아 <strong>확인 불가</strong>.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/ai-share/">AI 대화 공유</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

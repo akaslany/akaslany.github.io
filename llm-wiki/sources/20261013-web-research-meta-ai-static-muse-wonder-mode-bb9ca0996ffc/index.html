@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>muse-wonder-model-card</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>muse-wonder-model-card</h1>
+<p class="page-meta">PDF · 2026-10-13</p>
+<h2 id="요약">요약</h2>
+<p>메타 플랫폼스(Meta Platforms, Inc.) 및 메타 플랫폼스 아일랜드 리미티드(Meta Platforms Ireland Limited)는 2026년 10월 12일 자사의 차세대 인공지능 모델인 '뮤즈 원더(Muse Wonder)' 및 '뮤즈 원더 풀(Muse Wonder Full)'의 모델 카드를…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://research.meta.ai/static/muse-wonder-model-card">출처</a> · <a href="https://www.youtube.com/watch?v=dqOFQ5cryRg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="메타-뮤즈-원더-muse-wonder-모델-카드-해설-보고서">메타 뮤즈 원더(Muse Wonder) 모델 카드 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>메타 플랫폼스(Meta Platforms, Inc.) 및 메타 플랫폼스 아일랜드 리미티드(Meta Platforms Ireland Limited)는 2026년 10월 12일 자사의 차세대 인공지능 모델인 '뮤즈 원더(Muse Wonder)' 및 '뮤즈 원더 풀(Muse Wonder Full)'의 모델 카드를 공개하였습니다. 본 보고서는 해당 모델 카드에 명시된 기술적 사양, 목적, 성능 평가 결과, 위험 관리 프레임워크 및 한계점을 객관적으로 종합 분석한 문서입니다.</p>
+<p>뮤즈 원더 모델 군은 멀티모달(Multimodal) 입출력을 지원하는 모델로, 입력 모달리티로는 텍스트, 이미지, 비디오, 오디오를 지원하며 출력 모달리티는 텍스트 형태를 취합니다. 추론(Inference) 단계에서 최대 100만(1M) 토큰의 컨텍스트 길이를 제공하도록 설계되었습니다. 또한 전 세계의 다양한 언어가 포함된 다국어 학습 데이터를 기반으로 사전 학습을 거쳤습니다.</p>
+<p>이 모델의 주요 개발 목적은 상업적 이용 및 연구 개발을 모두 아우르며, 특히 개인 및 전문 분야에서의 에이전틱(Agentic) 작업 수행에 특화된 강점을 가집니다. 일반 목적의 추론 및 문서 분석부터 소프트웨어 공학, 도구 활용 기반의 다단계 워크플로, 도메인 특화 지식 작업 및 과학 기술 연구 지원에 이르기까지 폭넓은 활용 영역을 목표로 설정하고 있습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-findings">2. 주요 논점 (Key Arguments &amp; Findings)</h4>
+<h5 id="2-1-모델-기능-및-주요-활용-분야">2.1. 모델 기능 및 주요 활용 분야</h5>
+<p>소스 문서에 제시된 뮤즈 원더 모델의 주요 활용 분야는 크게 6가지 영역으로 구별됩니다.</p>
+<ol>
+<li><strong>일반 목적 보조 및 추론 (General-purpose assistance and reasoning):</strong>
+<ul>
+<li>질의응답, 문서 및 데이터 분석, 글쓰기 및 편집, 정보 요약, 복잡한 문제에 대한 논리적 추론 작업을 수행합니다.</li>
+</ul>
+</li>
+<li><strong>코딩 및 소프트웨어 공학 (Coding and software engineering):</strong>
+<ul>
+<li>개별 프로그래밍 과제 해결부터 대규모 소프트웨어 프로젝트에 이르는 광범위한 작업에서 코드 생성, 설명, 디버깅, 테스트 및 코드 수정을 수행합니다.</li>
+</ul>
+</li>
+<li><strong>개인 및 전문 에이전트 (Personal and professional agents):</strong>
+<ul>
+<li>외부 도구 활용 및 다양한 애플리케이션과의 상호작용을 통해 연구, 계획 수립, 다단계 워크플로 실행을 지원합니다.</li>
+</ul>
+</li>
+<li><strong>도메인 특화 지식 작업 (Domain-specific knowledge work):</strong>
+<ul>
+<li>법률, 금융, 보건/의료 등 전문 분야의 데이터를 해석하고, 전문 문서 이해, 출처 자료 종합, 검토용 초안 작성 등의 작업을 보조합니다.</li>
+</ul>
+</li>
+<li><strong>멀티모달 이해 및 추론 (Multimodal understanding and reasoning):</strong>
+<ul>
+<li>텍스트와 함께 문서, 스크린샷, 차트, 이미지, 비디오 자료를 통합적으로 해석하고 추론합니다.</li>
+</ul>
+</li>
+<li><strong>연구 개발 (Research and development):</strong>
+<ul>
+<li>정보 종합, 가설 수립 및 검증, 실험 설계, 결과 분석 등 과학 및 기술 연구 전반을 지원하며, 리눅스(Linux) 가상 머신 환경에서의 복잡한 엔드투엔드 연구 작업(Agents' Last Exam) 등을 실행합니다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-2-성능-평가-및-경쟁-모델-비교">2.2. 성능 평가 및 경쟁 모델 비교</h5>
+<p>뮤즈 원더 및 뮤즈 원더 풀의 성능은 개인·전문 에이전트, 코딩 및 소프트웨어 공학, 일반 지능 등 3가지 핵심 영역의 벤치마크를 통해 평가되었습니다. 평가 시 뮤즈 원더 모델군은 최대 추론 노력을 적용한 결과(<code>max</code>)를 기준으로 삼았으며, 주요 경쟁 모델인 '클로드 페이블 5.1(Claude Fable 5.1 max)', '지피티-6 아스트라(GPT-6 Astra max)', '클로드 오퍼스 5.5(Claude Opus 5.5 max)'와 비교 분석을 진행했습니다.</p>
+<h6 id="주요-벤치마크-비교표">주요 벤치마크 비교표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 영역</th>
+<th style="text-align:left">벤치마크 항목</th>
+<th style="text-align:center">뮤즈 원더 풀 (max)</th>
+<th style="text-align:center">뮤즈 원더 (max)</th>
+<th style="text-align:center">클로드 페이블 5.1 (max)</th>
+<th style="text-align:center">지피티-6 아스트라 (max)</th>
+<th style="text-align:center">클로드 오퍼스 5.5 (max)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>개인 및 전문 에이전트</strong></td>
+<td style="text-align:left">개인 초지능 지수 (PSI)</td>
+<td style="text-align:center"><strong>59.1</strong></td>
+<td style="text-align:center">54.3</td>
+<td style="text-align:center">49.9</td>
+<td style="text-align:center">54.5</td>
+<td style="text-align:center">55.2</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">하비 랩-에이에이 (Harvey LAB-AA)</td>
+<td style="text-align:center"><strong>13.1</strong></td>
+<td style="text-align:center">10.0</td>
+<td style="text-align:center">6.4</td>
+<td style="text-align:center">8.6</td>
+<td style="text-align:center">4.2</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">발스 파이낸스 에이전트 V2 (Vals Finance Agent V2)</td>
+<td style="text-align:center"><strong>59.1</strong></td>
+<td style="text-align:center">56.6</td>
+<td style="text-align:center">58.9</td>
+<td style="text-align:center">53.5</td>
+<td style="text-align:center">58.6</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">헬스벤치 프로 (HealthBench Pro)</td>
+<td style="text-align:center">62.3</td>
+<td style="text-align:center">60.5</td>
+<td style="text-align:center">62.1</td>
+<td style="text-align:center">65.3</td>
+<td style="text-align:center"><strong>65.6</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">오토메이션벤치-AA (AutomationBench-AA)</td>
+<td style="text-align:center"><strong>45.4</strong></td>
+<td style="text-align:center">39.1</td>
+<td style="text-align:center">32.1</td>
+<td style="text-align:center">41.6</td>
+<td style="text-align:center">41.2</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GDP.pdf</td>
+<td style="text-align:center">33.2</td>
+<td style="text-align:center">30.8</td>
+<td style="text-align:center">27.6</td>
+<td style="text-align:center"><strong>34.2</strong></td>
+<td style="text-align:center">30.6</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">잡벤치 (JobBench)</td>
+<td style="text-align:center">75.3</td>
+<td style="text-align:center">70.5</td>
+<td style="text-align:center">73.1</td>
+<td style="text-align:center">66.1</td>
+<td style="text-align:center"><strong>75.4</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">오에스월드 V2.1 (OSWorld V2.1 - Partial)</td>
+<td style="text-align:center">78.4</td>
+<td style="text-align:center">72.6</td>
+<td style="text-align:center">80.7</td>
+<td style="text-align:center">75.8</td>
+<td style="text-align:center"><strong>81.8</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">오에스월드 V2.1 (OSWorld V2.1 - Binary)</td>
+<td style="text-align:center">39.4</td>
+<td style="text-align:center">34.3</td>
+<td style="text-align:center"><strong>43.1</strong></td>
+<td style="text-align:center">34.3</td>
+<td style="text-align:center">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">메모리벤치 (MemoryBench)</td>
+<td style="text-align:center">85.5</td>
+<td style="text-align:center"><strong>85.6</strong></td>
+<td style="text-align:center">79.0</td>
+<td style="text-align:center">81.4</td>
+<td style="text-align:center">81.5</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코딩 및 소프트웨어</strong></td>
+<td style="text-align:left">터미널-벤치 4.0-AA (Terminal-Bench 4.0-AA)</td>
+<td style="text-align:center">57.1</td>
+<td style="text-align:center">52.0</td>
+<td style="text-align:center">52.0</td>
+<td style="text-align:center">59.1</td>
+<td style="text-align:center"><strong>59.6</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">디프에스더블유이 v1.1 (DeepSWE v1.1)</td>
+<td style="text-align:center"><strong>79.0</strong></td>
+<td style="text-align:center">78.8</td>
+<td style="text-align:center">67.4</td>
+<td style="text-align:center">74.1</td>
+<td style="text-align:center">74.2</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">에스더블유이-마라톤 (SWE-Marathon)</td>
+<td style="text-align:center"><strong>57.5</strong> (xhigh)</td>
+<td style="text-align:center">53.1</td>
+<td style="text-align:center">45.6</td>
+<td style="text-align:center">42.5</td>
+<td style="text-align:center">46.3</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">프로그램벤치 (ProgramBench)</td>
+<td style="text-align:center">59.0</td>
+<td style="text-align:center">50.0</td>
+<td style="text-align:center">55.5</td>
+<td style="text-align:center">52.5</td>
+<td style="text-align:center"><strong>70.5</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>일반 지능</strong></td>
+<td style="text-align:left">아티피셜 아날리시스 지수 (AA Intelligence Index v4.3)</td>
+<td style="text-align:center">56</td>
+<td style="text-align:center">52</td>
+<td style="text-align:center">53</td>
+<td style="text-align:center">53</td>
+<td style="text-align:center"><strong>58</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="분야별-상세-평가-분석">분야별 상세 평가 분석</h6>
+<ol>
+<li>
+<p><strong>개인 및 전문 에이전트 분야:</strong></p>
+<ul>
+<li><strong>개인 초지능 지수(PSI, Personal Superintelligence Index):</strong> 7개의 내부 평가 항목(Agents' Last Exam, AutomationBench-AA, FocusBench, JobBench, GDP.pdf, VBT, DRACO)을 종합한 지수로, 뮤즈 원더 풀이 59.1점을 기록하여 가장 높은 점수를 달성했습니다.
+<ul>
+<li><strong>포커스벤치(FocusBench):</strong> 주거, 여행, 정보기술(IT), 금융 등 다양한 도메인에서 현실 세계의 장애물에 지속적으로 대처하고 동적으로 변화하는 환경에 적응하는 개인 에이전트 역량을 정밀하게 평가합니다.</li>
+<li><strong>브라우징 검증 과제(VBT, Verifiable Browsing Task):</strong> 현실적인 사용자 요청 형태의 정보 탐색 질문에 대해 브라우저 검색, 열기, 찾기 도구를 활용하여 검증 가능한 답변을 도출하는 웹 브라우징 에이전트 수행 능력을 평가합니다.</li>
+</ul>
+</li>
+<li><strong>하비 랩-에이에이(Harvey LAB-AA):</strong> 아티피셜 아날리시스가 주관하는 법률 에이전트 평가(환각 검사 포함 v1.1 기준)로, 뮤즈 원더 풀이 13.1점을 기록해 경쟁 모델 대비 우수한 성능을 보였습니다.</li>
+<li><strong>발스 파이낸스 에이전트 V2(Vals Finance Agent V2):</strong> 발스 에이아이(Vals AI)가 주관하는 금융 분석 평가로, 뮤즈 원더 풀이 59.1점으로 가장 높았습니다.</li>
+<li><strong>메모리벤치(MemoryBench):</strong> 64K~100K 토큰에 달하는 대규모 다회차 대화 맥락 속에서 대상 정보를 정밀하게 회상하는 능력을 평가합니다. 여러 개별 사실과 함께 방해/교란(distractor) 대화 및 뒤늦게 주입되거나 업데이트되는 정보 속에서도 정확한 정보를 복원하는지 측정하며, 가중치가 부여된 질문별 루브릭 기준에 따라 대형언어모델(LLM) 판정관이 점수를 산정합니다. 뮤즈 원더가 85.6점, 뮤즈 원더 풀이 85.5점으로 우수한 복원력을 나타냈습니다.</li>
+<li><strong>오에스월드 V2.1(OSWorld V2.1):</strong> 우분투(Ubuntu) 데스크톱 환경에서 스크린샷과 GUI 조작을 통해 수행하는 평가입니다. 부분 점수(Partial) 기준 클로드 오퍼스 5.5가 81.8점으로 1위를 차지했으며, 이진 완료(Binary) 기준으로는 클로드 페이블 5.1이 43.1점을 나타냈습니다. (클로드 오퍼스 5.5의 이진 완료 점수는 소스상에 미기재되어 확인 불가)</li>
+</ul>
+</li>
+<li>
+<p><strong>코딩 및 소프트웨어 공학 분야:</strong></p>
+<ul>
+<li><strong>디프에스더블유이 v1.1(DeepSWE v1.1):</strong> 5개 언어, 91개 리포지토리의 113개 과제를 다루는 리포지토리 수준 코딩 평가에서 뮤즈 원더 풀이 79.0%(pass@1)로 최고 성적을 거두었습니다.</li>
+<li><strong>에스더블유이-마라톤(SWE-Marathon):</strong> 어번던트 에이아이(Abundant AI)가 측정한 초대형 프로젝트 코딩 평가입니다. 하네스(Harness) 조건과 관련해, 지피티-6 아스트라는 코덱스(Codex), 클로드 페이블 5.1은 클로드 코드(Claude Code)를 각각 사용하여 엄격하게 통제된 동일 하네스 비교는 아닙니다. 뮤즈 원더 풀은 초고도 추론 노력(xhigh) 조건에서 57.5%를 기록했습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>일반 지능 분야:</strong></p>
+<ul>
+<li><strong>아티피셜 아날리시스 지수(AA Intelligence Index v4.3):</strong> 여러 독립적 벤치마크를 통합한 지수로, 클로드 오퍼스 5.5가 58점으로 가장 높았고 뮤즈 원더 풀이 56점으로 뒤를 이었습니다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-3-위험-평가-및-위협-완화-조치">2.3. 위험 평가 및 위협 완화 조치</h5>
+<p>메타 초지능 스케일링 프레임워크(Meta Superintelligence Scaling Framework)에 따라 최상위 성능 모델인 '뮤즈 원더 풀'을 대상으로 치명적 위험 요인 평가가 진행되었습니다.</p>
+<h6 id="화학-및-생물학-cbrn-위험-평가">화학 및 생물학(CBRN) 위험 평가</h6>
+<ul>
+<li><strong>사전 완화 평가:</strong> 완화 조치가 없는 상태의 unmitigated 모델은 화학 및 생물학 분야에서 고위험 임계값(High risk threshold)에 도달할 가능성을 배제할 수 없는 것으로 평가되었습니다.</li>
+<li><strong>위협 완화 조치:</strong> 이에 따라 안전 사후 학습(Safety post-training) 및 시스템 수준 분류기(System-level classifiers) 등 특화된 완화 조치를 적용했습니다. 조치 적용 후 잔여 위험은 '보통 이하(Moderate or lower)' 수준으로 감소했습니다.</li>
+<li><strong>CBRN 능력 측정 결과:</strong>
+<ul>
+<li>시큐어바이오(SecureBio) 및 에이아이 안전 센터(CAIS)의 역량 평가 중 분자생물학(MBCT) 59.6%, 인체 병원체(HPCT) 66.5%, 바이러스학(VCT) 55.9%로 평균 60.7%를 기록했습니다.</li>
+<li>LAB-Bench 평가 중 ProtocolQA 89.0%, SeqQA+tools 95.6%를 기록했습니다.</li>
+<li>에이전틱 바이오 역량(ABC Bench) 평가 중 액체 취급 로봇(Liquid Handling) 제어 스크립트 생성은 100.0%를 나타냈습니다. 반면, 조각 설계(Fragment Design) 및 검수 회피(Screening Evasion) 항목은 안전 학습으로 인한 높은 거부율(<code>-*</code>)이 발생하여 점수 산정 전 거부 처리되었습니다.</li>
+<li>바이오 디자인 도구(Meta BDT, BioDesign Tools Usage): 메타가 팩컬티 에이아이(Faculty.AI) 및 외부 전문가와 공동 개발한 벤치마크로, 병원체 격리·특성 분석·변형 등 컴퓨팅 작업 5개 과제 평균 79.4%를 기록했습니다.</li>
+</ul>
+</li>
+<li><strong>CBRN 안전성 및 거부율:</strong>
+<ul>
+<li>생물학 안전 벤치마크인 바이오티어(BioTIER) 거부율은 영어 98.7%, 다언어 98.7%, 적대적 공격 98.2%를 달성했습니다.</li>
+<li>내부 화학 거부율 평가에서는 영어 100.0%, 다언어 100.0%, 적대적 공격 99.8%의 거부 성능을 확보했습니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="사이버-능력-및-복원력-평가">사이버 능력 및 복원력 평가</h6>
+<ul>
+<li><strong>사이버 능력:</strong> 사이버짐(CyberGym) 88.4%, 익스플로잇벤치(ExploitBench) 58.9%를 기록했습니다.</li>
+<li><strong>익스플로잇짐(ExploitGym) 검증:</strong> 총 92개의 플래그를 획득했으나, GPT-cyber 검증기 및 지미나이 3.1 프로(Gemini 3.1 Pro)를 통한 교차 검증 결과 의도된 취약점 활용은 21개, 의도되지 않은 취약점 활용은 71개로 확인되었습니다. 따라서 공식 순위 비교 기준 수치는 의도된 취약점에 해당하는 21개입니다. 완화 조치 전 사이버 위험 수준은 '보통 이하'로 평가되었습니다.</li>
+<li><strong>공모적 거부 실패율/공격 성공률(ASR):</strong> 사이버벤치(CyberBench) 단일/다중 0.8%, 폴리가드(PolyGuard) 사이버 하위집합 단일 1.1% / 다중 2.3%, 레드코드(RedCode) 단일 9.0% / 다중 8.0%로 적대적 탈옥(Jailbreak) 시도에 대한 강력한 복원력을 보여주었습니다.</li>
+</ul>
+<h6 id="통제-손실-loss-of-control-평가">통제 손실(Loss of Control) 평가</h6>
+<ul>
+<li>완화 조치 전 통제 손실 위험 평가 결과는 '보통 이하' 수준입니다.</li>
+<li><strong>마스크(MASK):</strong> 압박 상황에서도 baseline 지식에 반하지 않고 정직성을 유지하는지 평가하는 지표로 87.3%를 기록했습니다.</li>
+<li><strong>에이전틱 미스얼라인먼트(Agentic Misalignment):</strong> 목표 달성이나 종료 방지를 위해 유해한 행동을 취하는 비율을 측정하는 지표로 0%를 기록하여 통제 이탈 위험이 극히 낮음을 확인했습니다.</li>
+</ul>
+<hr />
+<h5 id="2-4-신뢰-및-안전성-trust-safety">2.4. 신뢰 및 안전성 (Trust &amp; Safety)</h5>
+<p>메타는 뮤즈 원더 모델의 안전한 배포를 위해 다층적 시스템 보호 조치를 적용했습니다.</p>
+<ol>
+<li><strong>가드레일 및 레드티밍:</strong> 메타 초지능 스케일링 프레임워크에 맞춰 사이버보안, 화학/생물학, 통제 손실 등 대형 재앙 위험 분야 전반에 걸쳐 레드티밍(Red-teaming) 및 광범위한 평가를 수행했습니다. 잔여 위험이 '보통 이하' 임계값에 도달했음을 내부 지배구조(Governance) 절차를 통해 최종 검토 후 배포를 결정했습니다.</li>
+<li><strong>모델 가중치 보안:</strong> 모델의 수명주기 전반에 걸쳐 '메타 수명주기 기반 가중치 보안 프로그램(Lifecycle-based weight security program)'을 운영하여 가중치 유출 및 안보 위험을 방지합니다.</li>
+<li><strong>제3자 협력 및 위협 모델링:</strong> 평가 벤치마크 개발 및 라이선싱을 위해 외부 기관과 협력했으며, 외부 전문가와의 위협 모델링 수행, 정부 기관 및 주요 이해관계자와의 인터뷰를 통해 평가 요건을 반영했습니다.</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-및-화자-entities-speakers">3. 등장 인물 및 화자 (Entities &amp; Speakers)</h4>
+<p>소스 문서 내에 기재된 조직, 제3자 평가 기관, 관련 기술 및 외부 참조 주체는 다음과 같습니다.</p>
+<ul>
+<li><strong>주요 개발 및 제공 주체:</strong>
+<ul>
+<li>메타 플랫폼스 (Meta Platforms, Inc.)</li>
+<li>메타 플랫폼스 아일랜드 리미티드 (Meta Platforms Ireland Limited)</li>
+</ul>
+</li>
+<li><strong>제3자 평가, 협력 및 기술/비교 주체:</strong>
+<ul>
+<li>아티피셜 아날리시스 (Artificial Analysis): Harvey LAB-AA, AutomationBench-AA, Terminal-Bench 4.0, AA Intelligence Index 운영 및 평가</li>
+<li>발스 에이아이 (Vals AI): Vals Finance Agent V2 평가 주관</li>
+<li>서지 (Surge): GDP.pdf 평가 점수 제공</li>
+<li>퍼플렉시티 (Perplexity): 심층 연구 벤치마크 DRACO 제공</li>
+<li>시큐어바이오 (SecureBio): BioTIER, ABC Bench, MBCT, HPCT, VCT 개발 및 평가</li>
+<li>에이아이 안전 센터 (Center for AI Safety / CAIS): 시큐어바이오와 CBRN 평가 공동 개발</li>
+<li>팩컬티 에이아이 (Faculty.AI): Meta BDT(BioDesign Tools) 공동 개발</li>
+<li>어번던트 에이아이 (Abundant AI): SWE-Marathon 평가 결과 제공</li>
+<li>데이터커브 (Datacurve): DeepSWE v1.1 제3자 평가 결과 제공</li>
+<li>오픈에이아이 (OpenAI): GPT-6 Astra 제공사, DeepSWE v1.1 지피티-6 아스트라 수치 제공, GPT-cyber 검증기 및 GPT-5.4 채점기 제공</li>
+<li>앤트로픽 (Anthropic): Claude Fable 5.1 및 Claude Opus 5.5 시스템 카드 수치 출처, Claude Code 하네스 제공사</li>
+<li>구글 (Google): Gemini 3.1 Pro 교차 검증기 제공사</li>
+</ul>
+</li>
+<li><strong>작성자 / 개별 화자 이름:</strong>
+<ul>
+<li>소스 문서 내 개별 연구자, 개발자 또는 보고서 작성자의 개인 성명은 기재되어 있지 않으므로 <strong>확인 불가</strong>합니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-timestamps">4. 주요 수치 및 시점 (Key Metrics &amp; Timestamps)</h4>
+<ul>
+<li>
+<p><strong>시점 및 사양:</strong></p>
+<ul>
+<li>모델 출시일: 2026년 10월 12일</li>
+<li>추론 시 컨텍스트 창 길이: 1,000,000 토큰 (1M tokens)</li>
+<li>연령 제한 정책: 18세 미만 개인의 사용 금지</li>
+</ul>
+</li>
+<li>
+<p><strong>벤치마크 핵심 수치 (뮤즈 원더 풀 / 뮤즈 원더):</strong></p>
+<ul>
+<li>개인 초지능 지수 (PSI): 59.1 점 / 54.3 점</li>
+<li>하비 랩-에이에이 (Harvey LAB-AA): 13.1 점 / 10.0 점</li>
+<li>발스 파이낸스 에이전트 V2 (Vals Finance Agent V2): 59.1 점 / 56.6 점</li>
+<li>헬스벤치 프로 (HealthBench Pro): 62.3 점 / 60.5 점</li>
+<li>오토메이션벤치-AA (AutomationBench-AA): 45.4 점 / 39.1 점</li>
+<li>GDP.pdf: 33.2 점 / 30.8 점</li>
+<li>잡벤치 (JobBench): 75.3 점 / 70.5 점</li>
+<li>오에스월드 V2.1 (OSWorld V2.1): Partial 78.4 점 (Binary 39.4 점) / Partial 72.6 점 (Binary 34.3 점)</li>
+<li>메모리벤치 (MemoryBench): 85.5 점 / 85.6 점</li>
+<li>터미널-벤치 4.0-AA (Terminal-Bench 4.0-AA): 57.1 점 / 52.0 점</li>
+<li>디프에스더블유이 v1.1 (DeepSWE v1.1): 79.0 점 / 78.8 점</li>
+<li>에스더블유이-마라톤 (SWE-Marathon): 57.5 점 (xhigh 조건) / 53.1 점</li>
+<li>프로그램벤치 (ProgramBench): 59.0 점 / 50.0 점</li>
+<li>아티피셜 아날리시스 지수 (AA Intelligence Index v4.3): 56 점 / 52 점</li>
+</ul>
+</li>
+<li>
+<p><strong>위험 평가 및 안전성 수치 (뮤즈 원더 풀 기준):</strong></p>
+<ul>
+<li>사이버짐 (CyberGym): 88.4%</li>
+<li>익스플로잇벤치 (ExploitBench): 58.9%</li>
+<li>익스플로잇짐 (ExploitGym): 총 92개 플래그 (의도적 21개, 비의도적 71개)</li>
+<li>공격 성공률 (ASR): CyberBench 0.8%(단일/다중), PolyGuard cyber 1.1%(단일) / 2.3%(다중), RedCode 9.0%(단일) / 8.0%(다중)</li>
+<li>바이오/화학 두가지 용도 지식 (SecureBio): MBCT 59.6%, HPCT 66.5%, VCT 55.9% (평균 60.7%)</li>
+<li>LAB-Bench: ProtocolQA 89.0%, SeqQA+tools 95.6%</li>
+<li>ABC Bench: Liquid Handling 100.0% (Fragment Design, Screening Evasion은 안전 거부로 산정 제외)</li>
+<li>메타 BDT (Meta BDT): 79.4%</li>
+<li>생물학(BioTIER) 거부율: 영어 98.7%, 다언어 98.7%, 적대적 프롬프트 98.2%</li>
+<li>화학(Internal Chemistry) 거부율: 영어 100.0%, 다언어 100.0%, 적대적 프롬프트 99.8%</li>
+<li>MASK 정직성 유지율: 87.3%</li>
+<li>에이전틱 미스얼라인먼트 (Agentic Misalignment) 유해 행동률: 0%</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<h5 id="소스-문서에-명시된-모델-자체의-한계점-및-배포-지침">소스 문서에 명시된 모델 자체의 한계점 및 배포 지침</h5>
+<ol>
+<li><strong>응답의 불완전성:</strong> 사용자 프롬프트에 대해 부정확하거나 편향되거나 불쾌감을 주는 응답을 생성할 가능성이 존재합니다.</li>
+<li><strong>다단계 추론 오류:</strong> 에이전트 작업에 최적화되어 있으나, 학습 데이터에 충분히 반영되지 않은 새로운 시나리오나 복잡한 다단계 추론 과정에서 오류가 발생할 수 있습니다.</li>
+<li><strong>시각 및 공간 추론 제약:</strong> 시각적 및 공간적 추론, 특히 3차원(3D) 작업 수행 능력에는 명확한 한계가 존재하므로 정밀한 공간 이해가 필요한 애플리케이션에서는 검증이 필요합니다.</li>
+<li><strong>언어별 평가 미비:</strong> 사전 학습 데이터에 포함된 모든 언어에 대해 평가가 이뤄진 것은 아니므로, 주요 지원 언어 이외의 언어에서는 성능 저하가 나타날 수 있습니다.</li>
+<li><strong>환경 설정에 따른 성능 변동성:</strong> 양자화(Quantization), 서빙 설정, 프롬프트 구성, 외부 도구 및 에이전트 하네스 구조에 따라 성능 측정값이 달라질 수 있습니다.</li>
+<li><strong>연령 제한 및 배포자 책임:</strong> 18세 미만 개인의 사용을 목적으로 하지 않으며, 배포자는 18세 미만 연령층 이용에 따른 위험 평가 및 관련 법률 준수 책임을 집니다.</li>
+<li><strong>책임 있는 사용(Responsible Use) 가이드라인:</strong> 개발자는 적용 분야 및 언어 환경에 맞춘 자체 평가를 수행해야 합니다. 특히 현실 세계에 실질적 영향을 미치거나 되돌릴 수 없는 작업(Irreversible actions)을 수행하는 에이전틱 환경에 모델을 배치할 경우, '사람의 개입 및 확인(Human-in-the-loop confirmation)' 등 추가적인 가드레일을 적용할 것을 강력히 권고합니다.</li>
+</ol>
+<h5 id="소스-미기재-사항-및-평가상의-불확실성">소스 미기재 사항 및 평가상의 불확실성</h5>
+<ul>
+<li><strong>개별 연구진 및 작성자 명단:</strong> 소스 텍스트 내에 개별 연구자 또는 저자 목록이 포함되어 있지 않아 <strong>확인 불가</strong>합니다.</li>
+<li><strong>학습 데이터의 구체적 규모 및 비용:</strong> 사전 학습 데이터의 구체적 용량, 토큰 수, 데이터 구성 비율, 모델 훈련 비용 등은 소스에 기재되어 있지 않아 <strong>확인 불가</strong>합니다.</li>
+<li><strong>경쟁 모델 일부 지표 미표기:</strong> 클로드 오퍼스 5.5(Claude Opus 5.5)의 OSWorld V2.1 이진 완료(Binary) 점수는 소스 표에 표기되지 않아 <strong>확인 불가</strong>합니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

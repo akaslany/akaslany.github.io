@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formal_Verification_of_Signal_4</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Formal_Verification_of_Signal_4</h1>
+<p class="page-meta">PDF · 2026-11-14</p>
+<h2 id="요약">요약</h2>
+<p>[객관적 사실] 본 보고서는 구글 딥마인드(Google DeepMind) 및 구글(Google) 연구진이 개발한 다중 에이전트 인공지능(AI) 기반 형식 명세 및 검증 프레임워크인 AlphaProof Code의 기술적 아키텍처와, 이를 세계적인 종단간 암호화(E2EE) 표준 프로토콜 구현체인 libsignal의 기계어…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://deepmind.google/documents/36/Formal_Verification_of_Signal_4.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=IBbVZ4m1O9E">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="alphaproof-code를-통한-signal-프로토콜-기계어-수준-형식-검증-해설-보고서">AlphaProof Code를 통한 Signal 프로토콜 기계어 수준 형식 검증 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>[객관적 사실] 본 보고서는 구글 딥마인드(Google DeepMind) 및 구글(Google) 연구진이 개발한 다중 에이전트 인공지능(AI) 기반 형식 명세 및 검증 프레임워크인 <strong>AlphaProof Code</strong>의 기술적 아키텍처와, 이를 세계적인 종단간 암호화(E2EE) 표준 프로토콜 구현체인 <strong>libsignal</strong>의 기계어 바이너리에 적용하여 달성한 암호학적 보안 검증 성과를 종합 해설한다(§1).</p>
+<ul>
+<li><strong>[객관적 사실] 검증 대상의 특성 및 중요성</strong>: 검증 대상은 전 세계 수십억 명의 사용자(Signal 앱, WhatsApp, Meta Messenger, Google Messages 등)가 통신 보안을 의존하는 Signal 프로토콜의 표준 참조 구현체인 <code>libsignal</code> (v0.105.4 및 <code>spqr</code> v1.6.0)이다(§1, §3). 기존 형식 검증 연구들이 프로토콜의 추상적 모델이나 검증용으로 재작성된 코드, 또는 고수준 소스 코드를 대상으로 진행되었던 것과 달리, 본 프로젝트는 어떠한 수정도 가하지 않은 실용 러스트(Rust) 코드를 표준 컴파일러(<code>stock rustc 1.98.1</code>)로 컴파일한 AArch64 리눅스(Linux) 기계어 실행 바이너리(<code>libsignal-cli</code>)를 직접 검증 대상으로 삼았다(§1, §3, §4, Table 1).</li>
+<li><strong>[객관적 사실] 프로젝트의 핵심 성과</strong>: AlphaProof Code 프레임워크를 통해 포스트-양자 키 교환 핸드셰이크인 PQXDH(Post-Quantum Extended Diffie-Hellman) 및 트립플 라쳇(Triple Ratchet, Sparse Post-Quantum Ratchet 포함) 프로토콜의 상징적(Symbolic) 보안 모델과 계산적(Computational) 보안 모델 양쪽 모두에서 기계 검증된 완결된 보안 증명을 구축하였다(§1, §5). 검증 과정에서 자동 생성된 기계 검증 가능 Lean 4 코드의 규모는 약 650만 줄에 달하며, 이는 약 2만 6천 줄의 신뢰 명세(Trusted Specifications) 및 AArch64 의미론(Semantics)을 신뢰 기반으로 삼는다(§1, §7).</li>
+<li><strong>[연구진의 주장] 전통적 형식 검증과의 비교 및 패러다임 전환</strong>: 전통적인 형식 검증 프로젝트(예: seL4 마이크로커널 검증에 20인년, CompCert 검증 C 컴파일러 개발에 6인년 소요)는 막대한 인적 노동 비용과 검증 친화적 코드 전용 작성의 필요성 때문에 특수 시스템 분야로 사용이 제한되어 왔다(§1). 연구진은 인간의 지도를 받는 AI 에이전트 팀과의 협업을 통해 기존 도구로는 수년의 전문가 노동이 필요했던 대규모 최적화 기계어 바이너리의 형식 검증을 단 5명의 연구원이 4주 만에 완료함으로써, AI가 실용적인 대규모 소프트웨어 형식 검증의 경제적 패러다임 전환을 이끌어냈다고 주장한다(§1, §7, §9).</li>
+<li><strong>[작성자의 분석적 해석] 본 보고서의 의의</strong>: 본 프로젝트는 암호학적 이론(상징적/계산적 모델)과 실제로 컴파일되어 실행되는 최적화 기계어 바이너리 사이의 구조적 간극(Gap)을 완전히 메운 최초의 연구이다. 특히 러스트 컴파일러(<code>rustc</code>)나 LLVM을 신뢰 영역(TCB)에 포함시키지 않고 AArch64 기계어 바이트 수준에서 직접 암호학적 보안 정리를 증명해 냄으로써, 암호 프로토콜 검증 및 시스템 보안 분야의 새로운 이정표를 제시하였다(§5.3, §8).</li>
+</ul>
+<hr />
+<h5 id="2-주요-논점-key-technical-arguments-evidence">2. 주요 논점 (Key Technical Arguments &amp; Evidence)</h5>
+<h6 id="2-1-alphaproof-code의-아키텍처-및-인간-ai-협업-아키텍처">2.1. AlphaProof Code의 아키텍처 및 인간-AI 협업 아키텍처</h6>
+<p>[객관적 사실] AlphaProof Code는 소스 코드의 컴파일된 기계어 바이너리와 연구 문헌의 암호학 명세 간의 일치성을 Lean 증명 언어로 입증하는 다중 에이전트 프레임워크이다(§2).</p>
+<ul>
+<li><strong>[연구진의 주장] 핵심 아키텍처 전환 및 무결성 보증</strong>: 형식 검증의 주된 노동 병목이 '증명 작성(Proof Writing)'에서 '명세 작성(Specification Writing)'으로 이동했다(§2). AI 에이전트가 생성한 대규모 증명 코드는 비신뢰(Untrusted) 영역에 위치하며 최종적으로 Lean 커널(Kernel)에 의해 엄격하게 검증되므로 에이전트의 오류나 환각 위험이 완벽히 차단된다(§2, §2.1). 반면 명세(Specification)는 검증의 기준이 되므로 신뢰(Trusted) 영역에 속하며 인간 연구자의 심도 있는 검토와 승인이 필수적이다(§2.1, Figure 1).</li>
+<li><strong>[객관적 사실] 4가지 핵심 구성요소 (Figure 1, §2.1~§2.4)</strong>:
+<ol>
+<li><strong>명세 작성 (Specification Writing)</strong>: 인간의 지도하에 명세 작성 에이전트(spec-writer agent)가 연구 문헌의 암호 모델 및 보안 속성을 Lean 명세로 변환하고, 검토 에이전트(reviewer agents)가 비판적 검토를 수행하며 최종적으로 인간 사용자가 승인한다(§2.1).</li>
+<li><strong>기계어 의미론 (Machine-Code Semantics)</strong>: 단일 스레드, 정적 링크된 AArch64 Linux 사용자 모드 환경을 Lean 내에 공식 모델링하였다. 총 467개 명령어와 31개 시스템 콜을 7,532줄의 Lean 코드로 정의하였으며, Arm 공식 ASL 명세, 유니콘(Unicorn) 에뮬레이터, QEMU 및 Sail 모델 오라클 테스트를 통해 정밀 검증되었다(§2.2).</li>
+<li><strong>증명 합성 (Proof Synthesis)</strong>: 오케스트레이터(Orchestrator), 팀 리드(Team Lead), 증명 워커(Proof Worker), 아키텍트(Architect), 통합자(Integrator), 크리틱(Critic) 등 40~80개의 전문화된 AI 에이전트 팀이 자율적으로 증명을 작성한다(§2.3).</li>
+<li><strong>문지기 (Gatekeeping)</strong>: 에이전트의 부당한 전제조건 추가 등 명세 훼손을 방지하기 위해 문지기(Gatekeeper)가 격리 보관(Held-out)된 명세 원본과 승인된 변경 이력만을 비교 도구(comparator) 및 Lean 커널로 확인한 후 최종 승인한다(§2.4).</li>
+</ol>
+</li>
+<li><strong>[작성자의 분석적 해석] AI 에이전트 팀의 맥락 관리 및 상태 오염 방지 메커니즘</strong>: 40~80개에 달하는 다중 에이전트가 무결성을 유지하며 자율 작업을 수행할 수 있었던 핵심 메커니즘은 엄격한 역할 분담과 맥락 관리(Context Management) 구조에 있다(§2.3). 오케스트레이터는 상위 목표를 팀 리드에게 하향 전달하고 직접 코드를 수정하지 않으며, 단일 Lean 파일은 동시에 단 1명의 증명 워커만 수정할 수 있게 제약하였다. 변경 사항의 리포지토리 커밋은 오직 통합자(Integrator)만 수행하며, 에이전트 간의 반복적 신호 오염을 막기 위해 공용 게시판 파일(bulletin file)을 통해 진행 상황과 노티스를 공유하게 설계되었다(§2.3, §7). 또한 증명 워커는 작업에 착수하기 전 해당 목표가 비성립하는지(falsification) 먼저 확인하여 무의미한 연산 자원 소모를 방지한다(§2.3, §7).</li>
+<li><strong>[객관적 사실] 명세 강력성 검증 기법</strong>: 명세의 결함이나 전제 조건이 충돌하여 정리가 무의미하게 성립하는 비공백성(Vacuity)을 방지하기 위해 전제 조건의 동시 충족 가능성 증명, 변이 테스트(Mutation Testing; MAC 검증 생략 코드 주입 등), 역사적 실제 버그 재현 테스트를 실시하였다(§2.1, §6).</li>
+</ul>
+<h6 id="2-2-상징적-보안-모델-symbolic-model-검증-및-정제-refinement">2.2. 상징적 보안 모델 (Symbolic Model) 검증 및 정제 (Refinement)</h6>
+<p>[객관적 사실] 상징적 검증은 암호학적 프리미티브(해시, MAC, 암호화 등)를 충돌이 발생하지 않는 이상적인 블랙박스 용어(Terms)로 취급하는 돌레프-야오(Dolev-Yao) 모델(DyLean 프레임워크)을 따른다(§3, §5.1.1).</p>
+<ul>
+<li><strong>[객관적 사실 및 정리] 바이너리-모델 정제 정리 (Theorem 1 / 정리 1)</strong>:
+<ul>
+<li>실체화된 AArch64 기계어 바이너리의 하드웨어 실행 트레이스(Hardware Traces)가 바이트 충돌(Collision)을 제외하고는 DyLean 상의 상징적 프로토콜 모델 트레이스로 완벽히 정제(Refinement)됨을 증명하였다(§5.1.4, §5.1.5).</li>
+<li>구체화 함수 $\gamma$(Concretization Function)는 상징적 모델 용어를 실제 바이트 스트링으로 매핑하는 동형사상(Homomorphism)으로 작동하며, 바이트를 용어로 역매핑하지 않는 구조를 취해 추측된 바이트 값의 충돌 가능성을 독립적으로 처리한다(§5.1.4, Appendix B.3).</li>
+</ul>
+</li>
+<li><strong>[객관적 사실] 증명된 10가지 상징적 보안 정리 (Table 2, Appendix B.6 Table 5)</strong>: DyLean 모델 및 정제 과정을 거쳐 기계어 바이너리에 대해 입증된 10가지 보안 정리는 다음과 같다(§5.1.2, Table 2, Table 5).
+<ol>
+<li><strong>순방향 비밀성 (Forward Secrecy)</strong>: 메시지 키 또는 체인/루트 키가 노출되더라도 해당 키가 도출되기 전의 과거 메시지 키는 보안이 유지됨.</li>
+<li><strong>탈취 후 보안성 (Post-Compromise Security)</strong>: 상태 탈취 후 정직한 통신자에 의해 새로운 DH 라쳇 단계가 수행되면 보안성이 자가 치유됨.</li>
+<li><strong>발신자 핸드셰이크 비밀성 (Initiator Secrecy)</strong>: Alice(발신자)의 핸드셰이크 키는 Bob의 장기 키/프리키가 특정 조합으로 탈취되거나 DH가 깨지지 않는 한 비밀이 유지됨.</li>
+<li><strong>수신자 핸드셰이크 비밀성 (Responder Secrecy)</strong>: Bob(수신자)의 핸드셰이크 키는 Alice의 identity 키 및 Bob의 프리키가 특정 조합으로 탈취되지 않는 한 비밀이 유지됨.</li>
+<li><strong>핸드셰이크 상호 인증 (Authentication)</strong>: Bob이 핸드셰이크를 수락하면 Alice가 동일한 프리키를 사용하여 핸드셰이크를 완료했음을 보장함.</li>
+<li><strong>동료 인증 (Peer Authentication)</strong>: 상대방의 정합성을 확인하여 악의적 중계자가 임의로 중간에 개입하지 못하도록 보장함.</li>
+<li><strong>키 탈취 위장 저항성 / KCI 저항성 (Key Compromise Impersonation Resistance)</strong>: 자신의 장기 키가 탈취되더라도 공격자가 상대방으로 위장하여 자신에게 접근하는 것을 방지함.</li>
+<li><strong>세션 독립성 (Session Independence)</strong>: 타 세션의 프리키 탈취가 대상 세션의 보안성에 영향을 미치지 않음.</li>
+<li><strong>수확 후 미래 해독 저항성 (Harvest-Now-Decrypt-Later Resistance)</strong>: KEM 탈취 없이 미래에 DH가 깨지더라도 과거 통신 암호문이 해독되지 않음.</li>
+<li><strong>핸드셰이크 순방향 비밀성 (Handshake FS)</strong>: 핸드셰이크 완료 후 장기 키가 탈취되어도 핸드셰이크 과정에서 생성된 세션 비밀은 유지됨.</li>
+</ol>
+</li>
+</ul>
+<h6 id="2-3-계산적-보안-모델-computational-model-검증-및-환원-reduction">2.3. 계산적 보안 모델 (Computational Model) 검증 및 환원 (Reduction)</h6>
+<p>[객관적 사실] 계산적 보안 모델에서는 암호문과 키를 바이트 스트링으로 다루며, 확률적 다항 시간 공격자(Adversary)의 이점(Advantage)이 기저 암호 프리미티브의 난제성으로 귀결(Reduction)됨을 입증한다(§5.2).</p>
+<ul>
+<li><strong>[객관적 사실 및 정리] 계산적 보안 환원 정리 (Theorem 2 / 정리 2)</strong>:
+<ul>
+<li><code>libsignal-cli</code> 바이너리를 직접 실행하는 암호학 게임 환경에서, 예산 제한(Budgets)을 따르는 공격자 $A$의 이점 $\text{Adv}^{\text{bin}}(A)$는 다음 상한(Bound)으로 제한됨을 명확한 수학적 수식으로 증명하였다(§5.2.3, §C.4):
+$$\text{Adv}^{\text{bin}}(A) \le 2\epsilon_{\text{KI}} + 2 N_{\text{send}} N_{\text{spk}} \delta_{\text{kem}} + \sum_{k &lt; q_{\text{start}}} \text{Sess}<em>k + 2\epsilon</em>{\text{mlkem}}(A)$$</li>
+<li>여기서 $\epsilon_{\text{KI}}$는 PQXDH 핸드셰이크 키 비구분성 이점, $N_{\text{send}}$는 발신 세션 수, $N_{\text{spk}}$는 서명된 프리키 수, $\delta_{\text{kem}}$은 Kyber1024 복호화 실패 확률($\le 2^{-174}$), $\text{Sess}<em>k$는 $k$번째 라쳇 세션 이점, $\epsilon</em>{\text{mlkem}}(A)$는 SPQR의 ML-KEM-768 복호화 실패 확률이다(§5.2.3, §C.4).</li>
+</ul>
+</li>
+<li><strong>[객관적 사실] 기저 암호 난제 이점($\epsilon_{\text{KI}}$ / $\beta_{\text{KI}}$)의 세부 환원 구조</strong>: 핸드셰이크 키 비구분성 이점 $\epsilon_{\text{KI}}$ (랜덤 오라클 모델 적용 시 $\beta_{\text{KI}} + 2 N_{\text{send}} N_{\text{spk}} \delta_{\text{kem}}$)는 다음과 같이 개별 기저 암호 난제들로 정밀하게 분해 증명된다(Lemma 1, Appendix C.3, C.7):
+<ol>
+<li><strong>$\epsilon_{\text{Sig}}$</strong>: X25519 및 XEdDSA 서명의 무단 도용 불가성(EUF-CMA) 난제 이점.</li>
+<li><strong>$\epsilon_{\text{ShCr}}$</strong>: Kyber1024 포스트-양자 KEM의 충돌 저항성(SH-CR) 난제 이점.</li>
+<li><strong>$\epsilon_{\text{GapDH}}$</strong>: X25519 간극 디피-헬만(Gap-DH) 난제 이점.</li>
+<li><strong>공개키 충돌 확률 상한</strong>: 공개키 중복 확률 제한 항들($\frac{n_{\text{spk}}^2}{2^{250}}$, $\frac{n_{\text{send}} n_{\text{spk}}}{2^{256}}$ 등) 포함.</li>
+</ol>
+</li>
+<li><strong>[연구진의 주장 및 근거] 환원 언어 및 분리 논리(Separation Logic)</strong>:
+<ul>
+<li>리덕션(Reduction)의 정밀성을 보장하기 위해 비정형 언어가 아닌 비용 의미론(Cost Semantics)이 내장된 소규모 전용 리덕션 언어 프로그램으로 리덕션을 정의하였다(§5.2.2).</li>
+<li>바이너리의 개별 AArch64 실행 결과와 Lean의 바이트 모델 결과 간의 동일성은 분리 논리(Separation Logic) 기반의 함수 계약(Function Contracts)을 통해 기계어 명령어 단위로 증명되었다(정리 4 / Lemma 4) (§5.2.3, §C.3).</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-4-역사적-실제-버그-재현-및-명세-강력성-검증">2.4. 역사적 실제 버그 재현 및 명세 강력성 검증</h6>
+<p>[객관적 사실] 작성된 형식 명세가 실제 취약점을 유효하게 포착할 수 있는지 검증하기 위해, 과거 <code>libsignal</code>에서 발견되어 수정되었던 2가지 실제 버그를 v0.105.4 소스 코드에 역인젝션하여 컴파일한 바이너리(<code>Asmbug</code>)에 대해 상징적 보안 정리의 비성립($\neg\text{Sec}(\text{Asmbug})$)을 Lean 커널에서 완벽히 증명하였다(§6).</p>
+<ul>
+<li><strong>사례 1: 취약한 상태 버그 (Weak State Bug, 커밋 cd36118)</strong> (§6)
+<ul>
+<li><strong>[객관적 사실] 버그 내용</strong>: 신규 세션 해독에 실패한 프리키 메시지를 이전 아카이브 세션으로 시도 해독하고, 성공 시 서명된 프리키 비밀 복사본이 포함된 신규 세션의 미확인 상태를 저장해 버리는 취약점이다(§6).</li>
+<li><strong>[객관적 사실] 검증 결과</strong>: 공격자가 첫 번째 세션의 메시지를 덮어씌워 인젝션했을 때 바이너리가 이를 수락하는 반면 상징적 모델 트레이스에서는 이를 설명할 수 없음을 Lean 기계어 스텝 실행을 통해 입증하였다(§6).</li>
+</ul>
+</li>
+<li><strong>사례 2: 소부분군 버그 (Small Subgroup Bug, 커밋 5293caa)</strong> (§6)
+<ul>
+<li><strong>[객관적 사실] 버그 내용</strong>: PQXDH 수신자(Bob)가 송신자(Alice)의 X25519 베이스 키에 대해 비틀림(Torsion-free) 및 범위 검사를 수행하지 않아, 비트 255가 설정된 변형 키를 재질의할 경우 동일한 공유 비밀을 갖는 두 번째 세션이 생성되는 취약점이다(§6).</li>
+<li><strong>[객관적 사실] 검증 결과</strong>: 상징적 모델의 정규 키(Canonical Key) 검사는 이를 거부하지만 버그가 인젝션된 바이너리는 이를 수락하여 명세의 보안 정리가 무너짐을 완전 입증하였다(§6).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-persons-roles">3. 등장 인물 및 화자 (Persons &amp; Roles)</h5>
+<p>[객관적 사실] 소스 문맥에 명시된 주요 저자, 지원 인력 및 외부 검토자의 역할은 다음과 같다(P1 표제, Acknowledgments).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 명칭 (한글 표기 및 로마자)</th>
+<th style="text-align:left">소스 상의 소속 및 역할</th>
+<th style="text-align:left">소스 확인 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">스와랏 초두리 (Swarat Chaudhuri)</td>
+<td style="text-align:left">논문 저자 (Google DeepMind)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">앤드루 페라이올로 (Andrew Ferraiuolo)</td>
+<td style="text-align:left">논문 저자 (Google DeepMind)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">안톤 코브샤로프 (Anton Kovsharov)</td>
+<td style="text-align:left">논문 저자 (Google DeepMind)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">테지 차제드 (Tej Chajed)</td>
+<td style="text-align:left">논문 저자 (Google DeepMind)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">샘 Schlesinger (Sam Schlesinger)</td>
+<td style="text-align:left">논문 저자 (Google)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">카른 세스 (Karn Seth)</td>
+<td style="text-align:left">논문 저자 (Google)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">조나단 카츠 (Jonathan Katz)</td>
+<td style="text-align:left">논문 저자 (Google)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">찰스 서튼 (Charles Sutton)</td>
+<td style="text-align:left">논문 저자 (Google DeepMind)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">푸시미트 코흘리 (Pushmeet Kohli)</td>
+<td style="text-align:left">논문 저자 (Google DeepMind)</td>
+<td style="text-align:left">P1 표제</td>
+</tr>
+<tr>
+<td style="text-align:left">롤프 슈미트 (Rolfe Schmidt)</td>
+<td style="text-align:left">Signal 측 관계자, 명세 피드백 제공</td>
+<td style="text-align:left">Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left">마이클 로젠버그 (Michael Rosenberg)</td>
+<td style="text-align:left">Signal 측 관계자, 명세 피드백 제공</td>
+<td style="text-align:left">Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left">에런 크렛 (Ehren Kret)</td>
+<td style="text-align:left">Signal 측 관계자, 명세 피드백 제공</td>
+<td style="text-align:left">Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left">에릭 위저 (Eric Wieser)</td>
+<td style="text-align:left">소스 코드 오픈소스화 지원</td>
+<td style="text-align:left">Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left">오웬 존스 (Owen Jones)</td>
+<td style="text-align:left">프로젝트 관리(Program Management) 지원</td>
+<td style="text-align:left">Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left">마틴 아바디 (Martín Abadi) 외 5인</td>
+<td style="text-align:left">논의 및 학술적 피드백 제공</td>
+<td style="text-align:left">Acknowledgments</td>
+</tr>
+<tr>
+<td style="text-align:left">툴시 도시 (Tulsee Doshi) 외 10인</td>
+<td style="text-align:left">프로젝트 지원 및 후원 리더십</td>
+<td style="text-align:left">Acknowledgments</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점-quantitative-data-timestamps">4. 수치 및 시점 (Quantitative Data &amp; Timestamps)</h5>
+<p>[객관적 사실] 소스 코드 및 논문 본문에서 추출된 정량적 데이터는 다음과 같다(§1, §2.2, §2.3, §3, §4, §5.1.5, §7).</p>
+<ul>
+<li>
+<p><strong>[객관적 사실] 시점 및 기간 데이터</strong>:</p>
+<ul>
+<li><strong>논문 작성/발행일</strong>: 2026년 11월 10일 (2026-11-10) (§1 표제).</li>
+<li><strong>Signal Shot 도전 과제 출범 시점</strong>: 2026년 4월 (Beneficial AI Foundation, Signal, Lean FRO 공동 발표) (§1, §8).</li>
+<li><strong>본 검증 작업 수행 기간</strong>: 5명의 연구진이 4주 동안 수행 (§7).</li>
+<li><strong>단일 캠페인 실행 시간</strong>: 1개 에이전트 팀 캠페인당 40~80개 에이전트가 24시간~72시간 동안 연속 실행 (§2.3).</li>
+<li><strong>컴파일러 버전</strong>: <code>stock rustc 1.98.1</code> (§4, Table 1).</li>
+<li><strong>대상 소프트웨어 버전</strong>: <code>libsignal v0.105.4</code>, <code>spqr v1.6.0</code> (§3, §4, Table 1).</li>
+</ul>
+</li>
+<li>
+<p><strong>[객관적 사실] 코드 규모 및 산출물 수치</strong>:</p>
+<ul>
+<li><strong>저장소 전체 Lean 코드 줄 수</strong>: 약 700만 줄 (주석 및 공백 포함) (§7).</li>
+<li><strong>기계어 검증 증명 코드 줄 수</strong>: 약 650만 줄 (바이너리 공통 증명 530만 줄, 계산적 모델 증명 86만 줄, 상징적 모델 증명 35만 줄) (§1, §7).</li>
+<li><strong>역사적 버그 재현 및 메모리 할당자 검증 줄 수</strong>: 버그 비성립 증명 14만 줄, <code>mallocng</code> 할당자 검증 7만 줄 (§7).</li>
+<li><strong>신뢰 명세 및 모델 줄 수 (TCB)</strong>: 신뢰 명세 18,000줄 (문서 포함 28,000줄), AArch64 의미론 및 기계어 표상 8,000줄 (기계어 표상 전체 95,000줄) (§1, §7).</li>
+<li><strong>검증 대상 바이너리 및 명령어 규모</strong>: 약 560 KB, AArch64 기계어 명령어 약 140,000개 (§7).</li>
+<li><strong>AArch64 세맨틱스 범위</strong>: 467개 명령어, 31개 시스템 콜, 7,532줄의 Lean 코드 (§2.2).</li>
+</ul>
+</li>
+<li>
+<p><strong>[객관적 사실] 하드웨어 제한 및 한계 수치</strong>:</p>
+<ul>
+<li><strong>프로세스 메모리 및 스택 제한</strong>: 검증 모델 내 기본 물리 메모리 1 GiB, 스택 메모리 8 MiB (§4.1).</li>
+<li><strong>입력 크기 제한</strong>: CLI 입력 최댓값 $2^{20}$ 바이트, 표준 입력 최댓값 $2^{32}$ 바이트, <code>send</code> 평문 길이 제한 $10^6$ 바이트 (§4.1).</li>
+<li><strong>세션 기록(Session Record) 최대 크기</strong>: 메시지 수와 무관하게 1.2 MB (1,209,331 바이트) 이하 유지 (§4.1, §C.4).</li>
+<li><strong>MAC 트렁케이션 크기 및 위조 확률</strong>: 8바이트 (위조 시도당 확률 최소 $2^{-64}$) (§5.1.4, §5.2.3).</li>
+<li><strong>CSPRNG 난수 중복 확률</strong>: $k$회 무작위 추출 시 $k^2 / 2^{251}$ 이하 (§5.1.5).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<p>[객관적 사실] 소스 텍스트에서 명시적으로 언급된 연구의 한계점 및 조건은 다음과 같다(§5.1.6, §5.2.5, §5.3).</p>
+<ul>
+<li>
+<p><strong>[객관적 사실] 암호학적 및 기계어 모델 상의 한계</strong>:</p>
+<ul>
+<li><strong>양자 공격자에 대한 계산적 모델 제한</strong>: 계산적 증명(Theorem 2)은 고전적(Classical) 공격자만을 대상으로 하며, 양자 공격자에 대한 계산적 보안성은 입증하지 못함(상징적 모델에서는 일부 다룸) (§3, Table 1, §5.2.5).</li>
+<li><strong>포스트-양자 치유(SPQR Healing) 미증명</strong>: 상징적 및 계산적 모델 증명 모두 공격자가 SPQR 키를 직접 선택할 수 있도록 허용하므로, DH가 손상된 이후 SPQR이 제공해야 하는 양자 후-양자 치유(Post-Quantum Healing) 속성까지는 증명하지 못함 (§5.1.6, §5.2.5).</li>
+<li><strong>바이트 충돌 확률의 조건부 허용</strong>: 상징적 증명(Theorem 1)은 충돌이 없는(Collision-free) 트레이스에 한해서만 성립하며, 바이트 충돌 확률을 계산적으로 캡슐화하여 제한하지 않고 조건부로 허용함 (§5.1.4, §5.1.6).</li>
+</ul>
+</li>
+<li>
+<p><strong>[객관적 사실] 검증 대상 및 환경 조건의 한계</strong>:</p>
+<ul>
+<li><strong>통신 대상 제한</strong>: 1대1 단일 세션으로 제한되었으며, 그룹 메시징, Sealed Sender, 서버 측 프로토콜 및 다중 기기(Multi-device) 상태는 검증 범위에서 제외됨 (§3, §5.2.5).</li>
+<li><strong>실제 컴파일 바이너리 간 간극</strong>: 실제 모바일 Signal 앱 바이너리가 아닌, 동일한 Rust 코드를 <code>musl</code> libc 및 CLI 훅(Hook)으로 빌드한 <code>libsignal-cli</code> 바이너리에 대해서만 검증이 수행됨 (§4, §5.2.5).</li>
+<li><strong>훅(Hooked) 루틴 기계어 검증 제외</strong>: 저수준 암호화 프리미티브(SHA-256, AES, Kyber1024, ML-KEM-768 등 39개 루틴) 및 일부 libc/Rust 메모리·출력 루틴은 기계어 코드를 직접 검증하지 않고 신뢰 계약(Contracts)으로 대체함 (§4).</li>
+<li><strong>미모델링 운영체제(OS) 기능</strong>: 멀티스레드, 시그널(Signals), vDSO, 동적 링크(Dynamic Linking), 현재 디렉터리 외 파일 접근 등은 모델링되지 않음 (§2.2).</li>
+</ul>
+</li>
+<li>
+<p><strong>[연구진의 주장 및 작성자의 분석] TCB 영역 및 신뢰 범위의 한계</strong>:</p>
+<ul>
+<li><strong>신뢰 영역(TCB)과 비신뢰 영역의 분리</strong>: 러스트 소스 코드 및 <code>rustc</code> 컴파일러, LLVM은 비신뢰 영역에 위치하므로 컴파일러 버그가 존재하더라도 증명이 실패할 뿐 잘못된 정리가 성립하지 않는다(§5.3). 반면, AArch64 세맨틱스 모델, Lean 4 커널, 훅(Hooked) 루틴의 신뢰 계약, 암호학적 기저 난제 전제조건은 신뢰 영역(TCB)에 포함되므로 이들의 정합성에 대한 감사(Audit)가 필수적이다(§5.3).</li>
+</ul>
+</li>
+<li>
+<p><strong>[객관적 사실] 확인 불가 및 미포함 사항</strong>:</p>
+<ul>
+<li><strong>키 생성(Keygen) 검증 미포함</strong>: 키 생성 과정 자체는 검증 대상에 포함되지 않으며 외부 설정(Setup)으로 정합성이 받아들여짐 (§4).</li>
+<li><strong>기타 외부 검증 미확인</strong>: 일반 Rust 컴파일러 전체의 형식 검증 여부 및 논문 문맥 외의 기타 외부 환경 변수는 소스상 확인 불가함 (§5.3).</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>前OpenAI推理负责人JT与Gemini pretrain负责人Rohan: Continue learning的未来</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>前OpenAI推理负责人JT与Gemini pretrain负责人Rohan: Continue learning的未来</h1>
+<p class="page-meta">웹 · 2026-08-02</p>
+<h2 id="요약">요약</h2>
+<p>Core Automation의 연구 자동화와 Transformer 이후 지속적 학습의 과제를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://mp.weixin.qq.com/s/-5raMxvw0sAK-IPGXRaijA">출처</a> · <a href="https://www.youtube.com/watch?v=2NTZfJXJFxE">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="분석-보고서-transformer-이후의-돌파구-지속적-학습-continual-learning-과-연구-자동화의-미래">[분석 보고서] Transformer 이후의 돌파구: 지속적 학습(Continual Learning)과 연구 자동화의 미래</h3>
+<h4 id="1-서론-core-automation과-핵심-인물-분석">1. 서론: Core Automation과 핵심 인물 분석</h4>
+<p>최근 인공지능(AI) 연구 생태계에서 가장 주목받는 움직임은 차세대 아키텍처와 연구 방법론의 근본적 혁신을 목표로 설립된 <strong>Core Automation</strong>의 등장입니다. 이 연구소는 기존 거대 IT 기업의 조직적 한계와 고착화된 기술 패러다임을 넘어선 새로운 지능의 형태를 탐색하고 있습니다.</p>
+<h5 id="주요-인물-및-창업-배경">주요 인물 및 창업 배경</h5>
+<ul>
+<li><strong>Jerry Tworek (전 OpenAI 추론 팀장):</strong> o1 모델로 대표되는 추론(Reasoning) 및 사고의 연쇄(Chain-of-Thought) 시리즈 개발을 총괄한 핵심 인물입니다. 인터뷰 및 기사에 따르면, 그는 2025년 OpenAI가 사전학습(Pre-training; 대규모 데이터 사전 훈련)의 중요성으로 다시 회귀하며 추론 팀에 대한 산출 자원과 우선순위를 낮추자, 연구적 돌파구를 찾기 위해 독립을 결심했습니다.</li>
+<li><strong>Rohan Anil (전 Google Gemini 사전학습 책임자):</strong> TPU(Tensor Processing Unit; 구글의 AI 전용 가속기) 하드웨어 최적화 및 대규모 사전학습 시스템의 권위자입니다. 하드웨어와 소프트웨어의 병목을 제거하여 연산 효율을 극대화하는 분야에서 독보적인 전문성을 보유하고 있습니다.</li>
+</ul>
+<p>이들의 결합은 '논리적 추론 알고리즘'과 '시스템 최적화'라는 두 핵심 축의 융합을 의미하며, 이는 Transformer 아키텍처의 구조적 한계를 하드웨어 수준에서부터 다시 정의하려는 시도로 해석됩니다.</p>
+<h5 id="연구소의-정체성-에이전시-agency-의-확대">연구소의 정체성: 에이전시(Agency)의 확대</h5>
+<p>Core Automation은 인간 연구원을 대체하는 것이 아니라, **'자동화 연구소(Automated Research Lab)'**로서 연구자 개인이 아이디어를 실험하고 검증하는 반복 주기를 극도로 단축하는 것을 지향합니다. 이는 연구자 개인이 다룰 수 있는 실험의 범위와 역량인 에이전시(Agency)를 수십 배 확장하여, 소수 정예 팀이 대규모 조직 이상의 연구 성과를 낼 수 있는 환경을 구축하는 것을 목적으로 합니다.</p>
+<hr />
+<h4 id="2-transformer-아키텍처의-성과와-구조적-한계">2. Transformer 아키텍처의 성과와 구조적 한계</h4>
+<p>Transformer는 지난 수년간 AI 분야의 표준으로 자리 잡았으나, 분석 결과 그 이면에는 명확한 경제적·구조적 한계가 존재합니다.</p>
+<ul>
+<li><strong>경제적 성공과 규모의 경제:</strong> Transformer가 성공한 본질적인 이유는 '경제적 타당성'에 있습니다. 훈련 비용 대비 창출되는 가치가 압도적이었으며, 연산 자원을 투입할수록 성능이 향상되는 **Scaling Law(규모의 법칙)**를 실현하기에 가장 효율적인 구조였기 때문입니다.</li>
+<li><strong>평행 세계의 통찰:</strong> 인터뷰에 따르면, LSTM(Long Short-Term Memory; 장단기 메모리 네트워크) 역시 규모를 확장(Scale)할 수 있었으나, 시장은 Transformer보다 낮은 효율을 가진 구조에 막대한 비용을 지불하지 않았습니다. 즉, 현재의 독점적 지위는 기술적 유일함보다는 경제적 선택의 결과입니다.</li>
+<li><strong>현실 세계의 과제와 적응성 결여:</strong> 실험실의 벤치마크(Benchmark; 성능 측정 기준) 점수와 달리, 실제 세계의 데이터는 훨씬 무질서하고 가변적입니다. 현재의 모델은 훈련 데이터 분포에 고정되어 있어, 배포 후 발생하는 새로운 사건이나 도구, 코드베이스에 유연하게 대응하지 못하는 '성능의 천장(Ceiling)' 문제에 직면해 있습니다.</li>
+</ul>
+<hr />
+<h4 id="3-기존-적응-방식의-비교-분석-컨텍스트-학습-vs-지속-미세조정">3. 기존 적응 방식의 비교 분석: 컨텍스트 학습 vs 지속 미세조정</h4>
+<p>모델을 새로운 환경에 적응시키기 위한 기존 방식들은 각각 치명적인 제약 조건을 가지고 있습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">컨텍스트 학습 (In-Context Learning)</th>
+<th style="text-align:left">지속 미세조정 (Continuous Fine-tuning)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>개념</strong></td>
+<td style="text-align:left">모델의 입력창(프롬프트)에 정보를 추가하여 학습시키는 방식</td>
+<td style="text-align:left">배포된 모델을 새로운 데이터로 다시 훈련시키는 방식</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>장점</strong></td>
+<td style="text-align:left">기존 지식을 잊어버리는 현상이 없음</td>
+<td style="text-align:left">이론적으로 모델의 전체 지식 체계를 갱신 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>단점</strong></td>
+<td style="text-align:left"><strong>용량(Capacity) 제한:</strong> 정보량이 물리적으로 제한됨. 예컨대 Codex의 경우 약 20분 사용 후 컨텍스트 압축 및 정리가 필요함</td>
+<td style="text-align:left"><strong>재앙적 망각(Catastrophic Forgetting):</strong> 새 정보를 배울 때 기존의 핵심 지식을 파괴함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>효율성</strong></td>
+<td style="text-align:left">정보가 늘어날수록 연산 비용이 기하급수적으로 급증함</td>
+<td style="text-align:left">데이터 효율성이 극도로 낮아 실시간 적용이 불가능함</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-새로운-연구-질문-테스트-시간-학습-test-time-learning">4. 새로운 연구 질문: 테스트 시간 학습(Test-time Learning)</h4>
+<p>연구진은 기존 패러다임을 전환할 핵심 질문을 다음과 같이 정의합니다.
+<strong>&quot;배포 후(테스트 시간)에도 모델이 끊임없이 배우고 새로운 환경에 적응할 수 있는 아키텍처를 어떻게 설계할 것인가?&quot;</strong></p>
+<p>이 연구는 현재 **초기 단계(Early Research)**에 있으며, 업계에서 합의된 구체적인 해법은 아직 부재합니다. 이는 단순히 Transformer를 부정하는 것이 아니라, 고정된 지능의 한계를 넘어 실시간으로 진화하는 기술적 경로를 찾으려는 객관적인 탐색 과정입니다.</p>
+<hr />
+<h4 id="5-경험-학습으로서의-강화학습-rl-과-최적화-전략">5. 경험 학습으로서의 강화학습(RL)과 최적화 전략</h4>
+<p>Jerry Tworek은 **강화학습(Reinforcement Learning, RL)**을 단순한 문제 해결 도구가 아닌, **'경험으로부터 배우는 학습(Learning from Experience)'**의 한 형태로 재정의합니다.</p>
+<ul>
+<li><strong>RL의 본질적 차이:</strong> 현재의 RL은 분산(Variance; 결과값의 변동 폭)을 줄이기 위해 수많은 병렬 롤아웃(Parallel Rollouts; 동시에 여러 시뮬레이션을 실행하는 방식)에 의존합니다. 이는 수학 문제를 풀 때의 깊은 사고나 축구를 배울 때의 동적인 피드백과 같은 인간의 효율적인 경험 학습과는 본질적으로 다릅니다.</li>
+<li><strong>엔드 투 엔드(End-to-End) 공동 최적화:</strong> 사전학습과 강화학습을 별개의 과정으로 보지 않고 하나의 통합된 시스템으로 공동 최적화할 경우, 인터뷰 및 기사에 따르면 연산 효율성을 약 <strong>10배(한 자릿수 이상)</strong> 개선할 수 있습니다.</li>
+<li><strong>최적화기와 아키텍처의 상호작용:</strong> <strong>Shampoo</strong>나 <strong>Soap</strong>과 같은 **2차 최적화 알고리즘(Second-order Optimizers)**은 단순한 속도 개선 그 이상을 의미합니다. 강력한 최적화기는 연구자가 **잔차 연결(Residual Connections; 층을 건너뛰어 신호를 전달하는 구조)**을 제거하고도 더 깊은 표상을 학습할 수 있게 하여, 이전에는 탐색 불가능했던 새로운 아키텍처 발견의 도구가 됩니다.</li>
+</ul>
+<hr />
+<h4 id="6-계산-깊이-computational-depth-와-효율성-문제">6. 계산 깊이(Computational Depth)와 효율성 문제</h4>
+<p>현재의 딥러닝 시스템은 명칭과 달리 실제로는 충분히 '깊지' 않다는 것이 아키텍처 전략가의 시각입니다.</p>
+<ul>
+<li><strong>표면적 깊이의 한계:</strong> 현재 대부분의 Transformer는 약 100층 내외의 고정된 깊이에 머물러 있습니다. 업계는 이를 극복하기 위해 사고의 연쇄(CoT)와 같은 방식으로 더 많은 토큰(Token; 언어의 최소 단위)을 생성하도록 유도하고 있으나, 이는 실제 연산의 깊이가 아닌 '시간적 나열'을 통해 깊이를 흉내 내는(Faking depth) 것에 불과합니다.</li>
+<li><strong>비효율성 분석:</strong> 복잡한 문제를 풀기 위해 반드시 더 긴 토큰 시퀀스를 생성해야만 하는 현재의 <strong>순차적 토큰 생성(Sequential Token Generation)</strong> 구조는 계산 자원을 극도로 낭비하며, 실시간 학습과 적응을 가로막는 결정적 병목입니다.</li>
+</ul>
+<hr />
+<h4 id="7-단기-최우선-과제-커널-생성-kernel-generation">7. 단기 최우선 과제: 커널 생성(Kernel Generation)</h4>
+<p>Core Automation은 새로운 모델 발표보다 <strong>커널 생성(Kernel Generation; GPU에서 실행되는 하위 연산 프로그램 작성)</strong> 자동화를 최우선 과제로 설정했습니다.</p>
+<ul>
+<li><strong>알고리즘 상태 공간(Algorithm State Space)의 관문:</strong> 새로운 아이디어가 있어도 이를 실행할 효율적인 커널이 없다면 하드웨어의 성능을 끌어낼 수 없습니다. 과거 **Engram Memory(엔그램 메모리)**와 같은 혁신적 구조(DeepSeek 등이 일부 구현)가 초기 확산에 실패했던 이유도 커널 수준의 최적화 부재 때문이었습니다. 즉, 커널 생성 능력은 새로운 아키텍처로 진입하기 위한 '게이트키퍼(Gatekeeper)' 역할을 합니다.</li>
+<li><strong>기술적 실증 수치(인터뷰 및 기사 인용):</strong>
+<ul>
+<li><strong>QR 커널(선형대수 핵심 연산) 경쟁 사례:</strong> 기존 표준 라이브러리(cuSolver) 대비, 인간 전문가와 검색 루프 활용 시 7배의 성능 향상을 보였습니다. 특히, 에이전트와 4주간 10만 달러를 투입한 실험에서는 <strong>기존 대비 60배의 속도 향상</strong>을 달성했습니다.</li>
+<li><strong>하드웨어 최적화:</strong> NVIDIA의 <strong>Blackwell/B200 GPU</strong> 환경에서 이론적 최대 연산량인 최고 수준의 **TOPS(Tera Operations Per Second; 초당 1조 번의 연산 수)**를 달성하여 '아이디어-실행' 간의 간극을 최소화하는 것이 목표입니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="8-결론-차세대-아키텍처의-성공-판별-조건">8. 결론: 차세대 아키텍처의 성공 판별 조건</h4>
+<p>새로운 아키텍처가 Transformer를 대체하고 진정한 지능으로 거듭나기 위한 5가지 핵심 지표는 다음과 같습니다.</p>
+<ol>
+<li><strong>장기 적응 곡선:</strong> 모델 배포 후 시간이 지남에 따라 성능이 저하되지 않고 지속적으로 우상향하는가?</li>
+<li><strong>망각 없는 학습:</strong> 새로운 정보를 실시간 습득하면서도 기존의 핵심 지식을 파괴하지 않고 유지하는가?</li>
+<li><strong>데이터 및 계산 효율:</strong> 방대한 데이터에 의존하지 않고 소량의 경험만으로 생물학적 시스템(인간) 수준의 학습 효율을 보이는가?</li>
+<li><strong>실제 하드웨어 활용도:</strong> 이론적 우위를 넘어 Blackwell 등 최신 하드웨어 가속기에서 압도적인 구동 효율과 TOPS를 증명하는가?</li>
+<li><strong>자기 개선(Self-improvement):</strong> 인간 연구원의 개입 없이 모델이 스스로 오류를 수정하고 연구 효율을 높이는 '자율적 진화' 루프에 진입했는가?</li>
+</ol>
+<p>이러한 지표를 충족하는 아키텍처의 발견은 단순한 모델 업데이트를 넘어, 인간의 개입 없이도 스스로 성장하는 진정한 의미의 인공 일반 지능(AGI) 시대를 여는 시금석이 될 것입니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/rl/">RL</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

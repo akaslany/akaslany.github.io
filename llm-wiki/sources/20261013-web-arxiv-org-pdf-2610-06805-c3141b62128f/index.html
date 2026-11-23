@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H-JEPA(계층적 공동 임베딩 예측 아키텍처) 기술 해설 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>H-JEPA(계층적 공동 임베딩 예측 아키텍처) 기술 해설 보고서</h1>
+<p class="page-meta">논문 · 2026-10-13</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 시각적 플래닝을 위한 엔드투엔드(End-to-End) 계층적 월드 모델 아키텍처인 **H-JEPA(Hierarchical Joint-Embedding Predictive Architecture)**의 기술적 구조, 수학적 정리, 작동 메커니즘 및 실증 성과를 다루는 전문 해설서이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.06805">출처</a> · <a href="https://www.youtube.com/watch?v=zgkKeYrVkGA">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="h-jepa-계층적-공동-임베딩-예측-아키텍처-기술-해설-보고서">H-JEPA(계층적 공동 임베딩 예측 아키텍처) 기술 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 시각적 플래닝을 위한 엔드투엔드(End-to-End) 계층적 월드 모델 아키텍처인 **H-JEPA(Hierarchical Joint-Embedding Predictive Architecture)**의 기술적 구조, 수학적 정리, 작동 메커니즘 및 실증 성과를 다루는 전문 해설서이다. 복잡하고 장기적인 목표(Long-horizon)를 달성하기 위한 잠재 월드 모델(Latent World Model)은 서로 다른 시간적 보폭(Timescale)과 추상화 수준에서 동역학을 추론해야 한다.</p>
+<p>기존의 단일 타임스케일 기반 단일 계층(Flat) JEPA 월드 모델(예: LeWM)은 두 가지 근본적인 한계점에 직면한다.</p>
+<ol>
+<li><strong>복리 예측 오차 및 탐색 공간 폭발:</strong> 먼 미래의 상태를 예측하기 위해 단일 저수준 타임스케일에서 미세 스텝을 순차적으로 전개해야 하며, 이 과정에서 예측 오차가 복리로 누적되고 연산 시 탐색해야 할 행동 공간(Action Search Space)이 폭발적으로 증가한다.</li>
+<li><strong>단일 잠재 공간의 목적 충돌:</strong> 단일 잠재 공간(Single Latent Space) 내에서 저수준 미세 동역학(Low-level Dynamics) 모델링과 고수준 목표 매칭(Goal Matching) 간의 상충 관계가 발생한다. 빠르게 변하는 모든 세부 정보를 유지하는 잠재 공간은 저수준 동역학 예측에는 유리하지만, 에이전트의 구체적 자세가 아닌 '도달할 위치'와 같이 추상적인 목표를 매칭할 때는 노이즈로 작용하여 거리 계산 성능을 저하시킨다.</li>
+</ol>
+<p>H-JEPA는 이러한 한계를 극복하기 위해 각 계층(Level)이 자체적으로 학습한 독립된 잠재 공간 내에서 서로 다른 예측 수평선(Horizon)과 보폭(Stride)으로 미래를 예측하는 계층적 아키텍처를 제안한다. 상위 수준으로 올라갈수록 정밀한 시간 스텝을 생략하고 긴 타임스케일과 고차원 추상화 잠재 공간에서 작동하며, 탑다운(Top-down) 방식으로 하위 수준에 서브골(Subgoal)을 제공한다. 특히 데이터 내 구성 요소들이 서로 다른 시간 주기로 변화할 때, 상위 계층은 예측 불가능한 고주파 미세 정보를 선택적으로 제거(Discard)하고 과제 수행에 필수적인 저주파 상태만 유지(Retain)한다.</p>
+<p>본 기술 보고서는 원본 논문(Source Text)에 명시된 수식, 실증 데이터, 하이퍼파라미터 등 명확한 기술적 사실에 기반하여 작성되었다. 원문이 명시한 기술적 사실, 저자들의 학술적 주장, 그리고 이를 바탕으로 한 객관적 기술 해석을 명확히 구분하여 서술한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
+<h5 id="2-1-논점-1-계층적-예측-학습-및-탑다운-플래닝-메커니즘">2.1. 논점 1: 계층적 예측 학습 및 탑다운 플래닝 메커니즘</h5>
+<p>H-JEPA는 관측 및 행동 스트림으로부터 계층적 잠재 예측 모델을 엔드투엔드로 학습한다. 각 레벨 $\ell$은 고유한 관측 인코더 $E^{(\ell)}$, 행동 인코더 $A^{(\ell)}$, 잠재 예측기 $F^{(\ell)}$를 보유하며, 독립된 잠재 공간을 형성한다.</p>
+<h6 id="수식적-정의-및-계층-구축-equations-1-3">수식적 정의 및 계층 구축 (Equations 1–3)</h6>
+<p>상위 레벨 $\ell &gt; 1$은 하위 레벨 $\ell-1$의 잠재 상태를 시간 윈도우 $w_\ell$만큼 풀링(Pooling)하고, 보폭(Stride) $s_\ell$ 간격으로 서브샘플링한다. 시간 구간 표기를 $a:b = {a, \dots, b-1}$라 할 때, 레벨 $\ell$의 상태 및 행동 임베딩은 다음과 같이 정의된다.</p>
+<p>$$z_t^{(\ell)} = E^{(\ell)}\left(z_{t \cdot s_\ell : t \cdot s_\ell + w_\ell}^{(\ell-1)}\right), \quad a_t^{(\ell)} = A^{(\ell)}\left(a_{t \cdot s_\ell + w_\ell - 1 : (t+1) \cdot s_\ell + w_\ell - 1}^{(\ell-1)}\right) \quad \text{--- (1)}$$</p>
+<p>각 레벨 $\ell$은 주어진 $c_\ell$개의 컨텍스트 잠재 상태와 행동 임베딩으로부터 미래 상태를 교사 강제(Teacher-forced) 방식으로 예측하도록 학습된다. 예측 손실 함수 $L_{\text{pred}}^{(\ell)}$와 기하학적 정규화기 $\text{SIGReg}(Z^{(\ell)})$를 결합한 전체 손실 함수 $L^{(\ell)}$는 다음과 같다.</p>
+<p>$$L_{\text{pred}}^{(\ell)} = \frac{1}{c_\ell} \sum_{\tau=1}^{c_\ell} \left| F^{(\ell)}\left(z_{&lt;\tau}^{(\ell)}, a_{&lt;\tau}^{(\ell)}\right) - z_{\tau+1}^{(\ell)} \right|_2^2 \quad \text{--- (2)}$$</p>
+<p>$$L^{(\ell)} = L_{\text{pred}}^{(\ell)} + \lambda_\ell \text{SIGReg}\left(Z^{(\ell)}\right) \quad \text{--- (3)}$$</p>
+<h6 id="탑다운-플래닝-수식화-equations-4-6">탑다운 플래닝 수식화 (Equations 4–6)</h6>
+<p>플래닝은 최상위 레벨 $L$에서 시작하여 최하위 레벨 1까지 탑다운 방식으로 전개된다. 최상위 레벨 $L$은 최종 목표 $g^{(L)}$와의 거리를 최소화하는 매크로 행동(Macro-actions)을 최적화한다.</p>
+<p>$$a_{0:H_L-1}^{(L), *} = \arg\min_{a_{0:H_L-1}^{(L)}} \left| \hat{z}_{H_L}^{(L)} - g^{(L)} \right|_2^2 \quad \text{--- (4)}$$</p>
+<p>상위 레벨 $\ell+1$에서 최적화된 예측 궤적 $(\hat{z}<em>1^{(\ell+1), *}, \dots, \hat{z}</em>{H_{\ell+1}}^{(\ell+1), *})$은 하위 레벨 $\ell$의 서브골로 제공된다. 하위 레벨 $\ell$은 인코더 $E^{(\ell+1)}$를 통해 자신의 예측 궤적을 상위 잠재 공간으로 승격(Lifting/Projection)시킨다.</p>
+<p>$$\tilde{z}<em>i^{(\ell+1)} = E^{(\ell+1)}\left(\hat{z}</em>{i \cdot s_{\ell+1} : i \cdot s_{\ell+1} + w_{\ell+1}}^{(\ell)}\right), \quad i = 1, \dots, K_{\ell+1} \quad \text{--- (5)}$$</p>
+<p>하위 레벨 $\ell$은 매칭할 서브골 개수 $K_{\ell+1}$ 및 가중치 $\beta \ge 0$에 따라 아래 최적화 문제를 해결하여 실시간 실행 가능한 제어 시퀀스를 산출한다.</p>
+<p>$$a_{0:H_\ell-1}^{(\ell), *} = \arg\min_{a_{0:H_\ell-1}^{(\ell)}} \left[ \left| \tilde{z}<em>{K</em>{\ell+1}}^{(\ell+1)} - \hat{z}<em>{K</em>{\ell+1}}^{(\ell+1), *} \right|<em>2^2 + \beta \sum</em>{i=1}^{K_{\ell+1}-1} \left| \tilde{z}_i^{(\ell+1)} - \hat{z}_i^{(\ell+1), *} \right|_2^2 \right] \quad \text{--- (6)}$$</p>
+<hr />
+<h5 id="2-2-논점-2-엔티티-주파수-격차-frequency-gap-에-따른-선택적-추상화">2.2. 논점 2: 엔티티 주파수 격차(Frequency Gap)에 따른 선택적 추상화</h5>
+<p>H-JEPA는 무작위로 정보를 손실하는 것이 아니라, 환경 내 각 엔티티(Entity)의 시간적 변화 주기 차이(Frequency Gap)에 따라 선택적 추상화(Selective Abstraction)를 수행한다.</p>
+<ul>
+<li><strong>선택적 추상화의 메커니즘:</strong> 빠른 시간 주기로 진동하지만 장기 예측이 불가능한 미세 정보(예: 개미 로봇의 다리 관절 자세, 무작위 텔레포트 방해물의 위치)는 예측 손실(Prediction Loss)을 줄이는 과정에서 상위 인코더에 의해 차단(Discard)된다. 반면 천천히 변하며 과제 수행에 필수적인 저주파 상태(예: 에이전트의 전체 위치 궤적)는 상위 잠재 공간까지 성공적으로 유지(Retain)된다.</li>
+<li><strong>실증적 프로빙(Probing) 평가 (2계층 MLP 프로브 NMSE):</strong>
+동결된 잠재 표현 위에 **2계층 MLP 프로브(Two-layer MLP Probes)**를 학습시켜 분산 정규화 MSE(NMSE)를 측정한 결과, Visual AntMaze의 관절 상태 및 FourRoomDistractors의 방해물(Distractor) 위치는 계층이 깊어질수록 NMSE가 1.0(평균 예측 수준, 복원 불가)에 수렴했다. 반면 에이전트의 위치 NMSE는 상위 레벨에서도 0에 가깝게 유지되었다.</li>
+<li><strong>주파수 격차 비대칭성:</strong> 가장 빠른 상태 성분과 가장 느린 상태 성분의 스펙트럼 중심(Spectral Centroid) 비율인 주파수 격차가 큰 환경(AntMaze, Humanoid, FourRoom)에서는 선택적 추상화가 뚜렷하게 발현된다. 반면 주파수 격차가 2배 미만인 조작 데이터셋(Push-T, Cube)에서는 상위 레벨에서의 정보 삭제 현상이 미미하다.</li>
+</ul>
+<hr />
+<h5 id="2-3-논점-3-플래닝-연산량-compute-대비-성능-대폭-향상-및-코스트-구조-개선">2.3. 논점 3: 플래닝 연산량(Compute) 대비 성능 대폭 향상 및 코스트 구조 개선</h5>
+<p>H-JEPA는 잠재 공간의 추상화와 시간적 분해(Temporal Decomposition)를 결합하여 단일 레벨 모델(LeWM) 및 단일 잠재 공간 계층 모델(HWM) 대비 동일하거나 더 적은 플래닝 연산량(TFLOPs)으로 성공률을 크게 끌어올린다.</p>
+<h6 id="시각적-플래닝-성능-및-연산-효율성-비교-visual-antmaze">시각적 플래닝 성능 및 연산 효율성 비교 (Visual AntMaze)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 구획 (Model Variant)</th>
+<th style="text-align:center">계층 수 (Depth)</th>
+<th style="text-align:center">대표 성공률 (%)</th>
+<th style="text-align:left">연산 효율성 및 코스트 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>LeWM (Flat Baseline)</strong></td>
+<td style="text-align:center">1단계</td>
+<td style="text-align:center">$18.0 \pm 3.5%$</td>
+<td style="text-align:left">단일 잠재 공간, 고비용 탐색, 코스트 평탄화 문제 발생</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HWM (Shared Latent)</strong></td>
+<td style="text-align:center">3단계</td>
+<td style="text-align:center">$38.0 \pm 4.2%$</td>
+<td style="text-align:left">시간 분해만 수행, 단일 잠재 공간 제약으로 성능 제한</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>H-JEPA (Ours)</strong></td>
+<td style="text-align:center">2단계</td>
+<td style="text-align:center">$39.3 \pm 3.7%$</td>
+<td style="text-align:left">독립 잠재 공간 도입, Pareto Frontier 상향 이동</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>H-JEPA (Ours)</strong></td>
+<td style="text-align:center"><strong>3단계</strong></td>
+<td style="text-align:center"><strong>$73.3 \pm 3.5%$</strong></td>
+<td style="text-align:left"><strong>최저 연산 예산으로 최고 성공률 달성 (+55.3%p 향상)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>H-JEPA (Ours)</strong></td>
+<td style="text-align:center">4단계</td>
+<td style="text-align:center">$63.3 \pm 7.7%$</td>
+<td style="text-align:left">데이터 제약으로 인해 3단계 대비 소폭 감소</td>
+</tr>
+</tbody>
+</table>
+<h6 id="코스트-지형-재형성-및-투영-연구-cost-geometry-projection-ablation">코스트 지형 재형성 및 투영 연구 (Cost Geometry &amp; Projection Ablation)</h6>
+<p>계층적 표현이 플래닝 코스트 지형을 어떻게 개선하는지 검증하기 위해, 상위 레벨 서브골 생성 없이 **단일 레벨(Level 1) 플래너의 목표 코스트 계산을 상위 인코더 공간으로 투영($E^{(2)} \circ \dots \circ E^{(k)}$)**하는 아블레이션 실험을 수행하였다.</p>
+<ul>
+<li><strong>코스트 지형 개선 (Table 1):</strong> Visual AntMaze에서 레벨 1의 자체 코스트(Native L1)를 사용할 때의 성공률은 $18.0%$~ $23.3%$에 불과했으나, 동일한 레벨 1 동역학 모델에서 코스트 측정 공간만 레벨 2 상위 공간으로 투영(L2 Projection)하는 것만으로 성공률이 **$31.3 \pm 2.7%$**로 급증하였다. 상위 잠재 공간은 복도 경로를 따라 목표점까지 매끄럽고 경사도가 명확한 코스트 지형(Cost Geometry)을 형성한다.</li>
+<li><strong>비용 단조성(Cost Monotonicity) 단조 증가:</strong> 전문가 궤적을 따라 단일 레벨의 전체 목표 코스트(Full-horizon Goal Cost)를 계산할 경우 코스트가 정체되거나 요동쳐 스피어만 단조성 상관계수(Spearman Correlation)가 $0.48 \sim 0.75$에 그쳤다. 반면 H-JEPA의 계층적 서브골 추적 코스트는 **$0.89 \sim 1.00$**의 완벽에 가까운 단조 감소 특성을 보여 경사하강법 기반 플래너의 수렴 안정성을 보장한다.</li>
+</ul>
+<hr />
+<h5 id="2-4-논점-4-역동역학-inverse-dynamics-손실을-통한-실제-로봇-영상-droid-확장-및-느린-특징-붕괴-방지">2.4. 논점 4: 역동역학(Inverse-Dynamics) 손실을 통한 실제 로봇 영상(DROID) 확장 및 느린 특징 붕괴 방지</h5>
+<p>에피소드마다 배경, 조명, 카메라이 위치, 대상 물체가 변화하는 복잡한 실제 로봇 데이터셋(DROID)에 H-JEPA를 적용할 경우, 순수 예측 목적 함수만으로는 **느린 특징 붕괴(Slow-Feature Collapse)**가 발생한다.</p>
+<ul>
+<li><strong>붕괴 원인 및 수학적 매커니즘:</strong> 비정상(Non-stationary) 자연 배경 환경에서는 이동하는 로봇 팔보다 정지된 배경의 정체성이 장기적으로 훨씬 예측하기 쉽다. 따라서 인코더는 로봇의 움직임을 버리고 배경 정보만 유지하려는 성향을 보인다.</li>
+<li><strong>역동역학 모델(IDM) 손실 추가 (Equation 8):</strong> 인접한 두 잠재 상태로부터 실행된 행동을 역추정하는 IDM 헤드 $I^{(\ell)}$ 및 손실 함수 $L_{\text{idm}}^{(\ell)}$를 도입하여 로봇 제어와 관련된 동적 정보의 손실을 방지한다. ($d_a$: 행동 차원, $\text{sg}[\cdot]$: Stop-gradient)</li>
+</ul>
+<p>$$L_{\text{idm}}^{(\ell)} = \frac{1}{T-1} \sum_{t=1}^{T-1} \frac{1}{d_a} \left| I^{(\ell)}\left(z_t^{(\ell)}, z_{t+1}^{(\ell)}\right) - \text{sg}\left[a_t^{(\ell)}\right] \right|_2^2 \quad \text{--- (8)}$$</p>
+<ul>
+<li><strong>DROID 실증 데이터:</strong>
+<ul>
+<li>IDM 손실이 없는 단순 예측 모델은 Fréchet fidelity 평가에서 **0%**를 기록하며 완전한 특징 붕괴를 일으켰다.</li>
+<li>IDM 손실을 적용한 2단계 H-JEPA는 단일 레벨(LeWM+IDM) 대비 오프라인 플래닝 피델리티(Fréchet Fidelity)를 <strong>+34% ~ +40%</strong> 향상시켰으며, HWM 대비로도 유의미한 우위를 점하였다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-작성자-화자-authors-and-roles">3. 등장 인물 및 작성자/화자 (Authors and Roles)</h4>
+<h5 id="저자-및-지도진-구성">저자 및 지도진 구성</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">저자 이름 (한글 표기)</th>
+<th style="text-align:left">원어 로마자 표기</th>
+<th style="text-align:left">소속 기관 (Affiliations)</th>
+<th style="text-align:left">역할 및 기여</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>완콩 장</strong></td>
+<td style="text-align:left">Wancong Zhang</td>
+<td style="text-align:left">NYU, Advanced Machine Intelligence</td>
+<td style="text-align:left">공동 제1저자 ($*$)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>바질 테르베르</strong></td>
+<td style="text-align:left">Basile Terver</td>
+<td style="text-align:left">Advanced Machine Intelligence, INRIA Paris</td>
+<td style="text-align:left">공동 제1저자 ($*$)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>마이클 라바트</strong></td>
+<td style="text-align:left">Michael Rabbat</td>
+<td style="text-align:left">Advanced Machine Intelligence</td>
+<td style="text-align:left">연구 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>얀 르쿤</strong></td>
+<td style="text-align:left">Yann LeCun</td>
+<td style="text-align:left">NYU, Advanced Machine Intelligence</td>
+<td style="text-align:left">공동 지도 저자 ($\dagger$)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>랜달 발레스트리에로</strong></td>
+<td style="text-align:left">Randall Balestriero</td>
+<td style="text-align:left">Advanced Machine Intelligence, Brown University</td>
+<td style="text-align:left">공동 지도 저자 ($\dagger$)</td>
+</tr>
+</tbody>
+</table>
+<p><em>$</em>$: 동등 기여 (Equal contribution; 동전 던지기로 순서 결정), $\dagger$: 공동 지도 (Equal advising)*</p>
+<h5 id="감사의-글-acknowledgments-에-명시된-인물-및-역할">감사의 글(Acknowledgments)에 명시된 인물 및 역할</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 이름</th>
+<th style="text-align:left">소속 / 관련 기여 내용</th>
+<th style="text-align:left">역할 및 구체적 지원 사항</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>아르템 졸루스 (Artem Zholus)</strong></td>
+<td style="text-align:left">로봇 데이터 및 환경 자문</td>
+<td style="text-align:left">로봇 데이터셋 조언 및 RoboCasa 맞춤형 과제(ObstacleReach 등) 설정 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>락팀 고스와미 (Raktim Goswami)</strong></td>
+<td style="text-align:left">데이터 생성 지원</td>
+<td style="text-align:left">탐색적 실험에 사용된 대체 RoboCasa 데이터 생성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>일룬 쿠앙 (Yilun Kuang)</strong></td>
+<td style="text-align:left">계산 인프라 지원</td>
+<td style="text-align:left">추가 계산 자원 제공 및 실험 실행 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>장 퐁스 (Jean Ponce)</strong></td>
+<td style="text-align:left">연구 자문</td>
+<td style="text-align:left">프로젝트 전반에 걸친 귀중한 학술 자문 제공</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-지표-metrics-data-and-hyperparameters">4. 주요 수치 및 시점/지표 (Metrics, Data, and Hyperparameters)</h4>
+<h5 id="4-1-실험-환경-및-데이터셋-수치">4.1. 실험 환경 및 데이터셋 수치</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">환경 이름</th>
+<th style="text-align:left">제어 차원 및 입력 특성</th>
+<th style="text-align:left">데이터셋 규모</th>
+<th style="text-align:left">특이사항 및 에피소드 길이</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>FourRoomDistractors</strong></td>
+<td style="text-align:left">2D 속도 제어, $224 \times 224$ RGB</td>
+<td style="text-align:left">1.5M 트랜지션 (3,750 에피소드)</td>
+<td style="text-align:left">평균 35스텝 무작위 텔레포트 방해물 포함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Visual AntMaze</strong></td>
+<td style="text-align:left">8D 토크 제어, 27D 고유감각, $64 \times 64$ RGB</td>
+<td style="text-align:left">10.05M 트랜지션 (25,000 에피소드)</td>
+<td style="text-align:left">explore 및 stitch 데이터 절반씩 혼합</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Push-T</strong></td>
+<td style="text-align:left">2D 목표 위치 제어, $224 \times 224$ RGB</td>
+<td style="text-align:left">2.34M 프레임 (18,685 에피소드)</td>
+<td style="text-align:left">에피소드 길이가 평균 125스텝으로 짧음</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>OGBench Cube</strong></td>
+<td style="text-align:left">5D 말단 제어, $224 \times 224$ RGB</td>
+<td style="text-align:left">10,000 에피소드 (2.0M 트랜지션)</td>
+<td style="text-align:left">단일 큐브 집기 및 놓기 스크립트 정책</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DROID</strong></td>
+<td style="text-align:left">7D 말단 제어, $256 \times 256$ RGB (3뷰)</td>
+<td style="text-align:left">74,530 에피소드 (220,084 뷰)</td>
+<td style="text-align:left">실제 로봇 조작 영상, 복잡한 자연 배경</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4-2-모델-구조-및-네트워크-하이퍼파라미터">4.2. 모델 구조 및 네트워크 하이퍼파라미터</h5>
+<ul>
+<li><strong>기본 프레임 결합:</strong> Level 1의 1 타임스텝은 연속된 환경 5스텝을 결합(Concatenate)하여 구성.</li>
+<li><strong>Level 1 인코더 &amp; 예측기:</strong> ViT-Tiny 이미지 인코더 (패치 크기 14 또는 4) 사용, <code>[CLS]</code> 토큰으로 표현 압축. 예측기는 Causal Transformer 구조 적용.</li>
+<li><strong>상위 레벨 (Level $\ell &gt; 1$) 구조:</strong> 2계층 MLP 인코더 및 Causal Transformer 예측기 사용.
+<ul>
+<li><strong>AntMaze:</strong> 잠재 차원 $d=384$, 예측기 5레이어 / 12헤드, FF 차원 1536.</li>
+<li><strong>FourRoom / Push-T / Cube:</strong> 잠재 차원 $d=192$, 예측기 4~6레이어 / 8~16헤드, FF 차원 1024~2048.</li>
+</ul>
+</li>
+<li><strong>계층 타임스케일 하이퍼파라미터:</strong> 모든 상위 레벨에서 보폭 $s_\ell = 2$, 윈도우 $w_\ell = 1$, 컨텍스트 $c_\ell = 3$.
+<ul>
+<li><strong>Level 1:</strong> 예측당 환경 5스텝</li>
+<li><strong>Level 2:</strong> 예측당 환경 10스텝</li>
+<li><strong>Level 3:</strong> 예측당 환경 20스텝</li>
+<li><strong>Level 4:</strong> 예측당 환경 40스텝</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-3-학습-및-최적화-하이퍼파라미터">4.3. 학습 및 최적화 하이퍼파라미터</h5>
+<ul>
+<li><strong>최적화 알고리즘:</strong> AdamW (가중치 감쇠 $10^{-3}$, $bfloat16$ 정밀도, 기울기 클리핑 $1.0$).</li>
+<li><strong>학습률 (Learning Rate):</strong> 1% 선형 워밍업 후 코사인 감쇠. Peak LR은 Level 1이 $5 \times 10^{-5}$, 상위 레벨은 $10^{-5}$.</li>
+<li><strong>SIGReg 정규화 계수 ($\lambda_\ell$):</strong>
+<ul>
+<li>FourRoom: H-JEPA $\lambda = 0.18$ (단일 레벨 LeWM은 $0.72$).</li>
+<li>AntMaze / Push-T / Cube: 모든 레벨 $\lambda = 0.09$.</li>
+<li>DROID: Level 1 $\lambda_1 = 0.08, \gamma_1 = 100$ (IDM 가중치); Level 2 $\lambda_2 = 0.16, \gamma_2 = 50$, 행동 임베딩 SIGReg $0.005$.</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-4-평가-지표-및-성과-수치">4.4. 평가 지표 및 성과 수치</h5>
+<ul>
+<li><strong>Visual AntMaze 플래닝 성공률:</strong> Flat LeWM ($18.0%$) $\rightarrow$ 3단계 H-JEPA (<strong>$73.3%$</strong>).</li>
+<li><strong>탐침 정규화 MSE (Probing NMSE):</strong> 분산 정규화 MSE 사용 ($0$은 완전 복원, $1$은 평균 예측 수준).</li>
+<li><strong>DROID 프레셰 피델리티 (Fréchet Fidelity, %):</strong> 식 (7)에 따라 산출. 로봇 엔드이펙터의 3D 궤적 $p$와 전문가 궤적 $\tilde{p}$ 간의 Fréchet 거리 $d_F$ 측정 ($0%$는 정지 상태, $100%$는 전문가 궤적 일치).</li>
+</ul>
+<p>$$\text{fidelity} = \frac{d_F(0, \tilde{p}) - d_F(p, \tilde{p})}{d_F(0, \tilde{p})} \times 100 \quad \text{--- (7)}$$</p>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<ul>
+<li><strong>Push-T 환경에서의 심각한 성능 저하:</strong>
+Push-T 환경에서는 계층이 3단계 이상으로 깊어질 때 성공률이 급격히 떨어진다. 이는 Push-T의 에피소드 길이가 평균 125스텝으로 매우 짧아, 깊은 계층 학습에 필요한 최소 클립 길이(3단계: 61스텝, 4단계: 121스텝)를 충족하는 샘플 수가 급감하기 때문이다. 3단계 H-JEPA는 LeWM 대비 58%, 4단계는 단 14%의 학습 트랜지션만 활용할 수밖에 없다.</li>
+<li><strong>조작(Manipulation) 데이터셋의 선택적 추상화 부재:</strong>
+Push-T 및 Cube와 같은 조작 데이터셋은 엔티티 간 주파수 격차(Frequency Gap)가 2배 미만으로 작다. 이로 인해 상위 레벨에서 저수준 정보를 선택적으로 삭제하는 계층적 추상화 현상이 나타나지 않는다.</li>
+<li><strong>실제 물리 로봇 폐루프(Closed-loop) 제어 검증 미비:</strong>
+DROID 데이터셋 실험은 오프라인 환경에서 오픈루프(Open-loop) 플래닝 피델리티를 평가한 것이다. H-JEPA가 생성한 서브골 플랜이 실제 실물 로봇의 폐루프 제어(Closed-loop Control) 상에서 성공적으로 구동할지는 실증되지 않은 향후 연구 과제이다.</li>
+<li><strong>기타 미확인 및 불확실한 사항:</strong>
+<ul>
+<li>실물 로봇 직접 적용 시 발생할 연산 지연 시간(Latency) 수치는 소스 문헌에 명시되어 있지 않음 (<strong>확인 불가</strong>).</li>
+<li>언어 모델(LLM) 연동을 통한 자연어 목표 지정 및 가변 구간(Variable-duration segments) 적용 등은 향후 연구 방향으로 제시되었으나 현 단계에서는 실증 데이터가 없음 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

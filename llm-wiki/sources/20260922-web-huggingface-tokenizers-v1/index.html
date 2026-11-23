@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tokenizers v1: encode, decode and scaling, measured</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>tokenizers v1: encode, decode and scaling, measured</h1>
+<p class="page-meta">웹 · 2026-09-22</p>
+<h2 id="요약">요약</h2>
+<p>머신러닝 워크플로의 역사에서 토크나이저는 모델 연산의 복잡도에 비해 부하가 매우 낮아 성능 병목 지점으로 간주되지 않았습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://huggingface.co/blog/tokenizers-v1">출처</a> · <a href="https://www.youtube.com/watch?v=gpkyQLpwTrg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="tokenizers-v1-성능-가속-및-확장성-측정-보고서">tokenizers v1: 성능 가속 및 확장성 측정 보고서</h3>
+<h4 id="1-서론-문제-설정-및-v1-개발-배경">1. 서론: 문제 설정 및 v1 개발 배경</h4>
+<p>머신러닝 워크플로의 역사에서 토크나이저는 모델 연산의 복잡도에 비해 부하가 매우 낮아 성능 병목 지점으로 간주되지 않았습니다. 그러나 모델 가속화 기술의 발전, 대규모 데이터셋 학습, 수많은 동시 요청을 처리하는 서빙 환경, 그리고 긴 입력값을 반복 처리하는 현대적 워크로드에서는 상황이 반전되었습니다.</p>
+<p>현재의 고성능 GPU 연산 속도는 CPU의 데이터 전처리 속도를 압도하며, 토크나이저가 데이터를 충분히 빠르게 공급하지 못할 경우 GPU가 유휴 상태(Idle)로 머무르는 현상이 발생합니다. Hugging Face의 <code>tokenizers</code> v1은 이러한 병목을 해결하기 위해 &quot;토크나이징의 경량화 및 워크플로 스케일링&quot;에 초점을 맞추어 설계되었으며, GPU가 데이터 공급을 기다리는 시간을 최소화하는 데 최우선 순위를 두었습니다.</p>
+<h4 id="2-tokenizers-4단계-파이프라인-구조">2. tokenizers 4단계 파이프라인 구조</h4>
+<p><code>tokenizers</code> 라이브러리는 텍스트를 모델이 이해할 수 있는 정수 리스트로 변환하기 위해 다음과 같은 4단계 표준 파이프라인을 수행합니다.</p>
+<ol>
+<li><strong>Normalization (정규화)</strong>: 소문자화, 유니코드 정규화 등 원본 텍스트의 일관성을 확보하기 위한 전처리를 수행합니다.</li>
+<li><strong>Pre-tokenization (사전 토큰화)</strong>: 텍스트를 'pre-token'이라 불리는 더 작은 논리적 단위로 분할합니다.</li>
+<li><strong>Model (모델)</strong>: 각 pre-token을 실제 토큰으로 변환하고 vocabulary ID로 매핑합니다. 전체 파이프라인에서 가장 연산 집약적인 핵심 단계입니다.</li>
+<li><strong>Post-processing (후처리)</strong>: 모델 요구 사항에 맞춰 특수 토큰(special token)을 추가합니다.</li>
+</ol>
+<p>본 보고서에서 측정한 10개 모델 중 8개는 <strong>BPE(Byte Pair Encoding)</strong> 방식을 사용하며, 나머지 2개는 WordPiece 및 Unigram 방식을 사용합니다. BPE는 바이트 단위에서 시작하여 학습된 순위(merge rank)에 따라 가장 높은 순위의 인접 쌍을 반복적으로 병합하며, 어떠한 경우에도 병합(merge)이 pre-token의 경계를 넘지 않는다는 원칙을 준수합니다.</p>
+<h4 id="3-v1의-6대-핵심-기술-메커니즘">3. v1의 6대 핵심 기술 메커니즘</h4>
+<p>v1의 성능 도약은 아키텍처 수준의 6가지 혁신적 변화를 통해 실현되었습니다.</p>
+<ul>
+<li><strong>Workspace Split</strong>: 단일 크레이트를 워크스페이스 구조로 개편하여 필수 런타임인 <code>tk-encode</code>를 핵심으로 분리했습니다. <code>tk-serialize</code>, <code>tk-convert</code>, <code>tk-train</code> 등은 필요 시에만 선택적으로 링크되도록 최적화했습니다.</li>
+<li><strong>No-alloc Model</strong>: 병합 작업 시 호출자가 소유한 스크래치 버퍼(scratch buffer)를 활용합니다. 이를 통해 루프 내부에서 메모리 할당자(allocator)를 호출하는 오버헤드를 완전히 제거했습니다.</li>
+<li><strong>Bitcannon (패턴 인식 기반 SIMD 가속)</strong>: 기존 정규표현식 엔진 대신 SIMD(Single Instruction, Multiple Data) 명령을 사용하여 레지스터 연산당 64바이트의 경계를 판정합니다. 현재 GPT-2, cl100k, o200k, Tekken, DeepSeek 패턴이 지원되며, 지원 범위를 벗어나는 패턴은 기존 regex 경로로 폴백(fallback)하여 호환성을 유지합니다. 모델 간 성능 향상 폭의 차이는 바로 이 Bitcannon의 패턴 지원 여부에 달려 있습니다.</li>
+<li><strong>Merge-loop Rewrite (구조적 최적화)</strong>:
+<ul>
+<li>프리앨로케이션된 버퍼 내에서 침투형 이중 연결 리스트(intrusive doubly-linked list)를 사용하여, 병합 시 발생하는 데이터 이동 오버헤드(O(N) data shifting)를 제거하고 O(1)의 포인터/인덱스 업데이트로 대체했습니다.</li>
+<li>병합 후보 쌍을 64비트 값으로 패킹하고 상위 비트에 merge rank를 배치하여, 분기(branchless) 없는 정수 비교만으로 다음 병합 대상을 결정합니다. &quot;병합 없음&quot;은 64비트 최대값으로 표현되어 비교 연산에서 자연스럽게 제외됩니다.</li>
+<li>기존 v0.23이 pre-token당 한 번의 모델 호출을 수행하던 것과 달리, 여러 개의 pre-token 스팬을 단일 모델 호출로 처리(batched model calls)하도록 구조를 변경했습니다.</li>
+</ul>
+</li>
+<li><strong>WordCache (Thread-local Memoization)</strong>: 동일한 pre-token 바이트에 대한 결과 ID를 캐싱하여 중복 연산을 방지합니다(af5a3e3). 입력 데이터의 규모가 커질수록 고유 단어 비중이 낮아지므로 성능 이득이 극대화되나, 중복 단어가 거의 없는 입력의 경우 캐시 조회 비용(lookup penalty)이 발생할 수 있는 트레이드오프가 존재합니다.</li>
+<li><strong>Native Parallelism</strong>: 공유 토크나이저가 여러 스레드에서 동시에 인코딩을 수행할 때 lock 대기가 발생하지 않도록 설계되었습니다. 각 스레드는 개별 서브 풀(스크래치 버퍼, 워드 캐시 등)을 사용하므로 리소스 경합(contention)이 최소화되었습니다(<a href="https://github.com/huggingface/tokenizers/pull/2365">#2365</a>).</li>
+</ul>
+<h4 id="4-벤치마크-방법론-및-환경-설정">4. 벤치마크 방법론 및 환경 설정</h4>
+<p>성능 측정은 <code>tokbench</code> 저장소를 활용하였으며, 공정한 비교를 위해 다음의 7가지 엄격한 규칙을 적용했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">규칙</th>
+<th style="text-align:left">목적 및 상세 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>동일 타이밍 루프 실행</strong></td>
+<td style="text-align:left">엔진별 특수 경로(Fast path)를 배제하고 모든 엔진이 동일한 루프 구조 내에서 실행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Vocabulary 로드 시간 제외</strong></td>
+<td style="text-align:left">순수 인코딩 연산 성능만을 정밀하게 측정</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>id-hash 무결성 검증</strong></td>
+<td style="text-align:left">FNV-1a 해시를 통해 결과 ID가 기존 엔진과 100% 일치함을 보장</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공통 셀(Common cells) 기준</strong></td>
+<td style="text-align:left">모든 테스트 대상 엔진이 성공적으로 검증을 마친 항목들의 중앙값 산출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>프로세스 독립성</strong></td>
+<td style="text-align:left">매 반복 시마다 새로운 프로세스를 시작하여 이전 작업의 메모리/캐시 영향 배제</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>물리 코어 고정</strong></td>
+<td style="text-align:left">SMT(Hyper-threading)의 변동성을 배제하기 위해 8개의 물리 코어에 워커를 고정</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>독립 Jobs 실행</strong></td>
+<td style="text-align:left">호스트 간 변동성을 측정하기 위해 별도의 작업 단위로 독립 실행</td>
+</tr>
+</tbody>
+</table>
+<p><strong>데이터 구성의 차이:</strong>
+본 보고서의 헤드라인 수치는 '서로 다른 문서 스트림(Distinct Documents)' 인코딩을 기준으로 합니다. 이는 '동일 문서 반복(Warm)' 측정 방식이 캐시 효과로 인해 실제보다 과도하게 높은 수치를 보여줄 수 있음을 경계한 것으로, 캐시 용량을 초과하는 대규모 말뭉치를 사용하여 실제 프로덕션 환경의 성능을 반영하도록 설계되었습니다.</p>
+<h4 id="5-성능-측정-결과-및-분석">5. 성능 측정 결과 및 분석</h4>
+<p>Apple M4 Max 단일 스레드 기준, v1은 v0.23 대비 모델에 따라 <strong>3배에서 최대 30배</strong>의 성능 향상을 달성했습니다.</p>
+<ul>
+<li><strong>성능 향상 편차 분석</strong>: 최저 향상을 보인 **t5-base(3배)**는 현재 Bitcannon의 SIMD 패턴 지원 범위에 포함되지 않아 기존 regex 경로를 사용하는 반면, 최고 향상을 보인 **gpt2(30x)**는 SIMD 가속을 전적으로 활용하기 때문에 이러한 격차가 발생합니다.</li>
+<li><strong>확장성</strong>: 8개의 물리 코어 사용 시 이론적 선형 스케일링 대비 **76%**의 효율을 달성하여, 멀티 코어 환경에서의 우수한 병렬 처리 능력을 입증했습니다.</li>
+<li><strong>호환성</strong>: 이러한 파괴적인 아키텍처 변화에도 불구하고, 생성되는 토큰 ID는 기존 라이브러리와 완벽히 일치하여 데이터 무결성을 유지합니다.</li>
+</ul>
+<h4 id="6-구현-현황-및-향후-로드맵">6. 구현 현황 및 향후 로드맵</h4>
+<h5 id="release-candidate-rc-완료-항목">Release Candidate (RC) 완료 항목</h5>
+<p>현재 Rust 프리릴리즈 버전(crates.io)에 반영된 주요 기술 사양입니다:</p>
+<ul>
+<li><strong>Workspace Split</strong>: 크레이트 구조 분리 및 최적화.</li>
+<li><strong>Bitcannon</strong>: GPT-2, cl100k, o200k, Tekken, DeepSeek 패턴 지원 (<a href="https://github.com/huggingface/tokenizers/pull/2201">#2201</a>, <a href="https://github.com/huggingface/tokenizers/pull/2317">#2317</a>).</li>
+<li><strong>WordCache</strong>: 중복 단어 메모이 제이션 (af5a3e3).</li>
+<li><strong>구조적 최적화</strong>: FlatCache, MPHF RankStore, BucketVocabStore 도입 (<a href="https://github.com/huggingface/tokenizers/pull/2190">#2190</a>, <a href="https://github.com/huggingface/tokenizers/pull/2188">#2188</a>).</li>
+<li><strong>Batched model calls</strong>: 모델 호출 단위 최적화 (<a href="https://github.com/huggingface/tokenizers/pull/2304">#2304</a>).</li>
+<li><strong>Node.js Bindings</strong>: 고성능 자바스크립트 환경 지원 (<a href="https://github.com/huggingface/tokenizers/pull/2281">#2281</a>).</li>
+</ul>
+<h5 id="1-0-0-계획-in-progress">1.0.0 계획 (In Progress)</h5>
+<ul>
+<li><strong>단일 인코딩 구현</strong>: 학습과 추론 시 동일한 <code>tk-encode</code>를 사용하여 결과 일관성 확보.</li>
+<li><strong>선택적 메타데이터 계산</strong>: offset 및 mask 계산을 요청 시에만 수행하도록 최적화.</li>
+<li><strong>Normalizers 개편</strong>: 정규화 파이프라인 재설계 및 <code>bitnorm</code> (based on <code>atomnorm</code>, <a href="https://github.com/huggingface/tokenizers/pull/2209">#2209</a>) 지원.</li>
+<li><strong>SPM Precompiled</strong>: SentencePiece 모델 프리컴파일 지원.</li>
+<li><strong>Bindings 확대</strong>: Python 바인딩 단순화 및 ExecuTorch/llama.cpp를 위한 C/C++ 바인딩 구축.</li>
+</ul>
+<h5 id="after-1-0-0-미래-과제">After 1.0.0 (미래 과제)</h5>
+<ul>
+<li><strong>tok-devices</strong>: GPU 장치 내에서 텍스트와 ID를 유지하며 병렬 처리를 극대화하는 GPU 인코딩 및 배치 디코딩 기술을 탐색 중이며, 현재 추가 프로토타이핑 단계에 있습니다.</li>
+</ul>
+<h4 id="7-설치-및-코드-예시">7. 설치 및 코드 예시</h4>
+<h5 id="설치-방법">설치 방법</h5>
+<p>학습 의존성을 제외하고 인코딩 성능에 집중한 경량 설치 명령어는 다음과 같습니다.</p>
+<pre><code class="language-bash"># 인코딩 전용 설치 (C++ 의존성 배제)
+cargo add tokenizers --pre --no-default-features --features http
+</code></pre>
+<h5 id="rust-사용-예시">Rust 사용 예시</h5>
+<p><code>from_pretrained</code>를 통한 로드와 단일/배치 인코딩 구현 예시입니다.</p>
+<pre><code class="language-rust">use tokenizers::tokenizer::{Result, Tokenizer};
+
+fn main() -&gt; Result&lt;()&gt; {
+    // 모델 로드
+    let tokenizer = Tokenizer::from_pretrained(&quot;deepseek-ai/DeepSeek-V4-Flash&quot;, None)?;
+
+    // 단일 인코딩: v1은 v0.23과 동일한 API를 유지합니다.
+    let encoding = tokenizer.encode(&quot;The tokenizer is no longer the bottleneck.&quot;, false)?;
+    
+    println!(&quot;{:?}&quot;, encoding.get_ids());
+    // [671, 17840, 9160, 344, 1119, 5827, 270, 111127, 16]
+    
+    println!(&quot;{:?}&quot;, encoding.get_tokens());
+    // [&quot;The&quot;, &quot;Ġtoken&quot;, &quot;izer&quot;, &quot;Ġis&quot;, &quot;Ġno&quot;, &quot;Ġlonger&quot;, &quot;Ġthe&quot;, &quot;Ġbottleneck&quot;, &quot;.&quot;]
+
+    // 멀티 코어 스케일링을 위한 배치 인코딩
+    // let encodings = tokenizer.encode_batch(documents, false)?;
+
+    Ok(())
+}
+</code></pre>
+<p><strong>주의 사항:</strong> Python 바인딩은 내부적으로 동일한 Rust 코드를 사용하지만, 각 호출마다 발생하는 FFI(Foreign Function Interface) 및 바인딩 오버헤드로 인해 순수 Rust 벤치마크 수치와는 차이가 발생할 수 있습니다.</p>
+<h4 id="8-결론">8. 결론</h4>
+<p>본 보고서는 <code>tokbench</code>의 객관적 데이터를 통해 <code>tokenizers</code> v1이 현대적 워크로드의 병목 현상을 해결하는 강력한 도구임을 입증했습니다. SIMD 가속, 메모리 할당 제거, 그리고 효율적인 캐싱 전략을 통해 실현된 이 성능 향상은 향후 더 많은 모델 제품군으로 확대 적용될 예정이며, 지속적인 업데이트가 이루어질 것입니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

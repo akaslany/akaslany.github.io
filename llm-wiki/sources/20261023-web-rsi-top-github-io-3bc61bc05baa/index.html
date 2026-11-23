@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSI-top — Escaping Exploration Collapse in Long-Horizon Autoresearch</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>RSI-top — Escaping Exploration Collapse in Long-Horizon Autoresearch</h1>
+<p class="page-meta">웹 · 2026-10-23</p>
+<h2 id="요약">요약</h2>
+<p>장기 오토리서치(Long-horizon autoresearch) 수행 과정에서 에이전트는 초기 성과 달성 이후 장시간 동안 탐색 성능이 향상되지 않는 '프론티어 정체(Frontier stall)'와 '탐색 붕괴(Exploration collapse)' 문제에 직면한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://rsi-top.github.io/">출처</a> · <a href="https://www.youtube.com/watch?v=melkz8cQQXo">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="rsi-top-장기-오토리서치-탐색-붕괴-극복-기술-해설-보고서">RSI-top: 장기 오토리서치 탐색 붕괴 극복 기술 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>장기 오토리서치(Long-horizon autoresearch) 수행 과정에서 에이전트는 초기 성과 달성 이후 장시간 동안 탐색 성능이 향상되지 않는 '프론티어 정체(Frontier stall)'와 '탐색 붕괴(Exploration collapse)' 문제에 직면한다. 에이전트의 제안이 단일한 방향으로 좁아지며 동일한 아이디어를 반복적으로 개선하는 국소 최적해에 갇히게 되며, 실제 오토리서치 실행 시간의 84%에서 92%에 달하는 기간 동안 프론티어 정체가 발생하는 것으로 나타난다.</p>
+<p>이러한 문제를 해결하기 위해 유닉스 계열 시스템의 프로세스 및 자원 진단 도구인 <code>htop</code>에서 영감을 받아 개발된 기술이 RSI-top이다. RSI-top은 오토리서치 실행 기록(Trajectory)을 사전에 정의된 과업 맞춤형 지표 대시보드(Metric dashboard)로 압축하여 백그라운드에서 실시간 측정·관리한다. 이후 프론티어 정체가 감지되면 다양성이 제어된 에이전트 코호트(Cohort)를 투입하여 탐색을 다각화함으로써 국소 정체 상태를 벗어나도록 유도한다.</p>
+<p>RSI-top은 기존 오토리서치 프레임워크인 오픈이볼브(OpenEvolve) 및 신카이볼브(ShinkaEvolve) 등의 내부 선택 및 변이 규칙을 변경하지 않고, 외부 탐색 루프 주변에 개입 메커니즘을 추가하는 플러그인(Plug-in) 하네스 구조로 작동한다. 이를 통해 기존 프레임워크의 구조적 수정 없이 높은 범용성과 확장성을 제공한다.</p>
+<h4 id="2-주요-논점-main-arguments-technical-principles">2. 주요 논점 (Main Arguments &amp; Technical Principles)</h4>
+<h5 id="2-1-탐색-붕괴-exploration-collapse-및-맥락-관성-context-inertia-의-원인">2.1. 탐색 붕괴(Exploration Collapse) 및 맥락 관성(Context Inertia)의 원인</h5>
+<p>장기 오토리서치에서 발생하는 **탐색 붕괴(Exploration collapse)**는 손실 함수 표면에서 국소 최적해(Local minimum)에 갇힌 경사하강법과 유사하게, 에이전트의 아이디어 제안 엔트로피가 낮아지며 단일 방향으로 수렴하는 현상을 의미한다. 포크앤플러시(Fork-and-Flush) 연구에서는 이를 특정 아이디어 영역에 매몰되는 <strong>'아이디어 분지(Idea basins)'</strong> 현상으로 규정한다. 에이전트는 최고 점수가 정체된 상태에서도 동일한 접근법만을 지속적으로 수정·개선하려 시도하며, 이로 인해 전체 실행 시간의 84%~92% 동안 프론티어 개선이 이루어지지 않는다.</p>
+<p>이러한 정체의 주요 원인은 **맥락 관성(Context Inertia)**이다. 모델은 프롬프트 및 맥락 내에 포함된 이전 시도들에 강하게 고착되어, 해당 방향이 실패했다는 증거가 누적되더라도 시도 방향을 전환하지 못하고 기존 방식을 계속 추진하려는 경향을 보인다. 수백 개의 트래젝토리가 쌓이는 장기 실행 환경에서 맥락 관성을 극복하기 위해 제안된 대표적인 맥락 관리 방식 4가지의 비교는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">방식</th>
+<th style="text-align:left">특징 및 한계/장점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>전체 히스토리 유지 (Full history)</strong></td>
+<td style="text-align:left">모든 실행 기록 및 인과 관계를 맥락에 유지하는 방식. 탐색이 길어질 경우 컨텍스트 윈도우 용량을 초과(Overflow)하여 적용 불가능함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>간헐적 요약 (Summarizing)</strong></td>
+<td style="text-align:left">코덱스(Codex) 등에서 사용하는 방식으로, 일정 트래젝토리마다 내용을 요약함. 컨텍스트 크기는 유지되나 요약 과정에서 정체 탈출에 필요한 구체적 세부 정보가 손실됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>맥락 초기화 (Resetting)</strong></td>
+<td style="text-align:left">포크앤플러시(Fork-and-Flush) 등에서 사용하는 방식으로, 컨텍스트를 비운 복제본을 생성하여 작업 공간만 공유하고 최적 후보부터 재시작함. 맥락 관성을 해결하여 아이디어 분지 탈출을 도모하나, 과거 탐색 시도에 대한 구조적 인덱스가 상실되어 이미 실패한 탐색 가지를 재탐색하는 위험을 내포함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지표 압축 및 선택적 펼침 (RSI-top)</strong></td>
+<td style="text-align:left">각 트래젝토리를 대시보드 지표 행으로 압축하여 가벼운 인덱스로 유지하고, 탐색 정체 시 대시보드를 기반으로 필요한 소수의 트래젝토리만 선택적으로 펼쳐(Selective Unfolding) 조회 및 활용함.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-2-rsi-top-핵심-구조-지표-대시보드-및-단계별-작동-메커니즘">2.2. RSI-top 핵심 구조: 지표 대시보드 및 단계별 작동 메커니즘</h5>
+<p>RSI-top은 사전 지표 컴파일 및 백그라운드 측정(1단계)과 정체 감지 및 다각화 개입(2단계)의 구조로 작동하며, 전체 프로세스는 <strong>'조회 후 선택적 펼침(Look-then-unfold)'</strong> 패러다임을 바탕으로 다음 5단계로 진행된다.</p>
+<ol>
+<li><strong>지표 설계 (Design metrics)</strong>: 실행 전 대형언어모델(LLM)이 과업 설명을 분석하여 고정된 입출력을 갖는 지표 명세를 작성하고, 이를 첫 트래젝토리 실행 전에 실행 가능한 스크립트로 컴파일한다.</li>
+<li><strong>백그라운드 측정 (Score in the background)</strong>: 네이티브 에이전트가 다음 트래젝토리를 실행하는 동안, 완료된 이전 트래젝토리에 대해 지표 스크립트가 백그라운드에서 비동기적으로 평가를 수행하고 대시보드에 <strong>행(Row) 데이터</strong>를 추적·추가한다.</li>
+<li><strong>정체 감지 (Detect stalls)</strong>: 모니터가 대시보드의 프론티어 변화를 감시하며, 일정 시간 동안 성능 개선이 기준치 미만에 머무르는 **프론티어 정체(Frontier stall)**를 감지하면 네이티브 탐색을 일시 정지한다.</li>
+<li><strong>선택적 펼침 (Unfold selectively)</strong>: 무거운 전체 실행 로그를 직접 스캔하는 대신, 코호트 에이전트들이 대시보드의 압축된 지표 행을 스캔·정렬하여 현재 정체를 탈출하는 데 가장 유용한 소수의 트래젝토리만 선택적으로 로드(<strong>Unfolding</strong>)하여 상세 분석한다.</li>
+<li><strong>개입 및 권한 이양 (Intervene, then hand back)</strong>: 코호트 에이전트들이 다각화된 새 방향성들을 병렬 트래젝토리로 실행하여 아카이브에 추가한 후, 기존 네이티브 탐색 루프에 제어권을 다시 이양한다.</li>
+</ol>
+<h5 id="2-3-다양성-제어-diversity-control-메커니즘">2.3. 다양성 제어(Diversity Control) 메커니즘</h5>
+<p>공동 대시보드를 읽는 에이전트 간 제안 중복을 방지하고 상이한 골짜기를 탐색하도록 유도하기 위해 RSI-top은 3가지 다양성 제어 메커니즘을 적용한다.</p>
+<h6 id="대시보드-지표-부분-집합-제공-random-metric-subsets">대시보드 지표 부분 집합 제공 (Random Metric Subsets)</h6>
+<ul>
+<li>코호트 내 각 에이전트에게 전체 대시보드 지표 중 무작위 부분 집합을 제공한다 (기본 설정: 전체 25개 지표 중 무작위 15개 제공).</li>
+<li>서로 다른 신호를 관찰하는 에이전트는 히스토리 내 트래젝토리의 우선순위를 다르게 평가하므로, 각자 다른 트래젝토리를 펼쳐보고 서로 다른 개선 결론에 도달하게 된다.</li>
+</ul>
+<h6 id="언어화된-샘플링-verbalized-sampling-을-통한-포트폴리오-제안">언어화된 샘플링(Verbalized Sampling)을 통한 포트폴리오 제안</h6>
+<ul>
+<li>각 에이전트는 단일 아이디어가 아닌 8개의 방향을 하나의 포트폴리오로 제안하며, 각 방향에 대한 언어화된 확률(Verbalized probability)을 함께 표기한다.</li>
+<li>언어화된 확률은 일반적인 기획자가 독립적으로 해당 방향을 제안할 가능성을 추정한 값으로, 확률 수치의 합이 1이 될 필요는 없으며 보정된 성공 확률을 의미하지도 않는다. 이러한 분포 형식을 요구함으로써 직관적이지 않거나 정형화되지 않은 정밀한 저확률 아이디어를 유효하게 도출하도록 돕는다.</li>
+</ul>
+<h6 id="인과-서브그래프-causal-subgraphs-기반의-제안-입증">인과 서브그래프(Causal Subgraphs) 기반의 제안 입증</h6>
+<ul>
+<li>전체 아카이브를 부모-자식 관계 기반의 방향성 비순환 그래프(DAG)로 관리하여 탐색 히스토리의 계통(Lineage)을 구별한다.</li>
+<li>에이전트 프롬프트를 통해 히스토리 내의 서로 다른 인과 서브그래프(Causal subgraphs)를 발굴하고 그에 기반하여 탐색 방향을 입증하도록 함으로써 실질적으로 차별화된 기회를 탐색하도록 보장한다.</li>
+</ul>
+<h5 id="2-4-벤치마크-평가-결과-및-성능-분석">2.4. 벤치마크 평가 결과 및 성능 분석</h5>
+<p>RSI-top의 성능은 단일 트래젝토리가 이전 결과를 누적하여 발전시키는 두 가지 주요 벤치마크에서 검증되었다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크</th>
+<th style="text-align:left">평가 조건 및 모델</th>
+<th style="text-align:left">주요 성과 지표</th>
+<th style="text-align:left">비고 및 세부 성과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Anthropic 커널 최적화 (Anthropic Kernel Optimization)</strong></td>
+<td style="text-align:left">4개 조합(OpenEvolve / ShinkaEvolve × DeepSeek v4 Flash / Gemini 3.7 Flash) + RSI-top 플러그인</td>
+<td style="text-align:left">- 최종 실행 사이클: 1109 사이클&lt;br&gt;- 정규화 성능 지표: 1363 / 사이클 산출 방식 적용</td>
+<td style="text-align:left">- 4가지 베이스라인 조합 모두 RSI-top 적용 전 실행 시간의 84%~92% 동안 정체 현상 표시&lt;br&gt;- OpenEvolve 단독 실행(1244 사이클) 대비 유의미한 사이클 단축 달성&lt;br&gt;- $300 API 예산 제한 조건의 GPT-5.6 Sol 및 Claude Opus 5와 대등한 성과를 저비용 Flash 모델로 구현</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MLE-bench (전체 75개 경진대회)</strong></td>
+<td style="text-align:left">Gemini 3.7 Flash + RSI-top (ReAct 루프 적용, A100 1대, 12시간 제한)</td>
+<td style="text-align:left">- 평균 메달 획득률: 63.1%&lt;br&gt;- 제출 유효성: 100%&lt;br&gt;- 중앙값 초과 비율(Med+): 77.3%&lt;br&gt;- 금메달 비율: 43.1%</td>
+<td style="text-align:left">- 비교 대상 방법론 중 가장 높은 평균 메달 획득률 및 금메달 비율 기록 (타 방법론 대부분은 24시간 제한 조건 사용)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MLE-bench Lite (22개 경진대회)</strong></td>
+<td style="text-align:left">Gemini 3.7 Flash + RSI-top (3개 시드 평균 평가)</td>
+<td style="text-align:left">- 메달 획득률, 제출 유효성, 중앙값 초과 비율, 금메달 비율 동시 평가</td>
+<td style="text-align:left">- 동일한 Gemini 3.7 Flash 베이스라인을 공유하는 오픈소스 오토리서치 기법 대비 우월한 성능 달성</td>
+</tr>
+</tbody>
+</table>
+<p><em>참고</em>: Anthropic 커널 최적화에서 연산 효율성은 실행 사이클(Cycle) 수치로 평가되며, 사이클 숫자가 낮을수록 빠른 수행 속도를 의미한다. 따라서 기준 상수인 <code>1363</code>을 실행 사이클 수치로 나눈 <strong>정규화 성능(1363 / 사이클)</strong> 공식을 적용하여, 사이클 단축 시 정규화 성능 수치가 상승하도록 설계되었다.</p>
+<h4 id="3-등장-인물-및-화자-people-authors">3. 등장 인물 및 화자 (People &amp; Authors)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속 및 역할</th>
+<th style="text-align:left">소스 내 확인 여부 / 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Yuzhen Mao</td>
+<td style="text-align:left">Stanford University Scaling Intelligence Lab, 논문 공저자</td>
+<td style="text-align:left">소스 명시 (DeLM 연구 저자로도 언급)</td>
+</tr>
+<tr>
+<td style="text-align:left">Jacky Kwok</td>
+<td style="text-align:left">Stanford University Scaling Intelligence Lab, 논문 공저자</td>
+<td style="text-align:left">소스 명시</td>
+</tr>
+<tr>
+<td style="text-align:left">Shayan Talaei</td>
+<td style="text-align:left">Stanford University Scaling Intelligence Lab, 논문 공저자</td>
+<td style="text-align:left">소스 명시</td>
+</tr>
+<tr>
+<td style="text-align:left">Azalia Mirhoseini</td>
+<td style="text-align:left">Stanford University Scaling Intelligence Lab, 논문 공저자</td>
+<td style="text-align:left">소스 명시</td>
+</tr>
+<tr>
+<td style="text-align:left">R. T. Lange et al.</td>
+<td style="text-align:left">ShinkaEvolve 연구 저자 / 소속 확인 불가 (소스 미언급)</td>
+<td style="text-align:left">소스 명시 (인용 문헌 [2])</td>
+</tr>
+<tr>
+<td style="text-align:left">Z. Cai et al.</td>
+<td style="text-align:left">Fork-and-Flush 연구 저자 / 소속 확인 불가 (소스 미언급)</td>
+<td style="text-align:left">소스 명시 (인용 문헌 [3])</td>
+</tr>
+<tr>
+<td style="text-align:left">S. Tan et al.</td>
+<td style="text-align:left">Scaling Discovery Requires Forgetting 연구 저자 / 소속 확인 불가 (소스 미언급)</td>
+<td style="text-align:left">소스 명시 (인용 문헌 [4])</td>
+</tr>
+<tr>
+<td style="text-align:left">D. Breunig</td>
+<td style="text-align:left">Context Inertia 관련 문헌 작성자 / 소속 확인 불가 (소스 미언급)</td>
+<td style="text-align:left">소스 명시 (인용 문헌 [6])</td>
+</tr>
+<tr>
+<td style="text-align:left">J. Zhang et al.</td>
+<td style="text-align:left">Verbalized Sampling 연구 저자 / 소속 확인 불가 (소스 미언급)</td>
+<td style="text-align:left">소스 명시 (인용 문헌 [7])</td>
+</tr>
+<tr>
+<td style="text-align:left">J. S. Chan et al.</td>
+<td style="text-align:left">MLE-bench 연구 저자 / 소속 확인 불가 (소스 미언급)</td>
+<td style="text-align:left">소스 명시 (인용 문헌 [8])</td>
+</tr>
+</tbody>
+</table>
+<h4 id="4-주요-수치-및-시점-key-metrics-timestamps">4. 주요 수치 및 시점 (Key Metrics &amp; Timestamps)</h4>
+<ul>
+<li><strong>탐색 정체(Stall) 정의 기준</strong>: 첫 1시간 경과 이후, 최소 20분 동안 최고 점수 개선이 2 사이클 미만으로 이루어지는 구간.</li>
+<li><strong>전체 실행 중 정체 시간 비율</strong>: 장기 오토리서치 베이스라인 실행 시간의 84% ~ 92%.</li>
+<li><strong>Anthropic 커널 최적화 성능 및 연산 수치</strong>:
+<ul>
+<li>정규화 성능 수식: <code>1363 / 사이클</code> (사이클이 적을수록 수치가 높아져 우수한 성능을 나타냄).</li>
+<li>OpenEvolve 단독 실행 결과: 1244 사이클.</li>
+<li>OpenEvolve + RSI-top 적용 결과: 첫 정체 지점에서 분기하여 1109 사이클로 단축 개선.</li>
+<li>프론티어 모델 비교군 API 예산 제한: $300 (GPT-5.6 Sol, Claude Opus 5에 적용).</li>
+</ul>
+</li>
+<li><strong>다양성 제어 관련 수치</strong>:
+<ul>
+<li>대시보드 지표 제어: 전체 25개 지표 중 무작위 15개 부분 집합 제공 (기본 설정).</li>
+<li>언어화된 샘플링 제어: 에이전트당 1회 개입 시 8개 방향의 포트폴리오 제안.</li>
+</ul>
+</li>
+<li><strong>MLE-bench 평가 및 통계 수치</strong>:
+<ul>
+<li>전체 경진대회 수: 75개 (Low, Medium, High 난이도 구성).</li>
+<li>MLE-bench Lite 경진대회 수: 22개 (Low 난이도 구성).</li>
+<li>하드웨어 및 제한시간: A100 GPU 1대 기준 12시간 실행 (타 방법론 24시간 대비 절반 조건).</li>
+<li>통계 검증: 3개 시드(Seed) 평균 평가 및 시드 간 표준편차(Standard Deviation) 측정.</li>
+<li>75개 전체 성과: 평균 메달 획득률 63.1%, 제출 유효성 100%, 중앙값 초과 비율(Med+) 77.3%, 금메달 비율 43.1%.</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-한계와-불확실성-및-향후-연구-limitations-uncertainties-future-work">5. 한계와 불확실성 및 향후 연구 (Limitations, Uncertainties &amp; Future Work)</h4>
+<h5 id="확인-불가능한-한계점-및-동시-연구와의-비교">확인 불가능한 한계점 및 동시 연구와의 비교</h5>
+<p>소스 내용에 근거할 때, RSI-top의 지표 자동 작성 시 사용되는 상세 프롬프트 구조, 스크립트 컴파일 오버헤드 비용, 대시보드 구축 및 백그라운드 평가에 소모되는 구체적인 계산 자원(CPU/GPU 연산량) 및 API 비용 수치는 **확인 불가 (소스 미언급)**이다.</p>
+<p>유사한 탐색 정체 문제를 해결하려는 동시 연구(Concurrent Work)들과 비교했을 때 다음과 같은 작동 및 구조적 차이점이 존재한다.</p>
+<ul>
+<li><strong>Fork-and-Flush, Scaling Discovery Requires Forgetting, Anthropic Memento harness</strong>: 해당 방식들은 일정 주기나 타임아웃 발생 시 대화 맥락(Context)을 완전히 삭제(Reset/Discard)하고 최적 후보나 작업 공간(Workspace) 파일만 유지하여 새 세션을 시작한다. 특히 Anthropic의 Memento 하네스는 고정된 타임아웃 시점에 에이전트 실행을 중단하고 코드베이스와 짧은 메모(Short note)만을 새로 투입되는 에이전트에 전달하는 방식을 취한다.</li>
+<li><strong>RSI-top의 차별점</strong>: RSI-top은 이전 실험 기록을 파기하지 않고 구조화된 지표 인덱스(대시보드)로 유지함으로써, 에이전트가 필요한 트래젝토리만 선택적으로 검색·인스펙션하여 개입 방향을 계획하도록 유도한다. 다만 컨텍스트 완전 초기화 방식들과 비교한 메모리 사용량 및 API 비용 효율성의 직접적인 정량 비교 데이터는 **확인 불가 (소스 미언급)**이다.</li>
+</ul>
+<h5 id="향후-발전-방향-what-s-next">향후 발전 방향 (What's next)</h5>
+<ul>
+<li><strong>다중 에이전트 오토리서치 맥락 관리 확장</strong>: 공유 맥락과 작업 큐 기반으로 병렬 에이전트를 제어하는 DeLM 프레임워크와 RSI-top을 결합하여, 대시보드가 다중 에이전트 간의 통합 공유 맥락 역할을 수행하도록 확장한다.</li>
+<li><strong>범용 장기 실행 에이전트 대시보드 적용</strong>: 실행 히스토리가 맥락 용량을 초과하는 코딩 에이전트, 연구 보조 에이전트 등 다양한 단일/다중 에이전트 시스템 전반으로 '조회 후 펼침(Look-then-unfold)' 패러다임을 넓게 적용한다.</li>
+<li><strong>상시(Always-on) 동적 제어 메커니즘 전환</strong>: 정체 감지 후 탐색을 일시 정지하고 개입하는 현 방식에서 벗어나, 에이전트들이 비동기적으로 대시보드를 지속 확인하여 국소 최적해(골짜기)에 진입하기 전에 실시간으로 탐색 방향을 제어하는 구조로 발전시킨다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

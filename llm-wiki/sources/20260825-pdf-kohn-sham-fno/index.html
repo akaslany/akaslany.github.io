@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning the Kohn–Sham map with neural operators for quasi-linear scaling density functional theory</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Learning the Kohn–Sham map with neural operators for quasi-linear scaling density functional theory</h1>
+<p class="page-meta">PDF · 2026-08-25</p>
+<h2 id="요약">요약</h2>
+<p>KS-FNO 원고는 Mg 계산에서 반복당 준선형 스케일링을 보고했으나 전체 셀 정확도는 검증되지 않았다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=P6zqMOc-cI4">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="kohn-sham-fno를-이용한-준선형-스케일링-밀도범함수이론-dft-심층-분석-보고서">Kohn-Sham FNO를 이용한 준선형 스케일링 밀도범함수이론(DFT) 심층 분석 보고서</h3>
+<h4 id="1-문서-상태-및-핵심-결론-document-status-executive-summary">1. 문서 상태 및 핵심 결론 (Document Status &amp; Executive Summary)</h4>
+<p>본 보고서는 Caltech TensorLab에서 호스팅하는 &quot;Learning the Kohn–Sham map with neural operators for quasi-linear scaling density functional theory&quot; 원고(2026-08-24 버전)를 정밀 분석한 결과입니다.</p>
+<ul>
+<li><strong>문서의 공식 지위:</strong> 2026년 8월 25일 현재 공개 레지스트리 점검에서 이 원고의 <strong>DOI나 arXiv ID, 학술지 출판 또는 동료 심사(Peer-review) 완료 근거가 확인되지 않은 저자 호스팅 원고</strong>입니다.</li>
+<li><strong>재현성 및 검증 한계:</strong> 본문 내에서 보충 정보(Supplementary Information, SI)를 31회 인용하고 있으나, 검토 시점의 공개 경로에서는 실제 코드, 모델 가중치, SI 문서 및 가공 데이터 패키지를 찾지 못했습니다. 따라서 보고된 수치의 독립적 재현과 세부 조건 감사가 불가능한 상태임을 인지해야 합니다.</li>
+<li><strong>핵심 요약:</strong> Kohn-Sham FNO(KS-FNO)는 표준 SCF(Self-Consistent Field) 루프를 유지하되, 명목상 $O(N^3)$ 병목인 <strong>'보조 오비탈 대각화 및 직교화' 단계를 학습된 신경 연산자(Potential-to-Density Neural Operator)로 대체</strong>하고, 테스트한 Mg 범위에서 iteration당 준선형에 가까운 경험적 스케일링을 보고한 시도입니다.</li>
+</ul>
+<hr />
+<h4 id="2-전자구조-계산의-병목-현상-물리적-배경-및-스케일링의-오해">2. 전자구조 계산의 병목 현상: 물리적 배경 및 스케일링의 오해</h4>
+<p>표준 Kohn-Sham DFT는 자기일관장(SCF) 루프를 통해 바닥 상태 밀도를 도출합니다. 이 과정의 핵심 병목은 해밀토니안의 고유값 문제($H\phi = \epsilon\phi$)를 해결하는 단계입니다.</p>
+<ul>
+<li><strong>물리적 병목:</strong> 전자 수나 밴드 수($N$)가 증가함에 따라 dense orbital diagonalization 및 직교화의 명목 비용은 **$O(N^3)$**로 설명됩니다. 이는 지수적 증가가 아니라 가파른 3차 다항 증가이며, 실제 Quantum ESPRESSO 비용은 solver·k-point·병렬화·수렴 조건에도 좌우됩니다.</li>
+<li><strong>복잡도 대조의 엄밀성:</strong> 저자들은 고정 channel·mode 조건의 KS-FNO/FFT update를 실공간 격자점 수($N_g$)에 대해 **$O(N_g \log N_g)$**로 제시합니다. 여기서 $N$은 electron/band scale이고 $N_g$는 real-space grid points이므로 같은 변수가 아닙니다. 고정 해상도·조성에서 둘 다 계 크기와 함께 증가할 수 있지만, 서로 다른 변수를 단순 비교해 보편적 속도비를 만들 수 없습니다.</li>
+</ul>
+<hr />
+<h4 id="3-세-가지-학습-목표의-물리적-타당성-분석-three-learning-targets">3. 세 가지 학습 목표의 물리적 타당성 분석 (Three Learning Targets)</h4>
+<p>본 논문은 오비탈 제거를 위한 세 가지 접근법을 물리적 관점에서 대조합니다.</p>
+<ol>
+<li><strong>Inverse KEDF 방식 ($n \to v_s$):</strong> 밀도에서 포텐셜을 역으로 찾는 방식입니다. 밀도 응답 함수($\chi_s$)의 작은 고유값이 역연산 시 오차를 극심하게 증폭시키는 <strong>수치적 불안정성</strong> 문제가 있습니다. 특히, 시도 밀도(Trial densities)가 물리적으로 유효한 포텐셜을 정의할 수 없는 <strong>v-representable 도메인</strong>을 벗어날 가능성이 크다는 본질적 한계가 존재합니다.</li>
+<li><strong>Direct Ground-state Prediction ($v_{ext} \to n^*$):</strong> 원자 구조에서 즉시 바닥 상태를 예측합니다. SCF 피드백을 명시적으로 반복하지 않으며, 이 논문의 동일-backbone 비교에서는 QMugs OOD에서 오차가 크게 증가했습니다. 이를 모든 direct density model의 일반적 취약성으로 확대하면 안 됩니다.</li>
+<li><strong>Forward Kohn-Sham Map ($v_{KS} \to n_{out}$):</strong> 본 논문이 채택한 방식으로, 단일 비상호작용 해를 근사합니다. SCF 루프의 명시적인 물리적 피드백(Hartree/XC 포텐셜 구성)을 유지하며, 저자들이 테스트한 세 target의 통제 비교에서 안정성과 외삽이 가장 유리했습니다. 이는 모든 가능한 표현에 대한 formal optimality가 아닙니다.</li>
+</ol>
+<hr />
+<h4 id="4-kohn-sham-fno-아키텍처-및-물리적-제약">4. Kohn-Sham FNO 아키텍처 및 물리적 제약</h4>
+<ul>
+<li><strong>Domain-invariant FNO:</strong> 고정된 도메인 크기에 종속되지 않고 역격자 반경의 함수로서 방사형 필터(Radial filters)를 평가합니다. 이를 통해 서로 다른 물리적 크기를 가진 분자와 고체에 동일한 필터를 적용할 수 있습니다.</li>
+<li><strong>SE(3) Equivariance:</strong> 저자들은 Fourier convolution의 병진 등변성과 spherical mode truncation 및 radial filter를 이용해 회전 등변성을 갖도록 설계했다고 설명합니다. 다만, discrete grid에서의 엄밀한 등변성 오차와 수치 검증은 공개 SI가 없어 확인하지 못했습니다.</li>
+<li><strong>학습 데이터:</strong> base model은 2,004개 QM9 분자와 6,500개 MC3D 결정, 합계 8,504개 구조에서 얻은 <strong>59,500개의 ordinary SCF labels</strong>로 학습됐다고 본문은 보고합니다. 다른 연구의 수백만 label과는 architecture·target·data distribution이 달라 직접 효율 대결로 해석할 수 없으며, 이 label 수가 Mg zero-shot 실패의 원인이라는 인과도 입증되지 않았습니다.</li>
+</ul>
+<hr />
+<h4 id="5-실험-결과-분석-i-분자-시스템-및-데이터-불일치-지적">5. 실험 결과 분석 I: 분자 시스템 및 데이터 불일치 지적</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">데이터셋</th>
+<th style="text-align:left">특성</th>
+<th style="text-align:left">KS-FNO 밀도 오차</th>
+<th style="text-align:left">Direct FNO 밀도 오차</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>QM9</strong></td>
+<td style="text-align:left">In-distribution</td>
+<td style="text-align:left"><strong>0.625%</strong></td>
+<td style="text-align:left">0.662%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>QMugs</strong></td>
+<td style="text-align:left">Out-of-distribution</td>
+<td style="text-align:left"><strong>2.23%</strong></td>
+<td style="text-align:left">9.97%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>감사 의견 (수치 불일치):</strong> 본문 서술에서는 heavy atoms 범위를 20→45로 명시하지만 Figure 3 캡션은 20–35로 표기합니다. SI·원자료 없이 어느 쪽이 맞는지 판정할 수 없으므로, 45개 원자 endpoint의 정확도를 확정값으로 인용하지 않습니다.</li>
+<li><strong>물리량 결과:</strong> QMugs에서 dipole(0.026 D/electron), Hartree error(0.267 mHa/electron) 등도 matched direct FNO보다 낮게 보고됐습니다. 이는 이 비교에서 SCF feedback을 보존한 target이 유리했음을 지지하지만, 모든 모델에서 필수라는 인과 증명은 아닙니다.</li>
+</ul>
+<hr />
+<h4 id="6-실험-결과-분석-ii-결정-구조-및-제한적-전이-학습">6. 실험 결과 분석 II: 결정 구조 및 제한적 전이 학습</h4>
+<ul>
+<li><strong>수렴 안정성:</strong> MC3D 테스트 셋 200개 중 199개에서 수렴에 성공했습니다. 반도체(0.75%) 대비 금속(1.46%)의 오차가 상대적으로 높게 나타납니다.</li>
+<li><strong>XC Functional Transfer:</strong> PBE로 학습된 모델을 PBEsol에 적용했을 때 Sr3SnO의 체적 오차가 0.61%로 유지되었습니다. 저자는 이를 물리적 범용성으로 강조하나, 이는 <strong>단일 물질(Sr3SnO)에 국한된 좁은 범위의 Zero-shot 사례</strong>입니다. 하이브리드 범함수나 전이 금속 산화물 등 복잡한 시스템으로의 일반화 여부는 여전히 미지의 영역입니다.</li>
+</ul>
+<hr />
+<h4 id="7-대규모-시스템-적용-mg-dislocation의-한계">7. 대규모 시스템 적용: Mg Dislocation의 한계</h4>
+<p>8,250개 원자(82,500개 원자가 전자) 규모의 마그네슘 전위 계산 결과는 본 보고서의 가장 비판적인 검토 대상입니다.</p>
+<ul>
+<li><strong>Fine-tuning의 필요:</strong> 베이스 모델은 시험한 Mg dislocation cells에서 모두 Zero-shot 수렴에 실패했습니다. 1,203개의 Mg 구조를 이용한 <strong>추가 fine-tuning</strong> 후 수렴했으므로, 이 결과를 base model의 defect zero-shot generalization으로 부를 수 없습니다. 다만 이 한 실패만으로 다른 모든 domain으로의 전이 능력을 부정하지는 않습니다.</li>
+<li><strong>정확도 검증 부재:</strong> 8,250개 원자 전체 셀에 대한 PBE 참조 밀도가 존재하지 않아 <strong>직접적인 정확도 확인은 불가능</strong>했습니다. 528개 원자 Crop에서의 오차(0.33~0.35%)만을 근거로 제시하고 있으나, <strong>전체 에너지는 물론 힘(Force) 및 결함 에너지(Defect energy)의 정확성은 본 실험에서 전혀 입증되지 않았습니다.</strong></li>
+</ul>
+<hr />
+<h4 id="8-계산-효율성-및-스케일링-정밀-진단">8. 계산 효율성 및 스케일링 정밀 진단</h4>
+<ul>
+<li><strong>실측 스케일링 지수:</strong> 격자 점 수($N_g$)에 따른 시간 복잡도 지수는 KS-FNO $p=1.03$, Quantum ESPRESSO(QE) $p=3.37$로 보고되었습니다.</li>
+<li><strong>하드웨어 비대칭 경고:</strong> FNO 시간은 <strong>NVIDIA B300 GPU 1개</strong>에서 측정됐고, QE 시간은 CPU 실행을 core count에 따라 선형 rescale해 <strong>192-core AMD EPYC 9655 node</strong>를 추정했습니다. 실제 동일 하드웨어·동일 조건 benchmark가 아니므로 절대적 speedup이나 비용·전력 우위를 산출할 수 없습니다.</li>
+<li><strong>총 계산 비용:</strong> 보고된 수치는 'SCF 1회 반복당 시간'입니다. 전체 수렴까지의 반복 횟수가 시스템 크기에 따라 증가할 경우 총 계산 비용의 스케일링은 $O(N_g \log N_g)$보다 악화될 수 있습니다.</li>
+</ul>
+<hr />
+<h4 id="9-감사-의견-기술적-경계-및-반증-조건-critical-audit">9. 감사 의견: 기술적 경계 및 반증 조건 (Critical Audit)</h4>
+<p>⚠️ <strong>본 보고서의 독자는 다음의 과장된 표현을 경계해야 합니다.</strong></p>
+<ol>
+<li><strong>&quot;DFT 완전 대체&quot;는 성립하지 않습니다:</strong> 본 모델은 밀도 성분만 학습합니다. 논문에서 total energy와 orbital-resolved spectrum(DOS 등)을 얻을 때는 수렴 후 별도의 <strong>fixed-density post-SCF diagonalization 1회</strong>를 사용했습니다. 힘은 평가하지 않았습니다.</li>
+<li><strong>&quot;모든 오비탈 계산 제거&quot;는 과장입니다:</strong> density optimization의 SCF loop 안에서 반복 orbital solve를 피한 것입니다. Density와 density-derived quantities에는 마지막 orbital solve가 필요 없을 수 있지만, 현재 모델로 spectra와 논문의 total energy를 얻을 때는 post-SCF orbital solve가 남습니다.</li>
+<li><strong>수렴이 곧 정답은 아닙니다:</strong> Fixed-point residual은 수렴 과정을 진단하는 도구일 뿐, PBE 정답과의 오차 한계(Error bound)를 보장하는 수학적 수치가 아닙니다.</li>
+<li><strong>입증되지 않은 물리량:</strong> Force, Stress, 구조 최적화(Relaxation)에 대한 정확도는 본 논문에서 전혀 다루어지지 않았습니다.</li>
+</ol>
+<hr />
+<h4 id="10-용어-사전-glossary">10. 용어 사전 (Glossary)</h4>
+<ol>
+<li><strong>자기일관장 (Self-Consistent Field, SCF):</strong> 입력과 출력 밀도가 일치할 때까지 포텐셜을 반복 갱신하는 수치 해석 과정.</li>
+<li><strong>퓨리에 신경 연산자 (Fourier Neural Operator, FNO):</strong> 퓨리에 변환을 통해 함수 공간 사이의 매핑을 학습하는 신경망.</li>
+<li><strong>등변성 (Equivariance):</strong> 입력의 회전/병진 변환에 따라 출력도 동일한 물리적 규칙으로 변환되는 성질.</li>
+<li><strong>밀도 응답 함수 ($\chi_s$):</strong> 포텐셜 변화에 따른 밀도 변화율. 이 함수의 **고유값 문제(Eigenvalue problem)**는 역 DFT 문제의 수치적 불안정성을 결정하는 핵심 요인임.</li>
+<li><strong>v-representability:</strong> 주어진 전자 밀도에 대응하는 유효한 외부 포텐셜이 존재할 조건.</li>
+<li><strong>도메인 불변성 (Domain-invariant):</strong> 서로 다른 물리적 크기의 reciprocal grid에 같은 learned filter를 샘플링하도록 설계한 성질. 정확도나 모든 경계조건으로의 일반화를 자동 보장하지 않습니다.</li>
+<li><strong>XC functional transfer:</strong> PBE로 학습한 density model을 fine-tuning 없이 PBEsol potential construction에 적용한 시험. 이 원고의 실증 범위는 단일 Sr3SnO EOS 사례입니다.</li>
+<li><strong>준선형 스케일링 (Quasi-linear Scaling):</strong> 이 원고에서는 격자점 수 $N_g$에 대한 FFT update $O(N_g\log N_g)$와 finite-range iteration-time fit $p=1.03$을 가리킵니다. 보편적 total-runtime 증명이 아닙니다.</li>
+<li><strong>고정점 잔차 (Fixed-point Residual):</strong> SCF 루프의 수렴 척도. 입력과 출력의 차이를 Relative-L1 단위로 측정함.</li>
+<li><strong>상태 방정식 (Equation of State, EOS):</strong> 체적 변화에 따른 에너지 변화를 나타내며, 벌크 계수 등 물질의 탄성 특성을 결정함.</li>
+</ol>
+<hr />
+<h4 id="11-증거의-세-층을-분리해-읽기">11. 증거의 세 층을 분리해 읽기</h4>
+<p>이 원고의 검증은 모두 같은 강도가 아닙니다. 첫째, QM9·QMugs·MC3D와 최대 528-atom Mg crop에는 conventional PBE reference density와의 직접 비교가 있습니다. 둘째, CaTiO3·Sr3SnO의 band structure, DOS, Harris energy 및 EOS는 FNO density를 고정한 뒤 orbital solve를 한 case study입니다. 셋째, 8,250-atom Mg full cell에는 PBE reference가 없고 learned fixed-point convergence 및 두 core의 ESP 차이만 있습니다. 따라서 crop의 0.33–0.35% 오차를 8,250-atom full-cell accuracy로 옮기거나, density accuracy를 force·stress·defect-energy accuracy로 바꾸면 안 됩니다.</p>
+<h4 id="12-반증-및-신뢰중단-기준">12. 반증 및 신뢰중단 기준</h4>
+<p>실용적 배치에서는 residual 수렴만으로 신뢰하지 말아야 합니다. 새로운 원소·산화상태·자성·pseudopotential·smearing·경계조건에서 가능한 크기의 conventional KS reference와 density, energy, force를 다시 비교해야 합니다. 회전·이동·cell-padding 변화에 대한 equivariance test, residual과 실제 density error의 calibration, 동일 하드웨어·동일 정확도에서의 end-to-end timing이 필요합니다. Base model이 Mg에서 그랬듯 residual이 발산하면 적용 범위 밖이라는 강한 경고로 취급하고, 수렴하더라도 reference error가 커지면 범용성·KS-accuracy·가속 주장을 철회하거나 해당 범위로 축소해야 합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li></ul></section>
+</main>
+</body>
+</html>

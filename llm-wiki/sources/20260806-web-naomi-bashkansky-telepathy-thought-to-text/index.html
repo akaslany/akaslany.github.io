@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why I’m leaving OpenAI to build telepathy</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Why I’m leaving OpenAI to build telepathy</h1>
+<p class="page-meta">웹 · 2026-08-06</p>
+<h2 id="요약">요약</h2>
+<p>콘두잇의 비침습 뇌-컴퓨터 인터페이스 비전과 의미 해독의 실증 한계, 신경 데이터 보호 과제를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=r0fxE8SZV-4">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="why-i-m-leaving-openai-to-build-telepathy-뇌-컴퓨터-인터페이스-bci-의-기술적-비전과-실증적-한계-분석">Why I’m leaving OpenAI to build telepathy: 뇌-컴퓨터 인터페이스(BCI)의 기술적 비전과 실증적 한계 분석</h3>
+<h4 id="1-저자-배경-및-conduit-합류-경위">1. 저자 배경 및 Conduit 합류 경위</h4>
+<p><strong>이력 및 퇴사 배경</strong>
+OpenAI에서 1.5년간 정렬(Alignment) 연구자로 근무하며 정렬 블로그 운영 및 AGI 온보딩 자료 제작을 담당했던 나오미 바슈칸스키(Naomi Bashkansky)는 2026년 7월 23일 퇴사 후, 바로 다음 날 BCI 스타트업 '콘두잇(Conduit)'의 창립 연구자(Founding Researcher)로 합류했습니다. 그녀는 인공지능이 인간의 도구를 넘어 인지적 확장으로 기능해야 한다는 비전을 가지고 이직을 결심했습니다.</p>
+<p><strong>이해관계 명시</strong>
+저자는 Conduit가 '일반 읽기 및 쓰기(General Read/Write)' 기술을 선점할 경우 기업 가치가 1조 달러(약 1,300조 원)를 상회할 것이라는 강력한 주관적 기대를 표명하고 있습니다. 본 보고서는 독립적인 과학적 검증을 거친 논문이 아니라, 신입 연구자로서 기업의 비전을 옹호하고 인재 영입을 독려하기 위해 작성된 <strong>기술 에세이</strong>임을 명확히 인지해야 합니다.</p>
+<hr />
+<h4 id="2-미래-비전-연도별-낙관적-시나리오-vignettes">2. 미래 비전: 연도별 낙관적 시나리오 (Vignettes)</h4>
+<p>다음 시나리오는 확정된 제품 로드맵이 아닌, 저자가 제시한 '낙관적 전망'의 단편들입니다.</p>
+<ul>
+<li><strong>2027년 - 비침습 헤드밴드의 도입:</strong> 사용자가 뇌에 비침습형 헤드밴드를 착용하고 Codex와 같은 AI 모델과 블루투스로 연결합니다. 모호한 생각이 텍스트 명령으로 해독되어 AI에 자동 전송되는 'Auto-send' 기능이 핵심입니다.</li>
+<li><strong>2030년 - 잠재 표현(Latent Representations)의 직접 연결:</strong> AI 모델이 텍스트 디코딩 단계를 건너뛰고 뇌의 신경 신호를 담은 Conduit의 '잠재 표현'과 직접 인터페이스합니다. 이를 통해 텍스트로 설명하기 어려운 시각적 이미지나 복잡한 개념의 공유가 가능해집니다.</li>
+<li><strong>2035년 - 인간과 AI의 공생:</strong> AI가 외부 도구가 아닌 '육감'이나 '새로운 팔다리'처럼 느껴지는 '인간-인-더-루프(Human-in-the-loop)'가 실현됩니다. 뇌에 정보를 직접 쓰는 '일반 쓰기(General Write)' 기술을 통해 인지 속도가 비약적으로 향상됩니다.</li>
+</ul>
+<hr />
+<h4 id="3-thought-to-text의-기술적-메커니즘">3. Thought-to-Text의 기술적 메커니즘</h4>
+<p><strong>핵심 차별점: 의미론적 디코딩(Semantic Decoding)</strong>
+여기서 '텔레파시'란 초자연적 능력이 아니라, 비침습 신경 신호를 AI 입력값으로 추정하는 BCI 기술의 비유입니다. 이 글과 Conduit의 설명은 신경 신호에서 언어적 '의미'를 추정하는 <strong>의미론적 디코딩</strong>에 초점을 둡니다.</p>
+<p><strong>입력과 출력: 전언어적(Pre-verbal) 신호</strong></p>
+<ul>
+<li><strong>입력값(회사 설명):</strong> Conduit는 참가자가 실제로 말하거나 타이핑하기 직전 수 초의 비침습 신경 활동 데이터를 사용한다고 설명합니다. 회사는 이를 아이디어가 단어로 정리되기 전의 신호를 포착하는 것으로 해석하지만, 독립 검증된 사실로 단정할 수는 없습니다.</li>
+<li><strong>목표 출력:</strong> 신경 신호에서 추출된 '의미적으로 유사한(Semantically Similar) 텍스트'입니다.</li>
+</ul>
+<p><strong>GPS와 지도 비유 및 왜곡 위험</strong>
+저자는 신경 신호를 '오차가 있는 잡음 섞인 GPS 위치'로, LLM과 문맥을 정확한 경로를 찾아주는 '지도'로 비유합니다.</p>
+<ul>
+<li><strong>기술적 보완:</strong> LLM(지도)은 부족한 신경 정보(GPS)를 보완하여 문장을 완성합니다.</li>
+<li><strong>분석적 경고:</strong> LLM이 실제 생각이 아닌 '문맥상 그럴듯한 문장'으로 정보를 보충할 때 **의미론적 표류(Semantic Drift)**나 **환각(Hallucination)**이 발생할 수 있습니다. 즉, 지도가 GPS 신호를 무시하고 임의의 경로를 생성할 위험이 상존합니다.</li>
+</ul>
+<hr />
+<h4 id="4-conduit의-자체-보고-10-000시간의-데이터-수집">4. Conduit의 자체 보고: 10,000시간의 데이터 수집</h4>
+<p>Conduit는 자체 블로그를 통해 세계 최대 규모의 신경-언어 데이터를 수집했다고 주장합니다. (외부 독립 검증 미완료)</p>
+<ul>
+<li><strong>데이터 규모 및 스택:</strong> 지난 6개월간 수천 명으로부터 약 10,000시간의 데이터를 확보했습니다.
+<ul>
+<li><strong>전사 및 대화 스택:</strong> <strong>Deepgram</strong>(음성 전사), <strong>OSS120B on Cerebras</strong>(LLM 추론), <strong>ElevenLabs 및 Groq</strong>(음성 출력)를 활용한 2시간의 자유 대화 세션을 매일 20시간씩 가동했습니다.</li>
+</ul>
+</li>
+<li><strong>운영 최적화와 '비터 레슨(Bitter Lesson)':</strong>
+<ul>
+<li><strong>하드웨어:</strong> 30분이 소요되는 젤(Gel) 도포를 생략하기 위해 3D 프린팅 기반의 스프링 장착 건식 전극 헤드셋을 제작, 교체 시간을 3분 이내로 단축했습니다.</li>
+<li><strong>노이즈 전략:</strong> Conduit는 초기 전력 차단과 Faraday Cage 같은 조치를 시도했으며, 4,000~5,000시간 규모 이후에는 데이터 양의 효과가 개별 노이즈 저감 기법보다 더 커졌다고 자체 보고합니다. 이는 회사의 운영 관찰이며 외부 재현 결과는 아닙니다.</li>
+</ul>
+</li>
+</ul>
+<p><strong>실증 예시 (Zero-shot)</strong>
+모델은 이전에 본 적 없는 피험자의 신경 신호만으로 다음과 같은 예측을 수행했습니다.</p>
+<ul>
+<li><strong>Ground Truth:</strong> &quot;방이 좀 더 추워진 것 같아&quot; $\rightarrow$ <strong>Prediction:</strong> &quot;산들바람, 심지어 부드러운 돌풍이 있었어&quot;</li>
+<li><strong>Ground Truth:</strong> &quot;그녀는 희미하게 미소 지으며 고개를 끄덕였다&quot; $\rightarrow$ <strong>Prediction:</strong> &quot;그녀는 무관심해 보이길 바라며 어깨를 으쓱했다&quot;</li>
+</ul>
+<hr />
+<h4 id="5-scaling-law의-검증-현황-및-비판적-분석">5. Scaling Law의 검증 현황 및 비판적 분석</h4>
+<p><strong>스케일링 법칙 주장</strong>
+저자는 데이터 양의 로그값에 비례하여 잠재 공간 예측의 **코사인 유사도(Cosine Similarity)**가 직선적으로 개선된다고 주장하며, 현재를 'GPT-2 시대'로 명명했습니다.</p>
+<p><strong>분석가적 비판</strong></p>
+<ul>
+<li><strong>지표의 한계:</strong> 코사인 유사도는 언어적 정확성을 대변하기에 불충분한 지표입니다. LLM에 의한 의미 왜곡을 걸러내지 못할 수 있습니다.</li>
+<li><strong>실증적 공백:</strong> 해당 보고서에는 수치화된 그래프, 오차 범위(Error bars), 기준선(Baseline), 타 연구자에 의한 재현 결과가 전혀 제시되지 않았습니다. 현재의 성과는 전적으로 회사 내부의 정성적 관찰에 의존하고 있습니다.</li>
+</ul>
+<hr />
+<h4 id="6-주요-위험-요소-및-실용성-과제">6. 주요 위험 요소 및 실용성 과제</h4>
+<ul>
+<li><strong>정신적 프라이버시:</strong> 전언어적 단계의 신호를 수집하므로, 외부로 내보내고 싶지 않은 '배경 생각'과 '의도적 명령'을 명확히 구분할 수 있는 보안 체계가 필수적입니다.</li>
+<li><strong>하드웨어의 진화 (Ablation Study):</strong> 현재 훈련에는 고밀도 센서가 장착된 <strong>4파운드(약 1.8kg)의 헬멧</strong>이 사용됩니다. Conduit은 이를 최소화하기 위한 절제 연구(Ablation study)를 진행 중이나, 이 성능이 일상용 경량 헤드밴드에서 유지될지는 미지수입니다.</li>
+<li><strong>동의와 데이터 주권:</strong> 참가자가 수집 목적, 보관 기간, 제3자 이용을 이해하고 동의를 철회할 수 있어야 합니다.</li>
+<li><strong>보안과 통제:</strong> 원시 신경 데이터, 잠재표현, 해독 텍스트에 암호화·삭제·접근통제를 적용하고, 자동전송(Auto-send) 전에는 사용자가 확인·취소할 수 있어야 합니다.</li>
+</ul>
+<hr />
+<h4 id="7-결론-반증-및-철회-기준">7. 결론: 반증 및 철회 기준</h4>
+<p>나오미 바슈칸스키의 비전이 단순한 공학적 낙관론을 넘어 실재하는 기술로 인정받기 위해서는 다음의 체크리스트가 충족되어야 합니다.</p>
+<h5 id="기술-검증-체크리스트"><strong>[기술 검증 체크리스트]</strong></h5>
+<ul>
+<li>[ ] <strong>독립적 유용성 검증:</strong> 신규 사용자 대상 Thought-to-Text의 오작동률 및 유용성에 대한 제3자 기관의 평가.</li>
+<li>[ ] <strong>Scaling Law 재현:</strong> 데이터 분할 및 기준선이 명시된 성능 그래프의 공개 및 외부 재현 성공.</li>
+<li>[ ] <strong>기기 경량화 실증:</strong> 4파운드급 훈련 장비의 성능이 소비자용 경량 기기에서도 통계적으로 유의미하게 유지됨을 증명.</li>
+<li>[ ] <strong>인지 향상 증거:</strong> 'General Write' 기술이 실제 학습 효율이나 인지 능력 향상에 기여한다는 신경과학적 근거 제시.</li>
+</ul>
+<p>본 보고서는 저자의 담대한 비전을 기술적 맥락에서 해석한 것입니다. 실제 '텔레파시'의 구현 여부는 마케팅적 수사가 아닌, 향후 공개될 엄격한 실증 데이터와 객관적인 성능 지표에 달려 있습니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li></ul></section>
+</main>
+</body>
+</html>

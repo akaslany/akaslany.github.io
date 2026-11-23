@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[기술 검증 보고서] Sliding Window Attention의 효율성 및 선형 어텐션 대비 우위 분석</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>[기술 검증 보고서] Sliding Window Attention의 효율성 및 선형 어텐션 대비 우위 분석</h1>
+<p class="page-meta">논문 · 2026-08-31</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 별도의 사후 학습(Post-training) 없이 적용된 슬라이딩 윈도우 어텐션(Sliding Window Attention, 이하 SWA)이 수천만 토큰 이상의 사후 학습을 거친 선형 어텐션(Linear Attention) 모델들을 상회한다는 논문의 주장을 기술적으로 검증한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=zhsD8PmEz3U">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="기술-검증-보고서-sliding-window-attention의-효율성-및-선형-어텐션-대비-우위-분석">[기술 검증 보고서] Sliding Window Attention의 효율성 및 선형 어텐션 대비 우위 분석</h3>
+<h4 id="1-연구의-핵심-명제-및-배경-분석">1. 연구의 핵심 명제 및 배경 분석</h4>
+<p>본 보고서는 별도의 사후 학습(Post-training) 없이 적용된 슬라이딩 윈도우 어텐션(Sliding Window Attention, 이하 SWA)이 수천만 토큰 이상의 사후 학습을 거친 선형 어텐션(Linear Attention) 모델들을 상회한다는 논문의 주장을 기술적으로 검증한다.</p>
+<p><strong>어텐션 싱크(Attention Sinks)의 역할과 기준선의 재정의</strong>
+논문은 SWA의 유효성이 초기 4개의 토큰, 즉 '어텐션 싱크'를 고정적으로 참조하는 설계에 전적으로 의존함을 규명한다. 트랜스포머 모델은 의미론적 중요도와 무관하게 초기 토큰에 어텐션 가중치를 집중시키는 경향이 있으며, 이를 보존하지 않는 기존의 'Sink-free SWA'는 윈도우 이동 시 성능이 급격히 붕괴되는 취약한 기준선(Weak Baseline)이다. 따라서 본 연구가 제시하는 SWA(w, 4)는 기술적으로 유효한 비교군을 설정했다는 점에서 학술적 의미를 갖는다.</p>
+<p><strong>핵심 주장 요약</strong>
+&quot;창 크기 64~512와 4개의 싱크를 조합한 SWA가 사후 학습된 선형 모델보다 강력하다&quot;는 결론을 도출하되, 이것이 풀 어텐션(Full Attention)의 완벽한 대체를 증명하는 것은 아님을 분명히 한다. 이는 현행 선형화 기법들이 지닌 정보 압축의 한계와 비효율성을 역설적으로 드러내는 지표로 해석되어야 한다.</p>
+<h4 id="2-단기-문맥-성능-및-벤치마크-지표-검증">2. 단기 문맥 성능 및 벤치마크 지표 검증</h4>
+<p>논문은 SWA(64, 4) 설정이 추가 학습 없이도 고비용의 사후 학습을 거친 선형 모델들과 대등하거나 우월한 성능 회복률을 보인다고 보고한다.</p>
+<p><strong>성능 회복률 분석 (Table 1, 2)</strong>
+논문의 Table 1에 따르면, SWA(64, 4)는 교사 모델(Teacher Model) 대비 MMLU 지표에서 93.2%, 6개 주요 벤치마크 평균에서 99.0%의 회복률을 기록하였다. 이는 Table 2에서 제시된 11개의 모델 사례 중 9개에서 평균 최고 성능을 기록한 결과로, 40M 토큰 이상의 학습 예산을 투입한 LoLCATs(MMLU 회복률 83.2%) 등과 비교할 때 SWA의 '0-token' 효율성이 압도적임을 시사한다.</p>
+<p><strong>주요 예외 사례 및 통계적 특이점</strong>
+Table 2의 세부 수치를 검토한 결과, SWA가 최고 성능을 기록하지 못한 예외 사례는 다음과 같다.</p>
+<ul>
+<li><strong>Phi-1.5-1.3B 사례</strong>: LoLCATs(62.5) 대비 SWA(62.4)로 근소하게 하회.</li>
+<li><strong>Qwen2.5-32B-Instruct 사례</strong>: QRWKV6(77.3) 대비 SWA(76.6).</li>
+<li><strong>Llama2.0-7B의 MMLU 전용 사례</strong>: DiJiang(40.7) 대비 SWA(39.8).</li>
+</ul>
+<p>심사역의 관점에서, 이러한 예외는 특정 아키텍처나 파라미터 규모에서 선형화 커널이 SWA의 단순 마스킹보다 유리할 수 있음을 시사하나, 전반적인 경향성을 뒤집기에는 부족한 수치다.</p>
+<h4 id="3-장문-문맥-추론-능력의-절대적-격차-분석">3. 장문 문맥 추론 능력의 절대적 격차 분석</h4>
+<p>장문 문맥에서 SWA는 선형 모델 대비 상대적 우위를 점하나, 풀 어텐션과의 절대적인 성능 격차는 '성능 붕괴' 수준으로 판단된다.</p>
+<p><strong>S-NIAH 4K 실험 결과 (Table 3)</strong>
+Llama 3.1 8B 기반의 4K 문맥 실험(Table 3)에서 SWA는 과제 및 윈도우 설정에 따라 약 17.2~23.0%의 정확도를 기록했다. 이는 LoLCATs(5.8% 이하)나 Liger-GLA(0.8% 이하)와 같은 선형 모델들에 비해서는 수치상 우세하지만, 약 100%의 정확도를 유지하는 풀 어텐션과 비교하면 실질적인 장문 추론 능력을 상실한 상태임을 보여준다.</p>
+<p><strong>BABILong 4K 실험 결과 (Table 4)</strong>
+BABILong 벤치마크(Table 4)에서도 SWA는 평균 15%의 정확도로 LoLCATs(3%)를 5배 가량 앞섰다. 그러나 풀 어텐션(60%) 대비 성능이 1/4 수준에 불과하다는 점은, SWA가 제공하는 우위가 '최악 중의 최선'일 뿐 프로덕션 환경에서의 '장문 처리 솔루션'으로서의 완결성을 갖추지 못했음을 반증한다.</p>
+<h4 id="4-계산-복잡도-및-하드웨어-실험-조건의-한계">4. 계산 복잡도 및 하드웨어 실험 조건의 한계</h4>
+<p><strong>이론적 복잡도 및 디코딩 특성</strong>
+풀 어텐션의 $O(L^2)$ 복잡도 대비, 고정 창 $w$를 가진 SWA는 $O(Lw)$의 복잡도를 갖는다. 여기서 $w$는 상수로 취급되므로 시퀀스 길이 $L$에 대해 선형적인 복잡도를 유지하며, KV 캐시 메모리 사용량을 일정 범위 내로 제한(Bounded)할 수 있는 명확한 이점을 제공한다.</p>
+<p><strong>하드웨어 제약 사항 및 스케일링 비평</strong>
+논문에서 사용된 실험 환경은 다음과 같은 명확한 한계를 지닌다.</p>
+<ul>
+<li><strong>실험 환경</strong>: 4-layer Transformer (d=1024, 16 heads), batch 1, fp16, NVIDIA RTX PRO 6000 Blackwell Max-Q <strong>Workstation Edition</strong>.</li>
+<li><strong>비평</strong>: 위 실험에 사용된 임베딩 차원($d=1024$)과 헤드 수(16)는 실제 70B 규모 모델(통상 $d=8192$ 이상)의 사양과 큰 괴리가 있다. 따라서 이 환경에서 측정된 처리량(Throughput)이 실제 대규모 클러스터 운영 환경의 메모리 대역폭 문제나 시스템 지연을 대변한다고 볼 수 없다.</li>
+<li><strong>지표 해석</strong>: 보고된 'Tokens/s' 수치는 디코딩 처리량에 치중되어 있으며, 실제 추론의 핵심인 <strong>TTFT(Time-to-First-Token)</strong> 및 <strong>Prefill 레이턴시</strong>에 대한 분석이 누락되었다. 처리량 향상이 반드시 전체 시스템의 에너지 효율이나 사용자 체감 지연 시간의 감소로 직결되지는 않는다.</li>
+</ul>
+<h4 id="5-실험-설계의-공정성-및-데이터-재현성-감사">5. 실험 설계의 공정성 및 데이터 재현성 감사</h4>
+<p><strong>교차 논문 합성(Cross-paper Synthesis)의 엄밀성 결여</strong>
+Table 1과 2에 제시된 선형 어텐션의 수치들은 서로 다른 선행 연구(LoLCATs, Liger-GLA 등)의 보고치를 취합한 것이다. 이는 각 모델이 동일한 코드 베이스, 동일한 사후 학습 데이터 예산, 혹은 통제된 하드웨어 환경에서 직접 비교된 것이 아님을 의미한다. SWA는 학습 예산이 0인 반면, 비교군인 LoLCATs는 40M 토큰의 사후 학습을 거쳤다는 점은 SWA의 효율성을 돋보이게 하나, 역으로 선형 모델들이 최적의 통제 실험 하에서 평가되었는지에 대한 의구심을 남긴다.</p>
+<p><strong>공개 자산 미확인 공시</strong>
+본 보고서 작성 시점까지 해당 연구의 공식 소스 코드, Raw Logs 및 재현 패키지가 대중에 공개되지 않았음을 확인하였다. 따라서 본 보고서의 모든 분석은 저자가 제공한 수치에 전적으로 의존하고 있으며, 독립적인 제3자에 의한 수치 검증 및 커널 최적화 수준에 대한 확인은 불가능한 상태이다.</p>
+<h4 id="6-결론-학술적-한계-및-향후-반증-기준">6. 결론: 학술적 한계 및 향후 반증 기준</h4>
+<p><strong>현재 결과의 한계</strong>
+본 연구가 제시한 SWA의 우위는 MMLU나 S-NIAH 4K와 같은 제한적 지표 내에서만 유효하다. 코딩, 자율 에이전트, 다국어 처리 및 복잡한 검색(Retrieval) 과제와 같은 실제 프로덕션 품질은 담보되지 않았으며, 특히 풀 어텐션 레이어를 혼합한 하이브리드 구조와의 직접 비교가 결여된 점은 치명적인 한계로 지적된다.</p>
+<p><strong>업데이트 및 반증 기준 설정</strong>
+심사역은 아래 조건이 충족될 경우 현재의 &quot;SWA 우세&quot; 결론이 즉시 수정되어야 함을 권고한다.</p>
+<ul>
+<li>동일한 사후 학습 예산 및 하드웨어 환경을 제공한 통제 실험에서 선형 모델이 SWA를 지속적으로 압도하는 경우.</li>
+<li>검색, 코딩 등 복잡한 실무 과제에서 SWA와 풀 어텐션 간의 성능 격차가 더욱 확대되어 실효성이 부정되는 경우.</li>
+<li>공개 코드 및 독립 재현 과정을 통해 보고된 수치적 오류나 벤치마크 편향이 발견되는 경우.</li>
+<li>하이브리드 레이어 구조 혹은 사후 학습된 SWA(Post-trained SWA)와의 비교를 통해 단순 SWA의 한계가 명확히 입증되는 경우.</li>
+</ul>
+<hr />
+<h4 id="편집-확정-수치-감사-부록">편집 확정·수치 감사 부록</h4>
+<h3 id="선형-어텐션보다-단순한-창이-더-강했다-swa-논문-검증">선형 어텐션보다 단순한 창이 더 강했다: SWA 논문 검증</h3>
+<h4 id="한-줄-결론">한 줄 결론</h4>
+<p>저자들이 시험한 조건에서는 <strong>4개 attention sink를 둔 훈련 없는 SWA가 사후학습된 선형 어텐션 기준선보다 대체로 강했다.</strong> 그러나 이것은 <strong>Full Attention 대체</strong>를 입증하지 않으며, 4K 장문 절대 성능 격차는 여전히 크다.</p>
+<h4 id="근거표">근거표</h4>
+<table>
+<thead>
+<tr>
+<th>주장</th>
+<th>PDF 근거</th>
+<th>편집 판정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>짧은 문맥 회복률</td>
+<td>Table 1: MMLU 93.2%, 6-benchmark 평균 99.0%</td>
+<td>논문 보고치로 인용 가능</td>
+</tr>
+<tr>
+<td>11개 모델 중 9개 평균 최고</td>
+<td>Table 2와 Results</td>
+<td>두 예외를 함께 표기: Phi-1.5 LoLCATs 62.5 vs SWA 62.4; Qwen2.5-32B QRWKV6 77.3 vs SWA 76.6</td>
+</tr>
+<tr>
+<td>S-NIAH 4K 우세</td>
+<td>Table 3: 대표 최고 SWA 약 17.2~23.0%, LoLCATs ≤5.8%, Liger-GLA ≤0.8%, Full Attention 약 100%</td>
+<td>선형 기준선 대비 우세와 Full Attention 대비 큰 격차를 동시에 말함</td>
+</tr>
+<tr>
+<td>BABILong 4K</td>
+<td>Table 4: SWA 15%, LoLCATs 3%, Full Attention 60%</td>
+<td>“대체”가 아니라 상대 우세</td>
+</tr>
+<tr>
+<td>속도·메모리</td>
+<td>Figure 2/A.4: 4-layer, d=1024, 16 heads, batch 1, fp16, RTX PRO 6000 Blackwell Max-Q</td>
+<td>합성 attention 실험; 70B production benchmark 아님</td>
+</tr>
+</tbody>
+</table>
+<h4 id="무엇이-새롭나">무엇이 새롭나</h4>
+<p>SWA 자체보다 중요한 편집 포인트는 <strong>올바른 기준선</strong>이다. 첫 토큰들은 의미와 무관해 보여도 attention mass를 받아내는 저장소 역할을 한다. 창이 이동할 때 이 네 sink 토큰을 남기지 않은 SWA는 급격히 무너질 수 있다. 따라서 sink-free SWA를 약한 기준선으로 놓고 선형화를 칭찬하면 비교가 왜곡된다.</p>
+<h4 id="기술-해석">기술 해석</h4>
+<p>Full Attention prefill의 self-attention은 O(L²), 고정 창 w는 대략 O(Lw)다. decode에서 attention/KV-cache 관련 비용은 창 이후 bounded 되지만 Transformer 전체, MLP, I/O, latency, throughput, FLOPs, energy, quality는 각각 분리해야 한다. 특히 tokens/s만 보고 energy 절감을 선언할 수 없다.</p>
+<h4 id="공정성-감사">공정성 감사</h4>
+<p>짧은 문맥 주표는 여러 선행 논문의 결과를 합친 cross-paper synthesis를 포함한다. base model, post-training token budget, 단계, 구현이 서로 다르므로 모두가 동일 코드·동일 예산의 통제 비교는 아니다. 저자들의 Appendix A.2 추가 비교는 도움이 되지만 이 차이를 완전히 제거하지 않는다.</p>
+<h4 id="범위와-제한">범위와 제한</h4>
+<p>MMLU·ARC·HellaSwag·PIQA·WinoGrande 및 S-NIAH·BABILong만으로 coding, agentic, retrieval, multilingual, multimodal, production 품질을 확정할 수 없다. 논문은 hybrid full-attention layers를 비교하지 않았고, post-trained SWA도 비교하지 않았다. 품질은 window·sink·layer·task·model에 민감하다. 공개 코드·raw logs·정확한 reproduction package는 이번 검토에서 확인되지 않았고 결과는 독립 재현된 것으로 표현하지 않는다.</p>
+<h4 id="반증과-업데이트-기준">반증과 업데이트 기준</h4>
+<p>동일 base model·코드·하드웨어·학습예산 통제 실험에서 선형 방법이 sink 포함 SWA를 반복해 앞서거나, 더 넓은 장문·코딩·에이전트·다국어 평가에서 우세가 사라지면 결론을 낮춘다. 코드·로그·재현 패키지, 독립 재현, hybrid 또는 post-trained SWA 비교가 공개되면 업데이트한다.</p>
+<h4 id="출처">출처</h4>
+<ul>
+<li>Sliding-window beats linear attention, arXiv:2608.28444v1, submitted 28 August 2026, Alexia Jolicoeur-Martineau, Rhea Sanjay Sukthanker, Pashmina Cameron, Emy Gervais: https://arxiv.org/abs/2608.28444v1</li>
+</ul>
+<p>이 글은 논문을 재출판·번역한 것이 아니라 수치와 비교 경계를 감사한 독립 한국어 학술 논평이다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li></ul></section>
+</main>
+</body>
+</html>

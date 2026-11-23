@@ -1,0 +1,58 @@
+:root {
+  color-scheme: light dark;
+  --paper: #f8f8f4;
+  --text: #1f2925;
+  --muted: #50625b;
+  --accent: #0c6451;
+  --line: #d5ded5;
+  --panel: #edf0e9;
+  font-family: system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #181e1b;
+    --text: #e7eee8;
+    --muted: #b2c2b9;
+    --accent: #90dec3;
+    --line: #41534a;
+    --panel: #222e28;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--text); line-height: 1.65; }
+a { color: var(--accent); text-underline-offset: .18em; }
+a:hover { text-decoration-thickness: .15em; }
+.site-header { border-bottom: 1px solid var(--line); }
+nav, main { max-width: 68rem; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 3rem); }
+nav { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; padding-block: .85rem; }
+nav a { text-decoration: none; }
+nav a:hover, nav [aria-current] { text-decoration: underline; }
+main { padding-block: 2.25rem 4rem; }
+h1, h2, h3 { line-height: 1.28; overflow-wrap: anywhere; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.65rem); margin: 0 0 1rem; }
+h2 { margin: 1.8rem 0 .6rem; }
+p, li { overflow-wrap: anywhere; }
+ul { padding-inline-start: 1.4rem; }
+li { margin-block: .25rem; }
+.page-meta { color: var(--muted); margin: 0; }
+pre, .search {
+  border: 1px solid var(--line);
+  border-radius: .35rem;
+  background: var(--panel);
+  padding: 1rem;
+}
+pre { white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 4; }
+code { font-family: ui-monospace, monospace; font-size: .92em; }
+.backlinks { border-top: 1px solid var(--line); margin-top: 2rem; }
+.search { margin-top: 2rem; }
+.search h2 { margin-top: 0; }
+.search label { display: block; margin-bottom: .3rem; }
+.search input { width: min(35rem, 100%); padding: .45rem; font: inherit; }
+.search small { color: var(--muted); display: block; }
+summary { cursor: pointer; }
+table { border-collapse: collapse; }
+td, th { border: 1px solid var(--line); padding: .3rem .6rem; text-align: start; }
+@media print {
+  .site-header, .search { display: none; }
+  main { max-width: none; padding: 0; }
+}

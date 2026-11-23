@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saving another 100TB of RAM with math (and Rust)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Saving another 100TB of RAM with math (and Rust)</h1>
+<p class="page-meta">웹 · 2026-09-19</p>
+<h2 id="요약">요약</h2>
+<p>Cloudflare는 전 세계적으로 수천 대의 서버, 페타바이트(PB) 급의 RAM, 그리고 수백만 개의 CPU 코어를 운영하는 거대 인프라를 보유하고 있습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://blog.cloudflare.com/saving-100-tb-of-ram-with-math/">출처</a> · <a href="https://www.youtube.com/watch?v=xEdmieJxWSE">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="기술-보고서-수학적-분석과-rust-최적화를-통한-전-세계-ram-100tb-절감-사례">[기술 보고서] 수학적 분석과 Rust 최적화를 통한 전 세계 RAM 100TB 절감 사례</h3>
+<h4 id="1-배경-cloudflare-인프라-규모와-리소스-최적화의-필요성">1. 배경: Cloudflare 인프라 규모와 리소스 최적화의 필요성</h4>
+<p>Cloudflare는 전 세계적으로 수천 대의 서버, 페타바이트(PB) 급의 RAM, 그리고 수백만 개의 CPU 코어를 운영하는 거대 인프라를 보유하고 있습니다. 모든 서비스가 모든 노드에서 동작해야 하는 환경 특성상, 미세한 리소스 낭비도 전역적으로는 거대한 손실로 이어집니다. 반대로 말하면 <strong>단 1%의 효율 개선</strong>만으로도 전체 가용성에 지대한 영향을 미칠 수 있습니다.</p>
+<p>실제로 지난달 Cloudflare DNS 팀이 100TB의 메모리를 절감한 성과를 거둔 바 있으며, 본 보고서에서는 그에 이어 <strong>Pingora 기반 서비스에서 추가적으로 100TB의 RAM을 회수</strong>한 기술적 최적화 사례를 다룹니다.</p>
+<h4 id="2-문제-정의-pingora-backend-router-pbr-의-메모리-과다-점유">2. 문제 정의: Pingora Backend Router(PBR)의 메모리 과다 점유</h4>
+<p>당사의 내부 로드 밸런싱 서비스인 **Pingora Backend Router(PBR)**는 일관된 해싱(Consistent Hashing) 처리를 위해 오픈소스 라이브러리인 <code>pingora-ketama</code>를 사용합니다. 그러나 특정 서비스 인스턴스에서 메모리 점유율이 <strong>최대 6GB</strong>까지 치솟는 이슈가 발생했습니다.</p>
+<p>조사 결과, 주요 원인은 다음과 같았습니다.</p>
+<ul>
+<li><strong>복합적인 해시 링 생성:</strong> 규정 준수(Compliance) 요건 및 특정 캐싱 기능의 조합에 따라 수십 개의 독립적인 해시 링이 필요해졌습니다.</li>
+<li><strong>리소스 기반 가중치 할당:</strong> PBR은 캐시를 위한 디스크 공간이나 연산 처리를 위한 CPU/GPU 코어 수에 따라 서버별 가중치(Weight)를 할당합니다. 이 가중치를 반영하기 위해 각 링 내에 생성되는 해시 포인트 수가 기하급수적으로 늘어난 것이 메모리 폭발의 근본 원인이었습니다.</li>
+</ul>
+<h4 id="3-일관된-해싱과-ketama-링의-메모리-구조-분석">3. 일관된 해싱과 Ketama 링의 메모리 구조 분석</h4>
+<h5 id="일관된-해싱의-기본-원리">일관된 해싱의 기본 원리</h5>
+<p>일관된 해싱은 서버 추가/제거 시 데이터 재배치를 최소화하기 위해 해시 함수의 출력 범위를 32비트 정수 공간(0 ~ $2^{32}-1$)의 원형 '링'으로 관리하는 방식입니다.</p>
+<h5 id="통계적-불균형-문제와-변동-계수-cv">통계적 불균형 문제와 변동 계수(CV)</h5>
+<p>서버당 단 하나의 해시 포인트만 존재할 경우($k=1$), 각 서버가 담당하는 영역의 크기는 통계적으로 매우 불균등해집니다. 이를 평가하기 위해 **변동 계수(Coefficient of Variation, CV)**를 활용합니다.</p>
+<ul>
+<li>서버($N$)가 100대일 때, 서버당 포인트가 1개라면 $\text{CV} \approx 99%$에 달합니다. 이는 어떤 서버는 평균보다 2배의 부하를 받는 반면, 어떤 서버는 거의 유휴 상태에 놓이는 극심한 불균형을 의미합니다.</li>
+</ul>
+<h5 id="ketama-알고리즘의-한계">Ketama 알고리즘의 한계</h5>
+<p>이 불균형을 해소하기 위해 Ketama 알고리즘은 서버당 여러 개의 가상 노드(해시 포인트)를 생성합니다. 하지만 Cloudflare처럼 수십 개의 독립적인 링을 운영해야 하는 구조에서는 이 가상 노드들이 차지하는 메모리 용량이 임계치를 넘어서게 된 것입니다.</p>
+<h4 id="4-수학적-최적화-변동-계수-cv-와-해시-수의-수확-체감">4. 수학적 최적화: 변동 계수(CV)와 해시 수의 수확 체감</h4>
+<h5 id="수식-분석과-수확-체감-diminishing-returns">수식 분석과 수확 체감(Diminishing Returns)</h5>
+<p>서버당 해시 수($k$)가 증가함에 따라 오차율(CV)이 어떻게 개선되는지 아래 수식을 통해 분석했습니다.
+$$\text{CV}_k = \sqrt{\frac{N-1}{Nk+1}}$$
+분석 결과, 해시 수를 늘릴수록 분산 정확도는 올라가지만 개선 폭은 급격히 감소합니다.</p>
+<p>Cloudflare는 기본 해시 수 160개에 가중치 인자($m_w=625$)를 곱해 서버당 최대 <strong>100,000개</strong>의 해시를 생성하고 있었습니다. 그러나 수식 모델링 결과, 마지막에 추가된 <strong>90,000개의 해시는 전체 오차율을 단 0.7% 개선</strong>하는 데 그쳤습니다. 즉, 0.7%의 정확도를 위해 방대한 메모리를 희생하고 있었던 것입니다.</p>
+<h5 id="32비트-공간의-한계와-birthday-paradox">32비트 공간의 한계와 Birthday Paradox</h5>
+<p>해시 수가 무한정 많아진다고 해서 정확도가 계속 높아지는 것도 아닙니다. 해시 포인트가 32비트 정수 공간의 한계에 가까워지면 **생일 역설(Birthday Paradox)**에 의해 해시 충돌 발생 확률이 높아집니다.
+시뮬레이션 결과, 특히 2,048대의 서버를 운영하는 대형 데이터 센터 환경에서는 해시 수가 1만 개에서 10만 개 사이로 늘어날 때 충돌로 인해 오히려 예측 불가능한 오차가 증가하는 현상이 확인되었습니다.</p>
+<h4 id="5-기술적-해결책-1-rust를-이용한-데이터-구조-압축">5. 기술적 해결책 1: Rust를 이용한 데이터 구조 압축</h4>
+<h5 id="기존-구조의-메모리-정렬-alignment-낭비">기존 구조의 메모리 정렬(Alignment) 낭비</h5>
+<p>기존의 해시 포인트 구조체는 다음과 같았습니다.</p>
+<pre><code class="language-rust">struct Point {
+    hash: u32,  // 4바이트
+    index: u32, // 4바이트
+}
+</code></pre>
+<p>여기서 <code>index</code>는 서버 배열의 위치를 가리킵니다. 실무적으로 서버 대수가 65,536대($2^{16}$)를 넘지 않으므로 <code>u16</code>으로 충분합니다. 그러나 단순히 <code>index: u16</code>으로 변경해도 Rust의 메모리 정렬 규칙 때문에 구조체 크기는 여전히 8바이트로 유지됩니다. 가장 큰 필드인 <code>u32</code>(4바이트)의 배수로 크기가 맞춰지면서 <strong>2바이트의 패딩(Padding) 낭비</strong>가 발생하기 때문입니다.</p>
+<h5 id="6바이트-저장-형식과-native-endianness-도입">6바이트 저장 형식과 Native Endianness 도입</h5>
+<p>이를 해결하기 위해 6바이트 크기의 raw byte 배열을 사용하고 게터(getter) 메서드로 접근하는 방식을 도입했습니다.</p>
+<pre><code class="language-rust">struct Point([u8; 6]);
+
+impl Point {
+   fn hash(&amp;self) -&gt; u32 {
+       // native endianness를 사용하여 성능 오버헤드 방지
+       u32::from_ne_bytes(self.0[0..4].try_into().unwrap())
+   }
+   fn index(&amp;self) -&gt; u16 {
+       u16::from_ne_bytes(self.0[4..6].try_into().unwrap())
+   }
+}
+</code></pre>
+<p>패딩을 제거한 이 최적화만으로도 해시 링이 점유하는 <strong>메모리를 즉각적으로 25% 절감</strong>했습니다.</p>
+<h4 id="6-기술적-해결책-2-해시-수-90-감축">6. 기술적 해결책 2: 해시 수 90% 감축</h4>
+<p>수학적 분석에 근거하여, 기존 대비 해시 생성 수를 <strong>90% 감축</strong>했습니다. 1/10 수준의 해시만으로도 부하 분산의 정밀도는 유의미한 차이가 없으며, 오히려 32비트 공간에서의 해시 충돌 위험을 낮추어 시스템의 안정성을 높일 수 있었습니다. 이 조치는 메모리 점유율을 직접적으로 낮추는 결정적 계기가 되었습니다.</p>
+<h4 id="7-안정적-전환-단계적-마이그레이션-전략">7. 안정적 전환: 단계적 마이그레이션 전략</h4>
+<h5 id="캐시-변동-cache-churn-리스크-관리">캐시 변동(Cache Churn) 리스크 관리</h5>
+<p>해시 링 구조나 알고리즘을 변경하면 요청이 전달되는 서버가 바뀌게 됩니다. 전 세계 네트워크에서 이를 한꺼번에 변경할 경우 대규모 **캐시 변동(Cache Churn)**이 발생하여 오리진(Origin) 트래픽이 폭주할 위험이 있었습니다.</p>
+<h5 id="전략적-솔루션-data-center-scoped-rollout">전략적 솔루션: Data-center-scoped Rollout</h5>
+<p>시스템 안정성을 위해 다음과 같은 단계적 마이그레이션을 수행했습니다.</p>
+<ol>
+<li><strong>이중 링 아키텍처:</strong> 구형(v1)과 신형(v2) 링을 메모리에 동시에 유지하며, 요청별 해시값에 따라 점진적으로 v2를 적용했습니다.</li>
+<li><strong>데이터 센터 단위 롤아웃:</strong> 단순한 글로벌 백분율 방식이 아닌, 소규모 데이터 센터부터 대형 데이터 센터 순으로 범위를 확장했습니다. 이는 캐시 churn의 폭발 반경(Blast Radius)을 최소화하기 위함입니다.</li>
+<li><strong>즉각적 롤백:</strong> 문제 발생 시 배포 없이 즉시 구형 링으로 트래픽을 회귀시킬 수 있는 경로를 확보했습니다.</li>
+</ol>
+<h4 id="8-최종-결과-100tb-ram-절감-성과-및-결론">8. 최종 결과: 100TB RAM 절감 성과 및 결론</h4>
+<p>마이그레이션 완료 후, 전 세계 PBR 서비스에서 총 <strong>100TB의 RAM을 회수</strong>하는 데 성공했습니다. 서비스 시작 시간과 메모리 사용량 그래프는 수직 하락했으며, 이는 인프라 운영 비용 절감과 시스템 안정성 향상으로 직결되었습니다.</p>
+<p>현재 이 모든 최적화가 적용된 V2 링은 Cloudflare의 오픈소스 프로젝트인 <code>pingora-ketama</code> 크레이트(crate)에 반영되어 있습니다(현재는 비공개 기능으로 포함).</p>
+<p>본 사례는 &quot;수학은 보편적이다&quot;라는 진리를 다시 한번 증명합니다. 당연하게 여겨지는 표준 알고리즘과 데이터 구조를 수학적/시스템적 관점에서 집요하게 재검토하는 것이 대규모 클라우드 인프라에서 얼마나 압도적인 가치를 창출하는지 보여주는 모범 사례라 할 수 있습니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

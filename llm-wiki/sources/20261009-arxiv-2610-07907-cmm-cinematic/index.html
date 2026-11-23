@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Continuous Memory Machines</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Continuous Memory Machines</h1>
+<p class="page-meta">논문 · 2026-10-09</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 기존 순환 신경망(RNN)이 지닌 단일 벡터 표현 공간의 병목 현상을 극복하기 위해, 단기 기억(STM)과 장기 기억(LTM)의 행렬 형태(Matrix-valued) 메모리를 트랜스포머 기반 양방향 메커니즘으로 결합한 연속 기억 기계(Continuous Memory Machines, CMM) 아키텍처를…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/abs/2610.07907v1">출처</a> · <a href="https://www.youtube.com/watch?v=cXGRbw9k06s">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="연속-기억-기계-continuous-memory-machines-cmm-논문-해설-보고서">연속 기억 기계(Continuous Memory Machines, CMM) 논문 해설 보고서</h3>
+<hr />
+<h4 id="1-논문-기본-정보-및-서론-paper-metadata-introduction">1. 논문 기본 정보 및 서론 (Paper Metadata &amp; Introduction)</h4>
+<h5 id="executive-summary">Executive Summary</h5>
+<p>본 보고서는 기존 순환 신경망(RNN)이 지닌 단일 벡터 표현 공간의 병목 현상을 극복하기 위해, 단기 기억(STM)과 장기 기억(LTM)의 행렬 형태(<code>Matrix-valued</code>) 메모리를 트랜스포머 기반 양방향 메커니즘으로 결합한 <strong>연속 기억 기계(Continuous Memory Machines, CMM)</strong> 아키텍처를 분석합니다. CMM은 생물학적 시스템의 빠른 뉴런 수준 처리와 장기 정보 보존 능력을 모방하여, 연속 사고 기계(CTM)의 해석 가능한 어텐션 패턴을 유지하는 동시에 광범위한 과제에서 기존 메모리 증강 네트워크 대비 강력한 일반화 성능을 입증하였습니다.</p>
+<h5 id="논문-메타데이터">논문 메타데이터</h5>
+<ul>
+<li><strong>논문 제목:</strong> 연속 기억 기계 (Continuous Memory Machines, CMM)</li>
+<li><strong>저자진:</strong> 씨어런 리간(Ciaran Regan), 카이 아룰쿠마란(Kai Arulkumaran), 루크 다로우(Luke Darlow), 스테파니아 드루가(Stefania Druga), 세바스티안 리시(Sebastian Risi), 리온 존스(Llion Jones)</li>
+<li><strong>제출일 및 범주:</strong> 2026년 10월 6일 제출, 컴퓨터 과학/인공지능 (cs.AI, arXiv:2610.07907v1)</li>
+<li><strong>학회 정보:</strong> NeurIPS 2026 Workshop: Personalized, Aligned, Long-Term Memory for AI Systems (PALM)</li>
+<li><strong>공개 코드 저장소:</strong> <code>https://github.com/SakanaAI/continuous-memory-machines</code></li>
+</ul>
+<hr />
+<h4 id="2-문제-의식-및-연구-배경-problem-statement-biological-motivation">2. 문제 의식 및 연구 배경 (Problem Statement &amp; Biological Motivation)</h4>
+<h5 id="기존-순환-신경망-rnn-의-구조적-한계">기존 순환 신경망(RNN)의 구조적 한계</h5>
+<p>기존의 순환 신경망(Recurrent Neural Networks, RNN)은 입력되는 시퀀스 정보를 단일 벡터 형태의 순환 상태(<code>Vector-valued recurrent state</code>)에 압축하여 전달합니다. 이러한 구조는 연산과 보존의 공간적 간섭을 유발합니다.</p>
+<ul>
+<li><strong>표현 공간의 병목:</strong> 실시간 연산을 위한 단기 연산(<code>Short-term computation</code>)과 과거 정보를 유지하기 위한 장기 보존(<code>Long-term retention</code>)이 정확히 동일한 벡터 표현 공간을 공유해야 함으로써 심각한 정보 손실과 표현력 제약이 발생합니다.</li>
+</ul>
+<h5 id="기존-확장-모델의-한계-및-생물학적-동기">기존 확장 모델의 한계 및 생물학적 동기</h5>
+<p>과거 메모리 용량을 단순히 확장하거나 시간 스케일(<code>Timescales</code>)을 분리하려 했던 시도들은 물리적 메모리 한계를 완화하는 데는 일조했으나, 실제 생물학적 뇌 신경계에서 관찰되는 고유한 처리 메커니즘을 구현하지 못했습니다.</p>
+<ul>
+<li><strong>생물학적 시스템과의 격차:</strong> 실제 신경계는 빠른 뉴런 수준 처리(<code>Rapid neuron-level processing</code>)와 장기 정보 보존(<code>Longer-term retention</code>)이 각기 다른 기전으로 작용하면서도 긴밀하게 유기적 결합을 이룹니다. 기존 모델들은 이 두 요소의 결합 형태를 아키텍처적으로 구현하지 못했습니다.</li>
+</ul>
+<blockquote>
+<p><strong>[핵심 차별화 포인트: CMM의 병목 극복 접근법]</strong>
+기존 RNN이 단일 벡터(<code>Vector-valued</code>) 공간에 단기 연산과 장기 보존을 강제로 압축했던 한계를 극복하기 위해, CMM은 행렬 형태(<code>Matrix-valued</code>)로 확장된 2개의 독립적 메모리 저장소(STM &amp; LTM)를 도입하여 생물학적 뇌의 이중 처리 구조를 아키텍처적으로 정밀하게 반영하였습니다.</p>
+</blockquote>
+<hr />
+<h4 id="3-연속-기억-기계-cmm-의-아키텍처-및-기억-구조-cmm-architecture-memory-stores">3. 연속 기억 기계(CMM)의 아키텍처 및 기억 구조 (CMM Architecture &amp; Memory Stores)</h4>
+<h5 id="ctm-기반-확장-및-아키텍처적-진화">CTM 기반 확장 및 아키텍처적 진화</h5>
+<p>연속 기억 기계(CMM)는 기존의 **연속 사고 기계(Continuous Thought Machine, CTM)**를 기반으로 구축 및 확장된 순환 아키텍처입니다. CTM이 지닌 단일 연속 사고 상태 표현을 확장하여, <strong>행렬 형태(<code>Matrix-valued</code>)의 메모리 상태</strong>를 갖는 이중 저장소 구조를 도입했습니다.</p>
+<h5 id="생물학적-동기와-아키텍처-요소의-1-1-매핑">생물학적 동기와 아키텍처 요소의 1:1 매핑</h5>
+<p>CMM은 생물학적 신경계의 정보 처리 방식을 각 메모리 저장소의 기능으로 1:1 매핑하여 구현합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">생물학적 시스템 기능</th>
+<th style="text-align:left">CMM 메모리 저장소 대응</th>
+<th style="text-align:left">아키텍처적 구현 및 메커니즘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>빠른 뉴런 수준 처리</strong>&lt;br&gt;(<code>Rapid neuron-level processing</code>)</td>
+<td style="text-align:left"><strong>단기 기억</strong>&lt;br&gt;(STM, Short-Term Memory)</td>
+<td style="text-align:left">최근 뉴런 활동 패턴을 추적하며, 고유하게 파라미터화된 뉴런 수준 모델이 이를 연산에 활용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>장기 정보 보존</strong>&lt;br&gt;(<code>Longer-term retention</code>)</td>
+<td style="text-align:left"><strong>장기 기억</strong>&lt;br&gt;(LTM, Long-Term Memory)</td>
+<td style="text-align:left">추후 사용을 위한 정보를 지속적으로 저장하는 전용 메모리 공간 역할 수행</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-단기-기억-stm-과-장기-기억-ltm-의-역할-분리-functional-separation-of-memory-stores">4. 단기 기억(STM)과 장기 기억(LTM)의 역할 분리 (Functional Separation of Memory Stores)</h4>
+<p>CMM 내부의 두 메모리 저장소는 행렬 단위(<code>Matrix-valued</code>)로 구성되며, 다음과 같이 명확히 분리된 독자적 기능을 수행합니다.</p>
+<h5 id="stm-vs-ltm-기능적-대조표">STM vs LTM 기능적 대조표</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">단기 기억 (STM, Short-Term Memory)</th>
+<th style="text-align:left">장기 기억 (LTM, Long-Term Memory)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>핵심 역할</strong></td>
+<td style="text-align:left">최근 뉴런 활동 패턴(<code>Recent neural activity</code>) 지속 추적 및 연산 활용</td>
+<td style="text-align:left">추후 재활용을 위한 정보의 지속적 보존(<code>Persistent long-term retention</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>파라미터화 구조</strong></td>
+<td style="text-align:left">고유하게 파라미터화된 뉴런 수준 모델&lt;br&gt;(<code>Uniquely parameterized neuron-level models</code>)</td>
+<td style="text-align:left">지속적인 장기 기억 저장 공간&lt;br&gt;(<code>Persistent long-term memory store</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기능적 특성</strong></td>
+<td style="text-align:left">입력 및 동적 변화에 민감하게 반응하는 실시간 처리 영역</td>
+<td style="text-align:left">정보의 손실 없는 유지 및 안정적 축적을 담당하는 보조 영역</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>연계성 브릿지 (Architecture Bridge):</strong><br />
+독자적인 기능적 역할을 수행하는 이 두 행렬 메모리 저장소(STM과 LTM)가 유기적으로 협력하기 위해서는, 서로의 정보를 교환하고 동시적으로 상태를 업데이트할 수 있는 고차원적 인터페이스가 필수적입니다. CMM은 이를 위해 <strong>트랜스포머 기반의 양방향 읽기·쓰기 메커니즘</strong>을 적용했습니다.</p>
+</blockquote>
+<hr />
+<h4 id="5-트랜스포머-기반-양방향-읽기-쓰기-메커니즘-transformer-based-bidirectional-read-write-mechanism">5. 트랜스포머 기반 양방향 읽기·쓰기 메커니즘 (Transformer-Based Bidirectional Read-Write Mechanism)</h4>
+<p>CMM은 단기 기억과 장기 기억 저장소를 효율적으로 제어하고 상호작용하도록 만들기 위해 트랜스포머(Transformer) 구조를 핵심 제어 장치로 채택하였습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">주요 메커니즘 및 기능</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>동시 갱신 (<code>Joint Update</code>)</strong></td>
+<td style="text-align:left">하나의 트랜스포머(Transformer)가 단기 기억(STM)과 장기 기억(LTM) 저장소를 동시(<code>Jointly</code>)에 갱신하여 두 공간의 동기화를 유지합니다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>자기 재조직 (<code>Self-Reorganization</code>)</strong></td>
+<td style="text-align:left">각 기억 저장소(STM, LTM)는 외부 개입 없이 자신의 내부 콘텐츠를 스스로 재조직(<code>Reorganize</code>)할 수 있습니다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>양방향 읽기·쓰기 (<code>Bidirectional Read-Write</code>)</strong></td>
+<td style="text-align:left">매우 높은 표현력을 제공하는 구조로, 각 저장소가 상대방 저장소의 정보를 읽어오거나(<code>Read from</code>), 상대방 저장소에 정보를 직접 기록(<code>Write to</code>)할 수 있습니다.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="6-실험-평가-성능-결과-및-비교-기준선-experimental-evaluation-results">6. 실험 평가, 성능 결과 및 비교 기준선 (Experimental Evaluation &amp; Results)</h4>
+<p>*본 절에 기술된 모든 성과 및 성능 평가 결과는 원문 논문에 기술된 실험 조건 범위 내의 **'저자 보고 기준(Author-reported basis)'*<em>입니다.</em></p>
+<h5 id="1-평가-과제-영역">1) 평가 과제 영역</h5>
+<p>CMM의 성능 및 일반화 능력은 다음 3가지 핵심 과제 영역에서 검증되었습니다.</p>
+<ol>
+<li><strong>알고리즘 과제 (<code>Algorithmic tasks</code>)</strong></li>
+<li><strong>문맥 내 학습 과제 (<code>In-context learning tasks</code>)</strong></li>
+<li><strong>순환 추론 과제 (<code>Recurrent reasoning tasks</code>)</strong></li>
+</ol>
+<h5 id="2-비교-기준선-및-성능-우수성">2) 비교 기준선 및 성능 우수성</h5>
+<ul>
+<li><strong>기준선 모델 대비 우수성:</strong> CTM을 포함하여 기존에 제시된 광범위한 기준선 모델 수위(<code>Broad suite of baselines</code>)와 비교해 탁월한 성능을 달성하였습니다.</li>
+<li><strong>강력한 일반화 능력:</strong> 기존의 대표적인 메모리 증강 네트워크(<code>Prior memory-augmented networks</code>)들보다 뛰어난 일반화(<code>Stronger generalization</code>) 능력을 보여주었습니다.</li>
+<li><strong>해석 가능성 유지:</strong> 기존 CTM 아키텍처가 지닌 고유한 장점인 해석 가능한 어텐션 패턴(<code>Interpretable attention patterns</code>)을 그대로 유지하면서 성능 향상을 도출하였습니다.</li>
+</ul>
+<hr />
+<h4 id="7-보고서-작성-범위-및-한계-scope-disclaimer">7. 보고서 작성 범위 및 한계 (Scope Disclaimer)</h4>
+<blockquote>
+<p><strong>[보고서 작성 범위 및 한계 (Scope Disclaimer)]</strong></p>
+<ul>
+<li><strong>저자 보고 기준의 한계:</strong> 본 보고서에서 다룬 CMM의 일반화 능력, 어텐션 해석 가능성 및 타 모델 대비 우수성은 원문(<code>arXiv:2610.07907v1</code>)의 초록 및 메타데이터에 명시된 실험 조건(알고리즘, 문맥 내 학습, 순환 추론 과제) 범위 내로 한정됩니다.</li>
+<li><strong>외부 정보 및 추측 배제:</strong> 본 문서는 원문 출처에 기반하여 작성되었으며, 동료심사(<code>Peer review</code>) 최종 결과, 외부 검증 수치, 실제 산업 응용 사례, 저장소 내부 코드 구조의 상세 구현 및 후속 연구 등 원문에 제시되지 않은 외부 사실이나 추측성 해석은 포함하지 않습니다.</li>
+</ul>
+</blockquote>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

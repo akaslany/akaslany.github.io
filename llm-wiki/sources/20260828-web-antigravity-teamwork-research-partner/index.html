@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teamwork: When AI Becomes a Research Partner</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Teamwork: When AI Becomes a Research Partner</h1>
+<p class="page-meta">웹 · 2026-08-28</p>
+<h2 id="요약">요약</h2>
+<p>Google Antigravity Teamwork의 설계와 연구 성과를 검토하고 독립 재현의 한계를 짚는다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://antigravity.google/blog/teamwork-when-ai-becomes-a-research-partner">출처</a> · <a href="https://www.youtube.com/watch?v=HxfxWXUEZPg">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="google-antigravity-teamwork-프레임워크-기술-성취와-검증-현황-심층-보고서">Google Antigravity 'Teamwork' 프레임워크: 기술 성취와 검증 현황 심층 보고서</h3>
+<p>본 보고서는 2026년 8월 27일 공개된 Google Antigravity의 'Teamwork' 멀티 에이전트 오케스트레이션 프레임워크와 이를 활용한 이론적/시스템적 연구 성과를 기술 감사 관점에서 분석합니다. 본 분석은 벤더의 수사적 표현을 배제하고, 제공된 팩트카드와 기술 감사 문서에 근거하여 기술적 성취의 실질적 한계와 검증 상태를 엄밀히 규정합니다.</p>
+<h4 id="1-제품-개요-및-가용성-시제-분리">1. 제품 개요 및 가용성 시제 분리</h4>
+<p>Antigravity Teamwork는 단일 모델의 출력이 아닌, 복잡한 연구 및 엔지니어링 문제를 해결하기 위해 설계된 '멀티 에이전트 오케스트레이션 프레임워크'입니다. 벤더가 보고한 성능 수치를 현재의 가용 기능과 혼동해서는 안 되며, 다음과 같이 시제를 분리하여 접근해야 합니다.</p>
+<ul>
+<li><strong>현재 (Available Now):</strong> 모든 유료 Antigravity 플랜에서 <code>/teamwork-preview</code> 명령을 통해 프레임워크의 초기 기능을 사용할 수 있습니다.</li>
+<li><strong>단기 미래 (Next few weeks):</strong> 제품 발표에서 언급된 성능 개선사항들이 순차적으로 롤아웃(Rollout)될 예정입니다.</li>
+<li><strong>미래 (Upcoming Updates):</strong> Long Proof 패턴 내에서 Gemini 3.7 Flash와 3.1 Pro를 결합하여 사용하는 기능은 향후 지원 예정인 항목입니다. 현재 유료 플랜 사용자가 이 결합 모델의 성능을 즉시 재현할 수는 없습니다.</li>
+</ul>
+<h4 id="2-teamwork-프레임워크-설계-원칙과-패턴">2. Teamwork 프레임워크: 설계 원칙과 패턴</h4>
+<p>Teamwork의 핵심 설계 철학은 '오케스트레이션 로직과 에이전트 명세의 분리'에 있습니다.</p>
+<ul>
+<li><strong>패턴(Pattern) 중심의 적응형 구조:</strong> 사용자의 프롬프트에 따라 시스템이 '패턴'을 자동으로 선택합니다. 패턴은 고정된 코드가 아닌 에이전트의 역할과 승급 조건을 정의한 명세서이며, 런타임 시 작업의 난이도에 따라 에이전트 수와 팀 구조가 유동적으로 변하는 '런타임 적응형(Adaptive at runtime)' 특성을 가집니다.</li>
+<li><strong>Long Proof 패턴의 메커니즘:</strong>
+<ol>
+<li><strong>전략 생성:</strong> 병렬로 다수의 후보 전략을 도출합니다.</li>
+<li><strong>Falsifier(반증기) 비판:</strong> 전담 에이전트가 각 전략의 논리적 허점을 공격적으로 식별합니다.</li>
+<li><strong>합성 트리(Synthesis tree) 결합:</strong> 비판을 견뎌낸 유효한 아이디어들을 결합하여 강화된 후보를 생성합니다.</li>
+<li><strong>실패 기록(Pitfall registry) 축적:</strong> 실패한 경로와 오류 원인을 기록하여 이후 반복 과정에서 동일한 실수를 방지하는 지식 베이스를 구축합니다.</li>
+</ol>
+</li>
+</ul>
+<h4 id="3-수학-및-이론-컴퓨터-과학-tcs-7대-성과-분석">3. 수학 및 이론 컴퓨터 과학(TCS) 7대 성과 분석</h4>
+<p>공급자는 &quot;7개 난제 해결&quot;을 주장하나, 기술 감사 결과 이들은 모두 'arXiv 전인쇄본(Preprint)' 상태로 공식적인 동료 심사(Peer Review)를 통과하지 않았습니다. 벤더가 주장하는 'Expert Review'는 외부의 독립적인 검증이 아닌 Google 및 David Woodruff 교수진의 내부 검토임을 명확히 합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">성과 내용 및 정확한 기술적 범위</th>
+<th style="text-align:left">검증 상태 및 모델 귀속</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>1. $\ell_p$ Subspace Coreset</strong></td>
+<td style="text-align:left">$p&gt;2$에서 $\epsilon$ 의존성 상한 개선. 다만 $(\kappa, \epsilon)$ 의 공동 최적성 문제는 여전히 미해결임.</td>
+<td style="text-align:left">$p&gt;2$는 Gemini 시스템 성과이나, $p&lt;2$는 저자·시스템·<strong>GPT-5.6 Sol</strong>의 혼합 기여임.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2. Sparse Least-Squares</strong></td>
+<td style="text-align:left">SSE(Small-Set Expansion) 가정을 전제로 한 조건부 하한 확립.</td>
+<td style="text-align:left">일반 볼록 최적화에 대한 무조건적 결과가 아님.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3. MAX-IP/Chamfer Embedding</strong></td>
+<td style="text-align:left">싱글톤(Singleton) 쿼리로 제한된 범위 내에서의 차원 하한 격차 해소.</td>
+<td style="text-align:left">일반적인 멀티 벡터 쿼리 환경에 대한 해결책은 아님.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>4. Hadamard Quantization</strong></td>
+<td style="text-align:left">MSE 상한의 선도 상수(Leading constant)를 48.369에서 8.162로 약 5.93배 개선.</td>
+<td style="text-align:left"><strong>주의:</strong> 이는 $b \to \infty$ 상황의 수학적 상한 비율이며, 시스템의 실제 실행 속도 향상이 아님.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>5. Erdős Unit-distance</strong></td>
+<td style="text-align:left">평면 단위 거리 지수 후보 증명 재발견.</td>
+<td style="text-align:left"><strong>비판:</strong> README에서 수식 오류 및 논증 공백을 자인함. '구조적으로 불완전한 논증'으로 분류됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>6. Prefix-matrix Factorization</strong></td>
+<td style="text-align:left">Near-optimal 하한 증명.</td>
+<td style="text-align:left">동시기에 Bhowmik–Hasan 등이 더 강력한(Matching) 결과를 발표하여 최신/최강 결과가 아님.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>7. Knuth’s Cycles</strong></td>
+<td style="text-align:left">짝수 m에 대한 자연어 증명 초안 작성 및 Lean 검증 주장.</td>
+<td style="text-align:left"><strong>비판:</strong> 저장소에 <code>.lean</code>, <code>lakefile</code>, 정리 선언, CI 빌드 로그가 없어 외부 재현이 불가능한 '비공개 자기보고' 수준임.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>모델 귀속 주의:</strong> 벤더는 Gemini 3.7 Flash가 문제 1, 3, 4를 재현했다고 보고했으나, 이는 내부 테스트 수치일 뿐 이를 뒷받침할 공개 로그, 해시, 혹은 프롬프트 트레이스는 존재하지 않습니다.</p>
+<h4 id="4-시스템-벤치마크-및-성능-감사">4. 시스템 벤치마크 및 성능 감사</h4>
+<p>시스템 성능 지표는 모두 벤더가 보고한 내부 수치이며, 원본 데이터와 시뮬레이터 소스가 비공개된 상태입니다.</p>
+<ul>
+<li><strong>TCSBench:</strong> Teamwork는 71%를 기록했으나, 이는 기존 베이스라인(67.7%, Colosseum 하니스 위에서 Gemini 3.6 Flash/3.1 Pro 및 교차 비평 구성)과 동일한 하니스 및 예산 조건에서 측정되었는지 객관적으로 확인되지 않았습니다.</li>
+<li><strong>RISC-V 시뮬레이터:</strong> 100개 이상의 테스트와 18개 미학습 워크로드에서 0.71%의 cycle-count MAPE를 보고했습니다. 이 성과의 핵심은 마이크로아키텍처 상태가 실패 전까지 조용히 분기되는 <strong>'Silent execution gap(정적 실행 간극)'</strong> 문제를 Spike/BOOM과의 록스텝(Lockstep) 공동 시뮬레이션으로 해결했다는 점입니다. 그러나 시뮬레이터 소스 비공개로 인해 보편적 신뢰도는 확보되지 않았습니다.</li>
+</ul>
+<h4 id="5-오픈소스-기여-및-실질적-영향도">5. 오픈소스 기여 및 실질적 영향도</h4>
+<p>실제 오픈소스 저장소에 반영된 코드는 가용성이 확인되나, 성능 향상의 범용성에 대해서는 비판적 접근이 필요합니다.</p>
+<ul>
+<li><strong>Eigen:</strong> 마스터 브랜치(Commit 944a219...)에 병합 완료. 단일 행/열 GeMV 연산 시 **'4개 축적기 언롤링(4-way accumulator unrolling)을 포함한 직접 데이터 액세스 및 SIMD 연산'**을 적용한 패스트 패스(Fast path)를 구현했습니다. 이는 특정 워크로드에서의 코드 수용을 의미하며, 모든 환경에서의 속도 향상을 보증하지는 않습니다.</li>
+<li><strong>ParlayHash:</strong> 공식 저장소 내 <code>swiss_parlay</code> 브랜치에 존재함. 이는 유지보수자 브랜치(Maintainer branch) 단계이며, 아직 메인(Main) 브랜치에 병합되지 않은 상태입니다. 따라서 공식 릴리스에 포함된 기능으로 간주할 수 없습니다.</li>
+</ul>
+<h4 id="6-종합-비평-및-반증-가능-조건">6. 종합 비평 및 반증 가능 조건</h4>
+<p>현재의 Teamwork 프레임워크는 '인간 전문가를 대체하는 자율 연구자'라기보다, 복잡한 가설 생성과 검증 루프를 자동화하여 연구 효율을 극대화하는 **'강력한 연구 파트너(Research Partner)'**로 정의하는 것이 기술적으로 정확합니다.</p>
+<p>본 보고서의 분석 결과가 향후 긍정적으로 업데이트되기 위해서는 다음과 같은 <strong>반증 가능성(Falsifiability) 조건</strong>이 충족되어야 합니다.</p>
+<ol>
+<li><strong>학술적 권위 확보:</strong> arXiv 전인쇄본의 정식 Peer Review 통과 및 저명 저널 게재.</li>
+<li><strong>형식 검증의 투명성:</strong> Knuth 저장소 내 독립 빌드 가능한 Lean 소스 코드(<code>.lean</code>, <code>lakefile</code> 등)와 종속성 일체 공개.</li>
+<li><strong>벤치마크 재현성:</strong> TCSBench 71% 달성 시 사용된 정확한 하니스 환경과 프롬프트 로그(Trace) 공개.</li>
+<li><strong>시스템 검증:</strong> RISC-V 시뮬레이터의 소스 코드 및 검증 스크립트 오픈소스화.</li>
+</ol>
+<p>본 기술 감사관은 벤더의 주장(Claim)과 실제 확인된 산출물(Artifact)을 엄격히 구분하며, 향후 공개되는 데이터를 바탕으로 본 보고서를 지속적으로 갱신할 예정입니다.</p>
+<p>&lt;!-- N2Y_EDITORIAL_CORRECTION_V1 --&gt;</p>
+<h4 id="공개-제작용-편집-교정-이-절이-영상의-최종-사실-권위">공개 제작용 편집 교정 — 이 절이 영상의 최종 사실 권위</h4>
+<p>이 자료는 Google Antigravity / The Antigravity Team의 2026-08-27 제품·연구 발표다. <code>/teamwork-preview</code> 자체는 기사 게시 시점 모든 유료 플랜에서 이용 가능하다고 발표됐지만, 소개된 개선은 향후 몇 주에 걸쳐 rollout되며 Gemini 3.7 Flash와 3.1 Pro를 Long Proof에서 함께 쓰는 지원은 날짜가 정해지지 않은 향후 업데이트다.</p>
+<p>수학·TCS 일곱 건은 “유명 난제 7개 완전 해결”이 아니다. 1번은 p&gt;2 ℓp subspace coreset의 bound improvement이며 공동 최적성은 미해결이다. 2번은 가정에 의존하는 sparse least-squares conditional lower bound다. 3번은 singleton-query MAX-IP/Chamfer embedding의 complexity gap을 거의 닫는 제한된 lower bound다. 4번은 Hadamard quantization의 두 번째 단계를 제거한 이론 결과이며 약 5.93×는 실측 속도가 아니라 b→∞에서 MSE upper-bound leading constant 48.369→8.162의 비율이다. 5번 Erdős 저장소는 internet 없는 내부 재실행을 주장하지만 README가 잘못된 공식과 논증 공백을 인정해 확정 independent reproduction이 아니다. 6번은 prefix-matrix factorization near-optimal lower bound이며 같은 시기 더 강한/matching 결과가 공개됐다. 7번은 even m의 제한된 두 Knuth constructions로, uniform 범위는 m≥10이고 m=4,6,8은 별도 탐색이다.</p>
+<p>Google은 Knuth를 제외한 여섯 건을 human experts가 검토·확인했다고 말하고 Knuth의 40-page proof가 Lean으로 formally verified됐다고 말한다. 이는 공급자의 validation 설명이다. expert review, Lean kernel check, independent reproduction, peer review는 서로 다르다. Lean formal verification은 novelty·우선권·문헌 완전성·동료심사를 뜻하지 않으며, 링크된 저장소에는 Lean source·top-level theorem·axiom/sorry 검사·build/CI가 없어 이 작업에서 독립 빌드하지 못했다. 5편 arXiv는 전인쇄본이며 peer-reviewed publication으로 부르지 않는다. 최초 결과는 기사상 Gemini 3.1 Pro에 귀속되고, Problems 1·3·4의 Gemini 3.7 Flash reproduction은 Flash-specific 산출물이 공개되지 않은 Google 내부 재실행 보고다.</p>
+<p>TCSBench paper v1의 67.7%=203/300은 Colosseum + Gemini 3.6 Flash/3.1 Pro + 교차선택 + 자동 verifier의 결합 범위다. 71%는 Gemini 3.7 Flash와 3.1 Pro를 쓴 Google vendor-reported internal testing 결과이며 동일 harness·예산·항목별 출력이 공개되지 않아 independent SOTA가 아니다. RISC-V simulator의 xv6 boot, 100+ tests, 18 unseen workloads, 평균 cycle-count MAPE 0.71%, Spike/BOOM validation도 생성 소스·원자료·고정 버전·재현법이 공개되지 않은 vendor report다.</p>
+<p>Eigen commit 944a219bd60af0f750ccf2fca8fe43ea293b30a9은 upstream master 병합이 확인되지만 이는 모든 workload의 보편 speedup을 입증하지 않는다. ParlayHash swiss_parlay는 공식 저장소의 maintainer branch이며 main/release 병합은 확인되지 않았다. branch 존재는 availability/acceptance signal이지 universal speedup의 독립 재현이 아니다.</p>
+<p>편집 해석은 후보 제안보다 falsifier의 반증과 synthesizer의 종합 구조가 핵심이라는 것이다. 아직 확립되지 않은 일반화는 임의 연구 분야의 동일 효과, 장기간 완전 자율성, 인간 연구자 대체, 내부 연구 설정과 paid-plan preview의 동일성이다. 안전한 결론은 인간이 목표·검토·최종 수용을 맡는 research partner이며 보편적 autonomous replacement가 아니라는 것이다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

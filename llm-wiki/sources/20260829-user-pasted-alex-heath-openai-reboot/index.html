@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>샘 올트먼: 오픈AI는 올해 AGI에 도달할 수도 있다</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>샘 올트먼: 오픈AI는 올해 AGI에 도달할 수도 있다</h1>
+<p class="page-meta">웹 · 2026-08-29</p>
+<h2 id="요약">요약</h2>
+<p>오픈AI의 비공개 아스트라 시연과 연내 AGI 전망을 검토하고 일부 강화학습 실험의 감속 범위를 짚는다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://sources.news/p/sam-altman-openai-agi">출처</a> · <a href="https://www.youtube.com/watch?v=7QSusCphdXQ">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/recursive-self-improvement/">Recursive Self-Improvement</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="openai-astra-agi-올해설-내부-취재가-보여-준-속도와-경계">OpenAI Astra·AGI 올해설: 내부 취재가 보여 준 속도와 경계</h3>
+<h4 id="이-보고서의-증거-구조">이 보고서의 증거 구조</h4>
+<p>이 문서는 <strong>사용자 제공 한국어 원문 기반 2차 분석</strong>이다. 기사 문언은 알렉스 히스의 2026-08-28 사용자 제공 한국어 원문을 따른다. 발행자 canonical·제목·저자·날짜·첫 본문 앵커는 직접 확인했지만 전체 영문 Sources 본문은 paywall로 완전 대조하지 못했다. 같은 기자의 TIME <code>Inside OpenAI’s Reboot</code> 장문은 직접 열어 주요 앵커를 대조했다. 같은 기자의 취재는 사적 demo와 내부 benchmark의 독립 기술 검증이 아니다.</p>
+<h4 id="기자가-본-것과-아직-입증되지-않은-것">기자가 본 것과 아직 입증되지 않은 것</h4>
+<p>히스는 주요 고객 대상 <strong>비공개 Astra 사전 시연</strong>을 관찰했다고 썼다. 여러 agent가 수학 문제를 분해·조정해 만든 것은 proposed proof이며, 독립 검증된 theorem discovery나 중요한 발명의 재현이 아니다. 빠른 desktop 조작, slide·finance·messy-data demo도 안전하고 신뢰할 수 있는 enterprise deployment나 production accuracy를 보장하지 않는다. private demo는 public availability, release/model/system card와 다르다.</p>
+<p>Astra가 days or weeks 동안 일하고 수정 사항을 기억하도록 설계됐다는 설명은 long-running design이다. task identity, completion rate, interruption rate, cost, quality, human escalation이 공개되지 않았으므로 proven week-long completion이나 infinite execution으로 부를 수 없다. memory는 permission, agent identity, auditability, security와 별개다. 공개 Workspace Agents와 API 문서에는 도구 권한, human approval, traces, 관리자 중단·Compliance API가 있지만, 이것이 Astra의 동일 architecture나 완전한 안전을 입증하지 않는다.</p>
+<h4 id="agi는-전망이지-판정-결과가-아니다">AGI는 전망이지 판정 결과가 아니다</h4>
+<p>OpenAI Charter는 AGI를 <code>경제적으로 가치 있는 대부분의 업무에서 인간을 능가하는 고도로 자율적인 시스템</code>으로 정의하고 timeline은 불확실하다고 적는다. Altman의 <code>올해 말 내부 시스템을 AGI라 부를 수도</code>는 subjective classification forecast다. Mark Chen의 <code>80%</code>는 정의된 public metric과 denominator가 없는 executive estimate이며, Brockman의 말은 2년 뒤의 retrospective possibility다. AGI 판단에는 autonomy, reliability, breadth, economically valuable tasks, cost, safety, independent evaluation이 필요하다. 이 자료는 AGI가 성립했다거나 2026년에 확인·합의됐다는 결론을 입증하지 않는다.</p>
+<h4 id="ai-연구-자동화의-정확한-범위">AI 연구 자동화의 정확한 범위</h4>
+<p>Pachocki가 설명한 내부 기준은 주어진 experiment idea를 internal codebase에 implement하고 run해 results를 return하는 task execution이다. 전체 research agenda를 선택하고, 가치 있는 실험을 고르고, scientific meaning을 판단하거나 autonomous weight/model design을 하는 것과 다르다. <code>one week of human work</code>에는 동일 task, human baseline, quality threshold, evaluator, compute와 실패 사례가 필요하지만 공개되지 않았고 independently reproduced되지 않았다. <code>recursive self-improvement has begun</code>은 Alex Heath의 editorial inference다. model-assisted AI R&amp;D, open-ended recursive self-improvement, autonomous model design을 구분한다.</p>
+<h4 id="감속은-회사-전체-학습-정지가-아니다">감속은 회사 전체 학습 정지가 아니다</h4>
+<p>기사와 OpenAI의 2026-08-18 공개 자료가 가리키는 범위는 tool/computer use와 연결된 <strong>일부 frontier RL experiments</strong>다. 최신 배치 대상 모델의 RL scaling은 2주 중단됐고 최대 frontier RL run은 보류됐지만, clusters와 general pretraining, small-scale training·evaluation은 계속됐다. 어떤 experiment가 누가 정한 어떤 trigger로 얼마나 지연됐는지, 우려 행동의 세부와 공식 incident record는 제한적이다. 따라서 company-wide training halt로 서술하지 않는다. capability caution, alignment confidence, security controls, compute constraints도 별도 축이다.</p>
+<h4 id="제품-사업-roadmap의-상태">제품·사업 roadmap의 상태</h4>
+<p>Industry-specific enterprise organization은 전략이지 delivered vertical outcomes가 아니다. Humanoid는 Altman의 plan이며 prototype, production, deployment가 아니다. tabletop/pocket/wearable과 <code>soon</code>은 form-factor exploration이고 ambient proactive device는 released product가 아니다. privacy 문제를 인정했다는 말은 privacy guarantee가 아니다. compute resale, old-chip reuse, systems for others는 undecided options이며 contract나 revenue가 아니다. <code>more compute would have raised last year's revenue</code>는 executive counterfactual이지 audited lost revenue가 아니다.</p>
+<h4 id="선행-영상과-다른-이번-범위">선행 영상과 다른 이번 범위</h4>
+<p><code>rIPiXJH5t8o</code>는 Gary Marcus의 Astra math capability 비평이고 <code>eLicGfnuFe0</code>는 OpenAI 공식 cyber-safety pacing 발표 해설이다. 이번 분석은 exact duplicate가 아니라, Alex Heath의 insider report가 한 화면에 놓은 <strong>capability acceleration + safety constraint + commercial speed</strong>의 긴장을 다룬다. 분리 기준을 지킬 때 <code>PASS_DISTINCT_SCOPE</code>다.</p>
+<h4 id="유효기간과-falsifiers">유효기간과 falsifiers</h4>
+<p>기본 유효기간은 2026-09-05 KST까지다. Astra public release/model/system card, independent benchmark와 long-horizon completion data, official safety incident/pause disclosure, Charter/AGI-definition change, persistent-agent permission/identity/audit architecture, device/robot prototype·regulatory/privacy detail, compute-sales contract, 또는 named party의 quote correction/denial이 나오면 관련 결론을 업데이트하거나 철회한다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/recursive-self-improvement/">Recursive Self-Improvement</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/openai/">OpenAI</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li></ul></section>
+</main>
+</body>
+</html>

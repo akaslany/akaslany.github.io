@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mka_tech_paper</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>mka_tech_paper</h1>
+<p class="page-meta">PDF · 2026-11-11</p>
+<h2 id="요약">요약</h2>
+<p>[사실 (Fact)] 본 보고서는 Google DeepMind 연구진이 2026년 11월 10일 발표한 논문 *&quot;MKA: Evaluating Multimodal Knowledge Agents on end-to-end professional tasks&quot;*를 바탕으로, 지식 작업(Professional Knowledge…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://storage.googleapis.com/deepmind-media/papers/mka_tech_paper.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=WfDAhgVUIco">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="multimodal-knowledge-agent-mka-벤치마크-해설-보고서">Multimodal Knowledge Agent (MKA) 벤치마크 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p><strong>[사실 (Fact)]</strong>
+본 보고서는 Google DeepMind 연구진이 2026년 11월 10일 발표한 논문 *&quot;MKA: Evaluating Multimodal Knowledge Agents on end-to-end professional tasks&quot;*를 바탕으로, 지식 작업(Professional Knowledge Work) 환경에서 멀티모달 AI 에이전트의 시각적 이해력과 종단간(End-to-End) 수행 능력을 평가하기 위해 개발된 <strong>Multimodal Knowledge Agent (MKA)</strong> 벤치마크를 정밀하게 분석한다. MKA 데이터셋은 10개 주요 경제 분야(Business, Construction, Education, Engineering, Finance, Healthcare, Law &amp; government, Logistics &amp; mapping, Science, Software &amp; data) 및 83개 직업군에 걸친 200개의 평가 태스크로 구성되어 있다 ([SOURCE_IMAGE_1] 참조).</p>
+<p><strong>[사실 (Fact)]</strong>
+각 태스크는 2개에서 45개(평균 7.30개)의 이종(Heterogeneous) 입력 파일(건축 도면, 회로도, 의료 영상, 지리공간 지도, 스프레드시트 등)을 복합적으로 분석하여 .xlsx, .pptx, .pdf, .docx, .html, .png 등 독립적인 실행 파일 형태의 최종 결과물(Deliverable)을 생성하도록 설계되었다. 평가 체계는 격리된 샌드박스 환경에서 구동되는 에이전트형 채점기(Agentic Autorater)를 활용하며, 도메인 전문가 3인과의 검증 연구에서 96.2%의 pairwise 이진 기준 일치도(Cohen's $\kappa = 0.911$)를 달성했다.</p>
+<p><strong>[소스 주장 (Source Claim)]</strong>
+현실의 지식 작업은 시각적으로 조밀한 문서를 해석하고 최종 작성물의 레이아웃과 포맷을 시각적으로 검증하는 과정을 필수로 포함한다. 그러나 기존 프론티어 AI 에이전트들은 주로 코드 작성 중심의 학습 환경으로 인해 시각(Vision) 정보를 직접 관찰하기보다 텍스트, 마크다운, CSV 변환이나 OCR 엔진 및 컴퓨터 비전 스크립트에 과도하게 의존하는 '텍스트·코드 편향(Text-and-Code Bias)'을 보인다. 기존 벤치마크(GDPval, APEX-Agents, GDP.pdf, GDP.xlsx 등)는 텍스트/스프레드시트에 치중되어 있거나 단일 턴 응답만을 평가하여, 이미지 보기 도구를 제거하더라도 성능 평가 점수에 변동이 없는 등 에이전트의 시각적 인지 맹점을 포착하지 못하는 구조적 한계를 지닌다.</p>
+<p><strong>[작성자 해석 (Interpretation)]</strong>
+MKA 벤치마크는 에이전트 평가의 패러다임을 단순 텍스트 질의응답이나 단순 코드 실행에서 '시각적 인지-다단계 도구 사용-독립 실행 파일 작성 및 검증'의 완전한 종단간 워크플로우로 전환했다. 특히 시각 정보가 단순 참고 자료가 아니라 태스크 성패를 좌우하는 '필수적 시각 인식(Load-Bearing Vision)' 속성을 부여함으로써, 기존 에이전트들이 파이썬 스크립트나 OCR로 시각적 관찰을 우회하려는 편향을 정밀하게 타격하고 프론티어 AI 모델의 실질적인 지식 작업 역량을 엄격하게 검증하는 기준을 제공한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-discussion-points">2. 주요 논점 (Key Discussion Points)</h4>
+<h5 id="2-1-기존-벤치마크의-텍스트-코드-편향-및-맹점-분석">2.1. 기존 벤치마크의 텍스트·코드 편향 및 맹점 분석</h5>
+<p><strong>[사실 (Fact)]</strong>
+현재 프론티어 에이전트들은 작업 공간 내 파일이 주어졌을 때 문서를 플레인 텍스트, 마크다운, CSV로 변환하거나, 취약한 OCR 엔진 및 파이썬 컴퓨터 비전 스크립트에 과도하게 의존하는 경향을 보인다 (Section 1). 기존 대표 벤치마크들과 MKA의 구조적 특성을 비교한 명세는 아래 [Table 1]과 같다 (Section 1 및 Section 5).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크</th>
+<th style="text-align:center">시각적 필수성 (Load-Bearing Vision)</th>
+<th style="text-align:center">다단계 도구 사용 (Multi-Step Tool Use)</th>
+<th style="text-align:center">이종 다중 파일 (Heterogeneous Multi-File)</th>
+<th style="text-align:center">개방형 결과물 (Open-Ended Deliverables)</th>
+<th style="text-align:center">시각+코드 채점 (Visual + Code Grading)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>MMMU-Pro / CharXiv</strong></td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GDP.pdf</strong></td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오 (PDF 전용)</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GDP.xlsx</strong></td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">아니오 (단일 파일)</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BrowseComp / MM-BrowseComp</strong></td>
+<td style="text-align:center">부분적</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오</td>
+<td style="text-align:center">아니오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>OSWorld</strong></td>
+<td style="text-align:center">예 (GUI)</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">부분적</td>
+<td style="text-align:center">부분적</td>
+<td style="text-align:center">아니오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SpreadsheetBench 2</strong></td>
+<td style="text-align:center">아니오 (입력)</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">아니오 (표 형태)</td>
+<td style="text-align:center">예 (.xlsx)</td>
+<td style="text-align:center">부분적</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>APEX-Agents</strong></td>
+<td style="text-align:center">부분적</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">부분적</td>
+<td style="text-align:center">아니오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GDPval</strong></td>
+<td style="text-align:center">아니오 (우회 가능)</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">예</td>
+<td style="text-align:center">아니오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MKA (본 연구)</strong></td>
+<td style="text-align:center"><strong>예</strong></td>
+<td style="text-align:center"><strong>예</strong></td>
+<td style="text-align:center"><strong>예</strong></td>
+<td style="text-align:center"><strong>예 (88%)</strong></td>
+<td style="text-align:center"><strong>예</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>[소스 주장 (Source Claim)]</strong>
+연구진은 프론티어 비전-언어 모델(VLM)들이 픽셀 정보를 직접 보면서도 텍스트 사전 지식에 쏠리는 **언어적/텍스트 사전 편향(Linguistic/Text-Prior Bias)**과 2차원 기하학적 구조 추적에 실패하는 **기하학적 인지 맹목성(Geometric Blindness)**을 내재적으로 지니고 있다고 지적한다 (Rahmanzadehgervi et al., 2024; Vo et al., 2025; Section 1). 기존 벤치마크들이 이러한 맹점을 검증하지 못하는 구조적 이유는 다음과 같다:</p>
+<ol>
+<li><strong>GDPval 및 APEX-Agents</strong>: 다중 파일 오피스 환경을 다루지만 태스크 핵심 신호가 텍스트나 표 데이터에 집중되어 있어 시각 도구 없이 파이썬 스크립트나 OCR만으로 성능 손실 없이 우회 완수가 가능하다. 실제 GDPval에서 이미지 보기 도구(<code>view_image</code>)를 제거하더라도 Gemini 4 Carbon의 평가 점수(Overall WSR 88.1% vs 88.2%)는 변동이 없었다.</li>
+<li><strong>GDP.pdf 및 GDP.xlsx</strong>: PDF 또는 단일 Excel 파일 등 단일 포맷에 한정되어 다중 파일 및 모달리티 간 교차 추론을 평가하지 못하며, 단일 턴 텍스트 응답만을 요구한다.</li>
+<li><strong>시각 QA 및 브라우징/GUI 벤치마크</strong>: 단일 턴 질의응답에 머물거나(MMMU-Pro), 짧은 문자열 일치만을 평가하거나(BrowseComp), 픽셀 단위 클릭 동작과 추론이 뒤얽혀 결과물의 논리적·구조적 품질을 독립적으로 평가하지 못한다(OSWorld).</li>
+</ol>
+<hr />
+<h5 id="2-2-mka-데이터셋-구조-10개-산업-파일-유형-및-결과물-분석">2.2. MKA 데이터셋 구조: 10개 산업, 파일 유형 및 결과물 분석</h5>
+<p><strong>[사실 (Fact)]</strong>
+MKA 데이터셋은 10개 산업 분야에 20개씩 균등 배분된 200개의 비공개 평가 태스크와 83개 전문 직업군으로 구성된다 ([SOURCE_IMAGE_1] 참조). 이와 별도로 외부 독립 평가 및 연구를 위해 분야별 1개 태스크로 구성된 10개의 공개 Showcase 데이터셋(MKA-Showcase)이 제공된다.</p>
+<pre><code>MKA 10개 산업 분야 명세 [SOURCE_IMAGE_1]:
+[Business] [Construction] [Education] [Engineering] [Finance]
+[Healthcare] [Law &amp; government] [Logistics &amp; mapping] [Science] [Software &amp; data]
+</code></pre>
+<h6 id="1-입력-파일-포맷-분포-총-1-459개-파일-태스크당-평균-7-30개-중앙값-6-0개-범위-2-45개">1. 입력 파일 포맷 분포 (총 1,459개 파일, 태스크당 평균 7.30개, 중앙값 6.0개, 범위 2~45개)</h6>
+<p>입력 파일의 모달리티별 비중은 아래와 같다 ([SOURCE_IMAGE_2] 참조):</p>
+<ul>
+<li><strong>PDF 문서 (43.0%, 628개)</strong>: 입면도·평면도, CAD/배관 입체 도면, SEC Form 10-K, 상업용 임대차 계약서, 임상 수술 기록 등 (.pdf).</li>
+<li><strong>이미지 및 스캔 파일 (22.9%, 334개)</strong>: 평면도, 회로/기계 도면, CT/엑스레이, GIS 경로 지도, 수치 표고 모델(DEM), 손글씨 양식 스캔 등 (PNG 217개, JPG/JPEG 105개, TIF 6개, GIF 3개, SVG 3개).</li>
+<li><strong>스프레드시트 (10.9%, 159개)</strong>: 재무제표·운영 모델, 손해배상 대장, 엔지니어링 자재명세서(BOM), 간트 차트 등 (XLSX 158개, XLSM 1개).</li>
+<li><strong>Word 문서 (10.2%, 149개)</strong>: 표준 작업 절차서(SOP), 구매 계약서, 임상 코딩 교차표, 증인 진술서 등 (DOCX 148개, Pages 1개).</li>
+<li><strong>지리공간 및 텍스트/JSON (6.0%, 88개)</strong>: 지방자치단체 경계 레이어, LiDAR 명세서, EEG 메타데이터, 이메일 스레드 등 (TXT 42개, GeoJSON 21개, JSON 10개, KML 2개 등).</li>
+<li><strong>슬라이드 (3.5%, 51개)</strong>: 이사회 브리핑, 투자 제안서, 네트워크 아키텍처 발표 템플릿 등 (.pptx).</li>
+<li><strong>CSV 및 TSV (3.4%, 50개)</strong>: 원격 측정 로그, 금리 데이터, 차량 배차 목록 등 (CSV 47개, TSV 3개).</li>
+</ul>
+<h6 id="2-최종-결과물-deliverable-포맷-분포-총-200개-태스크">2. 최종 결과물(Deliverable) 포맷 분포 (총 200개 태스크)</h6>
+<p>전체 태스크 중 88.0%(176개)는 에이전트가 독립 실행 파일 생성/수정을 요구하며, 12.0%(24개)는 최종 텍스트 응답 형식이다 ([SOURCE_IMAGE_3] 참조):</p>
+<ul>
+<li><strong>PDF 보고서</strong>: 22.5% (45개 태스크, .pdf)</li>
+<li><strong>Word 문서</strong>: 21.0% (42개 태스크, .docx)</li>
+<li><strong>프레젠테이션 슬라이드</strong>: 17.0% (34개 태스크, .pptx)</li>
+<li><strong>스프레드시트</strong>: 16.0% (32개 태스크, .xlsx, .xlsm)</li>
+<li><strong>텍스트 보고서</strong>: 15.0% (30개 태스크 - 텍스트 응답 24개, .txt 파일 6개)</li>
+<li><strong>이미지 및 차트</strong>: 4.5% (9개 태스크, .png, .jpg)</li>
+<li><strong>웹 애플리케이션</strong>: 4.0% (8개 태스크, .html)</li>
+</ul>
+<h6 id="3-showcase-대표-사례-요약-source_image_4-참조">3. Showcase 대표 사례 요약 ([SOURCE_IMAGE_4] 참조)</h6>
+<ol>
+<li><strong>인력 배치 피더 감사 (Business - 인력 계획 분석가)</strong>: 6개 입력 파일(분기별 이직 유입/유출 .png 차트, .csv 인원 기록, .pdf 규칙, .xlsx 기업 템플릿, .jpg 로고)을 기초로 15개 부서 간 이직 흐름을 추적하여 브랜드 양식이 적용된 2개 시트 Excel 파일(.xlsx)을 생성함 (루브릭 평가 기준: 90개).</li>
+<li><strong>지붕 태양광 점검 (Logistics &amp; mapping - GIS 분석가)</strong>: 9개 지리공간/표 파일(무제공 참도 지도 .jpeg, 1m 수치표고/태양 광량 .tif 라스터, 건물 레이어 .geojson, 자산 대장 .xlsx 등)을 통합 분석하여 지자체 소유 건물 상위 5개를 선별한 지도 포함 보고서(.docx)를 작성함 (루브릭 평가 기준: 62개).</li>
+<li><strong>비선형 역학 실습 슬라이드 (Engineering - 기계공학 강사)</strong>: 8개 입력 파일(백래시 기계 회로도 .pdf, 다중 사격법 논문 .pdf, 프레젠테이션 규격 .docx 등)을 로드하여 주기적 경계값 문제를 풀고 위상 공간 궤적 차트를 탑재한 6장 분량의 발표 자료(.pptx)를 작성함 (루브릭 평가 기준: 54개).</li>
+</ol>
+<hr />
+<h5 id="2-3-에이전트-하네스-stirrup-및-에이전트형-채점기-agentic-autorater-평가-체계">2.3. 에이전트 하네스(Stirrup) 및 에이전트형 채점기(Agentic Autorater) 평가 체계</h5>
+<p><strong>[사실 (Fact)]</strong></p>
+<h6 id="1-에이전트-실행-환경-stirrup-v0-2-1">1. 에이전트 실행 환경: Stirrup (v0.2.1)</h6>
+<ul>
+<li><strong>격리 샌드박스 사양</strong>: Debian 기반 Python 3.13 격리 샌드박스 (<code>python:3.13-slim-trixie</code>), 4 vCPU, 128MB 기본 RAM (최대 16GB 동적 버스트), 인터넷 접근 허용. <code>/workspace/input</code>에 입력 파일 배치.</li>
+<li><strong>사전 설치 실행 환경</strong>: LibreOffice, Tesseract OCR, pymupdf, weasyprint 및 주요 파이썬 오피스 라이브러리.</li>
+<li><strong>제한 조건</strong>: 태스크당 최대 250턴, 8시간 벽시계 시간(Wall-clock limit), 최대 1M 토큰 컨텍스트 지원. 전체 컨텍스트의 70% 도달 시 동적 컨텍스트 압축(Compaction) 수행. 마지막 20턴 남은 시점 경고 전달.</li>
+<li><strong>제공 도구 4종</strong>: <code>code_exec</code> (Bash/Python 실행, 타임아웃 300초), <code>view_image</code> (이미지/프로그래밍 렌더링 픽셀 로드), <code>web_search</code> (웹 검색, 타임아웃 180초), <code>finish</code> (결과물 검증 및 세션 종료).</li>
+</ul>
+<h6 id="2-에이전트형-채점기-agentic-autorater-구조-및-평가-구현-메커니즘">2. 에이전트형 채점기 (Agentic Autorater) 구조 및 평가 구현 메커니즘</h6>
+<ul>
+<li><strong>채점 모델 및 독립 환경</strong>: GPT-6 Luna 기반 Stirrup 에이전트. 샌드박스 내 인터넷 접근 차단. 후보 결과물 파일과 최종 텍스트 응답만 <code>/workspace</code>에 로드되며 원본 입력 파일은 제공되지 않음 (루브릭 자체에 정답 기준 및 오차 범위가 완전 수록됨).</li>
+<li><strong>시각 렌더링 및 파이프라인 우회 방지 구현 메커니즘 (Appendix A)</strong>:
+<ol>
+<li><em>시각적 렌더링 검사</em>: 오피스 및 PDF 결과물 검사 시 CLI 변환 스크립트 실행.
+<ul>
+<li>LibreOffice 헤드리스 변환: <code>soffice --headless --norestore --nolockcheck --convert-to pdf &lt;filename&gt; --outdir /workspace</code></li>
+<li>PDF-to-PNG 해상도 렌더링: <code>pdftoppm -png -r 150 &lt;file&gt;.pdf &lt;prefix&gt;</code> 실행 후 <code>view_image</code>로 레이아웃, 색상, 서식 검사.</li>
+<li>스프레드시트는 페이지 영역 잘림을 방지하기 위해 추가로 CSV 변환(<code>soffice --convert-to csv</code>)을 병행하여 픽셀 검사와 계산값 검출을 동시 수행.</li>
+</ul>
+</li>
+<li><em>프로그래밍 라이브러리 파싱 및 결함 방지 처리</em>:
+<ul>
+<li><code>openpyxl</code>: 수식 셀 계산값이 캐싱되지 않은 경우 <code>data_only=True</code> 사용 시 <code>None</code>을 반환하는 거짓 불합격(False Negative)을 방지하고자 반드시 <code>data_only=False</code> 수식 검사를 병행하거나 LibreOffice 렌더링 계산값을 교차 검증.</li>
+<li><code>python-docx</code>: <code>doc.paragraphs</code>가 표(Table) 내부 텍스트, 헤더/푸터를 무시하는 결함을 방지하기 위해 <code>doc.tables</code>의 모든 셀 파이프라인을 정밀 반복 검사.</li>
+<li>PPTX 슬라이드 개수: 메타데이터 오작동 방지를 위해 ZIP 압축 해제 후 <code>unzip -l &lt;file&gt;.pptx | grep -c 'ppt/slides/slide[0-9]'</code> 명령으로 물리 슬라이드 파일 수 정밀 집계.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h6 id="3-채점-루브릭-구조-및-수학적-평가-지표">3. 채점 루브릭 구조 및 수학적 평가 지표</h6>
+<ul>
+<li><strong>루브릭 구성</strong>: 총 14,284개 기준 (태스크당 평균 71.4개, 중앙값 68.5개, 범위 20~150개). 각 기준 $j$마다 1~5점 가중치 $w_{ij}$ 부여 (1점: 21.6%, 2점: 26.2%, 3점: 26.1%, 4점: 21.4%, 5점: 4.7%). 주 목표(Primary) 94.5%, 부 목표(Secondary) 5.5%. 전체 기준의 29.5%(4,217개 기준, 190개 태스크)는 메타데이터 상에 방향성 비순환 그래프(DAG) 의존성을 명시함.</li>
+<li><strong>WSR (Weighted Satisfaction Rate) 정의</strong>:
+$$\text{WSR}<em>i = \frac{\sum_j w</em>{ij} s_{ij}}{\sum_j w_{ij}} \quad (s_{ij} \in {0, 1})$$
+<em>작성자 clarification</em>: MKA 채점 체계는 DAG 선행 조건이나 통과 여부로 하위 점수를 0점 처리(Gating)하지 않고, 각 가중 기준 $w_{ij}$에 따라 독립적으로 점수를 합산한다. 이는 70개 이상의 루브릭 항목 중 단 하나의 미세한 오류로 태스크 전체 점수가 0점 처리되는 올패스(All-Pass) 방식의 취약성과 높은 분산을 방지하기 위함이다.</li>
+<li><strong>성능 분할 지표</strong>:
+<ul>
+<li><strong>Climb-WSR (핵심 프론티어 역량 지표)</strong>: 이전 세대 모델 패널 4종(Gemini 3.8 Flash, Gemini 3.6 Flash, Claude Sonnet 5.5, GPT-6.1 Sol)이 3회 실행 중 2회 이상 통과하지 못한 난이도 높은 7,888개 기준 대상 평가.</li>
+<li><strong>Regression-WSR (기존 역량 보존 지표)</strong>: 이전 세대 모델 패널이 안정적으로 통과(3회 중 2회 이상 통과)한 6,396개 기본 기준 대상 평가 (180개 태스크 대상).</li>
+<li><strong>Overall WSR</strong>: 전체 14,284개 루브릭 기준 대상 종합 평가 점수.</li>
+</ul>
+</li>
+</ul>
+<h6 id="4-인간-전문가와의-일치도-검증-human-agreement-study">4. 인간 전문가와의 일치도 검증 (Human Agreement Study)</h6>
+<p>50개 태스크 및 고가중치(3~5점) 기준 대상 블라인드 검증 결과, 채점기는 인간 전문가와 96.2%의 이진 기준 일치도를 기록했다 ([Figure 5] 참조).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 지표</th>
+<th style="text-align:left">수치 (95% 신뢰구간)</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>인간-채점기 일치도 ($A_{\text{HA}}$)</strong></td>
+<td style="text-align:left"><strong>96.2%</strong> [94.7%, 97.6%]</td>
+<td style="text-align:left">인간 일치도 상한선의 96.4% 수준 도달</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인간 상한선 ($A_{\text{HH}}$)</strong></td>
+<td style="text-align:left"><strong>99.8%</strong> [99.6%, 100.0%]</td>
+<td style="text-align:left">인간 평가자 상호 간 완전 일치율</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>가중 Cohen's $\kappa$</strong></td>
+<td style="text-align:left"><strong>0.911</strong> [0.873, 0.943]</td>
+<td style="text-align:left">다수결 기준 $\kappa = 0.919$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Fleiss' $\kappa$ / Correlation</strong></td>
+<td style="text-align:left">Fleiss $\kappa = 0.996$</td>
+<td style="text-align:left">Pearson $r = 0.966$, Spearman $\rho = 0.931$</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[채점기 오류 유형 및 조건부 오류율 분석 (전체 오류율 3.8%)]</strong> ([Table 2] 근거)</p>
+<ul>
+<li><strong>거짓 합격 (False Pass, 2.4% [1.3, 3.8])</strong>: 인간은 불합격 처리했으나 채점기가 합격 처리함. **인간 불합격 기준(34.2% 모집단) 대비 조건부 오류율은 7.1% [3.6, 11.4]**임. (수용 가능한 대안 값 인정, 라벨 누락 시 의미적 동등성 인정 등 채점기의 관대함에서 기인).</li>
+<li><strong>거짓 불합격 (False Fail, 1.4% [0.8, 2.0])</strong>: 인간은 합격 처리했으나 채점기가 불합격 처리함. **인간 합격 기준(65.8% 모집단) 대비 조건부 오류율은 2.1% [1.2, 3.1]**임. (동등 표현에 대한 엄격한 문자열 매칭, 동적 파일에 대한 정적 파이썬 코드 검사의 한계로 발생).</li>
+</ul>
+<hr />
+<h5 id="2-4-프론티어-모델-성능-및-토큰-비용-효율성-비교">2.4. 프론티어 모델 성능 및 토큰·비용 효율성 비교</h5>
+<p><strong>[사실 (Fact)]</strong>
+MKA 벤치마크 200개 전체 태스크에서 프론티어 모델 4종을 평가한 품질 결과([Table 3]) 및 효율성 결과([Table 4])는 다음과 같다.</p>
+<h6 id="1-결과물-품질-비교-table-3">1. 결과물 품질 비교 ([Table 3])</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:center">Climb-WSR (%) $\uparrow$</th>
+<th style="text-align:center">Overall WSR (%) $\uparrow$</th>
+<th style="text-align:center">Regression-WSR (%) $\uparrow$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Claude Fable 5.2</strong></td>
+<td style="text-align:center"><strong>56.56 ±3.63</strong></td>
+<td style="text-align:center"><strong>73.26 ±2.45</strong></td>
+<td style="text-align:center">95.71 ±1.68</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gemini 4 Carbon</strong></td>
+<td style="text-align:center">54.34 ±3.24</td>
+<td style="text-align:center">71.89 ±2.15</td>
+<td style="text-align:center"><strong>96.36 ±0.91</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Claude Opus 5.5</strong></td>
+<td style="text-align:center">53.01 ±3.54</td>
+<td style="text-align:center">70.98 ±2.46</td>
+<td style="text-align:center">95.81 ±1.32</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPT-6 Astra</strong></td>
+<td style="text-align:center">50.24 ±3.25</td>
+<td style="text-align:center">69.34 ±2.10</td>
+<td style="text-align:center">95.17 ±1.07</td>
+</tr>
+</tbody>
+</table>
+<h6 id="쌍체-부트스트랩-95-신뢰구간-paired-task-level-bootstrap-cis">쌍체 부트스트랩 95% 신뢰구간 (Paired Task-Level Bootstrap CIs)</h6>
+<ul>
+<li><strong>Claude Fable 5.2 vs. Gemini 4 Carbon</strong>: Climb-WSR 차이 +2.22%p (95% CI [−0.94, +5.49]) $\rightarrow$ 통계적으로 유의미한 차이 없음.</li>
+<li><strong>Gemini 4 Carbon vs. Claude Opus 5.5</strong>: Climb-WSR 차이 +1.33%p (95% CI [−1.70, +4.41]) $\rightarrow$ 통계적으로 유의미한 차이 없음.</li>
+<li><strong>Gemini 4 Carbon vs. GPT-6 Astra</strong>: Climb-WSR 차이 +4.10%p (95% CI [+1.00, +7.11]) $\rightarrow$ <strong>Gemini 4 Carbon이 통계적으로 유의미하게 우수함</strong>.</li>
+</ul>
+<h6 id="2-토큰-및-비용-효율성-비교-table-4">2. 토큰 및 비용 효율성 비교 ([Table 4])</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:center">총 토큰 수</th>
+<th style="text-align:center">입력 토큰 수</th>
+<th style="text-align:center">출력 토큰 수</th>
+<th style="text-align:center">평균 턴 수</th>
+<th style="text-align:center">실행 시간(분)</th>
+<th style="text-align:center">API 비용(태스크당)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Claude Fable 5.2</strong></td>
+<td style="text-align:center">40.48M</td>
+<td style="text-align:center">40.10M</td>
+<td style="text-align:center">378.9k</td>
+<td style="text-align:center">128.8</td>
+<td style="text-align:center">83.2</td>
+<td style="text-align:center">$35.28</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gemini 4 Carbon</strong></td>
+<td style="text-align:center">7.05M</td>
+<td style="text-align:center">6.92M</td>
+<td style="text-align:center">129.5k</td>
+<td style="text-align:center">46.6</td>
+<td style="text-align:center">29.2</td>
+<td style="text-align:center"><strong>$5.63</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Claude Opus 5.5</strong></td>
+<td style="text-align:center">19.96M</td>
+<td style="text-align:center">19.75M</td>
+<td style="text-align:center">208.8k</td>
+<td style="text-align:center">91.4</td>
+<td style="text-align:center">33.8</td>
+<td style="text-align:center">$10.29</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPT-6 Astra</strong></td>
+<td style="text-align:center"><strong>2.43M</strong></td>
+<td style="text-align:center"><strong>2.39M</strong></td>
+<td style="text-align:center"><strong>42.0k</strong></td>
+<td style="text-align:center"><strong>29.0</strong></td>
+<td style="text-align:center"><strong>18.5</strong></td>
+<td style="text-align:center">$6.03</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[소스 주장 및 작성자 분석 (Synthesis &amp; Interpretation)]</strong>
+API 비용 산출 시 각 제공자의 프롬프트 캐싱(Prompt Caching) 요율이 적용되었으며, <strong>누적 입력 토큰의 93.7%–97.7%가 프롬프트 캐시에서 제공</strong>되었다 (Section 4.2). 이로 인해 수천만 입력 토큰을 처리함에도 불구하고 호출 비용이 크게 절감된다.</p>
+<p>파레토 최적선(Pareto Frontier, [Figure 6], [Figure 7] 및 <code>[SOURCE_IMAGE_5]</code> 참조) 관점에서 모델 간 효율성 격차는 극명하다:</p>
+<ul>
+<li><strong>Claude Fable 5.2</strong>: Gemini 4 Carbon 대비 Climb-WSR은 단 +2.22%p 높았으나(통계적 유의성 없음), <strong>5.74배 많은 총 토큰</strong>(40.48M vs 7.05M), <strong>2.93배 많은 출력 토큰</strong>(378.9k vs 129.5k), <strong>2.76배 많은 턴 수</strong>(128.8 vs 46.6턴)를 소비하여 태스크당 <strong>6.26배 높은 API 비용</strong>($35.28 vs $5.63)을 지출했다.</li>
+<li><strong>Gemini 4 Carbon</strong>: 파레토 절곡점(Knee of the curve)에 위치하여 Claude Opus 5.5보다 1.33%p 높은 성능을 내면서도 토큰 소비량은 2.83배 적었으며, 최고의 비용 대비 성능 효율을 입증했다.</li>
+<li><strong>GPT-6 Astra</strong>: 턴 수와 토큰 소모는 가장 적었으나(2.43M 토큰, 29턴), 높은 단가 체계로 인해 Gemini 4 Carbon보다 비싼 $6.03를 기록하면서 성능은 하위권(Climb-WSR 50.24%)에 머물렀다.</li>
+</ul>
+<hr />
+<h5 id="2-5-시각적-인식-visual-perception-의-필수성-및-파이프라인-우회-코딩의-한계">2.5. 시각적 인식(Visual Perception)의 필수성 및 파이프라인 우회 코딩의 한계</h5>
+<p><strong>[사실 (Fact)]</strong>
+Gemini 4 Carbon 모델에서 <code>view_image</code> 도구를 제거(Ablation)하여 GDPval과 MKA 간 시각 인식 의존성을 비교한 결과는 아래 [Table 5]와 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크</th>
+<th style="text-align:center">Climb-WSR 변동</th>
+<th style="text-align:center">Overall WSR 변동</th>
+<th style="text-align:center">Regression-WSR 변동</th>
+<th style="text-align:center">입력 토큰 비율</th>
+<th style="text-align:center">출력 토큰 비율</th>
+<th style="text-align:center">턴 수 비율</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>MKA</strong></td>
+<td style="text-align:center"><strong>−5.94 %p</strong></td>
+<td style="text-align:center"><strong>−4.58 %p</strong></td>
+<td style="text-align:center"><strong>−1.96 %p</strong></td>
+<td style="text-align:center"><strong>1.85×</strong></td>
+<td style="text-align:center"><strong>1.40×</strong></td>
+<td style="text-align:center"><strong>1.28×</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GDPval</strong></td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">+0.08 %p (유의미성 없음)</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">0.89×</td>
+<td style="text-align:center">1.05×</td>
+<td style="text-align:center">0.95×</td>
+</tr>
+</tbody>
+</table>
+<p><code>view_image</code> 제거 시 GDPval은 성능 및 연산량에 변화가 없었으나, MKA는 Climb-WSR이 5.94%p 하락([−7.39, −4.49])하고 입력 토큰 1.85배, 출력 토큰 1.40배, 턴 수 1.28배가 급증했다.</p>
+<h6 id="사례-연구-case-study-정량-평가-부록-b-및-source_image_6-참조">사례 연구(Case Study) 정량 평가 (부록 B 및 [SOURCE_IMAGE_6] 참조)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">사례 구분</th>
+<th style="text-align:left">주요 작업 명세</th>
+<th style="text-align:center">시각 도구 유무</th>
+<th style="text-align:center">Climb-WSR</th>
+<th style="text-align:center">Overall WSR</th>
+<th style="text-align:center">연산량 증가 (시각 미사용 시)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>사례 1: CAD 부품 검토</strong>&lt;br&gt;(Engineering)</td>
+<td style="text-align:left">도면을 읽고 가공 가능성 평가</td>
+<td style="text-align:center"><code>view_image</code> 사용&lt;br&gt;<code>view_image</code> 제거</td>
+<td style="text-align:center"><strong>76.3%</strong>&lt;br&gt;63.3%</td>
+<td style="text-align:center"><strong>88.7%</strong>&lt;br&gt;82.4%</td>
+<td style="text-align:center">입력 토큰 4.6배&lt;br&gt;출력 토큰 1.8배&lt;br&gt;턴 수 2.4배</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>사례 2: 도로 점검 사진 분석</strong>&lt;br&gt;(Construction)</td>
+<td style="text-align:left">노면 균열 사진을 분석해 비용 산정</td>
+<td style="text-align:center"><code>view_image</code> 사용&lt;br&gt;<code>view_image</code> 제거</td>
+<td style="text-align:center"><strong>86.7%</strong>&lt;br&gt;<strong>14.3%</strong></td>
+<td style="text-align:center"><strong>96.0%</strong>&lt;br&gt;64.7%</td>
+<td style="text-align:center">입력 토큰 3.7배&lt;br&gt;출력 토큰 2.2배&lt;br&gt;턴 수 1.8배</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[소스 주장 (Source Claim)]</strong>
+연구진은 시각 도구가 제거되었을 때 에이전트가 코딩 우회 방식(OpenCV 픽셀 스캔, ASCII 렌더링, 유니코드 Braille 도트 플롯)을 통해 복구를 시도하지만, 이미지의 도메인 특성에 따라 성패가 궤멸적으로 갈린다고 분석한다:</p>
+<ol>
+<li><strong>정밀 CAD 도면(사례 1)</strong>: 에이전트가 터미널에 Braille 점도표를 출력하고 파이썬 OpenCV 스크립트로 픽셀 간격을 측정해 기본 기하 구조를 일부 복구했으나, 여전히 미세한 여유 공간 위반 조항을 놓쳤으며 2~5배의 과도한 토큰/턴 연산 비용을 치렀다.</li>
+<li><strong>실사 사진 및 의료 영상(사례 2 - [SOURCE_IMAGE_6] 참조)</strong>: 노면 사진의 경우 67회의 이미지 처리 코드를 실행(ASCII 휘도 렌더링, ORB 특징점 매칭 등)했음에도 불구하고, ASCII 렌더링 내에서 3차원 아스팔트 함몰 부위를 단순 아스팔트 질감과 구별하지 못해 인지에 완전히 실패했다. 이로 인해 Climb-WSR 점수가 86.7%에서 14.3%로 붕괴(-72.4%p)했다.</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-speakers">3. 등장 인물 및 화자 (Figures &amp; Speakers)</h4>
+<p>본 논문 및 데이터셋 개발에 참여한 연구진, 기여자, 외주 파트너의 명단 및 역할은 다음과 같다. (소서에서 구체적 역할을 명시하지 않은 항목은 엄격히 &quot;<strong>확인 불가</strong>&quot;로 명시함).</p>
+<h5 id="주요-저자-및-리더십-google-deepmind">주요 저자 및 리더십 (Google DeepMind)</h5>
+<ul>
+<li><strong>Anima Singh</strong>: 공동 1저자 (연구 및 평가 리드, Research &amp; Evaluation Lead)</li>
+<li><strong>Suhas Yogin</strong>: 공동 1저자 (종단간 데이터셋 및 릴리스 리드, End-to-End Dataset &amp; Release Lead)</li>
+<li><strong>Weicheng Kuo</strong>: 공동 1저자 (초기 데이터 및 태스크 디자인 리드, Early Data &amp; Task Design Lead)</li>
+<li><strong>Benjamin Caine</strong>: 주요 기여자 (Core Contributor) 및 교신 저자</li>
+<li><strong>Mario Lučić</strong>: 주요 기여자 (Core Contributor)</li>
+<li><strong>Melvin Johnson</strong>: 리더십 (Leadership)</li>
+<li><strong>Radu Soricut</strong>: 리더십 (Leadership)</li>
+<li><strong>Jean-Baptiste Alayrac</strong>: 리더십 (Leadership)</li>
+</ul>
+<h5 id="공동-저자-및-기여자-google-deepmind-알파벳순">공동 저자 및 기여자 (Google DeepMind, 알파벳순)</h5>
+<ul>
+<li>Ivor Rendulic, Ivan Jurin, Antoine Yang, Oran Kelly, Rohan Doshi (교신 저자), Hammad Ayyubi, Ioana Bica, Sergi Caelles, Matthew Conniff, Dan Graur, Anastasija Ilić, Ahmet Iscen, Chao Jia, Tomasz Kępa, Chunyuan Li, Noah Ó Donnaile, Filip Pavetic, Goran Petrovic, Khalid Salama, Zhicheng Wang, Polina Zablotskaia, Yiqian Zhang, Ming Zhao (개별 세부 역할: <strong>확인 불가</strong>).</li>
+</ul>
+<h5 id="외부-파트너-및-도메인-전문가">외부 파트너 및 도메인 전문가</h5>
+<ul>
+<li><strong>Artificial Analysis</strong>: 외부 평가 파트너 (Stirrup 하네스 표준화 평가 협력 및 공개 MKA 리더보드 호스팅).</li>
+<li><strong>10개 분야 도메인 전문가들</strong>: 83개 직업군에 걸쳐 5년 이상 경력을 보유하고 태스크 작성, 참도 생성 및 검증을 담당한 평가 인력 (개별 실명: <strong>확인 불가</strong>).</li>
+</ul>
+<h5 id="구현-및-서빙-운영-기여자">구현 및 서빙/운영 기여자</h5>
+<ul>
+<li><strong>초기 채점기(Autorater) 구현</strong>: Balaji Lakshminarayanan, Xi Liu, Ben Withbroe.</li>
+<li><strong>코어 서빙 및 인프라 지원</strong>: Steven Guh, Calin Juravle, Nam Luu Nhat, Sehoon Shon.</li>
+<li><strong>프로그램 매니지먼트 지원</strong>: Slavica Andačić, Sumit Bagri, Shruti Garg, Tiffany Loer, Kate Olszewska, Nandita Sethi.</li>
+<li><strong>AI 공동 저자 및 에디터</strong>: Gemini Argon, Gemini Carbon (벤치마크 설계, 코드 협업, 데이터 분석 및 논문 집필 참여).</li>
+</ul>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-timestamps">4. 주요 수치 및 시점 (Key Metrics &amp; Timestamps)</h4>
+<p>소스 논문에서 확인 가능한 명확한 수치 및 시점 정보는 다음과 같다. (확인되지 않은 수치는 &quot;확인 불가&quot; 표기).</p>
+<ul>
+<li><strong>논문 게재 및 공개 시점</strong>: 2026년 11월 10일</li>
+<li><strong>데이터셋 구성 수치</strong>:
+<ul>
+<li>비공개 평가 태스크: 200개</li>
+<li>공개 Showcase 태스크: 10개 (분야별 1개)</li>
+<li>산업 분야 및 직업군: 10개 경제 분야, 83개 전문 직업군</li>
+<li>입력 파일 총수: 1,459개 (태스크당 평균 7.30개, 중앙값 6.0개, 범위 2~45개)</li>
+<li>루브릭 평가 기준 총수: 14,284개 (태스크당 평균 71.4개, 중앙값 68.5개, 범위 20~150개)</li>
+<li>독립 실행 파일 결과물 요구 비율: 88.0% (176개 태스크는 파일 생성, 24개 태스크는 텍스트 응답)</li>
+</ul>
+</li>
+<li><strong>채점 신뢰도 수치</strong>:
+<ul>
+<li>인간-채점기 일치도 ($A_{\text{HA}}$): 96.2% [94.7%, 97.6%]</li>
+<li>인간 상한선 ($A_{\text{HH}}$): 99.8% [99.6%, 100.0%]</li>
+<li>상관계수 및 일치도 지표: Cohen's $\kappa = 0.911$ [0.873, 0.943] (다수결 $\kappa = 0.919$), Fleiss' $\kappa = 0.996$, Pearson $r = 0.966$, Spearman $\rho = 0.931$</li>
+<li>채점기 총 오류율: 3.8% [2.4, 5.4] (거짓 합격 2.4%, 거짓 불합격 1.4%)</li>
+<li>조건부 오류율: 인간 불합격 대비 거짓 합격 7.1% [3.6, 11.4], 인간 합격 대비 거짓 불합격 2.1% [1.2, 3.1]</li>
+</ul>
+</li>
+<li><strong>샌드박스(Stirrup v0.2.1) 사양 및 제한 수치</strong>:
+<ul>
+<li>최대 상호작용 턴 수: 250턴</li>
+<li>실행 벽시계 시간 제한: 8시간 (480분)</li>
+<li>도구 실행 타임아웃: <code>code_exec</code> 300초, <code>web_search</code> 180초</li>
+<li>컨텍스트 압축(Compaction) 시점: 컨텍스트 길이의 70% 도달 시</li>
+<li>샌드박스 리소스: 4 vCPU, 기본 RAM 128MB (동적 버스트 최대 16GB)</li>
+</ul>
+</li>
+<li><strong>모델별 수치 (태스크당 평균)</strong>:
+<ul>
+<li>Claude Fable 5.2: Climb-WSR 56.56%, Overall 73.26%, 총 토큰 40.48M, 입력 40.10M, 출력 378.9k, 128.8턴, 83.2분, API 비용 $35.28</li>
+<li>Gemini 4 Carbon: Climb-WSR 54.34%, Overall 71.89%, 총 토큰 7.05M, 입력 6.92M, 출력 129.5k, 46.6턴, 29.2분, API 비용 $5.63</li>
+<li>Claude Opus 5.5: Climb-WSR 53.01%, Overall 70.98%, 총 토큰 19.96M, 입력 19.75M, 출력 208.8k, 91.4턴, 33.8분, API 비용 $10.29</li>
+<li>GPT-6 Astra: Climb-WSR 50.24%, Overall 69.34%, 총 토큰 2.43M, 입력 2.39M, 출력 42.0k, 29.0턴, 18.5분, API 비용 $6.03</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>소스 논문 연구진이 Section 6(Limitations)에서 명시한 연구의 한계 및 미확인 요소는 다음과 같다.</p>
+<h5 id="연구진이-밝힌-6가지-연구-한계점">연구진이 밝힌 6가지 연구 한계점</h5>
+<ol>
+<li><strong>실행 변동성 포착 미흡</strong>: 각 모델당 태스크별 1회 실행 및 1회 채점만 진행하여, 신뢰구간이 태스크 샘플링 차원은 반영하지만 에이전트 행동 및 채점기의 실행 간(Run-to-Run) 변동성을 완벽히 포착하지 못함.</li>
+<li><strong>인간 일치도 검증 대상의 한계</strong>: 인간 전문가 일치도 연구(50개 태스크)가 고가중치 기준(가중치 3~5점)에 집중되어 있어, 1~2점 수준의 저가중치 세부 레이아웃 검사 항목으로 그대로 확장되지 않을 수 있음.</li>
+<li><strong>시각 소거 실험의 단일 모델 한정</strong>: 시각 도구 제거(<code>view_image</code> Ablation) 실험이 Gemini 4 Carbon 모델에 대해서만 수행되어 타 프론티어 모델의 시각 의존도 수준은 확인 불가.</li>
+<li><strong>인터넷 허용으로 인한 정보 우회 가능성</strong>: 샌드박스 내 인터넷 접근이 허용되어 있어, 에이전트가 파일 내부 시각적 extraction 대신 웹 검색을 통해 일부 정보를 획득했을 가능성이 존재함.</li>
+<li><strong>Climb/Regression 분할의 패널 의존성</strong>: 난이도 분할 기준이 이전 세대 Gemini/Claude/GPT 모델 패널의 해결 능력 결과에 의존하여 정의됨.</li>
+<li><strong>API 비용 산정의 시점 한계</strong>: API 산정 비용이 논문 작성 당시 제공자의 공시 가격(List prices) 기준이므로 가격 정책 변경 시 변동될 수 있음.</li>
+</ol>
+<h5 id="소스-미다룸-확인-불가-항목">소스 미다룸 / 확인 불가 항목</h5>
+<ul>
+<li><strong>분야별 도메인 전문가 개별 실명</strong>: 10개 분야 83개 직업군 작성자의 실명은 소스에 기재되지 않음 (<strong>확인 불가</strong>).</li>
+<li><strong>타 모델 시각 소거 데이터</strong>: Claude Fable 5.2, Claude Opus 5.5, GPT-6 Astra의 시각 도구 제거 시 정량 수치는 소스에서 다루지 않음 (<strong>소스 미다룸</strong>).</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

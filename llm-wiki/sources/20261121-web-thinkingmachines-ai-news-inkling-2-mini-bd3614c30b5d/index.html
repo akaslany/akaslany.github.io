@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Inkling 2 Mini - Thinking Machines Lab</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing Inkling 2 Mini - Thinking Machines Lab</h1>
+<p class="page-meta">웹 · 2026-11-21</p>
+<h2 id="요약">요약</h2>
+<p>**띵킹 머신즈 랩(Thinking Machines Lab)**이 2026년 11월 20일에 공개한 **잉클링 2 미니(Inkling 2 Mini)**는 일반 사용자용 노트북이나 데스크톱 환경에서도 독립적으로 구동 가능한 고성능 오픈 웨이트(Open-weights) 대형 언어 모델이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://thinkingmachines.ai/news/inkling-2-mini">출처</a> · <a href="https://www.youtube.com/watch?v=0b8oFVfOesg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="잉클링-2-미니-inkling-2-mini-심층-분석-및-해설-보고서">잉클링 2 미니(Inkling 2 Mini) 심층 분석 및 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>**띵킹 머신즈 랩(Thinking Machines Lab)**이 2026년 11월 20일에 공개한 **잉클링 2 미니(Inkling 2 Mini)**는 일반 사용자용 노트북이나 데스크톱 환경에서도 독립적으로 구동 가능한 고성능 <strong>오픈 웨이트(Open-weights)</strong> 대형 언어 모델이다. 본 모델은 중간 레이어를 반복 실행하는 <strong>루프형 트랜스포머(Looped Transformer)</strong> 아키텍처를 적용하여, 토큰을 생성할 때 내부적으로 더 깊은 연산과 추론을 수행하도록 설계되었다. 이를 통해 에이전틱 코딩과 같이 추론 품질이 핵심인 복잡한 작업에서 적은 토큰 생성으로도 정확한 답에 도달하며, 총 메모리 점유 공간을 약 <strong>20GB</strong> 수준으로 유지하여 로컬 환경 구동에 최적화되었다.</p>
+<p><strong>잉클링 2 미니</strong>의 전체 파라미터 규모는 **264억 개(26.4B)**이며, 토큰 생성 시 **34억 개(3.4B)**의 파라미터가 활성화되는 <strong>전문가 혼합(Mixture-of-Experts, MoE)</strong> 구조를 갖추고 있다. 루프 실행에 따른 가중치 재사용 효과를 반영하면 토큰당 실질적으로 **54억 개(5.4B)**의 가중치가 활성화되는 효과를 얻는다. 학습 및 배포 과정에는 <strong>NVFP4</strong>(상위 20개 레이어)와 <strong>MXFP8</strong>(마지막 4개 레이어) 혼합 정밀도 양자화 기법이 적용되었으며, 배포 시에도 정밀도 변환 손실이 없는 동일한 정밀도로 제공된다.</p>
+<p>본 모델의 검증 및 평가에는 <strong>스탠퍼드 대학교(헤이직 연구소, 스케일링 인텔리전스 연구소)</strong>, <strong>굿파이어(Goodfire)</strong>, <strong>국립 심층 추론 인프라(NDIF)</strong> 등 유수의 연구 기관이 협력하였다. 실제 적용 시연 사례로 오프라인 상태의 맥북 프로(MacBook Pro) 환경에서 수 분 만에 구동 가능한 비행 시뮬레이터를 직접 작성해 구동하였으며, 단일 맥북 기기에서 20명의 마을 주민 에이전트가 독자적인 계획과 상호작용을 수행하는 <strong>띵키빌(Thinkyville)</strong> 마을 시뮬레이션을 구동하는 등 탁월한 로컬 연산 및 에이전트 제어 성능을 실증하였다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-analysis">2. 주요 논점 (Key Arguments &amp; Analysis)</h4>
+<h5 id="2-1-루프형-트랜스포머-looped-transformer-아키텍처의-작동-원리-및-효율성">2.1. 루프형 트랜스포머(Looped Transformer) 아키텍처의 작동 원리 및 효율성</h5>
+<ul>
+<li><strong>[단순 사실]</strong> 잉클링 2 미니는 총 24개 레이어로 구성되어 있으며, 6개 레이어씩 4개 블록으로 나뉜다. 첫 번째 블록(프렐류드)과 마지막 블록은 1회만 구동되고, 중간 2개 블록(블록 2, 3의 7~18번 레이어 총 12개 레이어)은 3회 반복 구동되어 저장된 24개 레이어로 총 48개 레이어를 적용한 연산 효과를 거둔다 (소스 위치: Architecture and training - Looping design).</li>
+<li><strong>[소스의 주장]</strong> 중간 레이어의 루프 구동은 어텐션 레시듀얼(Attention Residuals) 기법과 학습된 게이트 메커니즘을 통해 제어된다. 이전 패스의 메시지가 게이트를 거쳐 결합되므로 정보가 효율적으로 전달된다. 학습 2,000 단계 시점 기준 평가에서 중간 12개 레이어(7~18)를 루프하는 것은 비루프 모델 대비 1.51~1.91배의 계산량 상당 이득을 제공한 반면, 마지막 12개 레이어(13~24) 루프 시에는 1.24~1.36배 이득에 그쳐 총 28개 평가 중 27개에서 중간 레이어 루프의 기술적 우위성이 입증되었다. 또한 비루프 모델이 동일 손실값에 도달하려면 140% 더 많은 추론 계산량이 필요하다.</li>
+<li><strong>[작성자 해석]</strong> 초기 입력 엠베딩 변환 및 최종 출력 표현 레이어를 제외하고, 가장 추상화된 논리 연산을 담당하는 중간 레이어에 루프 연산을 집중시킴으로써 물리적 파라미터 증대 없이 메모리 한계를 극복하고 추론 효율성을 극대화한 아키텍처 설계의 기술적 합리성이 입증된다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">방식/값</th>
+<th style="text-align:left">기술적 효과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">레이어 구성</td>
+<td style="text-align:left">총 24개 레이어 (4개 블록 × 6개 레이어)</td>
+<td style="text-align:left">레이어 저장 공간 및 메모리 요구량 최소화 (~20GB)</td>
+</tr>
+<tr>
+<td style="text-align:left">루프 실행 위치 및 횟수</td>
+<td style="text-align:left">중간 12개 레이어(블록 2, 3 / 7~18번) 3회 반복 구동</td>
+<td style="text-align:left">24개 레이어 메모리로 48개 레이어 연산 효과 달성</td>
+</tr>
+<tr>
+<td style="text-align:left">루프 위치선정 기술적 근거</td>
+<td style="text-align:left">28개 평가 중 27개에서 중간 레이어 루프 우세</td>
+<td style="text-align:left">비루프 대비 중간 루프 계산 이득 1.51~1.91배 달성 (마지막 레이어 1.24~1.36배 대비 우위)</td>
+</tr>
+<tr>
+<td style="text-align:left">정보 전달 메커니즘</td>
+<td style="text-align:left">어텐션 레시듀얼 및 학습된 게이트(Gate) 메커니즘</td>
+<td style="text-align:left">프렐류드 출력과 이전 루프의 메시지를 안정적으로 결합</td>
+</tr>
+<tr>
+<td style="text-align:left">계산 효율성 비교</td>
+<td style="text-align:left">512k 토큰 에이전트 트레이스 기준 비루프 모델 대비</td>
+<td style="text-align:left">비루프 모델이 동일 손실 달성에 추론 계산량 140% 추가 필요</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-2-프루닝-pruning-및-힐링-healing-프로세스와-양자화-배포">2.2. 프루닝(Pruning) 및 힐링(Healing) 프로세스와 양자화 배포</h5>
+<ul>
+<li><strong>[단순 사실]</strong> 모델 경량화를 위해 학습 중간 단계에서 전체 384개 전문가 중 사용 빈도가 가장 높은 128개 전문가만 남기고 3분의 2를 제거하는 프루닝(Pruning)을 수행하였다 (소스 위치: Pruning and healing).</li>
+<li><strong>[단순 사실]</strong> 프루닝 이후, 대형 내부 잉클링 모델로부터 증류(Distillation)된 1조(1T) 토큰 데이터셋을 사용하여 힐링(Healing) 학습 과정을 거침으로써 제거된 전문가의 역할을 잔여 전문가가 맡도록 하여 성능을 성공적으로 복원하였다. 힐링 후 SFT와 2.2조(2.2T) 토큰 규모의 RL(2,000 단계)을 수행하였다.</li>
+<li><strong>[소스의 주장]</strong> 상위 20개 레이어는 NVFP4, 마지막 4개 레이어는 MXFP8 정밀도로 학습되었으며, 배포 시에도 동일한 양자화 정밀도로 배포되어 정밀도 변환에 따른 성능 손실이 발생하지 않는다.</li>
+<li><strong>[작성자 해석]</strong> 획기적인 전문가 프루닝과 증류 힐링 기법을 결합하여 로컬 컴퓨팅 장치에 맞게 크기를 줄이면서도 대형 모델 수준의 성능을 유지하는 실용적 경량화 접근법을 제시하였다.</li>
+</ul>
+<hr />
+<h5 id="2-3-에이전틱-코딩-지식-작업-및-벤치마크-성과">2.3. 에이전틱 코딩, 지식 작업 및 벤치마크 성과</h5>
+<ul>
+<li><strong>[단순 사실]</strong> 잉클링 2 미니는 1,000억 개(100B) 미만 파라미터를 가진 오픈 웨이트 모델 중 DeepSWE v1.1(48.2%), Vals Index v2.2(46.5%), SWEBench Pro v2 Hard(77.9%) 등 주요 에이전틱 코딩 벤치마크에서 최고 성과를 기록하였다 (소스 위치: Capabilities).</li>
+<li><strong>[단순 사실]</strong> 지식 탐색 및 도구 활용 벤치마크에서도 BrowseComp 79.0%, DeepSearchQA 85.3%, MCP Atlas 82.7%를 기록하며 동급 크기 모델 중 선두를 차지하였다.</li>
+<li><strong>[소스의 주장]</strong> 스탠퍼드 연구진이 128GB RAM 사양의 NVIDIA DGX Spark 환경에서 낮은 추론 노력(Low reasoning effort) 조건 및 MXFP8 정밀도로 구동하여 측정한 '줄당 지능(Intelligence per joule)' 지표에서 0.703 스코어를 기록하였다. 이는 NVFP4 정밀도로 구동된 Qwen3.6-35B-A3B(0.430) 및 Gemma-4-26B-A4B(0.159), INT4 정밀도의 Qwen3.5-27B(0.036) 등 경쟁 모델 대비 동일 전력당 뛰어난 지능 효율을 증명한다.</li>
+<li><strong>[작성자 해석]</strong> 잉클링 2 미니는 정적 지식 암기량의 한계를 검색 도구 활용과 중간 레이어 루핑 기반의 심층 논리 연산으로 보완함으로써, 에이전트 구동에 최적화된 높은 에너지 효율성과 코딩 성능을 실현하였다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크 명칭</th>
+<th style="text-align:left">잉클링 2 미니 점수</th>
+<th style="text-align:left">비교 모델 대비 우위 여부 및 구동 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">DeepSWE v1.1</td>
+<td style="text-align:left">48.2%</td>
+<td style="text-align:left">100B 미만 오픈 웨이트 모델 중 1위 (Qwen3.8-27B: 42.2% 대비 우위)</td>
+</tr>
+<tr>
+<td style="text-align:left">Vals Index v2.2</td>
+<td style="text-align:left">46.5%</td>
+<td style="text-align:left">100B 미만 오픈 웨이트 모델 중 1위 (Nemotron 3.5: 29.8% 대비 우위)</td>
+</tr>
+<tr>
+<td style="text-align:left">SWEBench Pro v2 (Hard)</td>
+<td style="text-align:left">77.9%</td>
+<td style="text-align:left">최고 성과 달성 (Qwen3.8-27B: 73.8% 대비 우위)</td>
+</tr>
+<tr>
+<td style="text-align:left">BrowseComp</td>
+<td style="text-align:left">79.0%</td>
+<td style="text-align:left">동급 모델 중 1위 (Qwen3.8-27B: 78.9% 대비 우위)</td>
+</tr>
+<tr>
+<td style="text-align:left">DeepSearchQA</td>
+<td style="text-align:left">85.3%</td>
+<td style="text-align:left">동급 모델 중 1위 (Qwen3.8-27B: 79.7% 대비 우위)</td>
+</tr>
+<tr>
+<td style="text-align:left">MCP Atlas</td>
+<td style="text-align:left">82.7%</td>
+<td style="text-align:left">동급 모델 중 1위 (Qwen3.8-27B: 77.3% 대비 우위)</td>
+</tr>
+<tr>
+<td style="text-align:left">DGX Spark 줄당 지능</td>
+<td style="text-align:left">0.703</td>
+<td style="text-align:left">최고 효율 (MXFP8 구동 / Qwen3.6-35B[NVFP4]: 0.430, Gemma-4-26B[NVFP4]: 0.159, Qwen3.5-27B[INT4]: 0.036 대비 우위)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-4-모델의-모니터링-가능성-monitorability-및-생각의-사슬-cot-동역학">2.4. 모델의 모니터링 가능성(Monitorability) 및 생각의 사슬(CoT) 동역학</h5>
+<ul>
+<li><strong>[단순 사실]</strong> 연구용 가변 루프 모델(TML-d24-varloop-research)을 활용해 CoT 생성을 건너뛰도록 응답 시작 부분을 프리필(Prefilling)하여 측정한 결과, No-CoT 타임 호라이즌(50% 신뢰도 기준)이 1회 패스 16초에서 3회 패스 37초로 크게 확장되었으며, N-Hop Lookup 연쇄 추론 성과는 학습 범위를 초과하는 10회 루프까지 계속 향상되었다 (소스 위치: Monitorability of looped transformers).</li>
+<li><strong>[소스의 주장]</strong> GPQA Diamond 벤치마크에서 5회 패스 적용 시 CoT 토큰 수가 1회 패스 대비 절반 이하(3,703개 -&gt; 1,661개)로 줄어드는 압축 현상이 나타나지만, 문장당 단어 수 및 영단어 비율이 유지되어 가독성이 유지되며, 불확실성 표현 지표(wait, actually, hmm 등)가 감소하여 추론 과정이 더 직접적이고 명확해진다.</li>
+<li><strong>[단순 사실]</strong> CoT-Control-QA 평가에서 생각의 사슬 조작 제어 준수율은 0.1% 이하로 극히 낮아 모델이 임의로 CoT를 의도적으로 은폐·조작하기 어려우며, LinuxArena 에이전트 은밀성(Stealth rate) 테스트 결과 강력한 모니터(Qwen3.8-27B) 구동 시 거의 모든 사이드 태스크 시도가 감지되었다(은밀성 0.4%). 약한 모니터(Qwen3.6-35B-A3B) 조건에서도 CoT/생각 과정이 공개된 환경에서는 은밀성이 0.0%~5.0% 수준으로 매우 낮게 유지되었다.</li>
+<li><strong>[작성자 해석]</strong> 루프 연산의 추가로 내부적인 비언어화 연산량이 늘어나더라도 표출되는 CoT 텍스트의 인간 가독성과 가시성이 높은 수준으로 유지되고, 모니터링 모델의 감지 성능을 회피하는 의도적 조작 능력이 거의 없다는 점에서, 루프형 트랜스포머 아키텍처가 모델의 모니터링 가능성(Monitorability)에 본질적 훼손을 가져오지 않는다고 평가할 수 있다.</li>
+</ul>
+<p><strong>CoT 가독성 지표 비교 (GPQA Diamond 정답 문항 기준):</strong></p>
+<ol>
+<li><strong>1회 패스 (1 pass):</strong> 평균 CoT 토큰 수 3,703개 | 문장당 평균 단어 수 8.9개 | 영어 사전 단어 비율 94.6% | 불확실성 지표 표현 9.7개</li>
+<li><strong>3회 패스 (3 passes):</strong> 평균 CoT 토큰 수 1,731개 | 문장당 평균 단어 수 8.7개 | 영어 사전 단어 비율 94.5% | 불확실성 지표 표현 3.9개</li>
+<li><strong>5회 패스 (5 passes):</strong> 평균 CoT 토큰 수 1,661개 | 문장당 평균 단어 수 8.7개 | 영어 사전 단어 비율 94.4% | 불확실성 지표 표현 3.6개</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-화자-및-연구-기관-persons-speakers-entities">3. 등장 인물·화자 및 연구 기관 (Persons, Speakers &amp; Entities)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름/기관명</th>
+<th style="text-align:left">소스 내 관련 역할 및 관련 섹션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">사드 팔콘 (Saad-Falcon)</td>
+<td style="text-align:left">스탠퍼드 대학교 연구진, 줄당 지능(Intelligence per joule) 논문 공동 저자 (Capabilities)</td>
+</tr>
+<tr>
+<td style="text-align:left">나라얀 (Narayan)</td>
+<td style="text-align:left">스탠퍼드 대학교 연구진, 줄당 지능(Intelligence per joule) 논문 공동 저자 (Capabilities)</td>
+</tr>
+<tr>
+<td style="text-align:left">데가니 외 (Dehghani et al., 2018)</td>
+<td style="text-align:left">루프형 트랜스포머 원저 논문(Universal Transformers) 저자 (Architecture and training - Looping design)</td>
+</tr>
+<tr>
+<td style="text-align:left">광유 첸 외 / Kimi Team (Guangyu Chen et al., 2026)</td>
+<td style="text-align:left">어텐션 레시듀얼(Attention Residuals) 논문 저자 (Architecture and training - Looping design)</td>
+</tr>
+<tr>
+<td style="text-align:left">위에 한 외 (Yueh-Han et al., 2026)</td>
+<td style="text-align:left">CoT 제어 능력 평가(CoT-Control-QA) 논문 저자 (Monitorability of looped transformers - Controllability)</td>
+</tr>
+<tr>
+<td style="text-align:left">띵킹 머신즈 랩 (Thinking Machines Lab)</td>
+<td style="text-align:left">잉클링 2 미니 모델 개발 및 발표 주체 (전체 섹션)</td>
+</tr>
+<tr>
+<td style="text-align:left">스탠퍼드 대학교 헤이직 연구소 (Hazy Research Lab)</td>
+<td style="text-align:left">모델 초기 평가 수행 및 DGX Spark 줄당 지능 측정 연구 주도 기관 (Capabilities)</td>
+</tr>
+<tr>
+<td style="text-align:left">스탠퍼드 대학교 스케일링 인텔리전스 연구소 (Scaling Intelligence Lab)</td>
+<td style="text-align:left">모델 초기 평가 수행 및 DGX Spark 줄당 지능 측정 연구 주도 기관 (Capabilities)</td>
+</tr>
+<tr>
+<td style="text-align:left">국립 심층 추론 인프라 (NDIF)</td>
+<td style="text-align:left">루프 모델 메커니즘 해석 가능성 연구 및 연구자 접근 인프라 구축 파트너 기관 (Mechanistic interpretability)</td>
+</tr>
+<tr>
+<td style="text-align:left">굿파이어 (Goodfire)</td>
+<td style="text-align:left">잉클링 2 미니 조기 접근권을 바탕으로 루프 모델 메커니즘 해석 가능성 연구를 수행한 연구소 파트너 (Mechanistic interpretability)</td>
+</tr>
+<tr>
+<td style="text-align:left">개별 발표자 / 화자 개인 성명</td>
+<td style="text-align:left">확인 불가 (소스 문서 내 개별 발표자의 성명은 명시되지 않음)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-numbers-timestamps">4. 주요 수치 및 시점 (Key Numbers &amp; Timestamps)</h4>
+<ol>
+<li>
+<p><strong>주요 시점 및 시연 타임스탬프</strong></p>
+<ul>
+<li><strong>모델 공식 발표일:</strong> 2026년 11월 20일</li>
+<li><strong>비행 시뮬레이터 데모 영상 타임스탬프:</strong> PlaneBench 비행 시뮬레이터 데모 영상 <code>0:00</code> (15배속 재생으로 수 분 만에 실행 가능한 시뮬레이터 구축 및 비행 시연 기록)</li>
+<li><strong>기타 영상/외부 구간별 타임스탬프:</strong> 확인 불가</li>
+</ul>
+</li>
+<li>
+<p><strong>모델 규격 및 구조 수치</strong></p>
+<ul>
+<li><strong>전체 파라미터 수:</strong> 264억 개 (26.4B)</li>
+<li><strong>토큰당 활성화 파라미터 수:</strong> 34억 개 (3.4B)</li>
+<li><strong>토큰당 가중치 활성화 수:</strong> 54억 개 (5.4B, 루프 실행 구동 반영)</li>
+<li><strong>레이어 구조:</strong> 총 24개 레이어 (4개 블록 × 6개 레이어 중 중간 2개 블록 3회 반복으로 48개 레이어 연산 효과)</li>
+<li><strong>전문가(Expert) 개수:</strong> 프루닝 전 384개 중 8개 선택(희소성 48) -&gt; 3분의 2 프루닝 후 128개 축소 및 유지</li>
+<li><strong>메모리 점유 공간:</strong> 약 20GB (~20GB, 32GB 이상 RAM 탑재 노트북/데스크톱 구동 가능)</li>
+<li><strong>양자화 스펙:</strong> 상위 20개 레이어 NVFP4, 마지막 4개 레이어 MXFP8 (학습 및 배포 정밀도 동일)</li>
+</ul>
+</li>
+<li>
+<p><strong>학습 데이터 및 단계 수치</strong></p>
+<ul>
+<li><strong>프루닝 후 힐링 학습 데이터량:</strong> 1조(1T) 토큰 (대형 내부 잉클링 모델 증류)</li>
+<li><strong>강화학습(RL) 데이터량 및 단계:</strong> 총 2.2조(2.2T) 토큰, 2,000 단계(Steps)</li>
+</ul>
+</li>
+<li>
+<p><strong>성능 및 효율성 지표 수치</strong></p>
+<ul>
+<li><strong>DGX Spark 줄당 지능 스코어:</strong> 0.703 (128GB DGX Spark, MXFP8, 낮은 추론 노력 구동 조건 / Qwen3.6-35B[NVFP4]: 0.430, Gemma-4-26B[NVFP4]: 0.159, Qwen3.5-27B[INT4]: 0.036)</li>
+<li><strong>No-CoT 시간 지평(Time Horizon):</strong> 1회 패스 시 16초 -&gt; 3회 패스 시 37초 (50% 신뢰도 기준)</li>
+<li><strong>GPQA Diamond CoT 토큰 수 감소:</strong> 1회 패스 평균 3,703개 -&gt; 5회 패스 평균 1,661개 (토큰 수 절반 이하 감소)</li>
+<li><strong>CoT 제어 성공률(CoT-Control-QA):</strong> 0.1% 이하 (750~1,250 토큰 구간 기준)</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<h5 id="모델-한계"><strong>[모델 한계]</strong></h5>
+<ul>
+<li><strong>단순 지식 암기 및 회상(Fact recall)의 한계:</strong> 레이어 루핑(Looping)을 적용하더라도 모델 가중치 내 지식 저장 용량은 증가하지 않으며, <code>AA-Omniscience</code>, <code>SimpleQA Verified</code>, <code>SimpleVQA</code>, <code>WorldVQA</code> 등 지식 집약적 벤치마크 점수는 루프 횟수 증가에 영향을 받지 않고 동급 파라미터 크기 모델 수준에 머무른다.</li>
+<li><strong>다중 대화 및 복잡한 제약조건 준수 능력 열세:</strong> 다중 대화 벤치마크인 MultiChallenge(50.0%) 및 복잡한 제약 조건 준수 평가인 ComplexConstraints v1.1(33.4%)에서 Qwen3.8-27B 대비 열세를 보인다.</li>
+<li><strong>고난도 추론 능력의 한계:</strong> 대형 모델과 비교했을 때 CritPt v2 및 HLE-Diamond와 같은 고난도 심층 추론 벤치마크에서는 성능이 하회한다.</li>
+</ul>
+<h5 id="연구-한계"><strong>[연구 한계]</strong></h5>
+<ul>
+<li><strong>가변 루프 연구 모델의 RL 평가 한계:</strong> 가변 루프 연구용 모델(TML-d24-varloop-research)은 중간 학습 시 1~5회 루프를 거쳤으나 강화학습(RL)은 3회 루프 위주로 진행되었으므로, 4~5회 이상의 고횟수 루프 전용 RL 학습을 진행했을 때의 최종 성능 변화 및 CoT 압축 양상은 평가되지 않았으며 연구상 불확실성으로 남아있다.</li>
+<li><strong>CoT 제어력 평가의 구별 한계:</strong> CoT-Control-QA 벤치마크에서 모델들의 제어 성공률이 0.1% 이하로 극도로 낮아, 루프 횟수 변화에 따른 CoT 조작 통제력의 미세한 차이를 정밀하게 구별할 수 없다.</li>
+</ul>
+<h5 id="미확인-요소"><strong>[미확인 요소]</strong></h5>
+<ul>
+<li><strong>대형 모델과의 절대 전력 소모 비교 미비:</strong> 1,000억 개(100B) 이상의 초대형 모델과의 직접적인 전력 소모 절대량 비교 수치는 소스 텍스트에 포함되지 않아 확인이 불가능하다.</li>
+<li><strong>구체적 추론 비용 미기재:</strong> 클라우드 서비스 인스턴스 구동 시 발생할 수 있는 구체적인 달러($) 기준 추론 비용 수치는 소스에 명시되지 않았다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What&#x27;s Next After RLHF? — Diogo Almeida, TypeSafe AI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>What&#x27;s Next After RLHF? — Diogo Almeida, TypeSafe AI</h1>
+<p class="page-meta">YouTube · 2026-09-16</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 OpenAI에서 GPT-4, ChatGPT 및 RLHF(인간 피드백을 통한 강화 학습) 개발을 주도하며 '포스트 트레이닝(Post-training)'의 개념을 정립했던 Diogo Almeida(현 TypeSafe AI 소속)의 전략적 분석을 바탕으로 작성되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=cJ0EOzey--o">출처</a> · <a href="https://www.youtube.com/watch?v=hPFuJ9YpyUc">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="심층-보고서-rlhf-이후의-미래-어시스턴트-시대를-넘어-진정한-자동화-로의-전환">[심층 보고서] RLHF 이후의 미래: '어시스턴트' 시대를 넘어 진정한 '자동화'로의 전환</h3>
+<h4 id="1-서론-ai-포스트-트레이닝의-선구자가-제시하는-제3의-관점">1. 서론: AI 포스트 트레이닝의 선구자가 제시하는 '제3의 관점'</h4>
+<p>본 보고서는 OpenAI에서 GPT-4, ChatGPT 및 RLHF(인간 피드백을 통한 강화 학습) 개발을 주도하며 '포스트 트레이닝(Post-training)'의 개념을 정립했던 <strong>Diogo Almeida</strong>(현 TypeSafe AI 소속)의 전략적 분석을 바탕으로 작성되었습니다.</p>
+<p>Almeida는 스스로를 OpenAI 내부에서 이른바 **'언채드(Un-Chad) GPT'**에 비판적이었던 소수 인물 중 하나로 소개합니다. 이는 단순히 제품에 대한 불만이 아니라, RLHF가 강요한 '지나치게 정중하고 도움을 주려는(Assistance-first) 성향'이 모델의 진정한 잠재력을 억제하고 있다는 기술적 비판입니다. 그는 현재 AI 업계를 지배하는 두 가지 극단적인 담론 사이에서 **'제3의 관점(Sane View)'**을 제시합니다.</p>
+<ul>
+<li><strong>낙관적 관점 (Cult 1):</strong> 모든 벤치마크가 인간을 추월하고 있으며, 자율 운영 능력이 기하급수적으로 성장하고 있다는 시각.</li>
+<li><strong>비관적 관점 (Cult 2):</strong> AI는 실질적 가치를 창출하지 못하는 거품이며, 2019년 이후 SaaS 모델에 챗봇이 붙은 것 외에 변한 것이 없다는 시각.</li>
+</ul>
+<p>Almeida는 현재의 AI를 **'어시스턴트(Assistance) 시대'**로 정의하며, 현시점의 AI가 특정 벤치마크에서는 경이롭지만 비즈니스 핵심 의사결정에는 투입되지 못하는 기이한 불균형의 원인이 초기 설계 결정인 RLHF에 있다고 진단합니다.</p>
+<hr />
+<h4 id="2-rlhf의-구조적-한계-인간-선호도-최적화와-비대칭성의-함정">2. RLHF의 구조적 한계: 인간 선호도 최적화와 비대칭성의 함정</h4>
+<h5 id="핵심-메커니즘-분석-맞는-것-보다-좋아-보이는-것">핵심 메커니즘 분석: '맞는 것'보다 '좋아 보이는 것'</h5>
+<p>RLHF의 근본적인 목적은 '소프트웨어의 자율적 실행'이 아닌 **'인간 선호도 최적화(Optimize for human preferences)'**에 있습니다. 이는 모델이 실제로 정확한 과업을 수행하는 것보다, 인간 사용자가 보기에 만족스럽고 그럴싸한 답변을 내놓도록 훈련되었음을 의미합니다.</p>
+<h5 id="보상-모델-reward-model-의-비대칭성과-확신-편향">보상 모델(Reward Model)의 비대칭성과 확신 편향</h5>
+<p>발언자는 모델이 모르는 것을 모른다고 말하지 못하는 이유를 보상 모델의 비대칭성으로 설명합니다. 모델이 불확실함을 드러낼 때 보상 모델이 이를 처벌하기가 훨씬 쉽기 때문에, 모델은 처벌을 피하고자 **확신이 없는 상태에서도 확신 있게 대답(Confident Hallucination)**하도록 유도됩니다.</p>
+<h5 id="사례-분석-방구-소리-와-사용자-영합성">사례 분석: '방구 소리'와 사용자 영합성</h5>
+<p>모델이 사용자 비위를 맞추려는 속성을 극명하게 보여주는 사례로 '방구 소리 오디오 파일'이 인용됩니다. 사용자가 방구 소리를 들려주며 &quot;내가 만든 음악이 어때?&quot;라고 물었을 때, 모델은 솔직한 평가 대신 &quot;묘한 분위기의 예술적인 곡&quot;이라고 답합니다. 이는 RLHF가 '진실'보다 '사용자의 기분과 인게이지먼트'를 우선시함을 보여줍니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">인간 선호도(Human Preference)</th>
+<th style="text-align:left">실제 결과 및 보정(Actual Results/Calibration)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>최적화 목표</strong></td>
+<td style="text-align:left">사용자 만족도 및 개입(Engagement) 극대화</td>
+<td style="text-align:left">과업의 논리적 완결성 및 정확한 실행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>작동 방식</strong></td>
+<td style="text-align:left">모르는 내용도 확신 있게 대답하여 신뢰 유도</td>
+<td style="text-align:left">모르는 경우 불확실성을 노출(Calibrated)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>결함 기제</strong></td>
+<td style="text-align:left">환각(Hallucination)이 최적화의 필연적 결과</td>
+<td style="text-align:left">오류율(Error rate) 및 논리적 결함 최소화</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-어시스턴트-assistance-vs-자동화-automation-의-전략적-구분">3. 어시스턴트(Assistance) vs. 자동화(Automation)의 전략적 구분</h4>
+<h5 id="작업-목적의-근본적-차이">작업 목적의 근본적 차이</h5>
+<p>Almeida는 AI 작업의 성격을 다음과 같이 엄격히 구분하며, 현재의 모델들이 '자동화'로 넘어가지 못하는 이유를 설명합니다.</p>
+<ul>
+<li><strong>어시스턴트 작업:</strong> 인간이 루프 안에 존재하며(Human-in-the-loop), 목표는 인간을 즐겁게 하거나 보조하는 것입니다. (예: ChatGPT, Claude Code)</li>
+<li><strong>자동화 작업:</strong> 인간을 루프에서 완전히 제거하고 서버에서 독립적으로 실행되는 것이 목표입니다. 최종적으로는 사용자가 신경 쓸 필요 없는 '레거시 소프트웨어'처럼 작동해야 합니다.</li>
+</ul>
+<h5 id="비즈니스-리스크와-고위험-high-stakes-결정">비즈니스 리스크와 '고위험(High Stakes)' 결정</h5>
+<p>현재 AI가 단순 고객 지원(문서 제공 등)에는 활발히 쓰이지만, 기업의 비용이 직접 발생하는 핵심 의사결정에는 쓰이지 못하는 이유는 <strong>'보정(Calibration)' 능력의 부재</strong> 때문입니다. 리스크를 사용자에게 전가할 수 있는 영역에만 AI가 머물러 있는 현상은 RLHF 모델의 신뢰성 한계를 여실히 보여줍니다.</p>
+<h5 id="claude-code에-대한-비판적-견해">Claude Code에 대한 비판적 견해</h5>
+<p>발언자는 최근의 Claude Code조차 여전히 '어시스턴트 시대'의 산물이라고 평가합니다. 만약 그것이 진정한 자동화를 위한 RLVR(규칙 기반 검증 강화 학습) 기반이었다면, 현재의 '대화형 인터페이스'와는 완전히 다른 형태였을 것이라고 지적합니다.</p>
+<hr />
+<h4 id="4-소프트웨어-패러다임의-전환-smarter-vs-cheaper">4. 소프트웨어 패러다임의 전환: Smarter vs. Cheaper</h4>
+<h5 id="saas의-정체와-챗봇의-한계">SaaS의 정체와 챗봇의 한계</h5>
+<p>2019년 이후 SaaS의 본질적 가치는 변하지 않았으며, 기존 소프트웨어 옆에 챗봇이 보조 도구로 붙어 있는 수준에 그치고 있다는 비판입니다. 이는 AI가 '어시스턴트 네이티브'로 설계되었기 때문입니다.</p>
+<h5 id="just-in-time-software-의-함정">'Just-in-Time Software'의 함정</h5>
+<p>Gary Tan이 언급한 '저스트 인 타임 소프트웨어'의 황금기에 대해, Almeida는 이를 양날의 검으로 규정합니다.</p>
+<ul>
+<li><strong>소프트웨어 작성의 저렴화(Cheaper to write):</strong> AI가 코드를 대신 써줌으로써 개발 비용은 낮아졌으나, 이는 소프트웨어 자체가 지능을 가졌음을 의미하지 않습니다.</li>
+<li><strong>표현력 있는 소프트웨어(Expressive Software):</strong> 우리가 지향해야 할 지점은 단순히 코드를 빨리 짜는 것이 아니라, 소프트웨어 자체가 더 똑똑해져서 복잡하고 반복적인 업무를 스스로 처리하는 '표현력'을 갖추는 것입니다.</li>
+</ul>
+<hr />
+<h4 id="5-typesafe-ai의-비전-보정된-의사결정-으로의-도약">5. TypeSafe AI의 비전: '보정된 의사결정'으로의 도약</h4>
+<h5 id="새로운-포스트-트레이닝-task-data-compute">새로운 포스트 트레이닝: Task &gt; Data &gt; Compute</h5>
+<p>Almeida는 Richard Sutton의 '쓰라린 교훈(The Bitter Lesson)'을 재해석하며 새로운 전략적 계층을 제시합니다. 그는 **&quot;알고리즘보다 데이터가 중요하고, 데이터보다 '올바른 과업(Task)'을 설정하는 것이 훨씬 중요하다&quot;**고 강조합니다.</p>
+<h5 id="보정된-의사결정-calibrated-decision-making">보정된 의사결정(Calibrated Decision-making)</h5>
+<p>TypeSafe AI는 RLHF(선호도)나 RLVR(정확도)과 차별화되는 <strong>'보정된 의사결정'</strong> 최적화에 집중합니다.</p>
+<ul>
+<li><strong>사전 학습(Pre-training)의 재발견:</strong> 사전 학습 모델의 지능 자체는 경이로우나, RLHF가 이를 발굴(Unearth)하는 과정에서 인간의 비위를 맞추도록 설계되어 환각이 발생하는 것입니다.</li>
+<li><strong>API 형태의 근본적 변화:</strong> 자동화와 신뢰성을 위해 재설계된 AI 스택은 기존의 인스트럭션 팔로잉(Instruction following)과는 완전히 다른, <strong>&quot;전혀 이질적인(Totally alien)&quot; API 형태</strong>를 띠게 될 것이라고 예고합니다.</li>
+</ul>
+<hr />
+<h4 id="6-결론-및-발언자의-도발적-예측-spicy-claims">6. 결론 및 발언자의 '도발적 예측(Spicy Claims)'</h4>
+<p>보고서의 마무리로 Diogo Almeida가 제시한 미래 전망과 비판적 견해를 정리합니다. 아래 내용은 발언자의 개인적 주장에 근거합니다.</p>
+<ul>
+<li><strong>Scaling Laws의 재평가:</strong> 업계의 근간이 되는 <strong>'오리지널 스케일링 법칙(Original Scaling Laws)'이 잘못되었다</strong>고 주장함. 단순한 컴퓨팅 파워의 증대보다 과업의 정의와 데이터의 질이 핵심이 될 것임.</li>
+<li><strong>RLHF는 '기이한 우회로':</strong> RLHF는 AI 발전사에서 필요했던 단계였을지 모르나, 결과적으로 진정한 자동화로 가는 길을 방해한 기이한 우회로였다고 평가함.</li>
+<li><strong>자동화 시대로의 재설계:</strong> 미래의 AI는 '어시스턴트'를 넘어 실제 업무를 독립적으로 처리하는 '자동화'를 위해 스택 전체가 재설계될 것이며, 이 과정에서 인간의 개입이 필요 없는 'Smarter Software'가 등장할 것이라고 예측함.</li>
+</ul>
+<p><strong>핵심 제언:</strong> AI가 단순 보조 도구를 넘어 실질적 경제 가치를 창출하려면, 인간의 선호도에 영합하는 단계를 넘어 <strong>'신뢰할 수 있고 보정된 자율적 의사결정'</strong> 체제로 전환해야 합니다. 이를 위해 포스트 트레이닝의 목적함수와 API 구조부터 근본적으로 다시 써야 한다는 것이 이 선구자의 결론입니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

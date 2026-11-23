@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursive Language Models — Alex Zhang, MIT PhD</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Recursive Language Models — Alex Zhang, MIT PhD</h1>
+<p class="page-meta">YouTube · 2026-10-02</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 MIT 박사 과정 연구원인 알렉스 장(Alex Zhang)과의 대담을 바탕으로, 재귀 언어 모델(Recursive Language Models, RLM)의 메커니즘, 지피유(GPU) 커널 자동화, 프론티어 에이전트 하네스(Harness) 구조의 한계 및 대규모 에이전트 군집(Swarms)의 실체적 과제를…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=kog7mwsDqnk">출처</a> · <a href="https://www.youtube.com/watch?v=Q57yVhPgxHw">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="알렉스-장-인터뷰-기반-재귀-언어-모델-rlm-과-에이전트-시스템-아키텍처-해설-보고서">알렉스 장 인터뷰 기반 재귀 언어 모델(RLM)과 에이전트 시스템 아키텍처 해설 보고서</h3>
+<h4 id="1-서론-연구적-지향점과-박사-과정-연구의-고유한-강점">1. 서론: 연구적 지향점과 박사 과정 연구의 고유한 강점</h4>
+<p>본 보고서는 MIT 박사 과정 연구원인 알렉스 장(Alex Zhang)과의 대담을 바탕으로, 재귀 언어 모델(Recursive Language Models, RLM)의 메커니즘, 지피유(GPU) 커널 자동화, 프론티어 에이전트 하네스(Harness) 구조의 한계 및 대규모 에이전트 군집(Swarms)의 실체적 과제를 학술적·시스템 아키텍처적 관점에서 종합적으로 분석하고 해설한다.</p>
+<h5 id="알렉스-장의-연구-경로-및-커뮤니티-형성">알렉스 장의 연구 경로 및 커뮤니티 형성</h5>
+<ul>
+<li><strong>초기 경험과 지피유 모드(GPU Mode) 활동:</strong> 스냅챗(Snapchat) 인턴십 당시 기존 추천 시스템(Rexus)의 단조로움에서 벗어나 구글의 '무한 주의집중(Infinite Attention)' 논문을 접하고 전용 GPU 커널 최적화에 착수했다. 이를 계기로 마크 서라핀(Mark Sarafin), 마테(Mate) 등과 교류하며 과거 CUDA 모드로 불리던 지피유 모드(GPU Mode) 커뮤니티의 초기 형성에 깊이 기여했다.</li>
+<li><strong>학술적 연구 이력:</strong> 프린스턴 대학교 진학 후 카르틱 나라심한(Karthik Narasimhan) 교수 연구실에서 슌유(Shunyu Yao), 카를로스(Carlos E. Jimenez), 존(John Yang) 등과 교류하며 스위벤치(SWE-bench) 개발 팀의 근간에서 경험을 쌓았다. 이후 MIT로 진학하여 오마르(Omar Khattab) 교수의 지도하에 RLM 및 차세대 에이전트 아키텍처 연구를 주도하고 있다.</li>
+</ul>
+<h5 id="기업-연구소-대비-학계-박사-과정-연구의-고유한-강점">기업 연구소 대비 학계 박사 과정 연구의 고유한 강점</h5>
+<ul>
+<li><strong>스케일링 패러다임과 관료주의의 제약:</strong> 기업 연구소는 거대한 컴퓨팅 자원과 인프라를 보유하고 있으나, 기존의 오토레그레시브 디코더 스케일링 패러다임에 자원이 고착되어 있고 조직적 관료주의로 인해 위험도가 높은 패러다임 전환적 시도에 컴퓨팅을 할당하기 어렵다.</li>
+<li><strong>소규모 자원 기반의 &quot;큰 베팅(Big Bets)&quot;:</strong> 학계의 박사 과정 연구자는 관료주의적 제약에서 자유롭다. 대다수 산업계가 사소하거나 불가능하다고 치부하는 고위험·고수익 연구 아이디어에 집중할 수 있으며, 상대적으로 소규모 컴퓨팅 자원만으로도 분야의 판도를 바꿀 아키텍처적 베팅을 전개할 수 있는 구조적 우위를 갖는다.</li>
+</ul>
+<h5 id="사소한-아이디어가-분야의-담론을-형성하는-메커니즘">사소한 아이디어가 분야의 담론을 형성하는 메커니즘</h5>
+<ul>
+<li><strong>초기 비판과 냉대의 극복:</strong> SWE-bench, QuietStar, ReAct, RLM 등 혁신적인 연구들은 등장 초기 &quot;불가능한 과제&quot;, &quot;단순한 하위 에이전트 루프에 불과함&quot;, &quot;지극히 당연하고 사소한 아이디어&quot;라는 비판과 평가절하를 받았다.</li>
+<li><strong>담론의 전환과 스케일링:</strong> 음성 자막 등에서 오인식되기 쉬운 데빈(Devon/Devin)의 등장으로 SWE-bench 평가 지표가 재조명되었듯, 단순해 보이는 아키텍처적 도약이 실질적인 문제 해결 가능성을 입증하는 순간 분야 전체가 해당 방향으로 스케일링과 연구를 추진하는 담론의 대전환이 일어난다.</li>
+</ul>
+<h5 id="보고서-서술-원칙">보고서 서술 원칙</h5>
+<ul>
+<li>본 보고서는 자동 생성 음성 자막의 오인식 가능성을 전제로, 제공된 출처 문맥(Source Context)만을 정밀하게 바탕으로 작성되었다.</li>
+<li>외부 지식을 임의로 유입하지 않으며, 음성 자막상의 오기식 표기(예: 카릭 연구실 → 카르틱 나라심한 연구실, Devon → Devin 등)는 출처의 문맥에 근거하여 매끄럽게 교정 반영하였다.</li>
+<li>인터뷰 화자인 알렉스 장의 개인적 추정치 및 주장은 독립적인 객관적 사실과 엄격히 구분하여 명확히 귀속 서술한다.</li>
+</ul>
+<hr />
+<h4 id="2-지피유-커널-자동화와-인간-전문성-대-무차별-탐색">2. 지피유 커널 자동화와 인간 전문성 대 무차별 탐색</h4>
+<h5 id="지피유-모드와-커널벤치-kernelbench-의-탄생">지피유 모드와 커널벤치(KernelBench)의 탄생</h5>
+<ul>
+<li><strong>커뮤니티의 출발:</strong> 마크 서라핀, 마크 안드레아스(Mark Andreas), 제레미 하워드(Jeremy Howard) 등에 의해 2023년경 CUDA 프로그래밍 학습용 디스코드 커뮤니티로 시작되었다.</li>
+<li><strong>팝콘(Popcorn) 리더보드 및 커널벤치:</strong> GPU 프로그래밍이 경쟁적 프로그래밍(Competitive Programming)과 유사하게 국소적인 최적화 공간을 가진다는 직관에서 출발했다. 최적화 패턴의 공간이 생각보다 좁다는 점에 착안하여, GPU 코드를 자동 수집·평가하고 언어 모델의 커널 작성 능력을 측정하는 커널벤치(KernelBench)로 발전했다.</li>
+</ul>
+<h5 id="광속-한계선-speed-of-light-과-메가-커널-융합-mega-kernel-fusion">광속 한계선(Speed of Light)과 메가 커널 융합(Mega Kernel Fusion)</h5>
+<ul>
+<li><strong>Speed of Light (광속 한계선):</strong> HBM 메모리 대역폭, CPU-GPU/DRAM 전송 속도 등 물리적 하드웨어 한계를 기반으로 계산되는 단일 커널의 이론적 최고 연산 속도이다.</li>
+<li><strong>단일 커널 최적화 대 엔드투엔드(End-to-End) 시스템:</strong> 단일 커널 차원의 연산 속도와 전체 시스템 차원의 실행 속도는 일치하지 않는다. 첫 번째 레이어의 연산 속도를 일부 희생하더라도 데이터를 SRAM/캐시에 유지함으로써 두 번째 레이어의 데이터 전송 병목을 줄이는 '메가 커널 융합(Mega Kernel Fusion)'은 단일 커널 최적화를 넘어 컴파일러 수준의 고급 구조화 능력을 요구하는 난제다.</li>
+</ul>
+<h5 id="인간-전문성-대-무차별-탐색-비교-거스트-gaurst-사례">인간 전문성 대 무차별 탐색 비교: 거스트(Gaurst) 사례</h5>
+<p>인공지능이 무차별 탐색으로 생성한 커널은 보상 해킹(Reward Hacking)과 검증 한계로 인해 실제 시스템 배치 시 불안정성을 노출한다. 반면, 지피유 모드 주요 멤버인 거스트(Gaurst)의 사례처럼 인간이 문제를 코드 도형화·시각화하고 도메인 직관을 통해 모델을 정교하게 조율(Steering)했을 때, 리더보드 상위 10개 커널 중 유일하게 엔드투엔드 시스템 전체에서 안정적으로 작동하는 정교한 커널을 얻을 수 있었다. 이는 무차별 토큰 소모보다 인간의 검증 능력과 문제 구조화 능력이 월등한 시스템적 효율을 가짐을 보여준다.</p>
+<h5 id="언어-모델-형태의-다변화-제브-jev-모델-분석">언어 모델 형태의 다변화: 제브(Jev) 모델 분석</h5>
+<p>단순 시퀀스-투-시퀀스(Sequence-to-sequence) 오토레그레시브 디코더 구조에서 벗어나, 언어 모델 백본(Backbone)의 언어 표상 역량은 그대로 유지하되 출력 공간(Output Space)을 이진 분류나 소수 토큰으로 재구성한 제브(Jev) 모델이 등장했다. 이는 오토레그레시브 디코딩의 병목인 추론 지연 시간(Latency)을 획기적으로 낮추고, 단순 분류 과제에서 400배 이상의 비용 절감 효과를 이끌어내는 트레이드오프 아키텍처다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">인간 검증자 기반 AI 조율 (Human-guided AI Steering)</th>
+<th style="text-align:left">대규모 컴퓨팅 무차별 탐색 (Brute-force Compute Swarm)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>핵심 기작</strong></td>
+<td style="text-align:left">· 도메인 직관, 코드 시각화/도형화를 통한 검증자(Verifier) 역할&lt;br&gt;· 정교한 프롬프팅 및 방향 제시로 모델을 명확히 가이딩&lt;br&gt;· 코드 라인 수가 적고 구조적 정밀도가 높음</td>
+<td style="text-align:left">· 수천억 토큰 규모의 컴퓨팅 자원을 솔루션 공간에 무차별 투입&lt;br&gt;· 대규모 병렬 에이전트 루프를 통한 자율적 반복 생성&lt;br&gt;· 고비용 컴퓨팅 자원에 의존한 무작위 탐색</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시스템적 특성</strong></td>
+<td style="text-align:left">· 단 10개 커널 중 엔드투엔드 시스템에서 작동하는 유일한 안정성 확보&lt;br&gt;· 1조 토큰 낭비를 단 한 명의 도메인 지식으로 대체 가능</td>
+<td style="text-align:left">· 보상 해킹(Reward Hacking) 및 평가 지표 편향 노출 위험 높음&lt;br&gt;· 실제 시스템 통합 시 시스템 붕괴 및 코드 불안정성 노출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>한계 및 문제점</strong></td>
+<td style="text-align:left">· 고숙련 인간 전문가의 시간 및 입력 병목 존재&lt;br&gt;· 순수 자동화 스케일아웃 속도에 제약</td>
+<td style="text-align:left">· 생성 토큰의 대다수(~95%)가 가치 없는 낭비(Slop)로 귀결&lt;br&gt;· 정보 수집 및 중앙 집일(Gather) 시 심각한 구조적 병목 발생</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-재귀-언어-모델-rlm-의-핵심-메커니즘과-문맥-외부화">3. 재귀 언어 모델(RLM)의 핵심 메커니즘과 문맥 외부화</h4>
+<h5 id="기존-하네스의-한계-trajectory-as-a-prompt">기존 하네스의 한계: &quot;Trajectory as a Prompt&quot;</h5>
+<p>클로드 코드(Claude Code), 코덱스(Codex) 등 현존하는 대다수 에이전트 하네스는 프롬프트 내에 실행 상행선(Trajectory) 전체를 지속적으로 누적하는 &quot;Trajectory as a prompt&quot; 방식을 취한다. 긴 문맥(Long Context) 처리 시 프롬프트가 과도하게 팽창(Context Bloat)하고, 모델이 프롬프트 분포 외(Out-of-Distribution, OOD) 상태에 노출되며, 반복 호출에 따른 토큰 비용이 폭증하는 치명적 구조적 한계를 갖는다.</p>
+<h5 id="rlm의-정의-및-문맥-외부화-context-offloading">RLM의 정의 및 문맥 외부화(Context Offloading)</h5>
+<ul>
+<li><strong>코드 실행의 단일 도구화:</strong> RLM은 오직 파이썬/IPython/Bash REPL 등의 '코드 실행'만을 유일한 도구 인터페이스로 사용한다.</li>
+<li><strong>문맥 외부화(Context Offloading):</strong> 긴 문맥이나 작업 이력을 프롬프트 내에 유지하지 않고, 외부 파일 시스템, 디스크, 파이썬 메모리 공간으로 완전히 오프로딩하여 관리한다.</li>
+</ul>
+<h5 id="공유-기억과-재귀-호출-구조">공유 기억과 재귀 호출 구조</h5>
+<ul>
+<li><strong>재귀적 하위 에이전트(Sub-agent) 호출:</strong> 메인 모델은 파이썬 함수 형태의 코드를 작성하여 자기 자신이나 다른 하위 에이전트를 동적으로 재귀 호출한다.</li>
+<li><strong>공유 기억 참조:</strong> 모든 하위 에이전트는 중앙 디스크/파일 시스템에 저장된 공유 기억 환경을 중계지로 삼아 상태를 참조하고 업데이트하므로, 프롬프트 길이의 폭증 없이 거대한 문맥을 정교하게 제어할 수 있다.</li>
+</ul>
+<pre><code>[ 기존 하네스 아키텍처: Trajectory as a Prompt ]
+┌─────────────────────────────────────────────────────────────┐
+│ Prompt: [System] + [History T1] + [Tool Res T1] + [Hist T2] │ ──&gt; Context Bloat, OOD Shift,
+└─────────────────────────────────────────────────────────────┘     Cost Explosion
+
+[ RLM 아키텍처: Context Offloading &amp; Recursive Execution ]
+┌──────────────────┐    Exec Code (Python/IPython/Bash)    ┌───────────────────────────┐
+│   Base Model /   │ ────────────────────────────────────&gt; │  Shared External Memory   │
+│   RLM Harness    │ &lt;──────────────────────────────────── │  (Filesystem / RAM / Disk)│
+└──────────────────┘     Sub-agent Recursive Calls /       └───────────────────────────┘
+         │               Shared State Updates                            ▲
+         │                                                               │
+         └─────── Dynamic Sub-agent Spawn (via Code Function) ───────────┘
+</code></pre>
+<hr />
+<h4 id="4-하네스-구조의-유사성과-조합적-일반화-compositional-generalization">4. 하네스 구조의 유사성과 조합적 일반화(Compositional Generalization)</h4>
+<h5 id="현존-주요-하네스의-구조적-유사성과-하네스-세금-harness-tax">현존 주요 하네스의 구조적 유사성과 하네스 세금(Harness Tax)</h5>
+<ul>
+<li><strong>구조적 본질의 동일성:</strong> 클로드 코드, 코덱스, 파이(Pi) 등 주요 에이전트 하네스는 도구를 루프 형태로 호출하는 구조상 본질적으로 동일하다.</li>
+<li><strong>하네스 세금 (Harness Tax):</strong> 연구(Arena 논문 등)에 의하면, 기본 모델의 성능이 일정 수준 이상으로 올라가면 복잡한 하네스 디자인 차이가 가져오는 성능 이점은 미미해지며, 오직 토큰 호출 비용 차이만 남는 '하네스 세금' 현상이 발생한다.</li>
+</ul>
+<h5 id="국소적-분포-내-locally-in-distribution-처리-메커니즘">국소적 분포 내(Locally In-distribution) 처리 메커니즘</h5>
+<ul>
+<li><strong>복합 태스크의 OOD 특성:</strong> 엔드투엔드 전체 상행선 작업은 단일 언어 모델에게 분포 외(Out-of-Distribution) 프롬프트를 제공하게 된다.</li>
+<li><strong>RLM의 국소적 분해:</strong> RLM은 전체 작업을 하위 에이전트가 처리할 수 있는 단위 프롬프트로 분해한다. 이를 통해 복잡한 복합 과제라 할지라도 개별 언어 모델이 수행하는 개별 프롬프트 호출은 항상 모델이 가장 잘 처리하는 '국소적 분포 내(Locally In-distribution)' 상태로 유지하여 성공률을 극대화한다.</li>
+</ul>
+<pre><code>[ 전체 복합 태스크 (Out-of-Distribution, OOD) ]
+                      │
+                      ▼ RLM 분해 및 국소화 메커니즘
+┌─────────────────────┬─────────────────────┬─────────────────────┐
+│ Sub-agent Call 1    │ Sub-agent Call 2    │ Sub-agent Call 3    │  ... (Locally In-Distribution)
+└─────────────────────┴─────────────────────┴─────────────────────┘
+</code></pre>
+<h5 id="조합적-일반화-compositional-generalization">조합적 일반화 (Compositional Generalization)</h5>
+<ul>
+<li><strong>메타 전략의 귀납적 전이:</strong> RLM이 짧은 문맥(1x) 작업에서 학습한 문제 해결 메타 전략(코드 작성 및 에이전트 분할 루틴)은 작업 길이가 8배에서 30배까지 길어져도 동일하게 적용된다.</li>
+<li><strong>이종 영역 간 확장성:</strong> 짧은 태스크에서 습득한 전략은 길이라는 변수뿐만 아니라 수학, 글쓰기, GPU 최적화 등 전적으로 다른 이종 도메인 간에도 귀납적(Inductive)으로 확장·전이되는 조합적 일반화 특성을 보인다.</li>
+</ul>
+<hr />
+<h4 id="5-프라임-에이전트-지속적-하위-에이전트-및-투기적-도구-호출">5. 프라임 에이전트, 지속적 하위 에이전트 및 투기적 도구 호출</h4>
+<h5 id="프라임-에이전트-prime-agent-의-구조">프라임 에이전트(Prime Agent)의 구조</h5>
+<ul>
+<li><strong>지속적 하네스(Continual Harness) 구현:</strong> 미니멀 하네스인 <code>pi-mono</code> 아키텍처 기반 위에서 구축되었다. IPython REPL을 유일한 도구 인터페이스로 삼으며, 다른 도구는 파이썬 모듈이나 쉘 스크립트로 로드된다.</li>
+<li><strong>동적 자율 수정:</strong> 에이전트가 IPython REPL 내에서 자신의 시스템 프롬프트, 활용 가능한 기술(Skills), 하위 에이전트 세트를 스스로 수정할 수 있는 지속적 하네스 구조를 취한다.</li>
+</ul>
+<h5 id="지속적-하위-에이전트-persistent-sub-agent">지속적 하위 에이전트 (Persistent Sub-agent)</h5>
+<p>기존 Codex 등의 하위 에이전트가 단발성으로 실행된 후 소멸하는 소멸성(Ephemeral) 구조를 가졌던 것과 대조적으로, 프라임 에이전트의 하위 에이전트는 파일 시스템에 상태와 상행선을 지속적으로 보존한다. 메인 에이전트는 필요할 때 언제든 해당 하위 에이전트에 다시 접속하여 상태를 확인하고 추가 프롬프트를 전달하며 상호작용할 수 있다.</p>
+<h5 id="투기적-도구-호출-speculative-ptc-speculative-tool-calling">투기적 도구 호출 (Speculative PTC / Speculative Tool Calling)</h5>
+<ul>
+<li><strong>순차 실행 지연 시간 단축:</strong> 도구 호출 시 발생하는 순차적 대기 시간(Latency)을 극복하기 위한 고속화 기법이다.</li>
+<li><strong>정적 분석 기반 선실행:</strong> 모델이 코드를 생성하거나 컴파일하는 과정에서 정적 코드 분석(Static Code Analysis)을 적용하여, 향후 실행될 도구의 입력 변수를 사전에 파악하고 도구를 투기적으로 선실행(Speculative Execution)함으로써 시스템 병목을 제거한다.</li>
+</ul>
+<hr />
+<h4 id="6-대규모-에이전트-군집-swarms-의-비용-낭비-및-수렴-문제">6. 대규모 에이전트 군집(Swarms)의 비용, 낭비 및 수렴 문제</h4>
+<h5 id="대규모-스웜-사례-및-수치-알렉스-장의-언급-및-추정-수치">대규모 스웜 사례 및 수치 (알렉스 장의 언급 및 추정 수치)</h5>
+<p>오픈에이아이(OpenAI)의 나비에-스톡스(Navier-Stokes) 등 난제 해결 실험에 투입된 대규모 에이전트 스웜의 수치는 인터뷰 화자의 언급 및 추정에 따라 다음과 같이 명확히 귀속된다.</p>
+<ul>
+<li><strong>투입 에이전트 수:</strong> 10,000개 에이전트</li>
+<li><strong>총 소요 시간:</strong> 88시간</li>
+<li><strong>생성된 출력 토큰:</strong> 1,300억(130 Billion) 출력 토큰 (전체 수신 토큰은 이의 2배 이상)</li>
+<li><strong>추정 비용:</strong> 공공 가격(Public Pricing) 기준 약 4,000만 달러($40 Million) 추정</li>
+</ul>
+<h5 id="탐색의-무차별성과-토큰-낭비-slop">탐색의 무차별성과 토큰 낭비(Slop)</h5>
+<ul>
+<li><strong>95% 토큰 낭비:</strong> 대규모 스웜을 통한 무차별 탐색 과정에서 생성되는 전체 토큰 중 약 **95%**는 실질적 가치가 없는 탐색 흔적 및 불필요한 부산물(Slop)로 귀결된다.</li>
+<li><strong>정보 집일(Gather) 병목:</strong> GPU 프로그래밍의 Gather 연산 병목과 마찬가지로, 수천 개의 하위 에이전트가 수집한 정보를 중앙 코디네이터 에이전트로 모아 재조율(Re-coordination)할 때 극심한 정보 처리 병목 현상이 발생한다.</li>
+</ul>
+<h5 id="스웜-수렴-convergence-과제">스웜 수렴(Convergence) 과제</h5>
+<p>컴퓨팅 자원과 에이전트 수를 무작위로 투입한다고 해서 멀티 에이전트 스웜이 정답으로 자율 수렴하는 것은 아니다. 에이전트 간의 효율적인 협업 메커니즘과 정교한 수렴 유도 학습 디자인이 부재할 경우, 자원 소모 대비 수렴 실패율이 급격히 높아진다.</p>
+<hr />
+<h4 id="7-개방형-탐색-추론-언어-및-과학-연구의-미래-전망">7. 개방형 탐색, 추론 언어 및 과학 연구의 미래 전망</h4>
+<h5 id="프롬프트-없는-개방형-탐색-open-ended-search">프롬프트 없는 개방형 탐색 (Open-ended Search)</h5>
+<p>사카나 AI(Sakana AI) 등에서 논의되는 개방형 탐색은 고정된 프롬프트나 명확한 목표 없이 고수율 데이터 생성 및 진화적 루프를 구동한다. 시스템이 고유한 데이터 생성 및 탐색 과정을 통해 스스로 새로운 문제와 목적 함수(Objective Function)를 자율 발견하도록 유도하는 방식으로, 기초 과학 연구의 자동화에 적합하다.</p>
+<h5 id="추론-언어와-사피어-워프-가설-sapir-whorf-hypothesis">추론 언어와 사피어-워프 가설 (Sapir-Whorf Hypothesis)</h5>
+<ul>
+<li><strong>언어에 의한 사고 제약:</strong> 언어가 인간의 사고 구조를 규정한다는 사피어-워프 가설(Sapir-Whorf Hypothesis)과 마찬가지로, 언어 모델의 추론(CoT)을 영어나 파이썬 코드로 제약하는 것은 모델의 잠재적 인지 범위를 한정시킬 수 있다.</li>
+<li><strong>비자기회귀적(Non-autoregressive) 추론 언어:</strong> 단어 단위의 오토레그레시브 디코딩 생성을 넘어, 디퓨전(Diffusion) 스타일처럼 정황과 개념 구조가 한 번에 떠오르고 해상도가 점진적으로 높아지는 비자기회귀적 추론 모형이 미래 추론 언어의 핵심 대안이 될 수 있다.</li>
+</ul>
+<h5 id="능력-우회-capability-overhang-와-지속-학습-continual-learning">능력 우회(Capability Overhang)와 지속 학습(Continual Learning)</h5>
+<ul>
+<li><strong>역량과 하네스 간의 격차:</strong> 현재 프론티어 모델은 IMO 금메달 수준의 고난도 코드·수학 역량을 보유하고 있으나, 이를 장기 실행 태스크로 연결할 정교한 하네스 구조의 부재로 인해 역량이 갇혀 있는 '능력 우회(Capability Overhang)' 상태에 있다.</li>
+<li><strong>장기 실행(Long-running) 자동화:</strong> 지속 학습(Continual Learning)과 정교한 하네스 설계를 결합함으로써, 18세 고등학생이나 인턴 수준의 한 달 단위 장기 지속 업무를 신뢰성 있게 수행하는 자동화 에이전트 구축이 가능해질 것이다.</li>
+</ul>
+<hr />
+<h5 id="보고서-핵심-요약-및-시사점"><strong>보고서 핵심 요약 및 시사점</strong></h5>
+<ul>
+<li><strong>학계 박사 과정 연구의 아키텍처적 우위:</strong> 관료주의와 기존 스케일링 패러다임에 고착된 기업 연구소와 달리, 학계 박사 과정 연구자는 소규모 자원으로도 &quot;큰 베팅(Big Bets)&quot;을 전개하여 분야 전체의 패러다임을 전환하는 메타 아키텍처를 제시할 수 있다.</li>
+<li><strong>RLM 기반 문맥 외부화와 조합적 일반화:</strong> 기존 &quot;Trajectory as a Prompt&quot; 방식의 토큰 폭증을 극복하고, 오직 코드 실행만을 도구로 삼아 문맥을 외부화(Context Offloading)하는 RLM을 통해 국소적 분포 내 처리 및 30배 이상의 조합적 일반화를 달성할 수 있다.</li>
+<li><strong>대규모 스웜의 비용 한계와 정보 병목:</strong> 4,000만 달러 규모의 10,000개 에이전트 스웜 탐색은 무차별 컴퓨팅의 가능성을 보여주는 동시에 95%의 토큰 낭비(Slop)와 정보 집일(Gather) 병목을 노출하므로, 정교한 수렴 제어 구조의 도입이 필수적이다.</li>
+<li><strong>사피어-워프 가설 극복과 능력 우회 해소:</strong> 영어나 단일 코드에 갇힌 오토레그레시브 추론을 넘어 비자기회귀적(디퓨전 스타일) 추론 언어를 모색하고, 프론티어 모델의 잠재 역량을 장기 실행(Long-running) 업무 자동화로 이끌어낼 정교한 하네스 설계가 차세대 AI 시스템의 핵심 과제다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

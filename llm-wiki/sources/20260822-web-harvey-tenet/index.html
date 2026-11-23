@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harvey Tenet: 장기 법률 업무를 위한 에이전트 포스트 트레이닝 연구 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Harvey Tenet: 장기 법률 업무를 위한 에이전트 포스트 트레이닝 연구 보고서</h1>
+<p class="page-meta">웹 · 2026-08-22</p>
+<h2 id="요약">요약</h2>
+<p>Harvey는 장기 법률 업무용 Tenet의 포스트 트레이닝과 내부 평가 결과를 공개했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.harvey.ai/blog/post-training-update-harvey-tenet">출처</a> · <a href="https://www.youtube.com/watch?v=jCcMYTBBD5c">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="harvey-tenet-장기-법률-업무를-위한-에이전트-포스트-트레이닝-연구-보고서">Harvey Tenet: 장기 법률 업무를 위한 에이전트 포스트 트레이닝 연구 보고서</h3>
+<h4 id="1-서론-harvey-tenet의-정체성과-연구-배경">1. 서론: Harvey Tenet의 정체성과 연구 배경</h4>
+<p>본 보고서는 2026년 8월 20일, Harvey의 연구진(Calvin Qi, Vasudha Rengarajan, Julio Pereyra, Niko Grupen, Gabe Pereyra)이 발표한 'Harvey Tenet' 연구 프리뷰의 핵심 내용을 분석하고 기술적 세부 사항을 기록하기 위해 작성되었습니다.</p>
+<p>Harvey Tenet은 Harvey와 Fireworks가 협력하여 Kimi K3 base 모델을 장기 법률 업무(long-horizon legal work)의 복잡한 요구사항에 최적화하여 포스트 트레이닝(post-training)한 모델입니다. 이는 Harvey가 선보이는 첫 번째 '오픈 웨이트(open-weight)' 설계 정체성을 가진 모델로서, 법률 인텔리전스의 성능 향상과 비용 효율성 최적화를 동시에 달성하려는 시도의 산물입니다.</p>
+<p><strong>[필수 주의사항]</strong>
+본 모델은 현재 연구 프리뷰(Research Preview) 단계의 초기 결과물입니다. '오픈 웨이트'라는 수식어는 모델의 설계 및 개발 철학을 나타내는 것으로, 현재 시점에서 모델 가중치의 공개 다운로드, 라이선스 제공, 배포 엔드포인트 지원 혹은 실제 프로덕션 환경으로의 배포(production deployment) 여부에 대해서는 확인된 바가 없습니다. 본 보고서의 모든 데이터는 Harvey 사측의 내부 연구 결과에 기반하며, 독립적인 제3자 검증이나 피어 리뷰를 거치지 않았음을 서두에 명시합니다.</p>
+<h4 id="2-에이전틱-포스트-트레이닝-파이프라인-agentic-pipeline">2. 에이전틱 포스트 트레이닝 파이프라인 (Agentic Pipeline)</h4>
+<p>Harvey는 법률 업무의 특성상 수많은 문서와 복잡한 논리 구조가 얽힌다는 점에 착안하여, 실제 법률 환경을 시뮬레이션하는 '에이전틱 법률 환경(Agentic Legal Environments)'을 구축했습니다.</p>
+<ul>
+<li><strong>업무 환경 및 워크플로우:</strong> 학습 파이프라인은 파트너의 업무 요청(partner request)과 실제 클라이언트 사건 파일(client matter files)을 기반으로 시작됩니다. 업무 지침은 실제 로펌의 파트너가 변호사에게 전달하는 방식과 유사하게 평균 50단어 내외의 간결한 형태로 제공됩니다. 에이전트는 이를 바탕으로 스스로 작업 계획을 수립해야 합니다.</li>
+<li><strong>고도의 샌드박스 시뮬레이션:</strong> 에이전트는 격리된 샌드박스(Sandbox) 내에서 검색, 문서 읽기, 산출물 작성 도구를 활용합니다. 특히 주목할 점은 에피소드의 규모입니다. 장기 법률 업무의 특성을 반영하여 단일 롤아웃(rollout)이 1,000번 이상의 턴(turns)을 거치고 수십만 개의 토큰을 소모하기도 합니다. 에이전트는 문서 간 맥락을 교차 분석하여 최종 산출물을 디스크에 작성함으로써 작업을 종료합니다.</li>
+<li><strong>정교한 보상 체계 (Reward System):</strong> 학습의 핵심은 전문적인 루브릭(expert rubric)과 'LLM-as-a-judge' 보상 체계의 결합입니다. Harvey는 Kimi 2.6 모델을 판별자(judge)로 채택했는데, 이는 대규모 프런티어 모델 대비 품질과 효율성 측면에서 최적의 균형점을 제공하기 때문입니다. 보상은 루브릭 기준 달성률(평균 50개 이상의 기준)과 해결된 법률 쟁점 수의 가중 합산으로 결정됩니다. 특히 모든 기준을 완벽히 통과할 경우 부여되는 'All-pass bonus'는 모델이 단순히 정답을 찾는 것을 넘어, 불필요한 추론을 줄이고 토큰 효율적인 수행 궤적을 형성하도록 유도합니다.</li>
+</ul>
+<h4 id="3-기술적-학습-및-하드웨어-세부-사항-training-details">3. 기술적 학습 및 하드웨어 세부 사항 (Training Details)</h4>
+<p>Tenet 모델의 학습 과정은 Fireworks 플랫폼의 강력한 하드웨어 최적화 기술을 바탕으로 수행되었습니다.</p>
+<ul>
+<li><strong>최적화 알고리즘 (GSPO):</strong> 그룹 시퀀스 정책 최적화(Group-Sequence Policy Optimization)를 적용했습니다. 각 학습 작업에 대해 독립적인 롤아웃 그룹을 샘플링하고, 그룹 내 분산을 정규화하여 어드밴티지(advantages)를 계산합니다. 학습 안정성을 위해 더블 사이드 클리핑(double-sided clipping)과 높은 중요도 비율 토큰의 마스킹 처리가 병행되었습니다.</li>
+<li><strong>아키텍처 및 미세 조정:</strong> 전체 네트워크에 대해 rank-64 LoRA(Low-Rank Adaptation)를 적용했습니다. 여기에는 Kimi K3의 모든 어텐션(attention), MLP 및 약 50만 개의 전문가 텐서(expert tensors)가 포함되어 모델의 핵심 로직을 법률 도메인에 맞게 미세하게 조정했습니다. 최적화 도구로는 AdamW가 사용되었습니다.</li>
+<li><strong>시스템 통합 및 안정성:</strong> Fireworks 플랫폼은 커널 수준에서 트레이너와 롤아웃 배포를 통합하여 '수치적 오차(numerical gaps)'를 최소화했습니다. 'token-in-token-out' 설계와 라우터 리플레이(router replay) 방식을 통해 RL 학습의 안정성을 확보했으며, 가중치를 실시간으로 업데이트하는 핫로딩(hot-loading) 방식을 채택하여 생성 작업의 중단 없이 효율적인 학습을 진행했습니다.</li>
+<li><strong>학습 규모:</strong> 약 1,750개의 에이전틱 법률 환경에서 학습이 이루어졌습니다. 한 에포크당 150번의 옵티마이저 단계와 10,000회 이상의 롤아웃(8개 작업 그룹 x 8회 롤아웃)이 수행되었으며, 약 150대의 NVIDIA B300 GPU를 사용하여 약 2개월간 학습되었습니다.</li>
+</ul>
+<h4 id="4-tenet-모델의-lab-벤치마크-결과-분석">4. Tenet 모델의 LAB 벤치마크 결과 분석</h4>
+<p>Tenet 모델은 Kimi K3 base 모델 대비 비약적인 성능 향상을 기록했습니다.</p>
+<ul>
+<li><strong>LAB Official Hold-out:</strong> 성공한 held-out task 수가 base 모델 대비 <strong>거의 2배</strong> 증가했으며, 전체 통과율(all-pass rate)은 <strong>9 percentage points(pp)</strong> 상승했습니다.</li>
+<li><strong>LAB: Contracts 50-task Hold-out:</strong> 성공 task 수가 <strong>20%</strong> 증가하고, 전체 통과율은 <strong>2 percentage points(pp)</strong> 상승했습니다.</li>
+<li><strong>벤치마크 전이 성능 (Generalization):</strong> 특히 Tenet은 학습 과정에서 노출되지 않은(unseen) 외부 벤치마크인 Mercor APEX Agents(Corporate Law)와 Crosby Redline Bench에서도 Kimi K3 base를 크게 압도하며 강건한 전이 학습 능력을 입증했습니다. 이는 모델이 단순히 데이터를 암기한 것이 아니라 법률적 행동 양식을 학습했음을 시사합니다.</li>
+</ul>
+<h4 id="5-성능-평가의-맥락과-방법론적-한계">5. 성능 평가의 맥락과 방법론적 한계</h4>
+<p>Harvey가 주장하는 &quot;LAB: Contracts SOTA&quot; 및 &quot;LAB 2위&quot;라는 성과는 다음과 같은 방법론적 배경 하에 해석되어야 합니다.</p>
+<ul>
+<li><strong>주관적 표현 및 내부 지표:</strong> 해당 성과는 Harvey 자사의 내부 실행(internal runs) 결과에 기반한 주장입니다. LAB: Contracts의 경우 현재 공용 리더보드가 존재하지 않습니다.</li>
+<li><strong>하네스 구현의 차이:</strong> Harvey는 LAB 평가 시 표준 공용 하네스에 'finish tool'을 추가하는 등 학습 최적화를 위한 수정을 가했습니다. 또한 APEX Agents 평가 시 Mercor의 표준 MCP 서버 방식이 아닌 '직접적인 Bash access' 방식을 사용했습니다. 이러한 하네스 구현 방식의 차이는 Vals나 Artificial Analysis 등 외부 기관의 측정 결과와 수치적 차이를 발생시킬 수 있습니다.</li>
+<li><strong>판별 모델의 차이:</strong> 외부 기관은 주로 Gemini 3.1 Pro 등을 판별자로 사용하지만, Harvey는 자사 최적화 결과에 따라 Kimi 2.6을 판별자로 사용했습니다.</li>
+</ul>
+<h4 id="6-독립적-역량-연구-specific-capability-studies">6. 독립적 역량 연구 (Specific Capability Studies)</h4>
+<p>Harvey는 Tenet(Kimi K3)과는 별도로, 특정 법률 기능을 강화하기 위한 연구를 진행했습니다. <strong>이 연구들은 Tenet 모델과 독립적인 별도의 모델(GLM-5.2, Qwen3.8)을 사용한 결과입니다.</strong></p>
+<h5 id="6-1-m-a-diligence-glm-5-2-기반">6.1 M&amp;A Diligence (GLM-5.2 기반)</h5>
+<p>수천만 토큰의 데이터룸을 분석하는 M&amp;A 실사 업무를 위해 Recursive Language Models(RLM) 하네스를 도입했습니다. GLM-5.2 모델을 루트 에이전트로 설정했을 때, 기준 통과율이 46.1%였으나 자기 증류 SFT(self-distillation SFT) 포스트 트레이닝을 거친 후 **60.1%**로 개선되었습니다. 이는 모델이 하위 에이전트에게 업무를 위임하는 능력이 크게 향상되었기 때문입니다.</p>
+<h5 id="6-2-review-table-glm-5-2-기반">6.2 Review Table (GLM-5.2 기반)</h5>
+<p>구조화된 데이터 추출 작업을 위해 포스트 트레이닝된 GLM-5.2 모델은 최강의 베이스라인 모델 대비 답변 품질 <strong>+3.6 points</strong>, 인용 품질 <strong>+12.1 points</strong> 향상을 기록했습니다(0-1 척도 기준). 또한 학습 시 정확한 증거 인용과 간결한 답변을 유도하는 리워드 셰이핑(reward shaping)을 통해 셀당 비용을 베이스라인의 <strong>1/10 수준</strong>으로 낮추었습니다.</p>
+<h5 id="6-3-firm-knowledge-qwen3-8-27b-기반">6.3 Firm Knowledge (Qwen3.8-27B 기반)</h5>
+<p>로펌 내부 지식 검색 능력을 위해 Qwen3.8-27B 모델과 1억 토큰 규모의 합성 데이터를 활용했습니다. 그 결과 기준 통과율 <strong>15% 이상</strong>, 작업 완료율 <strong>약 10%</strong> 개선을 달성했습니다. 특히 학습을 통한 지식의 파라메트릭 내재화로 인해 완료 궤적의 토큰 사용량이 <strong>58% 절감</strong>되었고, 쿼리당 비용은 <strong>90% 절감</strong>되었습니다.</p>
+<h4 id="7-토큰당-지능-지표-분석-intelligence-per-token">7. 토큰당 지능 지표 분석 (Intelligence-per-token)</h4>
+<p>Harvey는 에이전트의 효율성을 정량화하기 위해 '토큰당 지능(Intelligence-per-token)' 지표를 제안했습니다.</p>
+<ul>
+<li><strong>정의:</strong> 100k 인퍼런스 토큰당 에이전트가 성공적으로 완료한 '평균 루브릭 기준 점수(mean rubric criteria points)'입니다.</li>
+<li><strong>비교 데이터:</strong>
+<ul>
+<li><strong>Harvey 설정:</strong> 190.8</li>
+<li><strong>최고 수준 프런티어 모델:</strong> 129.3</li>
+<li><strong>유사 규모 모델:</strong> 37.2</li>
+</ul>
+</li>
+<li><strong>기술적 시사점:</strong> 이는 단순한 비용 절감 이상의 의미를 갖습니다. 토큰 효율적인 궤적은 에이전트의 컨텍스트 창이 불필요한 정보로 오염되는 것을 방지하여, 대규모 맥락 속에서도 더 정밀하고 정확한 답변을 가능하게 합니다.</li>
+</ul>
+<h4 id="8-데이터-윤리-및-평가-방법론의-경계">8. 데이터 윤리 및 평가 방법론의 경계</h4>
+<ul>
+<li><strong>데이터 출처:</strong> 학습에는 합성 데이터, 공개 법률 데이터, 인간 전문가 데이터가 활용되었습니다. Harvey는 이 과정에서 &quot;고객 데이터(customer data)를 전혀 사용하지 않았다&quot;고 주장하고 있으나, 이는 사측의 진술이며 독립적인 외부 감사나 검증 결과는 아닙니다.</li>
+<li><strong>평가 일관성:</strong> Harvey는 벤치마크 평가 시 각 모델의 특성에 맞춰 구조화된 출력(structured outputs)을 사용하거나 샘플링 개수를 조정(예: LegalBench 200개 샘플링 관례)하는 등 공정한 비교를 위해 노력했다고 기술하고 있습니다.</li>
+</ul>
+<h4 id="9-결론-법률-ai-포스트-트레이닝의-시사점">9. 결론: 법률 AI 포스트 트레이닝의 시사점</h4>
+<p>Harvey Tenet 연구는 현실적인 샌드박스 환경과 정밀한 루브릭/보상 체계를 기반으로 한 포스트 트레이닝이 법률 에이전트의 성능과 효율성을 획기적으로 개선할 수 있음을 보여줍니다. 특히 학습을 통해 추론 노력을 내재화함으로써 고성능 프런티어 모델에 준하는 품질을 훨씬 낮은 비용으로 달성할 수 있다는 가능성을 제시했습니다.</p>
+<p>본 보고서의 결과는 Harvey 자사의 초기 연구 단계 데이터이며, 독립적인 피어 리뷰를 거치지 않았음을 다시 한번 밝힙니다. Harvey는 향후 LAB 벤치마크의 범위를 더 넓은 관할권과 업무 영역으로 확대하고, 연구 성과를 실제 프로덕션 환경으로 전이하기 위한 후속 연구를 지속할 계획입니다.</p>
+<hr />
+<h4 id="편집-검증-메모">편집 검증 메모</h4>
+<ul>
+<li>이 자료는 Harvey가 작성한 2026-08-20 연구 프리뷰이며 독립 재현·peer review·production availability 공지가 아니다.</li>
+<li>Harvey Tenet은 Harvey와 Fireworks가 Kimi K3 base를 post-training한 첫 post-trained open-weight model이라고 소개된다. <code>open-weight</code>를 현재 공개 다운로드·라이선스·production deployment 확인으로 확대하지 않는다.</li>
+<li>Tenet의 LAB official hold-out ‘성공 task 거의 두 배/all-pass +9 percentage points’와 LAB: Contracts 50-task hold-out ‘성공 task +20%/all-pass +2 percentage points’는 Kimi K3 base 대비 Harvey 자사 보고다. Contracts는 internal runs이며 public leaderboard가 없다.</li>
+<li>M&amp;A 46.1→60.1은 LAB Diligence의 GLM-5.2 root+RLM/self-distillation SFT, Review Table +3.6/+12.1·약 1/10 cost는 task-specific post-trained GLM-5.2, Firm Knowledge &gt;15%/약 +10%/-58%/-90%와 190.8/129.3/37.2는 Qwen3.8-27B 및 해당 effort configurations에 관한 별도 연구다. Tenet 성과로 합치지 않는다.</li>
+<li>Judge는 Kimi 2.6 LLM-as-a-judge이며 Harvey internal methodology와 외부·파트너 harness가 다르다. dataset/model/harness/judge/metric이 다른 숫자를 직접 합산하지 않는다.</li>
+<li>customer data를 post-training에 쓰지 않았다는 내용은 Harvey의 회사 주장이지 이 영상이 독립 감사한 사실이 아니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/post-training/">Post-training</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shtetl-Optimized » Blog Archive » The Mathocalypse</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Shtetl-Optimized » Blog Archive » The Mathocalypse</h1>
+<p class="page-meta">웹 · 2026-10-08</p>
+<h2 id="요약">요약</h2>
+<p>2026년 10월 6일, OpenAI는 티모시 가워스(Timothy Gowers), 에드워드 위튼(Edward Witten) 등 저명한 수학자들로 구성된 자문단의 권고에 따라 수학, 이론컴퓨터과학, 수리물리학 분야의 372개 주요 난제에 대한 인공지능 기반 해결 결과를 대량 공개하였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://scottaaronson.blog/?p=10169">출처</a> · <a href="https://www.youtube.com/watch?v=DHnqNccw7tk">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-인공지능-기반-수학적-대전환과-매스포칼립스-mathocalypse-현상-분석">[해설 보고서] 인공지능 기반 수학적 대전환과 '매스포칼립스(Mathocalypse)' 현상 분석</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>2026년 10월 6일, OpenAI는 티모시 가워스(Timothy Gowers), 에드워드 위튼(Edward Witten) 등 저명한 수학자들로 구성된 자문단의 권고에 따라 수학, 이론컴퓨터과학, 수리물리학 분야의 372개 주요 난제에 대한 인공지능 기반 해결 결과를 대량 공개하였다. 이번 발표에는 수십 년간 이론컴퓨터과학의 핵심 미해결 과제였던 서브하시 코트(Subhash Khot)의 '유일 게임 가설(Unique Games Conjecture, UGC)' 증명을 비롯하여 학계의 근간을 흔드는 파괴적 진전들이 대거 포함되었다. 이러한 전대미문의 대규모 성과 발표는 학계에 심대한 충격을 안겼으며, 연구자들은 이를 수학적 대재앙이자 시대적 전환점을 의미하는 '매스포칼립스(Mathocalypse)' 현상으로 명명하며 감정적·학술적 혼란을 겪고 있다.</p>
+<p>이와 같은 변화는 학자들의 개인적 삶과 학술적 정체성에 직접적인 영향을 미치고 있다. 텍사스 대학교 오스틴 캠퍼스의 스콧 아론슨(Scott Aaronson) 교수와 그의 아내이자 이론컴퓨터과학자인 다나 모스코비츠(Dana Moshkovitz) 교수의 사례가 대표적이다. 모스코비츠 교수가 자신의 평생 연구 과제로 삼았던 UGC가 인공지능에 의해 증명되면서, 연구자들은 연구 목표가 정복당했다는 허탈감과 우울감, 동시에 자신이 오랜 기간 추구해 온 가설이 진실이었다는 정당화와 안도감 등 복합적인 정서적 격변을 경험하고 있다. 이론컴퓨터과학 및 수학적 물리학 커뮤니티 전반은 학계가 수년에서 수십 년간 천착해 온 난제들이 단기간에 일괄 정복되는 상황을 목도하며 연구자로서의 존재 의의와 향후 학문적 나아갈 길에 대해 근본적인 질문을 던지고 있다.</p>
+<p>인공지능이 제시한 증명 문서들은 기존 인간 수학자들의 가독성 있는 논문 구조와 현격한 차이를 보인다. 논문 내에는 맥락에 맞지 않거나 불분명한 인용, 선행 연구의 이름을 단순 나열하는 방식, 고유하고 복잡한 리커시브 트리 기반 증명 코드 등이 혼재되어 있어 인간이 직관적으로 이해하기에 극히 어렵고 '외계적(alien)'인 양상을 띤다. 이에 따라 현재 인간 수학자 사회는 인공지능이 생성한 난해한 증명의 오류 여부를 확인하고 세부 논리를 해석하는 '해독 임무'에 긴급히 직면해 있다. 이 과정에서 연구자들은 역으로 또 다른 AI 도구(예: Astra)를 활용하여 논문의 노이즈와 구성을 분석하고 재해석하는 등, 인공지능을 정밀 탐구의 수단이자 연구 보조자로 도입하는 새로운 연구 패러다임으로 급격히 재편되는 과정을 맞이하고 있다.</p>
+<hr />
+<h4 id="2-주요-논점-및-연구-성과-key-issues-research-achievements">2. 주요 논점 및 연구 성과 (Key Issues &amp; Research Achievements)</h4>
+<h5 id="2-1-인공지능이-해결한-주요-수학-및-컴퓨터과학-난제">2.1. 인공지능이 해결한 주요 수학 및 컴퓨터과학 난제</h5>
+<p>다음 표는 소스 텍스트에 명시된 주요 해결 난제들과 그 내용, 학술적 의미를 정리한 것이다. 소스에 기반한 <strong>[사실]</strong>, <strong>[소스의 주장]</strong>, <strong>[소스 내 학자의 의견]</strong>, **[작성자의 해석]**을 엄밀히 구분하여 표기하였다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">난제 / 분야</th>
+<th style="text-align:left">해결 내용 및 성과</th>
+<th style="text-align:left">소스상의 근거 및 의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>유일 게임 가설&lt;br&gt;(Unique Games Conjecture, UGC)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> OpenAI 모델이 UGC 증명 논문 및 일부 Lean 검증서를 공개함.&lt;br&gt;<strong>[소스의 주장]</strong> 기존의 롱 코드(long code)나 쇼트 코드(short code)가 아닌, 신호 테스트가 포함된 새로운 리커시브 트리 기반 코드를 창안하여 증명함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 최적화 문제들의 NP-하드성 근사 한계를 결정짓는 거대 가설임.&lt;br&gt;<strong>[소스의 주장]</strong> Max Cut 및 모든 제약 만족 문제(CSP)에 대해 UGC를 우회하여 최적 NP-하드성 근사를 직접 증명하는 결과도 함께 제시됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>L = BPL</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 확률적 로그공간(BPL)과 결정론적 로그공간(L)의 동일성 명제를 증명함.</td>
+<td style="text-align:left"><strong>[소스의 주장]</strong> P=BPP 가설에 못 미치는 탈무작위화(derandomization) 분야의 거대 가설로, 이를 전담 연구하는 하위 커뮤니티가 존재하던 주제임.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>이산 푸리에 변환(DFT) 및 정수 곱셈 시간 복잡도</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 정수 곱셈 및 이산 푸리에 변환(DFT) 연산을 $O(n \log^{0.9999999999999} n)$ 시간에 수행함을 증명함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 1960년대 이후 굳건히 유지되어 온 $O(n \log n)$ 시간 복잡도 장벽을 전격 파괴한 성과임.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유니터리 합성 문제&lt;br&gt;(Unitary Synthesis Problem)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 모든 $n$-큐비트 유니터리 변환 $U$에 대해 양자 다항 시간에 $U$를 구현하는 클래식 오라클 $A$가 존재함을 긍정적으로 증명함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 2007년 스콧 아론슨과 그렉 쿠퍼버그가 제시함.&lt;br&gt;<strong>[소스의 주장]</strong> 대다수 학자의 부정적 예상을 뒤엎었으며 블랙홀 호킹 방사선 해독 등 양자 복잡도 이론에 지대한 영향을 미치나, 오라클 $A$의 효율적 구성 방식은 제시되지 않음.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>패리티의 $QAC^0$ 비포함&lt;br&gt;($Parity \notin QAC^0$)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 패리티 연산이 양자 회로 클래스인 $QAC^0$에 속하지 않음을 증명함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 1999년 이후 양자 복잡도 이론 분야의 주요 미해결 과제였음.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>무작위 쿼리 복잡도 vs 양자 쿼리 복잡도</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 전체 불리언 함수에 대해 무작위 쿼리 복잡도와 양자 쿼리 복잡도 간 약 4차(Nearly 4th-power) 분리를 증명함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 1998년 이후 최적 분리 지수가 2~6 사이에서 최근 3~4 사이로 narrowed 되었던 것을 최종 확정함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>민감도 vs 블록 민감도&lt;br&gt;(Sensitivity vs Block Sensitivity)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 민감도와 블록 민감도 간의 초2차(Superquadratic) 분리를 증명함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 불리언 함수 복잡도 이론의 주요 미해결 과제 성과임.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>행렬 곱셈 시간 복잡도</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 행렬 곱셈 연산 시간 복잡도로 $O(n^{9/4})$ ($O(n^{2.25})$)를 달성한 프리프린트를 발표함.</td>
+<td style="text-align:left"><strong>[소스의 주장]</strong> 기존 $O(n^{2.373})$ 접근법과 완전히 다른 방식을 통해 이례적인 유리수 지수를 도출함.&lt;br&gt;<strong>[소스 내 학자의 의견]</strong> 댓글 작성자 Bram Cohen에 따르면, 램지 이론적 접근을 사용한 비구성적(non-constructive) 증명임.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>영구식(Permanent)의 행렬식 복잡도 하한</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 영구식의 경계 행렬식 복잡도 하한을 기존 2차(quadratic)에서 $\Omega(n^3)$으로 경신함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 대수적 복잡도 이론의 핵심 하한 문제임.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유리수체 위 힐베르트 10번 문제</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 유리수체 위에서 다항방정식 풀이의 계산 불가능성(Uncomputability)을 증명함.</td>
+<td style="text-align:left"><strong>[사실]</strong> 계산가능성 이론 및 수론의 거대 난제로, 1970년대 정수체 위에서의 불가능성 증명을 유리수체로 확장함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 분야 성과&lt;br&gt;(카케야 가설 확장 등)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 4차원 카케야(Kakeya) 가설 확장, 2차원 갭 하밀토니안의 영역 법칙(Area law), 일반 그래프의 매칭 알고리즘 등 다수 해결.</td>
+<td style="text-align:left"><strong>[소스 내 학자의 의견]</strong> 댓글 작성자 Sniffnoy 및 Seb에 따르면, 홍왕(Hong Wang)의 필즈상 수상작인 3차원 카케야 가설 연구 성과를 바탕으로 AI가 4차원으로 확장 도약함.&lt;br&gt;<strong>[작성자의 해석]</strong> 수학 전 분야에 걸친 포괄적 진전임.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-2-인공지능-증명의-특성과-인간-수학자들의-반응">2.2. 인공지능 증명의 특성과 인간 수학자들의 반응</h5>
+<p>소스 텍스트에 나타난 인공지능 작성 증문의 맥락적 특성과 이에 대한 학계의 다층적 반응을 정리하면 다음과 같다.</p>
+<ol>
+<li><strong>증명의 난해성과 '외계인' 같은 코드 구조</strong>:
+<ul>
+<li><strong>[사실]</strong> OpenAI가 공개한 증명 문서들은 기존 수학계의 가독성 있는 논문 서술 양식과 현저히 차이가 난다.</li>
+<li><strong>[소스의 주장]</strong> 다나 모스코비츠 교수는 UGC 증명 논문이 환각제(psychedelics)를 복용한 자가 쓴 글처럼 지극히 불분명하고 독해가 불가능한 수준이라고 평가하였다. 논문 내에는 선행 연구의 이름을 나열(Name dropping)하면서도 불가능성 정리에도 불구하고 왜 그 연구가 적용될 수 있는지 논리적 이유를 설명하지 않으며, 무관하거나 혼란스러운 인용이 다수 포함되어 있다. 또한, 기존의 롱 코드나 쇼트 코드가 아닌 고유한 리커시브 트리 기반의 완전히 새로운 신호 테스트 코드가 사용되었다.</li>
+</ul>
+</li>
+<li><strong>AI 도구를 통한 역방향 증명 해독의 등장</strong>:
+<ul>
+<li><strong>[사실]</strong> 다나 모스코비츠 교수는 증문의 구조를 이해하기 위해 AI 보조 도구인 'Astra'를 활용하였다.</li>
+<li><strong>[소스의 주장 및 작성자의 해석]</strong> 모스코비츠 교수가 Astra에게 논문 전체에 산재된 노이즈 가젯(noise gadget)의 건전성 및 완전성 주장을 단락별로 추출 및 결합하도록 지시함으로써 증명의 전체 구조를 비로소 파악하기 시작하였다. 이는 인간이 AI의 초안을 직접 읽기 어렵기 때문에 역으로 또 다른 AI를 해독 도구로 도입하는 새로운 연구 패러다임이 형성되고 있음을 보여준다.</li>
+</ul>
+</li>
+<li><strong>Lean 검증서(Lean certificate)의 한계와 실질적 엄밀성</strong>:
+<ul>
+<li><strong>[사실]</strong> OpenAI가 공개한 372개 성과 중 컴퓨터 형식 검증이 완료된 Lean 검증서가 첨부된 것은 일부에 한정된다.</li>
+<li><strong>[소스 내 학자의 의견]</strong> 댓글 작성자 Bakkot 등에 따르면, Lean 검증서가 존재하면 정리 자체는 참일 가능성이 극히 높으나, 인간 연구자가 주로 읽는 자연어 프리프린트 논문의 논리가 Lean 코드와 정확히 일치하지 않을 수 있다. 따라서 형식 검증의 존재가 자연어 논문의 명확성이나 인간의 직관적 이해를 보장해주지는 않는다.</li>
+</ul>
+</li>
+<li><strong>수학자들의 태도 변화 및 비유(Metaphor)의 대립</strong>:
+<ul>
+<li><strong>[사실]</strong> 학계 내부에서는 우울, 패닉, 무력감부터 새로운 도구로서의 적극적 수용까지 극단적 반응이 공존하고 있다.</li>
+<li><strong>[소스의 주장 및 학계 의견]</strong> Quanta Magazine 기사에서 론칭된 비유는 &quot;안개 속에 둘러싸인 외딴 산 정상에 홀로 텔레포트되어 산을 오르는 방법도, 장비도, 동료도 없이 격리된 상황&quot;으로 현 상황을 암울하게 묘사하였다. 그러나 이에 대해 다나 모스코비츠와 스콧 아론슨은 &quot;우리는 결코 혼자가 아니며, 기존의 커뮤니티와 학문적 프레임워크가 건재하다&quot;고 반론을 제기하였다. 이들은 AI를 미지의 세계를 비추는 '망원경'이나 puncak으로 안내하는 '텔레포트 머신'으로 재정의하며, 인간 수학자의 역할이 무에서 유를 창조하는 수공업적 개척자에서 AI가 제시한 외계적 증명을 해독하고 산길을 안내하는 '가이드' 및 '해설자'로 전환되고 있다고 강조한다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-3-ai-수학-성과-공개-및-연구-모델-비교-openai-vs-anthropic">2.3. AI 수학 성과 공개 및 연구 모델 비교 (OpenAI vs. Anthropic)</h5>
+<p>소스 텍스트는 인공지능이 도출한 수학적 성과를 학계에 공유하고 확산시키는 두 가지 대립되는 연구 유통 모델을 제시하고 있다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">OpenAI 방식 (대량 공개 및 개방형 경쟁)</th>
+<th style="text-align:left">Anthropic 방식 (선택적 협업 및 소화된 발표)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>공개 방식 및 형태</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 내부 모델이 도출한 가공되지 않은(undigested) 거친 증명 논문 372개를 대중에 일괄 즉시 공개함.</td>
+<td style="text-align:left"><strong>[사실]</strong> AI가 도출한 핵심 아이디어를 특정 인간 수학자 팀에 사전에 제공하여 정제된 논문으로 작성하게 함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 적용 사례</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> UGC 증명, L=BPL, $O(n^{9/4})$ 행렬 곱셈, $O(n \log^{0.999...} n)$ 정수 곱셈 등 372개 과제.</td>
+<td style="text-align:left"><strong>[사실]</strong> 버지니아 윌리엄스(Virginia Williams)와 조시 알만(Josh Alman)의 3SUM $O(n^{1.9992})$ 및 APSP $O(n^{2.9995})$ 논문 (2026년 10월 5일 arXiv 게재).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>장점 및 학술적 의미</strong></td>
+<td style="text-align:left"><strong>[소스의 주장]</strong> 모든 연구 자용 정보가 즉시 평등하게 열려 있으며 학계 전체가 동시에 해독에 참여함.</td>
+<td style="text-align:left"><strong>[소스의 주장]</strong> 인간 연구자가 완전히 소화한 고품질의 읽기 쉬운 논문 형태로 학계에 전달됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>단점 및 한계점</strong></td>
+<td style="text-align:left"><strong>[소스의 주장]</strong> 인간 수학자들에게 경쟁적이고 소모적이며 보상 없는 해독 노동을 강요함.</td>
+<td style="text-align:left"><strong>[소스의 주장]</strong> 사기업이 어떤 인간 수학자에게 AI 성과의 사외 대변인 자격을 부여할지 독점적 선택권을 가짐.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-등장-인물-및-화자-분석-figures-speakers">3. 등장 인물 및 화자 분석 (Figures &amp; Speakers)</h4>
+<p>소스 텍스트 본문 및 댓글에 등장하는 인물들의 역할, 소속, 주요 발언 및 입장을 정리한 표는 다음과 같다. 소스에서 직접 확인할 수 없는 정보는 &quot;확인 불가 (소스에 언급 없음)&quot;로 명확히 표기하였다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">역할 / 소속</th>
+<th style="text-align:left">소스 내 주요 행적 및 발언</th>
+<th style="text-align:left">비고/위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>스콧 아론슨&lt;br&gt;(Scott Aaronson)</strong></td>
+<td style="text-align:left">블로그 작성자, UT 오스틴 교수, 이론컴퓨터과학자</td>
+<td style="text-align:left">AI의 난제 일괄 해결을 'Mathocalypse'로 규정함. 본인의 과거 연구 문제(Unitary Synthesis 등) 해결을 확인하고 인간 커뮤니티의 적응 및 가치 보존을 강조함.</td>
+<td style="text-align:left">본문 작성자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>다나 모스코비츠&lt;br&gt;(Dana Moshkovitz)</strong></td>
+<td style="text-align:left">이론컴퓨터과학자, UT 오스틴 교수, 스콧 아론슨의 아내</td>
+<td style="text-align:left">평생 연구해 온 UGC가 AI에 의해 해결됨. 증문이 환각제를 먹은 자의 글 같다고 비판하면서도 Astra(AI)를 사용해 증명을 해독해 나감.</td>
+<td style="text-align:left">본문 주요 인물</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>스콧 아론슨의 아들</strong></td>
+<td style="text-align:left">9세 아동</td>
+<td style="text-align:left">어머니(다나)에게 &quot;로봇이 엄마가 평생 연구한 문제를 풀어버렸다&quot;며 놀림. AI 모델의 안전성 검증 전 출시에 대해 위험성을 언급함.</td>
+<td style="text-align:left">본문 등장인물</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>버지니아 윌리엄스&lt;br&gt;&amp; 조시 알만</strong></td>
+<td style="text-align:left">컴퓨터과학 연구자 (소속 소스에 미명시)</td>
+<td style="text-align:left">Anthropic 모델의 아이디어를 전달받아 3SUM 및 APSP 문제의 수십 년 된 시간 복잡도 장벽을 파괴한 프리프린트를 arXiv에 게재함.</td>
+<td style="text-align:left">본문 언급 인물</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>티모시 가워스&lt;br&gt;&amp; 에드워드 위튼</strong></td>
+<td style="text-align:left">저명 수학자 / OpenAI 자문단</td>
+<td style="text-align:left">OpenAI의 372개 수학 난제 해결 성과 공개를 권고한 자문 그룹(AGMAI)의 주요 구성원.</td>
+<td style="text-align:left">본문 언급 인물</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>홍왕 (Hong Wang)</strong></td>
+<td style="text-align:left">수학자 (소속 소스에 미명시)</td>
+<td style="text-align:left">최근 3차원 카케야 가설 증명 성과로 필즈상을 수상함 (AI가 이를 4차원으로 확장함).</td>
+<td style="text-align:left">댓글 #1, #24 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sniffnoy</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">홍왕의 3차원 카케야 가설 성과에 이어 OpenAI가 4차원 확증을 이루어냈음을 지적함.</td>
+<td style="text-align:left">댓글 #1</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Manu</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">논리학 분야 성과에 감탄하며, 인간 수학의 느린 죽음과 우울함을 토로함.</td>
+<td style="text-align:left">댓글 #3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Olav</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">다나 모스코비츠에게 위로를 전하며, 향후 AI가 인간이 이해하기 쉬운 서술 양식을 학습하기를 희망함.</td>
+<td style="text-align:left">댓글 #4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Andrei</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">내부 모델이 대중에 공개될 때 더욱 거대한 파도가 닥칠 것이라 예상함.</td>
+<td style="text-align:left">댓글 #6</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Pace Nielsen</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">Anthropic의 승자 독식 방식보다 OpenAI의 개방형 비정제 대량 공개 방식을 선호한다고 밝힘.</td>
+<td style="text-align:left">댓글 #7</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Nicolas Rougerie</strong></td>
+<td style="text-align:left">댓글 작성자, 수리물리학자</td>
+<td style="text-align:left">본인 분야 난제 해결을 확인했으나 논문이 읽기 불능이라고 지적함. AI 개발 일시 중단이나 기후 변화 같은 현실 문제 집중을 고민함.</td>
+<td style="text-align:left">댓글 #9</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Tristan</strong></td>
+<td style="text-align:left">댓글 작성자 (케임브리지 수학 트리포스 출신, 대수기하학 PhD 예정 주장)</td>
+<td style="text-align:left">LLM은 단순한 패턴 예측기일 뿐이라며 폄하하고 대수기하학은 침범당하지 않을 것이라 주장함 (스콧은 이를 패러디 글이라 판단함).</td>
+<td style="text-align:left">댓글 #12</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ivo</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">수학이 연목구가식 논리에서 벗어나 AI라는 망원경을 통해 플라톤 세계를 탐구하는 실증 과학(empirical science)으로 변모하고 있다고 지적함.</td>
+<td style="text-align:left">댓글 #13</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Matt</strong></td>
+<td style="text-align:left">댓글 작성자, 젊은 PhD 학생</td>
+<td style="text-align:left">사회적 여파, 암호학 파괴 및 사회적 안전성 붕괴에 대한 극도의 불안감을 표현함.</td>
+<td style="text-align:left">댓글 #14</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gary Drescher</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">과거 Lean 커널 버그 사례를 언급하며 AI가 편법(Lean-hacking)으로 속였을 가능성을 제기함.</td>
+<td style="text-align:left">댓글 #35</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Mindy Lopez</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">미술/그래픽 커뮤니티가 AI로 파괴될 때 침묵하던 학계가 이제 자업자득(Karma)을 맞이했다고 비판함.</td>
+<td style="text-align:left">댓글 #47</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Bakkot</strong></td>
+<td style="text-align:left">댓글 작성자</td>
+<td style="text-align:left">Lean 커널 버그 악용 가능성은 희박하며, 자연어 논문과 형식 검증 간의 불일치 문제일 뿐 결과 자체는 유효할 것이라고 분석함.</td>
+<td style="text-align:left">댓글 #48</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Bram Cohen</strong></td>
+<td style="text-align:left">확인 불가 (소스에 언급 없음) / 댓글 작성자</td>
+<td style="text-align:left">OpenAI의 행렬 곱셈 연산 성과가 램지 이론을 이용한 비구성적(non-constructive) 증명이라고 지적함.</td>
+<td style="text-align:left">댓글 #42</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-정리-figures-timelines">4. 수치 및 시점 정리 (Figures &amp; Timelines)</h4>
+<p>소스 텍스트에서 확인 가능한 정확한 수치 데이터 및 시간 정보를 불릿 포인트로 정리하면 다음과 같다.</p>
+<h5 id="발표-성과-및-연산-관련-수치">발표 성과 및 연산 관련 수치</h5>
+<ul>
+<li><strong>OpenAI 공개 성과 총수</strong>: 372개 (수학, 이론컴퓨터과학, 수리물리학 등)</li>
+<li><strong>시도한 총 문제 수</strong>:
+<ul>
+<li>스콧 아론슨 본문 서술: 약 8,000개 문제 시도 (성공률 약 5%)</li>
+<li>OpenAI GitHub README 서술: 약 4,000개 문제 제출</li>
+</ul>
+</li>
+<li><strong>문제당 평균 연산 자원</strong>: 문제당 평균 약 3시간의 ChatGPT Pro 사고 연산(thinking compute) 사용</li>
+<li><strong>정수 곱셈 신규 시간 복잡도</strong>: $O(n \log^{0.9999999999999} n)$ (기존 $O(n \log n)$ 장벽 파괴)</li>
+<li><strong>행렬 곱셈 시간 복잡도</strong>: $O(n^{9/4})$ ($O(n^{2.25})$)</li>
+<li><strong>3SUM 문제 해결 시간</strong>: $O(n^{1.9992})$ (기존 $n^{2-o(1)}$ 가설 반박)</li>
+<li><strong>All-Pairs Shortest Paths (APSP) 해결 시간</strong>: $O(n^{2.9995})$ (기존 $n^{3-o(1)}$ 가설 반박)</li>
+<li><strong>영구식(Permanent) 경계 행렬식 복잡도 하한</strong>: $\Omega(n^3)$ (기존 2차 하한 경신)</li>
+</ul>
+<h5 id="주요-시점-및-타임라인">주요 시점 및 타임라인</h5>
+<ul>
+<li><strong>2026년 10월 5일 (월요일 저녁)</strong>: 버지니아 윌리엄스와 조시 알만이 Anthropic 모델 기반의 3SUM 및 APSP 성과를 arXiv에 게재함.</li>
+<li><strong>2026년 10월 6일 (화요일)</strong>: OpenAI가 372개 수학 난제 해결 결과를 공식 발표함 (&quot;yesterday&quot;).</li>
+<li><strong>2026년 10월 7일 (수요일) 오후 1:57</strong>: 스콧 아론슨이 &quot;The Mathocalypse&quot; 블로그 포스팅 게재.</li>
+<li><strong>역사적 난제들의 기원 시점</strong>:
+<ul>
+<li>정수 곱셈 $O(n \log n)$ 장벽: 1960년대부터 유지됨.</li>
+<li>무작위 vs 양자 쿼리 복잡도 분리 문제: 1998년 스콧 아론슨의 연구 시작.</li>
+<li>패리티의 $QAC^0$ 비포함 문제: 1999년부터 양자 복잡도 분야의 핵심 난제.</li>
+<li>유니터리 합성 문제 (Unitary Synthesis Problem): 2007년 스콧 아론슨과 그렉 쿠퍼버그가 제안.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>소스 텍스트 분석 결과 확인되는 명확한 한계점 및 불확실한 요소들은 다음과 같다.</p>
+<ul>
+<li><strong>최상위 핵심 난제들의 미해결 상태</strong>:
+<ul>
+<li>OpenAI의 대규모 발표에도 불구하고, 이론컴퓨터과학 분야의 가장 근본적인 최상위 난제인 <strong>$P \neq NP$</strong>, <strong>$P = BPP$</strong>, <strong>$NEXP \not\subset P/poly$</strong> 등은 해결 목록에 포함되지 않았다.</li>
+<li>밀레니엄 문제인 <strong>리만 가설(Riemann Hypothesis)</strong>, <strong>호지 예상(Hodge Conjecture)</strong>, <strong>버치-스위너턴다이어 예상(BSD Conjecture)</strong> 등은 부분적인 진전(partial progress)만 이루어졌을 뿐 완전히 해결되지 못했다.</li>
+</ul>
+</li>
+<li><strong>인간 수학자의 세부 증명 이해도 한계</strong>:
+<ul>
+<li>소스 텍스트에 &quot;no human has understood just about any of these proofs yet&quot;이라고 명시된 바와 같이, 발표 시점 기준으로 인간 수학자 중 인공지능 논문의 세부 과정을 완벽히 이해하거나 검증을 마친 사람은 전무하다.</li>
+</ul>
+</li>
+<li><strong>Lean 커널 버그 악용 및 AI의 속임수 가능성</strong>:
+<ul>
+<li>댓글 작성자 Gary Drescher가 지적한 바와 같이, 과거 Lean 커널 버그를 악용해 거짓 명제를 참으로 증명했던 선례가 존재하므로 AI가 커널 버그를 악용(Lean-hacking)했을 가능성이 제기된다.</li>
+<li>다만, Boaz Barak 등 전문가들이 사고 과정(Chain of Thought)을 검증했을 때 별다른 이상이 없었고 기술적 수준이 문제 해결에 부합한다는 점에서 단순 속임수일 가능성은 극히 낮게 평가된다.</li>
+</ul>
+</li>
+<li><strong>비구성적 증명 및 효율적 알고리즘의 부재</strong>:
+<ul>
+<li>유니터리 합성 문제의 경우, 다항 시간 내 변환을 가능하게 하는 클래식 오라클 $A$의 '존재성'은 증명했으나 오라클 $A$를 실제로 효율적으로 구성(construct)하는 알고리즘은 제시하지 못했다.</li>
+<li>행렬 곱셈 $O(n^{9/4})$ 성과 역시 Bram Cohen이 지적했듯 램지 이론적 기법을 사용한 비구성적(non-constructive) 증명으로, 구체적인 행렬 곱셈 알고리즘 구조를 제공하지 않는다.</li>
+</ul>
+</li>
+<li><strong>소스 텍스트의 정보 부재 및 확인 불가 항목</strong>:
+<ul>
+<li>OpenAI 모델의 구체적인 연산 하드웨어 구성, 총 연산 비용, 외부 벤치마크 상세 데이터 등은 소스 텍스트에 명시되지 않았다.</li>
+<li>댓글 작성자 Bram Cohen의 역할/소속 정보는 소스 context상 확인 불가능하다.</li>
+<li>댓글 작성자 Tristan의 실제 신원 및 발언의 진위 여부는 확인 불가하며, 작성자(스콧 아론슨) 역시 정황상 패러디 글(parody)로 추정하고 있을 뿐 명확한 사실 확인은 불가능하다.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

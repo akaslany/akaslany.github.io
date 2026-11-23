@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory Attention</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Memory Attention</h1>
+<p class="page-meta">논문 · 2026-09-24</p>
+<h2 id="요약">요약</h2>
+<p>연구 목적 및 동기 표준적인 대규모 언어 모델(LLM)은 문맥적 은닉 상태(Contextual Hidden States)로부터 독립적인 선형 투사(Linear Projection, $W_V$)를 통해 가치(Value)를 생성합니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/abs/2609.28399v1">출처</a> · <a href="https://www.youtube.com/watch?v=ZOEPbR2Wfd0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="memory-attention-ma-토큰-인덱스-메모리와-문맥-키-결합을-통한-가치-투사-대체-기술-보고서">Memory Attention(MA): 토큰 인덱스 메모리와 문맥 키 결합을 통한 가치 투사 대체 기술 보고서</h3>
+<p><strong>원문 출처:</strong> Jiale Kang, <em>Memory Attention</em>, arXiv:2609.28399v1 (https://arxiv.org/pdf/2609.28399v1)</p>
+<hr />
+<h5 id="1-서론-및-기술적-배경">1. 서론 및 기술적 배경</h5>
+<p><strong>연구 목적 및 동기</strong>
+표준적인 대규모 언어 모델(LLM)은 문맥적 은닉 상태(Contextual Hidden States)로부터 독립적인 선형 투사(Linear Projection, $W_V$)를 통해 가치(Value)를 생성합니다. 본 연구는 이러한 밀집 계산(Dense Computation) 방식이 다수의 문맥에서 재사용 가능한 정보까지 매번 새로 계산한다는 비효율성에 주목합니다. 이에 따라 기존의 $W_V$를 토큰 인덱스 기반의 메모리 조회(Lookup) 시스템으로 대체하여, 고정된 연산 비용 내에서 모델의 파라미터 용량을 효과적으로 확장하는 ‘메모리 어텐션(Memory Attention, MA)’ 기술을 제안합니다.</p>
+<p><strong>핵심 가설 요약</strong>
+어텐션 메커니즘에서 ‘키(Key)’는 이미 충분한 문맥 정보를 담고 있습니다. 따라서 별도의 가치 투사 행렬 없이, 문맥적 정보를 담은 키($K$)와 토큰별 고유 정보를 담은 정적 ‘메모리(Memory, $M$)’를 결합하는 것만으로도 가치($V$)를 구성할 수 있다는 가설을 세웠습니다. 이는 모델의 파라미터 수는 늘리면서도 실제 추론 시 필요한 연산량(FLOPs)은 획기적으로 줄일 수 있는 구조적 전환을 의미합니다.</p>
+<hr />
+<h5 id="2-memory-attention-ma-메커니즘-상세">2. Memory Attention(MA) 메커니즘 상세</h5>
+<h6 id="2-1-가치-구성-value-construction-프로세스">2.1 가치 구성(Value Construction) 프로세스</h6>
+<p>MA는 $W_V$를 통한 행렬 곱셈 대신, 다음과 같은 단계로 가치를 구성합니다.</p>
+<ol>
+<li><strong>메모리 조회 및 헤드별 정규화:</strong> 각 레이어별로 독립적인 임베딩 테이블($E \in \mathbb{R}^{N \times d_v}$)에서 입력 토큰 ID($s$)에 해당하는 메모리 벡터($M$)를 조회합니다.
+<ul>
+<li>수식: $M = \text{Norm}(E[s])$</li>
+<li><strong>기술적 정밀도:</strong> 여기서 $\text{Norm}$은 <strong>각 키/가치 헤드(KV Head) 내에서 독립적으로 적용되는 RMSNorm</strong>을 의미합니다. 이는 메모리가 각 헤드의 차원($d_h$)과 헤드 수($H_{KV}$)에 맞춰 정밀하게 스케일링되도록 보장합니다.</li>
+</ul>
+</li>
+<li><strong>동적 키와 정적 메모리의 결합:</strong> 학습 시, 은닉 상태에서 유도된 문맥 키($K$)와 조회된 메모리($M$)를 더하여 최종 가치($V$)를 생성합니다.
+<ul>
+<li>수식: $V = K + M$</li>
+</ul>
+</li>
+<li><strong>상호 보완적 역할:</strong> $K$는 현재 문맥에 따른 동적 정보를 제공하고, $M$은 토큰별로 고정된 정적 정보를 제공하여 기존 $W_V$가 수행하던 역할을 분담하여 대체합니다.</li>
+</ol>
+<h6 id="2-2-추론-시-최적화-테이블-접기-table-folding">2.2 추론 시 최적화: 테이블 접기(Table Folding)</h6>
+<p>추론 단계에서는 정규화 과정이 고정된 파라미터로 작동하므로, 이를 메모리 테이블에 미리 병합(Folded)할 수 있습니다.</p>
+<ul>
+<li><strong>원리:</strong> $E'[i] = \text{Norm}(E[i])$를 미리 계산하여 저장함으로써, 런타임 복잡도를 각 레이어의 토큰당 $O(1)$ 조회로 단순화합니다.</li>
+<li><strong>분석적 함의:</strong> 이 '접기' 기법은 연산 집약적인 정규화 단계를 정적인 전처리 단계로 변환시키며, 시스템의 병목 현상을 **연산(Compute, FLOPs)에서 메모리 대역폭(Memory Bandwidth) 및 조회(Lookup)**로 전이시키는 핵심 최적화 요소입니다.</li>
+</ul>
+<h6 id="2-3-ma-offload-및-프리페칭-prefetching">2.3 MA-Offload 및 프리페칭(Prefetching)</h6>
+<p>토큰 인덱스 기반 조회의 특성을 활용하여 GPU 메모리 점유를 최소화하는 메커니즘입니다.</p>
+<ul>
+<li><strong>오프로드(Offload):</strong> 대용량 메모리 테이블을 CPU나 SSD에 배치하고, 필요한 엔트리만 GPU로 전송합니다.</li>
+<li><strong>파이프라인 및 그룹화:</strong> 현재 레이어의 계산 중에 다음 레이어의 데이터를 전송하는 프리페칭을 수행합니다. 실험에 따르면 <strong>프리필(Prefill) 단계에서는 1개 레이어, 디코딩(Decoding) 단계에서는 4개 레이어</strong>를 오프로드 그룹 단위로 설정하고, <strong>프리페치 깊이(Prefetch Depth)를 4</strong>로 유지할 때 계산과 통신을 효과적으로 중첩(Overlap)시킬 수 있습니다.</li>
+</ul>
+<h6 id="2-4-확장-기술-ma-recall">2.4 확장 기술: MA-Recall</h6>
+<p>KV 캐시(Key-Value Cache)의 가치 부분을 영구 저장하는 대신, 저장된 키($K$)와 토큰 ID를 기반으로 필요할 때마다 $V$를 재구성하는 기술입니다.</p>
+<ul>
+<li><strong>이점:</strong> KV 캐시 중 가치 컴포넌트의 저장 공간을 약 50% 절감할 수 있습니다.</li>
+<li><strong>트레이드오프:</strong> 다만, 이 과정에서 <strong>역 위치 회전(Inverse Positional Rotation)</strong> 또는 <strong>RoPE 재계산</strong>과 같은 추가적인 연산 부담이 발생하므로, 캐시 공간과 연산량 사이의 신중한 선택이 필요합니다.</li>
+</ul>
+<hr />
+<h5 id="3-실험-설정-및-환경">3. 실험 설정 및 환경</h5>
+<p>MA의 효율성을 검증하기 위해 다양한 어텐션 백본(Backbone)에 적용하여 실험을 진행하였습니다.</p>
+<p><strong>[표 1] 어텐션 구성별 모델 사양 (24 Layers, Hidden Size 1,024)</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">어텐션 구성 (Backbone)</th>
+<th style="text-align:center">KV 헤드 수 ($H_{KV}$)</th>
+<th style="text-align:center">헤드 차원 ($d_h$)</th>
+<th style="text-align:center"><strong>총 KV 차원 ($d_v$)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>MHA</strong></td>
+<td style="text-align:left">Multi-Head Attention</td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">64</td>
+<td style="text-align:center"><strong>1,024</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GQA</strong></td>
+<td style="text-align:left">Grouped-Query Attention</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">64</td>
+<td style="text-align:center"><strong>512</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MQA</strong></td>
+<td style="text-align:left">Multi-Query Attention</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">256</td>
+<td style="text-align:center"><strong>256</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>학습 및 파라미터 조건의 엄밀성</strong></p>
+<ul>
+<li><strong>토큰 예산(Training Token Budgets):</strong> 표준 모델과 MA 모델은 동일한 수의 학습 토큰(10B~20B)을 사용하여 학습되었습니다.</li>
+<li><strong>파라미터 불일치 주의:</strong> MA 모델은 추가적인 메모리 테이블($N \times d_v$)을 포함하므로, <strong>전체 파라미터 수는 표준 모델보다 현저히 많습니다</strong> (예: MHA 기준 373M vs MA 1,135M). 본 실험은 파라미터 수 동일 조건이 아닌, **'동일 학습 비용(Token Budget) 대비 모델 용량 확장 효율'**을 측정하는 데 목적이 있습니다.</li>
+</ul>
+<hr />
+<h5 id="4-주요-실험-결과-분석">4. 주요 실험 결과 분석</h5>
+<h6 id="4-1-토큰-효율성-token-efficiency-및-언어-모델링-성능">4.1 토큰 효율성(Token Efficiency) 및 언어 모델링 성능</h6>
+<ul>
+<li><strong>토큰 효율성:</strong> 분석 결과 MA는 표준 모델 대비 **1.42배(1024 차원 모델) 및 1.16배(2048 차원 모델)**의 토큰 효율성을 기록했습니다. 이는 동일한 손실(Loss) 수준에 도달하기 위해 표준 모델보다 <strong>약 13.8%에서 29.6% 적은 학습 토큰</strong>만으로도 충분함을 의미합니다.</li>
+<li><strong>성능 지표:</strong> WikiText 당혹도(Perplexity)가 MHA 기준 31.55에서 28.64로 크게 개선되었으며, LAMBADA 등 주요 지표에서도 일관된 향상을 보였습니다.</li>
+</ul>
+<h6 id="4-2-다운스트림-태스크-및-검색-retrieval-성능">4.2 다운스트림 태스크 및 검색(Retrieval) 성능</h6>
+<ul>
+<li><strong>다운스트림:</strong> ARC, HellaSwag 등 7개 태스크 평균 점수가 0.6~1.16% 포인트 상승했습니다. 단, PIQA 등 특정 벤치마크에서는 미세한 성능 하락이 관찰되어 모든 태스크에서 만능은 아님을 시사합니다.</li>
+<li><strong>검색(NIAH):</strong> 학습 문맥 윈도우(2K) 내에서 96.8%의 높은 정확도를 기록했으며, 윈도우를 벗어난 4K 구간에서도 표준 모델 대비 우수한 검색 능력을 유지했습니다.</li>
+</ul>
+<h6 id="4-3-추론-효율성-및-지연-시간-latency-의-역설">4.3 추론 효율성 및 지연 시간(Latency)의 역설</h6>
+<ul>
+<li><strong>연산량 및 저장 공간:</strong> 가치 구성 FLOPs가 대폭 감소하였으며, MA-Offload 적용 시 GPU 파라미터 상주량을 표준 모델보다도 7.38%(192 MiB) 더 절감하면서 2.08배의 전체 파라미터 용량을 확보했습니다.</li>
+<li><strong>지연 시간 분석:</strong>
+<ul>
+<li><strong>프리필(Prefill): 약 3.04%의 속도 향상</strong>이 확인되었습니다. 이는 배치 계산 시 FLOPs 감소 효과가 더 크게 작용하기 때문입니다.</li>
+<li><strong>디코딩(Decode): 약 0.86%의 미세한 속도 저하</strong>가 발생했습니다. 이는 자동 회귀(Auto-regressive) 단계에서 메모리 조회 및 커널 동기화 오버헤드가 FLOPs 절감 이득을 상쇄하기 때문인 것으로 분석됩니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계점-및-기술적-주의사항">5. 한계점 및 기술적 주의사항</h5>
+<ul>
+<li><strong>성능 향상의 비범용성:</strong> 가치 구성 연산량은 이론적으로 감소하지만, 실제 종단간(End-to-end) 속도는 하드웨어 대역폭과 구현 방식에 따라 다릅니다. 특히 디코딩 단계에서의 미세한 지연은 본 기술이 모든 추론 시나리오에서 즉각적인 속도 향상을 보장하지 않음을 보여줍니다.</li>
+<li><strong>문맥 의존성 보존:</strong> MA는 가치 투사($W_V$)를 대체할 뿐, 키($K$)를 통해 여전히 문맥 정보를 수용합니다. 즉, 어텐션 메커니즘의 본질적인 문맥 의존적 작동 방식은 그대로 유지됩니다.</li>
+<li><strong>학술적 상태:</strong> 본 보고서의 기반이 된 연구는 동료 심사(Peer-review)를 거치지 않았거나 독립적인 제3자에 의한 재현이 확인되지 않은 <strong>사전 인쇄본(Preprint)</strong> 상태입니다. 따라서 실제 프로덕션 환경 적용 시에는 충분한 자체 검증이 선행되어야 합니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

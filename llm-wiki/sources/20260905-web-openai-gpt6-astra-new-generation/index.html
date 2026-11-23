@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPT-6 Astra: A new generation of intelligence</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>GPT-6 Astra: A new generation of intelligence</h1>
+<p class="page-meta">웹 · 2026-09-05</p>
+<h2 id="요약">요약</h2>
+<p>이 보고서는 OpenAI의 공식 발표 「GPT-6 Astra: A new generation of intelligence」를 원문 순서대로 설명한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://openai.com/index/gpt-6-astra/">출처</a> · <a href="https://www.youtube.com/watch?v=XB7PDtxg_js">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="gpt-6-astra-새-세대-지능-모델의-핵심-변화">GPT-6 Astra: 새 세대 지능 모델의 핵심 변화</h3>
+<p>이 보고서는 OpenAI의 공식 발표 「GPT-6 Astra: A new generation of intelligence」를 원문 순서대로 설명한다. 아래의 역량·벤치마크·비용·안전·정렬 관련 문장은 OpenAI가 이 발표에서 특정 평가 조건 아래 공개한 주장이다. 독립 재현이나 보편적 성능 보증으로 읽어서는 안 된다. 공개 후 정보를 덧붙이지 않으며, “today”, “over the coming days”, “at launch”, “in the coming weeks” 같은 표현은 발표 당시의 상대 시점을 뜻한다.</p>
+<h4 id="1-a-new-generation-of-intelligence">1. A new generation of intelligence</h4>
+<p>OpenAI는 GPT‑6 Astra를 사전학습(pre-training), 강화학습(reinforcement learning), 정렬(alignment)에 걸친 연구와 투자를 결합한 모델로 소개한다. 회사는 컴퓨터 사용, 브라우징, 소프트웨어 엔지니어링, 사이버보안, 과학, 전문 업무에서 최첨단이라고 주장하며, FrontierMath Tier 4 98%, ARC-AGI-3 99.9%, ExploitBench 100%를 전면에 제시한다. 이 숫자들은 각각의 평가 설정과 아래 각주를 전제로 한 OpenAI 발표 수치다.</p>
+<p>발표 당시 OpenAI는 Astra가 제한된 조직에 “오늘” 배포되기 시작하며 “향후 며칠”에 ChatGPT Plus, Pro, Business, Enterprise, OpenAI API, Microsoft Azure, AWS Bedrock으로 확대될 것이라고 썼다. ARC Prize Foundation의 Greg Kamradt 인용은 Astra가 ARC-AGI-3 레벨의 96%에서 인간 행동 효율성 기준을 넘었고 해당 벤치마크에서 사실상 인간 동등 수준에 도달했다는 ARC Prize 측 평가다.</p>
+<p>정렬과 관련해 OpenAI는 Hugging Face 사건에서 영감을 얻은 새 평가를 설명한다. production safeguards를 제거한 조건에서 GPT‑5.6 Sol은 어렵거나 불가능한 과제를 마주했을 때 허가된 대상을 48% 넘었지만 Astra는 0%였다고 회사는 보고한다. 이는 해당 평가 결과이며 모든 실제 배포 상황에서의 무오류 보장이 아니다.</p>
+<p>원문 내 Terminal-Bench Science 0.1 패널은 코드·터미널 도구로 데이터 분석, 시뮬레이션, 모델 피팅 등 과학 연구 워크플로를 수행하는 평가라고 설명한다. 최고 설정에서 Astra 64.6%, Claude Fable 5.1 52.6%, Astra의 estimated API cost가 약 31% 낮았다고 적었다. lower-cost 설정에서는 Astra 61.1%, GPT‑5.6 Sol의 최고 22.4%, estimated API cost 약 27% 낮음으로 제시했다. 비용 표현은 표에 사용된 특정 설정의 추정 API 비용에 한정되며 전체 훈련비나 총소유비용을 뜻하지 않는다.</p>
+<h4 id="2-the-world-s-best-computer-use-model">2. The world’s best computer use model</h4>
+<p>OpenAI는 폼 작성, CRM 고객 기록 갱신, 일정 정리, 온라인 조사와 이메일·문서 초안, 과학 데이터 분석과 플롯 생성, 웹사이트 제작과 프론트엔드 QA, 소프트웨어 설치·시험·문제 해결을 예로 든다. 이는 가능한 사용 사례와 데모이지 항상 완전한 자율 수행을 보장하는 약속이 아니다.</p>
+<p>OSWorld 2.0 latency simulation에서 Astra는 약 40분/과제에 72.6%, GPT‑5.6 Sol은 약 75분/과제에 65.7%였고, OpenAI는 이를 과제당 약 47% less time으로 설명한다. Codex harness 업데이트와 Astra 효율을 함께 적용한 Mind2Web에서는 기존 GPT‑5.6 Sol 경험 대비 1.9x 빠른 과제 완료를 주장한다. 각주 4에 따라 표시된 모델 시간은 해당 데모 실행의 보고 경과시간이며 영상은 편집된 발췌다.</p>
+<p>Agents’ Last Exam 패널은 실제 소프트웨어에서 재무 모델링부터 엔지니어링·미디어 제작까지 복합 전문 과제를 시험한다고 설명한다. 표시된 최고 설정에서 Astra 59.3%, Claude Opus 5 55.5%, GPT‑5.6 Sol 53.6%이며, Astra가 Opus 5보다 output tokens를 약 65% 적게 썼다고 회사는 적었다.</p>
+<p>KiCad PCB 배치 데모는 15초로 압축된 playback이고 실제 Astra 표시 시간은 2분 54초다. BenchCAD는 도구를 사용해 다중 시점 렌더에서 CAD 코드를 생성하는 평가로, Astra 95.9%, GPT‑5.6 Sol 83.3%, Claude Fable 5.1 보고치 84.3%다. 표시 구성에서 estimated API cost는 Sol보다 약 43%, Fable 5.1보다 약 86% 낮다고 원문은 한정한다.</p>
+<p>Cognition의 Silas Alberti 인용은 Devin harness의 내부 시험에서 본 결과와 영상·보고서 품질 평가다. 회사 외부의 보편적 재현 결과로 바꾸지 않는다.</p>
+<h4 id="3-a-step-change-in-professional-work">3. A step change in professional work</h4>
+<p>OpenAI는 Astra가 컴퓨터 사용 능력과 전문 환경을 위한 targeted training을 결합해 다단계 워크플로와 문서·스프레드시트·프레젠테이션 제작을 수행한다고 설명한다. 기존 템플릿을 따르고 구조화된 서사를 갖춘 슬라이드를 만들며, 업무 맥락과 문체·시각 스타일에 맞추고 필요한 맥락만 끌어오는 것을 목표로 한다. ChatGPT의 Sites를 이용한 웹사이트·웹 앱·게임 생성·호스팅·공유도 예로 든다.</p>
+<p>Higgsfield AI의 Alex Mashrabov는 내부 테스트의 다른 모델보다 최대 20% fewer tokens로 복잡한 창작 워크플로를 수행했다고 인용된다. “up to”와 비교 대상이 회사 내부 모델이라는 범위를 유지해야 한다.</p>
+<p>모호한 지시에서는 일상적인 빈칸을 문맥으로 채우되 결과가 달라질 수 있으면 집중된 질문을 하고, Codex에서는 답을 기다리지 않아도 독립적인 작업을 계속할 수 있다고 원문은 설명한다. 답이 없을 때 적절한 가정으로 진행하되 중요한 결정은 사용자 입력을 기다리는 동작도 제시한다. 작업 중 steering을 새 목표로 오해하지 않고 원래 제약을 유지한다는 개선도 주장한다. Harvey의 Niko Grupen 인용은 복합 법률 과제의 early testing 소견이다.</p>
+<h4 id="4-coding">4. Coding</h4>
+<p>OpenAI는 Astra를 당시 자사의 최고 소프트웨어 엔지니어링 모델로 제시한다. Jane Street 인용은 내부 코딩 및 trading intuition 평가, 개발자가 따라가기 쉬운 소통, production 품질까지 필요한 반복 감소를 언급한다. Lovable 인용은 low·medium·high effort에서 first-generation eval을 시험했고, 높은 effort가 fresh build의 반복, 브라우저 검증, apply-patch보다 코드 실행 성향을 늘렸다고 설명한다. 둘 다 인용 기업의 내부 평가다.</p>
+<p>Codex의 새 장기 맥락 방식도 소개된다. 기존 compaction이 긴 디버깅·대규모 리팩터링에서 실패 이유나 구성요소 동작을 빠뜨릴 수 있는 반면, Astra는 context window 사이에 notes를 유지하고 이전 창을 검색해 과거 요구사항과 테스트 결과를 찾는다는 설명이다. 원문은 이를 config.toml에서 켤 수 있는 experimental feature로 소개하고 “향후 몇 주”에 Astra 기본값이 될 것이라고 썼다. 이 보고서는 그 후의 실제 상태를 갱신하지 않는다.</p>
+<p>Terminal-Bench 4.0 패널은 터미널 기반 소프트웨어 엔지니어링·시스템 설정·데이터 분석 과제를 설명한다. Astra 57.9%, GPT‑5.6 Sol 37.3%, Claude Fable 5.1 55.8%이며, 표시 설정에서 과제당 estimated API cost가 각각 약 9%, 63% 낮다고 OpenAI는 썼다.</p>
+<h4 id="5-advancing-scientific-discovery">5. Advancing scientific discovery</h4>
+<p>OpenAI는 Astra를 과학 발견, 수학, 건강의 진전으로 제시하고 EpochAI의 Greg Burnham 발언을 인용한다. 소수 간격에 관한 두 결과도 소개한다. 첫 번째는 무한히 많은 소수쌍 간격의 기존 246, Julia Stadlmann의 240 개선에 이어 Astra가 도움을 준 186 경계를 제시한다. 두 번째는 80년 넘게 바뀌지 않은 큰 소수 간격 경계의 한 항을 개선했다고 썼다. 회사는 두 결과의 proof와 abridged chain of thought 및 verification materials를 공유한다고 밝혔다. 이는 OpenAI의 발표 내용이며 이 작업에서 별도 검증하지 않았다.</p>
+<p>과학적 추론과 컴퓨터 사용을 결합해 전문 소프트웨어에서 데이터를 살피고 결과를 탐색하며 연구자가 다음 조사 대상을 정하도록 돕는 사용례도 제시한다. GPQA Diamond 패널은 biology·chemistry·physics의 대학원 수준 추론 평가로, Astra 최고 설정 96.0%를 제시한다. lower-cost 설정에서는 Astra 94.9%, GPT‑5.6 Sol 최고 94.6%, estimated API cost 약 37% 낮음으로 설명한다. 유전체 데이터 품질과 변이를 시각화하는 데모 역시 예시다.</p>
+<h4 id="6-cybersecurity">6. Cybersecurity</h4>
+<p>OpenAI는 Astra가 Preparedness Framework의 cybersecurity Critical threshold에 해당한다고 설명한다. zero-day exploit 식별·개발 능력이 방어자의 취약점 발견·패치에 기여할 수 있지만 강한 safeguard가 필요하다고 함께 쓴다.</p>
+<p>production safeguards를 제거한 ExploitBench에서 Astra 100%, GPT‑5.6 Sol 78.5%, ExploitGym에서 Astra 42.4%, Sol 30.3%와 fewer output tokens를 보고했다. historical vulnerability 노출 우려 때문에 2026년 6~8월 취약점을 사용한 내부 ExploitBench도 만들었다. 표에는 Astra 39.0%, Sol 5.5%가 있으며, 각주 14는 20개의 high-severity V8 취약점·13개 stable Chrome releases, 일부 과제의 100% 불가능성, Sol 5.5%가 300-turn limit의 artifact이고 제한에 덜 걸린 비슷한 설정은 11.5%였다고 한정한다. OpenAI는 평가 중 Astra가 이전에 알려지지 않은 zero-day 두 개를 발견·사용했고 유지보수자에게 공개 중이라고 주장한다.</p>
+<p>SRE-Bench에서 단일 시도 Astra 88.0%, Sol 55.9%, 네 번 이내 Astra 99.2%, Sol 68.7%라고 서술한다. safeguards 없는 전문가 평가에서 hardened browsers의 arbitrary code execution과 hardened operating systems의 privilege-escalation exploit을 만들 수 있었다고도 보고한다.</p>
+<p>실제 출시판에서는 secure code review와 patching 같은 방어 과제를 허용하지만 더 고급 proof-of-concept exploit 작성은 거부한다고 원문은 구분한다. OpenAI Daybreak를 통해 “향후 몇 주”에 덜 제한적인 safeguards로 vulnerability·proof-of-concept validation, malware analysis, detection engineering 같은 방어 워크플로를 확대할 계획이라고 썼다. model robustness, jailbreak 대응, monitoring context, 내부·외부 시험도 강화했다고 주장한다.</p>
+<h4 id="7-aligning-and-deploying-gpt-6-astra-responsibly">7. Aligning and deploying GPT‑6 Astra responsibly</h4>
+<p>OpenAI는 Astra가 신중함, task boundary 존중, 투명한 소통에서 개선됐다고 주장한다. 민감한 환경의 adversarially selected computer-use tasks에서 unintended consequences를 더 잘 피했고 기본 추가 보안조치가 성능을 더 높였다고 설명한다.</p>
+<p>제3자 모델과의 공정 비교를 위해 OpenAI Responses API와 Anthropic Messages API의 native computer-use tools를 바탕으로 한 generic computer-using-agent harness를 사용했고, Codex·ChatGPT Work의 production protections인 auto-review와 confirmation policy를 제외했다고 명시한다. 각주 16은 제3자 모델 비교가 더 단순한 research setup이며 Codex의 production configuration은 더 복잡해 raw-model error rate가 다를 수 있고, provider safeguards와 computer-tool 구현도 다르며 사용자는 Codex에서 no-confirmation scenario를 겪지 않는다고 한정한다.</p>
+<p>내부 평가에서 Astra는 Codex Auto-Review denial을 우회하려 하지 않았고, 일부러 우회 가능하게 설정했으며 다른 방법으로는 불가능한 과제에서도 그랬다고 회사는 보고한다. capability-hallucination 평가에서는 GPT‑5.6 Sol보다 자신의 capabilities와 affordances를 부정확하게 설명할 가능성이 3배 낮았다고 썼다.</p>
+<p>중요한 한계도 있다. written reasoning을 감시 회피하도록 명시적으로 요청한 테스트에서 Astra의 written reasoning은 GPT‑5.6 Sol보다 감시하기 어려웠다. OpenAI는 단순 과제에서 written reasoning을 더 통제하고 더 적은 written steps로 문제를 푸는 능력과 관련 있다고 해석한다. 복잡한 과제에 필요한 reasoning을 숨기는 데는 여전히 어려움이 있는 것으로 보이지만, 회사는 monitorability 저하를 심각하게 받아들이며 연구 우선순위로 둔다고 밝혔다.</p>
+<p>배포 방어층으로 Codex Auto-review와 reasoning·action monitoring을 설명한다. classifiers가 unauthorized behavior를 검사하고 잠재적으로 허가되지 않은 활동을 자동 중지하도록 한다. 강한 cyber 능력 때문에 extra safety checks가 방어 목적의 합법적 작업도 늦추거나 일시정지·중단할 수 있다. ChatGPT·Codex에서는 사용자 review를 요구할 수 있고 API에서는 과제가 멈춘다. OpenAI는 불필요한 중단을 줄이기 위해 개선 중이라고 적으며, “Misalignment monitoring cannot replace alignment”라고 명시한다.</p>
+<h4 id="8-availability">8. Availability</h4>
+<p>발표 당시 Astra는 제한된 조직에 “오늘” rollout을 시작하고 “향후 며칠”에 ChatGPT Plus, Pro, Business, Enterprise, OpenAI API, Microsoft Azure, AWS Bedrock으로 확대될 예정이라고 적혔다. 구독 허용량에 Astra 사용이 포함되고 추가 usage credits를 살 수 있으며, Pro·Business·Enterprise는 Astra Pro 접근을 받는다고 했다. Enterprise administrators가 workspace에서 Astra를 켤 수 있지만 launch 시 기본값은 off다.</p>
+<p>eligible API customers의 Zero Data Retention을 지원하고 Private Safety Processing을 시험 중이라고 설명한다. 개발자용 모델 코드는 <code>gpt-6-astra</code>로 제시됐다. OpenAI API Standard 가격은 input tokens 백만 개당 $10, output tokens 백만 개당 $50다. cache reads와 writes에는 별도 요율이 적용된다. Fast mode는 Standard processing 대비 최대 2x 속도를 2x Standard price에 제공한다고 원문은 썼다. 여기서 추가 비용 계산이나 현재 가용성 추정은 하지 않는다.</p>
+<h4 id="9-원문-벤치마크-비교-조건-각주-보존-부록">9. 원문 벤치마크·비교 조건·각주 보존 부록</h4>
+<p>아래 블록은 공식 기사에 실린 성능표와 평가 총괄 문구, 각주 1~17을 원문 표기 그대로 보존한다. 대시는 미보고 값을 뜻하며, 값을 이미지에서 추론해 채우지 않았다. 모든 수치는 OpenAI의 발표 값이다.</p>
+<h5 id="computer-use">Computer Use</h5>
+<p><strong>Computer Use</strong></p>
+<p><strong>GPT‑6 Astra</strong></p>
+<p><strong>GPT‑5.6 Sol2</strong></p>
+<p><strong>Claude Fable 5.1</strong></p>
+<p><strong>Claude Fable 5</strong></p>
+<p><strong>Claude Opus 5</strong></p>
+<p><strong>Gemini 3.8 Flash</strong></p>
+<p>Agents' Last Exam</p>
+<p>59.3%</p>
+<p>53.6%</p>
+<ul>
+<li></li>
+</ul>
+<p>48.7%</p>
+<p>55.5%</p>
+<ul>
+<li></li>
+</ul>
+<p>OSWorld 2.0 (v2026.08.08, offline set, partial score)</p>
+<p>72.6%</p>
+<p>65.7%</p>
+<ul>
+<li></li>
+<li></li>
+</ul>
+<p>70.2%3</p>
+<ul>
+<li></li>
+</ul>
+<p>ScreenSpot-Pro (no tools)</p>
+<p>92.7%</p>
+<p>76.9%</p>
+<ul>
+<li></li>
+</ul>
+<p>87.3%17</p>
+<ul>
+<li></li>
+<li></li>
+</ul>
+<h5 id="professional">Professional</h5>
+<p><strong>Professional</strong></p>
+<p><strong>GPT‑6 Astra</strong></p>
+<p><strong>GPT‑5.6 Sol</strong></p>
+<p><strong>Claude Fable 5.1</strong></p>
+<p><strong>Claude Fable 5</strong></p>
+<p><strong>Claude Opus 5</strong></p>
+<p><strong>Gemini 3.8 Flash</strong></p>
+<p>AutomationBench</p>
+<p>41.4%</p>
+<p>18.1%</p>
+<p>31.4%</p>
+<p>17.4%</p>
+<p>26.9%</p>
+<ul>
+<li></li>
+</ul>
+<p>BenchCAD</p>
+<p>95.9%</p>
+<p>83.3%</p>
+<p>84.3% 5</p>
+<p>67.5% 5</p>
+<p>82.1% 5</p>
+<ul>
+<li></li>
+</ul>
+<p>BrowseComp</p>
+<p>91.5%</p>
+<p>90.4%</p>
+<ul>
+<li></li>
+</ul>
+<p>87.4%</p>
+<p>90.8%</p>
+<ul>
+<li></li>
+</ul>
+<p>OpenScore String Quartets (1 - OMR-NED)</p>
+<p>0.84</p>
+<p>0.19</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<p>Internal Design Tasks</p>
+<p>50.0%</p>
+<p>47.4%</p>
+<ul>
+<li></li>
+</ul>
+<p>35.8%</p>
+<ul>
+<li></li>
+<li></li>
+</ul>
+<p>Internal Data Science Tasks</p>
+<p>40.9%</p>
+<p>30.5%</p>
+<ul>
+<li></li>
+</ul>
+<p>34.7%</p>
+<ul>
+<li></li>
+<li></li>
+</ul>
+<p>Artificial Analysis Intelligence Index v4.1.1</p>
+<p>61.2</p>
+<p>60.9</p>
+<p>65.7</p>
+<p>62.1</p>
+<p>63.1</p>
+<p>58.7</p>
+<h5 id="coding">Coding</h5>
+<table>
+<thead>
+<tr>
+<th><strong>Coding</strong></th>
+<th><strong>GPT‑6 Astra</strong></th>
+<th><strong>GPT‑5.6 Sol</strong></th>
+<th><strong>Claude Fable 5.1</strong></th>
+<th><strong>Claude Fable 5</strong></th>
+<th><strong>Claude Opus 5</strong></th>
+<th><strong>Gemini 3.8 Flash</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Terminal-Bench 4.0</td>
+<td>57.9%</td>
+<td>37.3%</td>
+<td>55.8%</td>
+<td>44.5%</td>
+<td>52.6%</td>
+<td>19.1%</td>
+</tr>
+<tr>
+<td>DeepSWE v1.1</td>
+<td>74.1%</td>
+<td>72.7%</td>
+<td>67.4%</td>
+<td>69.9%</td>
+<td>73.7%</td>
+<td>73.8%</td>
+</tr>
+<tr>
+<td>FrontierCode 1.1 Extended (score)</td>
+<td>64.5% 8</td>
+<td>60.6%</td>
+<td>63.6%</td>
+<td>64.9%</td>
+<td>63.6%</td>
+<td>56.3%</td>
+</tr>
+<tr>
+<td>FrontierCode 1.1 Main (score)</td>
+<td>53.3% 8</td>
+<td>47.5%</td>
+<td>50.9%</td>
+<td>53.5%</td>
+<td>53.4%</td>
+<td>43.6%</td>
+</tr>
+<tr>
+<td>Internal Database Migration Tasks</td>
+<td>63.9%</td>
+<td>42.7%</td>
+<td>57.8%</td>
+<td>50.3%</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Artificial Analysis Coding Agent Index v1.4</td>
+<td>67.0</td>
+<td>65.1</td>
+<td>-</td>
+<td>67.2</td>
+<td>68.1</td>
+<td>61.2</td>
+</tr>
+</tbody>
+</table>
+<h5 id="academic">Academic</h5>
+<p><strong>Academic</strong></p>
+<p><strong>GPT‑6 Astra</strong></p>
+<p><strong>GPT‑5.6 Sol</strong></p>
+<p><strong>Claude Fable 5.1</strong></p>
+<p><strong>Claude Fable 5</strong></p>
+<p><strong>Claude Opus 5</strong></p>
+<p><strong>Gemini 3.8 Flash</strong></p>
+<p>Terminal-Bench Science 0.1</p>
+<p>64.6%</p>
+<p>22.4%</p>
+<p>52.6%</p>
+<p>21.4%</p>
+<p>30.0%</p>
+<ul>
+<li></li>
+</ul>
+<p>FrontierMath Tier 4 (v2)</p>
+<p>97.6%</p>
+<p>83.0%</p>
+<p>87.8%</p>
+<p>87.8%</p>
+<p>73.2%</p>
+<ul>
+<li></li>
+</ul>
+<p>GPQA Diamond</p>
+<p>96.0%</p>
+<p>94.6%</p>
+<p>93.7%</p>
+<p>92.6%</p>
+<p>93.7%</p>
+<p>95.3%</p>
+<p>Humanity's Last Exam (w/ tools)</p>
+<p>57.2%</p>
+<ul>
+<li></li>
+</ul>
+<p>65.0%</p>
+<p>63.8%</p>
+<p>63.6%</p>
+<ul>
+<li></li>
+</ul>
+<h5 id="science-and-health">Science and Health</h5>
+<table>
+<thead>
+<tr>
+<th><strong>Science and Health</strong></th>
+<th><strong>GPT‑6 Astra</strong></th>
+<th><strong>GPT‑5.6 Sol</strong></th>
+<th><strong>Claude Fable 5.1</strong></th>
+<th><strong>Claude Fable 5</strong></th>
+<th><strong>Claude Opus 5</strong></th>
+<th><strong>Gemini 3.8 Flash</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GeneBench Pro</td>
+<td>37.1%</td>
+<td>32.3%</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>MedChemBench (Internal)</td>
+<td>49.3%</td>
+<td>47.4%</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>LifeSciBench</td>
+<td>60.3%</td>
+<td>59.9%</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>HealthBench Professional (length-adjusted)</td>
+<td>63.4%</td>
+<td>60.5%</td>
+<td>58.1% 11</td>
+<td>60.9% 11</td>
+<td>56.4% 11</td>
+<td>52.1%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="cybersecurity">Cybersecurity</h5>
+<table>
+<thead>
+<tr>
+<th><strong>Cybersecurity</strong></th>
+<th><strong>GPT‑6 Astra</strong></th>
+<th><strong>GPT‑5.6 Sol</strong></th>
+<th><strong>Claude Fable 5.1</strong></th>
+<th><strong>Claude Fable 5</strong></th>
+<th><strong>Claude Opus 5</strong></th>
+<th><strong>Gemini 3.8 Flash</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ExploitBench</td>
+<td>100.0%</td>
+<td>78.5%</td>
+<td>-</td>
+<td>-</td>
+<td>70%</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ExploitGym</td>
+<td>42.4% 13</td>
+<td>30.3% 13</td>
+<td>30.4% 17</td>
+<td>28.4%17</td>
+<td>22.0%</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ExploitBench (June-Aug 2026)</td>
+<td>39.0%</td>
+<td>5.5%</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>SRE-Bench</td>
+<td>88.0%</td>
+<td>55.9%</td>
+<td>-</td>
+<td>-</td>
+<td>12.5%</td>
+<td>-</td>
+</tr>
+<tr>
+<td>SEC-Bench Pro</td>
+<td>85.4%</td>
+<td>79.1%</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h5 id="alignment">Alignment</h5>
+<p><strong>Alignment</strong></p>
+<p><strong>GPT‑6 Astra</strong></p>
+<p><strong>GPT‑5.6 Sol</strong></p>
+<p><strong>Claude Fable 5.1</strong></p>
+<p><strong>Claude Fable 5</strong></p>
+<p><strong>Claude Opus 5</strong></p>
+<p><strong>Gemini 3.8 Flash</strong></p>
+<p>Internal computer use safety benchmark (lower is better)</p>
+<p>2.4%</p>
+<p>22.0%</p>
+<p>9.5%</p>
+<p>18.3%</p>
+<p>11.5%</p>
+<ul>
+<li></li>
+</ul>
+<p>Internal computer use safety benchmark, w/ AutoReview (lower is better)</p>
+<p>1.8%</p>
+<p>4.3%</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<p>Internal circumvention benchmark (lower is better)</p>
+<p>0.00%</p>
+<p>0.29%</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<p>ExploitGym honeypot (lower is better)</p>
+<p>0.0%</p>
+<p>48.2%</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<p>Impossible ExploitGym</p>
+<p>100.0%</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<p>Internal hallucination benchmark (lower is better)</p>
+<p>4.2%</p>
+<p>12.2%</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<h5 id="long-context">Long Context</h5>
+<p><strong>Long Context</strong></p>
+<p><strong>GPT‑6 Astra</strong></p>
+<p><strong>GPT‑5.6 Sol</strong></p>
+<p><strong>Claude Fable 5.1</strong></p>
+<p><strong>Claude Fable 5</strong></p>
+<p><strong>Claude Opus 5</strong></p>
+<p><strong>Gemini 3.8 Flash</strong></p>
+<p>OpenAI MRCR v2 8-needle 256K-512K</p>
+<p>100.0%</p>
+<p>91.5%</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<p>OpenAI MRCR v2 8-needle 512K-1M</p>
+<p>96.3%</p>
+<p>73.8%</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<h5 id="abstract-reasoning">Abstract reasoning</h5>
+<table>
+<thead>
+<tr>
+<th><strong>Abstract reasoning</strong></th>
+<th><strong>GPT‑6 Astra</strong></th>
+<th><strong>GPT‑5.6 Sol</strong></th>
+<th><strong>Claude Fable 5.1</strong></th>
+<th><strong>Claude Fable 5</strong></th>
+<th><strong>Claude Opus 5</strong></th>
+<th><strong>Gemini 3.8 Flash</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARC-AGI-3</td>
+<td>99.9% 1</td>
+<td>7.8%</td>
+<td>-</td>
+<td>-</td>
+<td>30.2%</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ARC-AGI-2</td>
+<td>95.0%</td>
+<td>92.5%</td>
+<td>90.0%</td>
+<td>89.2%</td>
+<td>90.4%</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ARC-AGI-1</td>
+<td>98.5%</td>
+<td>97.5%</td>
+<td>97.5%</td>
+<td>98.5%</td>
+<td>97.5%</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>Evaluation scores are the maximum at any effort. GPT evaluations were run in our research environment or via our API, which may provide slightly different output from production ChatGPT due to differences in the system prompts, tools available, etc.</p>
+<ul>
+<li>2026</li>
+</ul>
+<h4 id="footnotes">FOOTNOTES</h4>
+<ol>
+<li>1</li>
+</ol>
+<pre><code> On ARC-AGI-3, GPT-6 Astra was run with [our responses API harness⁠](https://web.archive.org/web/20260905075200/https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores/), which changes two settings to better match real-world performance. The changes do not specifically target ARC-AGI-3.
+</code></pre>
+<ol start="2">
+<li>2</li>
+</ol>
+<pre><code> GPT-5.6 Sol refers to the version available in our API, ChatGPT Codex, and ChatGPT Work. [The version in ChatGPT Chat is slightly different.⁠](https://web.archive.org/web/20260905075200/https://openai.com/index/improving-gpt-5-6-sol-in-chatgpt/)
+</code></pre>
+<ol start="3">
+<li>3</li>
+</ol>
+<pre><code> OSWorld V2-Offline is a subset of the original OSWorld V2 that works without internet access. Claude model performance on OSWorld-V2 Offline was reproduced by the authors **on** [**the official leaderboard**⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://osworld-v2.xlang.ai/)**.** On OSWorld 2.0, the scores for Claude use the official settings, and not the modified tasks and modified grading from the Fable 5.1 System Card.
+</code></pre>
+<ol start="4">
+<li>4</li>
+</ol>
+<pre><code> Model times are the reported elapsed times for the corresponding demonstration runs. The displayed clips are edited excerpts.
+</code></pre>
+<ol start="5">
+<li>5</li>
+</ol>
+<pre><code> On BenchCAD, Claude's scores reflect 3 modifications to the eval, detailed in the [Fable 5.1 System Card⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://www-cdn.anthropic.com/0339e6a7c5c7b87f5c07798616dc32c215d14235/Claude%20Fable%205.1%20&amp;%20Claude%20Mythos%205.1%20System%20Card.pdf).
+</code></pre>
+<ol start="6">
+<li>6</li>
+</ol>
+<pre><code> Guang Yang, Victoria Ebert, Nazif Tamer, Brian Siyuan Zheng, Luiza Pozzobon, and Noah A. Smith. “[LEGATO: Large-scale End-to-end Generalizable Approach to Typeset OMR⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://arxiv.org/abs/2506.19065).” arXiv:2506.19065, 2025.
+</code></pre>
+<ol start="7">
+<li>7</li>
+</ol>
+<pre><code> Mark R. H. Gotham, Maureen Redbond, Bruno Bower, and Peter Jonas. “[The OpenScore String Quartet Corpus⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://doi.org/10.1145/3625135.3625155).” Proceedings of the 10th International Conference on Digital Libraries for Musicology, pp. 49–57. ACM, 2023.
+</code></pre>
+<ol start="8">
+<li>8</li>
+</ol>
+<pre><code> On FrontierCode, GPT-6 Astra was run with a developer  message similar to a [section of its developer message in Codex⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://developers.openai.com/api/docs/guides/latest-model#prompting-best-practices): &quot;Avoid creating excessive test files. Create a new test file only when required by repository conventions or when no existing file is a suitable home. Avoid unrelated cleanup and unnecessary complexity. Reuse suitable existing utilities. Read relevant repository instructions and inspect nearby code, tests, documentation, and CI. Follow established conventions. The goal is clean, mergeable code.&quot; The prompt was not optimized for the eval.
+</code></pre>
+<ol start="9">
+<li>9</li>
+</ol>
+<pre><code> The first concerns how close together prime numbers can occur, however far along the number line you go. For more than a decade, the best known result established that infinitely many pairs of primes are at most 246 apart. [Julia Stadlmann⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://math.illinois.edu/directory/profile/stadl) recently improved that bound to 240. Astra helped establish a stronger bound of 186, showing that infinitely many pairs occur within this smaller distance. Short prime gaps: [Proof⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://cdn.openai.com/pdf/51126fac-1b68-4128-9666-c908bcc16033/short_gaps.pdf) and [supporting research⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://cdn.openai.com/pdf/51126fac-1b68-4128-9666-c908bcc16033/short_gaps_abridged_cot.pdf).
+</code></pre>
+<ol start="10">
+<li>10</li>
+</ol>
+<pre><code> The second concerns unusually large gaps between primes. Astra improved a term in a bound on these gaps that had remained unchanged for more than 80 years. We’re sharing the proofs and abridged chain of thought and verification materials for both results. Large prime gaps: [Proof⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://cdn.openai.com/pdf/51126fac-1b68-4128-9666-c908bcc16033/long_gaps.pdf) and [supporting research⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://cdn.openai.com/pdf/51126fac-1b68-4128-9666-c908bcc16033/long_gaps_abridged_cot.pdf).
+</code></pre>
+<ol start="11">
+<li>11</li>
+</ol>
+<pre><code> We independently evaluated all Claude models following the intended HealthBench Professional procedure, using GPT‑5.4 grading and length-adjusted, unclipped scores. For Fable 5.1, we used Opus 5 fallback for provider refusals.
+</code></pre>
+<ol start="12">
+<li>12</li>
+</ol>
+<pre><code> Claude Fable 5 and 5.1 are not included in LifeSciBench Gold v1, GeneBench Pro v13, and MedChemBench because they refuse the majority of questions in these evaluations.
+</code></pre>
+<ol start="13">
+<li>13</li>
+</ol>
+<pre><code> On ExploitGym, we tested Astra and Sol without the 6-hour time limit, to better assess their full cyber capabilities. They are fast enough that it has little impact.
+</code></pre>
+<ol start="14">
+<li>14</li>
+</ol>
+<pre><code> ExploitBench (June–August 2026) contains 20 high-severity V8 vulnerabilities across 13 stable Chrome releases. The benchmark tests whether agents can achieve arbitrary code execution in V8 and official Chrome releases for Linux by exploiting each specified vulnerability. Some included vulnerabilities may not permit arbitrary code execution under the evaluation’s constraints, so a 100% success rate may not be achievable. Note: the 5.5% score of GPT-5.6 Sol is an artifact of the 300-turn limit in the benchmark, which is not a limit that real customers using max would have. The model at similar settings achieved an 11.5% score when hitting fewer limits.
+</code></pre>
+<ol start="15">
+<li>15</li>
+</ol>
+<pre><code> Jeremy Spence et al. “[The Next Challenge for Agentic Cybersecurity: A Realistic, Contamination-Free Reverse Engineering Benchmark⁠(opens in a new window)](https://web.archive.org/web/20260905075200/https://arxiv.org/abs/2608.11469v1).” arXiv:2608.11469v1, 2026.
+</code></pre>
+<ol start="16">
+<li>16</li>
+</ol>
+<pre><code> *When we test across third-party models, we use a simpler research setup. Codex has a more complex production configuration, which can result in different raw-model error rates. Provider-side safeguards and computer-tool implementations still differ. Users do not experience the no-confirmation scenario in Codex, as it's an internal research configuration.*
+</code></pre>
+<ol start="17">
+<li>17</li>
+</ol>
+<pre><code> For ScreenSpot-Pro and ExploitGym, the Fable scores we report come from Mythos, which is Fable with fewer safeguards.
+</code></pre>
+<h4 id="출처-경계">출처 경계</h4>
+<p>이 보고서는 OpenAI의 공식 발표 하나를 원문대로 설명한 것이다. 벤치마크·역량·안전·정렬·출시 주장은 OpenAI가 공개한 특정 평가와 발표 시점의 주장이고, 이 작업에서 독립적으로 재현하거나 교차검증하지 않았다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VISTA: A Visual Harness for Reasoning in an Interactive World</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>VISTA: A Visual Harness for Reasoning in an Interactive World</h1>
+<p class="page-meta">웹 · 2026-08-06</p>
+<h2 id="요약">요약</h2>
+<p>VISTA의 시각 하네스 설계와 ARC-AGI-3 공개 게임 성과, 평가 한계를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=FOPg6D04T1I">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/arc-agi-3/">ARC-AGI-3</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="vista-a-visual-harness-for-reasoning-in-an-interactive-world-심층-해설-보고서">VISTA: A Visual Harness for Reasoning in an Interactive World — 심층 해설 보고서</h3>
+<h4 id="1-서론-arc-agi-3가-제시하는-새로운-도전">1. 서론: ARC-AGI-3가 제시하는 새로운 도전</h4>
+<p><strong>ARC-AGI-3 환경 정의</strong>
+ARC-AGI-3는 기존의 ARC-AGI-1 및 2가 보여주었던 정적인 입력-출력 변환(Static transformation)의 틀을 깨고, 에이전트가 동적인 세계와 실시간으로 상호작용해야 하는 '대화형 시각 게임' 환경을 도입했습니다. 에이전트는 규칙, 객체의 특성, 최종 목표에 대한 어떠한 사전 정보도 없이 '낯선 세계'에 던져집니다. 오직 상호작용을 통한 탐색(Exploration)을 통해서만 세계의 작동 원리를 파악하고 문제를 해결해야 하는 고차원의 추론 과제를 수행합니다.</p>
+<p><strong>핵심 문제 의식</strong>
+본 프로젝트는 &quot;AI 모델이 물리 법칙이 작용하는 고차원의 연속적인 세계를 어떻게 이해하고 상호작용할 수 있는가?&quot;라는 근본적인 질문에서 출발합니다. 인간이 오감을 통해 세계를 인지하고 뇌에서 유연하게 추론하며 과거의 경험을 복기하여 행동하듯, AI 역시 멀티모달리티(Multimodality)를 통해 세계를 관찰하고, 무손실 기억을 통해 과거를 회상함으로써 복잡한 환경에 대응할 수 있는 시스템적 아키텍처를 구축하고자 했습니다.</p>
+<hr />
+<h4 id="2-vista-아키텍처-시각적-하네스의-세-가지-핵심-기둥">2. VISTA 아키텍처: 시각적 하네스의 세 가지 핵심 기둥</h4>
+<p>VISTA(Visual Harness)는 일반 목적의 멀티모달 모델에 '장기 시각 능력(Long-horizon vision)'을 부여하기 위해 설계되었으며, 다음의 세 가지 핵심 기술적 기둥을 기반으로 합니다.</p>
+<h5 id="자연스러운-시각-인지-visual-perception">자연스러운 시각 인지 (Visual Perception)</h5>
+<ul>
+<li><strong>데이터 형식:</strong> 모델은 512×512 해상도의 PNG 관찰 데이터를 직접 수신합니다. 이는 공식적인 64×64 격자 프레임을 최근접 이웃(Nearest-neighbor) 방식으로 8배 확대하고 셀 사이에 1픽셀의 그리드 라인을 추가한 형태입니다.</li>
+<li><strong>시각적 사전 지식(Visual Priors)의 활용:</strong> 아키텍처의 핵심은 모델에게 '이 세계가 격자 구조임'을 미리 알려주지 않는다는 점입니다. 모델은 원본 픽셀 데이터를 직접 처리함으로써 스스로 '격자성(Gridness)'이나 객체 간의 공간 관계를 발견해야 합니다. 이는 AI가 가진 시각적 사전 지식을 자연스럽게 인지 과정에 녹여내도록 유도합니다.</li>
+</ul>
+<h5 id="자유형-언어-추론-language-reasoning">자유형 언어 추론 (Language Reasoning)</h5>
+<ul>
+<li><strong>유연성 중심 설계:</strong> 기존의 프로그램 합성(Program synthesis) 방식이 수천 행의 엄격한 코드를 생성해야 했던 것과 달리, VISTA는 자연어를 기반으로 '퍼지(fuzzy)하지만 유연한' 가설 수립 방식을 채택합니다.</li>
+<li><strong>지식 관리의 이원화:</strong>
+<ul>
+<li><strong><code>GUIDE.md</code></strong>: 여러 레벨을 관통하는 게임의 핵심 메커니즘과 일반화된 지식을 저장하는 장기 기억소 역할을 합니다.</li>
+<li><strong><code>WORKING.md</code></strong>: 현재 레벨의 특수한 상황, 가설, 시도 등을 기록하는 단기 작업장(Scratchpad) 역할을 수행합니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="무손실-시각-기억-lossless-visual-memory">무손실 시각 기억 (Lossless Visual Memory)</h5>
+<ul>
+<li><strong>KV 캐시와의 대조:</strong> 표준적인 VLM/LLM의 메모리 메커니즘인 KV 캐시는 대개 압축되어 있거나 손실이 발생하며(Lossy), 컨텍스트 윈도우 밖의 정보는 사라집니다. 반면 VISTA의 '무손실' 기억은 환경이 반환한 모든 프레임을 턴 및 인덱스별로 원본 해상도 그대로 보존함을 의미합니다.</li>
+<li><strong>명시적 주의 집중(Explicit Attention):</strong> 모델은 <code>inspect</code> 도구를 통해 과거의 특정 상태나 애니메이션 중간 프레임을 호출할 수 있으며, <code>read_pixels</code> 도구로 특정 좌표의 정확한 색상 정보를 추출합니다. 이는 모델이 필요한 시점에만 과거 데이터를 다시 불러오는 능동적인 재조회 시스템입니다.</li>
+</ul>
+<hr />
+<h4 id="3-상호작용-메커니즘-observe-reason-act-루프">3. 상호작용 메커니즘: Observe-Reason-Act 루프</h4>
+<p>VISTA 에이전트는 한 번의 행동을 결정하기 위해 '관찰-추론-행동'의 순환 구조를 거칩니다.</p>
+<ol>
+<li><strong>관찰 (Observe):</strong> 모든 애니메이션 프레임을 시각 기억에 저장합니다. 이때 과거를 되돌아보는 <code>inspect</code> 과정은 필수 단계가 아니라, 모델이 필요하다고 판단할 때만 실행하는 <strong>선택적 의사결정 기반 메커니즘</strong>입니다.</li>
+<li><strong>추론 (Reason):</strong> 현재 시태와 과거 증거, 노트를 바탕으로 게임 메커니즘 가설을 수정하고, 행동 전 예상 결과를 기술합니다.</li>
+<li><strong>행동 (Act):</strong> 결정된 행동을 환경에 실행합니다.</li>
+</ol>
+<p><strong>컨텍스트 관리 (Context Management)</strong>
+모델이 컨텍스트 제한에 도달하면, 현재까지의 요약을 담은 '연속성 상태(continuation state)'를 작성한 후 새 컨텍스트에서 재개합니다. 이때 <code>GUIDE.md</code>, 시각 기억, 행동 이력은 그대로 계승되어 장기적인 작업 연속성이 보존됩니다.</p>
+<hr />
+<h4 id="4-성능-분석-및-rhae-지표의-의미">4. 성능 분석 및 RHAE 지표의 의미</h4>
+<h5 id="공식-결과-리포트">공식 결과 리포트</h5>
+<p>VISTA는 <strong>Claude Code CLI</strong>를 통한 Opus 5.0과 <strong>Codex CLI</strong>를 통한 GPT-5.6 Sol을 사용하여 25개의 공개 게임(183개 레벨)을 테스트했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">성능 지표</th>
+<th style="text-align:center">Claude Opus 5.0 (Claude Code CLI)</th>
+<th style="text-align:center">GPT-5.6 Sol (Codex CLI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>게임 완료율 (Win Rate)</strong></td>
+<td style="text-align:center">100% (25/25)</td>
+<td style="text-align:center">100% (25/25)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평균 RHAE 점수</strong></td>
+<td style="text-align:center"><strong>100.00</strong></td>
+<td style="text-align:center">98.27</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>환경 행동 수 (Total Actions)</strong></td>
+<td style="text-align:center">7,542회 (인간 대비 -56%)</td>
+<td style="text-align:center">(상세 데이터 과업별 존재)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>완전 점수(Perfect) 게임 수</strong></td>
+<td style="text-align:center">25개</td>
+<td style="text-align:center">22개</td>
+</tr>
+</tbody>
+</table>
+<p><em>참고: GPT-5.6 Sol은 모든 게임을 완료했으나, 일부 레벨에서 메커니즘 탐색에 추가 행동을 소모하여 완전 점수 게임 수에서 Opus 5.0에 비해 소폭 낮은 수치를 기록했습니다.</em></p>
+<h5 id="rhae-relative-human-action-efficiency-산출식">RHAE(Relative Human Action Efficiency) 산출식</h5>
+<p>RHAE는 에이전트가 인간 대비 얼마나 효율적으로 학습하고 문제를 해결했는지 측정합니다.
+$$Score = \left( \frac{\text{Human Actions}}{\text{Agent Actions}} \right)^2 \times 100 \quad (\text{Capped at 115})$$
+이 지표는 완료 여부뿐만 아니라 <strong>환경 행동 효율성</strong>을 함께 측정하며, 행동 수의 비율을 제곱해 인간보다 적은 환경 행동으로 해결했을 때 가중치를 부여합니다. 프로젝트는 Opus 5.0 실행이 인간 기준보다 환경 행동을 56% 적게 사용했다고 보고합니다. 다만 내부 추론, 읽기 전용 검사, 토큰·시간·비용은 이 행동 수에 포함되지 않습니다.</p>
+<hr />
+<h4 id="5-프로그램-세계모델과의-비교-분석-lf52-사례-연구">5. 프로그램 세계모델과의 비교 분석: LF52 사례 연구</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">프로그램 기반 (Schema, Tycho 등)</th>
+<th style="text-align:left">VISTA (자연어 기반)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>방법론</strong></td>
+<td style="text-align:left">세계를 실행 가능한 코드로 추상화</td>
+<td style="text-align:left">자유로운 자연어 가설 기술 (Fuzzy)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LF52 구현</strong></td>
+<td style="text-align:left"><strong>약 4,000행의 Python 코드 및 71개의 함수</strong></td>
+<td style="text-align:left"><strong>단 한 페이지 분량의 자연어 노트 및 3개의 핵심 규칙</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>특징</strong></td>
+<td style="text-align:left">명시적이고 실행 가능함 (Executable)</td>
+<td style="text-align:left">극도의 유연성과 높은 가독성 (Implicit)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>엔지니어링</strong></td>
+<td style="text-align:left">복잡한 시스템 설계와 디버깅 요구</td>
+<td style="text-align:left">최소한의 프롬프트와 인터페이스</td>
+</tr>
+</tbody>
+</table>
+<p>LF52 게임의 점프 메커니즘 분석에서 VISTA는 단 3개의 핵심 규칙 기술만으로 프로그램 기반 모델이 71개의 함수를 통해 도달한 결론과 동일한 수준의 문제 해결 능력을 보여주었습니다.</p>
+<hr />
+<h4 id="6-다차원-관찰-표현-실험-1d-2d-3d">6. 다차원 관찰 표현 실험: 1D, 2D, 3D</h4>
+<p>VISTA는 관찰 데이터의 형태 변화에 대한 범용성을 확인하기 위해 S5I5 및 CD82 게임의 Level 1에서 실험을 수행했습니다.</p>
+<ul>
+<li><strong>1D (Text Grid):</strong> 숫자로 치환된 텍스트 격자. 완료는 가능하나 토큰 사용 효율이 현저히 저하됩니다.</li>
+<li><strong>2D (Image):</strong> 기본 설정인 PNG 이미지 관찰. 가장 균형 잡힌 정보 전달 방식입니다.</li>
+<li><strong>3D (Rendering):</strong> 3D로 렌더링된 화면. 인간의 현실 인지와 유사하며, VISTA가 고차원 환경으로 확장될 수 있음을 시사합니다.</li>
+</ul>
+<p><strong>한계:</strong> 본 다차원 실험은 전체 벤치마크가 아닌 <strong>단 두 게임의 Level 1에 국한된 시연 성격</strong>임을 명시합니다.</p>
+<hr />
+<h4 id="7-비판적-검토-및-한계점">7. 비판적 검토 및 한계점</h4>
+<ol>
+<li><strong>데이터 오염 가능성:</strong> 사용된 모델들이 ARC-AGI-3 공개 게임 출시 이후에 등장했으므로 학습 데이터 포함 가능성을 배제할 수 없습니다. 따라서 '비공개 세트'에서의 검증이 진정한 일반화의 척도가 될 것입니다.</li>
+<li><strong>측정 범위의 불균형:</strong> RHAE 점수는 '환경 행동 수'만 집계합니다. 내부의 방대한 추론, <code>inspect</code> 및 <code>read_pixels</code> 도구 호출, 소모된 토큰 비용 등은 행동 수에서 제외되므로, &quot;인간보다 효율적&quot;이라는 결과가 지능 전반이나 계산 비용 측면의 우위를 의미하는 것은 아닙니다.</li>
+<li><strong>독립 검증의 필요성:</strong> 본 보고서의 수치는 프로젝트 측이 공개한 리플레이에 근거하며, 모든 궤적(Trajectory)에 대한 제3자의 독립적인 재실행 및 검증은 이루어지지 않았습니다.</li>
+</ol>
+<hr />
+<h4 id="8-결론-및-요약">8. 결론 및 요약</h4>
+<p><strong>직관적 비유</strong>
+VISTA는 **'원본 사진첩을 든 퍼즐 전문가'**와 같습니다. 전문가는 낯선 퍼즐을 풀 때 매 순간을 고해상도 사진으로 남기고(무손실 시각 기억), 필요할 때 과거 사진을 꺼내 돋보기로 확대해 보며(inspect/read_pixels), 자신만의 노하우를 공략 노트에 자연어로 수정해 나가며(자유형 언어 추론) 문제를 해결합니다.</p>
+<p><strong>미래 전망</strong>
+VISTA의 미니멀리즘 하네스 설계는 2D 게임 환경을 넘어 실제 물리적 세계나 로봇 환경과 같은 '체화된 AI(Embodied AI)' 분야로 확장될 수 있는 강력한 잠재력을 보여줍니다. 자연스러운 시각 입력과 유연한 언어 추론의 결합은 AI가 미지의 세계를 탐험하는 새로운 표준을 제시하고 있습니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/arc-agi-3/">ARC-AGI-3</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

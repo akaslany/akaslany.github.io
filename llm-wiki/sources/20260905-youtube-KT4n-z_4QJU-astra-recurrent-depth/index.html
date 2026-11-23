@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAI Astra and Recurrent Depth / Looped Transformers</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>OpenAI Astra and Recurrent Depth / Looped Transformers</h1>
+<p class="page-meta">YouTube · 2026-09-05</p>
+<h2 id="요약">요약</h2>
+<p>1. OpenAI Astra의 재귀적 깊이(Recurrent Depth) 루머 IT 전문 매체 'The Information'은 OpenAI가 곧 출시할 신규 모델 'Astra'에 '재귀적 깊이(Recurrent Depth)' 또는 '루프형 트랜스포머(Looped Transformers)' 아키텍처를 도입했다는 루머를…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=KT4n-z_4QJU">출처</a> · <a href="https://www.youtube.com/watch?v=ebZde4EVTSo">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai-astra와-재귀적-깊이-recurrent-depth-및-루프형-트랜스포머-기술-분석-보고서">OpenAI Astra와 재귀적 깊이(Recurrent Depth) 및 루프형 트랜스포머 기술 분석 보고서</h3>
+<p><strong>1. OpenAI Astra의 재귀적 깊이(Recurrent Depth) 루머</strong>
+IT 전문 매체 'The Information'은 OpenAI가 곧 출시할 신규 모델 'Astra'에 '재귀적 깊이(Recurrent Depth)' 또는 '루프형 트랜스포머(Looped Transformers)' 아키텍처를 도입했다는 루머를 보도했습니다. 해당 기술의 핵심은 동일한 가중치 블록을 반복 사용하여 모델의 추론 성능을 최적화(Optimization of Inference Performance)하는 데 있습니다. 다만, 본 기술은 OpenAI가 공식적으로 확인한 사안이 아니며, 현재로서는 아키텍처 전문가들 사이에서 논의되는 기술적 가능성에 기반한 분석 대상임을 분명히 합니다.</p>
+<p><strong>2. 기술적 정정: '텍스트'가 아닌 '중간 표현'의 반복 처리</strong>
+초기 루머에서는 모델이 '동일한 텍스트를 여러 번 처리한다'고 표현했으나, 이는 기술적으로 엄밀하지 않은 설명입니다. 정확한 메커니즘은 입력 데이터가 모델 내부의 특정 레이어 블록을 통과하며 생성되는 **'중간 표현(Intermediate Representations)'**을 다시 동일한 레이어에 재투입하여 연산을 심화하는 구조입니다. 즉, 텍스트 자체를 재독하는 것이 아니라, 이미 연산된 데이터를 더 깊은 수준에서 반복 가공하여 추론의 밀도를 높이는 방식입니다.</p>
+<p><strong>3. Nanbeige 4.2-3B: 루프형 트랜스포머의 실증적 사례</strong>
+루프형 아키텍처의 대표적인 사례로 중국의 'Nanbeige LLM Lab'과 'Boss Zhipin'이 공동 개발한 <strong>Nanbeige 4.2-3B</strong> 모델을 들 수 있습니다.</p>
+<ul>
+<li><strong>기술적 정정 (Technical Correction):</strong> 발표자는 이전에 이 모델의 출처를 인도 'Sarvam AI'로 혼동했던 오류를 공식적으로 바로잡았습니다. 이 모델은 중국 연구진의 성과임을 명시합니다.</li>
+<li><strong>아키텍처 구조:</strong>
+<ul>
+<li>총 22개의 고유한 레이어 블록(Unique Layer Blocks)으로 설계되었습니다.</li>
+<li>입력값이 22개 레이어를 모두 통과한 후, 출력 단계로 가기 전 다시 처음 레이어로 돌아가 동일한 가중치를 한 번 더 통과(Two-pass)합니다.</li>
+<li>결과적으로 22개 레이어의 파라미터만으로 총 44개 레이어를 통과한 것과 유사한 추론 깊이를 확보합니다.</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. 레이어 재사용(Layer Reuse)의 경제성 분석</strong>
+가중치를 복제하지 않고 기존 레이어를 재사용하는 방식은 '매개변수 효율성(Parameter-efficiency)' 관점에서 강력한 이점을 가집니다.</p>
+<ul>
+<li><strong>메모리 최적화:</strong> 고유 가중치 수가 22개로 유지되므로, 모델 로딩에 필요한 RAM 점유율 및 디스크 저장 공간은 22개 레이어 수준에 머뭅니다.</li>
+<li><strong>추론 계산량(Inference Compute):</strong> 다만 연산 비용은 실제 통과 횟수(44개 레이어)에 비례하여 증가합니다. 즉, 모델의 물리적 크기는 작게 유지하면서 추론 시의 논리적 깊이(Depth)만 확장하는 전략입니다.</li>
+</ul>
+<p><strong>5. 'From Scratch' 학습과 기존 모델 'Retrofit'의 성능 격차</strong>
+Nanbeige 기술 보고서의 핵심 발견 중 하나는 학습 방식의 중요성입니다.</p>
+<ul>
+<li><strong>Retrofit의 한계:</strong> 이미 학습이 완료된 일반 모델에 사후적으로 루프 구조를 추가하는 방식은 성능이 급격히 저하됩니다. 모델 가중치가 훈련 과정에서 경험하지 못한 데이터 분포에 노출되기 때문입니다.</li>
+<li><strong>처음부터 학습 (From-scratch Training):</strong> 루프 구조를 전제로 처음부터 학습시킨 모델만이 유의미한 성능 향상을 보였습니다. 이는 가중치가 반복적인 연산 경로에 최적화(Compute-optimal scaling)되어야 함을 시사합니다.</li>
+</ul>
+<p><strong>6. Two-pass 설계와 가성비(Bang for the buck)</strong>
+왜 레이어를 3~4번 반복하지 않고 단 2번만 반복하는지에 대해서는 '한계 이익 감소(Diminishing Returns)' 원리가 적용됩니다.</p>
+<ul>
+<li>실험 결과, 2회 반복(Two-pass) 설정이 약 75%의 토큰 효율성을 유지하면서도 가장 유리한 성능 트레이드오프를 제공했습니다.</li>
+<li>반복 횟수를 3회 이상으로 늘릴 경우 추가적인 성능 이득은 미미한 반면, 추론 지연 시간(Latency)은 기하급수적으로 늘어나 경제성이 떨어지는 것으로 확인되었습니다.</li>
+</ul>
+<p><strong>7. KV-cache 공유의 기술적 제약</strong>
+동일한 레이어를 재사용함에도 불구하고 KV 캐시(KV-cache)를 공유하는 것은 기술적으로 어렵습니다.</p>
+<ul>
+<li><strong>이유:</strong> 레이어 가중치는 동일하지만, 1회차 통과 시와 2회차 통과 시의 입력 활성값(Activations)이 다르기 때문에 저장해야 할 KV 값이 완전히 다릅니다.</li>
+<li><strong>성능 저하:</strong> KV 캐시를 강제로 공유하여 크기를 절반으로 줄이려는 시도는 약 <strong>3%의 모델링 성능 저하</strong>를 야기합니다. 최적의 성능을 위해서는 각 통과 단계마다 독립적인 KV 캐시를 유지하는 비용을 감수해야 합니다.</li>
+</ul>
+<p><strong>8. Mixture-of-Recursions: 동적 깊이(Dynamic Depth)의 도입</strong>
+'Mixture of Recursions' 논문은 모든 토큰에 동일한 루프를 적용하는 대신, 토큰별 난이도에 따라 연산량을 조절하는 방식을 제안합니다.</p>
+<ul>
+<li><strong>라우터(Router) 메커니즘:</strong> Mixture of Experts(MoE)와 유사하게, 라우터가 각 토큰을 분석하여 루프 횟수(예: 1회, 2회, 3회 등)를 동적으로 결정합니다.</li>
+<li><strong>효율성:</strong> 쉬운 토큰은 빠르게 통과시키고, 논리적 추론이 필요한 어려운 토큰에만 연산 자원을 집중 투입합니다.</li>
+</ul>
+<p><strong>9. Validation-loss 비교 분석 및 스케일링 효과</strong>
+Vanilla Transformer, Recursive Transformer, Mixture of Recursions 간의 검증 손실(Validation Loss) 비교 결과는 다음과 같습니다.</p>
+<ul>
+<li><strong>모델 규모(135M ~ 1.7B):</strong> 소형 모델에서는 일반 트랜스포머가 재귀형보다 우세한 경우가 있으나, 이는 훈련 데이터 및 하이퍼파라미터 설정에 매우 민감한 결과입니다.</li>
+<li><strong>Mixture of Recursions의 우위:</strong> 동적 깊이를 적용한 Mixture of Recursions는 모든 크기에서 가장 낮은 손실 값을 기록했습니다.</li>
+<li><strong>스케일링 특성:</strong> 모델의 크기가 커질수록 일반 모델과의 성능 격차가 벌어지며, 대규모 모델일수록 동적 재귀 구조가 제공하는 이점이 뚜렷해지는 경향을 보입니다.</li>
+</ul>
+<p><strong>10. 동적 깊이에서의 Attention 처리와 DeepSeek 사례</strong>
+서로 다른 깊이에 도달한 토큰들 간의 어텐션 처리는 비용과 성능의 균형점(Trade-off)을 찾는 과정입니다.</p>
+<ul>
+<li><strong>전체 어텐션:</strong> 모든 이전 토큰에 어텐션을 주는 것이 성능상 최선이나 연산 비용이 극도로 높습니다.</li>
+<li><strong>산업적 대안:</strong> 최신 아키텍처인 <strong>DeepSeek</strong>의 Sparse Attention이나 슬라이딩 윈도우(Sliding Window) 방식을 활용하여, 필수적인 정보에만 어텐션을 집중함으로써 성능 손실을 최소화하면서도 계산 효율을 극대화할 수 있습니다.</li>
+</ul>
+<p><strong>11. 재귀적 깊이와 잠재 추론(Latent Reasoning): '숨겨진 CoT'에 대한 반론</strong>
+루프형 구조가 인간이 읽을 수 있는 생각의 사슬(CoT)을 은폐한다는 주장에 대해, 발표자는 이를 '은폐'가 아닌 **'컴팩트한 추론(Compact Reasoning)'**으로 해석해야 한다고 반박합니다.</p>
+<ul>
+<li><strong>숙련된 수학자 비유:</strong> 초보자는 수학 문제를 풀 때 모든 단계를 종이에 적어야 하지만(Visible CoT), 숙련된 전문가는 내부적인 사고 과정을 통해 더 적은 기록만으로도 정확한 결론에 도달합니다.</li>
+<li>내부 연산(Latent Reasoning)이 강화된 모델은 겉으로 드러나는 토큰 수는 적을지언정 더 지능적인 결과를 내놓는 것이며, 이는 모델의 투명성을 고의로 낮추는 행위와는 무관합니다.</li>
+</ul>
+<p><strong>12. 재귀적 자기 개선(Recursive Self-improvement)과의 명확한 구분</strong>
+본 보고서의 기술은 '재귀적 자기 개선' 패러다임과 혼동되어서는 안 됩니다. 재귀적 자기 개선은 모델이 스스로를 개선하여 능력을 진화시키는 개념인 반면, 루프형 트랜스포머는 가중치를 효율적으로 재사용하여 모델의 논리적 깊이를 늘리는 <strong>아키텍처 확장(Scaling) 기술</strong>의 변주입니다.</p>
+<p><strong>13. 기술적 근간: Universal Transformers (2018)</strong>
+현재의 Nanbeige나 Mixture of Recursions 논의는 사실 2018년 발표된 **'Universal Transformers'**에 그 뿌리를 두고 있습니다. 최근의 시도들은 이 원천적인 아이디어를 현대의 대규모 언어 모델(LLM) 환경에 맞춰 단순화하거나(Nanbeige), 동적 라우팅을 결합하여(Mixture of Recursions) 실용화한 형태입니다.</p>
+<p><strong>14. 2025년의 진화: 고정 입력 재주입(Fixed Input Re-injection)</strong>
+2025년 논문 'Scaling up test time compute with latent reasoning'은 한 단계 더 나아간 구조를 제시합니다. 루프 과정에서 단순히 이전 레이어의 출력값만 넘기는 것이 아니라, **초기 입력값(Fixed Input)을 중간 상태에 지속적으로 재주입(Re-injection)**합니다. 이는 강력한 잔차 연결(Residual Connections) 구조를 형성하여 모델이 반복 연산 과정에서 초기 정보를 잃지 않고 더 깊은 잠재 추론을 수행할 수 있게 합니다.</p>
+<p><strong>15. 요약 및 결론</strong></p>
+<ul>
+<li>OpenAI Astra의 재귀적 깊이 채택설은 여전히 루머에 기반하나, 이는 추론 성능과 자원 효율성 사이의 전략적 선택지로서 기술적 타당성이 매우 높습니다.</li>
+<li>루프형 트랜스포머는 가중치 재사용을 통해 메모리 효율성을 극대화하며, 동적 깊이(Mixture of Recursions)를 통해 모델 규모가 커질수록 더 뛰어난 스케일링 효율을 보입니다.</li>
+<li>내부 연산의 증가는 추론 과정의 은폐가 아닌 '지능의 고도화 및 컴팩트화'로 이해되어야 하며, 이는 향후 추론 시간 계산량(Inference-time compute) 확장 기술의 핵심 축이 될 것으로 전망됩니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

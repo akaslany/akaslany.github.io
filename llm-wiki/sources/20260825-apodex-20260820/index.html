@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apodex Discovery: Discoverative AI 및 TRACES 벤치마크 심층 기술 감사 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Apodex Discovery: Discoverative AI 및 TRACES 벤치마크 심층 기술 감사 보고서</h1>
+<p class="page-meta">웹 · 2026-08-25</p>
+<h2 id="요약">요약</h2>
+<p>Apodex의 발견형 AI 평가 체계 TRACES와 성능 수치의 해석·재현 한계를 검토한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=X3TP1A0bHkU">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="apodex-discovery-discoverative-ai-및-traces-벤치마크-심층-기술-감사-보고서">Apodex Discovery: Discoverative AI 및 TRACES 벤치마크 심층 기술 감사 보고서</h3>
+<h4 id="1-문서-식별-및-출처-무결성-감사-provenance-audit">1. 문서 식별 및 출처 무결성 감사 (Provenance Audit)</h4>
+<p>본 기술 감사 보고서는 Apodex가 2026-08-12 공식 블로그에서 공개 발표한 생태계와 연결된 기술 보고서를 2026-08-25 기준으로 분석한다. PDF 자체에는 보고서 고유 발행일이 적혀 있지 않으므로 2026-08-12는 <strong>공식 공개 발표일</strong>로만 사용한다. 아래 검증은 표 산술과 주장 범위를 확인한 것이며, 비공개 원자료·실행 로그·verifier를 이용한 독립 재현은 아니다.</p>
+<ul>
+<li><strong>보고서 아이덴티티:</strong>
+<ul>
+<li><strong>제목:</strong> <em>Apodex Discovery: Reality Benchmarks and Environments for Evaluating and Building Discoverative Artificial Intelligence</em></li>
+<li><strong>저자 및 소속:</strong> Brian Wang, Sheng Wang(Technical Lead/교신저자) 등 총 29명의 연구진 (소속: Apodex).</li>
+<li><strong>저작권:</strong> landing page는 © 2026 Apodex, All rights reserved로 표시되고 보고서용 공개 재사용 라이선스는 확인되지 않았다. 본 제작에서는 보수적으로 원본 PDF·도표·장문 인용을 재배포하지 않고 자체 문장과 도식으로 교육·비평한다.</li>
+</ul>
+</li>
+<li><strong>데이터 소스 무결성 검증 (Warning: Stale Mismatch):</strong>
+<ul>
+<li><strong>[정의/직접 확인]</strong> 본 감사는 SHA-256 해시값 <code>87e6620185c977b9ca424c5f971a0eb1c54309d2c913761a7e863e65c3ce5ce2</code>를 가진 <strong>85쪽 분량의 PDF 문서</strong>만을 유일한 권위 있는 소스(Primary Source)로 인정한다.</li>
+<li><strong>[독립적으로 미검증]</strong> 공식 웹사이트의 'Download' 버튼을 통해 연결되는 30쪽 분량의 'Apodex-1.0' 문서는 본 최신 보고서와 내용상 'Stale Mismatch(구버전 불일치)' 상태임이 확인되었다. 데이터 오염 및 구식 지표에 기반한 오류를 방지하기 위해 해당 30쪽 문서는 <strong>분석 대상에서 완전히 배제</strong>하였음을 엄중히 고지한다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="2-discoverative-ai와-heavy-duty-solver-hds-의-개념적-재정의">2. Discoverative AI와 Heavy-Duty Solver(HDS)의 개념적 재정의</h4>
+<p>저자들은 기존 AI 모델의 역할을 '정적 응답기'에서 '능동적 발견 주체'로 격상시키며, 이를 <strong>Discoverative AI</strong>라 명명했다. 이는 실행 가능한 환경에서 도구를 사용하여 스스로 가설을 세우고 수정하며 발견을 수행하는 존재를 의미한다.</p>
+<h5 id="heavy-duty-solver-hds-의-구성-요소-및-시스템적-한계">Heavy-Duty Solver(HDS)의 구성 요소 및 시스템적 한계</h5>
+<p><strong>[정의/직접 확인]</strong> 성능 평가의 단위인 **Heavy-Duty Solver(HDS)**는 단일 파운데이션 모델(Foundation Model)이 아니다. 이는 다음의 5대 핵심 요소가 결합된 '시스템'이다.</p>
+<ol>
+<li><strong>Foundation Model:</strong> 추론과 텍스트 생성을 담당하는 연산 엔진.</li>
+<li><strong>Harness:</strong> 모델을 실제 파일 시스템, 도구, 실행 환경과 연결하는 물리적 인터페이스.</li>
+<li><strong>Tools:</strong> 검색, 코드 실행기, 전문 과학 소프트웨어, 검증기(Verifier) 등의 외부 도구 집합.</li>
+<li><strong>Memory:</strong> 장기 임무 수행 중 발생하는 상태 변화, 관측값, 가설, 결정 사항을 유지하는 저장소.</li>
+<li><strong>Control Policy:</strong> 다음 행동 결정, 도구 선택, 실패 시 재시도 전략 등을 결정하는 운영 정책.</li>
+</ol>
+<p><strong>[정의/직접 확인]</strong> 보고서에 명시된 성능 수치는 파운데이션 모델 단독의 지능 지수가 아니라, 위 5개 요소가 상호작용하는 <strong>'HDS 시스템 전체'의 결과물</strong>이다. 따라서 특정 solver 점수를 모델의 순수 추론 능력으로 환원하면 안 된다. 균형 잡힌 matched subset과 충분한 반복·통제가 있을 때에만 model, harness, 제어 정책의 기여를 제한적으로 분리할 수 있다.</p>
+<hr />
+<h4 id="3-정적-벤치마크-대-실행-기반-환경-traces-아키텍처">3. 정적 벤치마크 대 실행 기반 환경 (TRACES 아키텍처)</h4>
+<p>TRACES 벤치마크는 기존의 정적 QA 방식(MMLU, GPQA 등)이 AI의 '실험적 발견 능력'을 측정하지 못한다는 문제의식에서 출발한다.</p>
+<h5 id="비교-분석-정적-qa-vs-traces-executable-reality">비교 분석: 정적 QA vs. TRACES (Executable Reality)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">정적 QA (MMLU 등)</th>
+<th style="text-align:left">TRACES (Reality-based Environment)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>상호작용성</strong></td>
+<td style="text-align:left">단회성 (Single-pass)</td>
+<td style="text-align:left">연속적/상태 유지형 (Stateful)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>정보 획득</strong></td>
+<td style="text-align:left">모델 내장 지식 (Closed-book)</td>
+<td style="text-align:left">실시간 도구 출력, 시뮬레이션, 외부 문서</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평가 지표</strong></td>
+<td style="text-align:left">최종 정답 일치도 (Accuracy)</td>
+<td style="text-align:left">실행 궤적(Trajectory) 및 과정 점수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>복원력</strong></td>
+<td style="text-align:left">실패 시 즉시 오답</td>
+<td style="text-align:left">검증 피드백을 통한 자체 수정(Repair) 가능</td>
+</tr>
+</tbody>
+</table>
+<h5 id="추상화-구조-분석">추상화 구조 분석</h5>
+<ul>
+<li><strong>Problem Manifest:</strong> 질문, 성공 기준, 자산 예산(Time/Compute), 태스크 분해 방식을 정의하는 '정적 계약'이다. 이는 문제의 명세를 명확히 하지만, 저자들이 선택한 프록시(Proxy) 지표의 객관성까지 보장하지는 않는다.</li>
+<li><strong>Environment-Task-Episode:</strong> 실행 기반의 상호작용 구조다. 에피소드(Episode)는 특정 HDS가 환경(Environment) 내에서 특정 태스크(Task)를 수행한 전체 기록을 의미한다.</li>
+</ul>
+<p><strong>[열린 문제]</strong> 저자들이 명명한 'Reality-based'라는 표현은 실제 임상적 유효성(Real-world clinical validity)과 동의어가 아니다. 이는 시뮬레이션이나 사후 데이터 기반의 '실행 환경' 내에서의 현실성임을 유념해야 한다.</p>
+<hr />
+<h4 id="4-3단계-검증-채널-및-권한-체계의-투명성-감사">4. 3단계 검증 채널 및 권한 체계의 투명성 감사</h4>
+<p>TRACES는 결과와 과정을 두 개의 보완적 verifier로 평가하고, 무결성 위반을 별도 gate로 검사하는 구조를 제안한다. 교육적으로 세 통로로 설명할 수 있지만, 세 통로가 완전히 독립이라고 단정하면 안 된다.</p>
+<ol>
+<li><strong>Outcome Verifier (결과 검증기):</strong> 최종 산출물 및 중간 단계의 핵심 산출물(Load-bearing artifacts)을 숨겨진 진실(Hidden truth)과 대조한다. 0~1 사이의 정규화된 점수를 산출한다.</li>
+<li><strong>Process Verifier (과정 검증기 / HDS6):</strong> 모델의 신원이나 사적 사고 체인(CoT)을 배제한 채 외부로 드러난 실행 궤적(Trajectory)만을 평가하는 'Blind Judge' 역할을 수행한다.</li>
+<li><strong>Integrity Gate (무결성 게이트):</strong> 도구 호출 조작(Fabrication), 결과 위조, 데이터 누출(Leakage) 등 치명적 위반 시 즉시 'Hard-fail' 처리한다.</li>
+</ol>
+<p><strong>[저자 측 설계 설명]</strong> 일반 process judge는 outcome을 보지 않는다고 보고되지만, integrity gate는 fabrication 탐지를 위해 outcome을 제한적으로 조회한다. 또한 verifier 소스·versioned container hash·세부 gate specification·원 trajectory 점수가 공개되지 않아, 외부인은 정확성·강건성·편향을 충분히 검사하거나 독립 재현하기 어렵다.</p>
+<hr />
+<h4 id="5-hds6-traces의-6대-핵심-역량-지표-process-metrics">5. HDS6/TRACES의 6대 핵심 역량 지표 (Process Metrics)</h4>
+<p>HDS6는 task별 저자가 설계한 0–4 ordinal rubric으로 외부 trajectory의 과정 품질을 평가하는 운영자 지표다. 연구자의 성실성·내부 사고·결론의 진실을 직접 측정하는 점수는 아니다.</p>
+<ul>
+<li><strong>T (Tools):</strong> 도구 선택의 적절성 및 출력값 해석의 정확성.</li>
+<li><strong>R (Repair):</strong> 실패 후 원인을 파악하고 피드백을 반영하여 수정하는 능력.</li>
+<li><strong>A (Alternatives):</strong> 경쟁 가설을 비교하고 증거에 따라 가설을 갱신하는 태도.</li>
+<li><strong>C (Coherence):</strong> 수백 단계의 과정 중 초기 목표와 논리적 일관성을 유지하는 능력.</li>
+<li><strong>E (Evidence):</strong> 모든 주장이 데이터, 도구 출력, 문헌에 접지(Grounding)되었는지 여부.</li>
+<li><strong>S (Scope):</strong> 결론의 적용 한계와 불확실성을 명시하는 능력.</li>
+</ul>
+<p><strong>[정의/직접 확인]</strong> 저자들은 <strong>과정 점수(Process score)가 높다고 해서 결과가 반드시 과학적 참(Truth)인 것은 아님</strong>을 명시하고 있다. 이는 '그럴듯한 과정을 밟았는가'와 '실제 발견을 했는가'를 분리하는 중요한 경계선이다.</p>
+<hr />
+<h4 id="6-벤치마크-구성-범위-및-선택-편향-selection-bias-감사">6. 벤치마크 구성 범위 및 선택 편향(Selection Bias) 감사</h4>
+<ul>
+<li><strong>규모 분석:</strong> 16개 섹션 561개 산업 조사를 통해 423개의 내부 레지스트리(Registry) 문제를 확보했으나, 초기 릴리스에는 20개, 최종 보고서(Table 1) 수치 도출에는 <strong>17개 환경 및 218개 에피소드</strong>만이 활용되었다.</li>
+<li><strong>[열린 문제]</strong> 423개 문제 전체 목록, reviewer agreement, 점수 분포와 탈락 사유는 공개되지 않았다. 따라서 selection bias나 cherry-picking의 존재 여부와 크기를 외부에서 판단할 수 없다. 이는 부정행위의 증거가 아니라 감사 가능성의 결손이다. 또한 <strong>Claude Opus 모델이 생물학적 안전(Biosafety) 이유로 design task 수행을 거부한 결측은 비임의적</strong>이므로, 단순 평균이나 순위에서 일반적인 실패와 같은 방식으로 처리하면 capability와 safety-policy 차이를 혼동할 수 있다.</li>
+</ul>
+<hr />
+<h4 id="7-주요-사례-연구-case-studies-및-통계적-수치-분석">7. 주요 사례 연구 (Case Studies) 및 통계적 수치 분석</h4>
+<h5 id="aav-adeno-associated-virus-캡시드-설계">AAV(Adeno-associated virus) 캡시드 설계</h5>
+<p>저자들은 기존 SOTA 대비 평균 <strong>7%의 성능 향상</strong>을 주장한다. 그러나 본 감사관이 수치를 분해한 결과는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Task (AAV)</th>
+<th style="text-align:center">Apodex-1.1</th>
+<th style="text-align:center">Published SOTA</th>
+<th style="text-align:center">Relative Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Viability (예측)</td>
+<td style="text-align:center">0.904</td>
+<td style="text-align:center">0.878</td>
+<td style="text-align:center">3.0%</td>
+</tr>
+<tr>
+<td style="text-align:left">Tropism (예측)</td>
+<td style="text-align:center">0.635</td>
+<td style="text-align:center">0.622</td>
+<td style="text-align:center">2.1%</td>
+</tr>
+<tr>
+<td style="text-align:left">Structure (예측)</td>
+<td style="text-align:center">0.649</td>
+<td style="text-align:center">0.605</td>
+<td style="text-align:center">7.3%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Design (생성)</strong></td>
+<td style="text-align:center"><strong>0.180</strong></td>
+<td style="text-align:center"><strong>0.116</strong></td>
+<td style="text-align:center"><strong>55.2%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>[기술적 비판]</strong> '약 7%'는 네 이질 점수의 <strong>단순 macro-average</strong>인 0.59200과 0.55525의 상대 차이 6.62%를 반올림한 것으로 해석된다. 이는 네 과제별 상대 개선율 3.0%, 2.1%, 7.3%, 55.2%를 평균한 값도 아니고, 각 과제에서 7 percentage points 개선됐다는 뜻도 아니다. 서로 다른 metric을 동일 가중해 요약하는 선택의 정당화와 반복 불확실성이 제시되지 않았으므로 개별 task 수치와 조건을 함께 봐야 한다.</p>
+<h5 id="신약-재창출-drr-및-임상-분석">신약 재창출(DRR) 및 임상 분석</h5>
+<p>GPT-5.5/5.6-sol 모델에 생의학 환경을 추가했을 때 각각 <strong>+2.5, +7.6 points</strong>의 점수 향상이 보고되었다.
+<strong>[정의/직접 확인]</strong> 이 수치는 실제 치료 효과의 개선이 아니라, random anchor=0과 perfect=100 사이로 재척도화된 <strong>정규화 예측 점수의 포인트 차이</strong>다. Public-100 개발셋에서 각 3회 실행한 retrospective temporal forecast의 기술통계이며, raw-score 증가는 각각 +0.00330과 +0.00994다. Hidden-200 결과나 prospective clinical validation으로 해석하지 않는다.</p>
+<hr />
+<h4 id="8-통계적-해석-및-인과관계-감사-technical-audit">8. 통계적 해석 및 인과관계 감사 (Technical Audit)</h4>
+<h5 id="상관관계의-불확실성">상관관계의 불확실성</h5>
+<p>409개 궤적 분석에서 과정 점수(HDS6)와 결과 점수(Outcome) 사이의 <strong>Spearman $\rho = +0.51$, Pearson r = +0.56</strong>이 보고되었다.</p>
+<ul>
+<li><strong>주의사항:</strong> 상관관계는 인과관계를 입증하지 않는다. 특히 AAV 분야의 Spearman ρ는 <strong>+0.24</strong>로 약하다. 이 차이는 task 난이도·점수 분포·trajectory 구성·judge가 관찰할 수 있는 성공 신호 등 여러 요인의 영향을 받을 수 있으며, 과정이 결과를 인과적으로 만들었다거나 HDS6가 진실을 측정한다고 해석할 수 없다.</li>
+</ul>
+<h5 id="repair-실험의-인과-해석-한계">Repair 실험의 인과 해석 한계</h5>
+<p>저자들은 HDS6&lt;3인 434개 실행에 대해 수정 노트를 제공하여 <strong>+0.155</strong>의 개선을 달성했다고 주장한다.
+<strong>[열린 문제]</strong> 이 실험에는 <strong>수정 노트 없이 단순 재실행한 matched no-note rerun control이 없다.</strong> LLM은 확률적이고 HDS6&lt;3인 deficient run만 선택했으므로 run-to-run variation과 regression to the mean이 개입할 수 있다. 따라서 +0.155는 repair-note 재실행에서 관찰된 before/after 연관으로는 말할 수 있지만, repair note의 순수 인과효과로 확정할 수 없다.</p>
+<hr />
+<h4 id="9-발견-챌린지의-성격-retrospective-vs-prospective">9. 발견 챌린지의 성격: Retrospective vs. Prospective</h4>
+<p>저자들은 이미 정답이 알려진 과거 데이터를 맞히는 '사후 분석(Retrospective)'과 정답이 존재하지 않는 '미래 지향적(Prospective)' 도전을 구분한다.</p>
+<ul>
+<li><strong>파킨슨병 Prospective Challenge:</strong> 현재 <strong>'진행 계획(Plan)'</strong> 단계이며 실질적인 발견 결과는 존재하지 않는다.</li>
+<li><strong>[정의/직접 확인]</strong> 이는 주장을 미리 봉인(Seal)하고 미래의 실험 결과로 검증하겠다는 방법론적 엄격함의 제안일 뿐, 현재 AI가 새로운 치료제를 실제로 <strong>'발견했다'는 성공 발표가 아님</strong>을 명확히 한다.</li>
+</ul>
+<hr />
+<h4 id="10-보고서의-한계-및-최종-감사-결론">10. 보고서의 한계 및 최종 감사 결론</h4>
+<h5 id="구조적-비판-same-organization-conflict">구조적 비판: Same-organization Conflict</h5>
+<p>Apodex라는 단일 조직이 벤치마크 설계, 환경 운영, verifier 제작, baseline reproduction과 자사 solver 평가를 함께 수행한다. 이는 보고된 수치가 틀렸다는 증거는 아니지만, task 선택·scorer·rerun·공개 범위가 같은 조직의 판단에 의존하는 이해상충이다. Live site가 자사 entry를 표시하고 이 문제를 공개한 점은 투명성에 도움이 되지만 독립 검증을 대신하지 않는다. 외부 재현, versioned scorer/container, 원자료 또는 독립 escrow 감사가 필요하다.</p>
+<h5 id="초보자용-비유를-통한-요약">초보자용 비유를 통한 요약</h5>
+<blockquote>
+<p>&quot;기존 AI 평가가 정답만 적어 내는 '단답형 시험'이었다면, TRACES는 학생을 실험실(Environment)에 넣고 도구를 쥐여준 뒤, 교수님이 옆에서 오답 노트(Repair)를 주며 실험 전체 과정(Trajectory)을 지켜보는 '종합 연구 프로젝트 아키텍처'와 같습니다.&quot;</p>
+</blockquote>
+<h5 id="최종-감사-결론">최종 감사 결론</h5>
+<p>Apodex Discovery 보고서는 **'실제 일반 과학 발견 능력'의 입증이 아니라, 이를 측정하기 위한 '평가 아키텍처(TRACES)의 제안서'**로서의 가치를 지닌다. 보고된 7% 혹은 +0.155와 같은 수치는 고도로 통제되고 폐쇄적인 Apodex 자체 환경에서의 초기 지표일 뿐이다. 본 감사관은 이 보고서가 제안하는 'HDS 시스템 중심의 평가'라는 방향성은 긍정적으로 평가하나, 수치적 주장에 대해서는 독립적 검증이 이루어질 때까지 <strong>'유보적(Qualified)'</strong> 입장을 유지할 것을 권고한다.</p>
+<p><strong>[문서 검증 인가]</strong>
+검토 일자: 2026-08-25
+감사관: AI 에이전트 벤치마크 및 과학적 검증 전문 감사관 (Korean Scientific Editor &amp; Auditor)
+신뢰 등급: <strong>[LEVEL 2: 분석적 신뢰 (내부 일관성 확인, 외부 재현 미확인)]</strong></p>
+<p>핵심 영문 용어 고정: discoverative AI, heavy-duty solver, outcome verifier, process verifier, integrity gate.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li></ul></section>
+</main>
+</body>
+</html>

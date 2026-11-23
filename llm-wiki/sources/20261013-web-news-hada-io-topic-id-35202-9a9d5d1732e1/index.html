@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM의 능력에 대한 인식 격차가 커지고 있다 | GeekNews</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>LLM의 능력에 대한 인식 격차가 커지고 있다 | GeekNews</h1>
+<p class="page-meta">웹 · 2026-10-13</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 대중과 전문 사용자 사이에서 점차 심화되고 있는 초거대언어모델(LLM)의 능력에 대한 인식 격차 및 이에 대한 온라인 기술 커뮤니티(Hacker News / GeekNews)의 시각을 종합 분석한 해설서입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://news.hada.io/topic?id=35202">출처</a> · <a href="https://www.youtube.com/watch?v=ULJIddqoe9M">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="llm-능력-인식-격차-및-현장-체감도에-관한-해설-보고서">LLM 능력 인식 격차 및 현장 체감도에 관한 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 대중과 전문 사용자 사이에서 점차 심화되고 있는 초거대언어모델(LLM)의 능력에 대한 인식 격차 및 이에 대한 온라인 기술 커뮤니티(Hacker News / GeekNews)의 시각을 종합 분석한 해설서입니다. 안드레이 카파시(Andrej Karpathy)가 제시한 사용자 분류 체계와 체감 격차 유발 요인을 바탕으로, AI 기술의 실질적 가치와 한계에 대한 커뮤니티의 기술적·사회적 논의를 객관적으로 다룹니다.</p>
+<p>카파시는 대중이 LLM을 단지 어설픈 챗봇이나 검색 보조 도구로 접하는 반면, 최첨단 내부 시스템에 접근하는 극소수 전문가들은 수천 개의 에이전트가 협업하여 대규모 프로젝트를 수주 내에 완수하는 수직 상승 효과를 경험하고 있다고 분석합니다. 이러한 격차는 사용자가 해결하려는 문제의 야심·규모·작업 기간, 디지털 환경에서 강화학습 보상이 집중된 분야별 역량의 불균일성, 그리고 시스템 접근 권한(무료·유료·내부 시스템)이라는 세 가지 요인이 작용하여 깔때기 구조를 형성하기 때문에 발생합니다.</p>
+<p>이에 대해 Hacker News 등의 기술 커뮤니티에서는 격렬한 찬반 논쟁이 이어지고 있습니다. 긍정적 측면에서는 에이전트 도구를 활용한 개발 속도의 획기적 향상(Astra 기준 약 500배)과 AI 기반 코드 검토의 정교함, 그리고 차세대 모델 개발 가속화를 강조합니다. 반면 회의적 측면에서는 출근 열차, 도로 정체, 전력, 주택, 물가, 질병 등 일상적·구조적 문제에 AI가 실질적인 개선을 제공하지 못하고 있으며, 코드 검토 없는 신속한 개발이 장기적인 유지보수 및 고장 위험을 초래할 수 있다는 점을 지적합니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments">2. 주요 논점 (Key Arguments)</h4>
+<h5 id="2-1-llm-체감-역량의-4단계와-격차-유발-요인">2.1. LLM 체감 역량의 4단계와 격차 유발 요인</h5>
+<ul>
+<li><strong>주장 (<code>[소스 주장]</code>):</strong> LLM 역량에 대한 이해와 체감의 격차는 단순한 기술적 친숙도를 넘어 인구 비율 및 시스템 접근 권한에 따라 극단적인 4단계 구조를 형성하고 있습니다.</li>
+<li><strong>근거 (<code>[사실]</code>):</strong>
+<ul>
+<li><strong>1단계 (약 60억 명 / 인구의 약 75%):</strong> LLM을 거의 접하지 않은 대다수 인구.</li>
+<li><strong>2단계 (약 10억~20억 명 / 인구의 약 20%):</strong> 무료 챗봇(ChatGPT 등)을 가끔 검색이나 글쓰기 보조, 항공편 예약 시도 등의 용도로 사용하는 사용자층.</li>
+<li><strong>3단계 (약 2,000만 명 / 인구의 약 0.2%):</strong> 수학 및 코드 분야에서 최첨단 LLM을 전문적으로 활용하며, 과거 수주~수개월 걸리던 대규모 프로젝트를 에이전트 프롬프트로 완수하는 전문가층.</li>
+<li><strong>4단계 (약 5,000명 / 인구의 약 0.00006%):</strong> 내부 최첨단 시스템에 접근하여 수천 에이전트가 수주간 협업하는 환경을 경험하고, 인간의 검토 및 이해 속도를 초과하는 결과물을 접하는 극소수 연구자층.</li>
+</ul>
+</li>
+<li><strong>사례 (<code>[사실]</code>):</strong> 3단계 사용자층에서는 앱 제작, 복제, 번역 및 바이너리 앱 역컴파일 작업이 속도감 있게 이루어지고 있습니다. 4단계에서는 제로데이 취약점 발굴, 기계 속도의 사이버 공격/방어, 새로운 과학 발견, 최첨단 수학 원고 722편 검토 및 OpenAI-HF 사건 분석과 같은 고차원 작업이 진행되고 있습니다.</li>
+<li><strong>해설 (<code>[해설]</code>):</strong> 4단계에서 언급된 722편의 수학 원고 검토나 OpenAI-HF 사건 분석은 인간의 분석 및 이해 속도가 AI의 결과물 생산 속도를 따라가지 못해 발생하는 지연과 병목 현상을 보여주는 구체적 증거입니다. 이러한 격차를 유발하는 3대 깔때기 요인은 ① 문제의 야심·규모·작업 기간, ② 강화학습 보상이 집중된 디지털 환경(수학/코드)의 분야별 역량 불균일성, ③ 무료/유료/내부 권한에 따른 시스템 접근 차이입니다.</li>
+</ul>
+<hr />
+<h5 id="2-2-ai의-실질적-가치-및-세상을-바꾸는-능력에-대한-회의론">2.2. AI의 실질적 가치 및 세상을 바꾸는 능력에 대한 회의론</h5>
+<ul>
+<li><strong>주장 (<code>[소스 주장]</code>):</strong> &quot;데이터센터 안의 천재 국가&quot;라는 LLM 열풍은 '천재가 많으면 문제가 저절로 풀린다'는 오만에 기반하고 있으며, 실제 보편적 대중의 삶과 사회적 문제 해결에는 실질적 기여를 하지 못하고 있습니다.</li>
+<li><strong>근거 (<code>[소스 주장]</code>):</strong> 주거, 기근, 전쟁, 전력 및 수도 불안정, 물가 상승, 질병 등의 문제가 해결되지 않는 본질적 이유는 지능(천재)의 부족이 아니라 이를 해결할 <strong>구조적 유인(Incentive)의 부재</strong>에 있습니다.</li>
+<li><strong>사례 (<code>[사실]</code> 및 <code>[소스 주장]</code>):</strong>
+<ul>
+<li><strong>현실 세계의 불변성:</strong> 2016년과 2026년을 비교할 때 출근 열차 지연, 도로 정체, 식품·주택·전기요금 상승, 질병 사망 등 보통 사람의 삶은 개선되지 않았거나 악화되었습니다.</li>
+<li><strong>기술 열풍의 역사적 비유:</strong> 세그웨이(Segway)가 세상을 바꿀 것이라 믿었던 스티브 잡스의 사례나 2015년 택시, 2020년 화폐, 2021년 30분 배송, 2022년 JPEG 판매, 2024년 프로그래밍 해결 등 매년 반복되어 온 기술적 과대광고와 유사하다는 지적이 존재합니다.</li>
+<li><strong>에너지 문제 해결 제안:</strong> 전력 및 수도 불안정 문제를 해결하기 위해 대형 연구소들이 의미 없는 소프트웨어 양산에 추론 비용을 쓰기보다, 핵융합 분석·연구·시뮬레이션에 10억 달러어치의 토큰을 투입하여 무제한 에너지의 돌파구를 마련해야 한다는 커뮤니티 제안이 제시되었습니다.</li>
+</ul>
+</li>
+<li><strong>해설 (<code>[해설]</code>):</strong> 지적 호기심을 충족하거나 아무도 쓰지 않는 소프트웨어를 빠르게 생산하는 정교한 시스템이, 정작 현실 세계의 경제적·실질적 가치를 창출하지 못하고 자금을 소모하는 구멍으로 전락할 수 있다는 비판적 시각이 강하게 제기됩니다.</li>
+</ul>
+<hr />
+<h5 id="2-3-개발-현장에서의-ai-에이전트-활용-및-코드-검토-품질-논쟁">2.3. 개발 현장에서의 AI 에이전트 활용 및 코드 검토·품질 논쟁</h5>
+<ul>
+<li><strong>주장 (<code>[소스 주장]</code>):</strong> 프로그래밍 현장에서는 에이전트 활용을 통한 수직적 생산성 상승이 실현되고 있으나, 코드 검토 생략에 따른 품질 저하 우려와 AI 기반 코드 검토의 정교함을 둘러싼 논쟁이 대립하고 있습니다.</li>
+<li><strong>근거 (<code>[사실]</code> 및 <code>[소스 주장]</code>):</strong>
+<ul>
+<li><strong>개발 속도의 급증:</strong> 사람이 작성하던 코드 대비 에이전트 도구인 Astra의 작업 처리 속도는 대략 500배 빠르며, 업계에서 아이디어를 구현하고 반복 개선하는 속도 또한 100배 이상 가속화되었습니다.</li>
+<li><strong>품질 및 검토 관점의 대립:</strong>
+<ul>
+<li><em>우려 측:</em> 유지보수, 토큰 비용, 최적화, 코드 검토 생략으로 인한 시스템 붕괴 및 LLM의 잘못된 가정으로 인한 고장 위험성을 강조합니다.</li>
+<li><em>반론 측:</em> 사람이 작성한 기존 코드에도 실수가 상존하며, AI 기반 코드 검토가 사람이 놓치던 버그를 더 많이 잡아낸다고 주장합니다. 적절한 아키텍처, CI/CD, 품질 보증 수립 시 사람이 만든 것보다 안정적인 소프트웨어 구축이 가능하다고 봅니다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>사례 (<code>[사실]</code>):</strong> 최첨단 에이전트 개발 도구의 활용으로 올해 초부터 직접 코드를 작성하지 않고도 고장 없이 개발을 진행하는 사례, 타인과의 의사결정 절차를 줄여 프로젝트를 단기간에 완수하는 사례 등이 보고되고 있습니다.</li>
+<li><strong>해설 (<code>[해설]</code>):</strong> 개발자의 역할이 코드를 한 글자씩 직접 작성하던 방식에서 에이전트에 <strong>새로운 테스트와 경계 사례(Edge cases)를 제시하고 방향성을 설정</strong>해 주는 고차원적 관리 역할로 본질적인 전환을 이루고 있습니다.</li>
+</ul>
+<hr />
+<h5 id="2-4-일반-대중의-ai-수용도-및-미래-전망-휴머노이드-로봇-등">2.4. 일반 대중의 AI 수용도 및 미래 전망(휴머노이드 로봇 등)</h5>
+<ul>
+<li><strong>주장 (<code>[소스 주장]</code>):</strong> 일반 대중에게는 AI를 다룰 구체적 용도가 부재하지만, 향후 로봇공학 및 자율주행과 같은 물리적·하드웨어 영역과의 결합이 일어날 때 실질적인 사회적 대변혁이 발생할 것입니다.</li>
+<li><strong>근거 (<code>[사실]</code> 및 <code>[소스 주장]</code>):</strong>
+<ul>
+<li><strong>대중적 필요성 부재:</strong> 개인 비서 외에 AI의 실질적 유용성을 누리는 사용자는 전체의 1%에 불과하며, Google 검색 상단 AI 요약만으로 필요한 정보의 99%가 충족되므로 일반인에게 5분의 시간 절약은 큰 동인이 되지 않습니다.</li>
+<li><strong>물리적 영역의 가능성:</strong> 소프트웨어 및 동작 제어 지능의 돌파구가 마련됨에 따라 물리적 장벽을 극복한 하드웨어 결합이 세상을 바꿀 핵심으로 부상하고 있습니다.</li>
+</ul>
+</li>
+<li><strong>사례 (<code>[사실]</code>):</strong>
+<ul>
+<li><strong>휴머노이드 로봇:</strong> 약 2만 달러 수준의 저렴한 가격에 요리, 청소, 노인 돌봄, 운반, 조립/분해를 수행하는 유능한 휴머노이드 로봇이 보급될 경우 수십억 개의 육체노동 일자리가 대체되거나 임금 상한이 형성될 수 있습니다.</li>
+<li><strong>자율주행 서비스:</strong> Uber나 Lyft보다 높은 요금에도 불구하고 소비자들이 기꺼이 비용을 지불하고 이용하는 Waymo의 사례는 물리적 영역에서의 인간 대체 수용도를 잘 보여줍니다.</li>
+</ul>
+</li>
+<li><strong>해설 (<code>[해설]</code>):</strong> 사무직 영역에는 개인정보 및 IT 통합의 완충 지대가 존재하나, 위험과 불안정성이 존재하는 육체노동 및 이동 영역에서는 AI 소프트웨어와 결합한 로봇공학의 침투가 가속화될 것으로 예측됩니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-and-speakers">3. 등장 인물 및 화자 (Figures and Speakers)</h4>
+<p>소스 텍스트에 등장하는 인물, 화자 및 주요 기관/단체의 역할과 기여 내용입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물/화자/기관</th>
+<th style="text-align:left">역할 및 설명 (소스 내용 기준)</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>안드레이 카파시 (Andrej Karpathy)</strong></td>
+<td style="text-align:left">트윗을 통해 LLM 체감 역량의 4단계 및 깔때기 요인(문제 규모, 분야별 불균일성, 접근 권한)을 분석·제시한 전문가</td>
+<td style="text-align:left">소스 내 명시됨</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>스티브 잡스 (Steve Jobs)</strong></td>
+<td style="text-align:left">과거 세그웨이(Segway)가 세상을 바꿀 것이라 기대했던 인물로 기술 과대광고 비교 시 언급됨</td>
+<td style="text-align:left">소스 댓글 내 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GeekNews / Hacker News 사용자들</strong></td>
+<td style="text-align:left">소스 기사 공유 및 댓글을 통해 AI의 실질적 가치, 코드 검토 우월성, 휴머노이드 로봇의 미래 등에 관한 찬반 논쟁을 개진한 화자들</td>
+<td style="text-align:left">소스 내 명시됨</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>OpenAI</strong></td>
+<td style="text-align:left">최첨단 모델 판매 제한 및 가격 인상을 진행하였으며, 과거 연구 사건(OpenAI-HF 사건) 및 차세대 훈련 연산량과 연관되어 언급된 기관</td>
+<td style="text-align:left">소스 내 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hugging Face (HF)</strong></td>
+<td style="text-align:left">과거 사건(OpenAI-HF 사건) 및 군집 기반 HF 해킹 논의와 관련하여 언급된 플랫폼/기관</td>
+<td style="text-align:left">소스 내 언급 (상세 경위 미기재)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Waymo</strong></td>
+<td style="text-align:left">Uber 및 Lyft보다 비싼 요금에도 불구하고 사용자들이 기꺼이 이용하는 자율주행 서비스 사례로 언급된 기관</td>
+<td style="text-align:left">소스 댓글 내 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Google</strong></td>
+<td style="text-align:left">무료 AI 요약 답변을 통해 검색에 대한 기대 수준을 바꾸고 있는 검색 플랫폼/기관</td>
+<td style="text-align:left">소스 댓글 내 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Astra</strong></td>
+<td style="text-align:left">사람이 작성하던 기존 코드 대비 대략 500배 빠른 작업 처리 속도를 보이는 코딩 에이전트 도구</td>
+<td style="text-align:left">소스 댓글 내 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Uber / Lyft</strong></td>
+<td style="text-align:left">Waymo 자율주행 서비스와 이용 요금을 비교하는 대상으로 언급된 호출 서비스 기관</td>
+<td style="text-align:left">소스 댓글 내 언급</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hacker News 익명 작성자들</strong></td>
+<td style="text-align:left">회의론, 코드 검토 찬반, 휴머노이드 로봇 전망 등 개별 의견을 개진한 댓글 작성자들</td>
+<td style="text-align:left">개별 신원 확인 불가 (확인 불가)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-numbers-and-timestamps">4. 수치 및 시점 (Numbers and Timestamps)</h4>
+<p>소스 데이터에 포함된 정량적 수치 및 시점 데이터의 상세 목록입니다.</p>
+<ol>
+<li><strong>4월:</strong> 안드레이 카파시가 LLM 역량 인식 격차에 관한 원본 트윗을 올리고 다시 꺼내 본 시점.</li>
+<li><strong>약 60억 명 (인구의 약 75%):</strong> LLM을 거의 접하지 않은 대다수 사용자층.</li>
+<li><strong>약 10억~20억 명 (인구의 약 20%):</strong> 무료 ChatGPT류 제품을 가끔 검색 및 글쓰기 보조, 항공편 예약 시도 등의 용도로 사용하는 사용자층.</li>
+<li><strong>약 2,000만 명 (인구의 약 0.2%):</strong> 수학 및 코드 분야에서 최첨단 LLM을 전문적으로 활용하는 사용자층.</li>
+<li><strong>약 5,000명 (인구의 약 0.00006%):</strong> 내부 최첨단 시스템 및 수천 에이전트 협업 환경에 접근하는 극소수 전문 연구자층.</li>
+<li><strong>수주 ~ 수개월:</strong> 과거 전문 사용자가 대규모 복잡한 프로젝트를 완수하는 데 소요되던 작업 기간.</li>
+<li><strong>1년이 채 되지 않은 시점:</strong> 카파시 본인이 코드를 직접 한 글자씩 작성하고 가끔 Tab 자동완성을 사용했던 최근 과거 시점.</li>
+<li><strong>722편:</strong> AI가 생성한 최첨단 수학 관련 원고 중 수학자들의 검토가 필요한 원고 수.</li>
+<li><strong>지난 10년:</strong> 아시아 주요국 등에서 AI, 자동차, 철도 분야의 변화가 본격적으로 일어난 기간.</li>
+<li><strong>100배:</strong> 업계에서 AI 에이전트를 통해 아이디어를 구현하고 반복 개선하는 속도의 향상치.</li>
+<li><strong>4년 미만:</strong> 처음으로 정말 유능했던 LLM인 ChatGPT가 최초 출시된 이후 흐른 시간.</li>
+<li><strong>대략 500배:</strong> 사람이 작성하던 코드 대비 에이전트 도구인 Astra의 작업 처리 속도.</li>
+<li><strong>수십억·수조 달러:</strong> AI 산업 관련 매일 언급되는 투자/자본 및 추론에 투입되는 비용 규모.</li>
+<li><strong>10억 달러:</strong> 전력/수도 불안정 문제를 해결하기 위해 대형 연구소가 핵융합 분석·연구·시뮬레이션에 투입하도록 제안된 토큰 비용 규모.</li>
+<li><strong>2016년과 2026년:</strong> 외견상 사회적 변화가 크게 관측되지 않음을 대조·비교하기 위해 언급된 기준 연도.</li>
+<li><strong>2015년, 2020년, 2021년, 2022년, 2024년:</strong> 택시, 화폐, 30분 배송, JPEG 판매, 프로그래밍 해결 등 세상을 완전히 바꾼다는 기술적 약속이 반복되어 온 연도 목록.</li>
+<li><strong>수십 년:</strong> AI가 세상을 바꾸는 방식을 다뤄온 SF 소설의 역사 기간.</li>
+<li><strong>Adsense 2.0:</strong> 무료/불필요한 제품으로 시선을 모아 광고 수익을 버는 소셜미디어 구조에 비유된 광고 비유 표현.</li>
+<li><strong>1%:</strong> 현재 개인 비서 외에 AI의 실질적 유용성을 활용하는 사용자 비율 및 과학·기술 혁신을 담당하는 인구 비율.</li>
+<li><strong>99%:</strong> Google 검색 상단 AI 요약만으로 정보 요구가 충족되는 일반 사용자의 비율.</li>
+<li><strong>40~50%:</strong> AI 연구소의 전체 연산량 중 차세대 에이전트 훈련에 사용되는 비율.</li>
+<li><strong>약 2만 달러:</strong> 요리, 청소, 노인 돌봄, 운반, 조립/분해를 수행할 수 있는 저렴한 휴머노이드 로봇의 예상 가격.</li>
+<li><strong>수십억 개:</strong> 저렴하고 유능한 휴머노이드 로봇 보급 시 대체되거나 임금 상한이 생길 수 있는 육체노동 일자리 수.</li>
+</ol>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<p>본 보고서의 기초가 된 소스 텍스트 자체의 정보 한계 및 명확히 규명되지 않은 불확실성은 다음과 같습니다.</p>
+<ul>
+<li><strong>인구 수치 추산의 통계적 한계:</strong> 안드레이 카파시가 제시한 4단계 인구 수치(60억 명, 10억~20억 명, 2,000만 명, 5,000명) 및 인구 비율(75%, 20%, 0.2%, 0.00006%)은 엄밀한 통계조사 결과가 아닌 개인의 '대략적 추산'에 불과합니다.</li>
+<li><strong>특정 사건 및 결과 데이터의 미규명:</strong> 소스 내에서 언급된 'OpenAI-HF 사건'의 구체적인 경위 및 상세 분석 결과, 그리고 '722편의 수학 원고'에 대한 최종적인 학술적 검토 성공 여부는 소스 본문 내용만으로 확인할 수 없습니다.</li>
+<li><strong>커뮤니티 화자의 신원 및 대표성 미확인:</strong> Hacker News 댓글 작성자들의 정확한 성명, 전문 경력, 기술적 역량 검증 여부는 확인 불가하며, 이들의 시각이 전체 IT 산업 종사자를 대표하는 통계적 표본이라고 단정할 수 없습니다.</li>
+<li><strong>구조적 문제 해결 능력의 실증적 검증 부재:</strong> LLM이나 차세대 에이전트 시스템이 현실 세계의 물리적·사회적 문제(전력망 안정화, 기근, 주택난, 질병 치료 등)를 실제 성공적으로 해결할 수 있는지에 대한 실증적 연구 및 데이터는 소스에 포함되어 있지 않습니다.</li>
+<li><strong>AI 코드 검토 방식의 장기적 안정성 논쟁 미결론:</strong> 코드를 사람이 검토하지 않고 에이전트에게 전적으로 의존하는 방식이 장기적인 유지보수 비용과 시스템 고장률을 실제로 감소시키는지에 대해 현장 전문가들 간의 의견이 극명히 대립하고 있어 단일한 결론을 도출하기 어렵습니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

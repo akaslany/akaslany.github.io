@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RRSI: Regularized Recursive Self-Improvement of Agent Harnesses</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>RRSI: Regularized Recursive Self-Improvement of Agent Harnesses</h1>
+<p class="page-meta">논문 · 2026-09-30</p>
+<h2 id="요약">요약</h2>
+<p>최근 대형 언어 모델(LLM) 기반 에이전트 시스템은 단일 신경망 모델을 넘어, 모델을 감싸는 복합적인 시스템 아키텍처 형태로 발전하고 있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.24972v2">출처</a> · <a href="https://www.youtube.com/watch?v=ufTWQ3XAT0A">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="정규화된-에이전트-하네스-재귀적-자기-개선-rrsi-기술-해설-보고서">정규화된 에이전트 하네스 재귀적 자기 개선(RRSI) 기술 해설 보고서</h3>
+<h4 id="1-문제-제기-에이전트-하네스-자율-진화와-과적합-위험">1. 문제 제기: 에이전트 하네스 자율 진화와 과적합 위험</h4>
+<h5 id="1-1-에이전트-하네스의-개념-및-모델-가중치-자기-개선과의-명확한-구별">1.1. 에이전트 하네스의 개념 및 모델 가중치 자기 개선과의 명확한 구별</h5>
+<p>최근 대형 언어 모델(LLM) 기반 에이전트 시스템은 단일 신경망 모델을 넘어, 모델을 감싸는 복합적인 시스템 아키텍처 형태로 발전하고 있다. 본 연구에서 에이전트 $A$는 고정된 기반 정책(Backbone Policy) $\pi$와 이를 둘러싼 제어 구조인 하네스(Harness) $H$의 결합체인 $A = (\pi, H)$로 정밀하게 정의된다. 여기서 하네스 $H$는 모델의 가중치(Weights) 외부에 존재하는 모든 제어 및 지원 시스템을 총칭한다. 구체적으로 하네스는 다음과 같은 핵심 구성요소로 이루어진다:</p>
+<ul>
+<li><strong>시스템 및 작업 프롬프트:</strong> 에이전트의 역할, 페르소나, 기본 지침을 정의하는 텍스트 인터페이스.</li>
+<li><strong>제어 흐름(Control Flow):</strong> 에이전트가 계획(Planning), 행동(Action), 반성(Reflection), 최종 제출(Termination)을 수행하는 시점과 조건부 루프를 제어하는 실행 로직.</li>
+<li><strong>도구 인터페이스 및 설명:</strong> 외부 API, 셸, 스크립트 등과의 상호작용을 정의하는 스키마 및 가이드라인.</li>
+<li><strong>메모리 및 기술(Skill) 파일:</strong> 장기 기억 저장소 및 재사용 가능한 작업 수행 절차 문서.</li>
+<li><strong>문맥 관리(Context Management) 체계:</strong> 매 실행 단계마다 기반 모델에 입력되는 토큰 문맥의 압축, 요약 및 선택적 노출 로직.</li>
+</ul>
+<p>기존의 전통적인 재귀적 자기 개선(Recursive Self-Improvement, RSI)은 모델 가중치 자체를 파인튜닝하거나 강화학습을 통해 직접 업데이트하는 방식으로 연구되어 왔다. 이와 달리 본 연구가 다루는 에이전트 하네스 자율 진화는 기반 모델의 가중치 $\pi$를 완전히 고정(Frozen)한 상태에서, 모델을 둘러싼 외부 시스템 수준의 하네스 $H$만을 최적화하여 에이전트의 전체 수행 능력을 개선한다는 점에서 본질적인 구별점이 존재한다.</p>
+<p>과거의 하네스 개발은 엔지니어가 에이전트의 실패 실행 트래젝터리(Trajectory)를 직접 분석하고 프롬프트나 제어 코드를 수동으로 수정하는 '수동 하네스 엔지니어링'에 전적으로 의존해 왔다. 그러나 수동 방식은 사람이 분석할 수 있는 트래젝터리의 수량에 한계가 있어 확장성(Scalability)이 심각하게 제한된다. 이러한 병목을 극복하기 위해 LLM 제안자(Proposer)를 활용하여 과제 수행 피드백으로부터 하네스 구성요소를 자율적으로 수정, 평가, 선택하는 자율 하네스 진화 루프가 등장하게 되었다.</p>
+<h5 id="1-2-한정된-평가-세트-재사용으로-인한-적응형-과적합-문제">1.2. 한정된 평가 세트 재사용으로 인한 적응형 과적합 문제</h5>
+<p>반복적인 하네스 자율 진화 프로세스에서는 하네스 후보를 제안하고 채택 여부를 판정하기 위해 한정된 진화 작업 세트($D_{\text{evolve}}$)의 평가 피드백을 지속적으로 재사용한다. 이 과정에서 머신러닝의 적응형 데이터 분석(Adaptive Data Analysis) 문제와 직결되는 '적응형 과적합(Adaptive Overfitting)' 위험이 필연적으로 발생한다.</p>
+<p>진화 라운드가 진행됨에 따라 진화 세트($D_{\text{evolve}}$)에서의 평가 점수는 지속적으로 상승하지만, 한 번도 접하지 않은 분포 외(Out-of-Distribution, OOD) 벤치마크로 전이 평가할 경우 성능 향상 폭이 극도로 정체되거나, 심지어 진화 과정을 거치지 않은 초기 기본 하네스($H_0$)보다 성능이 퇴보하는 현상이 빈번히 관찰된다.</p>
+<p>연구진의 상세 분석에 따르면, 자율 하네스 진화 루프에서 과적합을 유발하는 핵심 원인은 다음 3가지로 분류된다:</p>
+<ul>
+<li><strong>벤치마크 특화 패턴 결합 (Benchmark-specific fitting):</strong> 탐색 알고리즘이 진화 데이터셋 고유의 과제 설명, 엔티티 명칭, 특정 정답 스키마 등 일반화되지 않는 특수 패턴을 하네스 프롬프트나 제어 로직 내에 직접 인코딩하는 현상.</li>
+<li><strong>평가 노이즈 추종 (Noise chasing):</strong> 한정된 평가 샘플과 평가 모델(LLM-as-a-Judge)의 확률적 변동성으로 인해 발생한 우연한 점수 상승을 실제 하네스 메커니즘의 근본적 개선으로 오인하여 상태(State)로 채택하는 현상.</li>
+<li><strong>불필요한 복잡성 축적 (Complexity accumulation):</strong> 에이전트의 실질적인 문제 해결 능력 향상 없이 프롬프트 길이, 도구 설명의 비대화, 문맥 크기 등 연산 복잡성만 지속적으로 누적시켜 진화 세트 점수를 편향되게 끌어올리는 현상.</li>
+</ul>
+<hr />
+<h4 id="2-rrsi-프레임워크-설계-제안-및-선택-단계의-정규화-메커니즘">2. RRSI 프레임워크 설계: 제안 및 선택 단계의 정규화 메커니즘</h4>
+<h5 id="2-1-제안-측면의-정규화-proposal-side-regularization">2.1. 제안 측면의 정규화 (Proposal-side Regularization)</h5>
+<p>정규화된 재귀적 자기 개선(RRSI) 프레임워크는 프롬프트, 제어 흐름, 도구, 메모리, 문맥 관리 등을 자유롭게 수정할 수 있도록 하네스의 탐색 공간 $\Omega(H)$ 자체는 완전히 열어둔다. 대신, 한정된 피드백에 의해 탐색 궤적(Search Trajectory)이 과적합 경로로 빠지지 않도록 제안(Proposal) 제어 메커니즘을 적용한다.</p>
+<p>제안 정규화는 탐색 용량이 효율적이고 원인 추적이 가능하도록 다음 3가지 핵심 요소로 구성된다:</p>
+<ol>
+<li><strong>시간에 따라 감쇄하는 수정 예산 ($L_0$ 스타일 수정을 통한 스파스성 유도):</strong> 단일 라운드에서 후보 하네스가 포함할 수 있는 독립적 수정의 개수를 제약한다. 총 $T$ 라운드 중 $t$ 번째 라운드의 수정 예산 $b_t$는 아래의 코사인 감쇄 수식에 의해 제어된다:</li>
+</ol>
+<p>$$b_t = \left\lceil b_{\min} + (b_{\max} - b_{\min}) \cdot \frac{1}{2} \left(1 + \cos\left(\frac{\pi t}{T}\right)\right) \right\rceil$$</p>
+<p>진화 초기($t \to 0$)에는 높은 예산($b_{\max}$)을 부여하여 여러 구성요소를 결합한 광범위한 구조적 탐색을 허용하며, 후기($t \to T$)로 갈수록 예산이 $b_{\min}$으로 스파스(Sparse)하게 감쇄되어 개별 수정의 원인 추적성(Attributability)이 명확한 미세 개선을 유도한다. 이는 불연속적 수정 개수를 직접 제어한다는 점에서 머신러닝의 $L_0$ 정규화와 기능적으로 대등하다.</p>
+<ol start="2">
+<li>
+<p><strong>증거 인식 신용 할당 (Evidence-Aware Credit Assignment):</strong> 모든 평가 이력 $L_t$(수정 부위 $\ell$, 검증 가설 $h$, 코드 차이 $d$, 점수 및 비용 변화량 $\Delta S, \Delta C$, 채택 여부 $a$)을 체계적으로 기록한다. 제안 모델은 과거 실패하거나 거절된 가설과 동일한 수정을 반복하지 않도록 음성 증거로 활용하며, 성공한 메커니즘에는 명확한 신용을 할당하여 한정된 탐색 용량의 무의미한 낭비를 방지한다.</p>
+</li>
+<li>
+<p><strong>구조화된 탐색 (Structured Exploration):</strong> 최근 $w$ 라운드 동안의 성능 개선량이 설정된 노이즈 범위 $\delta$ 이내로 정체될 경우 정체 상태($\sigma_t = 1$)로 판단한다. 이 때 제안 용량($m_{\text{draft}}$)의 일부를 지금까지 탐색되지 않은 미탐색 하네스 구성요소 집합 $U_t = \mathcal{K} \setminus T_t$로 강제 전환한다.
+여기서 하네스의 전체 수정 가능 구성요소 어휘 집합 $\mathcal{K}$는 다음과 같이 완전하게 정의된다:
+$$\mathcal{K} = {\text{prompt, control_flow, config, output_plumbing, context_mgmt, client_tool, skill, memory, subagent}}$$
+이를 통해 특정 모듈(예: 프롬프트 수정)에만 탐색이 치우치는 현상을 방지하고 다양한 구조적 구성요소로 탐색 다변화를 달성한다.</p>
+</li>
+</ol>
+<h5 id="2-2-선택-측면의-정규화-selection-side-regularization">2.2. 선택 측면의 정규화 (Selection-Side Regularization)</h5>
+<p>선택 단계에서는 성능 평가 전후에 걸쳐 4단계 검증 정규화를 적용함으로써, 점수 상승이 단순 노이즈, 데이터 누출, 또는 연산 복잡성 폭증에 의한 것인지를 엄격히 가려내어 영구 상태로 채택한다.</p>
+<ol>
+<li>
+<p><strong>누출 스크리닝 (Leakage Screening Critic):</strong> 후보 하네스의 디프(diff)를 완전 평가하기 전, 비평자(Critic) LLM이 코드를 스크리닝한다. 진화 벤치마크 고유의 작업 명칭, 엔티티, 특정 답안, 무의미한 코드 삽입 등이 발견되면 평가를 거치지 않고 즉시 거절하여 데이터 누출에 의한 평가 오염을 사전에 차단한다.</p>
+</li>
+<li>
+<p><strong>노이즈 조정 성능 하한선 (Stability-Aware Acceptance):</strong> 기본 하네스의 반복 평가로 측정된 노이즈 범위 $\delta$ 및 역대 최고 진화 점수 $S^*$를 바탕으로 다음 성능 하한선 조건을 적용한다:</p>
+</li>
+</ol>
+<p>$$S(H') \ge S^* - \delta$$</p>
+<p>이 조건은 확률적 평가 변동으로 인한 일시적 점수 하락이 지속적인 하네스 상태로 누적되는 현상을 차단한다.</p>
+<ol start="3">
+<li><strong>복잡성 인식 채택 조건 (Ridge/$L_2$ 스타일 비용 제어):</strong> 후보 하네스 $H'$의 성능 변화량 $\Delta S = S(H') - S(H_t)$ 및 상대적 정책 토큰 비용 변화량 $\Delta C = \frac{C(H') - C(H_t)}{C(H_t)}$를 측정한다. 유의미한 성능 향상($\Delta S &gt; \delta$)이 발생한 경우, 연산 비용 증가량은 아래 수식을 만족해야만 채택된다:</li>
+</ol>
+<p>$$\Delta C \le \beta_0 + \beta_1 \Delta S$$</p>
+<p>여기서 $\beta_0$는 미세한 점수 향상에 허용되는 기본 비용 증가 한계이며, $\beta_1$은 성능 향상 폭에 비례해 허용되는 추가 비용 비율이다. 한편, 점수 변화가 노이즈 범위 내($\Delta S \le \delta$)인 경우에는 아래의 가중 조건식을 적용한다:</p>
+<p>$$w_s \Delta S - w_c \Delta C + w_n \nu_t(H') &gt; 0$$</p>
+<p>여기서 $\nu_t(H')$는 후보 하네스가 건드린 구조적 구성요소 유형 집합 $\mathcal{K}_{\text{str}} = {\text{client_tool, skill, memory, subagent}}$ 중, 과거 승리한 수정에서 단 한 번도 등장하지 않았던 <strong>새로운 구조적 구성요소 유형의 개수</strong>를 의미한다. 프롬프트나 제어 흐름 수정은 이 신규성 보너스($\nu_t$)를 받지 못한다. 이 메커니즘은 연산 복잡성의 무제한 증가를 억제한다는 점에서 Ridge/$L_2$ 정규화와 동일한 축소(Shrinkage) 역할을 수행한다.</p>
+<ol start="4">
+<li>
+<p><strong>구조적 가지치기 (Lasso/$L_1$ 스타일 Structural Pruning):</strong> 가지치기 창($n_{\text{prune}}$) 동안 실질적인 성능 기여 $g_t(\ell) \le 0$인 하네스 구성요소를 가지치기 대상 집합($B_t$)으로 지정하여 제안자에게 해당 모듈의 삭제를 유도한다. 이는 Lasso/$L_1$ 정규화처럼 불필요한 하네스 구조를 지속적으로 제거하여 가볍고 스파스한 하네스를 유지하도록 돕는다.</p>
+</li>
+<li>
+<p><strong>도메인 제약 검증자 (Domain Guards $g(H_t, H')$):</strong> 주 성능 지표의 상승이 실행 유효성 정화로 이어지지 않도록 비대칭적 제약 조건을 적용한다. 공학 설계 도메인에서는 후보 하네스의 유효 출력 비율(Valid-output rate)이 기존 대비 0.03 이상 감소하거나, 미제출 비율(No-submission rate)이 0.02 이상 증가할 경우, 주 통과율 점수가 아무리 높아도 해당 후보를 즉시 거절한다.</p>
+</li>
+</ol>
+<h6 id="실증적-수정-채택-및-거절-사례-qualitative-case-studies">실증적 수정 채택 및 거절 사례 (Qualitative Case Studies)</h6>
+<p>본 정규화 선택 메커니즘의 작동 원리는 실제 진화 궤적 분석을 통해 명확히 확인된다:</p>
+<ul>
+<li><strong>코딩 도메인 R0-A 대 R0-B 사례:</strong> 첫 번째 라운드에서 R0-A 후보는 종료 전 검증 오딧과 장기 실행 작업에 대한 비차단 폴링 지침을 추가하여 진화 세트 점수를 +3.93 퍼센트포인트 향상시켰고, 노이즈 범위를 뛰어넘는 유의미한 성능 향상으로 즉시 채택되었다. 반면 유사한 검증 프롬프트를 추가한 R0-B 후보는 +1.69 퍼센트포인트 향상에 그친 반면 토큰 비용이 +26.1% 급증하여 복잡성 인식 채택 조건에 의해 거절되었다.</li>
+<li><strong>성능 하한선 거절 사례 (R8-B):</strong> 완료 게이트에 원본 작업 지침을 고정하여 토큰 비용을 -13.6% 절감했으나, 성능이 -2.81 퍼센트포인트 하락하여 노이즈 하한선($S^* - \delta$) 미달로 거절되었다.</li>
+<li><strong>공학 설계 도메인 사례 (R2):</strong> <code>&quot;workdir must be an existing directory&quot;</code>라는 반복적 도구 오류에 대한 복구 힌트를 추가한 결과, 토큰 비용 증가율은 +1.6%에 불과했으나 pass 수량이 122개에서 128개로 증가(+6개)하여 가볍고 유용한 제어 로직 개선으로 정식 채택되었다.</li>
+</ul>
+<hr />
+<h4 id="3-실험-결과-및-벤치마크-성능-평가">3. 실험 결과 및 벤치마크 성능 평가</h4>
+<h5 id="3-1-3개-도메인-8개-벤치마크의-실험-설정-및-도메인별-특성">3.1. 3개 도메인, 8개 벤치마크의 실험 설정 및 도메인별 특성</h5>
+<p>연구진은 RRSI의 범용성과 일반화 전이 능력을 평가하기 위해 코딩, 에이전트 작업공간, 공학 설계 등 3개 도메인에 걸쳐 총 8개 벤치마크를 구축하여 실험을 진행했다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크명</th>
+<th style="text-align:left">도메인</th>
+<th style="text-align:left">평가 수단 및 세부 검증 방식</th>
+<th style="text-align:left">데이터셋 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Terminal-Bench 2.1</strong></td>
+<td style="text-align:left">코딩</td>
+<td style="text-align:left">컨테이너 셸 기반 단위 테스트 실행</td>
+<td style="text-align:left">진화 세트 (89개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWE-bench Verified</strong></td>
+<td style="text-align:left">코딩</td>
+<td style="text-align:left">GitHub 이슈 패치 및 Fail-to-Pass/Pass-to-Pass 단위 테스트</td>
+<td style="text-align:left">OOD 세트</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Harvey LAB</strong></td>
+<td style="text-align:left">에이전트 작업공간</td>
+<td style="text-align:left">Gemini 3.5 Flash 판정 모델 (과제당 20~100개, 총 ~14,000개 루브릭 판정)</td>
+<td style="text-align:left">진화 세트 (120개) / ID 보류 세트 (40개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>JobBench</strong></td>
+<td style="text-align:left">에이전트 작업공간</td>
+<td style="text-align:left">Gemini 3.5 Flash 및 Claude Opus 4.8 평균 판정 모델</td>
+<td style="text-align:left">OOD 세트</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GDPval</strong></td>
+<td style="text-align:left">에이전트 작업공간</td>
+<td style="text-align:left">3개 판정 모델(Qwen3.6-35B-A3B, Claude Sonnet 4.6, Gemini 3.1 Pro) 다수결 승률</td>
+<td style="text-align:left">OOD 세트 (185개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>APEX-Agents</strong></td>
+<td style="text-align:left">에이전트 작업공간</td>
+<td style="text-align:left">Gemini 3.5 Flash 판정 모델 기반 pass@1 평가</td>
+<td style="text-align:left">OOD 세트 (480개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EngDesign</strong></td>
+<td style="text-align:left">공학 설계</td>
+<td style="text-align:left">물리 제약 동결 시뮬레이터 (결정론적 평가)</td>
+<td style="text-align:left">진화 세트 (61개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Frontier-Eng</strong></td>
+<td style="text-align:left">공학 설계</td>
+<td style="text-align:left">26개 영역 시뮬레이터 기반 Medal Score (Gold 1.0, Silver 0.67, Bronze 0.33)</td>
+<td style="text-align:left">OOD 세트 (38개 활성)</td>
+</tr>
+</tbody>
+</table>
+<p>각 도메인별 평가 방법론의 정밀도는 다음과 같다:</p>
+<ul>
+<li><strong>Harvey LAB:</strong> 160개 법률 과제에 대해 과제당 20~100개의 세부 채점 항목을 적용하며, 전체 평가 시 약 14,000개의 독자적 루브릭 판정을 Gemini 3.5 Flash 모델이 단독으로 수행한다.</li>
+<li><strong>GDPval:</strong> AI 에이전트 산출물을 사람 전문가 산출물과 1:1 비교한다. 편향을 제거하기 위해 제시 순서를 번갈아 가며 3개 독립 모델 패널의 다수결 승률을 측정한다.</li>
+<li><strong>Frontier-Eng:</strong> 26개 공학 분야에 대해 판정 모델 없이 고정된 시뮬레이터가 연속적 목적함수를 평가하여 Gold, Silver, Bronze 문턱값 도달 여부에 따라 Medal 점수(%)를 산출한다.</li>
+</ul>
+<h5 id="3-2-기존-하네스-진화-방법론과의-성능-비교-분석">3.2. 기존 하네스 진화 방법론과의 성능 비교 분석</h5>
+<p>에이전트 작업공간 도메인(Harvey LAB 진화 세트 기반)에서 초기 기본 하네스($H_0$), 기존 4개 최신 진화 기법(Meta-Harness, AHE, TTHE, HarnessX) 및 RRSI의 성과 비교는 아래 표와 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기법명</th>
+<th style="text-align:center">Harvey LAB (진화 세트)</th>
+<th style="text-align:center">Harvey LAB (ID 보류 세트)</th>
+<th style="text-align:center">JobBench (OOD)</th>
+<th style="text-align:center">GDPval (OOD)</th>
+<th style="text-align:center">APEX-Agents (OOD)</th>
+<th style="text-align:center">OOD 평균</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>$H_0$ (진화 없음)</strong></td>
+<td style="text-align:center">89.4</td>
+<td style="text-align:center">86.9</td>
+<td style="text-align:center">36.0</td>
+<td style="text-align:center">48.8</td>
+<td style="text-align:center">34.2</td>
+<td style="text-align:center">39.7</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Meta-Harness</strong></td>
+<td style="text-align:center"><strong>93.0</strong></td>
+<td style="text-align:center">89.2</td>
+<td style="text-align:center">37.1</td>
+<td style="text-align:center">49.1</td>
+<td style="text-align:center">35.7</td>
+<td style="text-align:center">40.6</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AHE</strong></td>
+<td style="text-align:center">90.7</td>
+<td style="text-align:center">88.7</td>
+<td style="text-align:center">37.2</td>
+<td style="text-align:center">47.2</td>
+<td style="text-align:center">33.1</td>
+<td style="text-align:center">39.2</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TTHE</strong></td>
+<td style="text-align:center">91.1</td>
+<td style="text-align:center">88.5</td>
+<td style="text-align:center">35.2</td>
+<td style="text-align:center">47.0</td>
+<td style="text-align:center">31.7</td>
+<td style="text-align:center">38.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HarnessX</strong></td>
+<td style="text-align:center">91.8</td>
+<td style="text-align:center">89.1</td>
+<td style="text-align:center">36.3</td>
+<td style="text-align:center">48.5</td>
+<td style="text-align:center">34.3</td>
+<td style="text-align:center">39.7</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RRSI (제안 기법)</strong></td>
+<td style="text-align:center">90.5</td>
+<td style="text-align:center"><strong>89.2</strong></td>
+<td style="text-align:center"><strong>40.7</strong></td>
+<td style="text-align:center"><strong>52.3</strong></td>
+<td style="text-align:center"><strong>37.9</strong></td>
+<td style="text-align:center"><strong>43.6</strong></td>
+</tr>
+</tbody>
+</table>
+<p>비정규화 기반 기존 진화 기법인 Meta-Harness는 진화 세트에서 93.0이라는 최고 점수를 기록했으나 OOD 전이에서는 불과 0.9점 상승에 그쳤다. AHE(39.2점)와 TTHE(38.0점)의 경우 OOD 평가에서 초기 기본 하네스($H_0$, 39.7점)보다 최대 1.7점 낮아지는 심각한 과적합 퇴보를 보였다.</p>
+<p>반면 RRSI는 과적합성 수정을 정규화로 차단하여 진화 세트에서는 비교 기법 중 가장 낮은 점수 상승(90.5)을 기록했으나, OOD 벤치마크 평균 점수에서는 <strong>43.6점</strong>을 달성했다. 이는 $H_0$ 대비 +3.9점, 기존 최상위 기법 대비 평균 **22.9%**의 상대적 성능 우위를 달성한 수치이다.</p>
+<h5 id="3-3-최고-개선-수치-및-ood-전이-성능">3.3. 최고 개선 수치 및 OOD 전이 성능</h5>
+<p>도메인별 RRSI의 진화 세트 최고 개선량 및 OOD 전이 성과는 다음과 같다:</p>
+<ul>
+<li><strong>코딩 도메인:</strong>
+<ul>
+<li>Terminal-Bench 2.1 (진화 세트): 74.2점에서 80.2점으로 <strong>+6.0 퍼센트포인트</strong> 개선.</li>
+<li>SWE-bench Verified (OOD 세트): 82.0점에서 83.8점으로 <strong>+1.8 퍼센트포인트</strong> 전이 개선.</li>
+</ul>
+</li>
+<li><strong>공학 설계 도메인:</strong>
+<ul>
+<li>EngDesign (진화 세트): 50.0점에서 54.9점으로 <strong>+4.9 퍼센트포인트</strong> 개선.</li>
+<li>Frontier-Eng (OOD 세트): Medal 점수 기준 17.7점에서 22.0점으로 <strong>+4.3 퍼센트포인트</strong> 개선 (상대 개선율 <strong>24.3%</strong> 달성).</li>
+</ul>
+</li>
+</ul>
+<h5 id="3-4-기반-모델-간-일반화-및-교차-모델-전이-policy-robustness">3.4. 기반 모델 간 일반화 및 교차 모델 전이 (Policy Robustness)</h5>
+<p>기반 정책 모델을 Claude Opus 4.8 및 Gemini 3.5 Flash로 변경하여 코딩 도메인에서 진화를 수행한 성과는 아래 표와 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기반 정책 모델</th>
+<th style="text-align:left">평가 벤치마크</th>
+<th style="text-align:center">초기 하네스 ($H_0$)</th>
+<th style="text-align:center">RRSI 적용 하네스</th>
+<th style="text-align:center">변화량 ($\Delta$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Claude Opus 4.8</strong></td>
+<td style="text-align:left">Terminal-Bench 2.1 (진화)</td>
+<td style="text-align:center">74.2</td>
+<td style="text-align:center"><strong>80.2</strong></td>
+<td style="text-align:center">+6.0 %p</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Claude Opus 4.8</strong></td>
+<td style="text-align:left">SWE-bench Verified (OOD)</td>
+<td style="text-align:center">82.0</td>
+<td style="text-align:center"><strong>83.8</strong></td>
+<td style="text-align:center">+1.8 %p</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gemini 3.5 Flash</strong></td>
+<td style="text-align:left">Terminal-Bench 2.1 (진화)</td>
+<td style="text-align:center">64.6</td>
+<td style="text-align:center"><strong>78.7</strong></td>
+<td style="text-align:center"><strong>+14.1 %p</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gemini 3.5 Flash</strong></td>
+<td style="text-align:left">SWE-bench Verified (OOD)</td>
+<td style="text-align:center">76.8</td>
+<td style="text-align:center"><strong>79.0</strong></td>
+<td style="text-align:center">+2.2 %p</td>
+</tr>
+</tbody>
+</table>
+<p>Gemini 3.5 Flash 환경에서 RRSI는 진화 세트 점수를 <strong>14.1 퍼센트포인트</strong>($64.6 \rightarrow 78.7$) 폭발적으로 향상시켰으며, SWE-bench Verified (OOD)에서도 <strong>2.2 퍼센트포인트</strong> 전이 개선을 기록했다.</p>
+<p>나아가 Gemini 3.5 Flash 환경에서 진화가 완료된 하네스를 탐색 과정에 전혀 참여하지 않은 하위 모델인 Gemini 3.1 Flash Lite에 고스란히 교차 적용(Cross-Model Transfer) 평가했다. 그 결과 Terminal-Bench 2.1 정확도가 11.2에서 14.6으로 <strong>3.4 퍼센트포인트</strong> 상승하여 <strong>30.4%의 상대적 개선율</strong>을 기록했다. 이는 RRSI가 특정 기반 모델의 프롬프트 민감도를 암기한 것이 아니라, <strong>모델 비의존적인 범용 제어 흐름 및 문맥 관리 아키텍처</strong>를 최적화했음을 완벽히 입증한다.</p>
+<hr />
+<h4 id="4-정책-토큰-비용-소거-연구-및-연구의-한계">4. 정책 토큰 비용, 소거 연구 및 연구의 한계</h4>
+<h5 id="4-1-정책-토큰-비용-및-실행-트래젝터리-효율성">4.1. 정책 토큰 비용 및 실행 트래젝터리 효율성</h5>
+<p>테스트 시점 연산 비용 및 토큰 소비량 분석에서 비정규화 진화 기법들은 복잡성을 무분별하게 누적시켜 실행 비용을 폭증시켰다.</p>
+<p>에이전트 작업공간 평가에서 RRSI가 생성한 하네스는 시도당 평균 <strong>2.42M(백만) 정책 토큰</strong>과 **26.3 단계(Step)**의 실행 트래젝터리를 소비했다. 이는 비정규화 진화(3.80M 토큰) 대비 <strong>약 30% 적은 정책 토큰</strong>을 소비한 것이며, 기존 기법인 AHE(3.82M 토큰, 34.6 단계) 대비 토큰 소비량 절감과 트래젝터리 단계 단축을 동시에 달성한 **이중 효율성 개선(Double Efficiency Gain)**을 증명한다.</p>
+<h5 id="4-2-구성요소별-소거-연구-ablation-study">4.2. 구성요소별 소거 연구 (Ablation Study)</h5>
+<p>제안 및 선택 정규화 요소의 개별 효과를 검증한 소거 연구 결과는 아래 표와 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">변형 모델 (Variant)</th>
+<th style="text-align:center">Harvey LAB (진화)</th>
+<th style="text-align:center">Harvey LAB (ID 보류)</th>
+<th style="text-align:center">OOD 평균</th>
+<th style="text-align:center">시도당 토큰 수 (M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>$H_0$ (진화 없음)</strong></td>
+<td style="text-align:center">89.4</td>
+<td style="text-align:center">86.9</td>
+<td style="text-align:center">39.7</td>
+<td style="text-align:center">1.56</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비정규화 전체 진화 (Unregularized)</strong></td>
+<td style="text-align:center"><strong>92.8</strong></td>
+<td style="text-align:center">88.9</td>
+<td style="text-align:center">40.3</td>
+<td style="text-align:center"><strong>3.80</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>제안 정규화 제거 (w/o proposal)</strong></td>
+<td style="text-align:center">90.7</td>
+<td style="text-align:center">88.8</td>
+<td style="text-align:center">41.9</td>
+<td style="text-align:center">2.69</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선택 정규화 제거 (w/o acceptance)</strong></td>
+<td style="text-align:center">91.5</td>
+<td style="text-align:center">88.7</td>
+<td style="text-align:center">41.0</td>
+<td style="text-align:center">3.59</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RRSI (전체 정규화 적용)</strong></td>
+<td style="text-align:center">90.5</td>
+<td style="text-align:center"><strong>89.2</strong></td>
+<td style="text-align:center"><strong>43.6</strong></td>
+<td style="text-align:center">2.42</td>
+</tr>
+</tbody>
+</table>
+<p>선택 정규화를 제거할 경우 진화 세트 점수(91.5)는 상승하지만 OOD 평균 점수가 41.0으로 저하되고 토큰 소비가 3.59M으로 급증한다. 제안 및 선택 정규화를 모두 제거한 비정규화 상태에서는 진화 세트 점수가 최고치(92.8)를 찍으나, OOD 성능은 40.3으로 초깃값($H_0$, 39.7) 부근으로 퇴보하고 토큰 소비량은 3.80M으로 극대화된다.</p>
+<h5 id="4-3-연구의-범위-및-내재적-한계점">4.3. 연구의 범위 및 내재적 한계점</h5>
+<p>연구진이 보고서의 Limitations 섹션을 통해 직접 밝힌 본 연구의 내재적 한계점 3가지는 다음과 같다:</p>
+<ol>
+<li><strong>기반 모델 고정 설정의 한계:</strong> 고정된 기반 모델 주변의 하네스 수준 재귀적 자기 개선에만 집중하였으며, 모델 가중치가 하네스 구조와 동시에 업데이트되는 공동 파인튜닝(Joint Fine-Tuning) 환경은 다루지 않았다.</li>
+<li><strong>유한한 데이터 및 하이퍼파라미터 의존성:</strong> 여전히 유한한 규모의 진화 작업 세트에 의존하며, 정규화 제어를 위한 하이퍼파라미터 설정($\delta, \beta_0, \beta_1$ 등)의 사전 보정 품질에 영향을 받는다.</li>
+<li><strong>일반화 검증의 확장 필요성:</strong> 다양한 도메인과 정책 모델에서 검증을 거쳤으나, 완전히 이질적인 에이전트 아키텍처, 새로운 도구 생태계 및 더 장기적으로 지속되는 자기 개선 프로세스에서의 일반화 가능성에 대해서는 추가적인 검증이 필요하다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

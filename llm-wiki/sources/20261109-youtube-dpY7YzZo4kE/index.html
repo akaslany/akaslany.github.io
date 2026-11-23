@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[One Million AI Engineer Special] How Stanford Teaches AI-Native Engineering — Mihail Eric, Monaco</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>[One Million AI Engineer Special] How Stanford Teaches AI-Native Engineering — Mihail Eric, Monaco</h1>
+<p class="page-meta">YouTube · 2026-11-09</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 AI 기술 및 정보 아키텍처 관점에서 스탠퍼드 대학교의 현대 소프트웨어 개발자 강의인 CS146S 커리큘럼과 현장 AI 엔지니어링 실무 패러다임의 변화를 종합 분석한 결과물입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=dpY7YzZo4kE">출처</a> · <a href="https://www.youtube.com/watch?v=iZw8xrXQ-H4">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="스탠퍼드-ai-네이티브-엔지니어링-강의-cs146s-및-ai-소프트웨어-개발-패러다임-해설-보고서">스탠퍼드 AI 네이티브 엔지니어링 강의(CS146S) 및 AI 소프트웨어 개발 패러다임 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 AI 기술 및 정보 아키텍처 관점에서 스탠퍼드 대학교의 현대 소프트웨어 개발자 강의인 CS146S 커리큘럼과 현장 AI 엔지니어링 실무 패러다임의 변화를 종합 분석한 결과물입니다. 유튜브 채널 'Latent Space'의 구독자 100만 명(1,000,000명) 달성을 기념하여 진행된 특별 인터뷰에는 진행자 스윅스(Swix)와 게스트 미하일 에릭(Mihail Eric)이 참석하였습니다. 미하일 에릭은 스탠퍼드 대학교 겸임교수이자 AI 스타트업 모나코(Monaco)의 AI 총괄(Head of AI)로 재직하며 이론적 프레임워크와 최첨단 엔터프라이즈 실무를 결합하고 있습니다.</p>
+<p>스탠퍼드 대학교의 CS146S(The Modern Software Developer) 강의는 AI 네이티브 개발 실무 전체를 체계화하여 학계와 산업계의 큰 주목을 받고 있습니다. 본 강의의 최초 구상은 클로드 오퍼스(Claude Opus) 출시 이전인 2024년 11월에 시작되었으며, 약 9~10개월간의 교육과정 심의 및 준비 기간(2024년 가을 ~ 2025년 중/후반)을 거쳐 2025년 가을 학기에 첫 정규 개설되었습니다. 본 인터뷰는 2025년 가을 학기 1주차 수업이 종료된 직후 진행되었습니다. 강의 구상 초기였던 2024년 버전의 관점이 다양한 AI 코딩 에이전트 도구를 폭넓게 탐색하고 단순 노출시키는 데 초점을 맞추었다면, 2025년 정규 개정판은 대규모 코드베이스 수용을 위한 컨텍스트 엔지니어링, 검증 가능한 아키텍처 설계, 백그라운드 에이전트 인프라, 그리고 실전 오픈소스(OSS) 프로젝트 직접 기여 중심으로 대폭 전환되었습니다.</p>
+<p>미하일 에릭은 스탠퍼드에서 최신 개발 패러다임을 교육하는 한편, Monaco에서 대규모 코드베이스와 자율형 영업/엔지니어링 에이전트를 직접 구축 및 운영하는 실무자입니다. 본 보고서는 그가 제시하는 이론적 프레임워크와 현장 실무의 결합 관점을 바탕으로 차세대 AI 엔지니어에게 요구되는 방어적 기술 집합(Defensible Skillset), 자동화 소프트웨어 팩토리의 아키텍처, 코드 리뷰 병목 해소 방안, 그리고 AI 보안의 한계와 과제를 정밀하게 분석합니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-discussion-points">2. 주요 논점 (Key Discussion Points)</h4>
+<h5 id="2-1-코딩-에이전트-내부-구조-및-프록시-분석-1주차">2.1 코딩 에이전트 내부 구조 및 프록시 분석 (1주차)</h5>
+<ul>
+<li><strong>[논점 제목]:</strong> 코딩 에이전트 하네스 내부 구조 실습 및 프록시 가로채기 분석</li>
+<li><strong>[소스 내 구체적 근거 및 주 위치]:</strong> CS146S 1주차 커리큘럼, 스탠퍼드 CS106B 기초 알고리즘 지식 기반 200줄 하네스(Harness) 구현 블로그 포스트, 중간자 프록시(MITM Proxy)를 활용한 클로드 코드(Claude Code) 네트워크 패킷 분석.</li>
+<li><strong>[주요 내용 및 사례]:</strong>
+수강생들은 자율 코딩 루프의 원리를 파악하기 위해 200줄 이하의 코드로 파일 수정 및 터미널 명령 실행이 가능한 최소 기능 하네스를 직접 작성합니다. 나아가 중간자 프록시(MITM Proxy) 도구를 활용하여 상용 에이전트인 Claude Code가 파운데이션 모델과 주고받는 네트워크 요청 및 응답을 가로채 분석합니다. 이를 통해 <strong>시스템 프롬프트(System Prompt)</strong>, <strong>계획 프롬프트(Plan Prompt)</strong>, 그리고 프롬프트 비대화를 방지하는 **압축 프롬프트(Compaction Prompt)**의 3단계 보존 메커니즘을 파악합니다. 특히 모델 가중치(Model Weights)의 비약적 발전(Opus 3.5/5.5 등)으로 인해 과거 약 20,000 토큰에 달했던 시스템 프롬프트 크기가 약 80% 축소되었으며, Git 사용법이나 과업 분할 등 기존 프롬프트 지침이 모델 가중치 내부로 내재화되는 프롬프트 소형화 패러다임을 확인합니다.</li>
+<li><strong>[구분: 사실 / 소스의 주장 / 작성자의 해석]:</strong>
+<ul>
+<li><strong>사실:</strong> CS146S 1주차에서 200줄 코드 하네스 작성 및 MITM 프록시를 통한 Claude Code 네트워크 패킷 가로채기 실습을 진행함. 초기 Claude Code의 시스템 프롬프트가 최근 모델 발전 과정에서 약 80% 축소되었음.</li>
+<li><strong>소스의 주장:</strong> 자율 코딩 에이전트의 핵심 메커니즘은 CS106B 수준의 기초 알고리즘 지식(200줄 코드)만으로 복원 가능하며, 프롬프트 축소는 모델 가중치 자체로 작업 노하우가 내재화된 결과라는 미하일 에릭의 주장.</li>
+<li><strong>작성자의 해석:</strong> 파운데이션 모델의 진화는 프롬프트 엔지니어링의 오버헤드를 줄이고 하네스를 경량화하는 방향으로 작용하며, 시스템 설계의 핵심은 하네스 코드와 모델 가중치 간의 역할 분담 최적화로 이동하고 있음.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-컨텍스트-엔지니어링-및-에이전트-스킬-절차화-2-3주차">2.2 컨텍스트 엔지니어링 및 에이전트 스킬 절차화 (2~3주차)</h5>
+<ul>
+<li><strong>[논점 제목]:</strong> 고도화된 컨텍스트 엔지니어링 체계와 에이전트 스킬(Skills) 도입 논쟁</li>
+<li><strong>[소스 내 구체적 근거 및 주 위치]:</strong> CS146S 2~3주차 커리큘럼, RAPID/RPI(Research-Proposal-Intent/Plan-Implementation-Testing) 프레임워크, MCP(Model Context Protocol) 툴 디자인, 스킬(Skill.md, CLI, 웹 스킬, explained diff, grill knee).</li>
+<li><strong>[주요 내용 및 사례]:</strong>
+수백만 줄 규모의 코드베이스에서는 단발성 프롬프팅이 실패하므로, 탐색(Research), 제안(Proposal), 스펙 작성(Plan), 구현(Implementation), 테스트(Testing) 단계로 이어지는 RAPID/RPI 프레임워크 기반 컨텍스트 엔지니어링을 적용합니다. 에이전트의 정형화된 행동 절차를 서술한 스킬(Skill.md)이 도입되며, 대표 사례로 제프리 리츠(Jeffrey Litz)가 개발한 <code>explained diff</code>가 활용됩니다. 이 스킬은 코드 변경 사항의 시각적 요약과 함께 개발자의 방심(Turning brain off)을 방지하는 이해도 검증 퀴즈를 제공합니다. 매트 포그(Matt Pog)의 <code>grill knee</code> 등도 실습 대상입니다.
+그러나 업계 내부에서는 <strong>스킬 구조에 대한 입체적 대립</strong>이 존재합니다. Anthropic 내부 개발진 일부는 &quot;스킬 프레임워크는 임시방편일 뿐 장기적으로 모델 가중치에 흡수되어 폐지되어야 한다&quot;는 <strong>스킬 폐지론</strong>을 제기하는 반면, Monaco 및 Cognition(Devon) 등 현장 구축진은 &quot;조직 차원의 모범 사례(Org-level Best Practices) 및 아키텍처 가이드라인을 서브에이전트에게 지속적으로 전달하는 검증된 보존 도구&quot;로 스킬의 유효성을 옹호합니다. 아울러 스킬의 무분별한 오발동(의도하지 않은 프로젝트에서의 작동), 컨텍스트 비대화, 덤 존(Dumb zone) 형성, 프롬프트 오버클리닝 문제는 해결 과제로 지적됩니다.</li>
+<li><strong>[구분: 사실 / 소스의 주장 / 작성자의 해석]:</strong>
+<ul>
+<li><strong>사실:</strong> CS146S 2~3주차에서 RAPID/RPI 프레임워크, MCP 툴 작성, <code>explained diff</code> 스킬 실습을 수행함.</li>
+<li><strong>소스의 주장:</strong> 대규모 코드베이스 수용을 위해서는 단발성 프롬프팅을 넘어선 컨텍스트 수용 단계 조율이 필수적임. 앤스로픽 내부의 스킬 폐지론과 Monaco/Devon의 조직 모범 사례 관리 도구로서의 스킬 유지론이 대립함.</li>
+<li><strong>작성자의 해석:</strong> 스킬 프레임워크는 단기적으로 서브에이전트 제어 프레임워크로 작동하지만, 장기적으로는 모델 내재화 지식과 조직별 거버넌스 정책(Policy Control) 사이를 중계하는 거버넌스 레이어로 재정의될 것임.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-에이전트-친화적-코드베이스-및-자동화-코드-리뷰-4-6주차">2.3 에이전트 친화적 코드베이스 및 자동화 코드 리뷰 (4~6주차)</h5>
+<ul>
+<li><strong>[논점 제목]:</strong> 코드베이스 검증 가능성(Verifiability) 확보 및 자동화 코드 리뷰 병목 해소</li>
+<li><strong>[소스 내 구체적 근거 및 주 위치]:</strong> CS146S 4~6주차 커리큘럼, Factory의 에이전트 준비도(Agent Readiness) 프레임워크, Cognition의 Devon Review 도입 사례, Aviator(Ankit/Vankit)의 코드 리뷰 병목 해소 기고문.</li>
+<li><strong>[주요 내용 및 사례]:</strong>
+에이전트가 코드를 원활히 읽고 수정할 수 있도록 정적 문서화, 명확한 서비스 경계, 검증 가능성(Verifiability)을 갖추는 '에이전트 준비도(Agent Readiness)'가 병목 해소의 선결 조건입니다. AI 도입으로 개발자의 생산성이 급증하여 일일 PR 생성 건수가 30개 이상(30+ PRs a day)으로 폭증함에 따라, 기존의 인간 중심 줄 단위(Line-by-line) 코드 리뷰는 전체 소프트웨어 개발 수명주기(SDLC)의 가장 심각한 병목으로 부상했습니다.
+이를 해결하기 위해 코드베이스의 정적 검증 조건이 충족될 경우 자동 승인(Auto-approve)을 수행하는 구조가 구축됩니다. 인간 및 AI 리뷰어의 역할은 줄 단위 수동 검수에서 PR 스펙과 코드베이스 전체 아키텍처 맥락 간 지식 간극을 검증하는 고차원 평가로 이동합니다. Monaco의 경우 CodeRabbit, Graphite, Ellipsis 등 다양한 도구를 시범 평가한 끝에 조직 내부 요구사항에 가장 부합하는 Cognition의 Devon Review 시스템을 채택하여 리뷰 병목을 해소하고 있습니다.</li>
+<li><strong>[구분: 사실 / 소스의 주장 / 작성자의 해석]:</strong>
+<ul>
+<li><strong>사실:</strong> CS146S 4~6주차 커리큘럼 구성, Factory의 에이전트 준비도 리포트 공유, Monaco의 Devon Review 실제 채택 사례.</li>
+<li><strong>소스의 주장:</strong> AI로 인해 일일 30개 이상의 PR이 생성되는 생산성 환경에서는 수동 리뷰가 시스템 병목이 되며, 정적 검증 가능성에 기반한 자동 승인 및 PR 스펙 중심 아키텍처 검수로 전환해야 함.</li>
+<li><strong>작성자의 해석:</strong> 코드 생성의 무한 확장성은 검증 아키텍처의 한계에 봉착하므로, 코드베이스 자체를 에이전트 친화적으로 재구조화하고 검증 자동화 비율을 높이는 것이 전체 시스템 출력을 결정함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-ai-보안-백그라운드-에이전트-및-팀-인프라-7-9주차">2.4 AI 보안, 백그라운드 에이전트 및 팀 인프라 (7~9주차)</h5>
+<ul>
+<li><strong>[논점 제목]:</strong> 공급망 보안 위험, 이벤트 기반 백그라운드 에이전트 및 갓 박스(God-box) 인프라 아키텍처</li>
+<li><strong>[소스 내 구체적 근거 및 주 위치]:</strong> CS146S 7~9주차 커리큘럼, 의존성 공급망 공격 위험, 백그라운드 에이전트(Monaco HAL, Monicoder, Ramp Inspect, Spotify Muse, Stripe Minions), LM 게이트웨이 및 MCP 포털, 갓 박스(God-box, M×N to M+N) 아키텍처 담론.</li>
+<li><strong>[주요 내용 및 사례]:</strong>
+자율 에이전트의 무분별한 외부 패키지 설치는 보안 취약점 유입 및 공급망 공격 위험을 증대시킵니다. 이에 따라 엄격한 의존성 핀(Pinning) 설정과 고위험 영역(인증 AuthN/AuthZ, 데이터 저장소, 결제)에 대한 제어 로직이 요구됩니다. 개발 도구는 기존 IDE 중심에서 벗어나 크론(Cron) 작업이나 이벤트 트라이거 방식으로 작동하는 백그라운드 에이전트로 진화하고 있습니다. Monaco는 Coder.com 플랫폼 기반의 격리 환경 에이전트 Monicoder와 슬랙 기반의 고객지원/QA/디버깅 통합 보트 HAL을 구축하였으며, 기업 현장의 Ramp Inspect, Spotify Muse, Stripe Minions 등이 동일 패러다임으로 운용됩니다.
+팀 인프라 관점에서는 진행자와 피초청자가 상호 교환한 <strong>'갓 박스(God-box)' 아키텍처 패턴</strong>이 핵심으로 대두됩니다. 이는 기존 $M \times N$ 구조로 파편화되어 있던 서비스와 모델 간 연결망을 단일 통합 인프라 레이어($M + N$ 구조)로 묶어내는 패턴입니다. 이 갓 박스 레이어 안에서 LM 게이트웨이, MCP 포털, 인증/권한 제어, 보안 감사, 비용 최적화가 일원화되며, 이를 설계·운용하는 플랫폼 엔지니어(Platform Engineer)가 기업의 생존을 결정하는 핵심 역할로 재정의됩니다.</li>
+<li><strong>[구분: 사실 / 소스의 주장 / 작성자의 해석]:</strong>
+<ul>
+<li><strong>사실:</strong> 7~9주차 보안, 백그라운드 에이전트, 팀 인프라 커리큘럼 내용 및 Monaco HAL/Monicoder, Ramp Inspect, Spotify Muse, Stripe Minions의 실제 구축 사례.</li>
+<li><strong>소스의 주장:</strong> 백그라운드 이벤트 에이전트가 주요 개발 패러다임이 되며, 플랫폼 엔지니어는 게이트웨이와 MCP 포털을 통합 관리하는 갓 박스 인프라 거버넌스를 전담해야 함.</li>
+<li><strong>작성자의 해석:</strong> 갓 박스 패턴은 인프라 복잡도를 $M \times N$에서 $M + N$으로 축소시키는 플랫폼 엔지니어링의 필수적 아키텍처 지향점이며, 자율 에이전트의 무분별한 시스템 침투를 제어하는 단일 방어선 역할을 수행함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-5-소프트웨어-팩토리와-ai-엔지니어의-미래-역할-10주차-및-monaco-실무">2.5 소프트웨어 팩토리와 AI 엔지니어의 미래 역할 (10주차 및 Monaco 실무)</h5>
+<ul>
+<li><strong>[논점 제목]:</strong> 소프트웨어 팩토리(Software Factory) 패러다임과 인간 초크 포인트, 그리고 엔지니어의 방어적 기술 집합</li>
+<li><strong>[소스 내 구체적 근거 및 주 위치]:</strong> CS146S 10주차 커리큘럼, Monaco 실무 경험, Warp의 자율 팩토리 과제, Boris의 에이전트 도입 5단계 모델(0~4단계), Steve Yaggi의 10단계 광기(Psychosis) 모델.</li>
+<li><strong>[주요 내용 및 사례]:</strong>
+전체 코드의 80~90% 이상을 에이전트가 자동으로 작성·유지보수하는 '소프트웨어 팩토리' 개념이 대두되고 있습니다. 완전히 무인화된 암전 팩토리(Dark Factory)와 인간이 상주하는 반자동 팩토리 간의 세부 형태 논의가 지속되는 가운데, 미하일 에릭은 전체 시스템이 자동화되더라도 인간이 끝까지 점유해야 하는 두 가지 핵심 **초크 포인트(Choke Points)**로 **'의도 및 스펙 정의(Intent/Spec)'**와 **'최종 검수 및 시스템 이해(Review/Taste)'**를 제시합니다.
+수동 구문 작성의 가치가 소멸함에 따라, 미래 AI 엔지니어의 핵심 방어 자산(Defensible Skillset)은 단순 구현력이 아닌 전체 시스템에 대한 **'소프트웨어 취향(Software Taste)'**과 정교한 **평가 체계 및 벤치마크(Evals/Benchmarks, 예: SWE-bench 모델)**를 직접 설계하는 능력으로 재편됩니다. 현업과 교육 간 간극을 메우기 위해 하루 10분간의 미세 실습(10 minutes a day)이 권장되며, Boris의 5단계 에이전트 도입 모델 및 Steve Yaggi의 광기(Psychosis) 진화 모델이 엔지니어 성장의 레퍼런스로 활용됩니다.</li>
+<li><strong>[구분: 사실 / 소스의 주장 / 작성자의 해석]:</strong>
+<ul>
+<li><strong>사실:</strong> CS146S 10주차 커리큘럼, Warp의 팩토리 실습 과제, Boris의 에이전트 도입 5단계 모델 및 Steve Yaggi의 광기 모델 언급.</li>
+<li><strong>소스의 주장:</strong> 코딩의 90%가 자동화되더라도 의도 정의와 최종 검수(초크 포인트)는 인간의 몫으로 남으며, 평가 역량(Evals)과 소프트웨어 취향이 엔지니어의 핵심 경쟁력이 됨.</li>
+<li><strong>작성자의 해석:</strong> 수동 코딩의 종말은 프로그래머를 구문 작성자에서 메타 하네스 아키텍터 및 평가 시스템 설계자로 격상시키며, 엔지니어링의 본질을 '어떻게 구현할 것인가'에서 '무엇을 검증할 것인가'로 전환시킴.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-persons-speakers">3. 등장 인물 및 화자 (Persons &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 / 화자 이름</th>
+<th style="text-align:left">소속 및 역할 (소스 기준)</th>
+<th style="text-align:left">소스 내 언급 맥락 및 주요 활동</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">스윅스 (Swix)</td>
+<td style="text-align:left">Latent Space 팟캐스트 진행자</td>
+<td style="text-align:left">인터뷰 진행, AI 엔지니어링 동향 질의, 갓 박스(God-box) 및 프록시 분석 관련 아키텍처 의견 제시</td>
+</tr>
+<tr>
+<td style="text-align:left">미하일 에릭 (Mihail Eric)</td>
+<td style="text-align:left">스탠퍼드 대학교 겸임교수 / Monaco AI 총괄</td>
+<td style="text-align:left">CS146S 강의 총괄 설계 및 진행, Monaco 내 자율 에이전트 시스템 구축, 인터뷰 피초청자</td>
+</tr>
+<tr>
+<td style="text-align:left">칩 훠연 (Chip Huyen)</td>
+<td style="text-align:left">미하일 에릭의 동료 (스탠퍼드 전 강사)</td>
+<td style="text-align:left">스탠퍼드 머신러닝 시스템 설계 강의 경험 공유 및 CS146S 커리큘럼 수립 관련 자문 제공</td>
+</tr>
+<tr>
+<td style="text-align:left">보리스 (Boris)</td>
+<td style="text-align:left">Anthropic 소속 Claude Code 개발자</td>
+<td style="text-align:left">CS146S 게스트 강연자, Claude Code 구축, 에이전트 도입 5단계 모델 및 트위터 인사이트 제안</td>
+</tr>
+<tr>
+<td style="text-align:left">싸일러스 (Silas)</td>
+<td style="text-align:left">Cognition 소속 개발자</td>
+<td style="text-align:left">CS146S 강연자, Devon Review 시스템 및 자동화 코드 검수 관련 발표 진행</td>
+</tr>
+<tr>
+<td style="text-align:left">월든 (Walden)</td>
+<td style="text-align:left">Cognition 소속 개발자</td>
+<td style="text-align:left">Monaco의 Devon 도입 및 실제 코드 리뷰 시스템 적용 관련 논의 진행</td>
+</tr>
+<tr>
+<td style="text-align:left">이노 (Eno)</td>
+<td style="text-align:left">Factory 소속 개발자</td>
+<td style="text-align:left">CS146S 강연자, 코드베이스의 '에이전트 준비도(Agent Readiness)' 프레임워크 발표</td>
+</tr>
+<tr>
+<td style="text-align:left">샘 블론드 (Sam Blonde)</td>
+<td style="text-align:left">Monaco 마케팅 담당자</td>
+<td style="text-align:left">일당 $6,000 규모의 Monaco 경비행기 공중 광고 및 깃발 마케팅 기획</td>
+</tr>
+<tr>
+<td style="text-align:left">존 트레이시 (John Tracy)</td>
+<td style="text-align:left">Monaco 엔지니어</td>
+<td style="text-align:left">Monaco 내부 자율 에이전트 인프라 Monicoder 및 HAL 공동 개발</td>
+</tr>
+<tr>
+<td style="text-align:left">유나 (Yuna)</td>
+<td style="text-align:left">Monaco 엔지니어</td>
+<td style="text-align:left">Monaco 슬랙 기반 통합 디버깅/QA/고객지원 AI 보트 HAL 개발</td>
+</tr>
+<tr>
+<td style="text-align:left">미첼 (Mitchell)</td>
+<td style="text-align:left">Basis 소속 인물</td>
+<td style="text-align:left">뉴욕 콘퍼런스 연사, 명시적 스펙 파일과 코드베이스 정적 상태 분리(Basis 모델) 제시</td>
+</tr>
+<tr>
+<td style="text-align:left">벤킷 (Vankit) / 앙킷 (Ankit)</td>
+<td style="text-align:left">Aviator 작성자</td>
+<td style="text-align:left">Latent Space에 'AI 코드 리뷰 병목 해소' 주제의 게스트 기고문 작성</td>
+</tr>
+<tr>
+<td style="text-align:left">스티브 야기 (Steve Yaggi)</td>
+<td style="text-align:left">Gas Town / Gas City 개발자</td>
+<td style="text-align:left">코딩 에이전트 몰입에 따른 개발자의 광기(Psychosis) 10단계 모델 제시</td>
+</tr>
+<tr>
+<td style="text-align:left">윌슨 (Wilson)</td>
+<td style="text-align:left">Cursor 소속 개발자</td>
+<td style="text-align:left">자율형 브라우저 직접 개발 프로젝트 진행</td>
+</tr>
+<tr>
+<td style="text-align:left">캣 (Cat)</td>
+<td style="text-align:left">Anthropic 소속 인물</td>
+<td style="text-align:left">과거 Latent Space 팟캐스트에 출연하여 초기 Claude Code 소개</td>
+</tr>
+<tr>
+<td style="text-align:left">덱스 (Dex)</td>
+<td style="text-align:left">텍스트 내 언급 인물</td>
+<td style="text-align:left">RPI 프레임워크 및 컨텍스트 상의 덤 존(Dumb zone) 개념 제시자</td>
+</tr>
+<tr>
+<td style="text-align:left">앤디 제시 (Andy Jassy)</td>
+<td style="text-align:left">Amazon CEO</td>
+<td style="text-align:left">&quot;보안은 아마존의 Job Zero(최우선 과제)&quot; 발언으로 언급</td>
+</tr>
+<tr>
+<td style="text-align:left">제프 베조스 (Jeff Bezos)</td>
+<td style="text-align:left">Amazon 전 CEO</td>
+<td style="text-align:left">미하일 에릭의 과거 아마존 재직 시기 관련 언급</td>
+</tr>
+<tr>
+<td style="text-align:left">몰타 (Malte)</td>
+<td style="text-align:left">Vercel 관계자</td>
+<td style="text-align:left">C/C++ 기반 핵심 소프트웨어를 Rust로 재작성하여 보안을 강화하자는 주장 제기</td>
+</tr>
+<tr>
+<td style="text-align:left">아이작 (Isaac)</td>
+<td style="text-align:left">텍스트 내 언급 인물</td>
+<td style="text-align:left">2024년 CS146S 보안 주차 강연 진행자</td>
+</tr>
+<tr>
+<td style="text-align:left">라제시 (Rajesh)</td>
+<td style="text-align:left">Cloudflare 엔지니어링 리드</td>
+<td style="text-align:left">CS146S 8주차 연사, 대규모 백그라운드 에이전트 인프라 도입 사례 공유</td>
+</tr>
+<tr>
+<td style="text-align:left">라이언 (Ryan)</td>
+<td style="text-align:left">OpenAI 소속 엔지니어</td>
+<td style="text-align:left">팟캐스트 게스트, 5개월간 단 한 줄의 수동 코딩 없이 하네스 엔지니어링 수행</td>
+</tr>
+<tr>
+<td style="text-align:left">엘라드 (Elad)</td>
+<td style="text-align:left">텍스트 내 언급 인물</td>
+<td style="text-align:left">CS146S 9주차 강연 일정 조율 대상자</td>
+</tr>
+<tr>
+<td style="text-align:left">매트 포그 (Matt Pog)</td>
+<td style="text-align:left">Anthropic / 커뮤니티 개발자</td>
+<td style="text-align:left">에이전트 스킬 'grill knee' 개발자</td>
+</tr>
+<tr>
+<td style="text-align:left">제프리 리츠 (Jeffrey Litz)</td>
+<td style="text-align:left">텍스트 내 언급 개발자</td>
+<td style="text-align:left">시각적 차이점 요약 및 이해도 퀴즈 스킬 'explained diff' 개발자</td>
+</tr>
+<tr>
+<td style="text-align:left">유진 옌 (Eugene Yen)</td>
+<td style="text-align:left">텍스트 내 언급 분석가/엔지니어</td>
+<td style="text-align:left">에이전트 스킬의 주기적 정제 및 Pruning 필요성 강조</td>
+</tr>
+<tr>
+<td style="text-align:left">마크 베니오프 (Mark Benioff)</td>
+<td style="text-align:left">Salesforce CEO</td>
+<td style="text-align:left">Monaco의 초기 타깃 시장과 대비되는 엔터프라이즈 AI 전략 관련 언급</td>
+</tr>
+<tr>
+<td style="text-align:left">제리 (Jerry)</td>
+<td style="text-align:left">텍스트 내 언급 인물</td>
+<td style="text-align:left">미하일 에릭, 스윅스 등과 소프트웨어 팩토리 담론을 나눈 인물</td>
+</tr>
+<tr>
+<td style="text-align:left">스콧 (Scott / Scott Chacon)</td>
+<td style="text-align:left">Git Butler 개발자</td>
+<td style="text-align:left">Git 아키텍처의 한계 극복 및 새로운 제어구조 프로젝트 진행자</td>
+</tr>
+<tr>
+<td style="text-align:left">앤 (An)</td>
+<td style="text-align:left">텍스트 내 언급 강사</td>
+<td style="text-align:left">스탠퍼드 내 명사 초청형 코첼라(Coachella) 스타일 코스 진행자</td>
+</tr>
+<tr>
+<td style="text-align:left">샘 그룹 (Sam Group) / 샘 (Sam)</td>
+<td style="text-align:left">Semgrep 소속 인물</td>
+<td style="text-align:left">CS146S 보안 주차 관련 강연자 및 보안 분석 도구 개발자</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-정보-data-points-timelines">4. 수치 및 시점 정보 (Data Points &amp; Timelines)</h4>
+<ul>
+<li><strong>채널 및 강의 수치:</strong>
+<ul>
+<li>Latent Space 유튜브 채널 구독자 수: 1,000,000명 (100만 명 달성 기념 에피소드)</li>
+<li>CS146S 전체 강의 기간: 10주(10-week) 커리큘럼</li>
+<li>최소 기능 코딩 에이전트(하네스) 작성 코드 줄 수: 200줄 (200 lines of code)</li>
+<li>Claude Code 초기 시스템 프롬프트 크기: 약 20,000 토큰 (최근 모델 발전으로 약 80% 축소 과정 거침)</li>
+<li>Claude Code 초기 1회 질의당 발생 비용: 약 $0.50 (50센트)</li>
+<li>개발 속도 급증 시 일일 PR 생성 건수: 하루 30개 이상 (30+ PRs a day)</li>
+<li>파운데이션 모델 기반 자율 팩토리 기여 비율 상한선: 현재 업계 선도 기업 기준 약 30% 수준</li>
+</ul>
+</li>
+<li><strong>타임라인 및 시점:</strong>
+<ul>
+<li>CS146S 최초 개념 구상 시점: 2024년 11월 (Pre-Opus 시절)</li>
+<li>커리큘럼 심의 승인 및 기획 준비 기간: 약 9개월 ~ 10개월 (2024년 가을 ~ 2025년 중/후반)</li>
+<li>CS146S 첫 개설 학기: 2025년 가을 학기</li>
+<li>본 인터뷰 진행 시점: 2025년 가을 학기 1주차 종료 시점 (2주차 진입 직전)</li>
+<li>OpenAI 팀의 무코드 하네스 엔지니어링 프로젝트 개발 기간: 5개월 (5 months)</li>
+</ul>
+</li>
+<li><strong>기업, 마케팅 및 경제적 수치:</strong>
+<ul>
+<li>Monaco 경비행기 공중 광고 집행 비용: 1일당 $6,000 (하루 6,000달러)</li>
+<li>Monaco 기업 투자 유치 단계: 시리즈 B (Series B)</li>
+<li>Claude Code 개발자 Boris의 초기 트위터 팔로워 수: 약 4,000명</li>
+<li>C/C++ 핵심 소프트웨어의 Rust 재작성 프로젝트 가상 예산: $6,000,000 (6백만 달러)</li>
+<li>피초청자(미하일 에릭) 권장 일일 미세 실험 시간: 하루 10분 (10 minutes a day)</li>
+</ul>
+</li>
+<li><strong>확인 불가 수치 항목:</strong>
+<ul>
+<li>스탠퍼드 수강생들의 개별 에이전트 도구(Cursor, Claude Code, Cognition 등) 사용 퍼센티지 점유율: <strong>확인 불가</strong> (미하일 에릭이 조사를 진행하지 않았다고 명시함)</li>
+<li>Monaco의 일당 $6,000 비행기 광고를 통한 직접적인 ROAS 및 신규 가입자 전환 수치: <strong>확인 불가</strong></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li>
+<p><strong>소스에서 확인할 수 없었던 사항 (확인 불가 항목):</strong></p>
+<ul>
+<li>스탠퍼드 수강생들의 개별 에이전트 도구 점유율 통계 (미하일 에릭이 추후 조사할 예정이나 현 시점에서는 미조사 상태임을 밝힘).</li>
+<li>Monaco가 일당 $6,000의 공중 경비행기 광고를 통해 수집한 정량적 ROI/ROAS, 신규 가입자 전환율 및 매출 영향도.</li>
+<li>앤(An)이 진행하는 코첼라(Coachella) 스타일 강의의 세부 수강 인원 및 정규 커리큘럼 구성 명세.</li>
+</ul>
+</li>
+<li>
+<p><strong>소스 자체에서 밝히는 불확실성 및 한계:</strong></p>
+<ul>
+<li><strong>소프트웨어 팩토리의 최종 형태 미정:</strong> 완전 무인 자동화 형태인 암전 팩토리(Dark Factory)와 인간이 개입하는 반자동 팩토리 중 어느 모델이 궁극적인 산업 표준이 될지에 대한 업계 차원의 의견 미확정.</li>
+<li><strong>에이전트 스킬(Skills) 프레임워크의 장기 유효성:</strong> Anthropic 내부 개발진의 '스킬 폐지론(스킬 구조는 임시방편일 뿐 모델 가중치로 흡수되어야 함)'과 Monaco/Devon의 '조직적 모범 사례 관리 도구로서의 스킬 유지론'이 상충함.</li>
+<li><strong>AI 생성 코드의 완벽한 보안성 미보장:</strong> 파운데이션 모델이 발전하더라도 인간이 발견하지 못한 전혀 새로운 차원의 버그나 보안 취약점을 생성할 가능성이 존재함. 모델 발전만으로 모든 보안 문제를 해결할 수 있는지 여부는 불확실함.</li>
+<li><strong>자동 승인(Auto-approve) 시스템의 경계 설정 문제:</strong> 검증 가능성에 기반한 자동 승인 로직 적용 시, 예외적인 아키텍처 결함이나 결제/인증 로우레벨 보안 위험이 서비스로 유입될 가능성이 여전히 존재함.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

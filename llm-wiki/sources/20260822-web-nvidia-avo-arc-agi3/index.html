@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NVIDIA AVO Reaches 100% on ARC-AGI-3, Demonstrating a Frontier-Level General-Purpose Architecture for Long-Horizon Auton</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>NVIDIA AVO Reaches 100% on ARC-AGI-3, Demonstrating a Frontier-Level General-Purpose Architecture for Long-Horizon Auton</h1>
+<p class="page-meta">웹 · 2026-08-22</p>
+<h2 id="요약">요약</h2>
+<p>NVIDIA는 장기 자율 에이전트 AVO의 ARC-AGI-3 공개 세트 만점과 GPU 커널 성능 향상을 보고했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://developer.nvidia.com/blog/nvidia-avo-reaches-100-on-arc-agi-3-demonstrating-a-frontier-level-general-purpose-architecture-for-long-horizon-autonomous-agents/">출처</a> · <a href="https://www.youtube.com/watch?v=jSixMR7aB9M">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/arc-agi-3/">ARC-AGI-3</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/nvidia/">NVIDIA</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="nvidia-avo-아키텍처-분석-arc-agi-3-공개-세트-100-00-rhae-달성-및-장기-자율-에이전트의-시스템적-접근">NVIDIA AVO 아키텍처 분석: ARC-AGI-3 공개 세트 100.00 RHAE 달성 및 장기 자율 에이전트의 시스템적 접근</h3>
+<h4 id="1-서론-모델-중심-평가에서-시스템-중심-평가로의-패러다임-전환">1. 서론: 모델 중심 평가에서 시스템 중심 평가로의 패러다임 전환</h4>
+<p>현대 인공지능 기술의 지평이 단순한 텍스트 생성에서 능동적 문제 해결로 확장됨에 따라, 단일 대규모 언어 모델(LLM)의 벤치마크 점수와 이를 포함한 '전체 에이전트 시스템'의 성능 지표 사이에는 거대한 간극이 발생하고 있습니다. 프론티어 언어 모델은 에이전틱 AI를 구동하는 핵심 엔진이지만, 모델 그 자체가 자율적인 성과를 보장하지는 않습니다. 실제 환경에서 발생하는 복잡하고 긴 호흡의 작업(Long-horizon tasks)을 성공적으로 수행하기 위해서는 모델을 둘러싼 시스템적 '하네스(Harness)'—즉, 컨텍스트 수용, 도구 가용성(Tool affordability), 상태 보존(State preservation), 그리고 실패 복구 메커니즘—의 정교한 설계가 필수적입니다.</p>
+<p>단일 추론 단계에서의 지능보다 중요한 것은 장기 자율 운용 과정에서의 '신뢰성'입니다. 에이전트가 여러 단계에 걸친 다중 경로를 탐색할 때, 시스템은 모델이 이전의 시행착오를 기억하고, 외부 피드백을 통해 가설을 수정하며, 교착 상태에 빠졌을 때 스스로 전략을 전환할 수 있는 구조적 토대를 제공해야 합니다. 이러한 관점에서 NVIDIA가 선보인 AVO(Agentic Variation Operators) 아키텍처는 모델 중심의 접근법을 넘어 시스템 중심의 설계가 어떻게 프론티어급 성능을 이끌어낼 수 있는지를 보여주는 이정표가 됩니다.</p>
+<p>본 보고서에서는 NVIDIA AVO 아키텍처의 기술적 구성을 심층 분석하고, ARC-AGI-3 벤치마크 및 GPU 커널 최적화 사례를 통해 '시스템적 기계(Systemic Machine)'로서의 에이전트가 지닌 가능성과 한계를 검토하고자 합니다. 특히 모델의 개별 역량을 장기적이고 일관된 전진(Forward Progress)으로 치환하는 아키텍처적 기제들을 집중적으로 조명할 것입니다.</p>
+<h4 id="2-avo-agentic-variation-operators-의-구조-장기-에이전트-루프와-시스템적-구성-요소">2. AVO(Agentic Variation Operators)의 구조: 장기 에이전트 루프와 시스템적 구성 요소</h4>
+<p>AVO 아키텍처의 핵심은 전통적인 진화 탐색(Evolutionary Search)에서 사용되던 '사전 정의된 변이 단계'를 자율 에이전트의 동적 판단으로 대체했다는 점에 있습니다. 이는 고정된 알고리즘이 아닌, 주 에이전트가 상황에 맞춰 최적의 변이를 설계하고 실행하는 고도의 자율성을 의미합니다.</p>
+<h5 id="2-1-핵심-구성-요소의-기능-및-상호작용">2.1 핵심 구성 요소의 기능 및 상호작용</h5>
+<ul>
+<li><strong>주 에이전트(Main Agent):</strong> 시스템의 중추로서, 주어진 컨텍스트와 도구를 활용해 가설을 수립하고 실행 계획을 세웁니다. 단순히 코드를 생성하는 것을 넘어, 환경 동역학(Environment Dynamics)을 실시간으로 추론하고 탐색 방향을 결정하는 의사결정 주체입니다.</li>
+<li><strong>지속 메모리(Persistent Memory):</strong> 단기 컨텍스트 윈도우의 한계를 극복하기 위해 설계된 요소입니다. 이전의 구현체, 실행 결과, 컴파일러 및 프로파일러의 피드백, 그리고 축적된 추론 과정을 저장합니다. 이는 에이전트가 매번 탐색을 처음부터 재구성(Reconstructing)하지 않고, 현재의 최선 상태에서 즉시 탐색을 이어갈 수 있도록 상태 보존 및 일관성 유지를 지원합니다.</li>
+<li><strong>감독자(Supervisor):</strong> 장기 자율 운용의 안정성을 담보하는 상위 계층입니다. 전체적인 탐색 궤적을 모니터링하며, 탐색이 정체(Stagnation)되거나 특정 지점에서 고점에 도달(Plateau)하여 무의미한 루프를 반복할 때 이를 감지합니다. 감독자는 이러한 상황에서 개입하여 주 에이전트가 다른 전략적 방향으로 전환하도록 유도함으로써 전체 시스템의 전진을 보장합니다.</li>
+</ul>
+<h5 id="2-2-실행-피드백-루프의-공학적-단계">2.2 실행 피드백 루프의 공학적 단계</h5>
+<p>AVO의 자율성은 다음과 같은 정밀한 순환 루프를 통해 실현됩니다.</p>
+<ol>
+<li><strong>가설 수립 및 계획:</strong> 주 에이전트가 지속 메모리에 저장된 과거 데이터를 참조하여 현재 문제에 대한 최선의 가설을 도출하고 행동 계획을 수립합니다.</li>
+<li><strong>도구 활용 및 환경 행동:</strong> 수립된 계획에 따라 코드 수정, 명령 실행, 하드웨어 기반 테스트(Hardware-grounded tests) 등 외부 인터페이스와 상호작용합니다.</li>
+<li><strong>실행 피드백 관찰:</strong> 환경으로부터 반환된 실행 결과와 관찰 데이터를 수집합니다. 여기에는 성공 여부뿐만 아니라 구체적인 오류 로그와 성능 지표가 포함됩니다.</li>
+<li><strong>메모리 갱신 및 상태 보존:</strong> 관찰된 피드백을 지속 메모리에 통합하여 시스템의 지식 베이스를 최신화합니다.</li>
+<li><strong>전략 수정 및 지속:</strong> 업데이트된 메모리를 바탕으로 기존 가설의 오류를 수정하거나 새로운 탐색 경로를 설정하며 루프를 재개합니다.</li>
+</ol>
+<h4 id="3-arc-agi-3-벤치마크와-rhae-지표의-이해">3. ARC-AGI-3 벤치마크와 RHAE 지표의 이해</h4>
+<p>ARC-AGI-3는 에이전트가 사전에 정의된 규칙이나 목표를 제공받지 않은 채, 오직 상호작용만을 통해 환경의 동역학을 온라인으로 추론해야 하는 고난도 추론 과제입니다.</p>
+<h5 id="3-1-온라인-추론-및-환경-상호작용의-복잡성">3.1 온라인 추론 및 환경 상호작용의 복잡성</h5>
+<p>본 벤치마크에서 에이전트는 '보지 못한(Unseen)' 환경에 투입되어 행동의 결과를 관찰함으로써 세계 모델을 스스로 구축해야 합니다. 이는 정적인 데이터셋 학습과는 근본적으로 다르며, 에이전트의 유연한 사고와 실시간 피드백 해석 능력을 시험합니다.</p>
+<h5 id="3-2-rhae-relative-human-action-efficiency-지표">3.2 RHAE (Relative Human Action Efficiency) 지표</h5>
+<p>본 분석에서 사용된 RHAE 지표는 단순히 과제 완료 여부(Completion)만을 따지지 않습니다. 이는 인간이 해당 과제를 처음 접했을 때 수행한 행동 횟수를 기준으로, 에이전트가 얼마나 효율적으로 목표에 도달했는지를 상대적으로 측정합니다. 따라서 높은 RHAE 점수는 에이전트가 단순한 시행착오의 반복이 아니라, 고도로 정제된 탐색 전략을 구사했음을 시사합니다.</p>
+<h5 id="3-3-설계-원칙-직접-상호작용-direct-interaction">3.3 설계 원칙: 직접 상호작용(Direct-interaction)</h5>
+<p>AVO는 Tycho와 같은 시스템이 사용하는 명시적인 프로그램적 세계 모델 구축 방식 대신, VISTA 등에서 제안된 '직접 상호작용' 원칙을 채택했습니다. 이는 에이전트가 환경과 직접 대화하며 문제를 해결하는 일반 목적적 접근법으로, 특정 도메인에 종속되지 않는 범용 아키텍처로서의 역량을 평가하기 위함입니다.</p>
+<h4 id="4-arc-agi-3-공개-세트-성과-데이터-분석">4. ARC-AGI-3 공개 세트 성과 데이터 분석</h4>
+<p>NVIDIA 기술 블로그에 보고된 공식 수치에 따르면, AVO 아키텍처는 ARC-AGI-3 공개 세트에서 완벽한 성공과 높은 효율성을 동시에 증명했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">상세 데이터 (NVIDIA 자사 보고 기준)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>평가 대상</strong></td>
+<td style="text-align:left">ARC-AGI-3 <strong>Public Set</strong> (25개 환경, 183개 레벨)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최종 성과</strong></td>
+<td style="text-align:left"><strong>100.00 RHAE</strong> (전체 레벨 완료)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>행동 효율성</strong></td>
+<td style="text-align:left">총 <strong>6,624회</strong>의 환경 행동(Environment Actions) 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>사용 모델</strong></td>
+<td style="text-align:left">Claude Opus 5 기반 AVO 시스템</td>
+</tr>
+</tbody>
+</table>
+<p>이 결과는 AVO의 시스템적 설계가 프론티어 모델의 잠재력을 장기 자율 작업 환경에서 어떻게 극대화할 수 있는지를 보여주는 정량적 근거입니다. 단, 이는 비공개(Private) 세트가 아닌 공개 세트에서의 성과임을 명확히 인지해야 합니다.</p>
+<h4 id="5-타-시스템-및-베이스라인과의-비교-시-주의사항-경계-설정">5. 타 시스템 및 베이스라인과의 비교 시 주의사항 (경계 설정)</h4>
+<p>AVO의 수치적 성과를 해석할 때는 환경 조건과 시스템 설계의 차이를 고려한 엄격한 논리적 접근이 필요합니다.</p>
+<h5 id="5-1-vista-시스템과의-비교-분석">5.1 VISTA 시스템과의 비교 분석</h5>
+<p>AVO는 동일한 183개 레벨에서 VISTA(Claude Opus 5 기반)의 7,542 action 대비 약 12% 적은 6,624 action으로 작업을 완수했습니다. 그러나 이를 단순한 '아키텍처적 우위'로 결론짓는 것은 성급합니다. AVO는 64x64 텍스트 그리드(Text-only modality)를 사용하여 관찰 데이터를 처리한 반면, VISTA는 512x512 PNG 이미지를 주력으로 사용했습니다. 이러한 관찰 표현의 차이는 모델의 인지적 부하(Cognitive Load)와 토큰 소모 효율에 큰 영향을 미치므로, 12%의 향상을 특정 구성 요소의 인과적 기여로 배분하는 통제된 실험(Ablation) 결과로 간주해서는 안 됩니다.</p>
+<h5 id="5-2-claude-opus-베이스라인과의-비교-분석">5.2 Claude Opus 베이스라인과의 비교 분석</h5>
+<p>ARC Prize에서 보고된 Claude Opus 5의 'High reasoning effort' 설정 시 성적인 약 30%와 AVO의 100.00 사이에는 70%p라는 거대한 격차가 존재합니다. 하지만 이는 동일한 조건에서의 비교가 아닙니다. 두 데이터는 추론 설정, 에이전트 시스템 하네스, 평가 환경의 구성이 판이하게 다르기 때문에, 이 격차 전체를 AVO 아키텍처만의 직접적 기여량으로 계산하거나 표현하는 것은 기술 분석적으로 부적절합니다.</p>
+<h5 id="5-3-모델별-운영-프로파일의-차이">5.3 모델별 운영 프로파일의 차이</h5>
+<p>실험 과정에서 AVO는 Claude Opus 5 외에도 GPT-5.6 Sol과 결합된 바 있습니다. 초기 관찰에 따르면 Sol 모델은 벽시계 시간(Wall-clock time) 측면에서 빠른 진행 속도를 보인 반면, Opus 모델은 환경 행동 횟수 측면에서 더 높은 효율성을 기록했습니다. 이는 모델에 따라 시간 효율성과 행동 효율성의 프로파일이 다를 수 있음을 시사하며, 시스템 설계 시 목적에 따른 모델 선택의 중요성을 보여줍니다.</p>
+<h4 id="6-도메인-확장-사례-gpu-커널-최적화-성능-보고">6. 도메인 확장 사례: GPU 커널 최적화 성능 보고</h4>
+<p>AVO 아키텍처가 추론 벤치마크를 넘어 실제 공학적 난제 해결에도 유효하다는 점은 GPU 커널 최적화 사례를 통해 입증되었습니다.</p>
+<h5 id="6-1-자율-엔지니어링-루프의-운용">6.1 자율 엔지니어링 루프의 운용</h5>
+<p>AVO는 NVIDIA DGX B200 하드웨어 환경에서 7일간 중단 없는 자율 운용을 수행했습니다. 이 과정에서 에이전트는 500개 이상의 탐색 방향을 검토하고, 40개의 커널 버전을 최종 커밋했습니다. 이는 소스 코드 검사, 가설 수립, 하드웨어 기반의 실제 성능 측정, 피드백 해석으로 이어지는 복잡한 엔지니어링 사이클을 인간의 개입 없이 완수했음을 의미합니다.</p>
+<h5 id="6-2-성능-향상-지표-dgx-b200-특정-구성-기준">6.2 성능 향상 지표 (DGX B200 특정 구성 기준)</h5>
+<ul>
+<li><strong>cuDNN 대비:</strong> 최대 3.5% 성능 향상 달성.</li>
+<li><strong>FlashAttention-4 대비:</strong> 최대 10.5% 성능 향상 보고.</li>
+</ul>
+<p>이 수치는 NVIDIA 연구진의 특정 하드웨어 및 평가 구성에서 도출된 결과로, 독립적인 외부 재현 결과가 아닙니다. 그러나 이는 AVO의 '루프 메커니즘'이 도메인 지식의 전이가 아니라, 장기적인 자율 진행을 유지하는 범용적인 아키텍처적 기계로서 작동할 수 있음을 시사합니다.</p>
+<h4 id="7-결론-시스템적-기계로서의-에이전트가-시사하는-점">7. 결론: 시스템적 기계로서의 에이전트가 시사하는 점</h4>
+<p>NVIDIA AVO 아키텍처의 분석을 통해 우리는 에이전틱 AI의 성능이 개별 모델의 지능을 넘어, 이를 구동하는 시스템적 설계에 의해 결정된다는 사실을 재확인할 수 있었습니다.</p>
+<p>첫째, AVO는 특정 도메인의 지식에 의존하는 대신 가설 수립, 도구 활용, 피드백 수용, 메모리 보존으로 이어지는 범용적인 '실행 루프'를 통해 전문 엔지니어링과 일반 추론 과제 모두에서 유효한 성과를 거두었습니다. 둘째, 장기 자율 작업의 핵심은 단기적인 추론 능력이 아니라, 지속 메모리와 감독 시스템이 제공하는 상태 보존 및 전략적 방향 수정 역량에 있습니다. 셋째, ARC-AGI-3 공개 세트에서의 만점 달성은 시스템적 접근이 장기 작업의 효율을 극대화할 수 있음을 보여주는 강력한 기술적 지표이지만, 이를 일반 지능(AGI)의 달성이나 모든 비공개 과제의 해결로 확대 해석하는 것은 경계해야 합니다.</p>
+<p>최종적으로 AVO는 모델 평가와 에이전트 시스템 평가가 분리되어야 함을 시사하며, 미래의 에이전틱 AI 연구가 지향해야 할 견고한 시스템 아키텍처의 방향성을 제시하고 있습니다. 핵심은 모델 그 자체가 아니라, 모델이 신뢰할 수 있게 작동하도록 만드는 아키텍처적 기계의 정교함에 있습니다.</p>
+<hr />
+<h4 id="편집-검증-메모">편집 검증 메모</h4>
+<ul>
+<li>핵심 결과는 NVIDIA 자사 기술 블로그가 보고한 ARC-AGI-3 <strong>public set</strong> 결과다: 25개 환경, 183개 레벨, 100.00 RHAE, 6,624 environment actions.</li>
+<li>이 결과는 semi-private 또는 fully private competition set의 결과가 아니며 독립 재현 결과로 표현하지 않는다.</li>
+<li>VISTA의 7,542 actions 대비 약 12% 적은 actions는 cross-system comparison이다. 백엔드, 관찰 표현, 메모리, 컨텍스트 관리가 달라 controlled ablation이 아니며 개별 구성요소의 인과 기여를 분리하지 않는다.</li>
+<li>ARC Prize의 Claude Opus 5 High reasoning effort 약 30%와 AVO 100.00은 추론 설정, 에이전트 시스템, 평가 구성이 다르므로 30→100 차이를 AVO의 직접 기여량으로 계산하지 않는다.</li>
+<li>AVO는 지속 메모리, 감독자, 도구, 실행·환경 피드백을 연결하는 장기 에이전트 시스템이다. public-set 만점은 일반 지능 달성이나 private-set 해결을 입증하지 않는다.</li>
+<li>GPU 커널 수치도 DGX B200의 특정 평가 구성에 관한 NVIDIA 자사 보고이며 독립 검증으로 확대하지 않는다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/arc-agi-3/">ARC-AGI-3</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/nvidia/">NVIDIA</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li></ul></section>
+</main>
+</body>
+</html>

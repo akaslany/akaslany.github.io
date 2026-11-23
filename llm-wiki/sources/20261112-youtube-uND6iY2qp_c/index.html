@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlphaGenome 2: Teaching AI to read the entire human genome</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>AlphaGenome 2: Teaching AI to read the entire human genome</h1>
+<p class="page-meta">YouTube · 2026-11-12</p>
+<h2 id="요약">요약</h2>
+<p>인간 게놈 프로젝트(Human Genome Project)는 13년에 걸친 대대적인 시퀀싱 작업을 통해 인간 DNA의 30억 개 염기서열을 해독하는 이정표를 세웠으나, 해독된 문자의 실제 생물학적 의미를 해석하는 과제는 여전히 미완의 영역으로 남아있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=uND6iY2qp_c">출처</a> · <a href="https://www.youtube.com/watch?v=EWOzH6AeHIM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="구글-딥마인드-알파제놈-alphagenome-2-및-유전체학-ai-분석-해설-보고서">구글 딥마인드 알파제놈(AlphaGenome) 2 및 유전체학 AI 분석 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>인간 게놈 프로젝트(Human Genome Project)는 13년에 걸친 대대적인 시퀀싱 작업을 통해 인간 DNA의 30억 개 염기서열을 해독하는 이정표를 세웠으나, 해독된 문자의 실제 생물학적 의미를 해석하는 과제는 여전히 미완의 영역으로 남아있다. 유전학자 에릭 랜더(Eric Lander)가 &quot;우리는 책을 샀지만, 그것은 읽기가 매우 어렵다&quot;고 비유했듯이, 셰익스피어 전집의 수백 배에 달하는 거대한 유전체 지침서에서 특정 염기 변화가 신체에 미치는 영향을 파악하는 것은 극도로 복잡한 작업이다. 그러나 인공지능(AI) 트랜스포머(Transformer) 모델의 도입으로 DNA 시퀀스를 텍스트처럼 읽고 해석하는 정밀 유전체 AI 분석 시대가 본격적으로 열리고 있다.</p>
+<p>구글 딥마인드(Google DeepMind)의 유전체 AI 연구는 팟캐스트 시즌 2(약 5~6년 전)에서 캘리코(Calico) 연구진과의 공동 연구로 처음 소개된 엔포머(Enformer) 모델을 시작으로 괄목할 발전을 이루어냈다. 엔포머를 통해 DNA 시퀀스 분석에 트랜스포머 아키텍처를 성공적으로 적용한 연구진은, 알파폴드 2(AlphaFold 2)의 구조 및 진화 정보 메커니즘을 확장하여 2%의 단백질 코딩 영역 내 미스센스 변이 병원성을 예측하는 알파미스센스(AlphaMissense)를 선보였다. 이어 2025년에는 전신 조직(Bulk tissue) 수준에서 게놈의 98%를 차지하는 비코딩(Non-coding) 영역의 조절 기능을 분석하는 알파제놈(AlphaGenome)을 공개하였으며, 최근에는 단일 세포 유형(Cell type)과 세포 상태(Cell state) 수준으로 해상도를 대폭 확장한 알파제놈 2(AlphaGenome 2)를 발표하기에 이르렀다.</p>
+<p>알파제놈 시리즈 개발의 궁극적 비전은 단순한 변이 영향 예측을 넘어, 유전체라는 중심 지휘본부(Central Command Center) 정보와 약물·유전자 자극에 따른 세포의 미래 상태 변화를 컴퓨터 상에서 완벽히 시뮬레이션하는 '가상 세포(Virtual Cell)' 구축에 있다. 이는 현재 10%에 불과한 신약 임상시험 성공률을 획기적으로 개선하고, 분자 수준에서 질병의 원인을 규명함으로써 정밀 의학(Precision Medicine)의 실현을 가속화하는 핵심 동력이 될 것으로 전망된다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-유전체-해석의-난제-유전자형-genotype-과-표형-phenotype-의-연결">2.1. 유전체 해석의 난제: 유전자형(Genotype)과 표형(Phenotype)의 연결</h5>
+<ul>
+<li><strong>[사실]</strong>: 유전자형(Genotype)은 A, C, G, T 4가지 염기 30억 개로 구성된 유전 정보 전체를 의미한다. 표형(Phenotype)은 세포 수준의 유전자 발현 변화부터 알츠하이머, 2형 당뇨와 같은 질환 유발 여부, 머리카락 색(MC1 유전자 연관) 등 신체적 특성에 이르기까지 다양한 생물학적 형질을 포괄한다. 질환 측면에서 인간의 질병은 단일 유전자 변이가 질환을 직접 유발하는 '멘델형 질환(Mendelian diseases)'과, 다수의 변이와 환경적 요인이 복잡하게 상호작용하여 위험도를 형성하는 '복합 질환(Complex diseases, 예: BRCA1 유전자 연관 암 리스크 프로필)'으로 구별된다.</li>
+<li><strong>[소스의 주장]</strong>: 30억 개의 염기서열과 최종 고차원 표형(고차 질환 등) 간의 생물학적 거리는 매우 멀고 유전적 요인 외 다수의 매개 경로가 존재한다. 따라서 고차원 표형을 직접 예측하려 하기보다, 유전자 발현 및 전사인자(TF) 결합과 같은 분자 생물학적 수준(Molecular level)의 매개 과제로 문제를 단순화(Problem simplification)하고 대량의 실증 데이터를 학습시킴으로써 예측 정확도를 획기적으로 향상시킬 수 있다.</li>
+<li><strong>[작성자의 해석]</strong>: complex 형질 분석의 난제를 분자 수준의 유전자 조절 메커니즘으로 재정의한 접근법은, 생물학적 노이즈를 줄이고 데이터 집적도를 극대화하여 유전체 AI 예측 모델의 실용성을 확보한 핵심 기술적 전환점이다.</li>
+</ul>
+<h5 id="2-2-게놈-구조와-비코딩-non-coding-영역의-중요성">2.2. 게놈 구조와 비코딩(Non-coding) 영역의 중요성</h5>
+<ul>
+<li><strong>[사실]</strong>: 인간 게놈 전체의 단 2%만이 단백질을 직접 암호화(Coding)하며, 나머지 98%는 비코딩(Non-coding) 영역으로 구성된다. 인간의 모든 세포는 부모로부터 물려받은 동일한 하나의 DNA 지침서를 공유하지만, 눈 세포(광선 감지), 근육 세포(신체 운동 수행) 등 독자적인 분자 기계를 갖춘 세포 유형으로 특성화(Specialization)된다.</li>
+<li><strong>[소스의 주장]</strong>: 단백질이 생체 기계를 구성하는 '레고 블록의 모양과 색상'이라면, 98%의 비코딩 영역은 이 블록들을 언제, 어디서, 얼마나 많이 생산할지 지시하는 복잡한 '조절 스위치(Control elements)' 역할을 한다. 모든 세포가 동일한 유전체를 가짐에도 서로 다른 특성을 갖는 이유는, 98% 비코딩 영역 내에 수많은 조절 스위치가 세포 유형별로 서로 다른 조합으로 작동하여 발현 수준을 완벽하게 정밀 조율(Fine-tuning)하기 때문이다.</li>
+<li><strong>[작성자의 해석]</strong>: 과거 '정크 DNA(Junk DNA)'로 비하되던 98% 비코딩 영역이 실제로는 세포 정체성과 질환 발병을 제어하는 핵심 소프트웨어임을 입증하며, 유전체 연구의 패러다임이 단백질 구조 분석에서 비코딩 조절 네트워크 해석으로 확연히 이동했음을 의미한다.</li>
+</ul>
+<h5 id="2-3-알파제놈-alphagenome-모델의-기술적-진화-단계">2.3. 알파제놈(AlphaGenome) 모델의 기술적 진화 단계</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">단계</th>
+<th style="text-align:left">모델 / 자원 명칭</th>
+<th style="text-align:left">주요 기술적 특징 및 연구 범위</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>1단계</strong></td>
+<td style="text-align:left"><strong>엔포머 (Enformer)</strong></td>
+<td style="text-align:left">Calico 연구진과의 협력으로 개발된 초기 트랜스포머 모델. DNA 시퀀스를 텍스트처럼 읽어 분자 수준 발현 패턴을 예측하는 연구의 기초 정립 (입력: 20만 bp, 해상도: 128 bp).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2단계</strong></td>
+<td style="text-align:left"><strong>알파폴드 2 &amp; 알파미스센스 (AlphaMissense)</strong></td>
+<td style="text-align:left">2% 코딩 영역 중심 연구. 알파폴드 2(AlphaFold 2)의 단백질 구조 및 진화 정보를 기반으로 Fine-tuning을 수행하여 코딩 영역 내 미스센스 돌연변이의 병원성(Pathogenic vs Benign)을 예측.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3단계</strong></td>
+<td style="text-align:left"><strong>알파제놈 (AlphaGenome)</strong></td>
+<td style="text-align:left">98% 비코딩 영역 분석 모델(2025년 공개). 입력 시퀀스 길이를 100만 염기쌍(1M bp)으로 확대하고 해상도를 1 베이스쌍(1 bp)으로 정밀화하여 전신 조직(Bulk) 수준의 조절 기능 예측.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>4단계</strong></td>
+<td style="text-align:left"><strong>알파제놈 아틀라스 (AlphaGenome Atlas)</strong></td>
+<td style="text-align:left">대규모 계산 비용 문제를 해결하기 위해 게놈 내 가능한 모든 단일 염기 변화 효과(90억 개)를 사전 계산(Pre-computed)하여 웹 아틀라스 형태로 공개. 모델의 10,000개 출력 수치, 알파 스코어, 진화적 보존성을 결합해 단일 지표인 <strong>AGVI 점수(AlphaGenome Variant Impact Score, 0~80점)</strong> 산출.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>5단계</strong></td>
+<td style="text-align:left"><strong>알파제놈 2 (AlphaGenome 2)</strong></td>
+<td style="text-align:left">전신 조직 수준을 넘어 단일 세포 유형(Cell type) 및 세포 상태(Cell state, 예: 전염증성 면역세포) 수준으로 정밀도 대폭 향상. 파인튜닝 없이 사용자 데이터 입력이 가능한 <strong>플러그인(Plug-in)</strong> 기능, Python API 및 <strong>코딩 에이전트(Coding Agent)</strong> 자연어 질의 결합 지원.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[사실]</strong>: 알파제놈 학습 메커니즘의 핵심은 <strong>개별 인간의 게놈 데이터로 직접 학습된 것이 아니라, 고정된 단일 레퍼런스 게놈(Reference genome)에 다양한 공개 분자 데이터(유전자 발현, 전사인자 결합, 오픈 크로마틴 등)를 정렬(Align)시켜 매핑 관계를 학습</strong>했다는 점이다. 모델은 고정된 레퍼런스 게놈 학습만으로도 미지의 개별 변이에 대한 미세 영향을 정확히 시뮬레이션한다.</li>
+<li><strong>[소스의 주장]</strong>: 90억 개 변이 효과를 사전 계산한 아틀라스와 다차원 출력값을 단일화한 AGVI 점수를 제공함으로써, 연구자들이 수많은 우범 변이 후보군 중에서 인과적 변이를 신속히 우선순위화(Rank)할 수 있는 인프라를 구축했다. 특히 알파제놈 2는 연구실 고유 데이터를 별도 파인튜닝 없이 직접 결합하는 플러그인(Plug-in) 기능과 코딩 에이전트 기반의 영어 자연어 명령 분석 워크플로우를 새로이 지원한다.</li>
+<li><strong>[작성자의 해석]</strong>: 레퍼런스 게놈 학습이라는 효율적 아키텍처 설정과 더불어, 데이터 플러그인 및 코딩 에이전트 인터페이스까지 확장된 플랫폼화 전략은 AI 유전체학 연구의 실용성과 현장 접근성을 최고 수준으로 끌어올린 사례이다.</li>
+</ul>
+<h5 id="2-4-희귀질환-임상-적용-사례-브로드-연구소-broad-institute-검증">2.4. 희귀질환 임상 적용 사례: 브로드 연구소(Broad Institute) 검증</h5>
+<ul>
+<li><strong>[사실]</strong>: 브로드 연구소의 로라 코발(Laura Koval) 연구원은 생후 6주에 희귀 소아 뇌전증(Pediatric epilepsy) 진단을 받았으나 4~5년간 원인 유전 변이를 찾지 못했던 환아 사례에 알파제놈을 적용했다. 환자의 유전 변이 목록에 AGVI 점수를 적용해 순위를 매긴 결과, RNA 스플라이싱(Splicing, RNA 절단 및 결합) 패턴을 변화시키는 최상위 변이를 특정했으며, 이를 세포주(Cell line) 기반의 습식 실험(Wet lab)으로 실증 검증했다.</li>
+<li><strong>[소스의 주장]</strong>: AGVI 점수로 발굴한 변이는 실제 세포주 실험에서 예측된 RNA 스플라이싱 오작동 패턴과 정확히 일치함이 입증되었다. 이러한 분자 진단(Molecular diagnosis) 성공은 안티센스 올리고(Antisense Oligos, ASO)와 같은 맞춤형 RNA 의약품이나 유전자 교정(Genome editing) 치료법 적용의 기틀을 마련하며, 부모의 유전 여부 확인 및 향후 가족 계획 수립에 핵심적인 정보를 제공한다.</li>
+<li><strong>[작성자의 해석]</strong>: 미해결 희귀질환 환자의 게놈 변이를 AI 점수로 재해석하고 습식 실험으로 입증한 본 사례는, 알파제놈이 단순 이론적 모델을 넘어 임상 진단 파이프라인의 유량 탐색 도구로 실제 작동함을 보여주는 결정적 증거이다.</li>
+</ul>
+<h5 id="2-5-전전신-유전체-연관-분석-gwas-의-한계와-알파제놈-2의-혁신">2.5. 전전신 유전체 연관 분석(GWAS)의 한계와 알파제놈 2의 혁신</h5>
+<ul>
+<li><strong>[사실]</strong>: 기존 유전체 연관 분석(GWAS)은 대규모 인구 데이터를 시퀀싱하여 특정 형질(고수 맛을 비누 맛으로 느끼는 특성부터 염증성 장 질환, 암 위험도 등)과 변이 간의 통계적 연관성을 추적한다. GWAS는 인구 내 1% 이상 빈도로 나타나는 일반 변이(Common variation) 분석에 집중되며, 염색체 블록 단위 상속에 따른 연쇄 불균형(Linkage Disequilibrium) 현상 때문에 연관 변이와 실제 인과 변이(Causal variant)를 구별해내지 못하는 한계가 있다. 또한 표적수가 적은 희귀 질환에는 통계학적으로 적용하기 어렵다.</li>
+<li><strong>[소스의 주장]</strong>: 알파제놈 2는 변이 효과를 분자 수준에서 직접 시뮬레이션함으로써 연쇄 불균형 블록 내에 얽힌 다수의 변이 중 실제 세포 수준에서 작용하는 '인과적 변이', '타깃 유전자', '작용 세포 유형'을 정밀 추출한다. 일례로 장 내에서 침입 병원체를 포식하는 'Big eater' 역할을 수행하는 마크로파지(Macrophage) 세포의 조절 유전자 자리 분석에서, 알파제놈 2는 변이로부터 <strong>29만 베이스쌍(290,000 bp)이나 떨어져 있는 원거리 조절 유전자</strong>와의 인과 관계를 예측해냈으며, 이는 크릭 연구소(Crick Institute)의 염증성 장 질환(IBD) 실험 결과를 사후 소급 검증(Retrospective validation)하는 성과로 이어졌다.</li>
+<li><strong>[작성자의 해석]</strong>: 단순 통계적 상관관계 분석에 갇혀 있던 GWAS 데이터의 한계를 유전체 AI의 분자적 예측 성능으로 극복함에 따라, 30만 bp에 달하는 초원거리 유전자 조절 메커니즘(Distant-acting regulation)까지 인과적으로 규명할 수 있는 길이 열렸다.</li>
+</ul>
+<h5 id="2-6-가상-세포-virtual-cell-비전과-신약-개발">2.6. 가상 세포(Virtual Cell) 비전과 신약 개발</h5>
+<ul>
+<li><strong>[사실]</strong>: 현재 임상시험에 진입하는 신약 후보물질이 최종 성공을 거두는 비율은 약 10%에 불과하다.</li>
+<li><strong>[소스의 주장]</strong>: 신약 개발의 높은 실패율은 질병의 근본적인 생물학적 인과 기전과 타깃 조절 메커니즘에 대한 인간의 이해 부족에 기인한다. 딥마인드가 지향하는 '가상 세포(Virtual Cell)'는 유전체라는 중심 지휘본부 정보와 현재 세포 상태, 그리고 유전자 결손이나 약물 투여와 같은 자극(Perturbation)을 입력받아 미래의 세포 반응 및 상태 변화를 컴퓨터 상에서 완벽히 시뮬레이션하는 시스템이다. 연구진은 생물학적 복잡성의 깊이로 인해 가상 세포 완성에는 오랜 시간이 걸릴 것이며, 범용인공지능(AGI)의 달성이 가상 세포 시스템 구축보다 시기적으로 앞설 것으로 예측했다.</li>
+<li><strong>[작성자의 해석]</strong>: 유전체 AI는 신약 개발의 천문학적 실패 비용을 절감하고, 생명 현상을 컴퓨터 상(In silico)에서 정밀하게 예측·통제하는 계산 생물학의 최종 진화 단계인 가상 세포를 향한 필수적 첫 단계이다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-정보-speakers-key-entities">3. 등장 인물 및 화자 정보 (Speakers &amp; Key Entities)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속 / 직업</th>
+<th style="text-align:left">주요 역할 및 연구 동기</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>한나 프라이 (Hannah Fry)</strong></td>
+<td style="text-align:left">구글 딥마인드 팟캐스트 진행자 (교수)</td>
+<td style="text-align:left">대담 진행, 전문가적 개념을 비전문가 눈높이에 맞춘 쉬운 비유로 유도 및 논의 핵심 요약.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아담 (Adam)</strong></td>
+<td style="text-align:left">구글 딥마인드 연구원</td>
+<td style="text-align:left">물리학 전공 중 유전학자 2인이 가르친 머신러닝 과목을 접하고 유전체학 연구로 전공 전환. 희귀질환 환자의 미해결 변이 포착 난제에 끌려 연구를 시작하였으며, 알파제놈 2 개발 주도. 과학의 전선 확장 및 환자 구제를 목표로 함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>제시카 (Jessica)</strong></td>
+<td style="text-align:left">구글 딥마인드 연구원</td>
+<td style="text-align:left">컴퓨터 공학 및 오퍼레이션 리서치 전공. 가족의 암/희귀질환 경험을 계기로 약 12년 전 '머신러닝 생물학(ML biology)'을 직접 검색하여 단일 세포 유전체학(Single-cell genomics) 및 계산 생물학 분야로 진입. 알파제놈 아틀라스 및 알파제놈 2 개발 주도.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>에릭 랜더 (Eric Lander)</strong></td>
+<td style="text-align:left">유전학자</td>
+<td style="text-align:left">인간 게놈 프로젝트(Human Genome Project) 핵심 참여자. &quot;책을 샀지만 읽기가 어렵다&quot;는 명언으로 유전체 해독과 해석 간의 격차 비유 (소속 기관 소스 내 확인 불가).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>존 점퍼 (John Jumper)</strong></td>
+<td style="text-align:left">구글 딥마인드 알파폴드 연구자</td>
+<td style="text-align:left">알파폴드 2 개발자. 알파폴드 2의 구조 보존적 특성으로 인한 돌연변이 예측 한계를 지적하여 알파미스센스(AlphaMissense) 프로젝트 전환의 계기를 제공함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>로라 코발 (Laura Koval)</strong></td>
+<td style="text-align:left">브로드 연구소 (Broad Institute) 연구원</td>
+<td style="text-align:left">알파제놈 아틀라스 사전 접근권을 부여받은 희귀질환 연구자. 4~5년간 원인을 찾지 못했던 소아 뇌전증 환아의 AGVI 상위 스플라이싱 변이를 특정하고 세포주 실험으로 실증 검증.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-정보-data-timeframes">4. 수치 및 시점 정보 (Data &amp; Timeframes)</h4>
+<h5 id="시간-및-기간-데이터">시간 및 기간 데이터</h5>
+<ul>
+<li><strong>13년</strong>: 인간 게놈 프로젝트(Human Genome Project)를 통해 인간 DNA 염기서열을 최초로 해독하는 데 소요된 기간.</li>
+<li><strong>10년</strong>: Human Cell Atlas 프로젝트 등을 통해 단일 세포(Single-cell) 수준의 정밀 분자 데이터가 대량으로 수집 및 생성되어 온 기간.</li>
+<li><strong>약 12년 전</strong>: 연구원 제시카가 '머신러닝 생물학'을 구글링하며 단일 세포 유전체학 분야에 입문한 시점.</li>
+<li><strong>약 5~6년 전</strong>: 팟캐스트 시즌 2에서 트랜스포머 AI 모델을 활용한 DNA 시퀀스 분석 연구가 최초로 언급된 시점.</li>
+<li><strong>2025년</strong>: 비코딩 영역 분석 모델인 알파제놈(AlphaGenome)이 최초로 공개된 연도.</li>
+<li><strong>생후 6주</strong>: 희귀 소아 뇌전증 환아가 최초로 질환 진단을 받은 시점.</li>
+<li><strong>4~5년</strong>: 소아 뇌전증 환아의 유전적 원인 변이를 규명하지 못하고 미해결(Unsolved) 상태로 머문 기간.</li>
+<li><strong>2~3주</strong>: 알파제놈 2 연구진이 비접근(Not accessible) DNA 영역에서의 예측 성능 저하 및 기전 불확실성 현상으로 인해 집중적으로 밤낮 고민했던 연구 기간.</li>
+<li><strong>40억 년</strong>: 지구 생명체가 진화 과정을 통해 유전적 복잡성을 축적해 온 진화 역사의 기간 (비유 수치).</li>
+<li><strong>18개월</strong>: 유전체 AI 모델(게놈 조절 분석) 분야가 본격적으로 가속 발전해 온 짧은 기간 (40억 년의 진화 역사와 대비되는 비유 수치).</li>
+</ul>
+<h5 id="유전체-및-분자-데이터">유전체 및 분자 데이터</h5>
+<ul>
+<li><strong>30억 개 (3 billion)</strong>: 인간 게놈 전체를 구성하는 염기(A, C, G, T)의 총 개수.</li>
+<li><strong>2%</strong>: 단백질을 직접 암호화(Coding)하는 게놈 영역의 비율.</li>
+<li><strong>98%</strong>: 단백질의 생성 시기, 장소, 양을 조절(Non-coding/Regulation)하는 조절 영역의 비율.</li>
+<li><strong>20만 개 (200,000 bp)</strong>: 초기 엔포머(Enformer) 모델의 입력 시퀀스 길이.</li>
+<li><strong>128 베이스쌍</strong>: 엔포머 모델의 해상도 단위.</li>
+<li><strong>100만 개 (1,000,000 bp)</strong>: 알파제놈(AlphaGenome) 모델의 확장된 입력 시퀀스 길이.</li>
+<li><strong>1 베이스쌍 (1 bp)</strong>: 알파제놈 및 알파제놈 2의 단일 염기 수준 정밀 해상도.</li>
+<li><strong>90억 개 (9 billion)</strong>: 알파제놈 아틀라스(AlphaGenome Atlas)가 게놈 내 가능한 모든 단일 염기 변화 효과에 대해 사전 계산(Pre-computed)한 변이 총수.</li>
+<li><strong>10,000개</strong>: 알파제놈 모델이 시퀀스 분석 시 출력하는 다차원 수치 데이터 수 (AGVI 점수로 압축 제공).</li>
+<li><strong>0 ~ 약 80점 (0 to roughly 80)</strong>: 알파제놈 변이 영향 점수(AGVI score)의 수치 범위 (점수가 높을수록 심각한 분자적 영향 의미).</li>
+<li><strong>1%</strong>: GWAS(전전신 유전체 연관 분석)에서 다루는 일반 변이(Common variation)의 인구 내 최소 출현 빈도 기준.</li>
+<li><strong>29만 베이스쌍 (290,000 bp)</strong>: 알파제놈 2가 마크로파지 세포주에서 성공적으로 예측하고 크릭 연구소(Crick Institute)가 실험으로 검증한 조절 변이와 타깃 유전자 간의 물리적 거리.</li>
+</ul>
+<h5 id="임상-및-연구-성과-수치">임상 및 연구 성과 수치</h5>
+<ul>
+<li><strong>10%</strong>: 현재 개발 중인 신약 후보물질이 임상시험을 통과하여 최종 승인에 도달하는 성공률.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li>
+<p><strong>높은 정밀도(High Precision) 대비 낮은 재현율(Low Recall) 문제 (대량의 위음성 존재)</strong></p>
+<ul>
+<li>알파제놈 및 알파제놈 2 모델은 생물학적 검증 관점에서 '높은 정밀도, 낮은 재현율(High precision, low recall)' 특성을 명확히 가진다.</li>
+<li>모델이 특정 변이에 대해 &quot;강한 영향을 미친다&quot;고 예측한 경우 실제 사실(True Positive)일 확률이 매우 높지만, 모델이 포착하지 못하고 놓치는 위음성(False Negative) 변이가 대량으로 존재한다. 따라서 점수가 낮다고 해서 변이의 위험성을 완전히 배제할 수는 없다.</li>
+</ul>
+</li>
+<li>
+<p><strong>'스파게티 사발(Bowl of Spaghetti)' 구조와 비접근(Not Accessible) 꼬인 DNA 영역에서의 예측 성능 저하</strong></p>
+<ul>
+<li>인간 DNA는 선형 끈 형태가 아니라 세포 핵 내부에서 빽빽하게 꼬이고 얽힌 '스파게티 사발' 구조를 형성한다.</li>
+<li>단백질이 쉽게 접근할 수 있는 오픈 영역(Accessible region)에 위치한 변이는 유전자와의 물리적 거리가 멀더라도 모델이 우수하게 예측해낸다. 그러나 빽빽하게 압축되어 단백질 접근이 불가능한 비접근(Not accessible) 영역에 존재하는 변이에 대해서는 예측 성능이 급격히 저하된다.</li>
+<li>이러한 예측 성능 저하가 단순히 비접근 영역 데이터 부족에 기인한 것인지, 혹은 미지의 구조적 억제 메커니즘(Additional repression mechanism)이 작용하기 때문인지에 대해 알파제놈 2 연구진조차 2~3주 동안 집중 고민했을 만큼 현재 분자생물학계 및 AI 기술진 모두에게 미해결 불확실성 영역으로 남아있다.</li>
+</ul>
+</li>
+<li>
+<p><strong>데이터 편향성 및 극희귀 세포 상태 데이터의 부족</strong></p>
+<ul>
+<li>학습에 투입된 분자 데이터가 채취가 용이한 혈액 및 면역 세포 데이터에 집중되어 있어 특정 세포 유형으로 데이터 편향(Bias)이 존재할 수 있다.</li>
+<li>인체의 깊은 조직(예: 폐 등) 내부나 특정 발달 단계에만 매우 희소하게 존재하는 극희귀 세포 상태(Rare cell state) 데이터는 수집 자체가 극도로 어려워, 해당 영역에서의 변이 예측 정확도를 보장하기 어렵다.</li>
+</ul>
+</li>
+<li>
+<p><strong>In Silico 시뮬레이션과 Wet Lab 간의 격차 및 실제 실험 검증의 필수성</strong></p>
+<ul>
+<li>AI 모델은 세포 내부의 수많은 생물학적 예외 상황(Edge cases)과 예외적 피드백 기전을 완벽히 시뮬레이션하지 못하며, 컴퓨터 상(In silico)의 시뮬레이션과 실제 생명체(Biology) 간의 격차는 여전히 매우 크다.</li>
+<li>따라서 AI 모델의 예측 결과는 단지 연구의 가이드를 제공하는 힌트(Clue)일 뿐이며, 페트리 드쉬 및 세포주(Cell line) 기반의 직접적인 습식 실험(Wet lab experiment)을 통한 직접 검증이 반드시 병행되어야 한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>연구 보조 도구로서의 한계 (독자적 임상 진단 불가)</strong></p>
+<ul>
+<li>알파제놈 및 알파제놈 2는 독자적으로 질병이나 치료법을 결정하는 clinical 진단 도구가 아니다.</li>
+<li>본 시스템은 수많은 유전 변이 중 우범 후보를 발굴하고 단서(Clue)를 제공하는 탐색적 연구 보조 도구(Research tool)에 한정되며, 임상 진단 파이프라인 전반의 상류(Upstream) 단계에서 전문가의 판단을 돕는 보조적 역할을 수행한다.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

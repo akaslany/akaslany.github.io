@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>d1-ultra: Introducing the World’s Best Decision Model | Blog | Liquid AI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>d1-ultra: Introducing the World’s Best Decision Model | Blog | Liquid AI</h1>
+<p class="page-meta">웹 · 2026-10-16</p>
+<h2 id="요약">요약</h2>
+<p>리퀴드 에이아이(Liquid AI)는 2026년 10월 15일 최첨단 성능을 갖춘 다중 모달(multimodal) 의사결정 모델인 '디원 울트라(d1-ultra)'의 공식 출시를 발표하였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.liquid.ai/blog/d1-ultra">출처</a> · <a href="https://www.youtube.com/watch?v=i1h4YQEnCEw">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="liquid-ai의-d1-ultra-의사결정-모델-해설-보고서">Liquid AI의 d1-ultra 의사결정 모델 해설 보고서</h3>
+<h4 id="1-개요">1. 개요</h4>
+<p>리퀴드 에이아이(Liquid AI)는 2026년 10월 15일 최첨단 성능을 갖춘 다중 모달(multimodal) 의사결정 모델인 '디원 울트라(d1-ultra)'의 공식 출시를 발표하였다. 본 모델은 단순하고 일반적인 결정 과제를 넘어서, 현실 세계의 복잡하고 다루기 힘든(messier) 유스케이스를 해결하는 데 특화되어 개발되었다.</p>
+<p>d1-ultra의 대표적인 실제 적용 사례로는 사양서와 대조하여 회로 기판의 결함을 감지하는 작업이나, 고객이 제출한 사진을 기반으로 손해 배상 청구 건을 검증하는 작업 등이 포함된다. 이는 기존 의사결정 모델들이 손쉬운 작업 영역에서만 제한적으로 유효했던 한계를 극복하기 위함이다.</p>
+<p>현재 d1-ultra는 리퀴드 에이아이 API(Liquid API)를 통해 입력 토큰 1,000,000개당 0.042 달러($0.042)의 비용으로 즉시 이용할 수 있다. 1회 순방향 패스 기반의 확률 반환 메커니즘과 정교한 확률 보정(calibration) 기술을 바탕으로 고도화된 의사결정 성능을 제공하며, 향후 다양한 모델 크기 제공, 지연 시간(latency) 단축, 신규 기능 추가 등 지속적인 성능 업데이트가 예정되어 있다.</p>
+<hr />
+<h4 id="2-주요-논점">2. 주요 논점</h4>
+<h5 id="2-1-d1-ultra의-핵심-기능-및-작동-방식">2.1 d1-ultra의 핵심 기능 및 작동 방식</h5>
+<p>본문 내 'What d1-ultra does' 섹션에 명시된 d1-ultra의 기술적 특성 및 비구조화 데이터 처리 방식은 다음과 같다.</p>
+<ul>
+<li><strong>입력 데이터 다중 모달성</strong>: 텍스트, 이미지, 또는 두 매체가 혼합된 비구조화 데이터(unstructured data)와 함께 하나 이상의 질문을 입력받는다.</li>
+<li><strong>1회 순방향 패스(One Forward Pass)</strong>: 단 한 번의 순방향 패스로 입력 전체를 통합적으로 읽어 들여 연산 효율성을 극대화한다.</li>
+<li><strong>토큰 미생성 및 확률 반환</strong>: 기존 생성형 모델과 달리 텍스트 토큰을 생성하지 않으며, 각 가능한 답변에 대한 확률(probability)만을 직접 반환한다.</li>
+</ul>
+<h5 id="2-2-질문-유형-및-입력-형태">2.2 질문 유형 및 입력 형태</h5>
+<p>d1-ultra는 기존 모델인 d1과 동일하게 다음 3가지 유형의 질문 구조를 지원한다.</p>
+<ul>
+<li><strong>noul</strong>: 예/아니오(yes/no) 형태의 단답형 질문으로, 0에서 1 사이의 확률값으로 응답한다.</li>
+<li><strong>Choice</strong>: 여러 라벨 항목 중 하나를 선택하는 질문으로, 각 라벨별 확률값을 제공한다.</li>
+<li><strong>Score</strong>: 정의된 척도(scale) 상에서의 위치를 결과값으로 제시한다.</li>
+</ul>
+<h5 id="2-3-성능-평가-및-확률-보정-calibration-결과">2.3 성능 평가 및 확률 보정(Calibration) 결과</h5>
+<p>본문 내 'Results' 섹션에서는 단순 정확도 추구 이상의 기술적 성과와 평가 결과를 다룬다.</p>
+<ul>
+<li><strong>기술적 배경 및 보정의 필요성</strong>: 의사결정 모델에서는 단순 정확도(Accuracy)뿐만 아니라 모델이 제시하는 확률의 신뢰도가 필수적이다. 기존 의사결정 모델들은 자신의 예측에 대해 과잉 확신(overconfident)하는 경향을 보여 현실 세계의 복잡한 문제 적용 시 오류를 유발하였다. d1-ultra는 더 큰 오픈 웨이트(open-weight) 모델에 리퀴드 특화 커스텀 및 학습 파이프라인을 적용하여, 현실 문제에 신뢰할 수 있는 보정된 확률을 출력하도록 맞춤 학습되었다.</li>
+<li><strong>벤치마크 평가 및 우수성</strong>: 기존 모델인 d1 및 제브 1.14(Jev 1.14)를 대상으로 총 112개의 고유 평가를 수행하였으며, 동일한 가격 조건에서 Jev 1.14 대비 우수한 정확도와 보정 성능을 입증하였다. 또한, 아티피셜 애널리시스 의사결정 인덱스(Artificial Analysis Decision Index)에서 타 의사결정 모델 대비 최소 8점 이상 우수한 성과를 기록하였다.</li>
+<li><strong>실무 데모 제공</strong>: d1-ultra의 실제 동작 사례는 디원 플레이그라운드(d1 Playground, d1.liquid.ai)를 통해 직접 확인할 수 있다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 범주</th>
+<th style="text-align:left">기능 및 성능 상세</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>기반 아키텍처</strong></td>
+<td style="text-align:left">대형 오픈 웨이트 모델 기반 + 리퀴드 전용 커스텀 기법 및 훈련 파이프라인 적용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평가 규모</strong></td>
+<td style="text-align:left">d1 및 Jev 1.14 모델과 총 112개 고유 평가(unique evaluations) 비교 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>확률 보정 특성</strong></td>
+<td style="text-align:left">과잉 확신(overconfident) 문제 해결을 통해 현실 예측 확률의 신뢰성 극대화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>벤치마크 지표</strong></td>
+<td style="text-align:left">아티피셜 애널리시스 의사결정 인덱스에서 타 모델 대비 최소 8점(8 points) 이상 우수</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-4-가격-정책-및-api-이용-가이드">2.4 가격 정책 및 API 이용 가이드</h5>
+<p>본문 내 'Availability and Pricing' 섹션에서는 요금체계, 토큰 계산 방식, API 연동 구조 및 향후 로드맵을 제시한다.</p>
+<ul>
+<li><strong>가격 체계</strong>: 입력 토큰 1,000,000개당 0.042 달러($0.042)가 부과되며, 출력 토큰 비용은 발생하지 않는다.</li>
+<li><strong>이미지 토큰 산정</strong>: 이미지는 텍스트와 동일한 비율로 토큰화된다. 32×32 피스 패치당 1.5 토큰으로 계산되며, 1024×1024 크기 이미지는 1,536 토큰으로 환산된다.</li>
+<li><strong>질문 단위 청구</strong>: 각 질문은 텍스트 및 포함된 모든 이미지를 포함하여 별도의 프롬프트로 계산 및 청구된다.</li>
+<li><strong>배포 및 플랫폼 연동</strong>: 현재 리퀴드 에이아이 API(Liquid AI API)에서 즉시 이용 가능하며, 향후 버셀(Vercel) 및 오픈루터(OpenRouter) 플랫폼을 통해서도 확장 제공될 예정이다.</li>
+<li><strong>API 구현 파이썬 코드 구조 분석</strong>:
+<ul>
+<li><strong>라이브러리 구성</strong>: <code>base64</code>, <code>os</code>, <code>requests</code> 모듈을 활용한다.</li>
+<li><strong>이미지 전처리</strong>: <code>board.jpg</code> 바이너리 데이터를 베이스64(base64)로 인코딩하여 텍스트 문자열 형식으로 전환한다.</li>
+<li><strong>엔드포인트 호출</strong>: POST 방식으로 <code>https://api.liquid.ai/decisions/v1/systemone</code> 엔드포인트에 요청을 전송한다.</li>
+<li><strong>인증 헤더</strong>: <code>LIQUID_API_KEY</code> 환경 변수를 호출하여 <code>Authorization: Bearer</code> 형태의 토큰 인증을 수행한다.</li>
+<li><strong>요청 페이로드(JSON) 구조</strong>: 모델명(<code>model: &quot;d1-ultra&quot;</code>), 인코딩된 이미지 배열(<code>images</code>), 현재 상황 설명(<code>state: &quot;Camera image of a circuit board...&quot;</code>), 그리고 질문 객체(<code>questions</code>)로 구성된다. 질문 객체 내부에는 질문 키(<code>defect</code>), 질문 유형(<code>type: &quot;noul&quot;</code>), 세부 지시문(<code>instructions: &quot;Does this circuit board have a defect?&quot;</code>)을 정의한다.</li>
+<li><strong>결과 추출</strong>: 응답 JSON 객체 내 <code>response.json()[&quot;answers&quot;][&quot;defect&quot;][&quot;noul&quot;]</code> 경로를 통해 해당 질문에 대한 최종 확률값을 반환받는다.</li>
+</ul>
+</li>
+<li><strong>지속적 개발 로드맵</strong>: 리퀴드 에이아이는 다양한 크기의 의사결정 모델 개발, 신규 기능 추가, 의사결정 품질 향상, 지연 시간(latency) 단축을 목표로 정기적인 업데이트를 지속 제공할 계획이다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자">3. 등장 인물 및 화자</h4>
+<ul>
+<li><strong>발행 기관</strong>: 리퀴드 에이아이 (Liquid AI, 2023년 설립) - d1-ultra 모델 개발 및 보고서 발표 주체. (언론 문의처: <code>press@liquid.ai</code>)</li>
+<li><strong>개인 화자/작성자 이름</strong>: 소스 내 미기재로 <strong>확인 불가</strong>.</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점">4. 수치 및 시점</h4>
+<ul>
+<li><strong>발표 일자</strong>: 2026년 10월 15일 (OCT 15, 2026)</li>
+<li><strong>기업 설립 연도</strong>: 2023년 (Est. 2023)</li>
+<li><strong>개인정보 처리방침 고지 자동 소멸 기준일</strong>: 2026년 10월 30일 (UTC)</li>
+<li><strong>이용 요금</strong>: 입력 토큰 1,000,000개당 0.042 달러 ($0.042) / 출력 토큰 비용 없음</li>
+<li><strong>이미지 토큰 환산율</strong>: 32×32 피스 패치당 1.5 토큰 (1024×1024 이미지 기준 1,536 토큰)</li>
+<li><strong>평가 및 벤치마크 수치</strong>: 112개의 고유 평가(unique evaluations) 진행 / 아티피셜 애널리시스 의사결정 인덱스(Artificial Analysis Decision Index)에서 최소 8점(8 points) 이상 우세</li>
+<li><strong>공식 인용 정보 (Citation)</strong>:
+<ul>
+<li>문헌 명칭: Liquid AI, &quot;d1-ultra: State-of-the-Art Decision Model&quot;, Liquid AI Blog, Oct 2026.</li>
+<li>BibTeX 식별 정보:<pre><code class="language-bibtex">@article{liquidAI2026d1-ultra,
+  author = {Liquid AI},
+  title = {d1-ultra: State-of-the-Art Decision Model},
+  journal = {Liquid AI Blog},
+  year = {2026},
+  note = {www.liquid.ai/blog/d1-ultra},
+}
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성">5. 한계와 불확실성</h4>
+<ul>
+<li><strong>개인 작성자 및 연구진 명단</strong>: 소스 상에는 발표 주체로 리퀴드 에이아이(Liquid AI)라는 기관명만 제시되어 있으며, 세부 연구원이나 개인 작성자 명단은 <strong>확인 불가</strong>.</li>
+<li><strong>기반 오픈 웨이트 모델의 구체적 명칭 및 파라미터 크기</strong>: &quot;더 큰 오픈 웨이트 모델(larger open-weight model)&quot;로만 기재되어 있어, 베이스가 된 정확한 모델명이나 파라미터 수치는 <strong>확인 불가</strong>.</li>
+<li><strong>버셀(Vercel) 및 오픈루터(OpenRouter) 출시 정확한 일정</strong>: &quot;곧 이용 가능(soon be available)&quot;으로만 표기되어 있으며 구체적인 출시 날짜는 <strong>확인 불가</strong>.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

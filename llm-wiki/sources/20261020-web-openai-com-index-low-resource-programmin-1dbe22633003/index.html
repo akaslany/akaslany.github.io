@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advancing coding in low‑resource programming languages | OpenAI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Advancing coding in low‑resource programming languages | OpenAI</h1>
+<p class="page-meta">웹 · 2026-10-20</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 OpenAI가 2026년 10월 19일에 발표한 &quot;Advancing coding in low‑resource programming languages&quot; 연구 보고서를 바탕으로 작성되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://openai.com/index/low-resource-programming-languages">출처</a> · <a href="https://www.youtube.com/watch?v=_GnMZ0xcT7U">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai의-저자원-프로그래밍-언어-코딩-능력-향상에-관한-해설-보고서">OpenAI의 저자원 프로그래밍 언어 코딩 능력 향상에 관한 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 OpenAI가 2026년 10월 19일에 발표한 &quot;Advancing coding in low‑resource programming languages&quot; 연구 보고서를 바탕으로 작성되었습니다. 본 소스는 COBOL, Fortran, Visual Basic과 같은 저자원 프로그래밍 언어(low-resource programming languages) 분야에서 인공지능 모델의 신규 코드 작성 및 기존 코드 마이그레이션 역량을 대폭 향상시킨 연구 결과와 평가 지표를 기술하고 있습니다.</p>
+<p>COBOL, Fortran, Visual Basic 등의 저자원 언어는 Python이나 JavaScript와 비교했을 때 모델이 학습에 활용할 수 있는 공개 코드와 문서의 양이 절대적으로 부족합니다. 그러나 이들 언어는 전 세계 주요 기반 시설과 핵심 서비스를 가동하는 중추 역할을 담당하고 있습니다. COBOL은 온라인 은행 시스템의 40% 초과(&gt;40%), 대면 신용카드 거래의 80%, ATM 거래의 95%를 지원하며, Fortran은 기상 예측 및 핵반응로 안전 분석 등에 광범위하게 사용됩니다.</p>
+<p>이처럼 중요한 레거시 시스템을 유지보수하고 현대화하는 과정에서는 문서화의 미비, 원래 개발자의 퇴직 및 이탈, 그리고 핵심 비즈니스 규칙이 오직 코드 형태로만 존재한다는 현실적인 어려움이 수반됩니다. OpenAI는 이러한 저자원 언어 코딩 역량을 검증하기 위해 신규 데이터베이스 엔진 구축 과제인 MultiLangBench와 기존 COBOL 코드 마이그레이션 평가 체계를 구축하였습니다. 최신 모델(GPT-6 Astra, GPT-6 Luna, GPT-6.1 Sol 등)을 적용한 평가 결과, 기존 GPT-5.6 Sol 모델 대비 정합성과 정확도가 비약적으로 상승했으며 API 비용 또한 대폭 절감되었음이 입증되었습니다.</p>
+<hr />
+<h4 id="2-주요-논점-main-discussion-points">2. 주요 논점 (Main Discussion Points)</h4>
+<h5 id="2-1-논점-1-multilangbench를-통한-신규-데이터베이스-엔진-구축-능력-검증">2.1 논점 1: MultiLangBench를 통한 신규 데이터베이스 엔진 구축 능력 검증</h5>
+<p><strong>[논점]</strong> 저자원 언어 기반 학습 데이터와 문서의 부족 문제를 극복하고, AI 모델이 백지 상태(from scratch)에서 고도의 데이터베이스 엔진을 구축할 수 있는지 검증하기 위해 MultiLangBench 평가 환경이 구축되었습니다.</p>
+<p><strong>[근거 및 평가 방식]</strong> MultiLangBench는 모델이 20개의 서로 다른 프로그래밍 언어를 사용하여 SQLite와 호환되는 데이터베이스 엔진을 바닥부터 구축하도록 요구하는 과제입니다. 모델은 코드베이스 구조화, 상태 관리, 에러 처리, 기존 기능 유지 및 신규 기능 추가를 완수해야 합니다. 언어 간 구현 성과를 객관적으로 비교하기 위해 데이터베이스 파일 자체를 공통 인터페이스로 활용하며, 후보 프로그램이 초기 데이터베이스와 SQL 쿼리를 받아 변경된 데이터베이스를 생성하면 참조(reference) SQLite 구현체와 비교하여 바이트 단위 및 동작 정합성을 검증합니다. 특히 본 평가는 SQLite의 기존 테스트 수트를 재가공하여 장시간의 코딩 세션(extended coding session) 동안 모델이 실제 작동 가능한 기능을 얼마나 구축할 수 있는지를 측정합니다.</p>
+<p><strong>[모델별 성능 및 비용 비교]</strong>
+MultiLangBench 평가에서 최신 모델들은 이전 세대 모델인 GPT-5.6 Sol에 비해 통과율과 비용 효율성 측면에서 획기적인 개선을 이루었습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:left">평균 테스트 통과율 (%)</th>
+<th style="text-align:left">샘플당 추정 API 비용 (USD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GPT-5.6 Sol</td>
+<td style="text-align:left">26.8%</td>
+<td style="text-align:left">$3.48</td>
+</tr>
+<tr>
+<td style="text-align:left">GPT-6 Luna</td>
+<td style="text-align:left">40.3%</td>
+<td style="text-align:left">$0.77</td>
+</tr>
+<tr>
+<td style="text-align:left">GPT-6 Astra</td>
+<td style="text-align:left">87.4%</td>
+<td style="text-align:left">소스 내 텍스트 미기재 (차트 시각화로만 제시)</td>
+</tr>
+</tbody>
+</table>
+<p><em>(참고: GPT-6 Luna는 GPT-5.6 Sol 대비 약 78% 저렴한 비용으로 향상된 성능을 제공합니다.)</em></p>
+<p><strong>[언어별 성과 및 사례]</strong> GPT-6 Astra는 최대 추론 노력 조건에서 20개 언어 중 19개 언어에서 83% 이상의 테스트 통과율을 달성하였습니다. 저비용 옵션인 GPT-6 Luna 역시 모든 평가 언어에서 GPT-5.6 Sol 대비 향상된 결과를 보여주었습니다. 주요 언어별 통과율 변화 수치는 다음과 같습니다.</p>
+<ul>
+<li><strong>COBOL:</strong> GPT-5.6 Sol 10.9% → GPT-6 Luna 17.1% → GPT-6 Astra 72.1%</li>
+<li><strong>OCaml:</strong> GPT-5.6 Sol 25.6% → GPT-6 Luna 34.1% → GPT-6 Astra 85.8%</li>
+<li><strong>Fortran:</strong> GPT-5.6 Sol 21.4% → GPT-6 Luna 31.4% → GPT-6 Astra 83.5%</li>
+<li><strong>Visual Basic:</strong> GPT-5.6 Sol 27.5% → GPT-6 Luna 41.6% → GPT-6 Astra 89.4%</li>
+</ul>
+<p>평가 대상 20개 언어 중 COBOL은 GPT-6 Astra 기준 72.1%를 기록하며 여전히 가장 난이도가 높은 언어로 확인되었습니다.</p>
+<hr />
+<h5 id="2-2-논점-2-cobol-마이그레이션-평가를-통한-기존-코드의-동작-보존-능력-검증">2.2 논점 2: COBOL 마이그레이션 평가를 통한 기존 코드의 동작 보존 능력 검증</h5>
+<p><strong>[기술적 특성 및 배경]</strong> COBOL 프로그램을 C++, Java, Kotlin, Python, Rust 등 현대적 언어로 이관할 때 핵심 과제는 비즈니스 로직과 언어 특유의 세부 동작을 원형 그대로 보존하는 것입니다. COBOL 시스템은 금융 거래 및 비즈니스 기록을 다루므로 올림/반올림 규칙이나 미존재 레코드 처리 방식 등에 핵심 비즈니스 규칙이 반영되어 있습니다. 특히 COBOL의 고정소수점 연산(fixed-point arithmetic)은 명시적인 반올림 요청이 없으면 초과 소수점 자리를 버립니다. 이를 마이그레이션 과정에서 임의로 반올림하도록 변경하면 프로그램이 에러 없이 실행되더라도 실제 금융 계산 결과에서 차이가 발생하게 됩니다. 또한 원 개발자의 퇴직/이탈 및 코드 내에만 존재하는 비즈니스 규칙 등으로 인해 엄격한 로직 보존이 필수적입니다.</p>
+<p><strong>[정합성 평가 및 성과 수치]</strong> OpenAI는 관측 가능한 출력값에 대한 바이트 단위 일치(byte-for-byte parity on observable outputs)를 요구하는 비공개 테스트 수트를 바탕으로 정합성을 평가했습니다. 마이그레이션의 성공 판정은 모든 테스트를 통과해야만 인정되는 엄격한 기준을 적용했습니다.</p>
+<ul>
+<li><strong>낮은 추론 노력 (Low Reasoning Effort):</strong> GPT-6.1 Sol 모델은 86.6%의 정확도를 기록하여, 동일 설정에서 5.4%에 불과했던 GPT-5.6 Sol 대비 비약적인 성장을 이루었습니다. 이때 발생한 API 비용은 기존 GPT-5.6 Sol 대비 39% 절감된 비용(기존 비용의 61% 수준)에 불과했습니다.</li>
+<li><strong>높은 추론 노력 (Higher Reasoning Effort):</strong> GPT-6.1 Sol 모델은 97.9%의 정확도를 달성하여 평가 지표 상한선에 다다르는 포화 상태를 나타냈습니다.</li>
+</ul>
+<hr />
+<h5 id="2-3-논점-3-엔터프라이즈-소프트웨어-현대화-및-오픈소스-공개">2.3 논점 3: 엔터프라이즈 소프트웨어 현대화 및 오픈소스 공개</h5>
+<p>OpenAI는 MultiLangBench의 평가 환경과 테스트 수트를 GitHub에 오픈소스로 공개했습니다. 이를 통해 개발자와 엔터프라이즈 고객이 평가 항목을 직접 검증하고, 자사에서 사용하는 언어에 대한 모델의 성능을 확인하며, 실제 업무 적용 시 해결해야 할 격차를 파악할 수 있도록 지원합니다.</p>
+<p>본 연구의 최종 목표는 단순한 코드 생성을 넘어 엔터프라이즈 환경에서 필요한 종합적인 소프트웨어 엔지니어링 역량을 AI 모델에 갖추는 것입니다. 생소한 코드 저장소에 대한 전반적 이해, 변경 계획 수립, 빌드 도구 활용, 테스트 실행, 디버깅 및 오류 수정 등 복잡한 실무 과제를 완수할 수 있도록 모델의 기능을 지속 확장하고 있습니다.</p>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-speakers">3. 등장 인물 및 화자 (Figures &amp; Speakers)</h4>
+<ul>
+<li><strong>기관 / 발행처:</strong> OpenAI (원문 작성 기관 및 연구 주체)</li>
+<li><strong>개인 화자 / 저자:</strong> 확인 불가 (제공된 소스 문맥 내에 개별 연구원, 저자, 발표자의 실명이 명시되어 있지 않음)</li>
+</ul>
+<hr />
+<h4 id="4-주요-수치-및-시점-정리-metrics-timelines">4. 주요 수치 및 시점 정리 (Metrics &amp; Timelines)</h4>
+<h5 id="시점-및-사회적-영향력-수치">시점 및 사회적 영향력 수치</h5>
+<ul>
+<li><strong>보고서 발표일:</strong> 2026년 10월 19일</li>
+<li><strong>COBOL의 사회적 영향력:</strong>
+<ul>
+<li>온라인 은행 시스템의 40% 초과 지원 (&gt;40%)</li>
+<li>대면 신용카드 거래의 80% 지원</li>
+<li>ATM 거래의 95% 지원</li>
+</ul>
+</li>
+</ul>
+<h5 id="평가-지표-및-모델-성능-수치">평가 지표 및 모델 성능 수치</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 구분</th>
+<th style="text-align:left">세부 항목 / 모델</th>
+<th style="text-align:left">성과 수치 및 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>MultiLangBench</strong></td>
+<td style="text-align:left">평가 대상 프로그래밍 언어 수</td>
+<td style="text-align:left">20개</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GPT-5.6 Sol 평균 통과율</td>
+<td style="text-align:left">26.8% (샘플당 추정 API 비용: $3.48)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GPT-6 Luna 평균 통과율</td>
+<td style="text-align:left">40.3% (샘플당 추정 API 비용: $0.77 / 약 78% 비용 절감)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GPT-6 Astra 평균 통과율</td>
+<td style="text-align:left">87.4% (COBOL 72.1%, OCaml 85.8%, Fortran 83.5%, Visual Basic 89.4%)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>COBOL 마이그레이션</strong></td>
+<td style="text-align:left">GPT-5.6 Sol 정확도</td>
+<td style="text-align:left">5.4% (낮은 추론 노력 설정)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GPT-6.1 Sol 정확도 (낮은 추론)</td>
+<td style="text-align:left">86.6% (GPT-5.6 Sol 대비 39% 절감된 비용 / 기존 비용의 61% 수준)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GPT-6.1 Sol 정확도 (높은 추론)</td>
+<td style="text-align:left">97.9% (평가 포화 상태 육박)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>운영 상의 한계:</strong> AI 모델이 COBOL 마이그레이션 평가에서 97.9%의 높은 정확도를 달성했더라도, AI가 생성한 코드를 실제 운영 시스템(production)에 적용할 때에는 전문가의 면밀한 코드 검토와 비즈니스 규칙 및 시스템 의존성에 대한 정밀 테스트가 필수적으로 요구됩니다.</li>
+<li><strong>언어별 난이도 한계:</strong> MultiLangBench 평가에서 COBOL의 통과율이 10.9%에서 72.1%(GPT-6 Astra 기준)로 상승했으나, 여전히 평가 대상 20개 언어 중 가장 낮은 통과율을 보여 가장 난이도가 높은 언어로 남아 있습니다.</li>
+<li><strong>소스 내 확인 불가 사항:</strong>
+<ul>
+<li>AI 모델의 세부 트레이닝 방법론 및 학습 데이터 구성 방식 (소스에 언급 없음)</li>
+<li>연구에 참여한 개별 연구원 및 작성자 실명 (소스에 언급 없음)</li>
+<li>GPT-6 Astra 및 GPT-6.1 Sol의 세부 인프라 비용 구조 (소스에 언급 없음)</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

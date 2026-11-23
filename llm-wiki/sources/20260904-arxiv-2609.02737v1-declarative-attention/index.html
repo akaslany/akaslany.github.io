@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Language Models Can Control Their Own Attention</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Language Models Can Control Their Own Attention</h1>
+<p class="page-meta">논문 · 2026-09-04</p>
+<h2 id="요약">요약</h2>
+<p>이 글은 arXiv v1 PDF 한 편만을 바탕으로 논문의 전개 순서와 용어를 보존해 설명한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/abs/2609.02737v1">출처</a> · <a href="https://www.youtube.com/watch?v=ysJB6NpZmsI">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="llm이-스스로-주목할-문맥을-고른다-declarative-attention">LLM이 스스로 주목할 문맥을 고른다: Declarative Attention</h3>
+<p>이 글은 arXiv v1 PDF 한 편만을 바탕으로 논문의 전개 순서와 용어를 보존해 설명한다. Declarative Attention(DA)은 보통의 attention 시각화도 아니고 새로 학습한 파운데이션 모델도 아니다. 기존 언어모델이 추론 중 자신이 읽어야 할 문맥 범위를 선언하고, 추론 엔진이 그 선언을 마스크로 바꾸는 추론 프로토콜이다.</p>
+<h4 id="장문맥-디코딩의-병목">장문맥 디코딩의 병목</h4>
+<p>논문이 출발하는 문제는 긴 입력을 받은 언어모델의 디코딩 비용이다. 일반적인 전역 attention 층은 다음 토큰을 만들 때마다 앞선 문맥 전체의 KV cache를 읽는다. 실제 attention 질량은 소수 토큰에 몰릴 수 있지만, 어떤 토큰이 중요한지는 전체 attention을 계산하기 전에는 알기 어렵다.</p>
+<p>기존 동적 희소 attention의 한 계열은 가벼운 proxy score로 각 시점의 관련 토큰을 고른다. 이 방식은 상수를 줄일 수 있어도 매 디코딩 단계마다 길이 N의 문맥을 훑는 extrinsic selection이 남아 O(N)이다. DA의 질문은 다르다. 모델이 다음 추론에 필요한 위치를 이미 안다면, 그 선택을 모델 자신의 출력으로 직접 선언하게 할 수 있지 않느냐는 것이다. 그래서 DA는 proxy로 숨은 중요도를 추정하지 않고 모델의 명시적 선언을 읽는다. O(N) 전체 문맥 읽기는 모델이 선언한 global 구간에만 남고, 매 단계의 별도 선택 스캔으로 붙지 않는다.</p>
+<h4 id="세-가지-attention-모드">세 가지 attention 모드</h4>
+<p>DA는 모델의 추론을 세 모드로 나눈다.</p>
+<ul>
+<li><code>&lt;global&gt;</code>: 모든 context segment를 본다. 긴 문맥을 탐색하고 다음에 볼 구간을 찾는 navigation 단계다.</li>
+<li><code>&lt;focus magic_chunks=&quot;K&quot;&gt;</code>: 태그가 지정한 segment만 본다. 특정 구간에서 필요한 값을 확인하거나 추론한다.</li>
+<li><code>&lt;local&gt;</code>: long-context segment는 보지 않고 질문, 지침, 지금까지 생성한 응답만 본다. 이미 모은 정보를 결합해 답을 만드는 단계다.</li>
+</ul>
+<p>이 구분은 모델 내부 attention weight를 사후 시각화한 것이 아니다. 모델이 생성한 태그가 다음 토큰들의 attention scope를 실제로 바꾼다. 프로토콜은 모드의 횟수나 순서를 고정하지 않는다. 모델은 필요에 따라 global, focus, local을 오갈 수 있다.</p>
+<h4 id="문맥-전달-magic-chunks와-항상-보이는-scaffold">문맥 전달: magic chunks와 항상 보이는 scaffold</h4>
+<p>focus가 작동하려면 긴 입력의 주소가 필요하다. 저자들은 context를 목표 크기 2048 tokens의 연속 구간으로 나누고 이를 “magic chunks”라고 부른다. 긴 단위를 자를 때는 문단, 줄바꿈, 문장 끝, 절 경계, 단어 경계 순으로 가능한 가장 거친 경계를 택해 단어 중간을 자르지 않는다.</p>
+<p>각 magic chunk는 실제 도구를 호출하는 것이 아니라, 이미 반환된 tool response처럼 prompt 안에 배치된다. 즉 생성 전에 모든 segment가 들어 있으며, 모델은 학습 중 익숙해진 user·assistant·tool 경계로 segment 주소를 추적한다.</p>
+<p>prompt는 항상 보이는 scaffold와 가변 context로 나뉜다. scaffold에는 system instruction, 질문, DA instruction, 그리고 지금까지의 모델 응답이 들어간다. global은 모든 context segment를, focus는 지정 segment를, local은 어떤 context segment도 추가로 보지 않지만 scaffold는 세 모드 모두에서 계속 보인다.</p>
+<h4 id="da-state-machine과-segment-level-mask">DA state machine과 segment-level mask</h4>
+<p>state machine은 기본 global 상태에서 시작해 모델 출력의 태그를 스트리밍으로 파싱한다. focus 또는 local의 opening tag가 닫히는 시점에 해당 상태로 전환하고, matching closing tag가 끝나면 다시 global로 돌아간다. <code>&lt;global&gt;</code> 태그 자체는 구조를 알려 주는 prompting 표지이며, 기본 상태가 이미 global이므로 별도 전환을 만들지 않는다.</p>
+<p>이 상태를 바탕으로 매 디코딩 단계의 segment-level mask를 갱신한다. focus에서는 지정된 magic chunk만, local에서는 long context가 전부 가려지고, global에서는 전체가 열린다. 중요한 점은 모델이 선언한 scope와 실제 KV-cache read가 연결된다는 것이다.</p>
+<h4 id="vllm-구현">vLLM 구현</h4>
+<p>vLLM의 KV cache는 보통 16~32 tokens의 고정 블록으로 저장되고 attention kernel도 블록 전체를 읽는다. 따라서 흩어진 개별 토큰만 가리면 실제 memory read가 줄지 않는다. 저자 구현은 보존할 span을 블록 경계 바깥쪽으로 반올림한다. 그 결과 segment 가장자리마다 최대 한 블록이 더 보일 수 있지만, 선언된 토큰은 버리지 않는다.</p>
+<p>구현은 attention metadata builder에 hook을 두고 요청의 KV-cache block table을 in-place로 다시 써서 보존 블록만 kernel에 보이게 한다. FlashAttention kernel과 scheduler는 바꾸지 않는다. DA가 손대는 것은 global attention layer의 KV read다. Gemma의 sliding-window attention이나 Qwen의 Gated DeltaNet처럼 context length와 무관한 efficient layer 비용은 그대로 남는다.</p>
+<p>DA는 단계당 attention 비용을 줄이는 대신, 프로토콜 태그와 분해된 추론 때문에 더 많은 decode steps를 만들 수 있다. 따라서 attention 계산량 감소, KV-cache read 감소, 전체 attended tokens 감소, 실제 end-to-end latency는 같은 말이 아니다.</p>
+<h4 id="평가-설정">평가 설정</h4>
+<p>저자들은 off-the-shelf 모델을 DA용으로 추가 학습하지 않고 zero-shot으로 평가했다. 주 결과는 Gemma-4-31B와 Qwen-3.6-27B에서 보고하며, scale 분석에는 두 계열의 총 6개 모델을 쓴다. 평가 묶음은 RULER, LongBench v1·v2, LooGLE, ZeroSCROLLS에서 가져온 15개 long-context source이며 single-span retrieval/reasoning과 multi-span reasoning으로 나뉜다.</p>
+<p>각 source에서 길이 필터를 거친 뒤 고정 random seed로 최대 128 examples를 뽑고, 같은 모델 안에서는 Vanilla, DA-no-mask(DAnm), DA가 같은 examples를 사용한다. thinking mode는 예비 실험에서 thinking tag 내부의 DA protocol 준수가 실패해 껐고, 최대 generation length는 8K tokens였다. serving은 NVIDIA B200과 custom vLLM integration을 사용했다.</p>
+<p>정확도는 format failure를 오답으로 포함한 correctness를 source 안에서 평균한 뒤 15개 source를 동일 가중으로 평균한다. attended tokens는 디코딩 동안 각 step이 attention한 KV positions의 합을 response별로 평균하고, 다시 source를 동일 가중으로 평균한다. 이것은 wall-clock latency 자체가 아니다.</p>
+<h4 id="비용과-정확도의-주-결과">비용과 정확도의 주 결과</h4>
+<p>Gemma-4-31B에서 평균 정확도는 Vanilla 87.01%에서 DA 85.74%로 내려가 1.27 percentage points 감소했다. 평균 attended tokens는 response당 13.43M에서 6.45M으로 줄어 Vanilla 대비 52.0% 감소했다.</p>
+<p>Qwen-3.6-27B에서 평균 정확도는 85.31%에서 82.56%로 내려가 2.75 percentage points 감소했다. 평균 attended tokens는 22.54M에서 15.52M으로 줄어 31.1% 감소했다.</p>
+<p>이 수치는 “정확도를 항상 보존한다”는 결과가 아니다. task별 증감이 있으며 multi-span 쪽 평균 하락이 더 컸다. Qwen의 일부 source에서는 DA의 길어진 generation이 단계당 절약을 상쇄해 총 attended tokens가 Vanilla보다 늘기도 했다.</p>
+<h4 id="maskless-ablation과-scaling">maskless ablation과 scaling</h4>
+<p>DAnm은 magic-chunk prompt와 세 모드 instruction은 동일하게 쓰되 custom attention mask를 적용하지 않고 full causal attention을 유지한다. Gemma에서 DAnm 정확도는 Vanilla와 같은 87.01%였고, Qwen에서는 84.62%로 Vanilla보다 0.69 percentage points 낮았다. 그러나 DAnm의 attended tokens는 Vanilla보다 Gemma에서 66.2%, Qwen에서 28.8% 많았다. DA와 DAnm 모두 Vanilla보다 대략 15~35% 더 많은 decode steps를 생성했기 때문이다.</p>
+<p>동적 mask를 적용한 DA는 DAnm 대비 attended tokens를 Gemma에서 71.1%, Qwen에서 46.5% 줄였다. 따라서 논문의 ablation 범위에서 절약의 핵심은 prompt 형식이 아니라 실제 mask다. 동시에 mask가 정확도 비용의 상당 부분도 만든다.</p>
+<p>모델 크기가 커질수록 DA 정확도는 두 계열 모두에서 Vanilla에 가까워졌다. focus call이 유효한 chunk로 파싱되는 성공률도 가장 작은 Gemma 모델의 58%에서 가장 큰 headline 모델들의 99%로 올라갔다. 이는 작은 모델의 protocol declaration mistake가 주요 실패 요인임을 보여 준다.</p>
+<p>context-length 분석에서 Gemma-4-31B의 DA는 짧은 구간에서 response당 약 1M, 가장 긴 bin에서 약 21M fewer attended tokens를 기록했다. 이는 Figure 4의 pooled context-length bin에 대한 값이며, 모든 모델·task의 보편적 최대 절약이나 latency 수치가 아니다.</p>
+<h4 id="roofline-wall-time-projection">roofline wall-time projection</h4>
+<p>저자들은 measured end-to-end serving speedup을 보고한 것이 아니라 roofline model로 optimized disaggregated inference setup의 decode cost를 추정했다. 조건은 single B200, bf16, compute-bound matmul의 MFU 40%, memory-bound read의 MBU 70%이며 15개 task trace의 full generation을 평균한다. prefill은 별도 pool에서 수행된다고 보고 projection에서 제외한다.</p>
+<p>Table 3에서 Gemma-4-31B의 추정 decode cost는 Vanilla 269.1 ms에서 DA 192.3 ms로, 즉 0.71×가 된다. Qwen-3.6-27B는 306.2 ms에서 237.3 ms로, 0.77×가 된다. 줄어드는 항목은 global-attention KV read다. matmul과 local-memory 비용은 context-independent이며, 더 많은 decode steps 때문에 오히려 늘어난다. 그러므로 0.71×와 0.77×는 저자들의 특정 hardware/utilization 가정에 따른 theoretical roofline projection이지 측정된 production latency나 실제 end-to-end speedup이 아니다.</p>
+<h4 id="한계와-향후-방향">한계와 향후 방향</h4>
+<p>DA는 모델의 선언이 맞고 parseable해야 한다. 작은 모델은 focus chunk를 잘못 지정하거나 protocol을 끝까지 따르지 못했고, 정확도 격차는 model capability와 scale에 의존했다. 고정 benchmark를 위해 만든 heuristic chunk segmentation은 의미 경계를 완벽히 보장하지 않는다.</p>
+<p>zero-shot DA는 Vanilla보다 대략 3분의 1 많은 decode steps를 만들고 task 구조에 맞지 않는 분해를 선택할 수 있다. 이 chain-of-thought와 protocol overhead는 절약을 깎는다. preliminary experiment에서는 thinking trace 안에서 protocol을 따르지 못해 non-thinking mode만 평가했다.</p>
+<p>global phase는 여전히 full context를 읽으며 DA attended tokens의 80% 이상을 차지한다. context가 길수록 navigation을 위한 global 비중이 커질 수 있다. 저자들은 짧은 segment index로 global navigation을 보조하거나 lightweight scan sparse attention을 global phase에 결합하는 방향을 제안한다.</p>
+<p>현재 구현은 vLLM attention metadata 경로를 수정해야 한다. kernel과 scheduler를 바꾸지는 않았지만 모든 model이나 serving stack에 자동 호환된다고 볼 수 없다. 실험 범위도 두 model family, 15개 long-context source, fixed-context benchmark, thinking-disabled setting에 한정된다. production readiness나 모든 workload의 보편적 정확도 보존은 검증하지 않았다.</p>
+<p>향후에는 accuracy와 attention efficiency를 함께 보상하는 post-training, 자연스럽게 주소화된 agent tool-call context, speculative decoding과의 결합, KV-cache offloading과 reversible context compaction이 제안된다. 이것들은 논문이 측정해 확정한 deployment result가 아니라 향후 가능성이다.</p>
+<h4 id="저자와-기여-범위">저자와 기여 범위</h4>
+<p>논문 저자는 Namgyu Ho, Huzama Ahmad, Woosung Koh, Se-Young Yun, Tal Schuster, Cicero Nogueira dos Santos이다. 이 설명의 방법·수치·한계는 모두 저자들의 arXiv v1 PDF에 귀속한다.</p>
+<h4 id="출처">출처</h4>
+<p>https://arxiv.org/abs/2609.02737v1
+라이선스: CC BY 4.0</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

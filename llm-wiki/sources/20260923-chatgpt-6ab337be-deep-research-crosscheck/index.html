@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatGPT - 딥리서치 교차검증 분석</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>ChatGPT - 딥리서치 교차검증 분석</h1>
+<p class="page-meta">AI 대화 공유 · 2026-09-23</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 2026년 9월 23일 기준의 ChatGPT 딥리서치(Deep Research) 결과를 바탕으로 작성된 기술 실사(Technical Due Diligence) 요약본입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/ai-share/">AI 대화 공유</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://chatgpt.com/share/6ab337be-fe8c-83ee-9ed0-c33a55d9ac62">출처</a> · <a href="https://www.youtube.com/watch?v=k4kR7EI8XdM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="맥킨지-ai-신약개발-9개-사례-심층-분석-및-교차검증-보고서">맥킨지 AI 신약개발 9개 사례 심층 분석 및 교차검증 보고서</h3>
+<h4 id="1-보고서-개요-및-분석-원칙">1. 보고서 개요 및 분석 원칙</h4>
+<p>본 보고서는 2026년 9월 23일 기준의 ChatGPT 딥리서치(Deep Research) 결과를 바탕으로 작성된 기술 실사(Technical Due Diligence) 요약본입니다. 본 컨설턴트는 가용한 모든 1차 자료(SEC 공시, peer-reviewed 논문, 임상 등록 데이터)를 바탕으로 맥킨지의 주장을 재검증했습니다.</p>
+<p><strong>분석 범위 및 한계 고지:</strong></p>
+<ul>
+<li><strong>데이터 기준점:</strong> 2026년 9월 23일 현재까지 공개된 데이터를 절대적 근거로 하며, 이후의 데이터 변화는 반영되지 않았습니다.</li>
+<li><strong>수치 귀속 및 역산:</strong> 원본 이미지의 픽셀 데이터 회수가 불가능함에 따라, 본 보고서 내 모든 수치 역산 및 시각적 데이터 해석은 공유된 텍스트 답변 내 기술된 결과에 전적으로 귀속됩니다.</li>
+<li><strong>독립적 검증 제한:</strong> 소스 컨텍스트의 'Deep Research' 내용을 근거로 하며, 외부 데이터에 대한 별도의 신규 물리적 검증은 수행하지 않았습니다.</li>
+</ul>
+<hr />
+<h4 id="2-후보물질-발굴-속도-분석-맥킨지-벤치마크의-재현">2. 후보물질 발굴 속도 분석: 맥킨지 벤치마크의 재현</h4>
+<p>맥킨지가 주장하는 '15~80% 개발 기간 단축'은 특정 성공 사례를 내부 벤치마크 데이터에 대입한 결과입니다. 실사 결과, 산술적 일관성은 확인되었으나 비교 방법론상의 '논리적 오류(Logical Fallacy)'가 존재함을 인지해야 합니다.</p>
+<h5 id="2-1-9개-자산별-단축률-산술-검증-표">2.1. 9개 자산별 단축률 산술 검증 표</h5>
+<p>전통적 제약사 벤치마크: <strong>Hit-to-PCC(32~50개월)</strong>, <strong>PCC-to-FIH(16~20개월)</strong>, <strong>Hit-to-FIH(48~70개월)</strong>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">자산명</th>
+<th style="text-align:left">보고된 주기 (Cycle Time)</th>
+<th style="text-align:left">비교 기준 (Benchmark)</th>
+<th style="text-align:left">계산된 단축률</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>EXS21546</strong></td>
+<td style="text-align:left">9개월 (Hit→PCC)</td>
+<td style="text-align:left">32~50개월</td>
+<td style="text-align:left"><strong>71.9% ~ 82.0%</strong></td>
+<td style="text-align:left">최단기 기록</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SGR-1505</strong></td>
+<td style="text-align:left">10개월 (Hit→PCC)</td>
+<td style="text-align:left">32~50개월</td>
+<td style="text-align:left"><strong>68.8% ~ 80.0%</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GB-0669</strong></td>
+<td style="text-align:left">17개월 (Hit→FIH)</td>
+<td style="text-align:left">48~70개월</td>
+<td style="text-align:left"><strong>64.6% ~ 75.7%</strong></td>
+<td style="text-align:left">COVID-19 특수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>rentosertib</strong></td>
+<td style="text-align:left">18개월 (Target→PCC)</td>
+<td style="text-align:left">32~50개월</td>
+<td style="text-align:left"><strong>43.8% ~ 64.0%</strong></td>
+<td style="text-align:left">Target ID 포함 시 더 높음</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>REC-1245</strong></td>
+<td style="text-align:left">18개월 (Target→PCC)</td>
+<td style="text-align:left">32~50개월</td>
+<td style="text-align:left"><strong>43.8% ~ 64.0%</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>IAM1363</strong></td>
+<td style="text-align:left">24개월 (Hit→FIH)</td>
+<td style="text-align:left">48~70개월</td>
+<td style="text-align:left"><strong>50.0% ~ 65.7%</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ABS-101</strong></td>
+<td style="text-align:left">24개월 (Hit→FIH)</td>
+<td style="text-align:left">48~70개월</td>
+<td style="text-align:left"><strong>50.0% ~ 65.7%</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ISM3312</strong></td>
+<td style="text-align:left">28개월 (Hit→PCC)</td>
+<td style="text-align:left">32~50개월</td>
+<td style="text-align:left"><strong>12.5% ~ 44.0%</strong></td>
+<td style="text-align:left">재현 데이터 상대적 취약</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GV20-0251</strong></td>
+<td style="text-align:left">36개월 (Target→IND)</td>
+<td style="text-align:left">48~70개월*</td>
+<td style="text-align:left"><strong>25.0% ~ 48.6%</strong></td>
+<td style="text-align:left">*Hit-to-FIH 기준 대입 시</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-2-종료점-endpoint-의-이질성과-해석상-오류">2.2. 종료점(Endpoint)의 이질성과 해석상 오류</h5>
+<p>맥킨지의 단축률 계산은 PCC(후보물질 선정), IND(임상시험계획), FIH(최초 인간 투여)를 혼용하고 있습니다.</p>
+<ul>
+<li><strong>개발 복잡도 차이:</strong> PCC 이후 IND/FIH까지는 장기 독성시험, CMC(제조공정관리), 규제 서류 작성 등 AI가 직접적으로 개입하기 어려운 물리적 시간이 수반됩니다.</li>
+<li><strong>분석가 제언:</strong> 내부 마케팅 수치인 Hit-to-PCC와 규제 단계인 Hit-to-FIH를 동일 선상에서 단축률로 비교하는 것은 실제 R&amp;D 부하를 과소평가할 위험이 있는 '통계적 착시'입니다.</li>
+</ul>
+<h5 id="2-3-가시적-성과와-실제-가치의-분리">2.3. 가시적 성과와 실제 가치의 분리</h5>
+<p>&quot;초고속 발굴&quot;이 &quot;임상 성공&quot;이나 &quot;위험조정 순현재가치(e rNPV)&quot; 개선으로 직결되지 않습니다. 발굴 단계의 현금 지출은 줄일 수 있으나, 후기 임상의 '인간 생물학적 난제(Human Biology Bottleneck)'를 해결하지 못한다면 e rNPV는 상승하지 않습니다.</p>
+<hr />
+<h4 id="3-9개-ai-활용-사례별-교차검증-세부-분석">3. 9개 AI 활용 사례별 교차검증 세부 분석</h4>
+<h5 id="3-1-개별-자산-실사-및-기술-플랫폼-분석">3.1. 개별 자산 실사 및 기술 플랫폼 분석</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">자산명 / 타깃</th>
+<th style="text-align:left">핵심 기술 (Platform)</th>
+<th style="text-align:left">2026년 현황</th>
+<th style="text-align:left">해석상 유의점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>rentosertib</strong> / TNIK</td>
+<td style="text-align:left">Insilico Medicine (Chemistry42)</td>
+<td style="text-align:left"><strong>Phase III 진입</strong> (2026.09)</td>
+<td style="text-align:left">가장 강력한 Proof Point. 단, 2a상은 소규모이며 FVC는 2차 평가지표였음.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ISM3312</strong> / 3CLPro</td>
+<td style="text-align:left">Insilico Medicine (Chemistry42)</td>
+<td style="text-align:left">Phase I 진행 중</td>
+<td style="text-align:left">COVID-19 및 기검증된 Protease 타깃 특수성. 수치 재현 자료 약함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>REC-1245</strong> / RBM39</td>
+<td style="text-align:left">Recursion (Phenomics maps + ML)</td>
+<td style="text-align:left">Phase I 진행 중</td>
+<td style="text-align:left">Phenomics 기반의 Target-to-Design 통합 결과. 효능 판단은 시기상조.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SGR-1505</strong> / MALT1</td>
+<td style="text-align:left">Schrödinger (Physics-based + Active Learning)</td>
+<td style="text-align:left">Phase I 진행 중</td>
+<td style="text-align:left">순수 AI보다는 고도화된 물리 기반 계산 화학의 성격이 강함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GV20-0251</strong> / IGSF8</td>
+<td style="text-align:left">GV20 Therapeutics (AI-driven Target ID)</td>
+<td style="text-align:left">Phase I/II 진행 중</td>
+<td style="text-align:left">타깃 발굴 속도는 우수하나, 저자-회사 간 밀접한 이해관계 및 대조군 부재.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>IAM1363</strong> / HER2</td>
+<td style="text-align:left">Iambic (Enchant / NeuralPLexer)</td>
+<td style="text-align:left">Phase I/Ib 진행 중</td>
+<td style="text-align:left">AI 모델뿐 아니라 폐쇄루프 자동화(Closed-loop automation) 기여도 큼.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EXS21546</strong> / A2AR</td>
+<td style="text-align:left">Exscientia (Generative Chemistry)</td>
+<td style="text-align:left"><strong>개발 중단</strong></td>
+<td style="text-align:left"><strong>핵심 반례.</strong> 9개월 만의 발굴이 임상적 유망성으로 연결되지 않음을 증명.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ABS-101</strong> / TL1A</td>
+<td style="text-align:left">Absci (Generative AI + Protein design)</td>
+<td style="text-align:left"><strong>전략 변경</strong></td>
+<td style="text-align:left">속도는 달성했으나 독자 개발 대신 파트너링(외부 의존) 선택. 가치 입증 미흡.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GB-0669</strong></td>
+<td style="text-align:left">Generate:Biomedicines (Computer-to-clinic)</td>
+<td style="text-align:left"><strong>우선순위 제외 (Paused)</strong></td>
+<td style="text-align:left">COVID-19 프로그램. 규제 가속 절차 및 자원 집중의 결과물로 일반화 불가.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="3-2-주요-성공-및-실패-사례-심층-비교">3.2. 주요 성공 및 실패 사례 심층 비교</h5>
+<ul>
+<li><strong>성공적 이정표: Rentosertib (TNIK)</strong>
+AI 기반 타깃 발굴부터 설계까지 수행한 자산 중 최초로 2026년 9월 10일 임상 3상 환자 투여를 개시했습니다. 이는 AI 신약개발이 전임상을 넘어 실제 상업화 직전 단계까지 도달할 수 있음을 보여주는 'Translational Proof Point'입니다.</li>
+<li><strong>전략적 경고: EXS21546 (A2AR)</strong>
+9개월이라는 기록적 속도로 후보물질을 도출했음에도 불구하고, 임상 1/2상 결과가 기대에 미치지 못해 개발이 중단되었습니다. 이는 '발굴 속도(Discovery Velocity)'와 '치료적 가치(Therapeutic Value)'가 완전히 독립된 변수임을 시사하는 가장 잔혹한 증거입니다.</li>
+</ul>
+<hr />
+<h4 id="4-데이터-왜곡-및-분석-편향-요인-6대-변수">4. 데이터 왜곡 및 분석 편향 요인 (6대 변수)</h4>
+<ol>
+<li><strong>선택 및 생존 편향 (Selection/Survivorship Bias):</strong> 공개된 데이터는 성공한 프로젝트 위주로 구성되어 있습니다. 실패하여 폐기된 수많은 AI 프로젝트의 주기 데이터는 분모에서 제외되어 수치가 상향 왜곡되었을 가능성이 큽니다.</li>
+<li><strong>코로나19 특수성 (COVID-19 Context):</strong> GB-0669와 ISM3312는 FDA의 <strong>CTAP(Coronavirus Treatment Acceleration Program)</strong> 등 규제기관의 비정상적 가속 절차 수혜를 입었습니다. 이를 일반 질환 개발 속도로 치환하는 것은 오류입니다.</li>
+<li><strong>타깃 신규성 (Target Novelty):</strong> HER2, 3CLPro 등 기검증된 타깃에서의 속도와 IGSF8과 같은 신규 타깃의 속도를 동일 선상에 두는 것은 난이도 차이를 무시한 처사입니다. 기검증 타깃은 AI 없이도 상대적으로 빠릅니다.</li>
+<li><strong>대조군 부재 및 인과관계의 불투명성:</strong> AI-native 기업들은 AI 외에도 소규모 조직, 빠른 의사결정 체계, 실험 자동화 등을 동시에 도입합니다. 따라서 '순수 AI 기여도'만을 분리하여 측정하는 것은 현재로선 불가능합니다.</li>
+<li><strong>AI 정의의 다양성:</strong> 생성형 화학, 페노믹스, 물리 기반 계산 등 기술적 메커니즘이 상이한 플랫폼들을 'AI'라는 단일 범주로 묶어 통계화하는 것은 분석의 정밀도를 떨어뜨립니다.</li>
+<li><strong>벤치마크 투명성:</strong> 비교군으로 사용된 맥킨지 내부 데이터의 원천이 불분명하여 외부 전문가의 독립적인 재현 및 오딧(Audit)이 제한적입니다.</li>
+</ol>
+<hr />
+<h4 id="5-임상적-임팩트-및-경제적-타당성-평가">5. 임상적 임팩트 및 경제적 타당성 평가</h4>
+<ul>
+<li><strong>임상 성공률의 '죽음의 계곡(Valley of Death)':</strong> AI 후보물질의 임상 1상 성공률(80~90%)은 고무적이나, 이는 기검증된 생물학에 기반했기 때문일 가능성이 큽니다. 임상 2상 성공률은 약 40%로 급락하며, 전체 산업 평균인 28.9%의 2상→3상 전환율을 혁신적으로 개선했다는 증거는 아직 성숙하지 않았습니다.</li>
+<li><strong>위험조정 비용(Risk-adjusted Cost) 분석:</strong> 초기 단계의 비용 절감이 전체 R&amp;D 생산성 혁명으로 이어지기 위해서는 후기 임상의 높은 실패율(Attrition)을 낮추는 '질적 개선'이 선행되어야 합니다. 단순히 빨리 실패하는 것은 e rNPV 개선에 큰 도움이 되지 않습니다.</li>
+<li><strong>규제 환경의 변화:</strong> 2026년 발표된 FDA/EMA의 <strong>'Good AI Practice'</strong> 원칙은 AI 활용 시 데이터 출처와 모델 검증을 엄격히 요구합니다. 규제기관은 기술의 혁신성보다 기존의 안전성/유효성 잣대를 우선시하고 있습니다.</li>
+</ul>
+<hr />
+<h4 id="6-최종-종합-결론-및-제언">6. 최종 종합 결론 및 제언</h4>
+<h5 id="6-1-현재의-증거-수준-요약">6.1. 현재의 증거 수준 요약</h5>
+<ol>
+<li><strong>발굴 속도 단축:</strong> <strong>강력한 증거 있음.</strong> AI가 후보물질 도출 기간을 1~2년 이내로 압축할 수 있다는 실증적 데이터는 충분합니다.</li>
+<li><strong>승인 확률 및 총비용 개선:</strong> <strong>증거 유보.</strong> EXS21546의 사례처럼 속도가 가치를 담보하지 못하며, 후기 임상 데이터가 누적될 향후 2~5년이 결정적 분수령이 될 것입니다.</li>
+</ol>
+<h5 id="6-2-향후-관전-포인트">6.2. 향후 관전 포인트</h5>
+<ol>
+<li><strong>Rentosertib의 임상 3상 최종 결과:</strong> AI가 발굴/설계한 물질의 최초 FDA 승인 여부.</li>
+<li><strong>임상 2상 통과율의 통계적 유의성:</strong> AI 네이티브 후보물질 코호트가 산업 평균 이상의 성공률을 유지하는지 추적.</li>
+<li><strong>신규 타깃(Novel Target)의 임상적 증명:</strong> 기검증 타깃이 아닌 AI 독자 발굴 타깃의 임상 효능 입증 여부.</li>
+</ol>
+<h5 id="6-3-사후-갱신-조건-및-명령문">6.3. 사후 갱신 조건 및 명령문</h5>
+<p>본 보고서의 유효성을 유지하기 위해 2026-09-23 이후의 데이터를 지속적으로 업데이트해야 합니다.</p>
+<blockquote>
+<p><strong>[딥리서치 핸드오프 명령문]</strong>
+&quot;2026-09-23 이후의 최신 데이터를 바탕으로 상기 9개 자산의 임상 상태를 업데이트하라. 특히 Rentosertib의 3상 진행 상황과 EXS21546 외 추가적인 중단 사례 발생 여부를 확인하라. AI-native 후보물질 코호트와 non-AI 대조군 간의 임상 2상 성공률(Success Rate) 및 중단 사유(Attrition Root Cause)를 비교 분석하고, AI 자체가 설명할 수 있는 부분과 자동화·조직 효율이 설명하는 부분을 분리하는 카운터팩추얼(Counterfactual) 분석을 수행하라.&quot;</p>
+</blockquote>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/ai-share/">AI 대화 공유</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

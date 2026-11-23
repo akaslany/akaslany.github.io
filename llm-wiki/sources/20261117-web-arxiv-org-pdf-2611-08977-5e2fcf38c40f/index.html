@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energy-Based Reasoners: Your Recurrent Reasoner Should Be an Energy-Based Model</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Energy-Based Reasoners: Your Recurrent Reasoner Should Be an Energy-Based Model</h1>
+<p class="page-meta">논문 · 2026-11-17</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 복잡한 알고리즘 추론(Algorithmic Reasoning) 태스크를 해결하기 위해 제안된 에너지 기반 이유기(Energy-Based Reasoners, EBRs) 연구 논문(arxiv.org/pdf/2611.08977)의 기술 아키텍처 및 실험 성과를 객관적으로 분석·구조화한 기술 해설서이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.08977">출처</a> · <a href="https://www.youtube.com/watch?v=FAsStTl4S5Y">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="기술-해설-보고서-에너지-기반-이유기-energy-based-reasoners-ebr-논문-분석-및-구조적-정리">[기술 해설 보고서] 에너지 기반 이유기(Energy-Based Reasoners, EBR) 논문 분석 및 구조적 정리</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>본 보고서는 복잡한 알고리즘 추론(Algorithmic Reasoning) 태스크를 해결하기 위해 제안된 에너지 기반 이유기(Energy-Based Reasoners, EBRs) 연구 논문(arxiv.org/pdf/2611.08977)의 기술 아키텍처 및 실험 성과를 객관적으로 분석·구조화한 기술 해설서이다. 기존의 순환 추론 모델(Hierarchical Reasoning Model, HRM 및 Tiny Recursive Model, TRM 등)은 잠재 공간(Latent space) 내에서 동일한 레이어 블록을 반복 적용하여 모델의 파라미터 수 증가 없이 연산 깊이(Effective depth)를 확장하는 방식을 채택하였다. 그러나 이러한 기존 모델들은 잠재 상태 내에서 추론의 진전(Progress)을 명시적으로 측정하고 안내할 수 있는 메커니즘이 부재하였다. 이에 따라 연산의 정지 시점 판단이나 추론 상태의 정밀화(Refinement)가 별도의 정지 헤드(Halt head)나 외부 검증기(Verifier)에 의존해야만 하는 구조적 한계를 지니고 있었다 (Abstract, Section 1).</p>
+<p>이를 해결하기 위해 제안된 EBRs는 잠재 추론 상태 $z$ 상에서 스칼라 에너지 함수 $E_\theta(z; x)$를 학습하고, 추론 과정을 해당 에너지 표면 상에서의 경사하강법(Gradient Descent)으로 정형화하였다. 학습된 에너지 함수는 잠재 상태의 품질을 평가하는 동시에, 에너지의 경사(Gradient) 신호를 통해 상태 정밀화의 방향을 직접 안내하고, 수렴 여부를 판단하는 정지 신호 역할을 하나의 통일된 목표(Unifying objective)로 수행한다. 또한 복수의 유효 해(Valid solutions)가 존재하는 문제 영역에서 모드 붕괴(Mode collapse)를 방지하고 해 공간 탐색 능력을 극대화하기 위해, persistent 에너지 하강 궤적 상에서 최적 해를 매칭하여 학습시키는 상태 기반 탐색적 모델링(State-Based Explorative Modeling, SXM) 기법을 새로 도입하였다 (Abstract, Section 1, Section 3.2).</p>
+<p>EBRs는 Sudoku-Extreme, Maze-Hard, N-Queens, Graph Coloring 등 4가지 주요 알고리즘 추론 벤치마크 평가에서 기존 순환 모델들을 우회하거나 크게 능가하는 성과를 달성하였다. 특히 Sudoku-Extreme 벤치마크에서 단 1.8M(180만) 개의 파라미터 소형 모델로 99.9%의 정확도를 기록하였으며, 차상위 성능 모델(EqR) 대비 345배 적은 추론 연산량(FLOPs)으로 우수한 정확도를 도출하였다. 아울러 다형적 해를 갖는 멀티 솔루션 벤치마크(N-Queens, Graph Coloring)에서도 단일 샘플 100%에 가까운 정확도와 더불어 고유한 유효 해 공간 커버리지(Coverage) 분야에서 SOTA(State-of-the-Art) 성능을 입증하였다 (Abstract, Section 1, Section 4).</p>
+<hr />
+<h5 id="2-정보-분류-프레임워크-사실-소스-주장-작성자-해석의-구분">2. 정보 분류 프레임워크: 사실, 소스 주장, 작성자 해석의 구분</h5>
+<p>보고서 내 기술 내용의 객관성과 검증 가능성을 담보하기 위해 본문 서술 시 다음과 같은 3가지 정보 유형 분류 체계를 적용한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">정보 유형</th>
+<th style="text-align:left">정의 및 판단 기준</th>
+<th style="text-align:left">본문 적용 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>사실 (Fact)</strong></td>
+<td style="text-align:left">소스 텍스트 내에서 실측·수치화되었거나 정량적 데이터로 제시된 명확한 실험 결과 및 수식 정의</td>
+<td style="text-align:left">벤치마크 정확도, FLOPs 연산량, 파라미터 수, 하이퍼파라미터 수치, 수식 정의 표기 시 사용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소스의 주장 (Source's Claim)</strong></td>
+<td style="text-align:left">연구진이 논문을 통해 제시하는 논리적 가설, 메커니즘 설계 의도, 우수성 주장 및 향후 발전 가능성 해석</td>
+<td style="text-align:left">에너지 기반 모델의 통합적 추론 기능, SXM의 모드 탐색 효과, 타 기법 대비 우수성 서술 시 사용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>작성자의 해석 (Author's Interpretation)</strong></td>
+<td style="text-align:left">소스 텍스트에 기반하되 본 기술 보고서 작성 과정에서 체계화한 구조적 요약, 정보 배치 및 카테고리화</td>
+<td style="text-align:left">본문 섹션 구성, 하이퍼파라미터 수평 비교 정리 및 한계점 항목 구획화 시 적용</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="3-주요-논점-및-기술-아키텍처-key-arguments-technical-architecture">3. 주요 논점 및 기술 아키텍처 (Key Arguments &amp; Technical Architecture)</h5>
+<h6 id="3-1-잠재-공간-상의-에너지-최소화-기반-순환-추론-energy-minimization-in-latent-space">3.1. 잠재 공간 상의 에너지 최소화 기반 순환 추론 (Energy Minimization in Latent Space)</h6>
+<ul>
+<li><strong>(1) 논점 개요:</strong> 기존 순환 모델의 고정된 상태 전이 함수 $z_{t+1} = f_\theta(z_t, x)$ 적용 방식에서 벗어나, 학습된 스칼라 에너지 함수 $E_\theta(z; x)$의 경사하강법을 통해 잠재 상태 $z$를 반복 정밀화하는 아키텍처를 도입함.</li>
+<li><strong>(2) 세부 근거:</strong>
+<ul>
+<li>기본 하강 수식은 $z_{t+1} = z_t - \alpha \nabla_z E_\theta(z_t; x)$ 형태를 취하며, 실제 구현에서는 노이즈 주입 및 잠재 상태의 단위 하이퍼스피어(Hypersphere) 다양체 $M$ 투영을 결합한 투영 랑주뱅 동역학(Projected Langevin Dynamics)을 적용함:
+$$\tilde{z} \leftarrow \text{RMS}(z) + \sigma \xi, \quad \xi \sim \mathcal{N}(0, I)$$
+$$z \leftarrow \Pi_M \left( \tilde{z} - \alpha \nabla_{\tilde{z}} E_\theta(\tilde{z}; x) \right)$$</li>
+<li><strong>RMS Normalization ($\Pi_M$)의 다양체 투영 의의:</strong> 토큰별 구면 투영(Unit RMS normalization)을 의미하는 $\Pi_M$을 매 스텝 적용함으로써, 반복적인 경사하강 과정에서 잠재 상태 $z$의 크기가 발산(Explosion)하는 것을 물리적으로 방지하고 궤적을 하이퍼스피어 다양체 $M$ 상에 바운딩시켜 심층 순환(Deep Recurrence) 및 수렴 안정성을 확보함 ($\nabla_M E_\theta$는 다양체 $M$에 접하는 경사).</li>
+<li><strong>스칼라 에너지 헤드 및 활성화 함수 직관:</strong> 스칼라 에너지 함수 $E_\theta(z; x)$는 토큰별 출력을 요약하는 경량 에너지 헤드로 구성됨:
+$$E_\theta(z; x) = \phi \left( \sum_{i=1}^N w^\top \text{SiLU}(W h_i + b) \right), \quad h = f_\theta(z + \text{emb}(x))$$</li>
+<li><strong>Softplus 활성화 함수($\phi$) 도입의 기술적 배경:</strong> Sudoku, N-Queens, Graph Coloring 등 정답 상태의 토큰 수가 고정된 태스크에서는 등가 함수(Identity)를 사용하나, Maze-Hard와 같이 경로 길이가 가변적인 태스크에서는 Identity 헤드 적용 시 특정 토큰의 에너지 기여도가 음수(Negative)가 되어 경로 토큰이 많아질수록 전체 에너지가 낮아지는 부작용(긴 우회 경로 선호 현상)이 발생함. 이를 방지하기 위해 Maze-Hard에서는 Softplus 함수를 적용하여 토큰 에너지를 항상 양수(Non-negative)로 제한함으로써, 경로 토큰 추가 시 에너지 증가 손실을 부여하고 불필요한 우회 경로(Detour)를 효과적으로 억제하여 최단 경로(Shortest Path)를 유도함.</li>
+</ul>
+</li>
+<li><strong>(3) 적용 사례 및 실험 결과:</strong> Figure 1에 제시된 바와 같이, 스도쿠 문제 해결 시 3개 상태의 하강 궤적을 지나는 평면 상에서 학습된 에너지 표면(Energy surface)이 고유 해 상태로 향할수록 매끄럽게 감소하는 형상을 보임(예: 3단계 미완성 $E=-129.2 \rightarrow 8$단계 $E=-245.0 \rightarrow 13$단계 완결 $E=-324.6$).</li>
+<li><strong>(4) 소스 내 참조 위치:</strong> Section 1, Section 3, Section A.1, Figure 1, Algorithm 1 &amp; 2.</li>
+</ul>
+<h6 id="3-2-적응형-정지-및-자체-검증-메커니즘-adaptive-halting-solution-selection">3.2. 적응형 정지 및 자체 검증 메커니즘 (Adaptive Halting &amp; Solution Selection)</h6>
+<ul>
+<li><strong>(1) 논점 개요:</strong> 별도의 정지 헤드(Halt head)나 외부 검증기(Verifier)를 추가하지 않고, 동역학 자체에서 도출되는 경사도 노름(Gradient norm)과 에너지 점수만으로 정지 시점 판단 및 최적 해 선택을 수행함.</li>
+<li><strong>(2) 세부 근거:</strong>
+<ul>
+<li><strong>수렴 손실($L_{\text{conv}}$):</strong> 세그먼트 마지막 $H$ 스텝 동안의 평균 상대 상태 변화량 $r_n = \frac{1}{H} \sum_{t=n-H+1}^n \frac{|z_t - z_{t-1}|}{|z_{t-1}|}$을 수렴 점수 $p_n = \sigma((\delta - r_n)/\kappa)$로 변환하고, 예측 정답 여부와 BCE loss로 정렬시킴:
+$$L_{\text{conv}}(Z, y) = \text{BCE}\left(p_n, \mathbf{1}[\hat{y}_\theta(z_n) = y]\right)$$</li>
+<li><strong>조기 정지(Early Stopping):</strong> 추론 시 다양체 접경사 노름 $|\nabla_M E_\theta(z; x)| &lt; \tau$ (또는 잔차 조건 $r_n &lt; \delta$) 충족 시 연산을 조기 종료함.</li>
+<li><strong>후보 선택:</strong> 독립적인 복수 궤적에서 생성된 후보 해 중 가장 낮은 에너지 $E_\theta(z; x)$ 값을 가지는 예측을 최종 선택함.</li>
+</ul>
+</li>
+<li><strong>(3) 적용 사례 및 실험 결과:</strong> Figure 6 실험 데이터에 따르면, 정답 궤적(Solved)은 하강 스텝 진행에 따라 에너지가 크게 감소하며 경사도 노름과 잔차($r_n$)가 0에 가깝게 수렴하는 반면, 오답 궤적(Wrong)은 높은 경사도 노름과 잔차를 유지함. Figure 7에 따르면 에너지 기반 해 선택 기법은 오라클(Oracle) 성능에 매우 근접함.</li>
+<li><strong>(4) 소스 내 참조 위치:</strong> Section 3.1, Section 3.3, Section 4.2, Figure 6, Figure 7, Table C.2.</li>
+</ul>
+<h6 id="3-3-상태-기반-탐색적-모델링-state-based-explorative-modeling-sxm">3.3. 상태 기반 탐색적 모델링 (State-Based Explorative Modeling, SXM)</h6>
+<ul>
+<li><strong>(1) 논점 개요:</strong> 단일 궤적 학습 시 발생할 수 있는 잠재 공간 미탐색 영역 및 다형적 해 공간에서의 모드 붕괴를 방지하기 위해 궤적 탐색 및 역전파 신호 매칭 기법인 SXM을 도입함.</li>
+<li><strong>(2) 세부 근거:</strong>
+<ul>
+<li>훈련 세그먼트당 $K$개의 병렬 경사하강 궤적을 유지하되, 세그먼트 종료 시 가장 우수한 궤적 1개만 역전파(Backpropagation) 신호를 전달함. 미선택 궤적도 삭제되지 않고 계속 유지되어 다음 세그먼트에서 선택 기회를 가짐.</li>
+<li><strong>Forward SXM (F-SXM):</strong> 목표 해 $y$에 대해 가장 예측 손실이 낮은 궤적 선택: $k_{F}^\star(y) = \arg\min_{1 \le k \le K} \ell_\theta(z_n^{(k)}, y)$.</li>
+<li><strong>Reverse SXM (R-SXM):</strong> 생성된 궤적에 대해 유효 해 집합 $Y(x)$ 중 가장 손실이 적은 해를 역으로 매칭: $y_{R}^\star(k) = \arg\min_{y' \in Y(x)} \ell_\theta(z_n^{(k)}, y')$.</li>
+<li><strong>R-SXM의 배치 내 해 재사용 억제(Non-reuse) 및 모드 붕괴 방지 메커니즘:</strong> 배치 내 여러 궤적이 단일 정답 해로 쏠려 모드 붕괴가 발생하는 것을 막기 위해, 이미 특정 궤적에 할당된 해는 75% 분량까지 타 궤적의 재사용을 금지하고 차선책(Closest remaining valid solution)에 강제 매칭시키는 비중복 할당 로직을 적용함.</li>
+</ul>
+</li>
+<li><strong>(3) 적용 사례 및 실험 결과:</strong> Table 4 아블레이션 실험(8x8 N-Queens 및 8-vertex Graph Coloring) 결과, 기본 EBR 모델에 F-SXM 추가 시 정확도 및 커버리지가 상승하며, R-SXM까지 결합했을 때 N-Queens 정확도 100%, Coverage 97.9%, Graph Coloring Conflict 0, Coverage 88.5%를 달성함.</li>
+<li><strong>(4) 소스 내 참조 위치:</strong> Section 3.2, Section A.4, Figure 2, Figure 3, Table 4, Table E.1.</li>
+</ul>
+<h6 id="3-4-추론-연산-효율성-및-테스트-타임-스케일링-compute-efficiency-test-time-scaling">3.4. 추론 연산 효율성 및 테스트 타임 스케일링 (Compute Efficiency &amp; Test-Time Scaling)</h6>
+<ul>
+<li><strong>(1) 논점 개요:</strong> 모델의 파라미터 수를 늘리지 않고 추론 단계의 반복 스텝(Iteration) 및 샘플(Sample) 수를 확장함으로써 성능을 비선형적으로 향상시키고 컴퓨팅 연산을 절감함.</li>
+<li><strong>(2) 세부 근거:</strong>
+<ul>
+<li>1.8M 파라미터의 EBR 모델이 5~10M 파라미터를 보유한 TRM, EqR, GRAM, Looped Flows 등을 능가함.</li>
+<li>경사 노름 임계값 $\tau=0.2$ 적용 시, 고정 반복 횟수(64 세그먼트) 대비 10.8배 적은 연산량(FLOPs)으로 동일 수준의 정확도(99.9%)를 유지함.</li>
+<li>동등 정확도 기준, 기존 FIXED-POINT attractors 모델인 EqR 대비 최대 345배 적은 FLOPs를 소모함.</li>
+</ul>
+</li>
+<li><strong>(3) 적용 사례 및 실험 결과:</strong> Figure 4a에서 반복 횟수 증가에 따른 정확도 향상 곡선을 보여주며, Figure 4b에서는 단 3개 샘플만으로 99.85% 정확도를 기록하여 128개 샘플을 요구하는 EqR(99.8%)을 능가함. Figure 5b 및 Table C.1 데이터는 연산량 대 정확도 간의 압도적 효율성을 입증함.</li>
+<li><strong>(4) 소스 내 참조 위치:</strong> Section 4.1, Figure 4, Figure 5, Table 1, Table C.1, Table C.2.</li>
+</ul>
+<hr />
+<h5 id="4-등장-인물-및-화자-정보-authors-roles-affiliations">4. 등장 인물 및 화자 정보 (Authors, Roles &amp; Affiliations)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구 분</th>
+<th style="text-align:left">성명 / 기관명 및 세부 내용</th>
+<th style="text-align:left">소스 내 확인 역할 및 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>제1저자</strong></td>
+<td style="text-align:left">William Xingxu Chen (Duke University)</td>
+<td style="text-align:left">주 연구 수행 및 논문 집필 (energy-based-reasoners.github.io)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공동 저자</strong></td>
+<td style="text-align:left">Alexi Gladstone (UIUC)</td>
+<td style="text-align:left">연구 수행 및 논문 집필</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공동 저자</strong></td>
+<td style="text-align:left">Zeyu Michael Li (Duke University)</td>
+<td style="text-align:left">연구 수행 및 논문 집필</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공동 저자</strong></td>
+<td style="text-align:left">Heng Ji (UIUC)</td>
+<td style="text-align:left">연구 수행 및 논문 집필</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공동 저자</strong></td>
+<td style="text-align:left">Yilun Du (Harvard University)</td>
+<td style="text-align:left">연구 수행 및 논문 집필</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기여/감사 인물</strong></td>
+<td style="text-align:left">Purvish Jajal</td>
+<td style="text-align:left">아이디어 제안 (XM 및 Reasoning models 관련 논의)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지원 프로그램</strong></td>
+<td style="text-align:left">NSF Graduate Research Fellowship (Grant No. DGE 21-46756)</td>
+<td style="text-align:left">Alexi Gladstone 연구 지원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>컴퓨팅 자원 제공</strong></td>
+<td style="text-align:left">Delta, DeltaAI (UIUC/NCSA, NSF award OAC 2320345/2005572 및 Illinois 주 지원)</td>
+<td style="text-align:left">고성능 컴퓨팅 및 데이터 자원 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>컴퓨팅 자원 제공</strong></td>
+<td style="text-align:left">Duke Compute Cluster (DCC, Duke Research Computing)</td>
+<td style="text-align:left">연구용 연산 자원 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저자별 세부 기여도</strong></td>
+<td style="text-align:left">저자별 상세 개별 작성 분량 및 세부 역할 분담</td>
+<td style="text-align:left">소스 상 공저 표기 외 저자별 개별 기여 지분 미기재 (<strong>확인 불가</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="5-정량적-수치-및-매개변수-정리-quantitative-figures-execution-parameters">5. 정량적 수치 및 매개변수 정리 (Quantitative Figures &amp; Execution Parameters)</h5>
+<h6 id="5-1-알고리즘-추론-벤치마크-성능-비교-performance-metrics">5.1. 알고리즘 추론 벤치마크 성능 비교 (Performance Metrics)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크 평가 항목</th>
+<th style="text-align:left">평가 지표</th>
+<th style="text-align:center">TRM</th>
+<th style="text-align:center">EqR</th>
+<th style="text-align:center">FPRM</th>
+<th style="text-align:center">GRAM</th>
+<th style="text-align:center">Looped Flows</th>
+<th style="text-align:center">EBR (Ours)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>모델 파라미터 수</strong></td>
+<td style="text-align:left"># Params</td>
+<td style="text-align:center">5–7M</td>
+<td style="text-align:center">5–7M</td>
+<td style="text-align:center">7M</td>
+<td style="text-align:center">10M</td>
+<td style="text-align:center">5–7M</td>
+<td style="text-align:center"><strong>1.8M / 7.1M</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sudoku-Extreme</strong></td>
+<td style="text-align:left">Single Sample Accuracy (%)</td>
+<td style="text-align:center">87.4</td>
+<td style="text-align:center">93.0</td>
+<td style="text-align:center">94.2</td>
+<td style="text-align:center">86.6±2.2</td>
+<td style="text-align:center">97.9±0.4</td>
+<td style="text-align:center"><strong>99.4±0.1</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Multi-Sample Accuracy (%)</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">99.8 (N=128)</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">96.1±0.9 (N=20)</td>
+<td style="text-align:center">99.3±0.2 (N=5)</td>
+<td style="text-align:center"><strong>99.9±0.1 (N=5)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Maze-Hard</strong></td>
+<td style="text-align:left">Single Sample Accuracy (%)</td>
+<td style="text-align:center">85.3</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">87.0</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">86.7±1.1</td>
+<td style="text-align:center"><strong>87.4±1.1</strong> *</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Multi-Sample Accuracy (%)</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">86.9±1.5 (N=5)</td>
+<td style="text-align:center"><strong>88.3±0.3 (N=5)</strong> †</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>N-Queens 8x8</strong></td>
+<td style="text-align:left">Single Sample Acc / Cov@20 (%)</td>
+<td style="text-align:center">78.7 / 26.7</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">99.5 / -</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>100±0 / -</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Multi-Sample Acc / Cov@20 (%)</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">100.0 / 89.7</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>100±0 / 98.1±0.2</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>N-Queens 10x10</strong></td>
+<td style="text-align:left">Single Sample Acc / Cov@20 (%)</td>
+<td style="text-align:center">37.8 / 4.7</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">89.7 / -</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>99.51±0.5 / -</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Multi-Sample Acc / Cov@20 (%)</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">100.0 / 57.5</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>99.99±0.01 / 92.0±0.9</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Graph Coloring 8-v</strong></td>
+<td style="text-align:left">Single Sample Conflict / Cov@20</td>
+<td style="text-align:center">109.7 / 21.8</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">8.3 / -</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>0±0 / -</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Multi-Sample Conflict / Cov@20</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">2.7 / 85.8</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>0±0 / 88.6±0.1</strong> ‡</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Graph Coloring 10-v</strong></td>
+<td style="text-align:left">Single Sample Conflict / Cov@20</td>
+<td style="text-align:center">164.3 / 8.9</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">31.3 / -</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>0±0 / -</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Multi-Sample Conflict / Cov@20</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">3.3 / 51.3</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>0±0 / 54.5±0.5</strong> ‡</td>
+</tr>
+</tbody>
+</table>
+<p>* <strong>Maze-Hard 평가 지표 보충 (Exact Match vs. Any-Shortest-Path):</strong> 표의 Maze-Hard 정확도(Single 87.4%, Multi 88.3%)는 단일 라벨링 최단 경로와의 정확한 일치(Exact Match) 기준이다. 라벨링 경로와 일치하지 않더라도 모든 유효한 최단 경로를 정답으로 인정하는 Any-Shortest-Path 지표 적용 시 EBR의 정확도는 **Single 94.07±0.91%, Multi(Pass@5) 94.77±0.59%**에 달한다 (Section D, Table D.1).<br />
+‡ <strong>Graph Coloring Cov@20 지표 분모 캡핑(Capping) 규격:</strong> 표의 수치는 기존 GRAM 코드가 8-vertex 및 10-vertex Graph Coloring에 분모 캡핑을 적용하지 않은 수식에 맞춘 비교치이다(이로 인해 기존 GRAM 수식은 8-vertex 최대 이론 커버리지가 99.6%로 제한되는 오류가 있음). EBR이 제안한 규격화된 분모 캡핑(Cov@20 수식 9)을 적용할 경우 EBR의 커버리지는 **8-vertex 89.0±0.1%, 10-vertex 85.3±0.8%**이다 (Section C).</p>
+<h6 id="5-2-태스크별-하이퍼파라미터-및-아키텍처-설정-task-specific-settings">5.2. 태스크별 하이퍼파라미터 및 아키텍처 설정 (Task-Specific Settings)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">설정 항목</th>
+<th style="text-align:center">Sudoku-Extreme</th>
+<th style="text-align:center">Maze-Hard</th>
+<th style="text-align:center">N-Queens (8x8)</th>
+<th style="text-align:center">N-Queens (10x10)</th>
+<th style="text-align:center">Graph Coloring (8-v)</th>
+<th style="text-align:center">Graph Coloring (10-v)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Hidden Size ($d$)</strong></td>
+<td style="text-align:center">256</td>
+<td style="text-align:center">256</td>
+<td style="text-align:center">512</td>
+<td style="text-align:center">512</td>
+<td style="text-align:center">512</td>
+<td style="text-align:center">512</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Total Parameters</strong></td>
+<td style="text-align:center">1.8M</td>
+<td style="text-align:center">1.8M</td>
+<td style="text-align:center">7.1M</td>
+<td style="text-align:center">7.1M</td>
+<td style="text-align:center">7.1M</td>
+<td style="text-align:center">7.1M</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Energy Head ($\phi$)</strong></td>
+<td style="text-align:center">linear</td>
+<td style="text-align:center">softplus</td>
+<td style="text-align:center">linear</td>
+<td style="text-align:center">linear</td>
+<td style="text-align:center">linear</td>
+<td style="text-align:center">linear</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Noise Scale ($\sigma$)</strong></td>
+<td style="text-align:center">0.4 $\rightarrow$ 0.05</td>
+<td style="text-align:center">0.4</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">0.3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Train Segments ($S$)</strong></td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Eval Segments</strong></td>
+<td style="text-align:center">64</td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>F-SXM Candidates ($K$)</strong></td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Reverse SXM 적용</strong></td>
+<td style="text-align:center">미적용(–)</td>
+<td style="text-align:center">미적용(–)</td>
+<td style="text-align:center">적용(✓)</td>
+<td style="text-align:center">적용(✓)</td>
+<td style="text-align:center">적용(✓)</td>
+<td style="text-align:center">적용(✓)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Noisy Solution Init</strong></td>
+<td style="text-align:center">미적용(–)</td>
+<td style="text-align:center">미적용(–)</td>
+<td style="text-align:center">적용(✓)</td>
+<td style="text-align:center">적용(✓)</td>
+<td style="text-align:center">적용(✓)</td>
+<td style="text-align:center">적용(✓)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Loss Weight ($\lambda$)</strong></td>
+<td style="text-align:center">0.75</td>
+<td style="text-align:center">0.5</td>
+<td style="text-align:center">0.25</td>
+<td style="text-align:center">0.5</td>
+<td style="text-align:center">0.25</td>
+<td style="text-align:center">0.25</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Halting Threshold ($\delta$)</strong></td>
+<td style="text-align:center">0.25</td>
+<td style="text-align:center">0.75</td>
+<td style="text-align:center">0.25</td>
+<td style="text-align:center">0.25</td>
+<td style="text-align:center">0.25</td>
+<td style="text-align:center">0.25</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Batch Size</strong></td>
+<td style="text-align:center">768</td>
+<td style="text-align:center">64</td>
+<td style="text-align:center">768</td>
+<td style="text-align:center">768</td>
+<td style="text-align:center">768</td>
+<td style="text-align:center">768</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Training Steps</strong></td>
+<td style="text-align:center">60,000</td>
+<td style="text-align:center">50,000</td>
+<td style="text-align:center">30,000</td>
+<td style="text-align:center">45,000</td>
+<td style="text-align:center">70,000</td>
+<td style="text-align:center">70,000</td>
+</tr>
+</tbody>
+</table>
+<h6 id="5-3-훈련-연산량-및-하드웨어-소요-시간-training-compute-wall-time">5.3. 훈련 연산량 및 하드웨어 소요 시간 (Training Compute &amp; Wall Time)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">태스크 구분</th>
+<th style="text-align:center">사용 하드웨어</th>
+<th style="text-align:center">총 훈련 스텝</th>
+<th style="text-align:center">소요 시간 (Wall Time)</th>
+<th style="text-align:center">총 연산량 (EFLOPs)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Sudoku-Extreme</strong></td>
+<td style="text-align:center">NVIDIA H200 (1장)</td>
+<td style="text-align:center">60,000 steps</td>
+<td style="text-align:center">3 Hours</td>
+<td style="text-align:center">1.92 EFLOPs</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Maze-Hard</strong></td>
+<td style="text-align:center">NVIDIA H200 (1장)</td>
+<td style="text-align:center">50,000 steps</td>
+<td style="text-align:center">3 Hours</td>
+<td style="text-align:center">1.16 EFLOPs</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>N-Queens (8x8)</strong></td>
+<td style="text-align:center">NVIDIA H200 (1장)</td>
+<td style="text-align:center">30,000 steps</td>
+<td style="text-align:center">4 Hours</td>
+<td style="text-align:center">2.45 EFLOPs</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>N-Queens (10x10)</strong></td>
+<td style="text-align:center">NVIDIA H200 (1장)</td>
+<td style="text-align:center">45,000 steps</td>
+<td style="text-align:center">8 Hours</td>
+<td style="text-align:center">5.82 EFLOPs</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Graph Coloring (8-v)</strong></td>
+<td style="text-align:center">NVIDIA H200 (1장)</td>
+<td style="text-align:center">70,000 steps</td>
+<td style="text-align:center">5 Hours</td>
+<td style="text-align:center">2.46 EFLOPs</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Graph Coloring (10-v)</strong></td>
+<td style="text-align:center">NVIDIA H200 (1장)</td>
+<td style="text-align:center">70,000 steps</td>
+<td style="text-align:center">8 Hours</td>
+<td style="text-align:center">3.98 EFLOPs</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="6-한계점-및-불확실성-limitations-uncertainties">6. 한계점 및 불확실성 (Limitations &amp; Uncertainties)</h5>
+<p>소스 텍스트의 <strong>Section 5 (Limitations and Future Work)</strong> 및 실험 분석 내용에 직접 언급된 주요 한계점 및 미확인 요소는 다음과 같다.</p>
+<ol>
+<li><strong>2차 미분 계산 오버헤드 (Computational Overhead of Second-Order Derivatives):</strong>
+<ul>
+<li>에너지 경사하강 궤적을 미분하여 모델을 훈련하기 위해서는 2차 미분(Second-order gradients) 계산이 필수적이므로 단일 갱신 스텝당 연산 비용이 높음. 또한 SXM 도입 시 $K$개 후보 궤적을 사전 계산해야 하므로 훈련 FLOPs가 크게 증가함 (Section 5, Section B).</li>
+</ul>
+</li>
+<li><strong>하이퍼파라미터 복잡성 (Hyperparameter Complexity):</strong>
+<ul>
+<li>하강 스텝 크기($\alpha$), 노이즈 스케일($\sigma$), 경사하강 스텝 수($n$), 손실 가중치($\lambda$) 등 제어해야 할 하이퍼파라미터 종류가 많고 튜닝 구조가 복잡함 (Section 5, Table A.2).</li>
+</ul>
+</li>
+<li><strong>학습 데이터 규모에 대한 의존성 (Data Scale Dependency in SXM):</strong>
+<ul>
+<li>데이터 증강이 없는 소규모 데이터셋 환경(예: Maze-Hard의 1,000개 미증강 데이터)에서는 SXM의 탐색 효과가 제한되어 $K=1$로 훈련되었으며 성능 향상 폭이 작았음 (Section 5, Section D).</li>
+</ul>
+</li>
+<li><strong>일반 자연어 추론으로의 확장성 미검증 (Generalization Beyond Structured Tasks):</strong>
+<ul>
+<li>본 연구의 실험 범위는 정형화된 알고리즘 추론 문제(Sudoku, Maze, N-Queens, Graph Coloring)로 한정되었으며, 대규모 언어 모델(LLM) 기반 자연어 추론이나 범용 세계 모델(World models) 계획 문제로의 확장 가능성은 검증되지 않은 향후 연구 과제임 (Section 5).</li>
+</ul>
+</li>
+<li><strong>소스 텍스트 내 미확인 요소 (Unverifiable Elements):</strong>
+<ul>
+<li><em>저작권 및 코드 라이선스 세부 조건:</em> 소스 텍스트 내에 구체적인 오픈소스 라이선스 항목이 표기되어 있지 않음 (<strong>확인 불가 / 소스 미다룸</strong>).</li>
+<li><em>연구진 개별 작성 분량 및 역할 분담:</em> 논문 내 저자 순서 및 소속 기관 표기 외 저자별 개별 기여 지분은 서술되어 있지 않음 (<strong>확인 불가 / 소스 미다룸</strong>).</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

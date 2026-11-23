@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[보고서] 자율 연구 에이전트의 아이디어 분지 탈출을 위한 &#x27;포크 앤 플러시(Fork-and-Flush)&#x27; 기법 해설 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>[보고서] 자율 연구 에이전트의 아이디어 분지 탈출을 위한 &#x27;포크 앤 플러시(Fork-and-Flush)&#x27; 기법 해설 보고서</h1>
+<p class="page-meta">논문 · 2026-10-14</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 대형 언어 모델(LLM) 기반의 자율 연구 에이전트(Autoresearch Agents)가 장기 실행(Long-horizon) 환경에서 겪는 정체 현상을 분석하고, 이를 극복하기 위해 제안된 주기적 개입 기법인 '포크 앤 플러시(Fork-and-Flush)' 알고리즘의 핵심 메커니즘과 성과를 상세히 서술한…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.07447">출처</a> · <a href="https://www.youtube.com/watch?v=eVEkVFjGRvY">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-자율-연구-에이전트의-아이디어-분지-탈출을-위한-포크-앤-플러시-fork-and-flush-기법-해설-보고서">[보고서] 자율 연구 에이전트의 아이디어 분지 탈출을 위한 '포크 앤 플러시(Fork-and-Flush)' 기법 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 대형 언어 모델(LLM) 기반의 자율 연구 에이전트(Autoresearch Agents)가 장기 실행(Long-horizon) 환경에서 겪는 정체 현상을 분석하고, 이를 극복하기 위해 제안된 주기적 개입 기법인 <strong>'포크 앤 플러시(Fork-and-Flush)'</strong> 알고리즘의 핵심 메커니즘과 성과를 상세히 서술한 정보 분석 보고서입니다.</p>
+<p><code>[사실 (Fact)]</code> LLM 기반 자율 연구 에이전트는 공개형(Open-ended) 연구 및 공학 문제에서 해법 제안, 코드 작성 및 수정, 환경 내 실행, 피드백 수집 및 제출의 순환 과정을 반복하며 솔루션을 지속적으로 탐색합니다. 그러나 수 시간에서 수 일에 걸쳐 수행되는 장기 탐색 과정에서, 동일한 초기 상태와 베이스 모델 조건으로 시작된 독립적 에이전트 실행들이 서로 현저히 다른 성과 점수 수준에서 정체(Plateau)를 겪고, 상당한 추가 계산 예산이 투입된 후에도 이러한 점수 격차가 해소되지 않는 지속적 성과 편차 현상이 관찰되었습니다.</p>
+<p><code>[주장 (Claim)]</code> 논문의 저자들은 연구 에이전트가 제출한 코드 아티팩트(Artifacts)를 기능적 명세(Functional Specification)로 변환한 뒤, 기능적 유사성(Functional Similarity)을 기준으로 2차원 공간에 임베딩하는 저차원 매핑 기법을 개발하였습니다. 이를 통해 단일 실행 에이전트들이 해공간 전체를 넓게 탐색하는 대신 초기 추론 과정에서 선택한 특정 국소 영역에 고착되어 미세한 수정만 반복한다는 점을 규명하였으며, 저자들은 이 국소 수렴 영역을 **'아이디어 분지(Idea Basins)'**라고 정의하였습니다. 특히 저자들은 기존 에이전트 시스템에서 활용되는 주기적 대화 이력 요약/압축(Compaction) 기법은 이전 대화 이력의 핵심 추론 경로와 초기 집착(Tunnel Vision)을 여전히 요약 형태로 내재하고 있어, 대화 문맥에 얽매인 아이디어 분지 고착 현상을 본질적으로 해결하지 못한다고 주장합니다.</p>
+<p><code>[주장 (Claim)]</code> 저자들은 아이디어 분지를 구조적으로 탈출하고 탐색의 다변화를 유도하기 위해 <strong>'포크 앤 플러시(Fork-and-Flush)'</strong> 기법을 제안합니다. 이 기법은 에이전트가 축적한 작업 공간(Workspace $W$, 코드/데이터/중간 결과물)은 100% 보존한 채, 에이전트의 대화 문맥(Chat Context $C$)을 완전히 초기화($(W, C) \to (W, \emptyset)$)하여 여러 개의 병렬 탐색 경로(Branches)를 분기(Forking)시키는 방식으로 작동합니다. 대화 이력이 지워진 에이전트는 작업 공간의 파일 아티팩트만을 바탕으로 자신의 의도를 재도출해야 하므로 이전 추론 편향에서 벗어나 해공간의 새로운 영역으로 비약적 이동(Jump)을 수행할 수 있습니다. 일정 탐색 예산 소비 후 가장 높은 성과 점수를 기록한 리더(Leader) 경로만 채택하고 나머지는 폐기함으로써 탐색과 활용(Exploration and Exploitation)의 정밀한 균형을 달성합니다.</p>
+<p><code>[사실 (Fact)]</code> 13개 장기 연구 및 공학 과제(알고리즘 최적화, 암호해독, 과학적 추론, 커널 최적화, 모델 압축 등)에 걸친 평가 결과, 포크 앤 플러시 기법은 동일한 계산 예산(Compute Budget) 조건하에서 단일 실행(Single-run) 베이스라인 및 Best-of-N(N=4) 베이스라인 대비 정규화 평균 점수 기준으로 각각 <strong>66.0%</strong> 및 **44.4%**의 상대적 성능 향상을 달성하였습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-structural-analysis">2. 주요 논점 (Key Arguments &amp; Structural Analysis)</h4>
+<h5 id="2-1-논점-1-장기-자율-연구-에이전트의-지속적-성과-편차-및-아이디어-분지-idea-basins-수렴">2.1. 논점 1: 장기 자율 연구 에이전트의 지속적 성과 편차 및 '아이디어 분지(Idea Basins)' 수렴</h5>
+<ul>
+<li><strong>논문 내 위치:</strong> 서론(1장), 3장, 부록 C, 부록 E, 부록 F (Figure 1, Figure 5)</li>
+<li><strong>근거 및 내용:</strong>
+<ul>
+<li><code>[사실 (Fact)]</code> 동일한 초기 상태 $s_0 = (\emptyset, \emptyset)$와 동일한 에이전트 인프라(GitHub Copilot CLI v1.0.73), 동일한 베이스 모델(11개 과제 대상 GPT-5.6-terra, 2개 대형 과제 대상 GPT-5.5)을 사용하더라도 독립적인 실행 경로들은 서로 완전히 다른 점수 대역에서 정체되는 성과 편차(Outcome Variance)를 나타냅니다.</li>
+<li><code>[사실 (Fact)]</code> 일례로 <code>p171</code> 과제에서 8개 독립 실행의 최종 점수는 최소 68.3에서 최고 100.0까지 넓게 분포(중앙값 81.9)하였으며, 계산 예산을 수배 이상 추가 투입하더라도 초기 정체 격차가 줄어들지 않았습니다.</li>
+<li><code>[주장 (Claim)]</code> 저자들은 제출된 코드의 구문적(Syntactic) 유사성이나 스타일 편향을 배제하기 위해, 코드 아티팩트를 표준화된 11개 섹션의 기능적 명세(Functional Specification)로 변환한 후 LLM 판정을 기반으로 t-STE(t-Distributed Stochastic Triplet Embedding) 및 SOE(Soft Ordinal Embedding) 알고리즘을 통해 2차원 해공간 지도(Idea-space Map)를 구축하였습니다. 그 결과 에이전트 제출물들이 국소적 영역('아이디어 분지') 내에 군집화되어 고착되는 현상을 시각적·기하학적으로 입증하였습니다.</li>
+<li><code>[주장 (Claim)]</code> 대화 이력을 주기적으로 줄여주는 컨텍스트 요약/압축(Compaction) 방식은 대화 이력에 내재된 초기 선택 편향을 완전히 끊어내지 못하므로 에이전트가 동일한 아이디어 분지 내에서 국소적 미세 조정(Local Refinement)만을 반복하게 만듭니다.</li>
+<li><code>[작성자 해석 (Interpretation)]</code> 이는 자율 연구 에이전트의 장기 정체 현상이 단지 모델의 절대적 지능 부족이나 계산량 결여 때문이 아니라, 대화 문맥 이력으로 인해 이전 추론 경로에 고착되는 구조적 '터널 비전(Tunnel Vision)'에 기인함을 명확히 보여줍니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="주요-과제별-단일-실행-single-run-베이스라인-성과-편차-요약표">주요 과제별 단일 실행(Single-run) 베이스라인 성과 편차 요약표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">과제명 (Task)</th>
+<th style="text-align:center">단일 실행 최고 점수 (Max)</th>
+<th style="text-align:center">단일 실행 평균 점수 (Mean)</th>
+<th style="text-align:center">중앙값 (Median)</th>
+<th style="text-align:center">최종 점수 분포 범위</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>p171</strong></td>
+<td style="text-align:center">100.20</td>
+<td style="text-align:center">84.26</td>
+<td style="text-align:center">81.90</td>
+<td style="text-align:center">68.3 ~ 100.0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>polyomino</strong></td>
+<td style="text-align:center">94.31</td>
+<td style="text-align:center">88.56</td>
+<td style="text-align:center">84.60</td>
+<td style="text-align:center">82.2 ~ 94.9</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>p150</strong></td>
+<td style="text-align:center">130.80</td>
+<td style="text-align:center">123.47</td>
+<td style="text-align:center">119.00</td>
+<td style="text-align:center">109.1 ~ 137.1</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AHC014</strong></td>
+<td style="text-align:center">39.35</td>
+<td style="text-align:center">23.71</td>
+<td style="text-align:center">14.30</td>
+<td style="text-align:center">7.8 ~ 59.8</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>job-shop</strong></td>
+<td style="text-align:center">10.36</td>
+<td style="text-align:center">9.66</td>
+<td style="text-align:center">9.40</td>
+<td style="text-align:center">7.2 ~ 10.8</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-2-논점-2-포크-앤-플러시-fork-and-flush-알고리즘의-메커니즘-및-탐색-기하학">2.2. 논점 2: 포크 앤 플러시(Fork-and-Flush) 알고리즘의 메커니즘 및 탐색 기하학</h5>
+<ul>
+<li><strong>논문 내 위치:</strong> 4장, 6.1장, 부록 D, 부록 E, 부록 I.1 (Figure 2, Figure 3, Figure 6)</li>
+<li><strong>근거 및 내용:</strong>
+<ul>
+<li><code>[사실 (Fact)]</code> 포크 앤 플러시 알고리즘은 다음과 같은 고정 스케줄 체계와 두 가지 핵심 연산으로 작동합니다:
+<ol>
+<li><strong>시작 라운드 (Opening Round):</strong> 빈 작업 공간 $\emptyset$에서 $K=4$개의 독립 에이전트를 동시에 출격시켜 초기 탐색 예산 $b_{\text{explore}}$를 부여한 후, 가장 높은 점수를 획득한 에이전트를 초기 리더(Trunk)로 선발합니다.</li>
+<li><strong>주기적 포크 앤 플러시 라운드:</strong> 전체 계산 예산 $B$의 33% 및 66% 시점에 고정적으로 개입을 실행합니다.</li>
+<li><strong>포크(Forking):</strong> 현시점 리더의 작업 공간(코드 및 결과물 $W$)을 그대로 복사하여 $K=4$개의 병렬 탐색 경로($\ell_1, \dots, \ell_K$)를 생성하고 각각에 탐색 예산 $b_{\text{explore}}$(전체 예산의 약 6%)를 할당합니다.</li>
+<li><strong>플러시(Flushing):</strong> 분기되는 각 경로의 누적 대화 문맥 $C$를 완전히 비워 초기화($(W, C) \to (W, \emptyset)$)합니다.</li>
+<li><strong>리더 채택 및 가지치기:</strong> 각 라운드 종료 시 가장 높은 점수 $J(\ell_k)$를 달성한 리더 경로만 채택하여 연속 실행을 이어가고, 탈락한 $K-1$개 경로는 폐기합니다.</li>
+</ol>
+</li>
+<li><code>[사실 (Fact)]</code> <strong>지시문 프롬프트(Branch Directive) 영향 분석:</strong> 포크 라운드 시 $K=4$개 가지 중 2개 가지에 &quot;기존과 완전히 다른 접근 방식을 채택하라&quot;는 명시적 지시문 프롬프트를 부여하는 실험을 진행한 결과, 지시문이 부여된 가지가 승리한 비율은 46%로 통계적 무작위 기대값(50%)과 유의미한 차이가 없었습니다 (이항 검정 $p=0.26$). 이는 탐색 다변화를 이끄는 동력이 프롬프트의 지시 문구가 아니라 <strong>대화 문맥의 구조적 플러시(Flush) 그 자체</strong>임을 증명합니다.</li>
+<li><code>[사실 (Fact)]</code> <strong>아이디어 공간 상의 비약적 이동(Jump) 정량화:</strong> <code>polyomino</code> 과제 기하학 분석 결과, 단일 실행 에이전트는 예산의 첫 25% 경과 후 제출물 간 이동 거리가 평균 단일 실행 스텝(Median Single-run Step) 대비 <strong>4.4 단위</strong>(SOE 기준 <strong>4.1 단위</strong>)를 절대 초과하지 못하고 국소 분지에 갇혔습니다. 반면 71% 예산 시점에서 플러시를 적용받은 포크 앤 플러시의 승리 경로($b_3$)는 플러시 직후 첫 제출에서 t-STE 기준 <strong>43 단위</strong>(SOE 기준 <strong>10.1 단위</strong>)에 달하는 대규모 비약적 이동(Jump)을 기록하였습니다. 이는 단일 실행 최고 이동 거리의 2배~10배, 중앙값 스텝 대비 10배 이상에 해당하는 수치이며, 동시 분기된 탈락 가지 3개는 모두 $\le 1$ 단위 이동에 그쳐 분지 지점에 갇혀 있었음이 확인되었습니다.</li>
+<li><code>[주장 (Claim)]</code> 작업 공간 $W$를 보존함으로써 축적된 유용한 연구 자산을 활용(Exploitation)하는 동시에, 대화 문맥 $C$를 비움으로써 이전 추론 편향에서 벗어나 해공간의 새로운 분지로 뛰어드는 광범위 탐색(Exploration)을 가능하게 합니다.</li>
+<li><code>[작성자 해석 (Interpretation)]</code> 이는 코드 및 파일 아티팩트를 매개체로 삼아 대화 이력의 인공적 제약을 제거함으로써, 테스트 시간 계산량 확충(Test-Time Compute Scaling)을 고차원 연구 공간으로 성공적으로 확장한 구조적 프레임워크입니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-논점-3-13개-연구-및-공학-과제-성능-평가-및-소거-연구-ablations">2.3. 논점 3: 13개 연구 및 공학 과제 성능 평가 및 소거 연구(Ablations)</h5>
+<ul>
+<li><strong>논문 내 위치:</strong> 5장, 6.1장, 부록 A (Table 1, Table 2, Table 3)</li>
+<li><strong>근거 및 내용:</strong>
+<ul>
+<li><code>[사실 (Fact)]</code> Frontier-CS, EdgeBench, VLIW 커널 최적화(<code>kernel</code>), 모델 압축(<code>tinyCIFAR</code>) 등 총 13개 고난도 장기 과제에서 동일한 계산 예산 $B$ 조건하에 평가가 진행되었습니다.</li>
+<li><code>[사실 (Fact)]</code> 13개 과제 정규화 평균 점수 평가 결과:
+<ul>
+<li><strong>Single-run (단일 실행):</strong> 0.47 (11개 주요 과제 평균 0.45)</li>
+<li><strong>Best-of-4 (병렬 실행 후 최고값 선택):</strong> 0.54</li>
+<li><strong>Fork-and-Flush (제안 기법):</strong> 0.78 (11개 주요 과제 평균 0.71)</li>
+<li>상대적 성능 향상: Single-run 대비 <strong>+66.0%</strong>, Best-of-4 대비 <strong>+44.4%</strong> 향상 달성.</li>
+</ul>
+</li>
+<li><code>[주장 (Claim)]</code> 11개 과제 대상 소거 연구(Ablation Study) 결과, 플러시만 단독 수행(Flush-only: 0.55)하거나 포크만 단독 수행(Fork-only: 0.57)했을 때보다 두 기법을 완전히 결합(Fork-and-Flush: 0.71)했을 때 단순 합산을 뛰어넘는 <strong>비선형적 상호작용 시너지 Effect</strong>가 발생함이 증명되었습니다.</li>
+<li><code>[사실 (Fact)]</code> 정규화 표준편차가 Single-run(0.26) 및 Best-of-4(0.21) 대비 Fork-and-Flush(0.16)에서 현저히 감소하여, 13개 중 10개 과제에서 실행 간 결과의 재현성과 안정성이 크게 향상되었습니다.</li>
+<li><code>[작성자 해석 (Interpretation)]</code> 이는 포크 앤 플러시가 단순히 운에 의존한 무작위 탐색이 아니라, 테스트 시간 계산량을 효율적으로 배분하여 최적의 해를 안정적으로 탐색해 내는 고도의 계산 효율적 프레임워크임을 의미합니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="11개-주요-과제-대상-소거-연구-ablation-결과-비교표">11개 주요 과제 대상 소거 연구(Ablation) 결과 비교표</h6>
+<p><em>(참고: 아래 점수는 각 과제 고유의 평가 지표 단위이며, 맨 아래 두 행은 0~1 min-max 정규화 평균값임)</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">과제명 (Task)</th>
+<th style="text-align:center">단일 실행 (Single-run)</th>
+<th style="text-align:center">플러시만 수행 (Flush-only)</th>
+<th style="text-align:center">포크만 수행 (Fork-only)</th>
+<th style="text-align:center">포크 앤 플러시 (Fork-and-Flush)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>polyomino</strong></td>
+<td style="text-align:center">88.56</td>
+<td style="text-align:center">85.91</td>
+<td style="text-align:center">90.74</td>
+<td style="text-align:center"><strong>94.41</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>job-shop</strong></td>
+<td style="text-align:center">9.66</td>
+<td style="text-align:center">10.00</td>
+<td style="text-align:center"><strong>10.43</strong></td>
+<td style="text-align:center">10.33</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AHC014</strong></td>
+<td style="text-align:center">23.71</td>
+<td style="text-align:center">23.04</td>
+<td style="text-align:center">24.59</td>
+<td style="text-align:center"><strong>57.46</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>p150</strong></td>
+<td style="text-align:center">123.47</td>
+<td style="text-align:center"><strong>160.80</strong></td>
+<td style="text-align:center">128.57</td>
+<td style="text-align:center">129.74</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>p171</strong></td>
+<td style="text-align:center">84.26</td>
+<td style="text-align:center">79.73</td>
+<td style="text-align:center">86.68</td>
+<td style="text-align:center"><strong>92.79</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>sphere-pack</strong></td>
+<td style="text-align:center">43.87</td>
+<td style="text-align:center">43.74</td>
+<td style="text-align:center">44.36</td>
+<td style="text-align:center"><strong>44.94</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>relay-lay</strong></td>
+<td style="text-align:center">72.61</td>
+<td style="text-align:center">72.80</td>
+<td style="text-align:center">72.79</td>
+<td style="text-align:center"><strong>72.81</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LWE-rec</strong></td>
+<td style="text-align:center"><strong>155.30</strong></td>
+<td style="text-align:center">148.40</td>
+<td style="text-align:center">147.00</td>
+<td style="text-align:center">144.60</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LLM-SQL</strong></td>
+<td style="text-align:center">26.90</td>
+<td style="text-align:center">27.01</td>
+<td style="text-align:center">26.93</td>
+<td style="text-align:center"><strong>27.04</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>order-add</strong></td>
+<td style="text-align:center">24.60</td>
+<td style="text-align:center">40.73</td>
+<td style="text-align:center">30.09</td>
+<td style="text-align:center"><strong>49.52</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Borden-inv</strong></td>
+<td style="text-align:center">59.92</td>
+<td style="text-align:center">65.85</td>
+<td style="text-align:center">78.02</td>
+<td style="text-align:center"><strong>80.24</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>초기 5개 과제 정규화 평균</strong></td>
+<td style="text-align:center">0.37</td>
+<td style="text-align:center">0.41</td>
+<td style="text-align:center">0.47</td>
+<td style="text-align:center"><strong>0.63</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전체 11개 과제 정규화 평균</strong></td>
+<td style="text-align:center">0.45</td>
+<td style="text-align:center">0.55</td>
+<td style="text-align:center">0.57</td>
+<td style="text-align:center"><strong>0.71</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-4-논점-4-성과-편차-발생-원인-분석-능력-한계선과-max-3-sat-실험">2.4. 논점 4: 성과 편차 발생 원인 분석 (능력 한계선과 MAX-3-SAT 실험)</h5>
+<ul>
+<li><strong>논문 내 위치:</strong> 6.2장 (Figure 4)</li>
+<li><strong>근거 및 내용:</strong>
+<ul>
+<li><code>[주장 (Claim)]</code> 저자들은 자율 연구 에이전트의 실행 간 성과 편차(Variance)가 과제의 절대적 난이도가 아니라 <strong>에이전트의 능력 한계선(Capability Frontier)</strong> 상에 위치할 때 극대화된다는 가설을 제시하였습니다.</li>
+<li><code>[사실 (Fact)]</code> 가설 검증을 위해 난이도를 변수 개수 $V \in [10, 100000]$로 정밀하게 조절할 수 있는 무작위 3-CNF 논리식 기반 MAX-3-SAT 문제를 활용하여 오픈소스 LLM(Qwen3.5-4B, 9B, 27B) 모델을 대상으로 정밀 통계 실험을 수행하였습니다.</li>
+<li><code>[사실 (Fact)]</code> 달성도 $h = (u_{\text{random}} - u_{\text{agent}}) / (u_{\text{random}} - u_{\text{ref}})$ 지표를 통해 무작위 추측($h=0$)부터 최고 성능 참고 솔버 WalkSAT($h=1$)까지 정규화된 달성도 $a$를 측정하였습니다. 그 결과 문제 난이도가 너무 쉬워 모든 실행이 해를 찾거나($a \approx 1$), 반대로 극도로 어려워 전혀 진전이 없는 경우($a \approx 0$) 실행 간 성과 편차가 0으로 수렴하였습니다.</li>
+<li><code>[사실 (Fact)]</code> 반면 에이전트 능력의 최전선에 해당하는 중간 난이도 지점($a \approx 0.497$, 약 50% 달성도)에서 성과 편차가 정점에 도달하는 매끄러운 <strong>역U자형(Inverted-U) 곡선</strong>이 형성됨을 확인하였습니다.</li>
+<li><code>[작성자 해석 (Interpretation)]</code> 열린 연구 문제(Open-ended Research)는 본질적으로 에이전트 능력의 한계선상에 정의되므로, 향후 더 강력한 차세대 LLM이 등장하더라도 탐색 과제의 난이도가 함께 확장되는 한 '아이디어 분지'로 인한 성과 편차 현상은 사라지지 않으며, 포크 앤 플러시와 같은 구조적 개입 기법이 계속해서 필수적인 역할을 할 것입니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-authors">3. 등장 인물 및 화자 (Key Figures &amp; Authors)</h4>
+<p>본 연구는 마이크로소프트 리서치(Microsoft Research)를 중심 축으로 프린스턴 대학교 및 임페리얼 칼리지 런던과의 협력 연구를 통해 수행되었습니다.</p>
+<ul>
+<li><strong>연구 저자 목록:</strong>
+<ul>
+<li><strong>지양 차이 (Ziyang Cai):</strong> 공동 제1저자 (마이크로소프트 리서치 인턴십, 프린스턴 대학교 소속)</li>
+<li><strong>크리스토스 지아카스 (Christos Ziakas):</strong> 공동 제1저자 (마이크로소프트 리서치 인턴십, 임페리얼 칼리지 런던 소속)</li>
+<li><strong>바실리스 콘토니스 (Vasilis Kontonis):</strong> 공동 저자</li>
+<li><strong>팀 피어스 (Tim Pearce):</strong> 공동 저자</li>
+<li><strong>시다르타 센 (Siddhartha Sen):</strong> 공동 저자</li>
+<li><strong>악샤이 크리슈나무르티 (Akshay Krishnamurthy):</strong> 공동 저자</li>
+<li><strong>시밤 가르그 (Shivam Garg):</strong> 공동 저자 (마이크로소프트 리서치)</li>
+<li><strong>디미트리스 파파일리오풀로스 (Dimitris Papailiopoulos):</strong> 공동 저자 (마이크로소프트 리서치)</li>
+</ul>
+</li>
+<li><strong>소속 기관:</strong> 마이크로소프트 리서치 (Microsoft Research), 프린스턴 대학교 (Princeton University), 임페리얼 칼리지 런던 (Imperial College London)</li>
+<li><strong>진행자 / 구두 발표자:</strong> 확인 불가 (본 소스 텍스트는 학술 논문 전문으로, 별도의 진행자, 사회자 또는 구두 인터뷰 화자는 포함되어 있지 않음)</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-정보-quantitative-metrics-timelines">4. 수치 및 시점 정보 (Quantitative Metrics &amp; Timelines)</h4>
+<h5 id="4-1-계산-예산-및-비용-산정-기준">4.1. 계산 예산 및 비용 산정 기준</h5>
+<ul>
+<li><strong>계산 신용 단위 (Compute Credits):</strong> 100 Compute Credits $\approx$ 미화 1달러 ($1.00 USD). (GitHub Copilot CLI의 입출력 토큰 단가 기준 측정)</li>
+<li><strong>과제당 투입 예산 범위:</strong> 6,000 ~ 100,000 credits (과제 당 실행 예산 미화 약 $60 ~ $1,000 수준).</li>
+</ul>
+<h5 id="4-2-실행-시간-범위-execution-horizon">4.2. 실행 시간 범위 (Execution Horizon)</h5>
+<ul>
+<li><strong>단일 에이전트 실행 시간:</strong> 과제 특성에 따라 수 시간에서 최대 107시간(<code>order-add</code> 기준) 소요되며, 실시간 모델 추론 및 코드 실행·훈련 시간을 포함하여 며칠간 연속 수행됨.</li>
+</ul>
+<h5 id="4-3-주요-성능-향상-지표">4.3. 주요 성능 향상 지표</h5>
+<ul>
+<li><strong>단일 실행(Single-run) 대비 상대적 향상:</strong> <strong>66.0%</strong> 증가</li>
+<li><strong>Best-of-4 베이스라인 대비 상대적 향상:</strong> <strong>44.4%</strong> 증가</li>
+<li><strong>정규화 평균 점수 변화:</strong> Single-run (0.47) $\to$ Best-of-4 (0.54) $\to$ Fork-and-Flush (0.78)</li>
+<li><strong>결과 변동성(표준편차) 감소:</strong> 정규화 평균 표준편차 0.26 (Single-run) $\to$ 0.16 (Fork-and-Flush)로 하락 (13개 중 10개 과제에서 편차 감소)</li>
+</ul>
+<h5 id="4-4-주요-과제별-계산-예산-및-소요-시간-현황표">4.4. 주요 과제별 계산 예산 및 소요 시간 현황표</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">과제명 (Task)</th>
+<th style="text-align:left">출처 (Source)</th>
+<th style="text-align:center">투입 예산 (Credits)</th>
+<th style="text-align:center">실행 소요 시간 (Median Hours)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>polyomino</strong></td>
+<td style="text-align:left">Frontier-CS (알고리즘)</td>
+<td style="text-align:center">25,000 credits</td>
+<td style="text-align:center">29 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>job-shop</strong></td>
+<td style="text-align:left">Frontier-CS (알고리즘)</td>
+<td style="text-align:center">10,000 credits</td>
+<td style="text-align:center">15 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AHC014</strong></td>
+<td style="text-align:left">Frontier-CS (알고리즘)</td>
+<td style="text-align:center">10,000 credits</td>
+<td style="text-align:center">68 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>p150</strong></td>
+<td style="text-align:left">Frontier-CS (알고리즘)</td>
+<td style="text-align:center">10,000 credits</td>
+<td style="text-align:center">70 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>p171</strong></td>
+<td style="text-align:left">Frontier-CS (알고리즘)</td>
+<td style="text-align:center">10,000 credits</td>
+<td style="text-align:center">80 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>kernel</strong></td>
+<td style="text-align:left">Anthropic Take-home</td>
+<td style="text-align:center">100,000 credits</td>
+<td style="text-align:center">64 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>tinyCIFAR</strong></td>
+<td style="text-align:left">자체 제작 (Custom)</td>
+<td style="text-align:center">31,000 credits</td>
+<td style="text-align:center">45 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>sphere-pack</strong></td>
+<td style="text-align:left">Frontier-CS (알고리즘)</td>
+<td style="text-align:center">6,000 credits</td>
+<td style="text-align:center">20 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>relay-lay</strong></td>
+<td style="text-align:left">Frontier-CS (알고리즘)</td>
+<td style="text-align:center">6,000 credits</td>
+<td style="text-align:center">6 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LWE-rec</strong></td>
+<td style="text-align:left">Frontier-CS 2.0 (암호학)</td>
+<td style="text-align:center">6,000 credits</td>
+<td style="text-align:center">83 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LLM-SQL</strong></td>
+<td style="text-align:left">Frontier-CS (연구)</td>
+<td style="text-align:center">6,000 credits</td>
+<td style="text-align:center">23 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>order-add</strong></td>
+<td style="text-align:left">EdgeBench (최적화)</td>
+<td style="text-align:center">6,000 credits</td>
+<td style="text-align:center">107 시간</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Borden-inv</strong></td>
+<td style="text-align:left">EdgeBench (과학 추론)</td>
+<td style="text-align:center">10,000 credits</td>
+<td style="text-align:center">5 시간</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4-5-2차원-공간-임베딩-검증-정확도-held-out-triplet-agreement">4.5. 2차원 공간 임베딩 검증 정확도 (Held-out Triplet Agreement)</h5>
+<ul>
+<li><strong>t-STE (t-Distributed Stochastic Triplet Embedding) 보류 데이터 일치율:</strong> 5개 평가 과제 평균 <strong>85%</strong> (0.85) 달성 (학습 데이터 88%).</li>
+<li><strong>SOE (Soft Ordinal Embedding) 보류 데이터 일치율:</strong> 5개 평가 과제 평균 <strong>83%</strong> (0.83) 달성 (학습 데이터 88%).</li>
+<li><strong>무작위 임의 추측 기준값 (Chance Level):</strong> 50% (0.50)</li>
+<li><strong>단순 실행 식별 휴리스틱 (Run-identity Heuristic):</strong> 52% ~ 60% (0.52 ~ 0.60)</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 연구에서 소스 문서를 통해 명시적으로 밝힌 한계점 및 불확실 요소는 다음과 같습니다.</p>
+<ol>
+<li><strong>평가 과제 수의 제한:</strong>
+<ul>
+<li>장기 실행 자율 에이전트 평가 환경 구축 및 실행에는 극심한 계산 비용과 과제당 수 일에 달하는 실행 시간이 소요되므로, 실험 대상 과제가 13개로 제한되었습니다.</li>
+</ul>
+</li>
+<li><strong>가지(Branch) 간 상호작용 및 협력 부재:</strong>
+<ul>
+<li>포크 앤 플러시로 생성된 병렬 가지들은 탐색 과정에서 상호 통신, 정보 공유, 역할 분담(Role Specialization) 없이 완전히 독립적으로 작동합니다. 가지 간 실시간 협력 메커니즘 구축은 향후 연구 과제로 남아 있습니다.</li>
+</ul>
+</li>
+<li><strong>최신 최첨단(Frontier) 모델 확장성 검증 과제:</strong>
+<ul>
+<li>본 연구에서는 GPT-5.6-terra, GPT-5.5, Qwen3.5 계열 모델을 중심으로 검증을 수행하였으며, 향후 새롭게 출시될 최신 프론티어 LLM 및 더 넓은 범위의 연구 과제 세트에서의 추가 검증이 필요합니다.</li>
+</ul>
+</li>
+<li><strong>소스 미기재 및 확인 불가 항목:</strong>
+<ul>
+<li><strong>연구원 세부 대화/로그 전문:</strong> 논문 부록에는 프롬프트 템플릿과 개입 로그만 기재되어 있으며, 수백 차례 수행된 개별 에이전트의 전체 대화 텍스트 및 상세 로그는 본문에 포함되지 않았습니다 (&quot;소스에서 다루지 않음&quot;).</li>
+<li><strong>모델 내부 가중치 변화:</strong> 본 연구의 모든 개입은 컨텍스트 초기화 및 인프라 제어 방식으로 이루어졌으므로, 모델 파라미터 업데이트나 내부 가중치 변화 정보는 존재하지 않습니다 (&quot;확인 불가&quot;).</li>
+<li><strong>발표자/인터뷰어 정보:</strong> 학술 논문 텍스트 특성상 별도의 구두 발표자, 진행자 등은 명시되어 있지 않습니다 (&quot;확인 불가&quot;).</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

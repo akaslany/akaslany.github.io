@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Own system one decisions with DiffusionGemma</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Own system one decisions with DiffusionGemma</h1>
+<p class="page-meta">소셜 · 2026-10-13</p>
+<h2 id="요약">요약</h2>
+<p>구글 딥마인드(Google DeepMind)의 오픈 웨이트 모델인 '디퓨전젬마(DiffusionGemma 26B-A4B-it)'를 기반으로 개발된 제로샷 의사결정 엔진 프로젝트 'dgem(Apache 2.0)'은 실시간 시스템 운영 환경에서 속도와 신뢰성을 동시에 확보하는 분류 및 제어 메커니즘을 제공하기 위해…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/social/">소셜</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://x.com/GoogleCloudTech/status/2109720569013055704">출처</a> · <a href="https://www.youtube.com/watch?v=BX1olqIeJ8Q">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="소스-해설-보고서-디퓨전젬마-diffusiongemma-기반-시스템-1-의사결정-엔진-dgem-분석-보고서">[소스 해설 보고서] 디퓨전젬마(DiffusionGemma) 기반 '시스템 1' 의사결정 엔진 dgem 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>구글 딥마인드(Google DeepMind)의 오픈 웨이트 모델인 '디퓨전젬마(DiffusionGemma 26B-A4B-it)'를 기반으로 개발된 제로샷 의사결정 엔진 프로젝트 'dgem(Apache 2.0)'은 실시간 시스템 운영 환경에서 속도와 신뢰성을 동시에 확보하는 분류 및 제어 메커니즘을 제공하기 위해 등장하였다. 전통적인 머신러닝 방식이나 확정적 코드 작성만으로 해결하기 어려운 모호한 분류 과제를 해결하면서, 기존 생성형 LLM(시스템 2)보다 월등히 빠르고 저렴한 비용으로 '시스템 1' 스타일의 의사결정을 단일 패스(One-pass) 방식으로 처리하는 것을 핵심 목표로 한다.</p>
+<p>단어 단위(Word-by-word)로 순차 생성되는 기존 LLM은 텍스트를 좌에서 우로 작성하는 과정에서 시퀀스 지연 및 주의력 이탈(Attention drift)이 발생하여 의사결정의 일관성이 무너지는 한계가 있다. 반면, 양방향 주의력(Bidirectional attention) 구조를 갖춘 디퓨전젬마 기반의 dgem은 타자기가 아닌 카메라 센서처럼 작동하여 JSON 스키마 내의 빈칸([MASK] 슬롯)을 단 일회의 순방향 패스로 동시에 추론 및 채워 넣는다. 이를 통해 획기적인 응답 속도(~125-450ms)와 정밀한 확률 분배를 제공한다.</p>
+<p>그러나 양방향 디퓨전 모델은 내용이 없는 프롬프트에서도 첫 번째 선택지 슬롯을 과도하게 선호하는 '선택지 점수화 편향(Box A Primacy Bias)' 문제를 지니고 있다. 개발진은 이를 해결하기 위해 초기 영점 차감(Null-Prior Tare) 및 이중 거울 캔버스(Dual-Mirror Canvas) 기반의 불변 의사결정 보정(IDC) 기법을 고안하였다. 나아가 대규모 검증(231개 JevBench 항목)을 거치며 모델이 판단을 우물쭈물하는 상태를 엔트로피 기반 백분율 수치로 정량화하고, 확신이 부족한 경우 고성능 대형 모델(Gemini) 또는 사람에게 처리를 이관하는 '망설임 게이팅(Hesitation-gating)' 메커니즘으로 기술을 고도화하였다.</p>
+<p>이러한 망설임 게이팅 기법은 에이전트 프롬프트 사전 컴파일, 도구 호출 오케스트레이션, 지식 그래프 엔티티 추출, 프롬프트 인젝션 방어 정책 엔진 등 다양한 실무 환경에서 탁월한 처리 속도와 우수한 안전성을 입증하고 있다. 향후 dgem 프로젝트는 도메인별 미세 온도 보정, 템플릿 확충, 경량 파인튜닝 어댑터 검증을 통해 시스템 1 의사결정의 정확도와 정교함을 지속적으로 강화해 나갈 계획이다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points-analysis">2. 주요 논점 (Key Points &amp; Analysis)</h4>
+<h5 id="2-1-단일-패스-one-pass-대-단어-단위-word-by-word-생성-모델의-차이">2.1 단일 패스(One-pass) 대 단어 단위(Word-by-word) 생성 모델의 차이</h5>
+<p>(소스 위치: 1. One pass vs. word-by-word)</p>
+<p>기존의 단어 단위 순차 생성 모델(LLM)과 양방향 마스크 처리 기반의 단일 패스 모델(DiffusionGemma/dgem)의 구조적 비교는 아래 표와 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">단어 단위 순차 생성 모델 (Word-by-word LLM)</th>
+<th style="text-align:left">단일 패스 디퓨전 모델 (DiffusionGemma / dgem)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>작동 원리</strong></td>
+<td style="text-align:left">텍스트를 좌에서 우로 한 단어씩 순차적 생성</td>
+<td style="text-align:left">JSON 스키마 내 빈칸([MASK])을 동시에 단일 패스로 처리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비유 방식</strong></td>
+<td style="text-align:left">타자기 (Typewriter) 방식</td>
+<td style="text-align:left">카메라 센서 (Camera sensor) 방식</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>처리 지연시간</strong></td>
+<td style="text-align:left">25개 이상 토큰 생성 시 약 2,480ms 소요</td>
+<td style="text-align:left">단일 패스로 전체 스키마 해결 시 약 125~450ms 소요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주의력 메커니즘</strong></td>
+<td style="text-align:left">순차 생성 과정에서 초반부 맥락 지워짐 (Attention Drift)</td>
+<td style="text-align:left">양방향 주의력 (Bidirectional Attention)으로 전체 문맥 유지</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선택지 확률 산출</strong></td>
+<td style="text-align:left">후속 토큰 생성에 따라 이전 토큰 수정 불가능</td>
+<td style="text-align:left">단 1회 패스로 모든 선택지에 대한 정밀 확률 분할 제공</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 복합 기업 지원 티켓(&quot;URGENT: Production API returning 502 Bad Gateway for 40 mins. If not resolved in 15 mins we will dispute our USD 45,000 Q3 enterprise invoice and cancel renewal.&quot;) 처리 시, 기존 LLM은 25개 이상의 토큰을 순차 생성하느라 2,480ms가 소요된다. 또한 텍스트를 좌에서 우로 작성하면서 주의력이 초기 &quot;502 Bad Gateway&quot; 장애에서 후반부 &quot;USD 45,000 invoice&quot; 분쟁으로 이탈하여 <code>urgency_score: 4</code>, <code>department: Billing</code>으로 잘못 고정되는 현상이 발생한다. 반면 dgem은 동일 티켓에 대해 단일 패스(~125-450ms)로 <code>urgent: yes</code>(신뢰도 99.7%), <code>urgency_score: 5</code>(신뢰도 94.3%), <code>department: Technical 75.5% vs Billing 24.5%</code> (Hesitation 51%, Very unsure) 결과를 도출한다.</li>
+<li><strong>[소스의 주장(Claim)]</strong>: 디퓨전젬마는 타자기가 아닌 카메라 센서처럼 작동하여 3개의 필드를 동시에 관찰하므로 필드 간 일관성을 유지하고, 모델이 유보적인 판단을 내리고 있음을 정밀한 확률 분할을 통해 즉시 알려준다.</li>
+<li><strong>[작성자/기술적 해석(Interpretation)]</strong>: 기존 순차 생성 방식은 이전 출력이 다음 출력을 구속하는 결정론적 오류 스노우볼링이 발생하는 반면, 양방향 디퓨전 단일 패스 모델은 문맥 전체를 동시 참조하므로 복합 조건이 얽힌 문맥 분석에서 지연 시간을 획기적으로 줄이면서 판단 불확실성을 가시화할 수 있다.</li>
+</ul>
+<hr />
+<h5 id="2-2-기존-신뢰도-측정-방식의-한계와-투표-순서-편향-box-a-primacy-bias">2.2 기존 신뢰도 측정 방식의 한계와 투표 순서 편향(Box A Primacy Bias)</h5>
+<p>(소스 위치: 2. Why raw confidence &amp; Shannon entropy are not enough)</p>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 100% 내용이 없는 프로브 프롬프트(<code>[REDACTED / CONTENT-FREE CALIBRATION PROBE]</code>)를 입력했을 때, 지시 이행 튜닝(Instruction-tuning) 편향으로 인해 디퓨전젬마의 원시 로짓(Raw logits)은 아무런 텍스트를 읽기 전부터 특정 위치에 편향된 점수를 부여한다.
+<ul>
+<li>선택지 2개 (A, B): Slot A에 <strong>88.3%</strong> 할당 (Slot B 11.7%, 약 9대 1 편향)</li>
+<li>선택지 3개 (A, B, C): Slot A에 <strong>78.3%</strong> 할당 (공정한 33.3% 대비 2배 이상)</li>
+<li>선택지 4개 (A, B, C, D): Slot A에 <strong>49.3%</strong> 할당 (공정한 25.0% 대비 약 2배)
+ChaosNLI, JevBench, Jev Decision Index, 50개 적대적 보정 세트 검증 결과, 선택지 순서만 변경해도 4개 항목 중 2개(50% 반전율)에서 최종 답변이 뒤집히는 현상이 확인되었다.</li>
+</ul>
+</li>
+<li><strong>[소스의 주장(Claim)]</strong>: 대부분의 라우터가 사용하는 샤논 엔트로피(Shannon entropy)는 모델의 확률 분산만을 측정하므로, 내용이 없는 상태에서 발생하는 '투표 순서 편향(Box A Primacy Bias)'을 감지하지 못하고 잘못된 조기 종료(False Early Exit)를 유발한다.</li>
+<li><strong>[작성자/기술적 해석(Interpretation)]</strong>: 모델의 표면적 확신(낮은 엔트로피)이 실제 데이터에 대한 이해가 아니라 템플릿의 위치적 편향에서 비롯될 수 있으므로, 원시 확신도나 단순 샤논 엔트로피만으로 의사결정을 자동화하는 것은 실무 운영 환경에서 매우 위험하다.</li>
+</ul>
+<hr />
+<h5 id="2-3-불변-의사결정-보정-idc-기술과-망설임-게이팅-hesitation-gating-의-진화">2.3 불변 의사결정 보정(IDC) 기술과 망설임 게이팅(Hesitation-gating)의 진화</h5>
+<p>(소스 위치: 3. Increasing speed and confidence with Invariant Decision Calibration)</p>
+<ul>
+<li><strong>[사실(Fact)]</strong>: initial 보정 기법으로 개발된 영점 조절(<code>--null-prior-debias</code>)은 빈 프롬프트의 Box A 편향을 사전 측정 후 0.1ms 만에 차감하여 멀티클래스 Brier 오차를 90.2% 감소시키고 가드레일 정확도를 88.0%에서 90.0%(유해성 83.3% → 100.0%)로 높였다. 이중 거울 캔버스(<code>--dual-mirror</code>)는 순방향(A..D)과 역방향(D..A) 선택지를 동일 캔버스에 병렬 배치하여 추가 GPU 지연시간 없이(125.0ms vs 129.0ms) 답변 뒤집힘 비율을 0.0%로 만들고, 가짜 확신 판단 시 순/역방향 갭을 66.8배 늘려 포착해냈다.
+그러나 소규모 검증(50개 세트)을 넘어 231개 JevBench 항목으로 스케일을 확장하고 실행 간 노이즈(run-to-run noise)를 측정한 결과, 보정 기법이 항상 일관된 개선을 보이지 않았으며, 미러링 질문을 언급하는 행위 자체가 모델 답변에 자극(nudge)을 준다는 사실이 발견되었다. 이에 따라 <code>--null-prior-debias</code>와 <code>--dual-mirror</code>는 CLI 내 선택적 연구 도구(<code>opt-in research tools</code>)로 남겨두고, 시스템은 백분율 기반 정규화 수치인 '망설임 게이팅(Hesitation-gating)'을 기본 탑재하는 방향으로 피벗되었다.</li>
+<li><strong>[소스의 주장(Claim)]</strong>: 망설임 게이팅은 모델이 명확할 때는 즉시 답변하고, 망설일 때는 확률 힌트와 함께 Gemini 등의 대형 모델이나 사람에게 이관함으로써 최고 수준의 효율성과 정확성을 보장한다. 35% 망설임 임계값을 적용할 경우 실시간 패스트 패스는 중앙값 105ms(비용 $0.02/1k건)로 작동하며, 8~32%의 이관율만으로 안전성 81/100, 충실도 86/100을 달성한다. 오프라인 JevBench 평가에서는 16% 망설임 초과 항목(39%)을 이관할 때 dgem의 정답 수가 187–189점에서 221/231점으로 대폭 상승했다 (Gemini 전수 처리 시 225점).</li>
+<li><strong>[작성자/기술적 해석(Interpretation)]</strong>: 단편적인 보정 수식이 복잡한 언어 모델 내에서 제2의 편향을 유발할 수 있음을 인지하고, 판단의 '우물쭈물함(Hesitation)' 자체를 메타 지표화하여 라우팅 기준으로 삼은 것은 뛰어난 정보 설계적 피벗이다.</li>
+</ul>
+<h6 id="보정-및-게이팅-기술-성과-요약표">보정 및 게이팅 기술 성과 요약표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기술명</th>
+<th style="text-align:left">주요 작동 방식</th>
+<th style="text-align:left">실측 성과 및 데이터 수치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Null-Prior 차감</strong> (<code>--null-prior-debias</code>)</td>
+<td style="text-align:left">빈 프롬프트 편향값을 사전 측정하여 추론 시 차감 (0.1ms 추가)</td>
+<td style="text-align:left">Brier 오차 90.2% 감소, 가드레일 정확도 88.0% → 90.0% (유해성 83.3% → 100.0%)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Dual-Mirror 캔버스</strong> (<code>--dual-mirror</code>)</td>
+<td style="text-align:left">정/역방향 선택지를 단일 캔버스에서 병렬 추론 (125ms vs 129ms)</td>
+<td style="text-align:left">답변 뒤집힘 비율 50% → 0.0% 제거, 가짜 확신 시 정/역방향 갭 66.8배 증폭</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>망설임 게이팅</strong> (Hesitation-gating)</td>
+<td style="text-align:left">엔트로피를 0~100% 스케일로 정규화하여 판단 불확실성 라벨링</td>
+<td style="text-align:left">AUROC ~0.85 (Clear &lt;16%, Somewhat unsure 16~50%, Very unsure &gt;50%)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>실시간 하이브리드 라우팅</strong></td>
+<td style="text-align:left">35% 임계값 기반 Gemini(gemini-3.8-flash) 하이패스 이관</td>
+<td style="text-align:left">이관율 8~32%, 안전성 81/100, 충실도 86/100, 속도 105ms vs 3.1s, 비용 $0.02 vs $1–2 / 1k건</td>
+</tr>
+</tbody>
+</table>
+<h6 id="제품-적용을-통해-얻은-5가지-실무-교훈-lessons">제품 적용을 통해 얻은 5가지 실무 교훈 (Lessons)</h6>
+<ol>
+<li><strong>순서 편향 측정 및 모니터링</strong>:
+<ul>
+<li><em>문제/규칙</em>: 릴리스마다 선택지 순서를 섞어 노이즈 임계값 대비 무작위 뒤집힘을 지속 측정함.</li>
+<li><em>성과</em>: 망설임 지표가 실제 문제가 되는 뒤집힘 케이스 대부분을 선제 포착함.</li>
+</ul>
+</li>
+<li><strong>도메인별 온도 보정 (Domain Calibration)</strong>:
+<ul>
+<li><em>문제/규칙</em>: 전역 단일 온도를 강제하지 않고, 도메인별 설정으로 보정함.</li>
+<li><em>성과</em>: 도메인 특성에 따라 최적 온도 범위가 1.2 ~ 3.6으로 피팅됨.</li>
+</ul>
+</li>
+<li><strong>중립 질문 ID 템플릿 규칙</strong>:
+<ul>
+<li><em>문제/규칙</em>: 질문 ID를 중립적으로 작성하고 선택지 문자를 질문 간 재사용하지 않음.</li>
+<li><em>성과</em>: 프롬프트 내 식별자 재사용으로 인한 모델의 교차 오염 및 편향 방지.</li>
+</ul>
+</li>
+<li><strong>입력문 우회 배치 프롬프트 구조 (Prompt Layout)</strong>:
+<ul>
+<li><em>문제/규칙</em>: 입력 데이터(Input)를 질문(Question)보다 앞에 배치함 (v0.2.0부터 기본 적용).</li>
+<li><em>성과</em>: XNLI 점수 0.662 → 0.699 (n=4,500), 타입 의사결정 점수 0.674 → 0.728 (n=2,000) 향상.</li>
+</ul>
+</li>
+<li><strong>2단계 토너먼트 대진표 (Wide Taxonomies)</strong>:
+<ul>
+<li><em>문제/규칙</em>: 26개 선택지 제한을 극복하기 위해 2단계 토너먼트 브래킷 구조 적용.</li>
+<li><em>성과</em>: 최대 255개 선택지 확장 처리, Decision Index 커버리지 16/22에서 22/22로 대폭 개선.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-4-시스템-1-의사결정-모델의-주요-실무-활용-분야">2.4 시스템 1 의사결정 모델의 주요 실무 활용 분야</h5>
+<p>(소스 위치: 4. Use cases)</p>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 소스에서는 dgem과 같은 시스템 1 모델을 적용할 수 있는 5가지 핵심 유스케이스를 제시하고 있다.</li>
+<li><strong>[소스의 주장(Claim)]</strong>: 기존 LLM 전수 호출 방식 대신 시스템 1 모델을 전단 및 후단에 배치함으로써 성능, 비용, 안전성 측면에서 커다란 이점을 얻을 수 있다.</li>
+<li><strong>[작성자/기술적 해석(Interpretation)]</strong>: 무겁고 비싼 프론티어 LLM의 컨텍스트 윈도우 오버헤드를 줄이고, 고속 '시맨틱 if문'을 통해 에이전트 시스템 전체의 반응 속도와 안정성을 제어하는 고성능 가드레일 역할을 수행한다.</li>
+</ul>
+<h6 id="5가지-세부-사용-사례">5가지 세부 사용 사례</h6>
+<ol>
+<li><strong>에이전트 LLM 컨텍스트 윈도우 사전 컴파일러 (Context Window Pre-compiler)</strong>
+<ul>
+<li>대형 시스템 2 LLM을 호출하기 전 단일 패스 모델을 실행하여 사용자 입력의 의도(Intent)와 긴급도(Urgency)를 평가하고 필수 맥락 유무를 검증함.</li>
+<li><em>실제 적용 예시</em>: 수상한 이메일 분석 시 <code>missing_sender_metadata</code> 플래그를 사전에 감지하여 에이전트가 무의미한 추론 턴을 낭비하지 않도록 사전에 차단함.</li>
+</ul>
+</li>
+<li><strong>에이전트 도구 호출 및 결과 처리 오케스트레이션 (Tool Invocation &amp; Result Orchestration)</strong>
+<ul>
+<li>결정론적 코드 내 '시맨틱 if문(Semantic if statements)'으로 작동하거나, 50개 이상의 MCP 도구 카탈로그를 LLM 전달 전 2~3개의 핵심 스키마로 축소하여 컨텍스트 팽창을 방지함.</li>
+<li>도구 실행 전 제안된 호출이 안전한지 검증하는 가드레일 역할 및 실행 후 반환되는 출력 데이터(<code>log dumps</code>, <code>search results</code>, <code>API payloads</code>)의 노이즈를 정돈/압축하여 컨텍스트에 전달함.</li>
+</ul>
+</li>
+<li><strong>지식 그래프 및 LLM 위키 엔티티 추출 (Knowledge Graph &amp; Wiki Entity Extraction)</strong>
+<ul>
+<li>비정형 데이터(회의록, 텍스트 메모, 외부 JSON/CSV)를 정형 온톨로지 타입으로 매핑함.</li>
+<li>2단계 토너먼트 브래킷을 통해 최대 255개 범주까지 확장 처리하며, <code>depends_on</code>, <code>supersedes</code>, <code>owned_by</code>와 같은 관계 에지(Relationship edges) 점수화를 단일 패스로 수행함. 온톨로지에 없는 신규 범주 등장 시 <code>--suggest-expansions</code> 옵션을 통해 새 클래스 추가를 자동 제안함.</li>
+</ul>
+</li>
+<li><strong>정책 엔진 (Policy Engines)</strong>
+<ul>
+<li>출력 확률을 템플릿에 정의된 선택지(&quot;allow&quot;, &quot;deny&quot;, &quot;escalate&quot;)로 엄격히 제한하여 정형화함.</li>
+<li>비인가 입력 텍스트가 분류기를 조작하여 자율 문장을 생성하게 만드는 프롬프트 인젝션(Prompt Injection) 공격을 구조적으로 차단함. 확신도가 낮거나 정/역방향 불일치가 발생하면 스스로 판단을 거부하고 인간이나 상위 시스템에 이관.</li>
+</ul>
+</li>
+<li><strong>의사결정 분해 (Decision Decomposition)</strong>
+<ul>
+<li>복잡한 설계 및 기획 문제를 원자 단위(Atomic) 질문들의 신속한 연속 처리 과정으로 분해함.</li>
+<li>'시맨틱 if문'을 연쇄 적용하여 정형화된 고속 의사결정 파이프라인을 구축함.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-5-향후-발전-계획-및-개발-방향">2.5 향후 발전 계획 및 개발 방향</h5>
+<p>(소스 위치: 5. What's next)</p>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 현재 dgem은 모델 재학습 없이 정책 템플릿 수정만으로 작동하는 제로샷(Zero-shot) 기반 시스템이다.</li>
+<li><strong>[소스의 주장(Claim)]</strong>: 향후 개발진은 도메인별 정교한 온도 보정, 의사결정 템플릿 확충, 그리고 제로샷 정확도가 정체되는 도메인을 위한 경량 파인튜닝 어댑터(응답 읽기 레이어 특화 소형 어댑터) 적용을 검토 중이다.</li>
+<li><strong>[작성자/기술적 해석(Interpretation)]</strong>: 무거운 전체 모델 재학습 대신 출력 레이어 중심의 경량 어댑터 파인튜닝 기법을 도입함으로써, 제로샷의 강점(빠른 정비)을 유지하면서도 한계 도메인에서의 정확도를 효율적으로 극대화할 수 있을 것이다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-characters-speakers">3. 등장 인물 및 화자 (Characters &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 / 계정</th>
+<th style="text-align:left">역할 및 소속</th>
+<th style="text-align:left">소스 내 언급 내용 및 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">후세인 치노이 (Hussain Chinoy / @ghchinoy)</td>
+<td style="text-align:left">dgem 프로젝트 개발자, 구글 클라우드 테크 팀원</td>
+<td style="text-align:left">dgem 개발, Box A 편향 발견, IDC 및 망설임 게이팅 메커니즘 고안 및 대규모 실험 수행</td>
+</tr>
+<tr>
+<td style="text-align:left">알란 블론트 (Alan Blount / @zeroasterisk)</td>
+<td style="text-align:left">게시물 공동 작성자, 구글 클라우드 테크 팀원</td>
+<td style="text-align:left">후세인 치노이의 아이디어를 바탕으로 기술 블로그 게시물 공동 작성</td>
+</tr>
+<tr>
+<td style="text-align:left">@GoogleCloudTech</td>
+<td style="text-align:left">게시물 발행 주체 (Google Cloud Tech 공식 계정)</td>
+<td style="text-align:left">소스 X(구 트위터) 기술 아티클 공식 발행 및 공개 주체</td>
+</tr>
+<tr>
+<td style="text-align:left">구글 딥마인드 (Google DeepMind)</td>
+<td style="text-align:left">오픈 웨이트 AI 모델 개발 기관</td>
+<td style="text-align:left">DiffusionGemma (26B-A4B-it) 오픈 웨이트 모델 제공</td>
+</tr>
+<tr>
+<td style="text-align:left">multimodalart / apolinario</td>
+<td style="text-align:left">Jev Decision Index 제작자</td>
+<td style="text-align:left">소스 내 벤치마크 평가 도구(Jev Decision Index) 관련 인물로 언급됨</td>
+</tr>
+<tr>
+<td style="text-align:left">기타 인물 정보</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 내 기타 인물의 구체적 직함이나 신원 정보는 확인 불가</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-numbers-timepoints">4. 수치 및 시점 (Numbers &amp; Timepoints)</h4>
+<ul>
+<li><strong>게시 및 수집 정보</strong>:
+<ul>
+<li>게시 시각: Mon Oct 12 18:59:15 +0000 2026</li>
+<li>수집 시각(UTC): 2026-10-13T09:54:51.983892+00:00</li>
+<li>게시물 반응 지표: 좋아요 258, 리트윗 35, 답글 8, 북마크 300, 조회수 0</li>
+</ul>
+</li>
+<li><strong>모델, 실행 환경 및 시스템 사양</strong>:
+<ul>
+<li>모델명 및 규모: DiffusionGemma (26B-A4B-it)</li>
+<li>라이선스: Apache 2.0 (dgem 프로젝트)</li>
+<li>배포 및 실행 환경: Cloud Run GPU (<code>NVIDIA L4</code> / <code>RTX Pro 6000</code>), 로컬 <code>Apple Silicon Metal</code> 실행 지원</li>
+<li>인터랙티브 데모: Decision Studio (<code>dgem serve</code> 명령어로 실행, <code>4-Scene Concept Walkthrough</code> 제공)</li>
+<li>연산 지연시간: 표준 LLM 2,480ms (25+ 토큰 순차 생성) vs DiffusionGemma/dgem 125~450ms (단일 패스)</li>
+<li>이중 거울 캔버스 지연시간: 125.0ms vs 129.0ms (0ms 추가 GPU 지연시간)</li>
+<li>실시간 처리 속도: dgem 패스트 패스 중앙값 105ms vs Gemini 3.1초</li>
+<li>실시간 비용: 1,000건 의사결정당 약 $0.02 vs Gemini $1–2</li>
+</ul>
+</li>
+<li><strong>편향 및 보정 수치</strong>:
+<ul>
+<li>빈 프롬프트(Box A) 편향률: 2개 선택지 중 Slot A 88.3% (vs B 11.7%), 3개 선택지 중 Slot A 78.3%, 4개 선택지 중 Slot A 49.3%</li>
+<li>50개 적대적 케이스 답변 반전율: 50% (4개 중 2개)</li>
+<li>Null-Prior 차감 효과: Multi-Class Brier 에러 90.2% 감소, 가드레일 정확도 88.0% → 90.0% (유해성 검증 83.3% → 100.0%)</li>
+<li>이중 거울 캔버스 효과: 선택지 반전 답변 뒤집힘 비율 50% → 0.0%, 정/역방향 갭 66.8배 증가</li>
+</ul>
+</li>
+<li><strong>망설임 게이팅 및 벤치마크 데이터</strong>:
+<ul>
+<li>평가 데이터셋 규모: JevBench 231개 항목, 판단 평가 13개 슈트(각 n=100)</li>
+<li>망설임 구간 설정: Clear (&lt;16%), Somewhat unsure (16–50%), Very unsure (&gt;50%)</li>
+<li>AUROC: ~0.85 (231개 JevBench 항목 대상)</li>
+<li>35% 임계값 실시간 성능: Gemini 이관율 8–32%, 안전성 점수 81/100, 충실도 점수 86/100</li>
+<li>오프라인 성능 점수: 16% 망설임 초과 항목(39%) 이관 시 dgem 점수 187–189점에서 221/231점으로 상승 (Gemini 전수 처리 시 225점)</li>
+<li>프롬프트 레이아웃 변경 효과: XNLI 점수 0.662 → 0.699 (n=4,500), 타입 의사결정 점수 0.674 → 0.728 (n=2,000)</li>
+<li>분류 확장성 및 온톨로지 에지: 2단계 토너먼트 브래킷으로 최대 255개 선택지 지원, Decision Index 패널 커버리지 16/22에서 22/22로 향상, 정형 관계 에지 데이터(<code>depends_on</code>, <code>supersedes</code>, <code>owned_by</code>) 평가</li>
+<li>도메인별 온도 범위: 약 1.2 ~ 3.6</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>초기 보정(IDC) 기법의 스케일 확장 한계</strong>: 231개 JevBench 항목으로 검증 규모를 확대했을 때, 초기 영점 차감 및 이중 거울 기법이 항상 일관된 의사결정 향상을 끌어내지는 못했으며, 거울 질문을 프롬프트에 직접 명시하는 행위 자체가 모델 답변에 자극(nudge)을 주는 현상이 관찰됨.</li>
+<li><strong>시스템 1 모델 과용의 위험성</strong>: 복잡한 기획이나 전략적 설계 문제에 시스템 1 의사결정 모델을 적용하는 것은 무리한 확장(Over-reach)이 될 수 있으며, 기획 및 설계 단계에는 시스템 2 모델을 사용하는 것이 적절함.</li>
+<li><strong>소프트웨어 버전 및 세부 파라미터 미기재</strong>: 프롬프트 레이아웃 기본값 변경 시점(v0.2.0) 외에 dgem 프로젝트의 정확한 최신 버전 번호나 세부 하이퍼파라미터는 소스에 명시되지 않아 <strong>확인 불가</strong>함.</li>
+<li><strong>파인튜닝 기술의 세부사항 확인 불가</strong>: 향후 계획으로 언급된 경량 파인튜닝 어댑터의 구체적인 아키텍처, 파인튜닝 데이터셋 크기, 배포 스크립트 등은 소스에서 다루지 않아 <strong>확인 불가</strong>함.</li>
+<li><strong>외부 정보 및 타 모델 비교 불용</strong>: 본 보고서에 기재된 내용 외의 관련 외부 정보, 타 오픈소스 모델과의 정량적 성능 비교 수치는 소스에 수록되지 않아 모두 <strong>확인 불가</strong>함.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/social/">소셜</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

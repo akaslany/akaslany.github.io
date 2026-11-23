@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>20배 적은 연산으로 비디오 학습? LeVJEPA 논문 검증</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>20배 적은 연산으로 비디오 학습? LeVJEPA 논문 검증</h1>
+<p class="page-meta">논문 · 2026-09-02</p>
+<h2 id="요약">요약</h2>
+<p>이 자료는 arXiv v1 사전논문(preprint) 검토이며 peer review와 독립 재현이 확립되었다는 뜻이 아니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=yBcW7cAx7N0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="20배-적은-연산으로-비디오-학습-levjepa-논문-검증">20배 적은 연산으로 비디오 학습? LeVJEPA 논문 검증</h3>
+<p>이 자료는 <strong>arXiv v1 사전논문(preprint)</strong> 검토이며 peer review와 독립 재현이 확립되었다는 뜻이 아니다. 모든 우선권·성능·해석은 저자 보고로 귀속한다.</p>
+<h4 id="결론">결론</h4>
+<p>LeVJEPA v1의 핵심은 “비디오를 20배 빠르게 학습했다”가 아니다. 저자들이 동일한 20% K710 데이터와 240 epoch에 맞춘 비교에서 보고한 <strong>total pretraining FLOPs 절감 범위가 5.6×–20.8×</strong>라는 뜻이다. wall-clock, GPU-hours, 전력, 탄소, serving latency를 측정한 배수가 아니다. 정확도도 모든 benchmark에서 우세하지 않다. equal-total-FLOPs ViT-B에서는 ImageNet-1K와 K400이 강했지만 SSv2는 최고 baseline보다 3.2 percentage points 낮았다.</p>
+<h4 id="방법-무엇을-없애고-무엇을-남겼나">방법: 무엇을 없애고 무엇을 남겼나</h4>
+<p>한 clip의 16 frames에서 full-resolution global view 하나와 spatial crop·photometric augmentation을 적용한 local views를 만든다. 모든 view는 같은 encoder와 projector를 공유한다. local/global [cls] embedding의 invariance MSE와 SIGReg를 합친다(Equation 1–3, p.4). λ=0.02가 objective의 유일한 hyperparameter이며 모든 실험에서 고정했다는 것이 저자 설명이다.</p>
+<p>SIGReg는 random univariate projections의 분포가 standard Gaussian에 맞도록 Epps–Pulley statistic으로 제약한다. 이때 저자들이 인용한 이론적 보장의 안전한 범위는 <strong>regularized representation objective에서 collapsed embedding solution을 배제하는 것</strong>이다. downstream accuracy, global optimization, robustness, general intelligence 또는 모든 학습 run의 성공 보장이 아니다.</p>
+<p>훈련 가능한 구성은 encoder와 작은 projector다. Polyak average는 decay 0.9999로 유지하지만 training forward pass를 받지 않고 objective에 참여하지 않는 evaluation checkpoint다(Appendix B, p.12). prior JEPA의 collapse-prevention target encoder와 같은 역할로 부르면 안 된다.</p>
+<h4 id="sparse-token-observation의-의미">sparse token observation의 의미</h4>
+<p>기본 설정은 patch embedding 뒤 uniform random dropping ρ=0.95다. 남은 token만 encoder가 본다. 이것은 masked pixels를 decoder가 복원하는 VideoMAE류의 reconstruction task가 아니다. retained tokens가 clip에 대한 유일한 sparse observation이다.</p>
+<p>논문은 ImageNet 평가에서 drop 증가와 정확도 개선을 보고하지만 Figure 4 caption은 “linear probing”, §4 서두와 y축은 “attentive”라고 적어 probe label이 충돌한다. 따라서 33.9%→47.6% endpoint를 영상 headline 근거로 사용하지 않는다. 또한 SSv2에서는 ρ&gt;0.3이 짧은 schedule에서 악화하고 긴 schedule이 이를 완화한다. “95%를 버릴수록 언제나 더 정확하다”는 결론은 틀리다.</p>
+<h4 id="matched-epochs-5-6-20-8-의-정확한-뜻">matched epochs: 5.6×–20.8×의 정확한 뜻</h4>
+<p>Figure 2와 §5.1(p.7)은 ViT-S/B/L을 동일 20% K710, 240 epochs, effective batch 3,072, frozen probing 조건으로 비교한다. 저자들은 LeVJEPA가 V-JEPA 2와 맞먹거나 앞서면서 total pretraining compute를 5.6×–20.8× 적게 썼다고 보고한다.</p>
+<p>그래프는 endpoint별 exact FLOP label을 모두 제공하지 않아 5.6×와 20.8×를 독립 재계산할 수 없다. 다만 본문이 밝힌 ViT-B 36.4 ExaFLOPs 대 4.8 ExaFLOPs는 36.4/4.8=7.5833×로 재계산된다. 이것은 compute ratio이며 “20.8× faster”, “20.8× lower energy”, “20.8× universal cost reduction”으로 바꾸면 안 된다.</p>
+<h4 id="matched-total-flops-benchmark별-trade-off">matched total FLOPs: benchmark별 trade-off</h4>
+<p>Table 3(p.7)은 ViT-B와 20% K710에서 total pretraining FLOPs를 같게 맞춘다. 저비용 sample 덕분에 LeVJEPA는 1,085 epochs와 V=10을 사용한다.</p>
+<ul>
+<li>ImageNet-1K attentive probe: VideoMAEv2 53.4, V-JEPA 2 51.6, LeVJEPA 61.0. strongest tested video baseline 대비 61.0−53.4=<strong>+7.6 percentage points</strong>.</li>
+<li>SSv2 attentive probe: 43.6, 42.5, 40.4. LeVJEPA는 best tested baseline보다 <strong>−3.2 points</strong>.</li>
+<li>K400 linear probe: 37.4, 40.7, 44.6. 표 안에서는 LeVJEPA가 최고다.</li>
+</ul>
+<p>따라서 “모든 motion benchmark를 이겼다”가 아니라 appearance와 K400에서는 강하고 SSv2에서는 competitive하지만 열세인 다목적 trade-off다.</p>
+<h4 id="dinov2와의-compute-matched-비교">DINOv2와의 compute-matched 비교</h4>
+<p>Table 4(p.7)의 DINOv2는 같은 videos에서 뽑은 individual frames 11.7M samples, 11,400 optimizer steps로 훈련하고 240-epoch LeVJEPA ViT-B와 total FLOPs를 맞춘 저자 재훈련 baseline이다.</p>
+<ul>
+<li>ImageNet-1K: DINOv2 53.8, LeVJEPA 50.7. LeVJEPA가 3.1 points 낮다.</li>
+<li>SSv2: 16.9 대 30.4. 30.4/16.9=<strong>1.7988×</strong>, relative gain 약 79.9%다.</li>
+</ul>
+<p>논문의 “nearly doubling motion-centric accuracy”는 이 SSv2 top-1과 이 protocol에만 묶여야 한다. 모든 motion understanding, 모든 DINOv2 checkpoint, fine-tuning 또는 real-world motion을 두 배로 만든다는 뜻이 아니다.</p>
+<h4 id="block-causal-attention과-streaming">block-causal attention과 streaming</h4>
+<p>Table 2(p.6)는 τ=1, ρ=.95, V=4, uniform random drop, ImageNet frozen attentive probe에서 bidirectional 50.7과 block-causal 51.2를 비교한다. 이 테스트에서 measurable accuracy penalty가 없었다는 보고다. 모든 dataset/model size/fine-tuning/streaming/world model에서 zero cost가 증명된 것은 아니다.</p>
+<p>block-causal encoder는 frame token이 current/past frames만 보게 한다. 그래서 encoder level에서는 incoming frame을 추가할 때 과거 frames를 다시 encode하지 않고 temporal representation을 연장할 수 있다. 그러나 end-to-end production latency, KV/memory behavior, decoder 또는 action model cost, throughput, application quality는 이 architecture property만으로 결정되지 않는다.</p>
+<h4 id="consumer-gpu-시연">consumer GPU 시연</h4>
+<p>§5.3(p.7)은 ViT-Tiny를 RTX 5080 16GB 한 장에서 12시간, Walking Tours 8 videos(약 620k frames, 약 5M clips)로 훈련했다고 보고한다. frozen ImageNet top-1은 initialization 8.9%에서 25.2%로 올랐다. batch 128이 8GB 미만이었고 동일 크기 V-JEPA 설정은 batch 28에서 card를 포화했다. 이는 접근성 demonstration이지 large-scale model, production quality 또는 cluster 결과와의 동등성 증명이 아니다.</p>
+<h4 id="코드-모델과-재현-상태">코드·모델과 재현 상태</h4>
+<p>PDF는 project page를 연결한다. live audit에서 그 page가 MLO-lab/LeVJEPA GitHub repository와 Hugging Face LeVJEPA-VideoMix-Large checkpoint를 연결하는 것을 확인했다. repository main HEAD는 <code>941526c...</code>, public code가 존재하지만 tag/release는 없었다. checkpoint는 303,099,904 parameters, CC BY-NC 4.0로 공개되어 있다. paper PDF 자체는 CC BY 4.0다. 공개 자산의 존재는 독립 재현이나 benchmark 검증이 아니다.</p>
+<p>live project page는 data-scaling ImageNet endpoint를 67.5%라고 쓰고 PDF v1 §5.4와 repository README는 69.5%라고 쓴다. 해결 전 이 endpoint는 영상과 제목에서 보류한다.</p>
+<h4 id="한계와-업데이트-기준">한계와 업데이트 기준</h4>
+<p>controlled comparison은 제한 corpus와 최대 ViT-L이다. internet-scale controlled comparison, very large batch/model에서 SIGReg, segmentation/tracking, robustness, fine-tuning, end-to-end streaming/world-model, wall-clock/GPU-hours/electricity/carbon, full hyperparameter-search 및 probe cost는 확립되지 않았다. 저자 소속과 공공 연구지원도 이해상충·맥락 정보로 보존한다.</p>
+<p>동일 protocol의 독립 반복이 headline compute/accuracy를 재현하지 못하거나 wall-clock·energy 측정이 FLOP 절감과 다른 결론을 내리면 효율 판단을 낮춘다. v2/erratum이 Figure 4 probe label, 67.5/69.5, Figure 2 exact coordinates를 해결하면 수치를 갱신한다. larger data/model, dense tasks, fine-tuning 및 end-to-end streaming 결과에서 trade-off가 확인되면 적용 범위를 다시 제한한다.</p>
+<h4 id="안전하게-말할-수-있음">안전하게 말할 수 있음</h4>
+<p>“저자들이 맞춘 protocol에서 LeVJEPA는 V-JEPA 2와 비교해 total pretraining FLOPs를 5.6×–20.8× 적게 사용했다고 보고했다. equal FLOPs Table 3에서는 ImageNet +7.6 points, SSv2 −3.2 points의 trade-off가 있다.”</p>
+<h4 id="말하면-안-됨">말하면 안 됨</h4>
+<p>“20.8배 빨라졌다”, “전력·비용이 20.8배 줄었다”, “모든 video benchmark를 이겼다”, “block-causal은 모든 streaming system에서 공짜다”, “95% token dropping은 언제나 정확도를 높인다”, “동료평가·독립 재현으로 확정됐다.”</p>
+<h4 id="출처">출처</h4>
+<ul>
+<li>LeVJEPA: Efficient &amp; Scalable Video Pretraining without the Heuristics, arXiv:2608.27395v1, submitted 27 August 2026 UTC, Lukas Kuhn 외 6인: https://arxiv.org/abs/2608.27395v1</li>
+<li>Project page: https://levjepa.github.io/</li>
+<li>Public repository identity: https://github.com/MLO-lab/LeVJEPA</li>
+<li>Public checkpoint record: https://huggingface.co/galilai-group/LeVJEPA-VideoMix-Large</li>
+</ul>
+<p>이 보고서는 논문 그림·표·레이아웃을 재사용하지 않는 독립적인 한국어 검증 해설이다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

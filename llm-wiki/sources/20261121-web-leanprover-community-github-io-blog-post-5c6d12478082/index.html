@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lean verification of the Riemann Hypothesis | Lean community blog</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Lean verification of the Riemann Hypothesis | Lean community blog</h1>
+<p class="page-meta">웹 · 2026-11-21</p>
+<h2 id="요약">요약</h2>
+<p>2026년 11월 20일, 수학자 레벤트 알푀게(Levent Alpöge)는 1,700만 줄의 코드로 구성된 Lean 라이브러리 형태의 리만 가설(Riemann Hypothesis) 증명을 공개하였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://leanprover-community.github.io/blog/posts/riemann-hypothesis">출처</a> · <a href="https://www.youtube.com/watch?v=YIQ5VOIHP94">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="리만-가설의-lean-형식-검증-분석-보고서">리만 가설의 Lean 형식 검증 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>2026년 11월 20일, 수학자 레벤트 알푀게(Levent Alpöge)는 1,700만 줄의 코드로 구성된 Lean 라이브러리 형태의 리만 가설(Riemann Hypothesis) 증명을 공개하였다. 이에 대응하여 2026년 11월 21일 13시 55분, Lean 및 Mathlib 커뮤니티(Lean and Mathlib communities)는 Lean FRO 및 Mathlib Initiative의 지지를 받아 해당 증명에 대한 공동 성명서를 발표하였다.</p>
+<p>Lean 및 Mathlib 커뮤니티는 알푀게가 제출한 리만 가설 증명의 정확성에 대해 완전한 신뢰를 표명하였으며, 성명서 발표 전날 동안 커뮤니티 차원의 종합적인 형식 검증 작업을 수행하였다. 그 결과 커뮤니티는 리만 가설의 명제(Statement)와 증명(Proof)이 모두 올바름을 공식 인증하였다.</p>
+<p>본 검증은 2026년 11월 12일 자 xenaproject 블로그 포스트에 제시된 4가지 형식 검증 기준을 완벽히 충족하였음을 근거로 이루어졌다. 본 보고서는 공개된 성명서 및 관련 토론 데이터를 기반으로 리만 가설의 형식 검증 과정, 기술적 근거, 주요 화자, 수치 정보 및 명시된 한계점을 객관적으로 분석하여 정리한다.</p>
+<hr />
+<h4 id="2-주요-논점-및-검증-근거-key-points-and-evidence">2. 주요 논점 및 검증 근거 (Key Points and Evidence)</h4>
+<h5 id="2-1-리만-가설-증명-검증의-4가지-핵심-기준과-충족-성과">2.1. 리만 가설 증명 검증의 4가지 핵심 기준과 충족 성과</h5>
+<p>xenaproject 블로그 포스트(2026-11-12)에서 제시한 4가지 형식 검증 기준과 이에 대한 구체적 충족 성과는 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>기준 1: 리만 가설 명제의 정확성 (Correct Statement)</strong></p>
+<ul>
+<li><strong>[사실]</strong> 해당 명제는 Mathlib의 공식 정의인 <code>RiemannHypothesis</code> 항목으로 이미 라이브러리에 포함되어 있었으며, Lean 및 수론(Number Theory) 전문가들에 의해 사전 검토(vetted)를 완료한 상태였다.</li>
+<li><strong>[소스의 주장]</strong> 명제 자체가 이미 커뮤니티의 엄격한 수학적 검증을 거친 공인 항목이므로 증명하려는 명제의 타당성이 확보되어 있다.</li>
+<li><strong>[작성자의 해석]</strong> 기존에 검증된 표준 수학 라이브러리 내 정의를 그대로 활용함으로써, 증명 대상이 되는 명제 자체가 왜곡되거나 변형되었을 가능성을 사전에 차단하였다.</li>
+<li><strong>참조 위치:</strong> 성명서 본문 1항</li>
+</ul>
+</li>
+<li>
+<p><strong>기준 2: 라이브러리 컴파일 성과 (Correct Compilation)</strong></p>
+<ul>
+<li><strong>[사실]</strong> 알푀게의 코드베이스는 표준 공리(Standard Axioms)만을 사용하여 오류나 빌드 실패 없이 완전히 컴파일된다.</li>
+<li><strong>[소스의 주장]</strong> 수십 명의 인원이 직접 코드베이스를 컴파일하여 동일한 원시 증명 내보내기 파일(Raw Proof Export File)이 재현됨을 보고하였다.</li>
+<li><strong>[작성자의 해석]</strong> 단일 환경에 의존하지 않고 다수의 독립된 환경에서 컴파일 재현성을 확보함으로써 코드의 기술적 안정성을 입증하였다.</li>
+<li><strong>참조 위치:</strong> 성명서 본문 2항 및 danofairanks 댓글</li>
+</ul>
+</li>
+<li>
+<p><strong>기준 3: 증명 대상 정리의 일치성 (Correct Theorem Proved)</strong></p>
+<ul>
+<li><strong>[사실]</strong> 커뮤니티는 리만 가설의 명제만을 격리하고 Mathlib만을 임포트(Import)하는 별도의 독립 파일을 작성하였다. 그 후 독립된 두 가지 비교 도구인 <code>comparator</code>와 <code>con-leche --compare</code>를 사용하여 알푀게 라이브러리에서 증명된 정리와 해당 격리 명제를 비교 분석하였다.</li>
+<li><strong>[소스의 주장]</strong> 두 비교 도구 모두 알푀게가 증명한 정리가 Mathlib에 정의된 리만 가설 명제와 정확히 일치함을 확인하였다. 아울러 Mathlib의 제타 함수 정의에 의존하지 않는 독립적인 로빈/라가리아스(Robin/Lagarias) 형식화가 교차 검증 도구로 활용되었다.</li>
+<li><strong>[작성자의 해석]</strong> 명제 격리 파일 생성과 이중 자동화 비교 도구, 대안적 형식화를 통한 교차 검증을 병행하여 증명된 정리가 의도한 본래 명제에서 벗어났을 위험을 이중으로 방지하였다.</li>
+<li><strong>참조 위치:</strong> 성명서 본문 3항 및 danofairanks 댓글</li>
+</ul>
+</li>
+<li>
+<p><strong>기준 4: Lean 증명의 유효성 및 외부 검증기 검증 (Valid Lean Proof &amp; Soundness)</strong></p>
+<ul>
+<li><strong>[사실]</strong> 내보낸 원시 증명 파일은 Lean 공식 커널(Kernel)을 비롯해 <code>con-leche</code>, <code>con-ron</code>, 그리고 다양한 프로그래밍 언어로 구현된 제3자 독립 검증기들에 의해 검증을 통과하였다.</li>
+<li><strong>[소스의 주장]</strong> <code>con-leche</code> 및 <code>con-ron</code> 검증기는 집합론(Set Theory) 대비 거짓 증명을 수용할 수 없다는 형식적 건전성(Formal Soundness)이 증명되어 있다. 이는 Lean 자체의 논리적 결함을 이용한 허위 증명 가능성 우려를 해소한다. 또한 검증 작업은 소스 코드 내 잠재적 악성 코드의 영향이 미치지 않는 비활성 내보내기 파일(Inert Export)을 대상으로 실행되었다.</li>
+<li><strong>[작성자의 해석]</strong> 주 엔진(Lean 커널) 외에 논리적 건전성이 입증된 외부 검증기들을 대거 투입함으로써 소프트웨어 자체의 버그나 공리계의 논리적 허점으로 인한 오판 가능성을 구조적으로 배제하였다.</li>
+<li><strong>참조 위치:</strong> 성명서 본문 4항 및 MIT 개요 페이지(<code>https://math.mit.edu/~drew/grh/</code>)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-2-기계적-소프트웨어-검증의-범위와-성격">2.2. 기계적/소프트웨어 검증의 범위와 성격</h5>
+<p>댓글 참여자 danofairanks의 분석에 따른 형식 검증의 실제 성격과 범위는 다음의 3가지 기술적 축으로 정교하게 구체화된다.</p>
+<ul>
+<li>
+<p><strong>1. 인간의 명제 보증 및 파이프라인 검인 (Human Vouching)</strong></p>
+<ul>
+<li><strong>[사실]</strong> 인간 전문가들은 Mathlib에 작성된 <code>RiemannHypothesis</code> 명제의 정확성을 사전 보증하고, 최종 검증 파이프라인이 출력한 결과를 검인하는 역할을 수행한다.</li>
+<li><strong>[소스의 주장]</strong> 커뮤니티가 공식 보증하는 핵심은 명제가 올바르게 서술되었으며 기계적 검증 파이프라인을 오류 없이 통과했다는 사실에 한정된다.</li>
+<li><strong>참조 위치:</strong> danofairanks 댓글 구역</li>
+</ul>
+</li>
+<li>
+<p><strong>2. 소프트웨어 파이프라인의 기계적 실행 (Software Execution)</strong></p>
+<ul>
+<li><strong>[사실]</strong> 소프트웨어 검증은 표준 공리 기반 라이브러리 컴파일, 2종 비교 도구(<code>comparator</code>, <code>con-leche --compare</code>)를 통한 명제 일치 확인, 건전성이 증명된 외부 커널 및 검증기들의 합격 판정, 로빈/라가리아스 교차 검증으로 이루어진다.</li>
+<li><strong>[작성자의 해석]</strong> 자동화된 형식 검증은 증명의 산술적·구문적 규칙 합치성을 완벽히 보증하지만, 이는 명제와 커널 사이의 기계적 일치성을 판정하는 절차이다.</li>
+<li><strong>참조 위치:</strong> danofairanks 댓글 구역</li>
+</ul>
+</li>
+<li>
+<p><strong>3. MIT 보고서 파이프라인의 독립적 실행 구조 (Report Execution)</strong></p>
+<ul>
+<li><strong>[사실]</strong> MIT 개요 페이지에 기록된 종합 검증 파이프라인 리포트는 1명의 인원이 클로드 코드(Claude Code)를 활용하여 실행한 결과이다.</li>
+<li><strong>[소스의 주장]</strong> 이는 블로그 성명서에서 언급된 &quot;수십 명의 인원이 독립적으로 블로그 코드베이스를 컴파일했다&quot;는 보고 내용과 명확히 구별되는 별도의 파이프라인 실행 기록이다.</li>
+<li><strong>참조 위치:</strong> danofairanks 댓글 구역</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-커뮤니티의-반응-및-기술적-사회적-시사점">2.3. 커뮤니티의 반응 및 기술적/사회적 시사점</h5>
+<p>성명서 하단 토론 구역(8개 댓글)에서 확인된 주요 반응 및 관점은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>역사적 의의 및 검증 성과에 대한 호평</strong></p>
+<ul>
+<li><strong>[사실]</strong> 사용자 stojko-stojan은 이번 성명서 발표를 역사적 순간을 직접 목격하는 희귀한 기회로 평가하며 축하를 전하였다.</li>
+<li><strong>[사실]</strong> 사용자 standsazkar-hub는 신속하고 철저한 검증 프로세스에 감사를 표하며, 인류가 리만 가설을 해결할 수 있는 형식 검증 소프트웨어를 구축할 만큼 지적 발전을 이루었다는 점을 강조하였다.</li>
+<li><strong>참조 위치:</strong> stojko-stojan, standsazkar-hub 댓글 구역</li>
+</ul>
+</li>
+<li>
+<p><strong>연산 자원 불평등 및 수학 발전 속도</strong></p>
+<ul>
+<li><strong>[사실]</strong> 사용자 yannlk는 연산 자원의 불평등(Inequalities in compute)에 관한 사회적 우려를 제기함과 동시에, 형식 검증 도입으로 수학 연구의 발전 속도가 전례 없이 빨라지고 있음을 언급하였다.</li>
+<li><strong>참조 위치:</strong> yannlk 댓글 구역</li>
+</ul>
+</li>
+<li>
+<p><strong>타 밀레니엄 난제로의 확장 기대</strong></p>
+<ul>
+<li><strong>[사실]</strong> 사용자 Xyndra 및 Agi-Asi는 리만 가설과 동일한 밀레니엄 난제 목록에 속한 'P 대 NP 문제(P vs NP)'를 언급하였다.</li>
+<li><strong>[소스의 주장]</strong> Agi-Asi는 리만 가설이 수학의 '성배(Holy Grail)'라고 평가하며, 이러한 기술적 흐름에 힘입어 연내에 P = NP 명제에 대한 참/거짓 여부를 규명하는 새로운 증명이 등장할 것이라고 예측하였다.</li>
+<li><strong>참조 위치:</strong> Xyndra, Agi-Asi 댓글 구역</li>
+</ul>
+</li>
+<li>
+<p><strong>논리적 건전성(Soundness) 입증의 기술적 가치</strong></p>
+<ul>
+<li><strong>[사실]</strong> 사용자 cognivore는 Lean 논리 자체의 결함을 이용한 허위 증명 가능성을 차단한 외부 검증기(<code>con-leche</code>, <code>con-ron</code>)의 형식적 건전성 증명 및 신속한 검증 작업 완료가 이번 성과의 가장 중요한 기술적 핵심이라고 지적하였다.</li>
+<li><strong>참조 위치:</strong> cognivore 댓글 구역</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-and-speakers">3. 등장 인물 및 화자 (Key Figures and Speakers)</h4>
+<p>소스 텍스트에 등장하는 인물, 조직, 토론 참여자 및 기술 도구의 역할과 확인 여부는 아래 표와 같다. 소스 텍스트에서 세부 직무나 소속이 제시되지 않은 항목은 지침에 따라 '확인 불가'로 명시하였다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소스 내 역할 / 설명</th>
+<th style="text-align:left">확인 여부</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">레벤트 알푀게 (Levent Alpöge)</td>
+<td style="text-align:left">리만 가설 증명 Lean 라이브러리(1,700만 줄) 작성자 및 공개자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">Lean 및 Mathlib 커뮤니티 (Lean and Mathlib communities)</td>
+<td style="text-align:left">증명 검증을 수행하고 공동 성명서를 발표한 주체</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left">Lean FRO</td>
+<td style="text-align:left">성명서를 지지(Endorsed)한 조직/기관 (세부 정보 소스 내 미제시)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">Mathlib Initiative</td>
+<td style="text-align:left">성명서를 지지(Endorsed)한 프로젝트/조직 (세부 정보 소스 내 미제시)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">stojko-stojan</td>
+<td style="text-align:left">댓글 작성자. 역사적 의의 강조 및 축하 메시지 작성</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">yannlk</td>
+<td style="text-align:left">댓글 작성자. 연산 자원 불평등 우려 및 수학 발전 속도 언급</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">standsazkar-hub</td>
+<td style="text-align:left">댓글 작성자. 신속한 소프트웨어 검증 성과 및 지적 발전 평가</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">aryah47</td>
+<td style="text-align:left">댓글 작성자. 일반화된 리만 가설(GRH) 명제 서술의 엄밀성 질의</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">cognivore</td>
+<td style="text-align:left">댓글 작성자. Lean 논리 결함 차단 및 건전성 검증의 중요성 강조</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">Xyndra</td>
+<td style="text-align:left">댓글 작성자. 밀레니엄 난제 연관성 및 P vs NP 언급</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">Agi-Asi</td>
+<td style="text-align:left">댓글 작성자. 리만 가설의 성격 강조 및 P vs NP 증명 예측</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">danofairanks</td>
+<td style="text-align:left">댓글 작성자. 기계 검증의 기술적 구체성과 한계를 상세 분석</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">클로드 코드 (Claude Code)</td>
+<td style="text-align:left">MIT 검증 페이지 파이프라인 실행에 활용된 AI/소프트웨어 도구</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-figures-and-timestamps">4. 수치 및 시점 (Figures and Timestamps)</h4>
+<p>소스 텍스트에 기재된 정량적 수치, 날짜, 시각 정보의 전체 목록은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>주요 날짜 및 시각 정보</strong></p>
+<ul>
+<li><strong>2026년 11월 12일:</strong> xenaproject 블로그 형식 검증 기준 포스트 게시일</li>
+<li><strong>2026년 11월 20일:</strong> 레벤트 알푀게의 리만 가설 증명 라이브러리 공개일</li>
+<li><strong>2026년 11월 21일 13:55:</strong> Lean 커뮤니티 블로그 공동 성명서 게시 시각</li>
+<li><strong>댓글 작성 시점 (성명서 게시 시점 기준 역산):</strong>
+<ul>
+<li>stojko-stojan: 2시간 전 (2 hours ago)</li>
+<li>yannlk: 2시간 전 (2 hours ago)</li>
+<li>standsazkar-hub: 2시간 전 (2 hours ago)</li>
+<li>aryah47: 2시간 전 (2 hours ago)</li>
+<li>cognivore: 1시간 전 (1 hour ago)</li>
+<li>Xyndra: 1시간 전 (1 hour ago)</li>
+<li>Agi-Asi: 1시간 전 (1 hour ago)</li>
+<li>danofairanks: 5분 전 (5 minutes ago)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>정량적 수치 정보</strong></p>
+<ul>
+<li><strong>1,700만 줄 (17 million lines of code):</strong> 알푀게가 제출한 Lean 라이브러리의 코드 규모</li>
+<li><strong>4가지 기준 (The four criteria):</strong> 증명 검증을 위해 충족해야 하는 필수 조건 개수</li>
+<li><strong>8개 (8 comments):</strong> 블로그 포스트 하단에 작성된 전체 댓글 수</li>
+<li><strong>수십 명 (Dozens of people):</strong> 코드베이스를 직접 성공적으로 컴파일했다고 보고한 인원 규모</li>
+<li><strong>1명 (One person):</strong> MIT 검증 페이지의 검증 파이프라인(Claude Code 활용)을 실행한 인원 수</li>
+<li><strong>2개 (Two independent tools):</strong> 증명된 정리와 원래 명제를 비교하는 데 사용된 독립 도구 수 (<code>comparator</code>, <code>con-leche --compare</code>)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<p>본 검증 보고서 및 소스 텍스트에서는 소프트웨어에 의한 형식 검증 성공에도 불구하고 다음과 같은 기술적·수학적 한계점과 미해결 요소들을 명시적으로 지적하고 있다.</p>
+<ul>
+<li>
+<p><strong>인간의 수학적 이해 부재 (Human Understanding)</strong></p>
+<ul>
+<li>기계적인 형식 검증 및 커널 통과는 완료되었으나, 증명 작성자인 알푀게 본인조차 증명 논증 전체를 완전히 마스터(mastered)하지는 못했다고 언급하였다.</li>
+<li>따라서 이번 성명은 컴퓨터 파이프라인에 의한 구문적 규칙 합치성 보증일 뿐, 인간 수학자 사회가 증명의 수학적 아이디어나 개념적 논리 구조를 완전히 이해했거나 수학적으로 재검증했음을 의미하지 않는다.</li>
+</ul>
+</li>
+<li>
+<p><strong>발견 경위 및 노동 분담 미제시 (Discovery Provenance)</strong></p>
+<ul>
+<li>알푀게의 비고(remark) 문서에는 해당 증명을 도출하기 위해 수행된 탐색 시도 횟수(attempt counts)나 인간 및 AI/소프트웨어 간의 작업 분담 비율(split of labour)에 대한 데이터가 전혀 공개되어 있지 않다.</li>
+</ul>
+</li>
+<li>
+<p><strong>잔여 신뢰 문제 (Residual Trust)</strong></p>
+<ul>
+<li>독립적인 커널과 외부 검증기들(<code>con-leche</code>, <code>con-ron</code> 등)이 모두 Mathlib의 상위 레벨 기본 정의와 동일하게 추출된 원시 내보내기 파일(Raw Proof Export File)을 입력값으로 공유한다.</li>
+<li>따라서 Mathlib 라이브러리 상위 레벨 자체에 존재하는 기본 수학적 정의의 오류 가능성이나 공유 내보내기 파일 생성(export) 프로세스 자체의 결함은 검증 범위 밖에 남아 있다(untested).</li>
+</ul>
+</li>
+<li>
+<p><strong>일반화된 리만 가설 (Generalised R.H.) 관련 서술의 불확실성</strong></p>
+<ul>
+<li>고전적 리만 가설(Classical R.H.)은 Mathlib 내에 명확히 형식화되어 사전 검토를 마쳤으나, 본 증명에 포함된 '일반화된 리만 가설(Generalised R.H.)' 명제가 Lean 매커니즘 상에서 엄밀하게 고정되었는지, 그리고 학술적 합의(consensus)가 완전히 도달했는지에 대해 사용자(aryah47)의 질의가 제기되었으며 이에 대한 추가적 검증 결과는 소스 상에서 확인되지 않는다.</li>
+</ul>
+</li>
+<li>
+<p><strong>기타 미확인 요소</strong></p>
+<ul>
+<li>인물들의 구체적 소속 기관, 직책, 연구 배경 및 검증에 투입된 연산 자원(하드웨어 스펙) 등은 소스 텍스트에 제시되지 않아 모두 <strong>&quot;확인 불가&quot;</strong> 또는 **&quot;소스에서 다루지 않음&quot;**으로 처리한다.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

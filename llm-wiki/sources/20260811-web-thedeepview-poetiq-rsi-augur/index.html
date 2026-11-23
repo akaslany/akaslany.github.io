@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why former DeepMind engineers are targeting RSI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Why former DeepMind engineers are targeting RSI</h1>
+<p class="page-meta">웹 · 2026-08-11</p>
+<h2 id="요약">요약</h2>
+<p>Poetiq의 재귀적 자기개선 구조와 Augur의 역할, 공개 근거와 안전성 검증의 한계를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.thedeepview.com/articles/why-former-deepmind-engineers-are-targeting-rsi">출처</a> · <a href="https://www.youtube.com/watch?v=C4sXElsAj0o">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/recursive-self-improvement/">Recursive Self-Improvement</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="심층-브리핑-poetiq의-재귀적-자기개선-rsi-기술과-augur-시스템-분석">[심층 브리핑] Poetiq의 재귀적 자기개선(RSI) 기술과 Augur 시스템 분석</h3>
+<h4 id="1-보고서-개요-및-출처-정보">1. 보고서 개요 및 출처 정보</h4>
+<p>본 보고서는 2026년 8월 10일 매체 <code>The Deep View</code>의 저자 <code>Nat Rubio-Licht</code>가 게시한 기사 <code>Why former DeepMind engineers are targeting RSI</code>를 바탕으로 작성된 기술 분석서입니다.</p>
+<blockquote>
+<p><strong>[필수 명시 사항]</strong>
+<strong>본 보고서는 공개된 The Deep View 기사와 그 안에 실린 창업자 발언을 바탕으로 한 기술 해설이며, 보고서 제작 과정에서 Poetiq의 내부 기술 문서, 소스 코드, 벤치마크 원자료, 외부 보안 평가 결과 등을 독립적으로 검증하지 않았습니다. 창업자 발언은 직접 인터뷰 원문이 아니라 기사가 전한 인용으로 귀속하며, 기술 해석과 편집부 논평도 확인된 제품 성능과 구분합니다.</strong></p>
+</blockquote>
+<h4 id="2-핵심-개념-정의-재귀적-자기개선-rsi-이란-무엇인가">2. 핵심 개념 정의: 재귀적 자기개선(RSI)이란 무엇인가?</h4>
+<ul>
+<li><strong>RSI(Recursive Self-Improvement)의 정의:</strong> 쉽게 비유하자면 AI가 단순히 업무를 수행하는 수준을 넘어, '자신의 업무 능력을 개선하는 방법' 자체를 스스로 더 낫게 만드는 과정을 의미합니다. 즉 개선을 수행하는 시스템이 자신의 개선 절차를 반복적으로 더 낫게 만든다는 강한 개념입니다.</li>
+<li><strong>Poetiq의 구조적 특징:</strong> 기사 설명상 Poetiq의 방식은 거대언어모델(LLM)의 핵심인 '가중치(weights)' 전체를 계속 직접 수정하는 그림과 다릅니다. 대신 **LLM 외부에서 작동하는 '좁은 과제용 하네스(Harness)'**가 <strong>[평가 → 수정 → 재평가]</strong> 과정을 반복하며 특정 작업의 최적화 절차를 다듬는 구조로 소개됩니다.</li>
+</ul>
+<h4 id="3-기술적-개념의-명확한-구분">3. 기술적 개념의 명확한 구분</h4>
+<p>전문적인 분석을 위해 혼동하기 쉬운 네 가지 개념을 다음과 같이 정의합니다.</p>
+<ul>
+<li><strong>벤치마킹(Benchmarking):</strong> 특정 모델이 주어진 도메인의 과제를 얼마나 정확하고 빠르게 수행하는지 정량적으로 측정하는 단계입니다.</li>
+<li><strong>모델 선택 및 라우팅(Model Selection/Routing):</strong> 벤치마크 결과를 기반으로, 비용과 성능을 고려하여 <strong>오픈소스 모델과 독점(Proprietary) 모델 중</strong> 해당 작업에 가장 적합한 모델을 매칭하는 기술입니다.</li>
+<li><strong>최적화(Optimization):</strong> 프롬프트 엔지니어링, 도구 활용 방식, 워크플로우 조정, 혹은 미세 조정(fine-tuning)을 통해 모델의 최종 성능을 제고하는 개별적인 활동입니다.</li>
+<li><strong>재귀적 자기개선(RSI):</strong> 위의 최적화 작업을 수행하는 '절차(알고리즘)' 자체가 반복을 거듭할수록 스스로 더 고도화된다는 강력한 기술적 주장입니다.</li>
+</ul>
+<h4 id="4-poetiq의-제품-및-기술적-주장-분석">4. Poetiq의 제품 및 기술적 주장 분석</h4>
+<p>다음은 창업자(Ian Fischer, Shumeet Baluja)의 발언과 기사 내용을 바탕으로 분석한 Poetiq의 핵심 자산입니다.</p>
+<ul>
+<li><strong>Augur 시스템:</strong> 기사에 따르면 기업과 연구자가 맞춤형 도메인 벤치마크로 모델 성능을 비교하고, 비용과 성능을 고려해 특정 작업에 맞는 공개형·독점형 모델을 찾도록 돕는 제품입니다.</li>
+<li><strong>암묵적 지도(Implicit Map):</strong> 창업자 Baluja는 RSI 시스템이 최적화 지점을 찾기 위해 여러 모델을 훑으며 모델별 강점 지도를 자동으로 만들었고, 이 내부 기능을 명시적 제품으로 확장한 것이 Augur라고 설명했습니다. 기사만으로 지도 생성 과정의 인간 개입 정도나 성능은 확인할 수 없습니다.</li>
+<li><strong>RSI 연구와의 상관관계:</strong> Augur는 RSI 시스템 구축을 위해 내부적으로 필요했던 '측정 도구'에서 출발했습니다. 창업자들은 RSI가 효과적으로 작동하려면 모델의 한계를 정확히 파악하는 데이터 피드백 루프가 필수적이라고 주장합니다.</li>
+</ul>
+<h4 id="5-생활-비유를-통한-이해-돕기">5. 생활 비유를 통한 이해 돕기</h4>
+<p>현재 Poetiq이 제시하는 시스템 구조는 다음과 같은 역할 분담으로 설명할 수 있습니다.</p>
+<ul>
+<li><strong>기반 LLM (공구함):</strong> 다양한 기능이 들어 있는 표준 도구 상자입니다.</li>
+<li><strong>Augur (시험대):</strong> 어떤 공구가 현재 작업(예: 정밀 기계 수리)에 가장 효율적인지 정밀하게 측정하는 검사 장비입니다.</li>
+<li><strong>외부 RSI 하네스 (감독자):</strong> 시험대의 결과를 분석하여, 공구를 사용하는 순서나 방식을 개선하고 이를 다시 시험하여 최적의 공정을 찾아내는 '지능형 감독자'입니다.</li>
+<li><strong>핵심 메시지:</strong> 정밀한 '시험대(Augur)'가 개발되었다는 사실이 곧 '감독자(RSI)'가 인간의 개입 없이 무한히 똑똑해졌음을 보장하는 것은 아닙니다. 시험과 개선은 별개의 역량입니다.</li>
+</ul>
+<h4 id="6-안전성-정책-및-비판적-검토">6. 안전성 정책 및 비판적 검토</h4>
+<ul>
+<li><strong>창업자 주장 및 개념:</strong> Fischer는 Poetiq의 기술을 **&quot;자가 최적화하는 최적화 도구(Self-optimizing optimizers)&quot;**라고 정의합니다. 그는 RSI가 초지능(Superintelligence)에 도달하는 가장 중요한 개척지(Frontier)라고 믿으며, 인간이 수동으로 개선하는 방식보다 훨씬 빠를 것이라고 주장합니다.</li>
+<li><strong>접근 제어(Access Control):</strong> Poetiq은 RSI 기술이 위험해질 수 있음을 인정하고, 이를 외부에 판매하지 않는 <strong>'내부 전용(Internal-only)'</strong> 정책을 고수하고 있습니다.</li>
+<li><strong>기술적 분석:</strong> 그러나 판매 제한은 접근 제어 정책일 뿐, 기술 자체가 안전하다는 증명이 아닙니다. 좁은 범위의 최적화에서도 목표가 잘못 설정되거나 점수만 올리는 행동, 권한 밖 도구 사용, 성능 회귀가 생길 수 있습니다.</li>
+<li><strong>검증 질문 리스트:</strong> 향후 시스템 검증을 위해 반드시 확인되어야 할 항목들입니다.
+<ul>
+<li>권한 분리 및 샌드박스(Sandbox) 격리 수준</li>
+<li>성능 퇴행 시 자동 복구(Rollback) 체계의 신뢰성</li>
+<li>감사 로그(Audit Log) 및 연산 자원 제한(Compute Cap) 설정 여부</li>
+<li>인간의 최종 승인 절차(Human-in-the-loop)의 실효성</li>
+<li>이상행동 탐지, 중단, 보고, 복구를 포함한 사고 대응(Incident Response)</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-확인되지-않은-증거-및-잠재적-위험">7. 확인되지 않은 증거 및 잠재적 위험</h4>
+<ul>
+<li><strong>누락된 기술적 근거:</strong> 기사에는 구체적 아키텍처·코드, 실제로 바뀌는 구성요소와 인간 승인 경계, 반복 개선 성능 곡선, 비교 baseline·dataset, contamination 통제, statistical significance, 비용·시간, 외부 재현 및 safety evaluation이 제시되지 않습니다.</li>
+<li><strong>구조적 위험:</strong> 좁은 과제라도 보상 해킹, 목표 오설정, benchmark overfitting, regression, tool/API 오용, 다른 과제로의 일반화 실패 위험을 확인해야 합니다. 이런 실패가 실제로 발생했다고 단정하는 것이 아니라, 공개 evidence가 부족한 상태에서 시험해야 할 반론입니다.</li>
+<li><strong>외부 환경 인용:</strong> 기사에서 언급된 Anthropic의 Dario Amodei 및 1,200명 연구자의 'Pacing the Frontier' 캠페인은 RSI의 위험성에 대한 업계의 우려를 보여주는 배경 정보입니다. 본 보고서에서는 해당 캠페인의 명단이나 원문을 직접 대조 검증하지 않았음을 밝힙니다.</li>
+</ul>
+<h4 id="8-our-deeper-view-편집부-및-분석가-해설">8. Our Deeper View: 편집부 및 분석가 해설</h4>
+<ul>
+<li><strong>편집부의 실용성 해석:</strong> The Deep View의 <code>Our Deeper View</code>는 모든 일을 하는 범용 초지능보다 특정 기술을 benchmark하고 좁은 과제에 RSI를 적용하는 방식이 실용적일 수 있다고 해설합니다. 이는 기사 편집부의 해석이지 실험으로 입증된 결론은 아닙니다.</li>
+<li><strong>기업적 관점:</strong> 충분히 검증된다면 기업은 모든 분야에서 뛰어난 모델보다 특정 업무에서 비용·성능 균형을 맞추는 도구를 선호할 수 있습니다. 다만 Augur의 실제 비용 절감, 성능 개선, 고객 성과는 기사만으로 확인되지 않습니다.</li>
+</ul>
+<h4 id="9-판단-갱신-및-철회-기준">9. 판단 갱신 및 철회 기준</h4>
+<p>본 보고서의 분석 내용은 아래와 같은 객관적 증거가 공개될 경우 수정되거나 철회될 수 있습니다.</p>
+<ul>
+<li>Poetiq의 상세 기술 백서 또는 소스 코드의 일부 공개</li>
+<li>벤치마크 프로토콜 및 데이터 오염(Contamination) 통제 방식의 공개</li>
+<li>제3자 기관에 의한 RSI 성능 향상 및 안전성 재현 실험 결과</li>
+<li>시스템의 무단 행동 또는 벤치마크 편향성 관련 실제 사고 사례 보고</li>
+</ul>
+<h4 id="10-최종-주의사항">10. 최종 주의사항</h4>
+<ul>
+<li>본 보고서는 &quot;스스로 진화하는 AI가 기술적으로 완성되었다&quot;거나 &quot;초지능의 도래가 확정적이다&quot;라는 단정적 표현을 사용하지 않습니다.</li>
+<li>본 문서는 정보 제공 및 기술 분석만을 목적으로 하며, 특정 기업에 대한 투자 권유나 주식 매수·매도 추천이 아닙니다. 모든 투자 결정의 책임은 본인에게 있습니다.</li>
+<li>숨은 chain-of-thought를 재현하거나 공개하지 않으며, 고수준 개념·근거·반론만 설명합니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/recursive-self-improvement/">Recursive Self-Improvement</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li></ul></section>
+</main>
+</body>
+</html>

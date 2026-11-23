@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하네스 러닝(Harness Learning) 기반 테스트 시간 적응 기술 분석 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>하네스 러닝(Harness Learning) 기반 테스트 시간 적응 기술 분석 보고서</h1>
+<p class="page-meta">논문 · 2026-10-13</p>
+<h2 id="요약">요약</h2>
+<p>하네스 러닝(Harness Learning)은 거대언어모델(LLM) 기반 에이전트의 파라미터를 직접 업데이트하지 않고, 모델 호출, 도구 활용, 정보 흐름을 제어하는 실행 가능 파이썬(Python) 프로그램인 '하네스(Harness)'를 실행 피드백을 통해 동적으로 수정함으로써 새로운 태스크에 적응시키는 기술이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2609.35738">출처</a> · <a href="https://www.youtube.com/watch?v=2MBpknPELsQ">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="하네스-러닝-harness-learning-기반-테스트-시간-적응-기술-분석-보고서">하네스 러닝(Harness Learning) 기반 테스트 시간 적응 기술 분석 보고서</h3>
+<h4 id="1-개요">1. 개요</h4>
+<p>하네스 러닝(Harness Learning)은 거대언어모델(LLM) 기반 에이전트의 파라미터를 직접 업데이트하지 않고, 모델 호출, 도구 활용, 정보 흐름을 제어하는 실행 가능 파이썬(Python) 프로그램인 '하네스(Harness)'를 실행 피드백을 통해 동적으로 수정함으로써 새로운 태스크에 적응시키는 기술이다. 기존 언어모델 에이전트는 다양한 문제 구조에 맞춰 오케스트레이션 로직을 변경해야 하는 한계가 있었다. 하네스 러닝은 하네스 코드 수정을 경사하강법 기반 적응에서의 가중치 업데이트 역할로 재정의하여 프로그램 공간 상의 메타 러닝(Meta-Learning) 프레임워크로 정형화한다.</p>
+<p>이 아키텍처의 핵심 구성요소는 고정된 <strong>솔버(Solver)</strong> 모델, 수정 가능한 실행 프로그램인 <strong>하네스(Harness)</strong>, 그리고 하네스 코드를 재작성하는 <strong>제안자(Proposer)</strong> 모델이다. 솔버는 기본 언어 모델로서 문제 해결에 필요한 추론과 출력을 담당하며 학습 및 추론 과정 전체에서 파라미터가 고정(Frozen)된다. 하네스는 솔버 모델의 호출 시점, 컨텍스트 구성, 외부 도구 실행 및 루프 구조를 정의하는 실행 코드이다. 제안자 모델은 주어진 태스크 설명, 현재 하네스 코드, 실행 피드백 보고서를 입력받아 하네스의 구조화된 코드 수정안(Search/Replace 편집)을 생성한다. <code>[SOURCE_IMAGE_1]</code> 및 <code>[SOURCE_IMAGE_2]</code>에 기술적으로 시각화된 바와 같이, 제안자 모델이 실행 피드백을 바탕으로 하네스를 수정하는 동안 솔버 모델은 완전히 고정된 상태를 유지한다.</p>
+<p>본 연구의 핵심 목표는 학습 과정에서 경험하지 못한 보지 못한(Unseen/Out-of-domain) 태스크에 대해 추론 단계(Test-time)에서 파라미터 업데이트 없이 실행 피드백만으로 일반화 가능한 적응 성능을 확보하는 것이다. 추론(Reasoning Gym) 및 다단계 질의응답(Multi-hop QA) 데이터셋 실험 결과, 하네스 러닝으로 학습된 4B 제안자 모델은 단일 단계 수정만으로 35B 교사(Teacher) 모델의 평균 성능을 뛰어넘었으며, 여러 라운드에 걸친 연속적인 피드백 기반 수정을 통해 보지 못한 태스크에서도 지속적인 성능 향상을 달성함을 검증하였다.</p>
+<hr />
+<h4 id="2-주요-논점">2. 주요 논점</h4>
+<h5 id="논점-1-하네스-러닝의-개념과-메타-러닝-meta-learning-프레임워크">논점 1: 하네스 러닝의 개념과 메타 러닝(Meta-Learning) 프레임워크</h5>
+<h6 id="개념-정의-및-작동-기전">개념 정의 및 작동 기전</h6>
+<p>하네스(Harness)는 언어모델 에이전트 환경에서 모델 호출 생성, 외부 도구 인터페이스 실행, 실행 결과의 피드백 처리, 오케스트레이션 루프 제어를 담당하는 실행 가능한 파이썬 프로그램이다. 제안자(Proposer) 모델은 이전 하네스 코드($h_{t-1}$)와 개발 질문 세트($Q_{fb}$)에서 수집된 실행 결과 보고서를 검토한 후 구조화된 서치 및 리플레이스(SEARCH/REPLACE) 방식을 통해 하네스 코드를 직접 수정하는 프로그램 편집($y_t$)을 수행한다. <code>[SOURCE_IMAGE_1]</code>과 <code>[SOURCE_IMAGE_2]</code>는 이러한 하네스 수정 및 피드백 순환 구조를 명확히 보여준다.</p>
+<h6 id="메타-러닝-정형화">메타 러닝 정형화</h6>
+<p>하네스 러닝은 실행 가능한 프로그램에 대한 메타 러닝으로 정형화된다.</p>
+<ul>
+<li><strong>안쪽 루프 (Inner loop - 추론 시간 적응)</strong>: 추론 단계에서 고정된 솔버 및 제안자 모델을 유지한다. 시드 하네스 $h_0$에서 시작하여 $t$번째 라운드마다 제안자 모델은 태스크 설명, 현재 하네스 $h_{t-1}$, 피드백 질문 세트($Q_{fb}^t$)의 실행 보고서로 구성된 컨텍스트 $x_t$를 입력받아 $G$개의 후보 수정안 ${y_i}<em>{i=1}^G$을 샘플링한다. 각 수정안을 적용하여 $h'<em>i = \text{Apply}(h</em>{t-1}, y_i)$를 생성한 후, 평가 질문 세트($Q</em>{score}^t$)에서의 점수를 기반으로 최적의 하네스 $h_t = \text{Select}(h_{t-1}, {h'<em>i}</em>{i=1}^G; Q_{score}^t)$를 선택하여 다음 라운드로 전달한다.</li>
+<li><strong>바깥 루프 (Outer loop - 제안자 정책 학습)</strong>: 다양한 학습 태스크 집합에서 하네스 수정 결과로 얻어지는 최종 평가 성능 보상을 바탕으로 강화학습을 통해 제안자 모델의 파라미터($\theta$)를 최적화한다. 이는 $\max_\theta \mathbb{E}[J(h_T; Q_{eval})]$의 메타 목표를 지향한다.</li>
+</ul>
+<h6 id="사실-소스-주장-작성자-해석의-명확한-구별">사실, 소스 주장, 작성자 해석의 명확한 구별</h6>
+<ul>
+<li><strong>명시적 사실 (Facts)</strong>: 구현된 프레임워크는 고정된 솔버와 실행 보고서를 활용하여 파이썬 하네스 코드를 편집하는 구조이다.</li>
+<li><strong>소스의 주장 (Source Claims)</strong>: 하네스 러닝을 통해 모델 파라미터 수정 없이 실행 피드백만으로 보지 못한 태스크에 높은 일반화 성능을 보이는 테스트 시간 적응이 가능하다.</li>
+<li><strong>작성자의 구조적 해석 (Analyst Interpretation)</strong>: 에이전트의 제어 로직(하네스)과 인지 능력(솔버)을 완전히 분리함으로써, 가중치 오염(Weight corruption) 위험 없이 에이전트의 실행 아키텍처를 안전하고 모듈화된 방식으로 지속 개선할 수 있는 정보 아키텍처적 기반을 제공한다.</li>
+</ul>
+<h6 id="위치-표기">위치 표기</h6>
+<ul>
+<li>Section 1, Section 3.1, Section 4.2</li>
+<li><code>[SOURCE_IMAGE_1]</code>, <code>[SOURCE_IMAGE_2]</code> 참조</li>
+</ul>
+<hr />
+<h5 id="논점-2-제안자-proposer-모델의-학습-방법론-sft-및-rl-grpo">논점 2: 제안자(Proposer) 모델의 학습 방법론 (SFT 및 RL/GRPO)</h5>
+<h6 id="지도-미세조정-sft">지도 미세조정 (SFT)</h6>
+<p>강화학습에 앞서 제안자 모델의 초기화를 위해 교사 모델(Qwen3.6-35B-A3B)이 수행한 성공적인 하네스 수정 이력을 수집하여 지도 미세조정을 진행한다. 초기 시드 하네스의 성능을 개선하고 품질 필터를 통과한 432개의 검증된 수정 사례를 구축하여 제안자 모델이 기본적인 코드 편집 및 실행 구조를 학습하도록 한다.</p>
+<h6 id="그룹-상대-정책-최적화-grpo-및-수학적-보상-정형화">그룹 상대 정책 최적화 (GRPO) 및 수학적 보상 정형화</h6>
+<p>초기화된 제안자 모델은 그룹 상대 정책 최적화(GRPO, Group Relative Policy Optimization) 알고리즘을 통해 학습된다. 토큰 수준 중요도 비율 $\omega_{i,k}(\theta) = \frac{\pi_\theta(y_{i,k}|x, y_{i,&lt;k})}{\pi_{\theta_{old}}(y_{i,k}|x, y_{i,&lt;k})}$와 그룹 정규화된 어드밴티지 $\hat{A}_i = \frac{r_i - \text{mean}(r)}{\text{std}(r) + \delta}$를 사용할 때, 클리핑된 대리 목적 함수(Clipped Surrogate Objective)는 다음과 같다:</p>
+<p>$$J(\theta) = \mathbb{E}<em>{x \sim \mathcal{D}, {y_i} \sim \pi</em>{\theta_{old}}(\cdot|x)} \left[ \frac{1}{\sum_{j=1}^G |y_j|} \sum_{i=1}^G \sum_{k=1}^{|y_i|} \min \left( \omega_{i,k}(\theta) \hat{A}<em>i, \text{clip}(\omega</em>{i,k}(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_i \right) \right]$$</p>
+<p>동일한 입력 컨텍스트 $x$에 대해 제안자 모델로부터 $G$개의 후보 수정안 ${y_i}_{i=1}^G$을 샘플링하고, 각 후보 하네스 $h'<em>i$를 독립된 평가 질문 세트($Q</em>{score}$)에서 실행하여 보상을 산출한다.</p>
+<p><strong>1. Reasoning Gym 보상 함수 정형화</strong>:
+$$r_i = J(h'<em>i; Q</em>{score}) + v_i$$
+여기서 유효성 보조 보상(Auxiliary Validity Reward) $v_i$는 다음과 같이 구체적으로 정의된다:
+$$v_i = 0.05 \cdot \mathbf{1}[y_i \text{ 구문 파싱 성공}] + 0.10 \cdot \mathbf{1}[h'<em>i \neq \bot] + 0.15 \cdot \rho</em>{run}(h'<em>i)$$
+$\rho</em>{run}$은 평가 질문 중 오류 없이 완료된 실행 시도의 비율이다.</p>
+<p><strong>2. Multi-hop QA 보상 함수 정형화</strong>:
+$$r_i = \begin{cases} J(h'<em>i; Q</em>{score}) + 0.1 \cdot \mathbf{1}[h'_i \neq \bot], &amp; \text{실행 가능한 하네스인 경우} \ 0, &amp; \text{실행 불가능한 경우} \end{cases}$$</p>
+<h6 id="단일-단계-single-step-vs-다단계-multistep-rl">단일 단계(Single-step) vs 다단계(Multistep) RL</h6>
+<ul>
+<li><strong>단일 단계 RL (Single-step RL)</strong>: 각 학습 단계에서 독립적인 시드 하네스 또는 고정된 부모 하네스 컨텍스트만을 입력으로 제공하여 단일 수정의 즉각적인 보상을 기반으로 학습한다.</li>
+<li><strong>다단계 RL (Multistep RL)</strong>: 이전 수정 단계에서 선택된 하네스와 새로 갱신된 실행 피드백 보고서를 순차적 입력으로 구성하여 학습을 진행한다. (Reasoning Gym에서는 오프라인 상태 갱신 방식, QA 환경에서는 온라인 동적 생성 방식 적용)</li>
+</ul>
+<h6 id="위치-표기-2">위치 표기</h6>
+<ul>
+<li>Section 3.2, Section 4.3</li>
+<li>Appendix B.2, Appendix B.3, Appendix B.4 참조</li>
+</ul>
+<hr />
+<h5 id="논점-3-추론-reasoning-gym-및-다단계-질의응답-multi-hop-qa-실험-결과">논점 3: 추론(Reasoning Gym) 및 다단계 질의응답(Multi-hop QA) 실험 결과</h5>
+<h6 id="실험-데이터셋-및-평가-방식">실험 데이터셋 및 평가 방식</h6>
+<ul>
+<li><strong>Reasoning Gym</strong>: 21개의 보지 못한(Unseen/OOD) 태스크 패밀리(미로, 수독구, 복합 산술 등)를 포함하여 평가를 진행하며, 표준 양식(Canonical) 및 변형 양식(Format-varied) 질문으로 평가한다.</li>
+<li><strong>Multi-hop QA</strong>: HotpotQA(In-domain)로 제안자 모델을 학습시킨 후, 보지 못한 데이터셋인 MuSiQue 및 2WikiMultihopQA(Out-of-domain)로의 전이 성능을 평가한다.</li>
+</ul>
+<h6 id="성능-비교-마크다운-테이블">성능 비교 마크다운 테이블</h6>
+<h6 id="표-1-reasoning-gym-보지-못한-태스크-평가-종합-성능-비교-21개-ood-패밀리-24개-확장-패밀리">[표 1] Reasoning Gym 보지 못한 태스크 평가 종합 성능 비교 (21개 OOD 패밀리 / 24개 확장 패밀리)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 / 학습 설정 (Model &amp; Setup)</th>
+<th style="text-align:left">단일 수정 평균 (Single-step Mean)</th>
+<th style="text-align:left">단일 수정 오라클 상위 8개 (Oracle Best-of-8)</th>
+<th style="text-align:left">다단계 5라운드 보유 점수 (Canonical)</th>
+<th style="text-align:left">다단계 5라운드 보유 점수 (Format-varied)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>시드 하네스 (Seed Baseline)</strong></td>
+<td style="text-align:left">0.56 (기준선)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">0.400</td>
+<td style="text-align:left">0.380</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>베이스 제안자 (Base Proposer)</strong></td>
+<td style="text-align:left">0.32</td>
+<td style="text-align:left">0.63</td>
+<td style="text-align:left">0.593</td>
+<td style="text-align:left">0.498</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지도 미세조정 (SFT)</strong></td>
+<td style="text-align:left">0.49</td>
+<td style="text-align:left">0.78</td>
+<td style="text-align:left">0.698</td>
+<td style="text-align:left">0.688</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>단일 단계 강화학습 (Single-step RL)</strong></td>
+<td style="text-align:left"><strong>0.62</strong></td>
+<td style="text-align:left"><strong>0.83</strong></td>
+<td style="text-align:left"><strong>0.699</strong></td>
+<td style="text-align:left"><strong>0.725</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>다단계 강화학습 (Multistep RL)</strong></td>
+<td style="text-align:left">0.534 (19개 평가)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left"><strong>0.701</strong></td>
+<td style="text-align:left"><strong>0.649</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>교사 모델 (Teacher - Qwen3.6-35B)</strong></td>
+<td style="text-align:left">0.56</td>
+<td style="text-align:left">0.85</td>
+<td style="text-align:left">N/A (단일/독립 평가)</td>
+<td style="text-align:left">N/A (단일/독립 평가)</td>
+</tr>
+</tbody>
+</table>
+<h6 id="표-2-다단계-질의응답-multi-hop-qa-데이터셋-및-학습-방식별-성능-비교">[표 2] 다단계 질의응답(Multi-hop QA) 데이터셋 및 학습 방식별 성능 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">데이터셋 (Dataset)</th>
+<th style="text-align:left">평가 유형</th>
+<th style="text-align:left">베이스 (Base)</th>
+<th style="text-align:left">지도 미세조정 (SFT)</th>
+<th style="text-align:left">단일 단계 RL (Single-step RL)</th>
+<th style="text-align:left">다단계 RL (Multistep RL)</th>
+<th style="text-align:left">교사 모델 (Teacher)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>HotpotQA</strong></td>
+<td style="text-align:left">In-domain (평균)</td>
+<td style="text-align:left">0.3900 미만</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left">0.4105</td>
+<td style="text-align:left"><strong>0.4131</strong></td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HotpotQA</strong></td>
+<td style="text-align:left">In-domain (Oracle@8)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left"><strong>0.5399</strong></td>
+<td style="text-align:left">0.5209</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HotpotQA</strong></td>
+<td style="text-align:left">In-domain (Best-of-80)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left">0.5800</td>
+<td style="text-align:left"><strong>0.5833</strong></td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MuSiQue</strong></td>
+<td style="text-align:left">Unseen OOD (평균)</td>
+<td style="text-align:left">0.1438 미만</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left">0.1467</td>
+<td style="text-align:left"><strong>0.1551</strong></td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MuSiQue</strong></td>
+<td style="text-align:left">Unseen OOD (Oracle@8)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left"><strong>0.2126</strong></td>
+<td style="text-align:left">0.2034</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MuSiQue</strong></td>
+<td style="text-align:left">Unseen OOD (Best-of-80)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left"><strong>0.2408</strong></td>
+<td style="text-align:left"><strong>0.2408</strong></td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MuSiQue</strong></td>
+<td style="text-align:left">Unseen OOD (10라운드 연속)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left"><strong>0.2700</strong></td>
+<td style="text-align:left"><strong>0.2700</strong></td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2WikiMultihopQA</strong></td>
+<td style="text-align:left">Unseen OOD (평균)</td>
+<td style="text-align:left">0.2500 미만</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left"><strong>0.3090</strong></td>
+<td style="text-align:left">0.2748</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2WikiMultihopQA</strong></td>
+<td style="text-align:left">Unseen OOD (Oracle@8)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left"><strong>0.4746</strong></td>
+<td style="text-align:left">0.4374</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2WikiMultihopQA</strong></td>
+<td style="text-align:left">Unseen OOD (Best-of-80)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">N/A (Direct RL)</td>
+<td style="text-align:left">0.5200</td>
+<td style="text-align:left"><strong>0.5433</strong></td>
+<td style="text-align:left">N/A (Direct RL)</td>
+</tr>
+</tbody>
+</table>
+<p><em>참고사항</em>: QA 실험은 SFT 지도 미세조정 단계 없이 베이스 모델(Qwen3-4B)에서 직접 강화학습(Direct RL from Base)을 수행하였으므로 SFT 및 교사 모델 항목은 <code>N/A (Direct RL from Base)</code>로 표기함.</p>
+<h6 id="교사-모델과의-비교-및-일반화-검증">교사 모델과의 비교 및 일반화 검증</h6>
+<p>Reasoning Gym의 보지 못한 21개 태스크 평가에서 4B 파라미터 기반의 단일 단계 RL 제안자 모델은 평균 0.62의 점수를 기록하여, 동일한 평가 프로토콜 하에서 35B 교사 모델이 기록한 평균 점수 0.56을 능가하였다. 또한 Multi-hop QA 실험에서는 HotpotQA에서만 학습된 RL 제안자가 학습에 전혀 사용되지 않은 MuSiQue 및 2WikiMultihopQA 환경에서도 10 라운드 연속 수정을 통해 각각 점수를 크게 향상시켜 강한 교차 벤치마크 일반화 전이 능력을 입증하였다.</p>
+<h6 id="단일-단계-vs-다단계-rl의-이론적-의의">단일 단계 vs 다단계 RL의 이론적 의의</h6>
+<p>실험 결과, 다단계 RL이 단일 단계 RL보다 일관되게 우수한 성능을 보이지는 않았다. 이는 이론적으로 매우 중요한 시사점을 제공한다. <strong>단일 단계 수정 환경에서의 학습만으로도 추론 시간 동안 반복적 하네스 개정 능력이 유기적으로 발현(Emergent capability)될 수 있음</strong>을 의미한다. 즉, 학습 과정에서 복잡한 다단계 신용 할당(Multi-step credit assignment)을 수행하지 않더라도, 단일 단계에서 습득된 코드 편집 및 피드백 반영 능력이 추론 시 중간 실행 컨텍스트에 자연스럽게 일반화된다.</p>
+<h6 id="위치-표기-3">위치 표기</h6>
+<ul>
+<li>Section 5.1, Section 5.2, Section 5.3, Section 5.4</li>
+<li>Table 1, Table 9, Table 13, Table 23 참조</li>
+</ul>
+<hr />
+<h5 id="논점-4-반복적-수정-repeated-revision-과-하네스-구조적-변화-분석">논점 4: 반복적 수정(Repeated Revision)과 하네스 구조적 변화 분석</h5>
+<h6 id="반복적-테스트-시간-적응의-우수성">반복적 테스트 시간 적응의 우수성</h6>
+<p>단일 수정이나 독립적인 무작위 제안(Independent proposals) 대비, 여러 라운드에 걸쳐 이전 라운드의 최선의 하네스를 지속적으로 개정하는 연속 수정(Successive revision) 방식이 훨씬 뛰어난 성과를 보인다. QA 데이터셋(MuSiQue)의 경우 독립 제안의 평균 정확도는 0.15에 불과했으나, 10 라운드 연속 수정을 거친 후 0.27까지 상승하여 독립적 80개 후보 중 최선의 오라클 점수(Best of 80)마저 상회하였다.</p>
+<p>연속적 수정 파이프라인 흐름:</p>
+<ul>
+<li><strong>초기 단계</strong>: 시드 하네스($h_0$) 평가 및 initial 실행 보고서 생성</li>
+<li><strong>1차 적응</strong>: 1차 피드백 반영 제안자 코드 수정 $\rightarrow$ 개선된 하네스 $h_1$ 선발</li>
+<li><strong>N차 적응</strong>: $N$차 피드백 반영 지속적 수정 $\rightarrow$ 최적화된 하네스 $h_T$ 완성</li>
+</ul>
+<h6 id="생성된-하네스-구조-분류-및-결합-실패-메커니즘-분석">생성된 하네스 구조 분류 및 결합 실패 메커니즘 분석</h6>
+<p>제안자 모델 학습 후 생성된 하네스 코드는 태스크 특성에 맞게 고유한 정보 처리 아키텍처로 진화한다:</p>
+<ol>
+<li><strong>인터프리터 루프 (Interpreter loop)</strong>: Reasoning Gym에서 주로 나타나며(SFT 데이터의 48% 차지), 솔버가 계산 과정을 파이썬 코드로 작성하면 이를 런타임 환경에서 직접 실행하여 답을 도출하는 방식이다.</li>
+<li><strong>도구 재구성 루프 (Tool loops)</strong>: 검증 알고리즘이나 헬퍼 도구를 솔버의 도구 호출 루프 내로 통합하는 구조이다.</li>
+<li><strong>검증 분기 (Verification branch)</strong>: QA 환경에서 솔버의 초안 답안이 검색된 문서 내에 존재하는지 검증하고, 없을 경우 해당 초안을 새로운 검색 쿼리로 재검색하는 분기 로직이다 (<code>[SOURCE_IMAGE_9]</code>의 d 참조).</li>
+<li><strong>증거 재연결 (Evidence rewiring)</strong>: 기존 시드 하네스의 '요약본 기반 답변' 구조를 변경하여, 검색된 1차/2차 원문 단락(Passages)을 답변 생성 모델 호출에 직접 연결하는 구조이다 (<code>[SOURCE_IMAGE_9]</code>의 b 참조).</li>
+</ol>
+<p><strong>구조적 결합(Structural Composition)과 기능적 결합(Functional Composition)의 차이 및 실패 원인</strong>:</p>
+<ul>
+<li><em>구조적 결합</em>: 헬퍼 도구를 솔버의 도구 호출 루프 내에 코드 상으로 통합하는 것.</li>
+<li><em>기능적 결합</em>: 통합된 헬퍼 도구가 실제로 정답 도출에 유의미하게 기여하는 것.</li>
+<li><em>기능적 결합의 실패 메커니즘</em>: 지침 프롬프트 하에서 제안자 모델은 높은 구조적 결합률(예: Single-step RL에서 12/32)을 달성하지만, 실제 기능적 결합률(3/32)은 매우 낮다. 표 20과 Section 6.2에 명시된 바와 같이, 올바른 알고리즘 코드가 삽입되었더라도 <strong>인터페이스/파싱 불일치</strong>(질문 파서가 목표 매개변수를 추출하지 못함), <strong>도구 통신 오류</strong>(잘못된 형식의 메시지 전달), <strong>답변 추출 실패</strong>(헬퍼 도구의 실행 결과가 최종 출력 포맷으로 변환되지 못함)로 인해 실제 과제 점수로 연결되지 못하고 기능적으로 실패하게 된다.</li>
+</ul>
+<h6 id="동시대-유사-프레임워크와의-구조적-비교-분석">동시대 유사 프레임워크와의 구조적 비교 분석</h6>
+<p>소스 문서 Appendix A 및 Table 2에 기재된 동시대 유사 연구들과의 아키텍처적 차이는 다음과 같다:</p>
+<ul>
+<li><strong>하네스-R1 (Harness-R1)</strong>: 고정된 대상 에이전트에 대해 오류 궤적 패치(Single patch edit)를 생성하도록 학습된다. 반면 하네스 러닝은 독립된 피드백 세트($Q_{fb}$)와 평가 세트($Q_{score}$)를 분리하고, 동일 하네스에 대한 다라운드 연속 수정(Successive refinement) 체계를 평가한다는 점에서 차별화된다.</li>
+<li><strong>JIT-에이전트 (JIT-Agent)</strong>: 인스턴스 수준에서 하네스 아카이브를 확장하며 동적으로 하네스를 생성/수리한다. 반면 하네스 러닝은 태스크 패밀리 수준에서 프로그램 상의 메타 러닝을 수행하여, 보지 못한 전체 패밀리 및 벤치마크로의 제로샷 전이 성능을 확보한다.</li>
+<li><strong>오르니스 (Ornith / Ornith-1.0, 1.5)</strong>: 스캐폴딩(하네스) 생성 정책과 과제 해결 솔버 정책을 공동 학습(Joint RL)시킨다. 반면 하네스 러닝은 솔버의 파라미터를 완전히 고정(Frozen solver)시킴으로써, 가중치 변경에 따른 혼선 없이 순수한 하네스 프로그램의 적응 능력만을 모듈화하여 평가한다.</li>
+</ul>
+<h6 id="위치-표기-4">위치 표기</h6>
+<ul>
+<li>Section 6.1, Section 6.2, Section 6.3, Table 2, Table 17, Table 20</li>
+<li>Figure 6, Figure 12, <code>[SOURCE_IMAGE_9]</code> 참조</li>
+</ul>
+<hr />
+<h4 id="3-연구진-및-화자">3. 연구진 및 화자</h4>
+<p>논문 상단 및 각주에 명시된 연구진의 역할 및 소속 정보는 다음과 같다. 소스 문서에 세부 기관명이 명시되지 않은 항목은 '확인 불가'로 처리한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">연구진 성명 (Author Name)</th>
+<th style="text-align:left">논문 명시 역할 (Role)</th>
+<th style="text-align:left">세부 소속 기관 (Affiliation)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Alvin Zhang</strong></td>
+<td style="text-align:left">공동 저자 (Equal contribution), 프로젝트 리드 (Project lead)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Xuecheng Liu</strong></td>
+<td style="text-align:left">공동 저자 (Equal contribution)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Zixuan Wang</strong></td>
+<td style="text-align:left">공동 저자 (Equal contribution)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Fahim Tajwar</strong></td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Daman Arora</strong></td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ruslan Salakhutdinov</strong></td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Daniel Khashabi</strong></td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Yuda Song</strong></td>
+<td style="text-align:left">공동 자문 (Equal advising)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Andrea Zanette</strong></td>
+<td style="text-align:left">공동 자문 (Equal advising)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+</tbody>
+</table>
+<p><em>참고 사항</em>: 개별 저자의 세부 담당 파트 및 개인 소속 기관은 원문 표기 범위(공동 저자, 프로젝트 리드, 공동 자문) 외에는 소스 문서상 <strong>확인 불가</strong>함. (단, 연구 수행 지원 기관으로 존스 홉킨스 대학교 ARCH 캘큘레이션 센터, 카네기 멜론 대학교 FLAME 센터, 오크리지 국립연구소 OLCF 등이 감사의 글에 명시됨.)</p>
+<hr />
+<h4 id="4-주요-수치-및-시점">4. 주요 수치 및 시점</h4>
+<h5 id="수치-및-파라미터-통합-데이터">수치 및 파라미터 통합 데이터</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목 구분</th>
+<th style="text-align:left">세부 매개변수 / 데이터 명칭</th>
+<th style="text-align:left">수치 및 명세</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>모델 크기</strong></td>
+<td style="text-align:left">제안자 모델 (Proposer Model)</td>
+<td style="text-align:left">Qwen3.5-4B (Reasoning Gym), Qwen3-4B (QA)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>모델 크기</strong></td>
+<td style="text-align:left">솔버 모델 (Solver Model)</td>
+<td style="text-align:left">Qwen3.5-4B (Reasoning Gym), Qwen3-8B (QA)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>모델 크기</strong></td>
+<td style="text-align:left">교사 모델 (Teacher Model)</td>
+<td style="text-align:left">Qwen3.6-35B-A3B (Reasoning Gym)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 파라미터</strong></td>
+<td style="text-align:left">지도 미세조정(SFT) 어댑터</td>
+<td style="text-align:left">LoRA (Rank=32, Alpha=32), 학습률 $10^{-4}$, Cosine decay</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 파라미터</strong></td>
+<td style="text-align:left">강화학습(RL) 설정</td>
+<td style="text-align:left">GRPO, 학습률 $10^{-6}$, 샘플링 온도 0.6 (Reasoning Gym) / 1.0 (QA)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>토큰 예산</strong></td>
+<td style="text-align:left">프롬프트 / 응답 토큰 제한</td>
+<td style="text-align:left">SFT Context 32,768 / RL Prompt 10,240~12,288 / Response 8,192~16,384</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>데이터셋 수량</strong></td>
+<td style="text-align:left">Reasoning Gym 평가 문제 수</td>
+<td style="text-align:left">개발(Dev) 25개, 최종 평가(Held-out) 75개 (패밀리당)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>데이터셋 수량</strong></td>
+<td style="text-align:left">HotpotQA / MuSiQue / 2Wiki QA 수</td>
+<td style="text-align:left">학습 2,000개, 개발 500개, 테스트 299~300개</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>성능 변화</strong></td>
+<td style="text-align:left">Reasoning Gym OOD 평균 점수</td>
+<td style="text-align:left">베이스 0.32 $\rightarrow$ SFT 0.49 $\rightarrow$ <strong>Single-step RL 0.62</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>성능 변화</strong></td>
+<td style="text-align:left">2WikiMultihopQA EM 점수</td>
+<td style="text-align:left">시드 0.2500 $\rightarrow$ Single-step RL 0.3090 $\rightarrow$ <strong>Best-of-80 0.5200</strong></td>
+</tr>
+</tbody>
+</table>
+<h5 id="시점-및-연구-관련-정보">시점 및 연구 관련 정보</h5>
+<ul>
+<li><strong>문헌 인용 연도 범위</strong>: 논문 본문 및 참고문헌에 기재된 연구 인용 연도는 2016년부터 2026년까지 분포함.</li>
+<li><strong>구체적 실험 수행 날짜</strong>: 소스 문서 내에 구체적인 날짜나 구체적 실험 진행 시점은 명시되어 있지 않으므로 <strong>확인 불가</strong>.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성">5. 한계와 불확실성</h4>
+<h5 id="연구의-한계점-source-explicits">연구의 한계점 (Source Explicits)</h5>
+<ol>
+<li><strong>단일 교사 모델 의존성</strong>: Reasoning Gym의 지도 미세조정(SFT) 코퍼스는 단일 35B 교사 모델의 1라운드 수정 데이터에만 의존하여 생성되어 전략 다양성이 제한된다.</li>
+<li><strong>고정된 솔버 사용</strong>: 솔버 모델의 파라미터가 고정되어 있어, 하네스 생성 능력과 솔버의 하네스 활용 능력이 함께 발전하는 공동 최적화(Joint optimization) 효과를 검증하지 못했다.</li>
+<li><strong>규정된 프롬프트 의존성</strong>: 제안자 모델이 스스로 코드를 검사하거나 실행 도구를 선택하는 자율적 탐색 없이, 외부에서 지정한 프롬프트 및 실행 보고서 양식에 의존하여 수정을 수행한다.</li>
+<li><strong>긴 도구 사용 궤적 제한</strong>: 매우 긴 도구 사용 궤적이나 복잡한 환경에서의 다단계 의사결정에 대한 평가 범위가 한계로 남아있다.</li>
+</ol>
+<h5 id="소스-미다룸-및-불확실한-영역">소스 미다룸 및 불확실한 영역</h5>
+<ul>
+<li><strong>동시 연구와의 동일 조건 정량적 성능 직접 비교</strong>: Harness-R1, JIT-Agent, Ornith 등 동시기에 진행된 유사 연구들과 동일한 실험 환경에서 직접 비교한 정량적 성능 수치는 소스에서 다루지 않는다 (<strong>소스에서 다루지 않음</strong>).</li>
+<li><strong>솔버와 제안자의 공동 최적화 성능</strong>: 고정된 솔버 대신 솔버와 제안자를 동시에 학습시킬 경우의 일반화 전이 성능 변화 수치는 <strong>확인 불가</strong>.</li>
+<li><strong>연구진의 세부 소속 및 세부 실험 일자</strong>: 문서상 명시되지 않은 개별 저자의 세부 기관 소속 및 구체적 실험 수행 일자는 <strong>확인 불가</strong>.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

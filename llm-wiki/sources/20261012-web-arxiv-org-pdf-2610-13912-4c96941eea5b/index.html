@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSI-Anything 기반 재귀적 자가 개선(RSI) 기술 해설 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>RSI-Anything 기반 재귀적 자가 개선(RSI) 기술 해설 보고서</h1>
+<p class="page-meta">논문 · 2026-10-12</p>
+<h2 id="요약">요약</h2>
+<p>재귀적 자가 개선(Recursive Self-Improvement, RSI)은 에이전트가 환경과 상호작용하며 축적한 경험을 지속적인 행동 및 학습 능력의 향상으로 전환하는 기술적 체계이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.13912">출처</a> · <a href="https://www.youtube.com/watch?v=yOdj-0__yYY">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="rsi-anything-기반-재귀적-자가-개선-rsi-기술-해설-보고서">RSI-Anything 기반 재귀적 자가 개선(RSI) 기술 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>재귀적 자가 개선(Recursive Self-Improvement, RSI)은 에이전트가 환경과 상호작용하며 축적한 경험을 지속적인 행동 및 학습 능력의 향상으로 전환하는 기술적 체계이다. 단일 과제 수행 시 피드백은 해법을 정교화하거나 행동을 안내하는 데 활용되며, 여러 라운드에 걸쳐 자가 훈련 및 선호도 최적화를 통해 정책이나 절차적 워크플로를 발전시킨다. 그러나 기존 RSI 방식은 상호작용을 위해 외부 피드백을 수집하는 과정에서 막대한 평가 비용이 발생하며, 정책(Policy)이 업데이트됨에 따라 세계 모델(World Model)의 예측 신뢰성이 저하되는 구조적 한계를 안고 있다.</p>
+<p>정책의 변화는 세계 모델이 예측해야 하는 행동 및 경험의 분포를 변동시키며, 역으로 세계 모델의 예측 변화는 궤적 선택과 정책 학습 신호에 직접적인 영향을 미친다. 이로 인해 정책과 세계 모델 중 어느 하나만 독립적으로 개선해서는 전체 시스템의 동시 향상을 보장할 수 없는 '결합 업데이트 문제(Coupling Challenge)'가 발생한다. 본 보고서에서 다루는 알에스아이-에니씽(RSI-Anything) 프레임워크는 이러한 한계를 극복하기 위해 제파-에니씽(JEPA-Anything) 예측 기반 구조 위에 구축된 영역 일반화(Domain-General) 자가 개선 프레임워크이다.</p>
+<p>RSI-Anything은 예측 가능한 세계 모델을 활용하여 행동 선택, 외부 평가 우선순위 지정, 학습 데이터 선별을 주도한다. 상호작용 과정에서 수집된 피드백은 정책 학습 또는 워크플로 개정을 유도하는 한편, 신뢰성 검증 결과에 따라 조건부 세계 모델 적응을 트리거한다. 이후 개별 요소 검사(Component check) 및 쌍 호환성 검사(Pair compatibility check)를 거쳐 검증된 정책-모델 쌍만을 시스템에 보존(Retention)함으로써 재귀적 개선 고리를 완결한다.</p>
+<p>소스 문서에 기재된 저자들의 주장에 따르면, RSI-Anything은 예측 세계 모델과 보존 메커니즘의 결합을 통해 제한된 외부 피드백 예산 하에서도 다양한 도메인에 걸쳐 안정적인 재귀적 자가 개선을 달성한다. 본 보고서는 소스 문서에 명시된 엄밀한 사실(Fact)과 저자들의 기술적 주장(Claim)을 명확히 구분하여 프레임워크의 수학적 구조와 도메인별 검증 성과를 기술한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-empirical-results">2. 주요 논점 (Key Arguments &amp; Empirical Results)</h4>
+<h5 id="2-1-프레임워크-구조-및-재귀적-업데이트-보존-메커니즘-framework-architecture-retention-protocol">2.1. 프레임워크 구조 및 재귀적 업데이트·보존 메커니즘 (Framework Architecture &amp; Retention Protocol)</h5>
+<p>RSI-Anything은 정책과 세계 모델 간의 결합 업데이트 문제를 해결하고, 지속적인 재귀적 향상을 보장하기 위해 고유한 예측, 업데이트 및 보존 메커니즘을 적용한다.</p>
+<ul>
+<li>
+<p><strong>예측 기반 구조 (JEPA-Anything Foundation):</strong></p>
+<ul>
+<li>JEPA-Anything의 직교 예측 인수분해(Orthogonal Predictive Factorization, OPF) 메커니즘을 상속하여 잠재 타깃을 상보적 요소(Complementary factors)로 분해하여 예측한 뒤, 이를 종합하여 완결된 잠재 상태(Latent state)로 합성한다.</li>
+<li>업데이트 주기 $k$에서 수용된 시스템을 $(\theta_k, \phi_{d,k})$로 정의할 때, 관측 상태 $s_t$, 후보 행동 $a_t$, 도메인 컨텍스트 $c_d$에 대한 잠재 상태 인코딩 및 예측 수식은 다음과 같다:
+$$z_t = E_{\phi_{d,k}}(s_t, c_d)$$
+$$\hat{z}<em>{t+1} = F</em>{\phi_{d,k}}(z_t, a_t, c_d)$$</li>
+<li>예측된 잠재 상태 $\hat{z}<em>{t+1}$는 리드아웃 $R$을 통해 결과 예측으로 전환된다. 리드아웃은 점 예측(Point readout) 방식과 확률적 리드아웃(Probabilistic readout) 방식을 모두 지원한다:
+$$\hat{o}</em>{t+1} = R_{\phi_{d,k}}(\hat{z}<em>{t+1}, c_d) \quad \text{(점 예측)}$$
+$$p</em>{\phi_{d,k}}(o_{t+1} \mid s_t, a_t, c_d) = R_{\phi_{d,k}}(\hat{z}_{t+1}, c_d) \quad \text{(확률적 리드아웃)}$$</li>
+</ul>
+</li>
+<li>
+<p><strong>예측 기반 선택 및 불확실성 감점 (Prediction-guided Selection):</strong></p>
+<ul>
+<li>상태 $s_t$와 목표 $g$에서 정책이 제시한 후보군 $K_t = \text{Propose}<em>{\theta_k}(s_t, g)$에 대해 효용 점수 $R_d(\hat{\tau})$를 산출하여 최선의 행동을 선택한다. 불확실성 페널티 $\Delta_d(\hat{\tau}) = \lambda_d U(u</em>\tau)$가 활성화된 경우 모델 불확실성을 반영하여 페널티를 부여한다:
+$$R_d(\hat{\tau}) = \sum_{j} w_{d,j} r_{\tau,j} - \Delta_d(\hat{\tau})$$</li>
+<li>수집된 피드백 기록은 정책 개선용 데이터셋 $D_{\text{policy},k}$와 세계 모델 적응용 데이터셋 $D_{\text{adapt},k}$로 분리 관리되어 비동기적 업데이트를 지원한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>비동기 업데이트 및 보존 메커니즘 (Retention Protocol):</strong></p>
+<ul>
+<li><strong>요소 검사 (Component Check):</strong> 개별적으로 업데이트 제안된 정책 $\theta'<em>{k+1}$과 세계 모델 $\phi'</em>{d,k+1}$의 유용성 및 품질을 독립 평가한다:
+$$G^\pi_k = Q_\pi(\theta'<em>{k+1}; \theta_k, D</em>{\text{gate},k}^\pi)$$
+$$G^W_k = Q_W(\phi'<em>{d,k+1}; \phi</em>{d,k}, D_{\text{gate},k}^W)$$</li>
+<li><strong>쌍 호환성 검사 (Pair Compatibility Check):</strong> 요소 검사를 통과한 모델 쌍 $(\theta_{k+1}, \phi_{d,k+1})$에 대해, 업데이트된 정책이 생성하는 후보 분포 상에서 세계 모델이 신뢰할 수 있는 예측을 제공하는지 결합 검증을 수행한다:
+$$G^\text{pair}<em>k = Q</em>\text{pair}((\theta_{k+1}, \phi_{d,k+1}); (\theta_k, \phi_{d,k}), D_{\text{compat},k})$$</li>
+<li>$G^\text{pair}_k = 1$을 만족하는 검증된 새로운 정책-모델 쌍만 보존되어 다음 상호작용 라운드에 투입되며, 검사 실패 시 기존의 검증된 시스템 쌍이 유지된다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-2-코드-복구-code-repair-영역에서의-성능-검증">2.2. 코드 복구(Code Repair) 영역에서의 성능 검증</h5>
+<p>코드 복구 실험에서는 코더(Coder) 정책을 리즌플럭스-코더-7B(ReasonFlux-Coder-7B)로 고정한 상태에서 세계 모델의 예측 기반 선택 및 피드백 적응이 코드 복구 성공률에 미치는 영향을 평가하였다. 총 200개의 코드콘테스트(CodeContests) 과제를 대상으로 3개 시드, 최대 3회의 피드백 라운드 동안 과제당 4개의 후보 패치를 생성하여 비교하였다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 조건 / 선택 방식</th>
+<th style="text-align:left">숨겨진 테스트 합격률 및 온라인 호출 횟수</th>
+<th style="text-align:left">예측 정확도 지표 (랭킹 정확도 / Brier 스코어)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>무작위 선택 (Random-K)</strong></td>
+<td style="text-align:left">26.0% (과제당 3.72회)</td>
+<td style="text-align:left">미측정 (소스 내 데이터 없음)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>정적 검증기 (Static Verifier)</strong></td>
+<td style="text-align:left">26.3% (과제당 3.72회)</td>
+<td style="text-align:left">랭킹 정확도 66.5% / Brier 스코어 0.488</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>고정 세계 모델 (Fixed WM, CURE-WM-Lite)</strong></td>
+<td style="text-align:left">29.2% (과제당 3.71회)</td>
+<td style="text-align:left">랭킹 정확도 72.8% / Brier 스코어 0.358</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>적응형 세계 모델 (Adaptive WM, RSI-Anything)</strong></td>
+<td style="text-align:left"><strong>31.2%</strong> (과제당 3.72회)</td>
+<td style="text-align:left">미측정 (소스 내 데이터 없음)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>상세 해설 및 검증 데이터:</strong></p>
+<ul>
+<li><strong>사실 (Fact):</strong> 용량 대등 정적 검증기 대비 고정된 세계 모델(Fixed WM)을 적용했을 때 숨겨진 테스트 합격률이 26.3%에서 29.2%로 +2.83%p(95% 신뢰구간 [+0.17, +5.50]) 향상되었다. 이 때 랭킹 정확도는 66.5%에서 72.8%로 상승하고, 5개 클래스 Brier 스코어는 0.488에서 0.358로 감소하여 예측 정확도가 정교해짐을 보였다.</li>
+<li><strong>사실 (Fact):</strong> 실행 피드백을 통해 세계 모델을 추가 적응(Adaptive WM)시킨 경우 합격률은 31.2%까지 추가 상승하였다. 모든 방식에서 과제당 온라인 테스트 호출 횟수는 3.71~3.72회로 거의 동일하게 유지되어, 추가 실행 비용 없이 성과가 향상됨이 입증되었다.</li>
+<li><strong>주장 (Claim):</strong> 저자들은 실행 피드백으로 적응된 세계 모델이 후속 패치 선택 시 더 우수한 예측을 제공함으로써 고정된 코더 조건에서도 코드 복구 성과를 재귀적으로 높인다고 주장한다.</li>
+<li><strong>추가 벤치마크 결과 (Fact):</strong> APPS 인트로덕토리(APPS Introductory) 및 라이브코드벤치 v6(LiveCodeBench v6) 평가에서도 최종 전체 테스트 합격률 각각 46.37% 및 33.05%를 기록하여 무작위 및 정적 검증기 베이스라인을 초과 달성했다.</li>
+</ul>
+<hr />
+<h5 id="2-3-그래픽-사용자-인터페이스-gui-환경에서의-과제-수행-개선">2.3. 그래픽 사용자 인터페이스(GUI) 환경에서의 과제 수행 개선</h5>
+<p>GUI 환경에서는 상호작용 피드백을 통해 정책과 세계 모델을 동시에 업데이트하였으며, 보존된 시스템이 행동 효율성과 오류 억제에 미치는 영향을 평가했다.</p>
+<ul>
+<li>
+<p><strong>미니웹++(MiniWoB++) 클릭-체크박스 과제 성과:</strong></p>
+<ul>
+<li><strong>성공률 추이:</strong> 초기 베이스라인 51% $\rightarrow$ 적응형(Adapted) 설정 79% $\rightarrow$ 최종(Final) RSI-Anything 설정 <strong>99%</strong> (세계 기반 제어군은 49% $\rightarrow$ 96% $\rightarrow$ 98% 기록).</li>
+<li><strong>행동 효율성 및 오류 트레이드오프:</strong>
+<ul>
+<li><strong>베이스라인 (Baseline):</strong> 에피소드당 평균 행동 수 5.30회, 중복 클릭 237회, 잘못된 제출 에피소드 9회.</li>
+<li><strong>적응형 (Adapted):</strong> 에피소드당 평균 행동 수 2.93회로 가장 짧은 동선을 보였으나, 잘못된 제출 에피소드가 21회로 다수 발생함.</li>
+<li><strong>최종 RSI-Anything (Final):</strong> 평균 행동 수는 3.21회로 적응형 대비 소폭 증가했으나 베이스라인 대비 <strong>39.4% 감소</strong>하였고, 중복 클릭 <strong>0회</strong>, 잘못된 제출 에피소드를 <strong>1회</strong>로 극적으로 줄임.</li>
+</ul>
+</li>
+<li><strong>시스템 안정성 해설:</strong> 보존 메커니즘(Retention Protocol)은 단순 행동 수 감소에만 치중하지 않고, 제출 오류(Submission Error)와 같은 오작동을 강력히 억제하는 정책-모델 쌍을 보존함으로써 최종 시스템의 완결성과 성공률(99%)을 확보함을 보여준다.</li>
+</ul>
+</li>
+<li>
+<p><strong>오에스월드(OSWorld) 과제 성과:</strong></p>
+<ul>
+<li>초기 에이전트 대비 성공률 <strong>18.4% 상대적 향상</strong> (Relative Gain).</li>
+<li>기존 알엘에니씽(RLAnything) 프레임워크 대비 <strong>5.5% 추가 상대적 향상</strong> 달성 (RLAnything은 초기 에이전트 대비 +12.3% 향상).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-물리적-영역-실험실-계획-laboratory-planning-의-연쇄적-정책-발전">2.4. 물리적 영역 실험실 계획(Laboratory Planning)의 연쇄적 정책 발전</h5>
+<p>실험실 계획 벤치마크인 랩호라이즌(LabHorizon) 환경에서 4B 규모 정책 모델의 5개 연속 버전을 단일 자가 개선 프로세스를 통해 평가했다. 독자의 이해를 돕기 위해 벤치마크 평가 척도를 구분하면 다음과 같다:</p>
+<ul>
+<li><strong>Level-1 (L1 Acc.):</strong> 시각 기반 다음 행동 선택 정확도 (Visually grounded next-action selection accuracy).</li>
+<li><strong>Level-2 (L2 Final Score):</strong> 전체 프로토콜 시퀀스 유사도 및 파라미터 정밀도를 결합한 최종 점수.</li>
+</ul>
+<ul>
+<li>
+<p><strong>연속 버전별 L2 Final Score 상승 추이 (200개 과제 F200 Level-2 기준):</strong></p>
+<ul>
+<li>초기 버전 (Initial): <strong>21.80%</strong></li>
+<li>버전 2 (Version 2): <strong>38.03%</strong></li>
+<li>버전 3 (Version 3): <strong>41.99%</strong></li>
+<li>버전 4 (Version 4): <strong>44.56%</strong></li>
+<li>최종 버전 (Final): <strong>46.01%</strong> (초기 버전 대비 <strong>+24.21%p</strong> 향상)</li>
+</ul>
+</li>
+<li>
+<p><strong>참조 시스템 및 대형 모델과의 비교 데이터:</strong></p>
+<ul>
+<li>기존 참조 시스템인 액터-시뮬레이터-셀렉터(Actor-Simulator-Selector)의 L2 Final Score(45.32%)를 <strong>+0.69%p</strong> 초과 달성함.</li>
+<li>Level-1 다음 행동 선택 정확도(L1 Acc.)에서 RSI-Anything 4B 최종 버전은 <strong>0.700</strong>을 기록하여 참조 시스템(0.665) 및 주요 타사 대형 모델들을 상회함 (Grok 4.3: 0.555, Gemini 3.1 Pro: 0.465, GPT-5.5: 0.535, Kimi K2.6: 0.550).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-5-화학-반응-최적화-reaction-optimization-에서의-탐색-효율성">2.5. 화학 반응 최적화(Reaction Optimization)에서의 탐색 효율성</h5>
+<p>제한된 물리적 실험 예산 하에서 ReactionT5-JEPA-Anything 기반 수율 예측을 활용한 조건 선택 효율성을 베이지안 최적화(Bayesian Optimization) 방식과 대조 평가했다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">스크리닝 조건 및 실험 예산</th>
+<th style="text-align:left">베이지안 최적화 (BO) 최고 수율</th>
+<th style="text-align:left">RSI-Anything 최고 수율 (성능 격차)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Pd-NHC-DMS 촉매 스즈키-미야우라 반응</strong>&lt;br&gt;(GC 분석, 20회 실험 예산)</td>
+<td style="text-align:left">87.5%</td>
+<td style="text-align:left"><strong>93.0%</strong> (+5.5%p 우수)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Pd(OAc)2 촉매 흐름 화학 반응</strong>&lt;br&gt;(LC-MS 분석, 40회 실험 예산)</td>
+<td style="text-align:left">82.16% (평균 최고)</td>
+<td style="text-align:left"><strong>96.15%</strong> (평균 최고, +13.99%p 우수)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>기술적 상세:</strong> ReactionT5 반응 예측 백본과 JEPA-Anything의 예측 설계를 결합하여 직렬화된 반응 및 후보 조건 벡터로부터 수율 분포 $p_\phi(y \mid r, c)$를 예측하고, 이를 측정된 피드백과 결합함으로써 제한된 실험 횟수 내에서 최적 조건에 훨씬 신속하게 도달함을 입증했다.</p>
+<hr />
+<h5 id="2-6-면역학-immune-science-엔드투엔드-과학적-응용">2.6. 면역학(Immune Science) 엔드투엔드 과학적 응용</h5>
+<p>면역학 도메인에서는 과학적 에이전트 워크플로 진화, 세계 모델 구축, 자가 교정 분석을 통합한 엔드투엔드 응용 체계를 시연했다.</p>
+<ul>
+<li><strong>워크플로 진화 및 모델 구축:</strong> 에이전트 제네시스(Agent Genesis)를 통해 에이전트 워크플로 탐색 및 선별을 수행하여 모델 구축 워크플로를 보존하고, 행동 조건부 면역 세계 모델을 구축했다.</li>
+<li><strong>멀티스케일 상태 표현:</strong> 세포(Cellular), 조직(Tissue), 개체(Individual) 수준의 면역 상태를 구조적으로 표현하고 개입(Intervention)에 따른 상태 변화를 시뮬레이션했다.</li>
+<li><strong>자가 교정 분석 및 치료 가설 도출:</strong>
+<blockquote>
+<p><strong>자가 교정(Self-Correction) 및 가설 생성 프로세스:</strong></p>
+<ol>
+<li>동결된 면역 세계 모델(Frozen Immune World Model)을 바탕으로 시뮬레이션 및 개입 순위 평가 수행.</li>
+<li>자가 교정 메커니즘을 통해 초기 스크리닝된 사이토카인 쌍(Cytokine-pair) 후보군을 데이터 부합성 미달로 제거.</li>
+<li>최종적으로 <strong>SIRP알파(SIRPα) 억제</strong>와 <strong>IL-36감마(IL-36γ) 축 조절</strong>의 결합 치료 가설을 도출함.</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-persons-speakers">3. 등장 인물 및 화자 (Persons &amp; Speakers)</h4>
+<p>소스 문서에서 명확히 확인되는 논문 저자 및 역량 정보는 다음과 같다. 본 논문 소스 내에 인터뷰어, 진행자, 별도의 발표자 등 추가 화자는 명시되어 있지 않다.</p>
+<ul>
+<li><strong>논문 저자 (Authors):</strong>
+<ul>
+<li>타오용 추이 (Taoyong Cui) - <em>주저자</em></li>
+<li>핀시안 젠 (Pinxian Zeng)</li>
+<li>왕한 쉬 (Wanghan Xu)</li>
+<li>하오 시아오 (Hao Xiao)</li>
+<li>슈한 슈에 (Shuhan Xue)</li>
+<li>치앙 가오 (Qiang Gao)</li>
+<li>완리 오우양 (Wanli Ouyang)</li>
+<li>펭 안 헹 (Pheng Ann Heng) - <em>교신저자</em></li>
+<li>젠페이 인 (Zhenfei Yin) - <em>교신저자</em></li>
+<li>잉칭 우 (Yingcheng Wu) - <em>교신저자</em></li>
+<li>링 양 (Ling Yang) - <em>교신저자</em>
+<em>(소속 및 세부 교신 정보는 논문 부록 A 참조로 기재됨)</em></li>
+</ul>
+</li>
+<li><strong>소스 내 별도 화자/인터뷰어/진행자:</strong> <strong>확인 불가</strong></li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-key-figures-timestamps">4. 수치 및 시점 (Key Figures &amp; Timestamps)</h4>
+<p>소스 문서에서 명확히 확인되는 작성 일자 및 주요 정량 데이터는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 / 데이터 항목</th>
+<th style="text-align:left">수치 및 시점 수집 내용</th>
+<th style="text-align:left">비고 및 소스 출처</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>문서 공개/작성 일자</strong></td>
+<td style="text-align:left"><strong>2026년 10월 12일</strong> (2026-10-12)</td>
+<td style="text-align:left">아카이브(arXiv) 제출일</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 복구 평가 규모</strong></td>
+<td style="text-align:left">200개 과제, 3개 시드, 최대 3회 피드백 라운드</td>
+<td style="text-align:left">CodeContests 벤치마크</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 복구 합격률</strong></td>
+<td style="text-align:left">정적 검증기 26.3% $\rightarrow$ 고정 WM 29.2% $\rightarrow$ 적응 WM <strong>31.2%</strong></td>
+<td style="text-align:left">숨겨진 테스트 전체 합격 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 복구 예측 정확도</strong></td>
+<td style="text-align:left">랭킹 정확도 66.5% $\rightarrow$ 72.8%, Brier 스코어 0.488 $\rightarrow$ 0.358</td>
+<td style="text-align:left">정적 검증기 대비 고정 WM</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GUI 체크박스 성공률</strong></td>
+<td style="text-align:left">베이스라인 51% $\rightarrow$ 적응형 79% $\rightarrow$ 최종 <strong>99%</strong></td>
+<td style="text-align:left">MiniWoB++ 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GUI 행동 및 오류 수치</strong></td>
+<td style="text-align:left">평균 행동 5.30회 $\rightarrow$ 3.21회 (-39.4%), 중복클릭 237 $\rightarrow$ 0회, 오제출 9 $\rightarrow$ 1회</td>
+<td style="text-align:left">MiniWoB++ 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GUI OSWorld 성공률</strong></td>
+<td style="text-align:left">초기 에이전트 대비 +18.4% 향상, RLAnything 대비 +5.5% 추가 향상</td>
+<td style="text-align:left">상대적 향상 비율 (Relative gain)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>실험실 계획 점수 추이</strong></td>
+<td style="text-align:left">21.80% $\rightarrow$ 38.03% $\rightarrow$ 41.99% $\rightarrow$ 44.56% $\rightarrow$ <strong>46.01%</strong></td>
+<td style="text-align:left">4B 정책 5개 연속 버전</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>화학 반응 최적화 (GC)</strong></td>
+<td style="text-align:left">20회 예산: RSI-Anything <strong>93.0%</strong> vs BO 87.5% (+5.5%p)</td>
+<td style="text-align:left">Pd-NHC-DMS 촉매 스크리닝</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>화학 반응 최적화 (LC-MS)</strong></td>
+<td style="text-align:left">40회 예산: RSI-Anything <strong>96.15%</strong> vs BO 82.16% (+13.99%p)</td>
+<td style="text-align:left">Pd(OAc)2 촉매 스크리닝</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>세부 상호작용 타임스탬프</strong></td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+<td style="text-align:left">소스 문서 내 세부 시간 기록 없음</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>소스 문서의 토의(Discussion) 및 본문에서 저자들이 명시한 한계점과 소스를 통해 확인할 수 없는 불확실한 요소를 구분하여 서술한다.</p>
+<ul>
+<li><strong>단일 과제 내 다중 라운드 공동 평가의 필요성:</strong>
+<ul>
+<li>단일 과제 내에서 정책과 세계 모델이 지속적으로 상호 개선되는 과정을 검증하기 위해서는 진화된 다중 라운드 공동 평가(Joint multiround evaluation) 체계가 추가로 구축되어야 함.</li>
+</ul>
+</li>
+<li><strong>물리적 실행 환경 평가 미비:</strong>
+<ul>
+<li>실험실 계획(LabHorizon) 성과는 프로토콜 시퀀스 및 파라미터 계획 평가에 한정되어 있으며, 실제 로봇 장비 및 물리적 워크플로 상에서의 실행(Physical execution) 평가 검증은 이루어지지 않음.</li>
+</ul>
+</li>
+<li><strong>젖은 실험실(Wet-lab) 검증 대기:</strong>
+<ul>
+<li>면역학 엔드투엔드 응용에서 도출된 치료 가설(SIRPα 억제 + IL-36γ 축 조절)은 계산 모델 및 데이터 분석 상으로 도출되었으나, 실제 생물학적 젖은 실험실(Wet-lab) 실험을 통한 최종 검증은 완료되지 않은 대기 상태임.</li>
+</ul>
+</li>
+<li><strong>기타 영역/실험 조건에 대한 불확실성:</strong>
+<ul>
+<li>소스 문서에 명시된 실험 도메인 외의 타 영역 적용 가능성, 실행 시간, 세부 계산 비용 등은 <strong>소스에서 다루지 않음</strong> 또는 <strong>확인 불가</strong>함.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Agents Need Causal World Models</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Why Agents Need Causal World Models</h1>
+<p class="page-meta">YouTube · 2026-10-08</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 YouTube 채널 &quot;Simons Institute for the Theory of Computing&quot;에 업로드된 강연인 &quot;Why Agents Need Causal World Models&quot;의 스크립트를 바탕으로 인과적 기계학습(Causal Machine Learning, Causal ML) 및 차세대 AI…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=8Y9BsCsp5MI">출처</a> · <a href="https://www.youtube.com/watch?v=JCgvoHQx0EM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-에이전트에-인과적-세계-모델-causal-world-models-이-필요한-이유">[보고서] 에이전트에 인과적 세계 모델(Causal World Models)이 필요한 이유</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 YouTube 채널 &quot;Simons Institute for the Theory of Computing&quot;에 업로드된 강연인 &quot;Why Agents Need Causal World Models&quot;의 스크립트를 바탕으로 인과적 기계학습(Causal Machine Learning, Causal ML) 및 차세대 AI 시스템의 구조적 방향성을 정밀 분석한 기술 해설 보고서입니다. 본 강연은 모이세스(Moises)의 사회로 진행되었으며, 메인 발표자인 엘리아스 바레인보임(Elias Bareinboim)이 현재의 예측 중심 AI가 직면한 근본적 한계를 진단하고, 이를 극복하기 위한 대안으로서 '인과적 세계 모델(Causal World Models)'의 필연성을 논증합니다.</p>
+<p>현재의 AI 기술은 자연어 처리, 컴퓨터 비전, 강화학습 등 고차원 데이터 공간에서의 예측(Prediction) 분야에서 압도적인 성과를 거두었습니다. 인공지능이 생성하는 언어나 이미지의 유연성(Fluidity) 측면에서는 눈부신 발전을 이루었으나, 대규모 데이터와 컴퓨팅 자원을 무제한 투입하는 '스케일링 가설(Scaling Hypothesis)'만으로는 세계를 제대로 이해(Understand)하는 진정한 AI에 도달할 수 없다는 문제의식이 수면 위로 떠오르고 있습니다. 세계의 작동 메커니즘에 대한 인과적 이해가 부재한 현재의 AI 시스템은 설명 가능성 부재, 불공정성 및 편향 증폭, 극심한 데이터 불효율성, 표현 미스매치, 일반화 및 강건성 부족, 제어 불가능성이라는 구조적 간극(Structural gap)에 갇혀 있습니다.</p>
+<p>발표자는 이러한 제반 문제의 근본 원인이 '세계에 대한 강건한 인과적 모델의 부재'에 있다고 진단합니다. 진정으로 신뢰할 수 있고, 안전하며, 설명 가능한 AI 시스템을 구축하기 위해서는 주디아 펄(Judea Pearl)이 정립한 '펄 인과 계층(Pearl Causal Hierarchy, PCH)'의 수학적 틀을 에이전트의 세계 모델에 직접 결합해야 합니다. 본 보고서는 강연에서 다루어진 펄 인과 계층의 3차원 공간 구조, 생성 AI의 근본 문제($\hat{M}$과 $M^*$ 간의 수학적 분리), 메커니즘적 해석 가능성(Mechanistic Interpretability)의 한계와 반사실적 접근법, 그리고 유연성과 이해를 결합한 '인과적 AI(Causal AI)'의 5가지 핵심 요구 역량을 종합적으로 구조화하여 제시합니다.</p>
+<hr />
+<h4 id="2-등장-인물-및-화자-characters-speakers">2. 등장 인물 및 화자 (Characters &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th>이름 (원어 표기)</th>
+<th>역할 / 소속 및 설명</th>
+<th>소스 내 위치/맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>엘리아스 바레인보임</strong>&lt;br&gt;(Elias Bareinboim)</td>
+<td>메인 발표자. 출간 예정 도서의 저자이자 인과적 AI(Causal AI) 이론 체계화를 주도하는 학자. <em>(소속 대학/기관명은 소스 내 미언급)</em></td>
+<td>강연 전체의 화자로서 에이전트에게 인과적 세계 모델이 필수적인 이유와 수학적 고찰을 발표함.</td>
+</tr>
+<tr>
+<td><strong>모이세스</strong>&lt;br&gt;(Moises)</td>
+<td>세션 진행자 (Moderator).</td>
+<td>오후 워크숍 세션을 시작하며 메인 발표자인 엘리아스 바레인보임을 소개함.</td>
+</tr>
+<tr>
+<td><strong>프라딥</strong>&lt;br&gt;(Pradeep)</td>
+<td>청중 질문자.</td>
+<td>강연 중간에 '상상(Imagine)' 계층 및 반사실적 모델의 경험 학습 가능성에 대해 핵심 질문을 던짐.</td>
+</tr>
+<tr>
+<td><strong>일리야</strong>&lt;br&gt;(Ilya / Ilya Sutskever)</td>
+<td>발표자가 인용한 AI 분야 리더.</td>
+<td>&quot;단순한 스케일링만으로는 부족하며 다음 도약을 위한 새로운 아이디어가 필요하다&quot;고 지적함.</td>
+</tr>
+<tr>
+<td><strong>얀</strong>&lt;br&gt;(Yann / Yann LeCun)</td>
+<td>발표자가 인용한 AI 분야 리더.</td>
+<td>&quot;스케일링만으로는 세계를 이해하는 시스템에 도달할 수 없다&quot;고 지적함.</td>
+</tr>
+<tr>
+<td><strong>요슈아</strong>&lt;br&gt;(Yoshua / Yoshua Bengio)</td>
+<td>발표자가 인용한 AI 분야 리더 및 공저자.</td>
+<td>&quot;강건하고 안전한 AI는 인과적 이해를 필요로 하며, 이것이 없으면 시스템이 예측 불가능하게 실패한다&quot;고 지적함. '인과적 신경 커넥터' 논문의 공동 연구자.</td>
+</tr>
+<tr>
+<td><strong>주디아 펄</strong>&lt;br&gt;(Judea Pearl)</td>
+<td>튜링상(Turing Award) 수상자.</td>
+<td>'펄 인과 계층(Pearl Causal Hierarchy, PCH)' 및 '인과 관계의 사다리(Ladder of Causation)' 개념을 제안함.</td>
+</tr>
+<tr>
+<td><strong>토마스 아이카드</strong>&lt;br&gt;(Thomas Icard)</td>
+<td>스탠퍼드 대학교 논리학 교수.</td>
+<td>발표자 및 연구진과 함께 펄 인과 계층(PCH)의 정리와 분리 가능성을 정형화함.</td>
+</tr>
+<tr>
+<td><strong>케빈</strong>&lt;br&gt;(Kevin)</td>
+<td>연구원 / 학생.</td>
+<td>요슈아 벤지오, 카이잔 리, 발표자와 함께 '인과적 신경 커넥터(Causal Neural Connector)' 논문을 작성함.</td>
+</tr>
+<tr>
+<td><strong>카이잔 리</strong>&lt;br&gt;(Kai-Zhan Lee)</td>
+<td>공동 연구자.</td>
+<td>'인과적 신경 커넥터(Causal Neural Connector)' 연구의 공저자.</td>
+</tr>
+<tr>
+<td><strong>앨런 튜링</strong>&lt;br&gt;(Alan Turing)</td>
+<td>컴퓨터 과학의 선구자.</td>
+<td>&quot;우리가 원하는 것은 경험으로부터 배울 수 있는 기계&quot;라는 AI의 초기 비전을 제시함.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-주요-논점-key-arguments-evidence">3. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="3-1-현재-ai-기술의-성과와-근본적-한계-current-ai-s-breakthroughs-vs-structural-gap">3.1. 현재 AI 기술의 성과와 근본적 한계 (Current AI's Breakthroughs vs. Structural Gap)</h5>
+<ul>
+<li><strong>[사실]</strong> 현재의 최첨단(State-of-the-art) AI 모델들은 자연어, 컴퓨터 비전, 강화학습 등 고차원 데이터 공간에서 관찰 및 예측(Prediction) 성능을 획기적으로 향상시켰습니다. 그러나 강연 시점으로부터 약 한 달 전 수행된 실험에 따르면, 최첨단 시각-언어 모델(GPT, 나노/나노 바나나 등)에 &quot;고양이(Cat)가 테이블 위의 화병(Vase)을 밀면 어떻게 되는가?&quot;라는 반사실적 질문을 던질 경우, 모델은 화병이 깨진 결과를 연출하기 위해 현실의 인과 메커니즘을 무시하고 테이블 주변에 임의의 쿠션을 다수 배치하는 오류를 범합니다. 또한 &quot;탁상용 전등(Desk lamp)의 스위치를 켜면 어떻게 되는가?&quot;라는 질문에는 전원 코드가 뽑혀 있음에도 불구하고 스위치가 켜졌다는 사실 하나만으로 전등에 불이 들어오는 이미지를 생성합니다.</li>
+<li><strong>[소사의 주장]</strong> 데이터 센터를 맨해튼 섬 절반 크기로 짓고 엔지니어, 데이터, 컴퓨팅 자원을 무제한 투입한다 하더라도(스케일링 가설), 이는 범용 AI로 수렴하지 못합니다. 일리야 수츠케버, 얀 르쿤, 요슈아 벤지오의 지적과 마찬가지로, 단순 스케일링은 '세계를 이해(Understand)'하는 시스템을 만들어내지 못합니다. 현재 AI의 맹점은 단순한 기술적 결함이 아니라 세계의 인과적 구조를 표현하지 못하는 근본적 구조적 간극(Structural gap)에 있습니다.</li>
+<li><strong>[작성자의 해석]</strong> 소스에 기술된 현행 AI의 6가지 구조적 한계는 다음과 같이 체계화할 수 있습니다.
+<ol>
+<li><strong>설명 가능성 부재 (Lack of Explainability):</strong> 시스템이 자신의 출력이나 행동의 진정한 원인을 설명하지 못하고 단순한 텍스트 배열을 뱉어냄.</li>
+<li><strong>불공정성 및 편향 증폭 (Unfairness &amp; Bias Amplification):</strong> 학습 데이터는 편향된 현실의 단면(Sample)에 불과하므로, 상관관계만 학습하는 AI는 데이터 속의 사회적 편향을 그대로 학습하여 오히려 증폭시킴.</li>
+<li><strong>데이터 불효율성 (Data Inefficiency):</strong> 유아는 적은 표본만으로 세계의 메커니즘을 깨닫는 반면, AI는 하나의 개념을 학습하기 위해 수천만 번의 상호작용 데이터를 요함.</li>
+<li><strong>표현 미스매치 (Representation Mismatch):</strong> 자연적 에이전트(인간)와 인공 에이전트가 세계를 인식하고 내부적으로 표현하는 구조 사이에 근본적 격차가 존재함.</li>
+<li><strong>일반화 및 강건성 부족 (Poor Generalizability &amp; Robustness):</strong> 데이터 분포가 이동하거나 환경, 문화, 조건이 미세하게 변경되면 AI 시스템이 예측 불가능하게 붕괴함.</li>
+<li><strong>제어 가능성 부족 (Lack of Controllability / Fat-hand Intervention):</strong> 수백만 개의 잠재 파라미터가 복잡하게 얽혀 있어, 특정 변수만 정밀하게 제어하지 못하고 주변 인자 전체를 크게 흔들어버리는 '뚱뚱한 손 개입(Fat-hand intervention)'이 발생함.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h5 id="3-2-3차원-연구-공간과-펄-인과-계층-pearl-causal-hierarchy-pch">3.2. 3차원 연구 공간과 펄 인과 계층 (Pearl Causal Hierarchy, PCH)</h5>
+<ul>
+<li><strong>[사실]</strong> 주디아 펄이 제안하고 토마스 아이카드 교수 연구진 등과의 협력 연구를 통해 정형화된 '펄 인과 계층(Pearl Causal Hierarchy, PCH)'은 에이전트가 경험하는 세계를 3개의 정교한 계층으로 구분합니다. 컴퓨터 과학 및 AI 연구 공간은 기존의 '계산 복잡도(Computational complexity)' 및 '통계적/표본 복잡도(Statistical/Sample complexity)' 축에 더해 '인과적 차원(Causal dimension)'이라는 제3의 축이 직교(Orthogonal) 구조로 존재합니다.</li>
+<li><strong>[소사의 주장]</strong> 계산 자원과 데이터 표본이 무한히 주어진다 하더라도 인과적 차원에서의 수학적 보장이 없다면 인과적 추론이나 이해에 도달하는 것은 불가능합니다. 따라서 에이전트가 획득하는 경험의 성격을 다음과 같이 3개 계층으로 명확히 분리하여 다루어야 합니다.</li>
+</ul>
+<h6 id="펄-인과-계층-pch-비교표">펄 인과 계층 (PCH) 비교표</h6>
+<table>
+<thead>
+<tr>
+<th>계층 (Layer)</th>
+<th>명칭</th>
+<th>상호작용 방식 및 자연어 질문</th>
+<th>수학적 표기</th>
+<th>주요 개념 및 적용 기술</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Layer 1</strong></td>
+<td>관찰 / 연관&lt;br&gt;(Associational / Seeing)</td>
+<td>능동적 개입 없이 수동적으로 데이터나 세계를 관찰함.&lt;br&gt;• <em>질문: &quot;무엇인가?&quot; / &quot;X를 보는 것이 Y에 대한 내 믿음을 어떻게 바꾸는가?&quot;</em></td>
+<td>$P(Y \mid X)$</td>
+<td>지도/비지도 학습, 베이즈 네트, CNN, 트랜스포머(GPT 등 sequence 예측).</td>
+</tr>
+<tr>
+<td><strong>Layer 2</strong></td>
+<td>개입&lt;br&gt;(Interventional / Doing)</td>
+<td>환경에 직접 능동적으로 개입하여 변수를 변화시킴.&lt;br&gt;• <em>질문: &quot;만약 ~하면 어떻게 되는가?&quot; / &quot;내가 X를 실행한다면 Y에 어떤 일이 발생하는가?&quot;</em></td>
+<td>$P(Y \mid do(X))$</td>
+<td>강화학습(RL), 마르코프 결정 과정(MDP), POMDP, 인과적 베이즈 네트.</td>
+</tr>
+<tr>
+<td><strong>Layer 3</strong></td>
+<td>반사실&lt;br&gt;(Counterfactual / Imagining)</td>
+<td>관찰된 사실과 반대되는 상황을 마음속으로 시뮬레이션함.&lt;br&gt;• <em>질문: &quot;왜?&quot; / &quot;관찰된 사실 x', y'가 주어졌을 때, 내가 다르게 행동했더라면 Y는 어떻게 되었을까?&quot;</em></td>
+<td>$P(Y_x \mid x', y')$</td>
+<td>비교, 후회, 비난, 원인 규명, 'Why' 질문. (기존 ML 언어에 상응 요소 부재)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>세부 계층(Layer 2.5 / 2.25)과 프라딥(Pradeep)의 질의응답:</strong>
+<ul>
+<li>청중 프라딥은 &quot;Layer 3 상상 영역의 반사실적 추론을 배울 수 있는 실제 물리적 경험 표본이 존재하는가?&quot;라는 핵심 질문을 던졌습니다.</li>
+<li>이에 대해 순수한 Layer 3 반사실적 분포는 현실에서 표본을 직접 채취할 수 있는 물리적 절차가 존재하지 않지만, 2015년 NeurIPS 논문 이후의 연구 성과에 따르면 Layer 3 내부를 더 미세한 하위 계층(Layer 2.5, Layer 2.25 등)으로 쪼갤 수 있음이 밝혀졌습니다. 이 하위 계층들에서는 '반사실적 무작위화(Counterfactual Randomization)'를 통해 일부 반사실적 진술이 물리적으로 실현 가능(Realizable)해집니다.</li>
+</ul>
+</li>
+<li><strong>[작성자의 해석]</strong>
+<ul>
+<li><strong>MNIST (32x32) 이미지 데이터셋을 통한 계층별 분포 분석:</strong>
+<ul>
+<li><strong>Layer 1 관찰 분포 ($P(Image \mid D=0)$):</strong> 자연적 상태에서는 잠재 변수 $C$(색상 결정 인자)에 의해 숫자 '0'은 주로 빨간색, 숫자 '5'는 주로 시안색(Cyan)으로 편향되어 관찰됨.</li>
+<li><strong>Layer 2 개입 분포 ($P(Image \mid do(D=0))$):</strong> 외부에서 강제로 숫자를 '0'으로 설정하면 $C \rightarrow D$ 간의 자연스러운 결합이 끊어져, 다양한 색상을 지닌 '0'의 균일한 분포가 형성됨.</li>
+<li><strong>Layer 3 반사실 분포 (ETT):</strong> &quot;실제 관찰된 이미지는 시안색 숫자 '5'였는데, 만약 이 숫자가 '0'이었다면 어떤 모습이었을까?&quot;라는 반사실 질문을 던지면, 관찰된 시안색 잠재 특성이 고정·유지된 채 숫자의 토폴로지만 '0'으로 변경되므로 대다수가 '시안색 0'인 분포가 형성됨.</li>
+</ul>
+</li>
+<li><strong>교차 계층 추론(Cross-layer Inference)과 정성적 유도 편향:</strong>
+<ul>
+<li>현실 세계 데이터의 99%는 수동적으로 수집된 Layer 1 관찰 데이터입니다. 인과적 추론의 핵심은 직접 물리적 개입을 하지 않고도 Layer 1 데이터로부터 Layer 2(개입) 및 Layer 3(반사실) 분포를 합성해내는 것입니다.</li>
+<li>단순한 통계적 보간(Interpolation)이나 데이터/파라미터 스케일링만으로는 Layer 1에서 Layer 2/3로 넘어갈 수 없습니다. Layer 3에는 Layer 1과 2에 존재하지 않는 실세계의 정성적 인과 구조 정보가 포함되어 있으므로, 인과 그래프나 메커니즘에 대한 정성적 유도 편향(Qualitative Inductive Bias)이 반드시 결합되어야만 교차 계층 추론이 성립합니다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-3-생성형-ai의-근본-문제와-인과적-신경-커넥터-fundamental-problem-of-gen-ai">3.3. 생성형 AI의 근본 문제와 인과적 신경 커넥터 (Fundamental Problem of Gen AI)</h5>
+<ul>
+<li><strong>[사실]</strong> 발표자는 요슈아 벤지오, 케빈, 카이잔 리와 수행한 공동 연구를 통해 '인과적 신경 커넥터(Causal Neural Connector)' 프레임워크를 제안했습니다.</li>
+<li><strong>[소사의 주장]</strong> 데이터 클러스터에서 수개월간 모델을 경험적 위험 최소화(ERM) 방식으로 학습시켜 관찰 분포(Layer 1의 $P$)를 완벽하게 재현하는 학습 모델 $\hat{M}$을 완성했다 하더라도, 이 $\hat{M}$이 우리가 직접 관찰할 수 없는 실제 세계 $M^*$의 잠재적 개입(Layer 2) 및 반사실(Layer 3) 인과 분포를 복원(Recover)할 수 있는 수학적 조건과 한계를 규명해야 합니다. 발표자는 이를 **'생성 AI의 근본 문제(Fundamental Problem of Gen AI)'**로 정의합니다.</li>
+<li><strong>[작성자의 해석]</strong>
+<ul>
+<li><strong>불가능성 증명 및 수학적 엄밀성:</strong> 순수한 ERM 스케일링을 통해 $P_{\hat{M}}(Y \mid X) = P_{M^<em>}(Y \mid X)$를 달성했다 하더라도, 이는 $P_{\hat{M}}(Y \mid do(X))$ 또는 $P_{\hat{M}}(Y_x \mid x', y')$에 대한 수학적 경계(Bound)나 보장을 전혀 제공하지 못합니다. 서로 전혀 다른 인과 메커니즘을 가진 복수의 실제 세계 모델 $M_1^</em>, M_2^<em>$가 Layer 1에서는 완전히 동일한 관찰 분포를 출력할 수 있기 때문입니다. 앞서 살펴본 고양이/화병 이미지 생성 오류나 전등 스위치 오류는 학습된 모델 $\hat{M}$이 Layer 1 표면 상관관계만 맞추고 실제 세계 $M^</em>$의 인과 메커니즘 복원에 실패했음을 보여주는 수학적 증거입니다.</li>
+<li><strong>인과적 신경 커넥터의 역할:</strong> 고차원 이미지/텍스트 데이터를 처리하기 위해서는 신경망(Neural)의 풍부한 표현력이 필수적이며, Layer 2/3 수준의 일관성을 확보하려면 인과적 구조(Causal)가 결합되어야 합니다. 인과적 신경 커넥터는 신경망의 유연성에 인과 그래프 기반의 구조적 제약을 부여함으로써 학습 모델 $\hat{M}$이 실제 세계 $M^*$의 인과 메커니즘을 복원할 수 있도록 유도하는 핵심 장치입니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-4-메커니즘적-해석-가능성-mechanistic-interpretability-과-인과적-설명-능력">3.4. 메커니즘적 해석 가능성(Mechanistic Interpretability)과 인과적 설명 능력</h5>
+<ul>
+<li><strong>[사실]</strong> MNIST 데이터를 바탕으로 표준 분류기(Non-robust)와 색상 편향을 제거한 강건한 분류기(Robust)를 비교하는 실험을 진행했습니다. 기존 메커니즘적 해석 가능성 연구에서 가장 보편적으로 사용되는 Layer 1 기반 귀속(Attribution) 방법인 SHAP을 적용한 결과, 두 분류기 모두 &quot;숫자의 획 모양 때문에 5라고 판단했다&quot;는 거의 동일한 귀속 패턴을 출력했습니다. 반면 Layer 3 반사실적 인과 귀속 방법을 적용했을 때 비강건 분류기는 &quot;색상(Cyan) 때문에 5라고 판단했다&quot;, 강건 분류기는 &quot;숫자의 토폴로지 모양 때문에 5라고 판단했다&quot;고 분류기 내부의 실제 판단 근거를 정확히 분별해냈습니다.</li>
+<li><strong>[소사의 주장]</strong> SHAP을 비롯한 기존의 Layer 1 기반 해석 가능성 기법들은 지상 실재(Ground truth, $M^*$)의 인과 구조를 반영하지 못하고 단순 데이터 상관관계에만 의존하므로 '재앙(Disaster)'에 가까운 결과를 초래합니다. Layer 3 반사실적 접근법만이 AI 분류기의 내부 의사결정 원인을 정확히 해명할 수 있습니다.</li>
+<li><strong>[작성자의 해석]</strong>
+<ul>
+<li><strong>SHAP의 구조적 결함 원인 분석:</strong> SHAP은 조건부 기대값 $E[Y \mid X]$에 기반하여 특성 귀속을 계산합니다. 이는 어디까지나 Layer 1의 관찰 분포 내부 통계량일 뿐, 분류기 내부 메커니즘에 개입하거나 반사실적 변화를 주었을 때의 결과를 평가하는 것이 아닙니다. 따라서 SHAP은 모델이 도메인의 허위 상관관계(색상)에 의존하는지, 실제 불변 인과 특성(숫자 모양)에 의존하는지 구조적으로 구별할 수 없습니다.</li>
+<li><strong>퐁(Pong) 아케이드 게임 백아웃(Blackout) 실험 정밀 분석:</strong>
+<ul>
+<li><strong>환경:</strong> 게임 화면의 프레임이나 전환 단계를 순간적으로 검게 가리는 '백아웃'을 적용하면 AI 에이전트의 성능(최상 점수 21점 기준)이 치명적으로 폭락함.</li>
+<li><strong>비인과적 설명 기법:</strong> 무작위로 발생한 모든 프레임 전환 단계에 책임(Fault)을 고르게 분산시켜 성능 저하의 진정한 원인을 지목하지 못함.</li>
+<li><strong>인과적 설명 기법:</strong> 무수한 프레임 중 특정 시드인 <strong>Seed #536</strong> 프레임 전환 단계를 정밀하게 원인으로 지목함. 분석 결과, 패들(Paddle)과 공(Ball) 사이의 물리적 거리가 특정 임계값 범위에 있을 때 백아웃이 발생하면 시스템이 공을 놓치게 된다는 명확한 인과적 지상 실재를 포착함.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-5-유연성-fluidity-과-이해-understanding-의-통합-causal-ai">3.5. 유연성(Fluidity)과 이해(Understanding)의 통합: Causal AI</h5>
+<ul>
+<li><strong>[사실]</strong> 현재 글로벌 AI 산업계(OpenAI, Anthropic, Google 등)는 언어와 이미지, 비디오 생성의 자연스러움을 극대화하는 '유연성(Fluidity)' 축을 최적화하는 데 거대한 자본과 연구력을 집중하고 있습니다. 반면 인과론 연구자들은 엄밀한 수학적 모델을 다루는 '이해(Understanding)' 축에 머물러 있습니다.</li>
+<li><strong>[소사의 주장]</strong> 현재 AI 연구진이 직면한 세대적 과제(Generational Challenge)는 유연성 축과 이해 축을 통합하여, 언어적으로 자연스러우면서도 세계에 대한 인과적 이해 능력을 갖춘 **'인과적 AI(Causal AI)'**를 구축하는 것입니다. 현재 대규모 언어 모델(LLM)이 사용하는 언어와 인과론의 수학적 언어는 상호 결합되지 못하고 겉돌고 있습니다.</li>
+<li><strong>[작성자의 해석]</strong> 발표자가 제시한 인과적 지능을 갖춘 AI가 완수해야 할 5가지 핵심 요구 역량(Causal AI Desiderata)은 다음과 같습니다.
+<ol>
+<li><strong>인과적 및 반사실적 생성 능력 (Causal &amp; Counterfactual Generation):</strong> 물리적·인과적 법칙에 위배되지 않는 이미지, 텍스트, 비디오 생성.</li>
+<li><strong>인과적 이해 및 설명 출력 능력 (Causal Understanding &amp; Articulating Explanations):</strong> 자신의 내부 판단과 세계의 현상에 대해 정확한 인과적 귀속 및 설명 제공.</li>
+<li><strong>의사결정의 효율성 및 정밀성 (Efficiency &amp; Precision in Decision Making):</strong> 강화학습 및 인과적 게임 이론(Causal Game Theory) 기반의 정교한 의사결정.</li>
+<li><strong>일반화 가능성 및 강건성 (Generalizability &amp; Robustness):</strong> 환경 및 분포 변화(Distribution shift) 속에서도 붕괴하지 않는 안정적 성능.</li>
+<li><strong>세계 모델 학습 및 발견 능력 (World Model Learning &amp; Discovery):</strong> 데이터로부터 새로운 인과 법칙을 과학자처럼 스스로 찾아내는 에이전트 역량.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-figures-timeline">4. 수치 및 시점 (Figures &amp; Timeline)</h4>
+<p>강연 본문에서 언급된 구체적 수치, 시점, 연구 발전사 및 출간 관련 데이터는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>주요 내용 및 수치 / 시점</th>
+<th>비고 및 소스 내 맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>실험 및 연구 타임라인</strong></td>
+<td>• <strong>&quot;약 한 달 전&quot;</strong>: GPT 및 나노 바나나(Nano Banana) 모델 대상 반사실적 이미지 생성 실험 수행 시점.&lt;br&gt;• <strong>&quot;최근 10년&quot; / &quot;NeurIPS 2015 시작&quot;</strong>: 펄 인과 계층을 세분화(Layer 2.5, 2.25 등)하고 반사실적 무작위화를 정형화한 연구의 발전 기간.&lt;br&gt;• <strong>&quot;약 6개월~1년 전&quot;</strong>: 발표자가 유연성(Fluidity)과 이해(Understanding) 축의 Unification(통합) 필연성을 깨달은 시점.</td>
+<td>소스 내 화자의 직접 발언 기준.</td>
+</tr>
+<tr>
+<td><strong>데이터 및 모델 수치</strong></td>
+<td>• <strong>32x32</strong>: MNIST 이미지 데이터셋의 차원 규격.&lt;br&gt;• <strong>100만(1 million) / 10억(1 billion) 토큰</strong>: 트랜스포머(GPT) 모델의 입력 시퀀스 길이 예시.&lt;br&gt;• <strong>21점</strong>: 퐁(Pong) 아케이드 게임의 만점 반환값(Return) 수치.&lt;br&gt;• <strong>Seed 536</strong>: 퐁 게임 성능 저하의 결정적 원인을 제공한 특정 프레임 전환 번호.</td>
+<td>기술 분석 및 실험 데이터.</td>
+</tr>
+<tr>
+<td><strong>도서 출판 및 웹사이트</strong></td>
+<td>• <strong>출간 시기</strong>: 올해 말(towards the end of the year) MIT Press를 통해 출판 예정.&lt;br&gt;• <strong>초안 웹사이트</strong>: <code>causalai-book.net</code>&lt;br&gt;• <strong>도서 제목</strong>: <em>Causal AI: Roadmap for Building Causally Intelligent Systems</em></td>
+<td>발표자의 신규 저서 정보.</td>
+</tr>
+<tr>
+<td><strong>연구 후원 기관</strong></td>
+<td>• <strong>NSF</strong> (미국국립과학재단)&lt;br&gt;• <strong>AFOSR</strong> (미 공군 과학연구실)&lt;br&gt;• <strong>ONR</strong> (미 해군연구소)&lt;br&gt;• <strong>DARPA</strong> (미 국방고등연구계획국)&lt;br&gt;• <strong>Sloan</strong> (슬론 재단)</td>
+<td>연구비 지원 및 연구소 후원 기관 목록.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<h5 id="소스-내에서-명시된-한계-및-불확실성">소스 내에서 명시된 한계 및 불확실성</h5>
+<ol>
+<li><strong>반사실적 무작위화의 수학적 세부사항 생략:</strong> Layer 2.5, Layer 2.25 등 반사실 영역의 세분화 및 반사실적 무작위화(Counterfactual Randomization)의 물리적 실현 가능성에 대한 수학적 증명은 강연 시간 제약상 오프라인 질의응답으로 이관되었으며 본 강연에서는 깊이 있게 다뤄지지 않았습니다.</li>
+<li><strong>LLM 표현 언어와 인과론 언어의 통합 메커니즘 미완성:</strong> LLM의 언어적 유연성과 인과 수학의 엄밀성을 기술적으로 완전히 결합(Click/Unify)하는 매개 방법론은 현재 연구가 진행 중인 학술적 난제로 남아있습니다.</li>
+<li><strong>일부 핵심 역량에 대한 설명 대략화:</strong> 인과적 강화학습(RL), 인과적 게임 이론(Causal Game Theory), 그리고 세계 모델 학습 및 인과적 발견(Capability 3, 4, 5)에 대한 세부 알고리즘은 강연 시간 제약으로 인해 개괄적 수준에서 언급되었습니다.</li>
+</ol>
+<h5 id="소스에서-확인할-수-없는-정보-확인-불가">소스에서 확인할 수 없는 정보 (확인 불가)</h5>
+<ul>
+<li><strong>발표자의 구체적 소속 기관명:</strong> 외부 지식(컬럼비아 대학교 등)을 배제하고 소스 텍스트 내부만 확인했을 때, 발표자 엘리아스 바레인보임의 현재 공식 소속 대학/연구소 명칭은 언급되지 않았습니다. <em>(소스 내 미언급 / 확인 불가)</em></li>
+<li><strong>질의응답의 최종 답변 내용:</strong> 진행자 모이세스가 프라딥을 무대로 부르고 청중 질문을 받는 과정에서 강연 녹음/스크립트가 종료되어 오프라인 질의응답의 최종 결론은 확인되지 않습니다. <em>(소스 내 미언급 / 확인 불가)</em></li>
+<li><strong>강연의 정확한 개최 연도 및 날짜:</strong> 세션이 &quot;오늘 워크숍의 오후 세션&quot;으로만 소개되었을 뿐, 강연이 진행된 정확한 날짜와 연도는 명시되지 않았습니다. <em>(소스 내 미언급 / 확인 불가)</em></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

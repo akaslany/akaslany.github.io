@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPT-6.2 Astra Formalizes Smoktunowicz&#x27;s Gap Theorem | Vals AI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>GPT-6.2 Astra Formalizes Smoktunowicz&#x27;s Gap Theorem | Vals AI</h1>
+<p class="page-meta">웹 · 2026-11-18</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 OpenAI의 GPT-6.2 Astra 모델이 아가타 스목투노비치(Agata Smoktunowicz)의 2006년 갭 정리(Gap Theorem)를 Lean 대화형 정리 증명기(Interactive Theorem Prover) 환경에서 세계 최초로 완전 형식화(Formalization)하는 데 성공한…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.vals.ai/blogs/smoktunowicz-gap-theorem">출처</a> · <a href="https://www.youtube.com/watch?v=3030tXFLyCg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="gpt-6-2-astra의-스목투노비치-갭-정리-smoktunowicz-s-gap-theorem-형식화-보고서">GPT-6.2 Astra의 스목투노비치 갭 정리(Smoktunowicz's Gap Theorem) 형식화 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 OpenAI의 GPT-6.2 Astra 모델이 아가타 스목투노비치(Agata Smoktunowicz)의 2006년 갭 정리(Gap Theorem)를 Lean 대화형 정리 증명기(Interactive Theorem Prover) 환경에서 세계 최초로 완전 형식화(Formalization)하는 데 성공한 성과를 분석합니다. 스목투노비치 갭 정리는 특정 등급화된 정역(Graded domain)의 겔판트-키릴로프 차원(Gelfand–Kirillov dimension, GK 차원)이 2와 3 사이에 엄격히 존재할 수 없음을 밝힌 추상알제리학의 중요 정리입니다.</p>
+<p>이 성과는 초고난도 연구 수준 형식화 벤치마크인 Autoform-Hard 환경에서 달성되었습니다. GPT-6.2 Astra는 샌드박스 내부에서 인간의 개입 없이 94분 동안 1,794줄의 Lean 코드를 생성하며 독립적으로 증명을 완결했습니다. 전체 수행 과정에서 소요된 총 비용은 $21.58로, 벤치마크에 허용된 최대 예산 한도($200) 및 시간 제한(3시간)을 크게 밑돌았습니다.</p>
+<p>특히 Astra의 형식화 증명은 2005년 및 2006년 출판된 스목투노비치의 원본 논문 증명 구조를 그대로 답습하지 않고 독창적인 우회 증명 경로를 개척했습니다. 원본 증명에 필수적인 버그만 갭 정리(Bergman Gap Theorem), 스몰-워필드 정리(Small–Warfield Theorem), 리만-로흐 정리(Riemann–Roch Theorem) 기반 논증은 현재 Lean의 수학 라이브러리인 Mathlib에 수록되어 있지 않아 직접 형식화할 경우 방대한 작업이 요구됩니다. Astra는 이러한 미수록 정리들을 완전히 우회하고, 공간의 성장을 측정하는 '용량(Capacity)' 개념을 새롭게 정의 및 도입하여 샌드박스 내 환경 한계를 극복했습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments">2. 주요 논점 (Key Arguments)</h4>
+<h5 id="2-1-autoform-hard-벤치마크-성과-및-모델-비교">2.1. Autoform-Hard 벤치마크 성과 및 모델 비교</h5>
+<p><strong>[사실]</strong> Autoform-Hard 벤치마크는 총 56개의 연구 수준 형식화 과제로 구성되어 있습니다. 최상위 3개 모델의 성과 비교는 아래 표와 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:left">해결 과제 수 (총 56개)</th>
+<th style="text-align:left">스목투노비치 갭 정리 해결 여부</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>GPT-6.2 Sol</strong></td>
+<td style="text-align:left">48개</td>
+<td style="text-align:left">미해결</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Claude Fable 5.2</strong></td>
+<td style="text-align:left">48개</td>
+<td style="text-align:left">미해결</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPT-6.2 Astra</strong></td>
+<td style="text-align:left"><strong>49개</strong></td>
+<td style="text-align:left"><strong>단독 해결 (성공)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>[소스의 주장]</strong> GPT-6.2 Sol과 Claude Fable 5.2는 정확히 동일한 48개 과제를 해결했으나, GPT-6.2 Astra만이 49번째 과제인 스목투노비치 갭 정리를 단독으로 해결하여 리더보드 최상위를 격차로 갈랐습니다.</p>
+<p><strong>[사실]</strong> 평가 실행 환경은 Lean, Mathlib, 셸이 제공되는 샌드박스 내부로 제약되었으며, 최대 3시간의 벽시계 시간(Wall clock)과 $200의 예산 제한 조건이 부여되었습니다. 이 과정에서 인간의 개입은 일체 배제되었습니다.</p>
+<p><strong>[사실]</strong> GPT-6.2 Astra의 실제 자원 소비량은 다음과 같습니다.</p>
+<ul>
+<li><strong>소요 시간</strong>: 94분 (벽시계 시간)</li>
+<li><strong>생성 코드량</strong>: 1,794줄 (Lines of code)</li>
+<li><strong>에이전트 턴</strong>: 146회 (Agent turns)</li>
+<li><strong>소요 비용</strong>: $21.58 (공표 단가 기준)</li>
+</ul>
+<hr />
+<h5 id="2-2-실행-과정-역학-및-에이전트-행동-분석">2.2. 실행 과정 역학 및 에이전트 행동 분석</h5>
+<p><strong>[사실]</strong> 실행 개시 후 약 47분 시점에 Astra는 불완전한 부분 증명을 제출했습니다. 해당 제출물은 비교적 쉬운 가환(Commutative) 케이스에 대해서는 증명을 완료했으나, 일반적인 비가환 케이스에 대해서는 구멍(<code>sorry</code>)을 남겨둔 상태였습니다.</p>
+<p><strong>[사실]</strong> 자동 채점기(Grader)는 이 부분 증명을 즉시 거절했습니다. 이에 Astra는 정직하게 자신이 증명한 부분과 증명하지 못한 부분을 명시한 &quot;미해결(unsolved)&quot; 보고서를 제출했습니다.</p>
+<p><strong>[사실]</strong> Autoform-Hard의 시스템 하네스 규칙상 에이전트는 최소 $20를 지출하기 전에는 포기할 수 없습니다. 당시 Astra의 지출액은 약 $8에 불과했기 때문에, 하네스는 에이전트를 강제로 작업에 복귀시켰습니다.</p>
+<p><strong>[작성자의 해석]</strong> 시스템 제약 규칙이 에이전트의 성급한 포기를 방지하고 새로운 논리적 접근법을 모색하도록 강제하는 동인으로 작용했습니다.</p>
+<p><strong>[사실]</strong> 복귀 직후 Astra는 이후 9분 동안 아무런 코드를 작성하지 않고 사고(Thinking) 단계에만 전념했습니다. 사고 단계를 마친 후 새로운 접근법으로 코드를 다시 작성하기 시작했으며, &quot;미해결&quot; 보고서를 제출한 지 39분 만에 채점기를 완전 통과하는 증명을 완성했습니다.</p>
+<hr />
+<h5 id="2-3-증명-검증-방식-및-무결성-검토">2.3. 증명 검증 방식 및 무결성 검토</h5>
+<p><strong>[사실]</strong> Autoform-Hard 벤치마크는 클린룸 채점(Clean-room grading) 방식을 채택하고 있습니다. 채점 과정에서는 신뢰할 수 있는 과제 사본으로부터 정리 명제를 완전히 새로 빌드하며, 정리의 문언이 원본과 정확히 일치하는지 검증합니다. 또한 Lean의 표준 공리(<code>propext</code>, <code>Quot.sound</code>, <code>Classical.choice</code>)만을 사용했는지 독립적인 커널 재실행을 통해 확인합니다.</p>
+<p><strong>[소스의 주장]</strong> Vals AI 연구진은 해당 증명에 대해 수동 검토(Hand review)를 진행했으며, 검토 항목 및 결과는 다음과 같습니다.</p>
+<ul>
+<li><strong>경고 및 미완성 구문 검토</strong>: <code>sorry</code> 구문 및 경고(warning) 없이 정상 빌드됨을 확인했으며, 표준 공리에만 의존함.</li>
+<li><strong>무결성 검토</strong>: 신뢰할 수 있는 과제 파일이 원본과 바이트 단위로 정확히 일치함(<code>byte-identical</code>).</li>
+<li><strong>메타 프로그래밍 및 재정의 검토</strong>: <code>native_decide</code> 미사용, 신규 공리 추가 없음, Unsafe 코드 미사용, 벤치마크 객체 재정의 없음.</li>
+<li><strong>명제 일치성 검토</strong>: Lean 명제가 유한차원 0차(degree-zero) 부분을 포함하여 스목투노비치 (2006) 논문의 정리 1(Theorem 1) 문언과 완전히 일치함.</li>
+</ul>
+<hr />
+<h5 id="2-4-증명-방식-비교-출판-논문-vs-gpt-6-2-astra">2.4. 증명 방식 비교: 출판 논문 vs GPT-6.2 Astra</h5>
+<p><strong>[사실]</strong> 출판된 기존 논문(Artin-Stafford 1995, Smoktunowicz 2005/2006)과 GPT-6.2 Astra의 증명 구조 비교는 아래 표와 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">출판 논문 (Artin-Stafford / Smoktunowicz)</th>
+<th style="text-align:left">GPT-6.2 Astra 형식화 증명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>분수체 구성</strong></td>
+<td style="text-align:left">Ore 조건 및 등급 분수환 $Q(R) = D[z, z^{-1}; \sigma]$ 활용 (문헌 인용)</td>
+<td style="text-align:left">Ore 조건 및 0차 나누기 순환군 $D$ 직접 증명 (사선 로랑 환 미구성)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>차원 측정</strong></td>
+<td style="text-align:left">$R_n$의 차원이 $n^{\operatorname{GKdim} R - 1}$로 성장함을 활용</td>
+<td style="text-align:left"><code>Growth.lean</code>, <code>Degree.lean</code>, <code>Hilbert.lean</code>을 통해 단어 길이와 등급 차원 연관성 직접 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>생성 공간</strong></td>
+<td style="text-align:left">$D$가 $V_n = R_n z^{-n}$에 의해 생성됨을 공통 분모 추정으로 증명</td>
+<td style="text-align:left">$D$가 단일 유한차원 공간 $S = A_{dm}x^{-m}$에 의해 생성됨을 성장에 기반하여 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>중간 정리 의존성</strong></td>
+<td style="text-align:left"><strong>Bergman Gap Theorem</strong>, <strong>Small–Warfield Theorem</strong>, <strong>Riemann–Roch Theorem</strong> 사용</td>
+<td style="text-align:left"><strong>Mathlib 미수록 정리 3종을 전면 우회</strong> 및 미사용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>핵심 기법</strong></td>
+<td style="text-align:left">연쇄 $U_i$ 구성을 통한 GK 차원 추정, 기하학적 리만-로흐 정리 적용</td>
+<td style="text-align:left"><strong>'용량(Capacity)'</strong> 개념 도입, 용량의 플래토(Plateau) 현상 및 안정화 부분환 활용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최종 귀결</strong></td>
+<td style="text-align:left">리만-로흐 정리에 의해 $\dim R_n \le cn$ 도출하여 $\operatorname{GKdim} R \le 2$ 귀결</td>
+<td style="text-align:left">단어 절단 논리로 $\dim A_n \le \dim A_{n-d} + C$ 도출하여 <strong>선형 성장 경계(Linear growth bound)로의 전환</strong> 및 모순 유발</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[소스의 주장]</strong> 출판된 증명의 핵심 뼈대인 Bergman Gap, Small–Warfield, Riemann–Roch 정리는 Mathlib에 존재하지 않으며, 이를 직접 형식화하는 것은 그 자체로 거대한 프로젝트입니다. Astra는 '용량(Capacity)' 기반 모듈 구조를 도입함으로써 이 기법들을 전면 우회했습니다.</p>
+<p><strong>[사실]</strong> Astra의 증명은 귀류법을 따르며, GK 차원이 2와 3 사이에 존재한다고 가정(모순용)한 뒤 6단계에 걸쳐 17개 핵심 모듈(파일)로 논리를 전개했습니다.</p>
+<ol>
+<li><strong>단계 1: GK 차원에서 차원 카운팅으로의 전환</strong>
+<ul>
+<li><code>Growth.lean</code> (17분 시점 생성, 110줄): 생성자 단어 길이 모음 및 벤치마크 정의 관련 기본 사실 증명.</li>
+<li><code>Degree.lean</code> (19분 시점 생성, 159줄): 단어 길이 기준 카운팅과 등급 차원 기준 카운팅이 상수배 범위 내에서 일치함을 증명 (유한차원 0차 부분 성질 활용).</li>
+<li><code>Hilbert.lean</code> (22분 시점 생성, 160줄): GK 차원이 2와 3 사이이면 $\dim A_n$이 선형보다 빠르고 이차식보다 느리게 성장한다는 가정을 재설정.</li>
+</ul>
+</li>
+<li><strong>단계 2: 분수체(Fractions) 구성</strong>
+<ul>
+<li><code>Ore.lean</code> (25분 시점 생성, 91줄): 다항식 성장 조건에 따라 공통 배수가 존재함(Ore 조건)을 증명하여 분수체 매설 기반 마련.</li>
+<li><code>HomogeneousFractions.lean</code> (29분 시점 생성, 127줄): 분수체 $Q$ 및 동차 차수가 같은 분수들의 집합인 0차 나누기 순환군 $D$ 구성.</li>
+<li><code>Boundary.lean</code> (41분 시점 생성, 89줄): 공통 분모화 도구 및 완만 성장 수열의 정체 보조정리(Plateau lemma) 작성.</li>
+</ul>
+</li>
+<li><strong>단계 3: $D$가 단일 공간에 의해 생성됨을 증명</strong>
+<ul>
+<li><code>Frames.lean</code> (57분 시점 생성, 138줄): 부분공간 $U$가 생성하는 나누기 순환군 조건 설정.</li>
+<li><code>StableIntervals.lean</code> (59분 시점 생성, 85줄): 동차 원소에 의한 켤레화(Conjugation) 자기동형사상 성질 증명.</li>
+<li><code>Weighted.lean</code> (62분 시점 생성, 98줄): 다양한 차수의 생성자 단어에 대한 비둘기집의 원리 기반 장부 정리.</li>
+<li><code>CoefficientGeneration.lean</code> (64분 시점 생성, 194줄): $D$가 단일 유한차원 공간 $S = A_{dm}x^{-m}$에 의해 나누기 순환군으로서 생성됨을 성장에 기초하여 도출.</li>
+</ul>
+</li>
+<li><strong>단계 4: 용량(Capacity) 논증</strong>
+<ul>
+<li><code>Capacity.lean</code> (75분 시점 생성, 133줄): 증명의 핵심. 결함(Defect) $\dim(SU) - \dim U$ 및 최소 결함인 용량(Capacity) 정의. 용량을 증가시키지 않는 원소들이 나누기 순환군을 형성함을 증명.</li>
+<li><code>MaxCapacity.lean</code> (77분 시점 생성, 113줄): 성장하는 공간 $A_{dn}x^{-n}$을 따라 용량을 적용하여 결함이 평탄해지는 플래토(Plateau) 형성 및 이 시점의 안정화환이 $D$ 전체를 포함함을 증명.</li>
+</ul>
+</li>
+<li><strong>단계 5: 플래토에서 선형 성장 경계(Linear growth bound)로의 전환</strong>
+<ul>
+<li><code>Cuts.lean</code> (79분 시점 생성, 107줄): 유한 차원 범위 내에서의 단어 절단 조합론 작성.</li>
+<li><code>Optimal.lean</code> (82분 시점 생성, 172줄): Astra가 단번에 작성한 가장 큰 파일로, 곱 $TA_n$의 성장이 일원적으로 제한되는 유한차원 $T \subseteq D$ 존재 증명.</li>
+<li><code>Controlled.lean</code> (84분 시점 생성, 87줄): 제한된 성장을 일으키는 원소들이 나누기 순환군을 이룸을 증명.</li>
+<li><code>LinearBound.lean</code> (86분 시점 생성, 105줄): 제한된 성장을 바탕으로 $\dim(TA_n) \le \dim(TA_{n-d}) + C$를 도출하여 $\dim A_n$이 선형 이하로 성장함을 증명, <code>Hilbert.lean</code>의 가정과 모순 발생.</li>
+</ul>
+</li>
+<li><strong>단계 6: 최종 정리 합체</strong>
+<ul>
+<li><code>Submission.lean</code> (39분 시점 최초 작성, 45줄): 39분 시점에 처음 생성되어 부분 증명 제출 시에 사용되었으나, 94분 최종 성공 시점에 17개 모듈을 결합하는 7줄의 최종 증명 코드로 완성되어 모순을 마무리하고 정리를 완결함.</li>
+</ul>
+</li>
+</ol>
+<p><em>(참고: 샌드박스 작업 공간에는 과제와 함께 제공된 빈 파일인 <code>Helpers.lean</code>이 포함되어 있었으며, 과정 중 작성되었던 <code>PolynomialModule</code>, <code>Commutative</code>, <code>FrameIndex</code> 파일은 최종 제출 전 삭제됨)</em></p>
+<hr />
+<h5 id="2-5-용량-capacity-개념과-기존-수학-문헌과의-연관성">2.5. '용량(Capacity)' 개념과 기존 수학 문헌과의 연관성</h5>
+<p><strong>[사실]</strong> Astra가 정의한 용량(Capacity)의 수학적 구조는 다음과 같습니다.</p>
+<ul>
+<li><strong>정의</strong>: 유한차원 부분공간 $U$와 $D$를 생성하는 유한차원 공간 $S$에 대해, $S$를 곱했을 때 발생하는 성장 결함(Defect)인 $\dim(SU) - \dim U$를 측정하고, $U$를 포함하는 더 큰 부분공간 $V$에 대해 이 결함의 최솟값을 취한 수식으로 정의됩니다.
+$$\operatorname{cap}(U) = \min_{V \supseteq U} (\dim(SV) - \dim V)$$</li>
+<li><strong>성질</strong>: 단조성(Monotone), 서브모듈러성(Submodular, 두 부분공간을 병합하는 비용이 각각의 합보다 크지 않음), 비제로 원소 곱에 대한 평행이동 불변성(Translation-invariant)을 가집니다.</li>
+<li><strong>나누기 순환군과의 관계</strong>: $U$의 용량을 증가시키지 않는 원소들의 집합(안정화 부분환, Stabilizer)은 나누기 순환군(Division ring)을 형성합니다.</li>
+</ul>
+<p><strong>[소스의 주장]</strong> 용량 개념은 출판된 스목투노비치의 논문들(2005, 2006)에는 등장하지 않지만, 기존 수학 문헌들과 매우 깊은 연관성을 보입니다.</p>
+<ul>
+<li><strong>장(J. J. Zhang, 1998)</strong>: 장의 하부 초월 차수(Lower transcendence degree) 문헌[Z98]에서 정의된 부피 차이 불등식(Volume difference inequality)의 수치가 Astra가 정의한 결함(Defect) $\dim(SU) - \dim U$와 정확히 일치합니다. 장(Zhang)은 이 불등식을 해당 갭 정리를 푸는 경로로 제안한 바 있으며, 그의 보조정리 8.7(Lemma 8.7)에는 Astra와 동일한 형태의 안정화군(Stabilizer) 논증이 포함되어 있습니다.</li>
+<li><strong>하미둔(Hamidoune) / 르쿠베(Lecouvey)</strong>: 덧셈 조합론에서 성장을 최소화하는 집합을 연구하여 합집합 경계를 증명하는 하미둔(Hamidoune)의 이소페리메트릭 기법(Isoperimetric method) 및 이를 나누기 순환군의 부분공간으로 확장한 르쿠베(2014)의 연구[L14]와 구조적으로 매우 유사합니다.</li>
+</ul>
+<p><strong>[사실]</strong> Astra의 사고 요약 기록에 따르면, 실행 개시 후 첫 몇 분 이내(in the first minutes of the run)에 &quot;하부 초월(lower transcendence)&quot;이라는 개념을 언급했음이 확인되었습니다. Astra는 <code>Capacity.lean</code> 파일에 포함된 25개의 선언문을 단 한 번의 명령으로 작성했으며, 단 한 차례의 수정 작업을 거쳐 성공적으로 컴파일을 완료했습니다.</p>
+<hr />
+<h4 id="3-등장-인물-화자-people-speakers">3. 등장 인물·화자 (People &amp; Speakers)</h4>
+<ul>
+<li><strong>제이콥 스타브리아노스 (Jacob Stavrianos)</strong>: 보고서 작성자 (Vals AI 소속 연구원)</li>
+<li><strong>아가타 스목투노비치 (Agata Smoktunowicz)</strong>: 2006년 등급화된 정역의 갭 정리를 증명한 수학자</li>
+<li><strong>참고 문헌 저자진</strong>:
+<ul>
+<li>M. Artin &amp; J. T. Stafford (1995년 이차 성장 비가환 등급 정역 논문 저자)</li>
+<li>G. R. Krause &amp; T. H. Lenagan (2000년 GK 차원 교재 저자)</li>
+<li>L. W. Small &amp; R. B. Warfield Jr. (1984년 1차원 프라임 아핀 환 논문 저자)</li>
+<li>J. J. Zhang (1998년 하부 초월 차수 논문 저자)</li>
+<li>C. Lecouvey (2014년 차원 추정을 위한 이소페리메트릭 기법 논문 저자)</li>
+<li>하미둔 (Y. O. Hamidoune, 덧셈 조합론 이소페리메트릭 기법 연구자)</li>
+</ul>
+</li>
+<li><strong>벤치마크 제공자</strong>: Meta FAIR의 AutoformBench 팀</li>
+<li><strong>모델/추론 제공자</strong>: OpenAI (증명 코드 및 추론 요약본 출판 허가 제공)</li>
+<li><strong>기타 특정 진행자/화자</strong>: 확인 불가</li>
+</ul>
+<hr />
+<h4 id="4-수치-시점-figures-timestamps">4. 수치·시점 (Figures &amp; Timestamps)</h4>
+<h5 id="주요-수치-key-figures">주요 수치 (Key Figures)</h5>
+<ul>
+<li><strong>Autoform-Hard 과제 수</strong>: 총 56개 (연구 수준)</li>
+<li><strong>GPT-6.2 Astra 해결 과제 수</strong>: 49개 (리더보드 1위)</li>
+<li><strong>GPT-6.2 Sol / Claude Fable 5.2 해결 과제 수</strong>: 각 48개</li>
+<li><strong>실행 소요 시간</strong>: 94분 (벽시계 시간)</li>
+<li><strong>총 생성 코드량</strong>: 1,794줄</li>
+<li><strong>에이전트 턴 수</strong>: 146회</li>
+<li><strong>최종 소요 비용</strong>: $21.58</li>
+<li><strong>벤치마크 예산 한도</strong>: $200</li>
+<li><strong>벤치마크 시간 제한</strong>: 3시간 (180분)</li>
+<li><strong>최소 포기 불가 조건</strong>: $20 지출 이전 포기 불가</li>
+<li><strong>첫 부분 제출 시점 지출액</strong>: 약 $8</li>
+</ul>
+<h5 id="시간-및-타임스탬프-timestamps">시간 및 타임스탬프 (Timestamps)</h5>
+<ul>
+<li><strong>보고서 게시일</strong>: 2026년 11월 18일</li>
+<li><strong>첫 부분 제출 (불완전 증명)</strong>: 실행 시작 후 47분 시점</li>
+<li><strong>사고 전념 단계 (코드 미작성)</strong>: 47분 ~ 56분 시점 (약 9분간)</li>
+<li><strong>최종 통과 시점</strong>: 미해결 보고서 제출 후 39분 지난 시점 (총 94분 시점)</li>
+</ul>
+<h5 id="주요-파일-생성-타임스탬프-file-creation-timestamps">주요 파일 생성 타임스탬프 (File Creation Timestamps)</h5>
+<ul>
+<li><code>Growth.lean</code>: 17분 시점</li>
+<li><code>Degree.lean</code>: 19분 시점</li>
+<li><code>Hilbert.lean</code>: 22분 시점</li>
+<li><code>Ore.lean</code>: 25분 시점</li>
+<li><code>HomogeneousFractions.lean</code>: 29분 시점</li>
+<li><code>Submission.lean</code>: 39분 시점 최초 작성 (부분 증명용), 94분 시점 최종 7줄 증명 코드로 완성</li>
+<li><code>Boundary.lean</code>: 41분 시점</li>
+<li><code>Frames.lean</code>: 57분 시점</li>
+<li><code>StableIntervals.lean</code>: 59분 시점</li>
+<li><code>Weighted.lean</code>: 62분 시점</li>
+<li><code>CoefficientGeneration.lean</code>: 64분 시점</li>
+<li><code>Capacity.lean</code>: 75분 시점</li>
+<li><code>MaxCapacity.lean</code>: 77분 시점</li>
+<li><code>Cuts.lean</code>: 79분 시점</li>
+<li><code>Optimal.lean</code>: 82분 시점</li>
+<li><code>Controlled.lean</code>: 84분 시점</li>
+<li><code>LinearBound.lean</code>: 86분 시점</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 보고서의 바탕이 된 소스 텍스트 분석 결과, 다음과 같은 사항들은 정보가 부재하거나 확인이 불가능합니다.</p>
+<ul>
+<li><strong>Astra의 날것(Raw) 사고 데이터 미공개</strong>: 보고서에 인용된 추론 과정 및 인용문은 모델의 날것(raw) 사고 데이터가 아니며, 제공자인 OpenAI가 생성한 요약본(provider-generated summaries)에 기반하고 있습니다. Astra의 실제 Raw 렌더링 데이터는 공개되지 않았습니다.</li>
+<li><strong>사전 학습 데이터 직접 참조 여부 불확실</strong>: Astra가 Zhang(1998)이나 Lecouvey(2014) 등의 문헌을 사전 학습 단계에서 직접 기억하여 참조했는지, 아니면 순수한 추론을 통해 해당 개념을 재발명했는지는 명확히 확인되지 않습니다. (소스에서는 실행 개시 후 첫 몇 분 이내의 요약에 &quot;lower transcendence&quot;가 언급되었다는 사실과 구조적 연관성만을 밝히고 있습니다.)</li>
+<li><strong>미해결 7개 과제 세부 내용 미다룸</strong>: Autoform-Hard의 총 56개 과제 중 Astra가 해결하지 못한 나머지 7개 과제가 무엇인지에 대해서는 소스에서 언급되지 않았습니다. (소스 미다룸)</li>
+<li><strong>기타 모델 및 환경 세부 사항</strong>: OpenAI의 GPT-6.2 Astra 파라미터 구조나 내부 아키텍처, 샌드박스 하드웨어 사양 등은 명시되지 않았습니다. (확인 불가)</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

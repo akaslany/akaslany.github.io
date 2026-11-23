@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScientistTwo: Pioneering the Human Knowledge Frontier with Autonomous AI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>ScientistTwo: Pioneering the Human Knowledge Frontier with Autonomous AI</h1>
+<p class="page-meta">논문 · 2026-09-19</p>
+<h2 id="요약">요약</h2>
+<p>본 연구는 기존 AI 연구 에이전트의 한계를 진단하고, 과학적 발견의 새로운 패러다임을 제시합니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.19644v1">출처</a> · <a href="https://www.youtube.com/watch?v=foi8pMg_Ulw">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="scientisttwo-자율형-ai를-통한-인간-지식-경계의-개척-arxiv-2609-19644v1-분석-보고서">ScientistTwo: 자율형 AI를 통한 인간 지식 경계의 개척 (arXiv:2609.19644v1 분석 보고서)</h3>
+<h4 id="1-핵심-요약-summary">1. 핵심 요약 (Summary)</h4>
+<ul>
+<li><strong>자율형 과학 개척자(Autonomous Pioneer):</strong> ScientistTwo는 단순한 연구 보조 도구를 넘어, 인간 전문가가 제시한 근본적인 도전 과제를 스스로 분석하고 해결책을 도출하여 지식의 경계를 확장하는 자율형 다중 에이전트 프레임워크입니다.</li>
+<li><strong>성공적인 연구 성과:</strong> ICLR, ICML, NeurIPS 등 최상위 컨퍼런스 수준의 107개 연구 과제를 수행한 결과, 80.4%(86개)의 과제에서 성공적으로 성능을 개선하는 압도적인 성과를 거두었습니다.</li>
+<li><strong>정량적 성능 향상:</strong> 기존 인간의 최신 기술(SOTA) 대비 평균 25.2%의 상대적 성능 향상을 기록하며, AI가 독립적으로 학술적 가치를 창출할 수 있음을 증명했습니다.</li>
+<li><strong>전문가 수준의 검증:</strong> ScholarPeer(평균 7.5점) 및 Stanford Agentic Reviewer(평균 5.7점) 등 자동화된 동료 심사 시스템에서 인간 저자 논문을 상회하는 점수와 승인율을 획득했습니다.</li>
+</ul>
+<h4 id="2-문제-설정과-목표-problem-setup-and-goals">2. 문제 설정과 목표 (Problem Setup and Goals)</h4>
+<p>본 연구는 기존 AI 연구 에이전트의 한계를 진단하고, 과학적 발견의 새로운 패러다임을 제시합니다.</p>
+<ul>
+<li><strong>기존 시스템의 한계:</strong> 이전의 에이전트들은 주로 단일 지표(Scalar Metric) 최적화에 매몰되어, 실제 과학적 발견에 필수적인 절차적 엄밀성(코드 분석, 절제 연구, 동료 심사 대응 능력)과 분석적 확장성(Analytical Expansion)이 결여되어 있었습니다.</li>
+<li><strong>핵심 목표:</strong> '문제 중심의 자율적 발견(Problem-driven autonomous discovery)'을 지향합니다.</li>
+<li><strong>연구 정의:</strong> 인간 전문가가 고수준의 목표($G$)를 제시하면, AI($A$)가 독립적으로 이론적/경험적 병목 현상을 진단하고, 이를 해결하는 논문($P^+$)과 재현 가능한 코드베이스($C^+$)를 생성하여 지식의 최전선을 확장하는 과정입니다.</li>
+</ul>
+<h4 id="3-scientisttwo의-구성과-작동-방식-system-architecture-and-research-loop">3. ScientistTwo의 구성과 작동 방식 (System Architecture and Research Loop)</h4>
+<p>ScientistTwo는 다중 에이전트 간의 정교한 협업과 'Stage(candidate, critic, refine)'로 요약되는 알고리즘적 엄밀성(Listing 1 참조)을 바탕으로 작동합니다.</p>
+<ul>
+<li><strong>아이디어 생성 및 검증 루프 (Stage 1):</strong>
+<ul>
+<li><strong>제한점 추출기(Limitation Extractor) &amp; 검증기(Limitation Verifier):</strong> 기존 SOTA 방법론의 핵심 한계를 진단하고, 추출된 제한점이 혁신을 이끌어내기에 충분한지 반복적으로 검토하여 씨앗 아이디어(Seed Ideas)를 도출합니다.</li>
+<li><strong>참신성 검사기(Novelty Checker):</strong> 생성된 아이디어의 학술적 차별성을 수치화하여 우선순위를 부여합니다.</li>
+</ul>
+</li>
+<li><strong>계층적 평가 및 진화 전략 (Stage 2 &amp; 3):</strong>
+<ul>
+<li><strong>효율적 스크리닝:</strong> 벤치마크 데이터의 부분집합(Subset)에서 아이디어를 선별 검증한 후, 가능성이 확인된 가설에 대해서만 전체집합(Full-set) 실험을 수행하여 자원을 최적화합니다.</li>
+<li><strong>아이디어 진화(Idea Evolution):</strong> 실험 기록(Execution traces)을 분석하여 성공 요인과 실패 원인을 학습하고, 이를 바탕으로 가설을 수정하여 최적의 해법을 찾아내는 진화적 정제 과정을 거칩니다.</li>
+</ul>
+</li>
+<li><strong>학술적 검증 루프 (Stage 4):</strong>
+<ul>
+<li><strong>Peer-Review &amp; Rebuttal 사이클:</strong> 생성된 초안에 대해 비판적 피드백을 제공하고, 이에 대응하기 위해 추가 실험을 설계·실행하는 동적 수성 과정을 포함합니다.</li>
+<li><strong>Meta-Review 에이전트:</strong> 최종 결과물이 학술지 투고 기준을 충족하는지 종합 평가하며, 필요 시 전체 프로세스를 재트리거(Recursive Refinement)하여 완성도를 극대화합니다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-평가-설정과-논문-보고-결과-evaluation-and-reported-results">4. 평가 설정과 논문 보고 결과 (Evaluation and Reported Results)</h4>
+<p>본 시스템은 최신 언어 모델인 Gemini 3.6 Flash와 Claude Opus 4.8을 백엔드로 사용하여 대규모 벤치마크를 수행했습니다.</p>
+<ul>
+<li><strong>실험 규모:</strong> ICLR, ICML, NeurIPS 수준의 107개 연구 과제를 도메인 제약 없이 수행했습니다.</li>
+<li><strong>정량적 성과:</strong>
+<ul>
+<li><strong>개선 성공률:</strong> 80.4% (86/107 과제 성공).</li>
+<li><strong>상대적 성능 향상:</strong> 인간 SOTA 대비 평균 25.2%.</li>
+</ul>
+</li>
+<li><strong>심사 결과 비교 (Table 2 참조):</strong>
+<ul>
+<li><strong>ScholarPeer:</strong> 평균 7.5점 (10점 만점), 승인율 91.9%. (기존 ScientistOne의 3.8점, 14.3% 대비 비약적 향상)</li>
+<li><strong>Stanford Agentic Reviewer (Held-out):</strong> 평균 5.7점, 승인율 72.1%로 전문가 수준의 논리 전개 능력을 입증했습니다.</li>
+</ul>
+</li>
+<li><strong>기존 모델과의 차별점:</strong> ScientistOne이 지표 최적화에 그친 반면, ScientistTwo는 복합적인 학술적 분석과 다차원적 실험 설계에서 우위를 점했습니다.</li>
+</ul>
+<h4 id="5-의미와-적용-범위-implications-and-scope">5. 의미와 적용 범위 (Implications and Scope)</h4>
+<ul>
+<li><strong>자율적 SOTA 발견 사례 (VD-STrans):</strong> ScientistTwo는 BPE 토크나이징의 구조적 병목을 자율적으로 진단하여 <strong>VD-STrans</strong> 방법론을 고안했습니다. 이는 기존 인간 SOTA(Jiang and Gong, 2026) 대비 10.9%의 성능 향상을 달성한 사례로, AI가 실제 학술적 난제를 해결할 수 있음을 보여주는 상징적 결과입니다.</li>
+<li><strong>출판 가능한 산출물:</strong> LaTeX 형식의 전문 논문과 즉시 실행 가능한 코드베이스를 동시에 제공함으로써 연구의 재현성을 보장합니다.</li>
+<li><strong>광범위한 적용 도메인:</strong> 강화 학습(RL), 대규모 언어 모델(LLM), 최적화, 이론 연구 등 AI 연구 전반에 걸친 범용성을 확보했습니다(Figure 1 참조).</li>
+</ul>
+<h4 id="6-한계와-불확실성-limitations-and-uncertainties">6. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<ul>
+<li><strong>산출물의 하드웨어 의존성:</strong> ScientistTwo가 도출한 개별 연구 성과(예: VD-STrans)는 256비트 AVX2 SIMD 환경과 같은 특정 하드웨어 사양에 최적화된 코드를 포함할 수 있어, 실행 환경에 따른 성능 편차가 존재할 수 있습니다.</li>
+<li><strong>계산 비용 및 안정성:</strong> 다중 에이전트 간의 재귀적 루프와 반복적인 실험 수행으로 인해 상당한 계산 리소스가 소모되며, 복잡한 워크플로우에 따른 실행 안정성 모니터링이 필수적입니다.</li>
+<li><strong>문서의 지위:</strong> 본 보고서의 근거가 된 논문은 현재 arXiv 프리프린트 상태로, 학계의 공식적인 동료 심사 이전 단계의 결과임을 명시합니다.</li>
+</ul>
+<h4 id="7-출처-source">7. 출처 (Source)</h4>
+<ul>
+<li><strong>원문:</strong> arXiv:2609.19644v1 [https://arxiv.org/pdf/2609.19644v1]</li>
+<li><strong>라이선스:</strong> CC BY 4.0 명시.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

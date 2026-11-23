@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadence: an architecture for a continuous and efficient stream of intelligence</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Cadence: an architecture for a continuous and efficient stream of intelligence</h1>
+<p class="page-meta">PDF · 2026-09-25</p>
+<h2 id="요약">요약</h2>
+<p>현대 인공지능 연구를 지배하는 Transformer 및 RNN 모델들은 정적 코퍼스 학습 후 고정되는 비지속적 특성을 지니며, 이는 신체화된 지능(Embodied Intelligence)이 요구하는 생물학적 원리와 근본적으로 대조됩니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=KU91QsLSOVg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="지능의-지속적이고-효율적인-흐름을-위한-아키텍처-cadence-심층-해설-보고서">지능의 지속적이고 효율적인 흐름을 위한 아키텍처: Cadence 심층 해설 보고서</h3>
+<h4 id="1-서론-기존-지능-모델의-아키텍처적-임계점">1. 서론: 기존 지능 모델의 아키텍처적 임계점</h4>
+<p>현대 인공지능 연구를 지배하는 Transformer 및 RNN 모델들은 정적 코퍼스 학습 후 고정되는 비지속적 특성을 지니며, 이는 신체화된 지능(Embodied Intelligence)이 요구하는 생물학적 원리와 근본적으로 대조됩니다. Bernhard Mueller의 <strong>Cadence</strong>는 이러한 한계를 극복하기 위해 '국소 복구(Local Repair)'와 '평형(Equilibrium)'을 핵심 기제로 하는 새로운 아키텍처를 제시합니다.</p>
+<p><strong>기존 지능 모델 vs. 생물학적 지능 요구 사양</strong></p>
+<ul>
+<li><strong>학습의 비지속성:</strong> Transformer는 사전 학습 후 고정(Frozen)되나, 생물학적 지능은 사용 중에도 지속적으로 경험을 통합함.</li>
+<li><strong>이차 비용의 메모리:</strong> Transformer의 어텐션 윈도우는 매 단계 $T^2$의 비용으로 재판독해야 하나, 생물학적 지능은 선형적($T$) 시간 비용으로 스트림을 처리함.</li>
+<li><strong>전역 경사하강법의 모순:</strong> 역전파(Backpropagation)는 전역적 그래디언트를 요구하여 개별 사건 학습 시 기존 정보를 파괴(Forgetting)하나, 생물학적 지능은 국소적 수정을 통해 가소성을 유지함.</li>
+<li><strong>휴지기 활동 부재:</strong> 기존 모델은 입력 부재 시 계산이 중단되나, 생물학적 지능은 휴지기 및 수면 중에도 내부 평형을 재조정(Consolidation)함.</li>
+<li><strong>자기 관찰 부재:</strong> 기존 모델은 내부 상태를 관찰하는 메타인지 기제가 결여되어 있으나, 생물학적 지능은 자신의 활동을 읽고(Readback) 제어함.</li>
+</ul>
+<h4 id="2-이론적-기초-국소-복구와-관찰-가능한-정상형-observable-normal-form">2. 이론적 기초: 국소 복구와 관찰 가능한 정상형(Observable Normal Form)</h4>
+<p>Cadence 아키텍처는 세 가지 핵심 운영 원칙인 **복구(Repair), 디튜닝(Detuning), 자기 읽기(Self-readback)**를 기반으로 설계되었습니다. 특히 '국소적 복구가 어떻게 전역적 정상형을 유도하는가'에 대한 수학적 보증은 이 모델의 신뢰성을 담보합니다.</p>
+<p><strong>전역 해답 도출을 위한 논리적 단계 (Step-by-step)</strong></p>
+<ol>
+<li><strong>패치(Patch) 기반 분산 구조:</strong> 네트워크는 고유한 상태를 보유한 '패치'들의 집합으로 구성됩니다. 각 패치는 오직 자신의 포트(Port)를 통해서만 이웃과 소통하는 유한 관찰자(Bounded Observer)입니다.</li>
+<li><strong>국소 불일치 복구(Local Repair):</strong> 인접 패치 간 포트 값이 일치하지 않을 때, 각 패치는 전역 정보 없이 오직 자신의 로컬 데이터만을 수정하여 불일치를 해결(Repair)합니다.</li>
+<li><strong>수학적 수렴 보증(Contraction Condition):</strong> Cadence는 <strong>수축 조건 $L\rho_W &lt; 1$</strong> (가중치의 행 질량(Row-mass) 예산 제한) 하에서 작동합니다. 이 조건은 어떠한 초기 상태에서도 네트워크가 단일한 전역 평형 상태(Global Normal Form)로 수렴함을 수학적으로 보증합니다.</li>
+<li><strong>잔차(Residual) 기반 증명서(Certificate):</strong> 현재 상태가 평형점에서 얼마나 떨어져 있는지 나타내는 '잔차'를 통해, 의사결정에 필요한 계산 비용을 사전에 예측(Certificate)하고 고정점 탐색(Fixed-point search)의 효율성을 극대화합니다.</li>
+</ol>
+<h4 id="3-학습-및-메모리-메커니즘-국소-신용-할당과-기록-저장소">3. 학습 및 메모리 메커니즘: 국소 신용 할당과 기록 저장소</h4>
+<p>Cadence는 시간과 깊이를 관통하는 역전파 대신, 평형 상태의 국소적 대비를 이용한 고유한 학습 메커니즘을 채택합니다.</p>
+<h5 id="디튜닝-detuning-국소-신용-할당">디튜닝(Detuning): 국소 신용 할당</h5>
+<p>Cadence에서 가중치 업데이트는 **디튜닝(Detuning)**이라 불립니다. 이는 외부 자극이 없는 '자유 단계'와 자극이 가해진 '강제 단계'라는 두 평형 상태의 대비(Contrast)를 이용합니다. 시냅스 양 끝단 뉴런 활동의 차이만으로 가중치를 수정하므로, 전역 그래디언트나 과거 궤적의 저장 없이도 자코비안 노름(Jacobian norm)을 효율적으로 제어하며 학습을 수행합니다.</p>
+<h5 id="기록-record-기록-저장소">기록(Record): 기록 저장소</h5>
+<p>이벤트는 델타 규칙(Delta rule)을 따르는 '기록 저장소(Record Store)'에 단 한 번의 쓰기(One-shot)로 저장됩니다. 이는 간섭 법칙(Interference Law)에 의해 수학적으로 관리되며, 새로운 정보가 기존 정보를 덮어쓰는 정도는 주소(Key)의 중첩 정도에 따라 결정됩니다.</p>
+<h5 id="강화-consolidation-sleep-수면과-꿈">강화(Consolidation/Sleep): 수면과 꿈</h5>
+<p>'밤(Night)' 단계에서 시스템은 외부 입력 없이 저장소의 내용을 바탕으로 **스스로 내부 완결적 시나리오를 생성(Dreams)**합니다. 이 과정에서 저장소의 단기 기록이 '느린 가중치(Slow weights)'로 이전됩니다. 이는 모델이 교사(Teacher) 없이 자신의 내부 상태로부터 학습하는 과정으로, 데이터 효율성을 비약적으로 높입니다.</p>
+<h4 id="4-세계-모델-가설과-메타인지의-사다리">4. 세계 모델 가설과 메타인지의 사다리</h4>
+<p>Cadence는 지능을 '자신의 포트와 행동을 예측하는 패치들의 계층적 구조'로 정의하며, 이를 <strong>메타인지 사다리(Metacognition Ladder)</strong> 가설로 정립합니다.</p>
+<h5 id="메타인지-가설-및-정리-3-2-linear-tower-collapse">메타인지 가설 및 정리 3.2 (Linear Tower Collapse)</h5>
+<p>Cadence의 핵심 통찰은 **'선형 읽기 타워의 붕괴 정리(Theorem 3.2)'**에 있습니다. 만약 자기 읽기(Readback) 구조가 단순히 선형적이라면, 전체 계층은 수학적으로 단일 층(Depth 0)으로 붕괴됩니다. 따라서 유의미한 메타인지를 위해서는 '스티어링 패치(Steering Patch)'가 하위 패치의 방정식 자체에 작용(예: 가중치 Gain 조정)하거나 비선형적이어야 합니다.</p>
+<h5 id="사다리의-층위">사다리의 층위</h5>
+<ul>
+<li><strong>입증된 단계 (Rung 0-2):</strong>
+<ul>
+<li><strong>Rung 0:</strong> 습관 및 일회성 회상.</li>
+<li><strong>Rung 1 (Dozing Cat):</strong> 자신의 놀람(Surprise) 신호를 감지하여 필요 시에만 수면에서 깨어나 에너지를 할당하는 단계.</li>
+<li><strong>Rung 2 (Ventriloquist):</strong> 여러 감각 신호의 잔차를 비교하여 상황에 맞는 감각에 정밀도 가중치(Precision weighting)를 부여하는 단계.</li>
+</ul>
+</li>
+<li><strong>미검증 가설 단계 (Rung 3-16):</strong> 이는 저자의 이론적 견해로, 선택적 감각(Rung 3), 전략 수립(Rung 9), 인간과 소통하는 주방 보조 로봇(Rung 15), 수백 개의 뇌가 지능을 공유하는 '뇌의 의회(Parliament of brains)'(Rung 16) 등을 포함하는 미래 지능의 경로를 제시합니다.</li>
+</ul>
+<h4 id="5-실험적-검증-초파리-커넥톰과-제어-실험-결과">5. 실험적 검증: 초파리 커넥톰과 제어 실험 결과</h4>
+<p>Cadence 아키텍처는 실제 생물학적 커넥톰 데이터와 소규모 세계(Small worlds) 실험을 통해 그 효용성을 증명했습니다.</p>
+<p><strong>주요 실험 및 실증 데이터 요약</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">실험 명칭</th>
+<th style="text-align:left">주요 결과 및 수치</th>
+<th style="text-align:left">대조군(Control) 대비 성과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>초파리 전뇌 시뮬레이션</strong></td>
+<td style="text-align:left">150,802개 뉴런의 실제 배선 구현. 냄새 학습 및 반전 학습 성공.</td>
+<td style="text-align:left">셔플된 배선은 생리학적 사실 확인 및 학습에 실패함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>언어 학습 (Grammar)</strong></td>
+<td style="text-align:left">1회 쓰기만으로 미학습 조합의 <strong>81.5%</strong> 재구성.</td>
+<td style="text-align:left">GRU/Transformer는 동일 성과에 50 에포크 소요.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>졸고 있는 고양이 (Dozing Cat)</strong></td>
+<td style="text-align:left">잔차 감지 기반 능동적 각성. <strong>0.238</strong>의 시간만 각성 상태 유지.</td>
+<td style="text-align:left">상시 각성 모델 대비 <strong>4.7배</strong> 적은 계산 비용으로 동등 성능 달성.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>음악 작곡 (Composer)</strong></td>
+<td style="text-align:left">단일 코어에서 26분 만에 학습 완료.</td>
+<td style="text-align:left">기존 대비 비약적인 시간 효율 증명.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>실험적 한계 명시:</strong> 초파리 시뮬레이션의 경우, 사용된 속도 모델(Rate model)은 날개짓 시간 단위(Wingbeat timescale)의 <strong>스파이크 타이밍(Spike timing) 정보를 운반할 수 없습니다.</strong> 따라서 해당 반사 작용은 모델이 아닌 신체 모델(Body model)에 의해 공급된 것임을 밝힙니다.</p>
+<h4 id="6-아키텍처의-한계-및-비주장-non-claims">6. 아키텍처의 한계 및 비주장(Non-claims)</h4>
+<p>본 보고서는 Cadence의 성과와 한계를 엄격히 구분하여 서술합니다.</p>
+<ul>
+<li><strong>이론적 주장 및 증명:</strong> 국소 복구를 통한 전역 평형 도달, 수축 조건 하의 수렴 보증, 선형적 시간 비용의 스트림 처리 가능성.</li>
+<li><strong>한계 및 미검증 사항:</strong>
+<ul>
+<li><strong>규모의 확장성:</strong> 대규모 언어 모델(LLM) 스케일에서의 직접적인 성능 비교 데이터는 아직 존재하지 않음.</li>
+<li><strong>메타인지 층위:</strong> 사다리의 3층 이상(Rung 3-16)은 현재 실증되지 않은 가설 단계임.</li>
+<li><strong>데이터 의존성:</strong> 모든 실험은 통제된 '소규모 세계(Small worlds)' 환경에서 수행됨.</li>
+</ul>
+</li>
+<li><strong>비주장(Non-claims):</strong>
+<ul>
+<li><strong>뇌와의 완전한 동등성:</strong> 생물학적 뇌의 기능을 일부 모사하나, 뇌와 완전히 동등하다거나 의식(Consciousness)이 발생한다는 주장은 하지 않음.</li>
+<li><strong>일반화된 전이 학습:</strong> 환경이 완전히 바뀐 상황에서의 일반화된 전이 학습 능력은 입증되지 않음.</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-결론-신체화된-지능-embodied-intelligence-을-향한-제언">7. 결론: 신체화된 지능(Embodied Intelligence)을 향한 제언</h4>
+<p>Cadence 아키텍처는 지능을 '전역적인 계산의 산물'이 아닌, **'각 부분이 자신의 불일치를 국소적으로 복구하며 만들어내는 전역적인 합의(Consensus)의 흐름'**으로 재정의합니다.</p>
+<p>본 모델은 로컬 학습(디튜닝)과 기록 저장소를 결합함으로써, 신체(Body)를 가진 에이전트가 제한된 전력과 계산 자원 내에서 어떻게 지속적으로 학습하고 환경에 적응할 수 있는지에 대한 실질적인 수학적, 아키텍처적 토대를 마련했습니다. 이는 향후 뉴로모픽 AI와 신체화된 로보틱스 연구에 있어 기존의 전역 학습 모델을 대체할 수 있는 강력한 패러다임을 제시합니다.</p>
+<p><strong>Cadence의 철학 요약:</strong> &quot;지능은 고정된 상태가 아니라, 환경과의 상호작용 속에서 지속적으로 평형을 회복해 나가는 에너지와 정보의 흐름이다.&quot;</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

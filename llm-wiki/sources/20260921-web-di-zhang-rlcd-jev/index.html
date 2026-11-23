@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is RLCD? The Secret Behind Jev | Di Zhang</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>What Is RLCD? The Secret Behind Jev | Di Zhang</h1>
+<p class="page-meta">웹 · 2026-09-21</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 Di Zhang의 분석을 기반으로, Jev를 단순한 언어 모델의 대안이 아닌 보상 모델링(Reward Modeling)의 진화된 단계로 정의한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://di-zhang-llm.github.io/blog/what-is-rlcd-the-secret-behind-jev/">출처</a> · <a href="https://www.youtube.com/watch?v=G_wWD3eAZr0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="rlcd와-jev-보상-모델링의-진화와-병렬-메커니즘-분석-보고서">RLCD와 Jev: 보상 모델링의 진화와 병렬 메커니즘 분석 보고서</h3>
+<h4 id="1-서론-jev를-바라보는-새로운-관점">1. 서론: Jev를 바라보는 새로운 관점</h4>
+<p>본 보고서는 Di Zhang의 분석을 기반으로, Jev를 단순한 언어 모델의 대안이 아닌 <strong>보상 모델링(Reward Modeling)의 진화된 단계</strong>로 정의한다. 저자의 핵심 주장에 따르면, Jev의 기술적 근간인 RLCD(Reward Learning from Calibrated Decisions)의 메커니즘은 다음과 같은 공식으로 요약된다.</p>
+<p>$$RLCD = \text{multiway preference modeling} + \text{probability calibration}$$</p>
+<p>과거의 보상 모델이 생성기(Generator) 뒤에 숨어 결과물을 평가하는 보조적 수단에 그쳤다면, RLCD와 Jev는 보상 모델 자체가 사용자 인터페이스이자 모델 그 자체가 되는 패러다임의 전환을 의미한다. 즉, 보상 모델은 더 이상 보이지 않는 곳에서 점수만 매기는 존재가 아니라, '유형화된 의사결정(Typed decisions)'을 직접 수행하는 제품의 핵심이 되었다.</p>
+<h4 id="2-보상-모델링의-진화-경로-스칼라에서-쌍별-선호도로">2. 보상 모델링의 진화 경로: 스칼라에서 쌍별 선호도로</h4>
+<h5 id="2-1-스칼라-보상-모델-r_-theta-x-a-의-한계">2.1. 스칼라 보상 모델 ($r_\theta(x, a)$)의 한계</h5>
+<p>전통적인 보상 모델은 문맥($x$)과 후보 답변($a$)을 입력받아 절대적인 수치처럼 보이는 스칼라 값($r_\theta(x, a) \in \mathbb{R}$)을 출력한다. 그러나 저자는 이 수치가 문제, 후보군, 체크포인트에 따라 의미가 변하는 불안정한 값이라고 분석한다. 실제로 이 모델들이 제공하는 유의미한 신호는 절대적 점수가 아니라 상대적 비교($r_\theta(x, a_1) &gt; r_\theta(x, a_2)$)일 뿐이며, 스칼라 값은 단지 그 선호 신호를 숨기고 있는 매개체에 불과하다.</p>
+<h5 id="2-2-llama-berry-pprm-pairwise-preference-reward-model">2.2. LLaMA-Berry PPRM (Pairwise Preference Reward Model)</h5>
+<p>LLaMA-Berry에서 제시된 PPRM은 이러한 상대적 선호도를 명시적으로 드러낸다. 두 해법 $a_1, a_2$ 중 어느 것이 우수한지를 확률적으로 모델링하며, 이는 <strong>Bradley–Terry 모델</strong>의 형식을 취한다.</p>
+<p>$$P(a_1 \succ a_2|x) = \frac{\exp u_\theta(x, a_1)}{\exp u_\theta(x, a_1) + \exp u_\theta(x, a_2)} = \sigma(u_\theta(x, a_1) - u_\theta(x, a_2))$$</p>
+<p>이 방식은 Yes/No 토큰을 활용한 제약된 언어 모델 결정 방식을 사용하며, 보상 모델링의 본질을 '선호 확률 모델링'으로 재정의한다.</p>
+<h5 id="2-3-데이터-및-학습의-맥락">2.3. 데이터 및 학습의 맥락</h5>
+<p>PPRM은 약 780만 개의 수학 해법 쌍을 통해 학습되며, DPO(Direct Preference Optimization)를 통해 선호도 예측 성능을 극대화한다. 여기서 저자는 **EBC(Enhanced Borda Count)**가 MCTS 내부의 집계 및 검색을 위한 '다운스트림 검색 기계(Downstream search machinery)'일 뿐이며, RLCD로의 직접적인 기술적 가교 역할을 하는 것이 아니라는 점을 강조한다. <a href="https://aclanthology.org/2025.naacl-long.375.pdf">관련 문헌: LLaMA-Berry</a></p>
+<h4 id="3-plackett-luce-다중-선택-multiway-으로의-확장">3. Plackett–Luce: 다중 선택(Multiway)으로의 확장</h4>
+<h5 id="3-1-luce-choice-모델과-다항-로짓">3.1. Luce Choice 모델과 다항 로짓</h5>
+<p>실제 의사결정 환경에서는 두 개 이상의 후보군($A = {a_1, a_2, \dots, a_K}$)이 존재한다. RLCD는 각 후보의 유틸리티($u_i$)를 기반으로 <strong>Luce Choice 모델</strong>을 사용하여 확률 분포를 정규화한다.</p>
+<p>$$P(a_i|x, A) = \frac{\exp u_i}{\sum_{j=1}^{K} \exp u_j}$$</p>
+<p>$K=2$일 때 이 수식은 정확히 Bradley–Terry 모델로 환원된다. 즉, PPRM은 다중 선택 기하학의 이진 특수 사례에 해당한다.</p>
+<h5 id="3-2-전체-순위-우도-및-손실-함수">3.2. 전체 순위 우도 및 손실 함수</h5>
+<p>전체 순위($\pi$)가 주어질 경우, Plackett–Luce 라이클리후드는 다음과 같이 정의된다.</p>
+<p>$$P(\pi|x) = \prod_{t=1}^{K} \frac{\exp u_{\pi_t}}{\sum_{j=t}^{K} \exp u_{\pi_j}}$$</p>
+<p>분모인 $\sum_{j=t}^{K} \exp u_{\pi_j}$는 순위 지정 과정에서 선택되지 않고 **남아 있는 후보들(remaining candidates)**의 유틸리티 합을 의미한다. 이에 따른 손실 함수 $\mathcal{L}<em>{PL}$과 단일 정답($y$) 케이스의 $\mathcal{L}</em>{choice}$는 다음과 같다.</p>
+<p>$$\mathcal{L}_{choice} = -\log \frac{\exp u_y}{\sum_j \exp u_j}$$</p>
+<p>저자는 이러한 Plackett–Luce 라이클리후드 구조가 RLCD의 수학적 중심축임을 명시한다.</p>
+<h5 id="3-3-시각적-이해-figure-2-내용-통합">3.3. 시각적 이해 (Figure 2 내용 통합)</h5>
+<p>Figure 2의 분석에 따르면, Bradley–Terry와 PPRM은 동일한 Luce Choice 기하학의 특수 사례이며, Plackett–Luce는 이 정규화 방식을 단순 선택에서 완전하거나 부분적인 랭킹으로 확장하여 RLCD의 토대를 형성한다.</p>
+<h4 id="4-rlcd의-핵심-확률-보정-calibration">4. RLCD의 핵심: 확률 보정(Calibration)</h4>
+<h5 id="4-1-보정의-정의와-typesafe의-계약">4.1. 보정의 정의와 TypeSafe의 계약</h5>
+<p>단순한 소프트맥스 정규화가 모델의 '정직함'을 보장하지는 않는다. 보정(Calibration)은 모델이 보고한 확률($p$)이 실제 관찰된 정확도와 일치하도록 만드는 과정이다.</p>
+<p>$$P(Y = \hat{Y} | \hat{P} = p) \approx p$$</p>
+<p>TypeSafe가 RLCD를 통해 제시하는 제품적 '계약(Contract)'은 <strong>모델이 보고하는 확률이 높을수록 실제 관찰되는 정확도 역시 비례하여 높아야 한다</strong>는 것이다. <a href="https://docs.typesafe.ai/introduction/machine-learning-primer">TypeSafe RLCD primer</a></p>
+<h5 id="4-2-brier-score-bs-신뢰도에-대한-비용-책정">4.2. Brier Score (BS): 신뢰도에 대한 비용 책정</h5>
+<p>Brier Score는 보정 목적을 구체화하는 엄격하게 적절한 점수 함수(Strictly proper scoring rule)다. 다중 선택 환경에서의 수식은 다음과 같다.</p>
+<p>$$BS(\mathbf{p}, y) = \frac{1}{2} \sum_{i=1}^{K} (p_i - \mathbb{1}[i=y])^2$$</p>
+<p>여기서 $\frac{1}{2}$ 계수는 다중 클래스 환경에서도 이진 결정 환경의 공식과 수치적 일관성을 유지하기 위해 사용된다. 예를 들어 0.8의 확률로 예측했을 때, 성공 시 비용(0.04)보다 실패 시 비용(0.64)이 16배나 높다. 이는 모델이 근거 없는 자신감을 갖는 '오만함'에 대해 강력한 패널티를 부여하여 정직한 확률 보고를 유도한다. <a href="https://journals.ametsoc.org/view/journals/mwre/78/1/1520-0493_1950_078_0001_vofeit_2_0_co_2.xml">Glenn Brier(1950)</a>, <a href="https://doi.org/10.1198/016214506000001437">Gneiting–Raftery(2007)</a></p>
+<h5 id="4-3-murphy-decomposition-및-불확실성-분석">4.3. Murphy Decomposition 및 불확실성 분석</h5>
+<p>Brier Score는 <a href="https://doi.org/10.1175/1520-0450%281973%29012%3C0595%3AANVPOT%3E2.0.CO%3B2">Murphy decomposition</a>에 의해 세 가지 요소로 분해된다 ($BS = REL - RES + UNC$).</p>
+<ul>
+<li><strong>신뢰도(Reliability, REL):</strong> 보고된 확률과 실제 빈도 사이의 격차.</li>
+<li><strong>해상도(Resolution, RES):</strong> 사례들을 서로 다른 결과율로 얼마나 예리하게 분리하는지.</li>
+<li><strong>불확실성(Uncertainty, UNC):</strong> 데이터셋 자체의 원천적인 난이도.</li>
+</ul>
+<h5 id="4-4-온도-t-최적화와-목적의-분리">4.4. 온도($T^*$) 최적화와 목적의 분리</h5>
+<p>실제 구현에서 보정은 온도 스케일링($T^*$)을 통해 최적화된다.</p>
+<p>$$T^* = \arg\min_{T&gt;0} \sum BS(\mathbf{p}^{(T)}(x_n), y_n)$$</p>
+<p>이는 **랭킹(어느 것이 1등인가)**과 **보정(그 선택이 맞을 확률이 얼마인가)**이라는 두 가지 목적을 분리한다. Figure 4가 시사하듯, 신뢰도 곡선(Reliability curve)은 단순한 벤치마크가 아니라 자동화 정책 수립을 위한 핵심 도구다. 랭킹은 '행동'을 결정하고, 보정은 그 행동을 소프트웨어가 '자동 집행'할지 아니면 사람에게 '에스컬레이션'할지를 결정한다.</p>
+<h4 id="5-jev의-아키텍처-보상-모델의-제품화">5. Jev의 아키텍처: 보상 모델의 제품화</h4>
+<h5 id="5-1-rlhf-스택-vs-jev-스택-비교">5.1. RLHF 스택 vs Jev 스택 비교</h5>
+<p>기존의 RLHF 방식이 <code>프롬프트 → 생성 → 응답 → 보상 모델</code>의 순차적 구조였다면, Jev는 생성과 파싱 단계를 생략하고 평가기 자체를 사용자 인터페이스로 승격시켰다.</p>
+<ul>
+<li><strong>Jev 아키텍처:</strong> <code>상태(state) + 후보 스키마(candidate schema) → 보정된 의사결정 분포</code></li>
+</ul>
+<h5 id="5-2-jev-primitives-유형화된-출력">5.2. Jev Primitives (유형화된 출력)</h5>
+<p>Jev는 선호 모델을 제품 레벨의 프리미티브로 추상화하여 제공한다. <a href="https://docs.typesafe.ai/primitives">Jev documentation</a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">프리미티브</th>
+<th style="text-align:left">설명</th>
+<th style="text-align:left">선호 모델 해석</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Noul</strong></td>
+<td style="text-align:left">이진 결정 (True/False)</td>
+<td style="text-align:left">이진 Bradley–Terry 결정</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Choice</strong></td>
+<td style="text-align:left">K개의 순서 없는 대안 중 선택</td>
+<td style="text-align:left">다중 Luce 분포 (Plackett-Luce)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Score</strong></td>
+<td style="text-align:left">순서가 있는 수준(Levels) 상의 분포</td>
+<td style="text-align:left">정렬된 집합에 대한 분포 추정</td>
+</tr>
+</tbody>
+</table>
+<h5 id="5-3-시각적-이해-figure-1-3-5-내용-통합">5.3. 시각적 이해 (Figure 1, 3, 5 내용 통합)</h5>
+<p>Figure 1, 3, 5를 종합하면 Jev의 핵심은 명확하다. 학습 대상이 '스칼라 보상'에서 '보정된 의사결정 인터페이스'로 변화한 것이다. Jev는 상태와 스키마를 입력받아 유형화된 확률 분포를 즉시 출력하며, 이 과정에서 보정된 신뢰도를 함께 제공함으로써 실질적인 '제품'으로서의 가치를 갖는다.</p>
+<h4 id="6-jev-병렬-샘플러의-비밀-메커니즘-분석">6. Jev 병렬 샘플러의 '비밀': 메커니즘 분석</h4>
+<h5 id="6-1-저자의-핵심-비판-새로운-것은-없다">6.1. 저자의 핵심 비판: &quot;새로운 것은 없다&quot;</h5>
+<p>Di Zhang은 Jev의 '병렬 샘플러'가 완전히 새로운 샘플링 법칙이나 아키텍처가 아니라는 점을 강력하게 명시한다. 저자의 해석에 따르면 이는 사실 **&quot;패킹(Packing) + 어텐션 마스크(Attention masks) + 유형화된 의사결정 헤드(Typed decision heads)&quot;**라는 기존 트랜스포머 엔지니어링의 조합일 뿐이다. 공식 발표에서 새로운 어텐션 연산자나 복잡도 결과, 또는 혁신적인 샘플러 알고리즘이 제시되지 않았다는 점이 이러한 비판을 뒷받침한다.</p>
+<h5 id="6-2-기술적-구현-tree-attention-mask">6.2. 기술적 구현: Tree Attention Mask</h5>
+<p>자기회귀 모델($P(y|x) = \prod P(y_t|x, y_{&lt;t})$)과 달리, 의사결정 모델은 모든 후보의 유틸리티를 동시에 추정할 수 있다.</p>
+<ul>
+<li><strong>시퀀스 패킹:</strong> 공유 상태($S$), 질문($Q$), 후보($C$)를 하나의 물리적 시퀀스로 결합한다. $Z = [S; Q_1; C_{1,1}; \dots]$</li>
+<li><strong>트리 레이아웃:</strong> 논리적으로 $S \to Q_q \to C_{q,k}$의 구조를 갖는다.</li>
+<li><strong>트리 어텐션 마스크 ($M^{tree}_{ij}$):</strong> 노드 $v(i)$에 포함된 토큰 $i$가 조상 노드($v(j) \preceq v(i)$)만 참조하도록 제한한다.
+$$M^{tree}_{ij} = \begin{cases} 0, &amp; v(j) \preceq v(i) \ -\infty, &amp; \text{otherwise} \end{cases}$$</li>
+<li><strong>Position ID 리셋:</strong> 이 마스크와 결합하여, 각 분기(Branch)의 위치 ID를 리셋함으로써 후보들이 동일한 접두사 뒤에서 서로 독립적으로 평가되도록 보장한다. 이 엔지니어링 기술은 기존의 시퀀스 패킹 문헌(<a href="https://arxiv.org/abs/2107.02027">arxiv 2107.02027</a>)과 TypeSafe의 <a href="https://docs.typesafe.ai/introduction">기술 문서</a>에 명시된 구조와 일치한다.</li>
+</ul>
+<h5 id="6-3-결론적-분석-제품화된-엔지니어링의-산물">6.3. 결론적 분석: 제품화된 엔지니어링의 산물</h5>
+<p>결국 Jev의 성능은 새로운 샘플링 법칙이 아니라, 여러 후보의 점수를 단 한 번의 포워드 패스(Forward pass)로 계산해내는 트랜스포머 엔지니어링의 결과물이다. Jev는 RLCD와 이러한 효율적 서빙 기술을 결합하여 제품화한 '보상 모델 서비스'인 셈이다.</p>
+<h4 id="7-rlcd의-분류-및-테스트-가능한-예측">7. RLCD의 분류 및 테스트 가능한 예측</h4>
+<h5 id="7-1-보상-소스로서의-rlcd-분류">7.1. 보상 소스로서의 RLCD 분류</h5>
+<p>RLCD는 RLHF나 RLVR과 상호 배타적인 경쟁 관계가 아니다. 저자는 RLCD를 다음과 같이 분류하며, 이것이 특정 보상 소스가 아닌 **출력 계약(Output Contract)**에 의해 정의됨을 강조한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">방식</th>
+<th style="text-align:left">주요 학습 신호</th>
+<th style="text-align:left">제품 출력물</th>
+<th style="text-align:left">특이 사항</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>RLHF</strong></td>
+<td style="text-align:left">인간의 선호도</td>
+<td style="text-align:left">생성된 응답</td>
+<td style="text-align:left">생성 중심</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RLVR</strong></td>
+<td style="text-align:left">검증 가능한 보상</td>
+<td style="text-align:left">생성된 추론/답변</td>
+<td style="text-align:left">결과 검증 중심</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RLCD</strong></td>
+<td style="text-align:left">의사결정 결과 및 보정</td>
+<td style="text-align:left">유형화된 확률 분포</td>
+<td style="text-align:left"><strong>출력 계약에 의한 정의</strong></td>
+</tr>
+</tbody>
+</table>
+<h5 id="7-2-저자의-5가지-테스트-가능한-예측">7.2. 저자의 5가지 테스트 가능한 예측</h5>
+<p>저자는 자신의 RLCD 해석을 검증하기 위한 5가지 가설을 제시한다.</p>
+<ol>
+<li><strong>이진 등가성(Binary equivalence):</strong> 2지 선다 Choice와 Noul 질문의 확률이 $P(A|{A, B}) \approx P(A \succ B)$를 만족해야 함.</li>
+<li><strong>쌍별-다중 일관성(Pairwise–multiway consistency):</strong> 다중 세트 내 상대적 확률이 $\frac{P(a_i|A)}{P(a_j|A)} \approx \exp(u_i - u_j)$를 통해 직접 비교 결과와 일치해야 함.</li>
+<li><strong>후보군 민감도(Candidate-set sensitivity/IIA):</strong> 무관한 후보 추가 시 기존 후보 간 확률 비율이 $\frac{P(a_i|A)}{P(a_j|A)} = \frac{P(a_i|A \cup {a_k})}{P(a_j|A \cup {a_k})}$로 유지되어야 함.</li>
+<li><strong>경험적 보정(Empirical calibration):</strong> 0.8 확률 빈도의 실제 정확도가 0.8에 수렴해야 하며, Murphy decomposition을 통해 해상도가 증명되어야 함.</li>
+<li><strong>순서 대칭성(Order symmetry):</strong> 후보 정의 순서(Permutation)를 바꿔도 출력 확률 값이 변하지 않아야 함.</li>
+</ol>
+<h4 id="8-결론-및-인용-정보">8. 결론 및 인용 정보</h4>
+<p>Jev는 언어 모델이 단순히 JSON을 예쁘게 출력하도록 미세 조정된 결과물이 아니다. 그것은 <strong>소프트웨어 인터페이스로 승격된 선호 모델</strong>이다. RLCD는 Plackett–Luce 선호 손실에 보정 제약을 더함으로써 이를 실현하며, Jev는 이를 효율적인 병렬 추론 구조로 패키징했다. 가장 본질적인 변화는 알고리즘의 세부 사항이 아니라, '제한 없는 답변 생성'에서 '소프트웨어가 정의한 행동에 대한 보정된 분포 추정'으로의 전환이다. 즉, 보상 모델이 제품을 평가하는 단계를 넘어 그 자체가 제품이 된 것이다.</p>
+<p><strong>인용 정보</strong></p>
+<p>Di Zhang. &quot;What Is RLCD? The Secret Behind Jev.&quot; Di Zhang Blog, September 21, 2026.</p>
+<p>@misc{zhang2026whatisrlcdthesecretbehin,
+title = { What Is RLCD? The Secret Behind Jev },
+author = { Di Zhang },
+year = { 2026 },
+month = { September },
+howpublished = {\url{ https://di-zhang-llm.github.io/blog/what-is-rlcd-the-secret-behind-jev/ }},
+note = {Blog post}
+}</p>
+<p>참조 URL:</p>
+<ul>
+<li>https://di-zhang-llm.github.io/blog/what-is-rlcd-the-secret-behind-jev/</li>
+<li>https://aclanthology.org/2025.naacl-long.375.pdf</li>
+<li>https://docs.typesafe.ai/introduction/machine-learning-primer</li>
+<li>https://journals.ametsoc.org/view/journals/mwre/78/1/1520-0493_1950_078_0001_vofeit_2_0_co_2.xml</li>
+<li>https://doi.org/10.1198/016214506000001437</li>
+<li>https://doi.org/10.1175/1520-0450%281973%29012%3C0595%3AANVPOT%3E2.0.CO%3B2</li>
+<li>https://docs.typesafe.ai/primitives</li>
+<li>https://arxiv.org/abs/2107.02027</li>
+<li>https://typesafe.ai/blog/introducing-system-one-models-and-jev</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[2610.13860] Make It Flow: Animating Water in 3D Gaussian Splatting Scenes</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>[2610.13860] Make It Flow: Animating Water in 3D Gaussian Splatting Scenes</h1>
+<p class="page-meta">논문 · 2026-10-14</p>
+<h2 id="요약">요약</h2>
+<p>3D 가우시안 스플래팅(3D Gaussian Splatting, 3DGS)은 타원체 형태의 가우시안 프리미티브(Gaussian Primitives)를 통한 명시적 3D 장면 표현(Explicit 3D Scene Representation) 방식을 채택하여, 실시간으로 고품질의 신규 시점 합성(Novel View…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/abs/2610.13860">출처</a> · <a href="https://www.youtube.com/watch?v=25Ib93MgBW4">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-3d-가우시안-스플래팅-장면-내-수면-애니메이션-기술-make-it-flow-논문-소스-분석-보고서">[보고서] 3D 가우시안 스플래팅 장면 내 수면 애니메이션 기술(&quot;Make It Flow&quot;) 논문 소스 분석 보고서</h3>
+<h4 id="1-개요">1. 개요</h4>
+<p>3D 가우시안 스플래팅(3D Gaussian Splatting, 3DGS)은 타원체 형태의 가우시안 프리미티브(Gaussian Primitives)를 통한 명시적 3D 장면 표현(Explicit 3D Scene Representation) 방식을 채택하여, 실시간으로 고품질의 신규 시점 합성(Novel View Synthesis)을 가능하게 한 혁신적인 기술입니다. 그러나 기존 3DGS 프레임워크는 기본적으로 장면 전체가 정적(Static)이라는 전제하에 작동하므로, 현실 세계에 보편적으로 존재하는 다양한 동적 현상을 포착하고 표현하는 데 근본적인 한계를 지닙니다. 사람이나 차량처럼 형태가 유지되는 일관된 운동(Coherent Motion)은 기존 동적 복원 기술로도 일정 부분 재구성이 가능하지만, 흐르는 물과 같은 고빈도 동적 현상(High-frequency Dynamic Effects)은 고속·밀집 다중 카메라 배열 장비를 갖추지 않은 간편 촬영 환경(Casual Capture, 즉 휴대폰이나 일반 단일/소수 카메라를 활용한 간편 촬영 조건)에서는 사실상 복원이 불가능에 가깝습니다.</p>
+<p>본 보고서에서 분석하는 논문(&quot;Make It Flow: Animating Water in 3D Gaussian Splatting Scenes&quot;, arXiv:2610.13860)은 복잡한 유체 물리 심뮬레이션(Physical Simulation)이나 고가의 동적 촬영 장비 없이도, 정적인 3DGS 장면 내의 수면 영역에 시각적으로 타당한 운동감을 부여하는 새로운 파라다임의 기술을 제안합니다. 기존 기술들이 고비용의 동적 데이터 수집이나 높은 계산 복잡도를 요하는 물리 방정식에 의존했던 것과 달리, 본 연구는 2D 광학 흐름을 3D 연속적 운동장으로 역투영·확장하는 직관적이고 효율적인 기법을 선보입니다.</p>
+<p>제안된 프레임워크는 단일/참조 이미지 또는 모델 렌더링 결과물로부터 2D 광학 흐름(Optical Flow)을 추정한 후, 이를 공간적으로 일관된 3D 오일러 운동장(3D Eulerian Motion Field)으로 확장(Lifting)합니다. 이어 시네마그래프(Cinemagraph) 원리에서 착안한 변형 알고리즘을 통해 3D 가우시안 프리미티브의 위치와 형상을 시간에 따라 동적으로 변형시킴으로써, 시간적으로 이음매가 없는 연속 반복(Seamless Looping) 수면 애니메이션을 구현합니다. 이 방식은 명시적 가우시안 표현의 빠른 렌더링 속도와 자유 시점 항해(Free-viewpoint Navigation) 기능을 완벽히 유지하면서도, 장면의 인지적 사실성(Perceptual Realism)을 극대화합니다.</p>
+<hr />
+<h4 id="2-주요-논점">2. 주요 논점</h4>
+<h5 id="2-1-기존-3d-가우시안-스플래팅의-한계와-동적-물-구현의-난제">2.1. 기존 3D 가우시안 스플래팅의 한계와 동적 물 구현의 난제</h5>
+<ul>
+<li><strong>소스 기반 근거</strong>: 3DGS 기술은 정적 장면을 전제로 개발되었기 때문에 동적 수면과 같은 고빈도 현상을 다루기 어렵습니다. 특히 고속 및 밀집 다중 시점 카메라 시스템이 부재한 간편 촬영 환경(Casual Capture)에서는 물의 시공간적 변화 데이터를 정확히 포착 및 복원하는 것이 기술적으로 불가능에 가깝습니다.</li>
+<li><strong>적용 방식 및 기술적 의의</strong>: 본 연구는 고비용의 동적 데이터 수집 시스템에 의존하는 대신, 이미 구축된 정적 3DGS 모델에 후처리 기법으로 동적 운동장을 결합하는 대안적 접근법을 제시하여 데이터 포착의 난제를 극복합니다.</li>
+</ul>
+<h5 id="2-2-2d-광학-흐름의-3d-오일러-운동장-3d-eulerian-motion-field-리프팅-기술">2.2. 2D 광학 흐름의 3D 오일러 운동장(3D Eulerian Motion Field) 리프팅 기술</h5>
+<ul>
+<li><strong>소스 기반 근거</strong>: 연구진은 참조 이미지 또는 렌더링 뷰에서 추출한 2D 광학 흐름(Optical Flow)을 3D 공간상의 일관된 오일러 운동장(3D Eulerian Motion Field)으로 리프팅(Lifting)하는 기술을 제안합니다.</li>
+<li><strong>적용 방식 및 기술적 의의</strong>: 무거운 물리학적 유체 심뮬레이션 계산을 거치지 않고, 2D 관측 흐름 정보를 3D 공간 벡터장으로 전환함으로써 복잡한 유체 동역학을 시각적으로 타당하게 모사하는 패러다임 전환을 이뤄냈습니다.</li>
+</ul>
+<h5 id="2-3-시네마그래프-cinemagraph-착상-알고리즘-및-가우시안-프리미티브-변형">2.3. 시네마그래프(Cinemagraph) 착상 알고리즘 및 가우시안 프리미티브 변형</h5>
+<ul>
+<li><strong>소스 기반 근거</strong>: 시네마그래프의 시공간 루핑 원리에 기반한 전용 알고리즘을 적용하여, 생성된 3D 오일러 운동장에 맞춰 3D 가우시안 프리미티브(Gaussian Primitives)를 정교하게 변형(Deform)합니다.</li>
+<li><strong>적용 방식 및 기술적 의의</strong>: 개별 가우시안 프리미티브 단위의 동적 변형을 제어함으로써, 프레임 경계에서 시각적 불연속성이나 경계 흔적이 드러나지 않는 완벽하게 연속되는 루핑(Seamless Looping) 수면 애니메이션을 완성합니다.</li>
+</ul>
+<h5 id="2-4-폭포-장면-데이터셋-평가-및-성능-검증">2.4. 폭포 장면 데이터셋 평가 및 성능 검증</h5>
+<ul>
+<li><strong>소스 기반 근거</strong>: 연구진은 실제 야외 환경(In-the-wild)에서 직접 촬영한 폭포(Waterfall) 장면 데이터셋을 구축하여 제안 기법을 검증했습니다.</li>
+<li><strong>적용 방식 및 기술적 의의</strong>: 기존의 동적 가우시안 스플래팅(Dynamic Gaussian Splatting) 기법 및 3D 시네마그래프 생성(3D Cinemagraph Generation) 연구들과 비교 평가를 수행한 결과, 시각적 품질(Visual Quality)과 계산 효율성(Computational Efficiency) 두 가지 측면 모두에서 명확한 성능 향상을 입증했습니다. 또한 렌더링 시 실시간 성능과 자유로운 시점 이동(Free-viewpoint Navigation) 기능을 보존하면서 인지적 사실성(Perceptual Realism)을 대폭 향상시켰습니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자">3. 등장 인물 및 화자</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (한글 표기 및 로마자 원문)</th>
+<th style="text-align:left">소스상 역할/지위</th>
+<th style="text-align:left">확인 가능 여부 및 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">케일 쾨네 (Kjell Keune)</td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 가능 (세부 소속 대학 및 연구기관 정보는 소스상 미기재)</td>
+</tr>
+<tr>
+<td style="text-align:left">플로리안 할봄 (Florian Hahlbohm)</td>
+<td style="text-align:left">저자 (Author) 및 제출자 (Submitter)</td>
+<td style="text-align:left">확인 가능 (v1 논문 파일 최초 제출 담당자, 세부 소속은 소스상 미기재)</td>
+</tr>
+<tr>
+<td style="text-align:left">야니스 묄러 (Jannis Möller)</td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 가능 (세부 소속 대학 및 연구기관 정보는 소스상 미기재)</td>
+</tr>
+<tr>
+<td style="text-align:left">수자나 카스티요 (Susana Castillo)</td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 가능 (세부 소속 대학 및 연구기관 정보는 소스상 미기재)</td>
+</tr>
+<tr>
+<td style="text-align:left">마르틴 아이제만 (Martin Eisemann)</td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 가능 (세부 소속 대학 및 연구기관 정보는 소스상 미기재)</td>
+</tr>
+<tr>
+<td style="text-align:left">마르쿠스 마그노어 (Marcus Magnor)</td>
+<td style="text-align:left">저자 (Author)</td>
+<td style="text-align:left">확인 가능 (세부 소속 대학 및 연구기관 정보는 소스상 미기재)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점">4. 수치 및 시점</h4>
+<ul>
+<li><strong>논문 식별자</strong>: arXiv:2610.13860 [cs.CV]</li>
+<li><strong>최초 제출 시점</strong>: 2026년 10월 9일 17:08:02 UTC</li>
+<li><strong>파일 크기</strong>: 12,290 KB (v1 PDF 기준)</li>
+<li><strong>개요 동영상 URL</strong>: https://youtu.be/qf04D73kgrc</li>
+<li><strong>DOI</strong>: https://doi.org/10.48550/arXiv.2610.13860</li>
+<li><strong>주요 학술 분류 (Subjects)</strong>: Computer Vision and Pattern Recognition (cs.CV); Graphics (cs.GR)</li>
+<li><strong>렌더링 속도(FPS), 해상도, 가우시안 개수 등 구체적 수치</strong>: 확인 불가 (제공된 소스가 초록 및 메타데이터에 한정되어 세부 수치는 미기재됨)</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성">5. 한계와 불확실성</h4>
+<ol>
+<li><strong>상세 알고리즘 및 수학적 수식 미비</strong>: 제공된 소스가 arXiv 메타데이터 및 초록(Abstract)으로 한정되어 있어, 2D 광학 흐름을 3D 오일러 운동장으로 리프팅하는 구체적인 수식이나 가우시안 프리미티브 변형 제어 코드의 세부 구현 사항은 확인 방법이 없습니다.</li>
+<li><strong>정량적 성능 지표 수치 부재</strong>: 초록상에서 기존 동적 가우시안 스플래팅 및 3D 시네마그래프 생성 기법 대비 시각적 품질과 계산 효율성의 향상을 명시하고 있으나, 이를 뒷받침하는 객관적 수치(PSNR, SSIM, LPIPS, FPS 등)는 초록 내에 기술되어 있지 않습니다.</li>
+<li><strong>수면 외 대상 및 다양한 유체 환경 적용성 검증 미비</strong>: 성능 평가가 야외 폭포(Waterfall) 데이터셋에 집중되어 있어, 파도가 치는 바다, 잔잔한 호수, 혹은 물 이외의 타 유체 및 동적 물체로의 확장 가능성은 소스 정보만으로 판단할 수 없습니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

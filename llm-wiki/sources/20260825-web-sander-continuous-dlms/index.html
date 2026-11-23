@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Continuous diffusion language models</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Continuous diffusion language models</h1>
+<p class="page-meta">웹 · 2026-08-25</p>
+<h2 id="요약">요약</h2>
+<p>연속 확산 언어모델의 부활을 증류 가능성으로 해석하고 학습 효율과 평가의 한계를 검토한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://sander.ai/2026/08/24/continuous-dlms.html">출처</a> · <a href="https://www.youtube.com/watch?v=71Bv9nqRswY">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="심층-기술-보고서-연속-확산-언어모델-cdlm-의-기술적-부활-역사적-궤적과-메커니즘의-비평적-재구성">[심층 기술 보고서] 연속 확산 언어모델(CDLM)의 기술적 부활: 역사적 궤적과 메커니즘의 비평적 재구성</h3>
+<p><strong>문서 식별 및 메타데이터</strong></p>
+<ul>
+<li><strong>저자</strong>: Sander Dieleman</li>
+<li><strong>발행일</strong>: 2026-08-24</li>
+<li><strong>Canonical URL</strong>: <a href="https://sander.ai/2026/08/24/continuous-dlms.html">https://sander.ai/2026/08/24/continuous-dlms.html</a></li>
+<li><strong>문서 성격</strong>: 본 보고서는 생성 AI 분야의 기술적 진보에 대한 저자의 주관적 해석과 역사적 회고를 담은 기술 에세이(fairly subjective account)입니다.</li>
+<li><strong>저작권</strong>: © 2026 Sander Dieleman. 명시적인 재사용 라이선스가 부재하므로 인용 및 참조 시 주의를 요합니다.</li>
+</ul>
+<hr />
+<h4 id="1-서론-자동회귀의-패권과-확산-모델의-도전">1. 서론: 자동회귀의 패권과 확산 모델의 도전</h4>
+<p>현대 언어 모델링의 주류는 자기회귀(autoregressive, AR) 패러다임입니다. 결합분포를 $p(x)=\Pi_i p(x_i|x_{&lt;i})$로 분해하여 토큰을 순차적으로 생성하는 이 방식은 고도의 확장성을 보여 왔습니다. 그러나 최근 5년간, 이미지 및 오디오 분야에서 발전한 확산 모델(Diffusion Models)의 방법론을 언어라는 이산적(Discrete) 도메인에 이식하려는 공학적 시도가 이어졌습니다.</p>
+<p>특히 2026년 현재, 한동안 이산 확산 모델(Discrete Diffusion, DDLM)에 밀려 '멸종'된 듯 보였던 연속 확산 언어모델(Continuous Diffusion Language Models, 이하 CDLM)이 다시금 기술적 부활을 맞이하고 있습니다. 본 보고서는 CDLM이 왜 다시금 연구의 중심부로 회귀했는지, 그리고 그 기저에 깔린 수학적·공학적 메커니즘의 실체는 무엇인지 비평적으로 재구성합니다.</p>
+<h5 id="증거를-읽는-네-층">증거를 읽는 네 층</h5>
+<ul>
+<li><strong>[정의·직접 귀결]</strong>: 확률분해, 상태공간, transport map의 표현 가능성처럼 정의나 수식에서 직접 따르는 내용입니다.</li>
+<li><strong>[논문 보고]</strong>: Plaid의 64배, RePlaid의 20배, LangFlow·FMLM의 benchmark처럼 각 논문 저자가 특정 조건에서 보고한 결과입니다. 독립 재현이나 보편 법칙으로 승격하지 않습니다.</li>
+<li><strong>[저자 해석]</strong>: “continuous extinction”, “distillability가 귀환의 주요 이유”처럼 Dieleman이 제시한 분야사 해석과 전망입니다.</li>
+<li><strong>[열린 문제]</strong>: 대규모 scaling, quality-matched 실제 latency, self-conditioning의 이론, 공정한 평가처럼 아직 결론이 정해지지 않은 항목입니다.</li>
+</ul>
+<hr />
+<h4 id="2-삼자-생성-패러다임의-비교-분석-ar-ddlm-cdlm">2. 삼자 생성 패러다임의 비교 분석: AR, DDLM, CDLM</h4>
+<p>언어 생성의 경로를 결정하는 세 가지 핵심 패러다임을 이해하기 위해서는 먼저 데이터의 성격과 전이 규칙을 구분해야 합니다.</p>
+<ul>
+<li><strong>자기회귀(AR)</strong>: 토큰을 순차적으로 생성하며, 교사 강제(Teacher Forcing)를 통해 병렬 학습이 가능하지만 생성 시에는 본질적으로 선형적인 시간 복잡도를 갖습니다. 내부적으로는 연속 임베딩과 활성 함수를 사용하지만, 상태 공간은 이산적 토큰의 출력에 고정되어 있습니다.</li>
+<li><strong>이산 확산(DDLM)</strong>: 상태 공간과 부패 전이(Corruption transition)가 이산 토큰 공간 내에서 이루어집니다. 대표적으로 [MASK] 토큰으로의 치환(Masked Diffusion)이나 무작위 토큰으로의 전이(Uniform-state Diffusion)가 사용됩니다. 이때 개별 토큰을 독립적으로 샘플링하는 과정에서 토큰 간의 결합 상관관계(Joint correlation)를 상실하는 분해 오차(Factorization error)가 발생할 수 있다는 점이 주요한 비판 대상입니다.</li>
+<li><strong>연속 확산(CDLM)</strong>: 이산 토큰을 먼저 고차원 연속 임베딩 공간($R^d$ 또는 One-hot)으로 투사한 후, 가우시안 부패(Gaussian corruption) 및 제거(Denoising) 과정을 수행합니다. 공학적으로 유의해야 할 지점은 가우시안 노이즈가 토큰 ID 문자열이나 정수에 직접 더해지는 것이 아니라, 토큰을 표현하는 <strong>연속적인 임베딩 벡터</strong>에 적용된다는 사실입니다. 생성의 종단점에서는 이 연속적인 표현을 다시 이산 토큰으로 변환(Unembedding/Discretization)하는 절차를 거치게 됩니다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">자기회귀 (AR)</th>
+<th style="text-align:left">이산 확산 (DDLM)</th>
+<th style="text-align:left">연속 확산 (CDLM)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>상태 공간</strong></td>
+<td style="text-align:left">이산 토큰 (출력 기준)</td>
+<td style="text-align:left">이산 토큰 공간</td>
+<td style="text-align:left">연속 임베딩 공간 ($R^d$)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전이 규칙</strong></td>
+<td style="text-align:left">순차적 조건부 확률</td>
+<td style="text-align:left">범주형 전이/마스킹</td>
+<td style="text-align:left">가우시안 노이즈/흐름(Flow)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>생성 순서</strong></td>
+<td style="text-align:left">엄격한 순차 생성</td>
+<td style="text-align:left">비순차적/병렬적</td>
+<td style="text-align:left">병렬적 궤적 추적</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 한계</strong></td>
+<td style="text-align:left">생성 속도의 선형성</td>
+<td style="text-align:left">토큰 간 상관관계 보존의 난제</td>
+<td style="text-align:left">임베딩 붕괴 및 스케줄링 복잡성</td>
+</tr>
+</tbody>
+</table>
+<p>공학적 난이도 측면에서 볼 때, 언어 데이터는 픽셀과 같은 '이산적 연속 데이터(Discrete data)'가 아닌 '범주형 데이터(Categorical data)'라는 점이 CDLM의 가장 큰 도전 과제입니다. 픽셀은 색의 강도라는 연속적인 물리적 신호를 반영하지만, 언어 토큰은 구조적 연관성이 없는 비구조적 집합이기 때문입니다.</p>
+<hr />
+<h4 id="3-cdlm의-4대-핵심-구성-요소-the-four-keys">3. CDLM의 4대 핵심 구성 요소 (The Four Keys)</h4>
+<p>CDLM의 성능과 안정성을 담보하는 설계 요소는 다음 네 가지로 요약됩니다.</p>
+<h5 id="3-1-임베딩-및-역임베딩-전략-embedding-unembedding">3.1 임베딩 및 역임베딩 전략 (Embedding &amp; Unembedding)</h5>
+<p>CDLM은 토큰을 연속 공간으로 '들어 올리는(Lift)' 방식에 따라 성능이 판가름 납니다.</p>
+<ul>
+<li><strong>Explicit One-hot/Bit code</strong>: One-hot은 어휘 크기($V$)만큼의 차원을 사용하는 단순한 방식이지만, 거대 어휘집에서는 상태·출력 차원이 $V$에 비례해 커져 계산·메모리 부담이 큽니다.</li>
+<li><strong>Pre-trained/Frozen</strong>: BERT나 기존 AR 모델의 임베딩을 재사용합니다. 안정적이지만 해당 임베딩의 기하학적 구조가 가우시안 부패에 최적화되어 있다는 보장은 없습니다.</li>
+<li><strong>Jointly Learned</strong>: 디노이저와 임베딩을 동시에 학습시킵니다. 그러나 나이브한 MSE 손실 하에서는 모든 임베딩이 한 점으로 뭉치는 <strong>붕괴(Collapse)</strong> 현상이나 노름(Norm) 증가 문제가 생길 수 있어, 해당 설계에서는 단위 노름(Unit norm), 정규화, 재구성·CE 항 같은 제약이 필요할 수 있습니다.</li>
+<li><strong>Contextual Latent</strong>: 개별 토큰이 아닌 인접 문맥 정보를 포함한 잠재 표현을 확산의 대상으로 삼아 표현력을 극대화합니다.</li>
+</ul>
+<h5 id="3-2-손실-함수-loss-function">3.2 손실 함수 (Loss Function)</h5>
+<p>출력 설계에 따라 손실 함수가 달라집니다. 임베딩 벡터 자체를 예측할 때는 **평균 제곱 오차(MSE)**가 흔하며, 어휘 분포를 직접 출력할 때는 **범주형 교차 엔트로피(CE)**를 쓸 수 있습니다. 특히 CDCD 연구에서 제시된 <strong>스코어 보간(Score interpolation)</strong> 기법은 연속적인 디노이저를 교차 엔트로피 손실로 학습하는 한 경로를 제시했습니다. 2023년 Plaid와 후속 RePlaid 같은 계열은 변분 하한(ELBO/NELBO) 기반 목적함수를 사용합니다. 이 bound에서 유도한 수치는 exact likelihood와 구분해야 합니다.</p>
+<h5 id="3-3-노이즈-스케줄링-noise-schedule">3.3 노이즈 스케줄링 (Noise Schedule)</h5>
+<p>고차원 임베딩 공간에서 정보 소멸은 대단히 비선형적일 수 있습니다. 낮은 노이즈 구간에서는 토큰의 정체성이 거의 유지되다가 특정 구간을 지나면 정보가 급격히 사라질 수 있습니다. 따라서 정보가 활발하게 변하는 구간에 학습 예산을 집중하는 <strong>적응형 noise schedule</strong>이나 **시간 왜곡(Time warping)**이 중요합니다. 엔트로피 또는 decoding error의 변화를 시간에 대해 고르게 만드는 선형화는 대표적 휴리스틱입니다. 다만 “각 단계가 정확히 같은 bits를 복원한다”는 보장이 아니라, 보정된 posterior와 유한-step 오차 조건이 붙는 근사적 설계 해석입니다.</p>
+<h5 id="3-4-자기-조건화-self-conditioning">3.4 자기 조건화 (Self-conditioning)</h5>
+<p>이전 단계의 모델 예측값($x_0$의 추정치)을 다음 단계의 입력으로 다시 제공하는 <strong>self-conditioning</strong>은 여러 CDLM 연구에서 큰 경험적 개선이 보고되어 널리 쓰입니다. 이는 정답을 넘기는 것이 아니라 기존의 거친 모델 추정치를 정교화하도록 돕는 방식입니다. 다만 통일 benchmark의 메타분석으로 모든 CDLM에서 효과가 보장된 것은 아닙니다. 또한 $x_t$만을 상태로 보는 표준 stateless/Markov 해석을 벗어나 ODE/SDE solver·likelihood 이론을 복잡하게 합니다. 상태를 $(x_t,c_t)$로 확장해 기술할 수는 있지만 기존 보장이 자동으로 이전되지는 않습니다.</p>
+<hr />
+<h4 id="4-임베딩-기하학의-수치적-안정성과-정보-소멸-현상">4. 임베딩 기하학의 수치적 안정성과 정보 소멸 현상</h4>
+<p>임베딩 공간의 '의미론적 기하학(Semantic Geometry)'은 노이즈 아래에서 어떤 토큰들이 먼저 혼동되는지를 바꿉니다. 그러나 의미가 가까운 토큰(예: cat, dog)을 기하학적으로 가깝게 배치하는 것이 raw 언어모델링 성능에 필수적인지는 여전히 <strong>열린 질문</strong>입니다. 식별성, 의미 구조, 노이즈 강건성이 서로 충돌할 수도 있습니다.</p>
+<p>CANDI 연구는 주로 one-hot 좌표, 독립 Gaussian noise, argmax 식별 설정에서 토큰의 정체성 부패(Identity corruption)와 랭크 저하(Rank degradation)의 시간적 불일치를 **시간적 불협화음(Temporal dissonance)**으로 분석합니다. 이는 clean anchor로 문맥 관계를 학습할 구간과 연속 denoising 신호가 유익한 구간이 어긋날 수 있다는 논문 가설입니다. learned/contextual/spherical embedding을 포함한 모든 CDLM의 보편 법칙은 아니며, 이산 마스킹과 가우시안 노이즈를 결합하는 하이브리드 방식은 한 대응책입니다.</p>
+<hr />
+<h4 id="5-역사적-변곡점-멸종에서-부활까지-2021-2026">5. 역사적 변곡점: 멸종에서 부활까지 (2021-2026)</h4>
+<ul>
+<li><strong>2021년 (태동기)</strong>: D3PM, SUNDAE 등 이산 공간에서의 확산 연구가 주를 이루었습니다.</li>
+<li><strong>2022-2023년 (연속형의 부상)</strong>: Diffusion-LM, SED, CDCD, Plaid 등 임베딩 기반 모델들이 쏟아져 나오며 연속형 확산의 전성기를 맞는 듯 보였습니다.</li>
+<li><strong>2023년 하반기 이후 (연속형 연구의 위축)</strong>: Plaid 계열의 큰 학습 효율 격차가 보고된 시기와 'ChatGPT 모멘트' 이후 성능·규모 경쟁의 강화가 겹치면서 신규 연구의 중심은 이산 확산(DDLM)으로 이동했습니다. 저자는 이를 &quot;Continuous extinction&quot;이라 부르지만, 이 인과 설명은 원문도 speculative이라고 밝힌 주관적 역사 해석입니다.</li>
+<li><strong>2025년 (하이브리드의 탐색)</strong>: Diffusion Duality를 통해 이산과 연속의 수학적 연결을 시도하고, CADD, CCDD, CANDI 등 두 패러다임의 장점을 결합하려는 노력이 이어졌습니다.</li>
+<li><strong>2026년 (연속형의 부활)</strong>: <strong>flow map</strong> 기술의 발전과 함께 LangFlow, RePlaid, Categorical Flow Maps 등이 등장했습니다. 특정 benchmark에서 경쟁 가능성이 보고되기 시작했지만, 대규모 AR 대비 보편 우위나 표준 recipe가 확립된 단계는 아닙니다.</li>
+</ul>
+<hr />
+<h4 id="6-plaid-1b-64배-효율-저하-보고에-대한-비평적-재검토">6. Plaid-1B '64배 효율 저하' 보고에 대한 비평적 재검토</h4>
+<p>2023년 Plaid 연구에서 보고된 &quot;자기회귀 모델 대비 64배 낮은 효율성&quot;이라는 수치는 오랫동안 CDLM의 한계로 인용되어 왔습니다. 그러나 이 수치를 해석할 때는 엄밀한 제약 조건을 고려해야 합니다.</p>
+<p>해당 분석은 특정 규모($10^{16}$–$10^{19}$ FLOPs) 하에서, 임베딩 레이어와 출력 투영을 제외한 **비임베딩 FLOPs(Non-embedding FLOPs)**를 기준으로 compute-optimal validation NLL을 맞춘 <strong>IsoFLOP 적합</strong> 결과입니다. 즉, Plaid-1B wall-clock이나 생성 속도가 정확히 64배 느렸다는 뜻도, 모델 계열 전체의 고정 상수라는 뜻도 아닙니다. 2026년 RePlaid는 서로 다른 aligned protocol에서 self-conditioning 포함 AR gap을 약 20배로 보고했습니다. 이는 recipe에 따라 격차가 달라질 수 있음을 보여주지만, 두 숫자를 동일조건의 직접 개선치로 읽거나 AR 격차가 해소됐다고 결론내려서는 안 됩니다.</p>
+<hr />
+<h4 id="7-2026년의-재검토-flow-maps와-증류-가능성">7. 2026년의 재검토: Flow Maps와 증류 가능성</h4>
+<p>저자는 최근 CDLM 부활의 주요 동력을 <strong>증류 가능성(Distillability)의 구조적 이점</strong>으로 해석합니다. 이는 진행 중인 역사의 단일 원인으로 입증된 결론은 아닙니다.</p>
+<h5 id="7-1-흐름-사상-flow-maps">7.1 흐름 사상 (Flow Maps)</h5>
+<p>Flow Map은 확산 ODE의 <strong>유한 시간 솔루션 연산자(Finite-time solution operator)</strong> 혹은 **수송 사상(Transport map)**을 직접 근사하는 방식입니다. 이는 기존의 수십 단계에 걸친 노이즈 제거 과정(NFE)을 단일 단계 또는 아주 적은 단계로 압축하려는 시도입니다. 이론적으로 충분한 표현력을 갖춘 공동 사상(Joint map)은 한 단계에서도 토큰 간 상관관계를 표현할 수 있습니다. 다만 <strong>flow map의 1단계 생성은 모든 문장을 단번에 완벽하게 생성한다는 만능열쇠가 아닙니다.</strong> 모델 용량, 학습·증류 오차와 최종 이산화가 실제 품질을 제한합니다.</p>
+<h5 id="7-2-연속적-궤적의-구조적-이점">7.2 연속적 궤적의 구조적 이점</h5>
+<p>다변량 잡음에서 전체 시퀀스로 가는 연속 수송 사상은 이론상 joint correlation을 표현할 수 있습니다. 반면 표준 token-factorized DDLM이 여러 위치를 한 step에서 독립 샘플하면 factorization error가 생길 수 있습니다. 이 차이는 continuous trajectory를 few-step mapping으로 증류하는 구조적 동기지만, 모든 DDLM 증류의 불가능성이나 CDLM의 자동적 우위를 뜻하지 않습니다. 2026년 연구들이 특정 조건에서 경쟁 가능성을 보고했지만, quality-matched wall-clock, 대규모 scaling, post-training 총비용은 여전히 열린 문제입니다.</p>
+<hr />
+<h4 id="8-평가-방법론의-취약성과-메트릭-게이밍의-위험성">8. 평가 방법론의 취약성과 메트릭 게이밍의 위험성</h4>
+<p>CDLM 연구의 아킬레스건은 표준화되지 않은 평가 지표에 있습니다. 특히 외부 AR 모델을 스코어러로 사용하는 **GenPPL(Generative Perplexity)**은 심각한 편향을 초래할 수 있습니다.</p>
+<p><strong>Franca–Tong의 반례</strong>에서는 의도적으로 퇴화한 비문 생성기가 reference보다 더 낮은(겉보기에는 좋은) GenPPL을 얻으면서 MAUVE는 매우 낮았습니다. 이는 메트릭 게이밍(Metric gaming)의 위험성을 보여줍니다. 다만 MAUVE 하나도 최종 진실은 아니므로, 품질–다양성 frontier, 분포 지표, task·human 평가와 quality-matched 비용을 함께 봐야 합니다. 이 결과만으로 AR 대체나 보편적인 속도 우위를 단정할 근거는 없습니다.</p>
+<hr />
+<h4 id="9-결론-공학적-다원주의와-새로운-경쟁의-서막">9. 결론: 공학적 다원주의와 새로운 경쟁의 서막</h4>
+<p>CDLM의 귀환은 특정 기술 진영의 우월성 확정이 아니라, 언어 생성이라는 거대한 난제를 해결하기 위한 <strong>또 하나의 공학적 경로가 다시 경쟁에 복귀했음</strong>을 의미합니다.</p>
+<p>현시점에서 AR·DDLM·CDLM은 대체뿐 아니라 공존·결합 가능성까지 함께 검토하는 것이 합당합니다. 원문에서 speculative decoding의 drafting 사례는 주로 <strong>discrete diffusion</strong>에 해당하며, CDLM과 hybrid는 joint drafting·posterior refinement·steering에서 연구되고 있습니다. 최종 출력은 이산 토큰으로 <strong>역임베딩/이산화(Unembed/Discretize)</strong> 되어야 하며, 연속 공간의 유연성과 증류 가능성이 실제 시스템 이점으로 이어지는지는 조건별 검증이 필요합니다.</p>
+<p><strong>보고서 요약 및 제언:</strong></p>
+<ul>
+<li><strong>증류 가능성의 재평가</strong>: 연속형 joint transport가 Few-step 생성을 위한 유력한 구조를 제공한다는 점이 2026년 연구 증가를 설명하는 저자의 핵심 해석입니다.</li>
+<li><strong>표준화의 시급성</strong>: GenPPL의 한계를 넘어서는 품질-속도 통합 평가 표준 수립이 연구 공동체의 최우선 과제입니다.</li>
+<li><strong>공학적 후보의 복귀</strong>: CDLM은 AR을 끝내는 기술이 아니라, 생성 효율·유연성·post-training 가능성을 다시 시험받는 공학적 후보입니다.</li>
+</ul>
+<p>결론적으로, CDLM은 언어를 생성하는 또 하나의 유망한 공학적 경로로서 다시 경쟁 선상에 들어왔습니다. 이 경쟁이 만들어낼 새로운 생성 패러다임의 진화에 주목해야 할 시점입니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

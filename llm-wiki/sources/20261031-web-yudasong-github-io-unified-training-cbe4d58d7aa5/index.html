@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unified Training — Training Foundation Models with a Single Algorithm</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Unified Training — Training Foundation Models with a Single Algorithm</h1>
+<p class="page-meta">웹 · 2026-10-31</p>
+<h2 id="요약">요약</h2>
+<p>[사실/소개의 내용] 파운데이션 모델(Foundation Models)은 관습적으로 사전학습(Pretraining), 미드트레이닝(Midtraining), 지도 미세조정(Supervised Fine-Tuning, SFT), 강화학습(Reinforcement Learning, RL)이라는 연속적인 단계별…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://yudasong.github.io/unified-training">출처</a> · <a href="https://www.youtube.com/watch?v=qzmGLae3IY8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="unified-training-단일-알고리즘-기반-파운데이션-모델-학습-해설-보고서">Unified Training: 단일 알고리즘 기반 파운데이션 모델 학습 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p><strong>[사실/소개의 내용]</strong> 파운데이션 모델(Foundation Models)은 관습적으로 사전학습(Pretraining), 미드트레이닝(Midtraining), 지도 미세조정(Supervised Fine-Tuning, SFT), 강화학습(Reinforcement Learning, RL)이라는 연속적인 단계별 학습(Staged Training) 파이프라인에 따라 개발되어 왔다. 이러한 방식은 각 단계마다 독립된 전용 데이터 레시피와 학습 인프라를 사용하는 알고리즘적 격리 상태로 고착되어 있었다.</p>
+<p><strong>[소스의 주장]</strong> 본 연구진은 파운데이션 모델 학습 단계 간의 알고리즘적 분리가 구조적으로 불필요하다고 지적하며, 사전학습·미드트레이닝·SFT·RL 전 과정을 단일 가능도 정식화(Maximum-likelihood formulation) 아래 통합하는 '통합 학습(Unified Training)' 프레임워크를 제안한다. 사전학습과 미드트레이닝, SFT는 이미 최대 가능도 목적 함수를 공유하고 있으며, 적절한 RL 업데이트 또한 현재 정책의 성취 조건부 분포(Success-conditioned distribution)에 대한 가능도 적합 형태로 변환할 수 있으므로, 정적 데이터(Static data)와 모델 생성 데이터(Model-generated data)를 전체 학습 과정에 걸쳐 동시 혼합하는 단일 파이프라인 구축이 가능하다.</p>
+<p><strong>[작성자/연구진의 해석]</strong> 통합 학습 패러다임은 전체 학습 파이프라인을 단일화되고 확장 가능한 단일 인프라 위에서 운용할 수 있도록 보장하며, 데이터의 종류, 혼합 비율, 투입 시점(Data schedule)이 모델 성능 동역학에 미치는 영향을 종합적으로 분석할 수 있는 체계적인 학술 연구 프레임워크를 제공한다. 기존의 단계별 학습은 특정 시점마다 특정 데이터 출처에만 가중치를 몰아주는 데이터 스케줄링의 특수한 극단 사례(Special case)로 재해석된다.</p>
+<hr />
+<h4 id="2-주요-논점-및-근거-key-issues-supporting-evidence">2. 주요 논점 및 근거 (Key Issues &amp; Supporting Evidence)</h4>
+<h5 id="2-1-단일-가능도-likelihood-정식화-및-통합-학습-프레임워크">2.1. 단일 가능도(Likelihood) 정식화 및 통합 학습 프레임워크</h5>
+<ul>
+<li>
+<p><strong>논점 (Claim):</strong>
+사전학습, 미드트레이닝, SFT, 강화학습(RL) 업데이트를 단일 최대 가능도(Maximum-likelihood) 목적 함수로 정식화함으로써 정적 코퍼스와 생성 데이터를 단일 시스템 구조 내에서 동시 최적화할 수 있다.</p>
+</li>
+<li>
+<p><strong>근거 (Evidence):</strong>
+이진 보상 환경에서의 최대 가능도 강화학습(MaxRL)은 현재 정책의 성공 조건부 분포에 대한 최대 가능도 적합과 수학적으로 동일하다. 본 연구진은 이를 임의의 생성 정책(Generation policies)으로 확장하여 정적 데이터 분포와 RL 생성 분포를 가중 혼합 가능도 손실 함수로 통합하였다. 이 체계 내에서 이진 보상 REINFORCE 알고리즘은 MaxRL과 동일한 성공 조건부 타깃을 적합하되 성공 확률이 높은 프롬프트에 더 높은 가중치를 배정하는 방식으로 포섭되며, 연속 보상 환경으로 확장된 TailRL 역시 동일한 최대 가능도 프레임워크의 일환으로 변환·수용된다.</p>
+</li>
+<li>
+<p><strong>사례/실험 결과 (Examples/Results):</strong></p>
+<ul>
+<li><strong>데이터 형식 및 손실 함수 정식화:</strong> 모든 학습 데이터는 비음수(Non-negative) 손실 가중치를 갖는 토큰 시퀀스로 표현된다. SFT 및 RL 시 프롬프트(Prompt) 토큰은 마스킹(Masking, 가중치 0) 처리된다. MaxRL 적용 시 생성기는 프롬프트당 여러 응답을 샘플링하여 성공 통과율 $\hat{p}$를 추정한다. 성공 응답 내 토큰의 손실 가중치 $A$는 $1/\hat{p}$로 부여되고, 실패 응답은 0의 가중치를 받아 기울기(Gradient)를 발생시키지 않는다.</li>
+<li><strong>가중 교차 엔트로피 및 정규화 메커니즘:</strong> 학습기는 배치(Batch) 내 전체 토큰의 가중 손실 합을 산출한 후, 정적 손실과 생성 손실 간에 고정된 계수를 두는 대신 배치에 실제로 포함된 <strong>비프롬프트(Non-prompt) 토큰의 총수</strong>로 나눈 가중 교차 엔트로피 손실(Weighted cross-entropy loss) 정규화를 적용한다.</li>
+<li><strong>비동기 인프라 구조:</strong> 최신 모델 가중치 복제본으로 응답을 생성하고 검증하여 버퍼에 쌓는 생성기(Generators)와, 버퍼에서 정적 데이터 및 RL 생성을 샘플링하여 최적화를 수행한 뒤 주기적으로 가중치를 갱신·게시하는 학습기(Trainer)가 비동기 데이터 버퍼(Data buffer) 체계로 연결되어 구동된다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-전체-학습-파이프라인에서의-성능-및-일반화-controlled-setting">2.2. 전체 학습 파이프라인에서의 성능 및 일반화 (Controlled Setting)</h5>
+<ul>
+<li>
+<p><strong>논점 (Claim):</strong>
+통제된 환경 실험에서 미드트레이닝 데이터의 반복 재사용(Epochs) 및 RL 단계에서의 병행 혼합은 단계별 학습 대비 모델의 기본 과제 수행력과 분포 외 일반화(Generalization) 능력을 현저히 향상시킨다.</p>
+</li>
+<li>
+<p><strong>근거 (Evidence):</strong>
+1억 2,400만(124M) 매개변수 모델을 200억(20B) 사전학습 토큰과 오라클이 생성한 5억 1,000만(510M) 토큰 규모의 검증 가능한 자연어 추론 퍼즐 코퍼스로 처음부터(From scratch) 학습시켰다. 평가 축은 Base, Extended, Extended generalization으로 다변화하여 평가하였다.</p>
+</li>
+<li>
+<p><strong>사례/실험 결과 (Examples/Results):</strong></p>
+<ul>
+<li><strong>평가 축 구별:</strong>
+<ul>
+<li><strong>Base:</strong> 미드트레이닝 코퍼스에 포함된 난이도/크기 범위 내 문제 평가.</li>
+<li><strong>Extended:</strong> RL 과정에 도입된 더 큰 규격의 퍼즐 중 미학습(Held-out) 문제 평가.</li>
+<li><strong>Extended generalization:</strong> 미드트레이닝과 RL 데이터 모두에서 제외된 더욱 거대한 규격의 퍼즐을 통한 분포 외 일반화 평가.</li>
+</ul>
+</li>
+<li><strong>성능 측정 결과:</strong> 최적의 통합 학습 구성은 Base 및 Extended 평가 모두에서 단계별 학습 성능을 상회하였으며, 가장 큰 상대적 격차 및 개선폭은 분포 외 영역인 Extended generalization에서 관측되었다.</li>
+<li><strong>데이터 재사용(Epochs)의 영향:</strong> 사전학습 단계에서 미드트레이닝 코퍼스를 약 2~4 에포크 재사용하여 혼합한 설정이 가장 강력한 최종 성능을 발휘했다. 반면 기존 단계별 학습에서는 미드트레이닝 단계를 2에포크에서 4에포크로 연장했을 때 오히려 최종 RL 단계의 정확도가 감소하는 성능 저하 현상이 발생했다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-동일-계산-자원-compute-matched-비교-분석">2.3. 동일 계산 자원(Compute-Matched) 비교 분석</h5>
+<ul>
+<li>
+<p><strong>논점 (Claim):</strong>
+사전학습, 미드트레이닝, RL 생성 및 최적화 비용을 전수 합산한 동일 계산 자원 예산(Compute budget) 기준에서, 통합 학습은 단계별 학습이 도달할 수 없는 높은 최고 성능 경계선(Observed Frontier)을 형성한다.</p>
+</li>
+<li>
+<p><strong>근거 (Evidence):</strong>
+사전학습, 미드트레이닝, RL 응답 샘플링 생성 자원, 정적/생성 데이터 최적화에 소비된 모델 FLOPs를 전량 집계하여 동일 컴퓨트 예산하에서의 pass@1(정확도) 및 pass@16(커버리지) 프론티어를 관측·비교했다.</p>
+</li>
+<li>
+<p><strong>사례/실험 결과 (Examples/Results):</strong></p>
+<ul>
+<li><strong>예산 규모별 프론티어 점유:</strong> 중간 규모 예산(Intermediate compute budget)에서는 6가지 단계별 학습 변형(학습률 및 미드트레이닝 예산 다변화 설정) 중 일부가 최고 정확도 프론티어를 형성하기도 했다.</li>
+<li><strong>대규모 예산(Large compute budget):</strong> 컴퓨트 예산이 커질수록 통합 학습 설정이 정확도(pass@1)와 커버리지(pass@16) 모두에서 최고 점수를 경신하며 프론티어를 전적으로 독점했다.</li>
+<li><strong>일반화 프론티어:</strong> Extended generalization 영역에서는 통합 학습 구성이 관측된 전체 계산 자원 프론티어의 거의 전 구간을 선점하였다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-사전-학습-능력의-유지-및-망각-forgetting-방지">2.4. 사전 학습 능력의 유지 및 망각(Forgetting) 방지</h5>
+<ul>
+<li>
+<p><strong>논점 (Claim):</strong>
+사전학습 단계에 미드트레이닝 데이터를 혼합하는 통합 초기화(Unified Initialization) 방식은 사전학습을 통해 확보한 일반 범용 능력을 훼손하지 않고 멸실(망각)을 효과적으로 방지한다.</p>
+</li>
+<li>
+<p><strong>근거 (Evidence):</strong>
+RL을 개시하기 직전 시점에서 미학습 사전학습 손실(Held-out pretraining loss) 및 5개 일반 벤치마크의 평균 점수를 측정하여 능력 보존력을 다변량 평가했다.</p>
+</li>
+<li>
+<p><strong>사례/실험 결과 (Examples/Results):</strong></p>
+<ul>
+<li>5가지 통합 학습 혼합 구성 모두 미드트레이닝 데이터의 투입량이 증가함에도 불구하고 held-out 사전학습 손실 및 5개 벤치마크 평균 점수에서 사전학습 전용(Pretraining-only) 모델과 거의 대등한 보존 성능을 유지했다.</li>
+<li>보존력 관점에서 가장 우수하게 설계된 단계별 학습 구성조차 held-out 손실이 대폭 상승하고 벤치마크 평균 점수가 크게 저하되었다. 최종 RL 정확도 기준으로 선택된 단계별 모델은 망각 현상이 더욱 극심하게 발현되었다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-5-이질적-heterogeneous-데이터-혼합-및-스케줄링-전략">2.5. 이질적(Heterogeneous) 데이터 혼합 및 스케줄링 전략</h5>
+<ul>
+<li>
+<p><strong>논점 (Claim):</strong>
+수학 강화학습 진행 중 이질적인 미드트레이닝 코퍼스를 혼합하는 비율과 시간적 스케줄링(Scheduling) 구조에 따라 망각 방지, 커버리지 확보, 타 영역(코딩) 성능 보존 간의 명확한 트레이드오프(Trade-off)가 발생한다.</p>
+</li>
+<li>
+<p><strong>근거 (Evidence):</strong>
+7억 6,000만(0.76B) 매개변수 모델을 바탕으로 Math12K 데이터셋 상에서 수학 RL을 12,000 업데이트 동안 진행하면서, 웹 텍스트·수학·코딩·추론 트레이스가 포함된 2억 4,000만(240M) 토큰 규모의 이질적 코퍼스를 0%~5% 비율로 지속 혼합하거나 스케줄을 달리하여 투입했다.</p>
+</li>
+<li>
+<p><strong>사례/실험 결과 (Examples/Results):</strong></p>
+<ul>
+<li><strong>혼합 비율의 영향:</strong> 미드트레이닝 혼합 비율이 커질수록 수학 평균 정확도(MATH-500, GSM8K pass@1)는 미세하게 감소하지만, pass@32 커버리지와 SciQ 정확도가 향상되고 코퍼스 held-out 손실 개선을 통해 망각이 억제되었다. 반면 코딩 pass@1 정확도(HumanEval+, MBPP+)는 혼합 비율에 비례하여 하락했다.</li>
+<li><strong>스케줄링 전략 비교 (평균 0.5% 비율 고정):</strong> 지속적 혼합(Constant mixing), 선형 감쇠(Linear decay), 전반부 감쇠(Half annealing, 학습 50% 시점에 0% 도달), 선형 증가(Linear growth)를 비교한 결과, 학습 중반에 혼합을 정지하는 전반부 감쇠 스케줄이 지속적 혼합에 비해 더 높은 최종 코딩 정확도와 SciQ 성능을 확보했다. 반면 held-out 코퍼스 손실 보존력은 지속적 혼합 방식이 가장 뛰어났다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-6-지속-학습-continual-learning-과-초기화-initialization-의-관계">2.6. 지속 학습(Continual Learning)과 초기화(Initialization)의 관계</h5>
+<ul>
+<li>
+<p><strong>논점 (Claim):</strong>
+후속 학습 개시 직전의 평가 정확도(Accuracy before RL)가 낮다는 사실이 반드시 열등한 초기화(Initialization) 상태를 의미하지 않으며, 통합 학습으로 형성된 초기화는 후속 지속 학습에서 최종 성능을 더 높은 수준으로 역전시키며 견인한다.</p>
+</li>
+<li>
+<p><strong>근거 (Evidence):</strong>
+수학 RL을 마친 단계별 모델 및 다양한 미드트레이닝 비율(0.5%, 1%, 2%, 5%)의 통합 학습 모델들을 초기화 지점으로 삼아, 추가 미드트레이닝 데이터 없이 동일한 조건하에서 4,000 업데이트 동안 코딩 RL 및 일반 추론 지속 학습을 수행했다.</p>
+</li>
+<li>
+<p><strong>사례/실험 결과 (Examples/Results):</strong></p>
+<ul>
+<li><strong>코딩 RL 실증:</strong> 코딩 RL 개시 시점에는 통합 학습 모델들의 초기 코딩 정확도가 단계별 모델보다 낮았으나, 4,000 업데이트 완료 시점에서는 4가지 통합 학습 모델 모두 단계별 모델을 제치고 더 높은 HumanEval+ 및 MBPP+ pass@1 정확도와 MBPP+ pass@16 커버리지를 달성했다. 특히 수학 RL 과정에서 가장 높은 5% 비율을 혼합했던 모델이 4개 평가 지표 전 항목에서 가장 뛰어난 최종 성과를 거두었다.</li>
+<li><strong>웹인스트럭트(WebInstruct) 및 퍼즐 실험 검증:</strong> WebInstruct 데이터셋 기반의 일반 추론 질문에 대한 지속 학습 연속 실험에서도 동일한 성능 역전 현상이 관측되었다. 또한 124M 퍼즐 실험에서도 RL 전 단계별 모델의 Base 정확도가 통합 모델보다 높았으나, RL 최적화 완료 후 최종 성과는 통합 모델이 단계별 모델을 완전히 역전하였다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-authors-key-contributors">3. 등장 인물 및 화자 (Authors &amp; Key Contributors)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 기관 (Affiliation)</th>
+<th style="text-align:left">역할 (Role)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Yuda Song</td>
+<td style="text-align:left">Carnegie Mellon University</td>
+<td style="text-align:left">주저자 및 프로젝트 리드 (Equal contribution, Project lead)</td>
+</tr>
+<tr>
+<td style="text-align:left">Alvin Zhang</td>
+<td style="text-align:left">Johns Hopkins University</td>
+<td style="text-align:left">공동 주저자 (Equal contribution)</td>
+</tr>
+<tr>
+<td style="text-align:left">Fahim Tajwar</td>
+<td style="text-align:left">Carnegie Mellon University</td>
+<td style="text-align:left">공동 주저자 (Equal contribution)</td>
+</tr>
+<tr>
+<td style="text-align:left">Daman Arora</td>
+<td style="text-align:left">Carnegie Mellon University</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">Jeff Schneider</td>
+<td style="text-align:left">Carnegie Mellon University</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">Daniel Khashabi</td>
+<td style="text-align:left">Johns Hopkins University</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">Ruslan Salakhutdinov</td>
+<td style="text-align:left">Carnegie Mellon University</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">J. Andrew Bagnell</td>
+<td style="text-align:left">Carnegie Mellon University, Aurora Innovation</td>
+<td style="text-align:left">공동 자문 (Equal advising)</td>
+</tr>
+<tr>
+<td style="text-align:left">Aarti Singh</td>
+<td style="text-align:left">Carnegie Mellon University</td>
+<td style="text-align:left">공동 자문 (Equal advising)</td>
+</tr>
+<tr>
+<td style="text-align:left">Andrea Zanette</td>
+<td style="text-align:left">Carnegie Mellon University</td>
+<td style="text-align:left">공동 자문 (Equal advising)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-timelines">4. 주요 수치 및 시점 (Key Metrics &amp; Timelines)</h4>
+<ol>
+<li>
+<p><strong>출판 및 논문 식별 정보</strong></p>
+<ul>
+<li>논문 출판 표기 연도: 2026년</li>
+<li>arXiv 논문 등록 번호: arXiv:2610.40564</li>
+</ul>
+</li>
+<li>
+<p><strong>통제된 실증 실험 (Controlled Setting - 124M 퍼즐 과제) 수치</strong></p>
+<ul>
+<li>모델 매개변수 규모: 1억 2,400만 (124M)</li>
+<li>사전학습 토큰 스트림 규모: 200억 (20B) 토큰</li>
+<li>오라클 생성 추론 트레이스 미드트레이닝 코퍼스 규모: 5억 1,000만 (510M) 토큰</li>
+<li>Base 평가 시 최적화 업데이트 횟수: 6,000회 (6000 updates)</li>
+<li>Extended 및 Extended generalization 평가 시 최적화 업데이트 횟수: 12,000회 (12000 updates)</li>
+<li>코퍼스 재사용(Re-use) 에포크 수: 약 2 에포크 및 4 에포크</li>
+</ul>
+</li>
+<li>
+<p><strong>계산 자원(Compute) 및 프론티어 수치</strong></p>
+<ul>
+<li>최고 프론티어 산정 상한 계산량: $1.71 \times 10^{19}$ FLOPs (그래프 상 표기 520 단위)</li>
+<li>컴퓨트 산정 포함 항목: 사전학습 FLOPs, 미드트레이닝 FLOPs, RL 생성 FLOPs, 정적/생성 데이터 최적화 FLOPs 전수 집계</li>
+</ul>
+</li>
+<li>
+<p><strong>이질적 데이터 실험 (Heterogeneous Midtraining - 0.76B 수학 RL) 수치 및 지표</strong></p>
+<ul>
+<li>모델 매개변수 규모: 7억 6,000만 (0.76B)</li>
+<li>혼합 미드트레이닝 코퍼스 규모: 2억 4,000만 (240M) 토큰 (웹 텍스트, 수학, 코딩, 추론 트레이스 혼합)</li>
+<li>수학 RL 학습 데이터셋: Math12K (최적화 횟수: 12,000회 updates)</li>
+<li>미드트레이닝 데이터 혼합 설정 비율: 0%, 0.5%, 1%, 2%, 5% (스케줄링 실험 평균 0.5%)</li>
+<li>주요 평가 벤치마크 및 지표:
+<ul>
+<li>수학 분야: MATH-500, GSM8K ($pass@1$ 정확도 및 $pass@32$ 커버리지)</li>
+<li>코딩 분야: HumanEval+, MBPP+ ($pass@1$ 정확도 및 $pass@32$ 커버리지)</li>
+<li>일반 지식 분야: SciQ ($pass@1$ 정확도)</li>
+<li>멸실 평가: Held-out corpus loss 상대 변화량</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>지속 학습 (Continual Learning) 수치 및 데이터셋</strong></p>
+<ul>
+<li>코딩 RL 최적화 업데이트 횟수: 4,000회 (4000 updates)</li>
+<li>코딩 지속 학습 평가 지표: HumanEval+ 및 MBPP+의 $pass@1$ 정확도 및 $pass@16$ 커버리지</li>
+<li>추론 지속 학습 추가 평가 데이터셋: WebInstruct</li>
+</ul>
+</li>
+<li>
+<p><strong>기타 미명시 정보</strong></p>
+<ul>
+<li>모델 구동 하드웨어(GPU/TPU) 종류 및 개수, 가동 시간 등 구체적 인프라 정보: <strong>확인 불가</strong></li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 연구 및 소스 문서의 Section 8(Future directions)에 명시된 주요 한계점 및 미해결 과제는 다음 4가지 핵심 항목으로 분류된다.</p>
+<ol>
+<li>
+<p><strong>스케일 및 예산 간 예측의 한계 (Scaling Laws 미확립)</strong></p>
+<ul>
+<li>본 논문에서 도출된 최적 혼합 구성 및 프론티어 경향성은 구체적인 실험 설정(124M 및 0.76B 매개변수 모델) 내에서 수집된 결과에 기초한다. 모델 매개변수가 수십억~수백억 이상으로 확대되거나 전체 예산 규모가 변경될 때 최적의 데이터 혼합 비율과 스케줄이 어떻게 변화하는지 예측할 수 있는 정량적 스케일링 법칙(Scaling laws)은 구축되지 않았다.</li>
+</ul>
+</li>
+<li>
+<p><strong>데이터 스케줄과 최적화(Optimization) 간의 상호작용</strong></p>
+<ul>
+<li>데이터 스케줄링의 효과는 모델 학습 시 병행되는 최적화 스케줄(학습률 스케줄, 최적화기 설정 등)과의 복합적 상호작용에 영향을 받는다. 학습 분포가 동적으로 진화함에 따라 최적화 매개변수가 어떻게 순응해야 하는지 두 요소의 연관성을 완전히 분리하여 정밀 규명하지 못했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>다중 과제(Multitask) 학습에서의 간섭 및 전이 동역학</strong></p>
+<ul>
+<li>연구진의 실험은 주로 단일 RL 과제(수학 또는 코딩)를 중심으로 진행되었다. 복수의 RL 과제를 동시에 학습하는 다중 과제 환경에서 발생하는 과제 간 전이(Transfer), 간섭(Interference), 불균일한 진전 속도(Unequal rates of progress) 문제 및 생성 데이터 투입 동역학에 대해서는 검증이 이루어지지 않았다.</li>
+</ul>
+</li>
+<li>
+<p><strong>장기 지속 학습에서의 초기화 평가 지표 부재</strong></p>
+<ul>
+<li>학습 초기 단계 설정의 유용성은 이후 연속 학습(Continual learning)을 진행한 뒤에야 밝혀지는 특성이 있다. 미래에 투입될 데이터에 대한 모델의 적응력이나 학습 가능성(Trainability)을 초기 시점에서 사전 측정·예측할 수 있는 신뢰성 있는 평가 지표가 현재 존재하지 않는다.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>연구 미다룸 및 확인 불가 영역:</strong>
+초대형 파운데이션 모델에서의 실제 통합 학습 적용 성과, 실제 산업 인프라 환경에서의 구체적인 비용 절감 비율, 소스 문맥에 포함되지 않은 구체적 시스템 최적화 수치 등은 모두 소스상 <strong>확인 불가</strong>한 영역에 속한다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

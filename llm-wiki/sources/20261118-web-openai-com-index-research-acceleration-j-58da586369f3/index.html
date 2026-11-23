@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research acceleration: The jagged frontier | OpenAI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Research acceleration: The jagged frontier | OpenAI</h1>
+<p class="page-meta">웹 · 2026-11-18</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 2026년 11월 18일 OpenAI가 발표한 공식 기술 보고서인 &quot;Research acceleration: The jagged frontier&quot;의 전체 내용을 바탕으로 작성되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://openai.com/index/research-acceleration-jagged-frontier">출처</a> · <a href="https://www.youtube.com/watch?v=cEIU_-yHbqU">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai-연구-가속화-및-불균일한-프론티어-the-jagged-frontier-해설-보고서">OpenAI 연구 가속화 및 불균일한 프론티어(The Jagged Frontier) 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 2026년 11월 18일 OpenAI가 발표한 공식 기술 보고서인 &quot;Research acceleration: The jagged frontier&quot;의 전체 내용을 바탕으로 작성되었습니다. 본 보고서의 목적은 코딩 에이전트가 인공지능 연구 및 개발(R&amp;D) 주기를 어떻게 가속화하고 변화시켰는지에 관한 내부 정량적·정성적 측정 결과를 종합 분석하여, AI 연구 가속화 현황과 이에 대응하는 인간 연구원의 필수적인 역할을 객관적으로 조명하는 것입니다.</p>
+<p>OpenAI가 재귀적 자기 개선(Recursive Self-Improvement, RSI)—즉 AI가 차세대 AI 시스템 개발을 자체적으로 가속화하는 현상—의 지표를 지속적으로 추적하고 공적으로 공유하는 이유는 프론티어 안전 이니셔티브(Frontier Safety Blueprint) 정책 및 연구 가속화 공개 방침에 의해서입니다. AI 모델의 능력이 비약적으로 향상됨에 따라 AI 주도 연구 가속화 가능성이 현실화되고 있으며, 이에 대응해 인간의 감독 능력을 유지하고 안전하게 AI를 스케일링하기 위한 기술적·지배구조적 과제를 해결하려면 투명성 확보가 필수적입니다. 이러한 RSI 지표 공개는 전 세계적인 공공 논의를 촉진하고 필요한 안전장치를 마련하기 위함이며, 완전한 자동 자율 RSI를 추구하겠다는 의도를 의미하지 않습니다.</p>
+<p>이러한 RSI 및 AI 연구 가속화 측정 노력은 OpenAI 독자적인 시도에 그치지 않고 업계 전반의 측정 표준 확립 흐름과 궤를 같이합니다. 앤스로픽(Anthropic)은 내부 모델 배치가 연구 주기를 가속화한 양상을 다룬 3편의 독립 보고서를 발표했으며, 구글 딥마인드(Google DeepMind)는 Gemini 4 Argon 안전 보고서를 통해 내부 코드 중 AI가 작성한 비중을 실증 정량화했습니다. 또한 평가 기관 METR은 앤스로픽과의 협력을 통해 Claude 모델이 능력 프론티어를 가속화한 정도를 평가한 바 있습니다.</p>
+<p>본 보고서의 분석 체계는 다음과 같은 3단계 프레임워크(Inputs, Process, Outputs) 구조로 구성됩니다:</p>
+<ol>
+<li><strong>투입 요소 (Inputs):</strong> 데이터, 인적 노동력, 연산 자원 외에 코딩 에이전트 등 AI 도구의 활용 실태 및 인건비 대비 에이전트 지출 비중</li>
+<li><strong>연구 프로세스 (Process):</strong> 연구원들이 에이전트에 과업을 위임하고 협업하며 연구 활동을 재구성하는 방식 및 연구원들의 주관적 가치 평가</li>
+<li><strong>산출물 및 능력 (Outputs):</strong> 코드 변경량, 가동된 연구 실험 수, 모델 능력 진보를 나타내는 종합 지표인 OpenAI ECI(OECI)를 통합한 연구 성과 측정</li>
+</ol>
+<p>본 보고서에서 분석한 데이터의 측정 범위는 2026년 1월부터 10월 18일까지의 내부 측정 자료(2026년 11월 18일 발표 기준)에 한정되며, 2026년 9월 발표되었던 이전 보고서의 분석을 시간적으로 확장하고 측정 방법론을 더욱 고도화한 결과를 담고 있습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-연구-투입-요소의-변화-inputs">2.1 연구 투입 요소의 변화 (Inputs)</h5>
+<h6 id="에이전트-사용량-급증-및-불균등-분포">에이전트 사용량 급증 및 불균등 분포</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: API 리스트 가격 기준으로 2026년 10월 연구원 1인당 일일 에이전트 사용 금액의 중앙값은 $2,400 USD로 9월($1,500 USD) 대비 62% 증가했습니다. 상위 90 백분위수 연구원의 일일 사용 금액은 $23,000 USD로 9월($11,000 USD) 대비 105% 급증했습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 연구 조직 내부에서 에이전트 기반 AI 사용량이 지수함수적으로 증가하고 있으며, 특히 에이전트 활용도가 매우 높은 헤비 유저 그룹이 전체 사용량 상승을 강력하게 견인하여 사용자 간 사용량 격차가 더욱 벌어지고 있습니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 에이전트 도입이 전체 연구진에게 균등하게 배분되기보다는 특정 고선호 연구원들에 의해 주도되고 있습니다. 사용 금액의 급속한 증가는 단순한 작업 수행 횟수의 증가뿐만 아니라 고성능·고비용 프론티어 모델로의 전환과 복합 에이전트 하네스 구조 채택이 복합적으로 반영된 결과입니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Inputs &gt; Internal agent usage</code></li>
+</ul>
+<h6 id="에이전트-일수-agent-workdays-및-동시-작동-concurrency">에이전트 일수(Agent Workdays) 및 동시 작동(Concurrency)</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 연구원 1인당 일일 평균 '에이전트 일수'(8시간의 에이전트 작동을 1 에이전트 일수로 정의)는 0.5일에서 5.7일로 11배 증가했습니다. 분야별로는 사전학습 및 사후학습 팀의 에이전트 런타임이 달력 기준 1일당 연구원 1인당 평균 약 8 에이전트 일수에 달했으며, 스케일링 및 인프라 팀은 평균 약 4 에이전트 일수를 기록했습니다. 또한 10월 중순 기준 연구원의 3분의 2 이상이 일일 피크 기준 4개 이상의 동시 작동 에이전트를 운용했고, 10% 이상은 16개 이상의 동시 작동 에이전트를 활용했습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 금전적 지출 비용 확장을 넘어 실제 시간 단위 작동량에서도 에이전트의 활용이 대폭 확장되었으며, 연구원들은 서브에이전트 및 다중 세션을 병렬로 작동시키는 방식으로 일하는 체계를 근본적으로 변모시켰습니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 연구원 1명이 하루에 여러 명분의 에이전트 작업 시간을 관제하고 수용하는 멀티태스킹 워크플로가 정착되었습니다. 다만 본 지표는 인터랙티브 대화형 사용 위주로 집계된 수치이므로 자동화된 스크립트 기반 작업까지 포함할 경우 실제 병렬 처리 규모는 더 클 수 있습니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Inputs &gt; Agent workdays / Concurrent agent use</code></li>
+</ul>
+<h6 id="인건비-대비-에이전트-비용-및-연구원-시간-배분">인건비 대비 에이전트 비용 및 연구원 시간 배분</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 2026년 9월 기준, 주식 보상(연구원 목표 보상의 70~80% 차지)을 제외한 연구원의 급여·보너스·복리후생 등 비지분 현금성 보상 대비 에이전트 사용 비용(API 가치 환산 기준) 비율은 약 2배(2.0x)에 달했습니다. 사전학습 및 사후학습 분야의 비율이 타 분야보다 높게 나타났습니다. 그럼에도 내부 에이전트 배포(Codex, ChatGPT, API 통합)가 전체 연구 컴퓨팅 자원 소비에서 차지하는 비중은 2%에 불과했습니다. 한편 연구원들의 시간 배분 측정 결과, Safety &amp; Alignment 분야의 문서화된 작업주가 1월부터 9월 사이 77.2% 증가하여 모든 연구 분야 중 가장 큰 절대적 증가를 기록했습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 에이전트 사용 가치가 인간의 직접적인 비지분 현금 인건비를 크게 상회하고 있으나 전체 연산 자원 대비 비중은 여전히 극소수입니다. 2026년 7월 발생한 Hugging Face 보안 사건 이후 OpenAI는 안전성 평가, 모니터링 가능성, 리워드 해킹 연구 등 Safety &amp; Alignment 분야로 인력과 연구 시간을 급격히 재배치했습니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 에이전트가 코드 구현 및 실험 실행 등 일반 연구 투입을 상당 부분 대체함에 따라, 인간 연구원의 직접적인 노동력은 프론티어 AI 학습의 안전성 확보, 리프레이밍, 지배구조 감독 영역으로 빠르게 집중되고 있습니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Inputs &gt; Internal agent usage relative to human labor costs / Where researchers allocate their time</code></li>
+</ul>
+<hr />
+<h5 id="2-2-연구-프로세스의-변모-및-연구원-시각-process">2.2 연구 프로세스의 변모 및 연구원 시각 (Process)</h5>
+<h6 id="작업-위임-성공률의-불균일성-the-jagged-frontier">작업 위임 성공률의 불균일성 (The Jagged Frontier)</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 인간의 개입이 전혀 없는 상태(Zero-intervention)에서 에이전트의 작업 자율 완수율은 상승 추세를 보였습니다. 2~4시간 소요 작업의 성공률은 3월 23%에서 10월(1~18일) 46%로, 4~8시간 소요 작업은 13%에서 35%로 증가했습니다. 그러나 O*NET 분류에 따른 작업 분야별 성공률은 극도로 불균일(Jagged)했습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 에이전트의 작업 완수 능력이 전반적으로 향상되고 있으나, 과업 영역별 성과 격차가 심하여 성능이 저하되는 특정 난이도/유형의 과업이 전체 AI 개발 프로세스의 병목 요소로 작용할 수 있습니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 단순 모니터링이나 정보 전달 등 정형화된 작업은 AI에 대한 의존도가 극대화되었으나, 핵심 시스템 구축 및 인프라 프로그래밍 등 고도의 정밀도를 요하는 작업은 여전히 인간 연구원의 직접 관여가 필수적입니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Process &gt; Measures of research activity</code></li>
+</ul>
+<h6 id="표-o-net-작업-및-기간별-에이전트-자율-완수-성공률-비교-2026년-8월-1일-10월-18일-기준">[표] O*NET 작업 및 기간별 에이전트 자율 완수 성공률 비교 (2026년 8월 1일~10월 18일 기준)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">상세 항목</th>
+<th style="text-align:left">자율 완수 성공률 (Zero-intervention Success Rate)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>소요 시간별</strong></td>
+<td style="text-align:left">2 ~ 4 시간 작업 (3월 대비 10월)</td>
+<td style="text-align:left">23% ➔ <strong>46%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">4 ~ 8 시간 작업 (3월 대비 10월)</td>
+<td style="text-align:left">13% ➔ <strong>35%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>O*NET 대분류</strong></td>
+<td style="text-align:left">소통 (Communicate)</td>
+<td style="text-align:left"><strong>69%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">분석 (Analyze)</td>
+<td style="text-align:left"><strong>58%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">구축 (Build)</td>
+<td style="text-align:left"><strong>43%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상위 성공 작업</strong></td>
+<td style="text-align:left">학습 실행 상태 모니터링 (Monitor runs for issues)</td>
+<td style="text-align:left"><strong>79%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">기술적 질문 답변 (Answer a technical question)</td>
+<td style="text-align:left"><strong>72%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>하위 성공 작업</strong></td>
+<td style="text-align:left">추론 및 서빙 코드 작성 (Write code for inference and serving)</td>
+<td style="text-align:left"><strong>25%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">평가, RL, 에이전트 환경 구축 (Build eval, RL, agent environments)</td>
+<td style="text-align:left"><strong>29%</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="연구원-일일-수행-작업의-정량적-분석-what-tasks-researchers-use-agents-for">연구원 일일 수행 작업의 정량적 분석 (What tasks researchers use agents for)</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: Epoch AI가 개발한 O*NET AI R&amp;D 분류 체계에 따라 연구원 1인당 일일 에이전트 활용 작업 건수(28일 이동 평균 기준)를 집계한 결과, 연구 프로세스 전체 영역(Decide, Design, Build, Run, Analyze, Communicate)에 걸쳐 일일 수행 과업 수가 꾸준히 증가했습니다. 특히 기술적 질문 답변, 상태 업데이트 공지 등 소통(Communicate) 분야 및 실행 모니터링/디버깅(Run)과 같은 단발성·고빈도 작업의 일일 수행 건수가 빠르게 늘어났습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 토큰 소비량이 큰 복합 기능 구현이나 모델 학습 실행 작업에 비해, 소통 및 단순 기술 지원과 같은 단기 과업에 에이전트를 호출하는 빈도가 정량적으로 매우 높게 나타납니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 연구원들은 거대한 코딩 작업뿐만 아니라 일상적인 연구 의사소통, 모니터링, 정보 탐색 전반에 에이전트를 상시 보충 도구로 밀착 배치하여 활용하고 있습니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Process &gt; What tasks researchers use agents for</code></li>
+</ul>
+<h6 id="에이전트에-대한-가치-평가-설문-결과">에이전트에 대한 가치 평가 설문 결과</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 2026년 8월 말~9월 초 연구원 101명을 대상으로 한 설문에서 &quot;향후 3개월간 GPT-5.2보다 우수한 프론티어 코딩 에이전트 사용 권한이 박탈된다면 무엇을 포기하겠는가?&quot;라는 질문에 중앙값 기준으로 연구원들은 <strong>팀 연산량의 30%</strong> 또는 **팀 인원의 40%**를 포기하겠다고 응답했습니다 (2027년 1월 시점 기준 동일 질문 시 팀 연산량의 50% 포기 응답). 또한 10월 후반 28명 대상 설문에서 27명은 &quot;중견 인간 연구원 1명 + 2024년 모델(o1-preview)&quot;의 조합보다 &quot;최신 내부 모델&quot; 단독 활용 시 일일 생산성이 더 높을 것이라고 답했습니다 (남은 1명은 제시된 선택지 대신 GPT-6 Astra 선택).</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 연구원들은 최신 코딩 에이전트에 극도로 높은 가치를 부여하고 있으며 인력 증원이나 연산 자원 확보보다 최신 프론티어 모델 사용 권한을 압도적으로 선호합니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 최신 AI 에이전트가 연구 조직 내부에서 단순한 생산성 보조 도구를 넘어 실질적인 인적 인프라와 연산 자원을 직접 대체하는 핵심 연구 자산으로 인식되고 있습니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Process &gt; Researchers' perspectives on AI use</code></li>
+</ul>
+<h6 id="아이디어-출처-및-워크플로-한계">아이디어 출처 및 워크플로 한계</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: GPT-6 Astra 및 GPT-6.2 Astra 출시 과정의 핵심 아이디어 출처 조사 결과, 사후학습 및 안전 모니터링 분야의 핵심 아이디어는 100% 인간 연구원으로부터 발상되었습니다. 사전학습의 경우 GPT-6 Astra는 인간이 발상했으나, GPT-6.2 Astra는 연구원이 Codex와의 대화를 통해 핵심 인사이트를 발굴하거나 Codex의 수정 제안을 통해 아이디어를 완성했습니다. 10명의 연구원 인터뷰 결과, 에이전트는 코드 구현 및 오류 수정에는 유용하나, <strong>낮은 연구 취향(Research taste), 낮은 코드/데이터 품질, 불필요한 AI 슬롭(AI slop) PR 생성, 비본질적 작업 집착(Rabbit-holing)</strong> 등의 명확한 한계를 보였습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 독창적인 연구 방향 설정과 연구 취향(Research taste)은 여전히 인간 연구원이 주도하고 있으며, 에이전트의 조잡한 산출물과 자원 낭비를 방지하기 위해 인간의 정밀한 검토와 감독이 필수적입니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 에이전트의 발전을 통해 대화형 아이디어 구체화가 시작되었으나, 딥러닝 연구의 차별화된 가치를 창출하는 고품질 문제 정의와 엄밀한 검증은 여전히 인간 영역에 머물러 있습니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Process &gt; Where big ideas come from / Changes in research workflows</code></li>
+</ul>
+<hr />
+<h5 id="2-3-연구-산출물-및-모델-능력-향상-outputs">2.3 연구 산출물 및 모델 능력 향상 (Outputs)</h5>
+<h6 id="코드-변경량-및-실험-수">코드 변경량 및 실험 수</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 활성 기여 연구원 1인당 28일 이동 평균 코드 변경 라인 수(테스트 코드 제외)는 2025년 이전 평균 대비 2026년 동안 급격한 상승세를 지속했습니다. 또한 활성 실험자 1인당 로그에 기록된 연구 실험 수는 2026년 10월 18일 종료 기준 최근 4주 평균 2025년 기준선 대비 <strong>1.68배</strong>를 기록했습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 에이전트 투입량 및 활용 확장이 연구 현장의 정량적 생산물(코드 작성량 및 물리적 실험 수 수행 건수) 증가로 직결되고 있습니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 정량적 코딩·실험 수의 증가가 연구의 질적 도약과 1:1로 비례하는 것은 아니지만, 전체적인 R&amp;D 탐색 속도가 크게 가속화되었음을 입증합니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Outputs &gt; Lines of code changed / Research experiments</code></li>
+</ul>
+<h6 id="openai-eci-oeci-추세-및-모델-믹스-비교">OpenAI ECI (OECI) 추세 및 모델 믹스 비교</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>: Epoch Capabilities Index 지표 산출 방법론을 응용하여 공개 벤치마크와 내부 벤치마크를 결합해 측정한 OpenAI ECI(OECI) 분석 결과, OpenAI 모델의 능력 프론티어는 2025년 8월 이후 <strong>연간 16.4포인트</strong> 증가했습니다. 이는 Epoch이 2024년 말 이후 관찰한 업계 일반 프론티어 상승률(연간 14포인트)을 상회하는 수치입니다. OECI 트렌드 라인에는 OpenAI의 GPT-5, GPT-5.1, GPT-5.2, GPT-5.3 Codex, GPT-5.5, GPT-5.6 Sol, GPT-6 Astra, GPT-6.2 Astra, GPT-6.2 Sol 등 20개 공개 모델과 경쟁사의 Gemini 3 Flash, Gemini 3.1 Pro, Claude Fable 5, Claude Fable 5.1, Claude Fable 5.2 등 28개 외부 모델 데이터가 포함되었습니다. OpenAI 모델들은 Epoch의 일반 ECI보다 OECI 점수가 타사 대비 상대적으로 높게 산출되었는데, 이는 내부 평가 벤치마크 믹스의 차이에 기인합니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: OECI 추적은 AI 연구 가속화 및 RSI(재귀적 자기 개선)가 최상위 모델 능력 개선으로 이어지고 있는지를 측정하는 최종 산출 지표입니다.</li>
+<li><strong>[작성자 해석(Author Interpretation)]</strong>: 평가 믹스 차이로 인한 상대적 우위 착시 가능성을 감안하더라도, 에이전틱 연구 가속화가 최상위 모델의 실질적인 능력 프론티어 확장으로 환원되고 있음을 시사합니다.</li>
+<li><strong>근거 및 출처 위치</strong>: <code>Outputs &gt; OpenAI ECI</code></li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-speakers">3. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h4>
+<p>소스 문서에는 연구원들의 실명(First/Last Name)이 기재되어 있지 않으며, 인터뷰 인용 시 익명 식별 기호(Researcher 번호)로 표기하고 있습니다. 확인된 화자의 역할 및 주요 발언은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">식별자</th>
+<th style="text-align:left">소속 및 담당 업무</th>
+<th style="text-align:left">주요 발언 및 연구 워크플로 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Researcher 1</strong></td>
+<td style="text-align:left">Posttraining (사후학습 / 평가 담당)</td>
+<td style="text-align:left">에이전트 작업 복제 오류 경험 후, 에이전트에 1개 과업만 먼저 지시하여 인간이 검토·수정한 뒤 나머지 과업을 수행하게 하는 단동형 감독 워크플로 적용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Researcher 2</strong></td>
+<td style="text-align:left">Safety (안전 / 강화학습 환경 담당)</td>
+<td style="text-align:left">에이전트의 연구 취향 한계 지적 (&quot;스스로 해결하지 못하는 잘 설정된 문제를 생각해내지 못하며, 데이터 생성 시 유사 데이터만 반복 생성함&quot;)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Researcher 3</strong></td>
+<td style="text-align:left">Posttraining (사후학습 / 데이터 품질 담당)</td>
+<td style="text-align:left">에이전트를 활용해 모든 데이터를 스캔 및 보정 후 정돈된 거대 시트로 출력하는 고속 데이터 검수 작업 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Researcher 7</strong></td>
+<td style="text-align:left">Safety (안전 / 평가 담당)</td>
+<td style="text-align:left">오픈소스 평가 포팅 작업 시 기존 1.5~2주 소요되던 연구를 1일~수일 이내로 단축시킨 가속화 사례 증언</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Researcher 8</strong></td>
+<td style="text-align:left">Pretraining (사전학습 / 아키텍처 및 데이터 담당)</td>
+<td style="text-align:left">현 시점 아이디어 발상 및 연구 취향 측면에서 인간이 우위에 있으나, 이러한 우위가 지속될 것이라고 확신할 수는 없음을 명시</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><em>참고사항:</em> 경영진, CEO, 외부 연구자 등 소스 텍스트에 명시되지 않은 기타 인명 정보는 <strong>&quot;확인 불가&quot;</strong> 처리합니다.</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-정리-key-figures-timeframes">4. 수치 및 시점 정리 (Key Figures &amp; Timeframes)</h4>
+<ul>
+<li><strong>보고서 발표 및 데이터 측정 시점</strong>: 발표일 2026년 11월 18일 (측정 데이터 범주: 2026년 1월 ~ 10월 18일)</li>
+<li><strong>1일 1인당 에이전트 사용 비용 (API 리스트 가격 기준)</strong>:
+<ul>
+<li>중앙값: 2026년 9월 $1,500 USD ➔ 10월 $2,400 USD (62% 증가)</li>
+<li>상위 90 백분위수: 2026년 9월 $11,000 USD ➔ 10월 $23,000 USD (105% 증가)</li>
+</ul>
+</li>
+<li><strong>에이전트 일수 (Agent Workdays, 8시간=1 workday)</strong>:
+<ul>
+<li>연구원 1인당 일일 평균: 0.5일 ➔ 5.7일 (11배 증가)</li>
+<li>사전학습 및 사후학습 팀: 달력 기준 1일당 평균 약 8 에이전트 일수 사용</li>
+<li>스케일링 및 인프라 팀: 달력 기준 1일당 평균 약 4 에이전트 일수 사용</li>
+</ul>
+</li>
+<li><strong>동시 작동 에이전트 비중 (2026년 10월 중순 기준)</strong>:
+<ul>
+<li>4개 이상 동시 작동 연구원: 전체의 3분의 2 이상</li>
+<li>16개 이상 동시 작동 연구원: 전체의 10% 이상</li>
+</ul>
+</li>
+<li><strong>인건비 대비 에이전트 비용 비율 (2026년 9월 기준)</strong>:
+<ul>
+<li>주식 보상(전체 보상의 70~80%)을 제외한 비지분 보상 대비 에이전트 사용 비용 비율: 약 <strong>2배 (2.0x)</strong></li>
+<li>내부 에이전트 배포(Codex, ChatGPT, API 통합)가 전체 연구 컴퓨팅에서 차지하는 비중: <strong>2%</strong></li>
+</ul>
+</li>
+<li><strong>Safety &amp; Alignment 연구 투입 노동량</strong>:
+<ul>
+<li>2026년 1월~9월 간 문서화된 작업주 <strong>77.2% 증가</strong> (전 연구 분야 중 최대 절대 증가량)</li>
+<li>주요 분기점: 2026년 7월 Hugging Face 보안 사건 발생 이후 급증</li>
+</ul>
+</li>
+<li><strong>개입 없는 작업 완수 성공률 (Zero-intervention Success Rates)</strong>:
+<ul>
+<li>2~4시간 소요 작업: 3월 23% ➔ 10월 46%</li>
+<li>4~8시간 소요 작업: 3월 13% ➔ 10월 35%</li>
+<li>카테고리별 성공률 (8월 1일~10월 18일): 소통(69%), 분석(58%), 구축(43%)</li>
+<li>작업별 성공률: 학습 상태 모니터링(79%), 기술 질문 답변(72%) vs 평가/RL 환경 구축(29%), 추론/서빙 코드 작성(25%)</li>
+</ul>
+</li>
+<li><strong>프론티어 에이전트 3개월 박탈 시 교환 용의 설문 결과 (101명 대상)</strong>:
+<ul>
+<li>팀 인원: 중앙값 <strong>40%</strong> 포기 용의</li>
+<li>팀 연산량: 중앙값 <strong>30%</strong> 포기 용의 (2027년 1월 기준 예상 질문 시 <strong>50%</strong>)</li>
+</ul>
+</li>
+<li><strong>연구 실험 수 (Research Experiments)</strong>:
+<ul>
+<li>2026년 10월 18일 종료 4주 평균: 2025년 기준선 대비 <strong>1.68배</strong></li>
+</ul>
+</li>
+<li><strong>OpenAI ECI (OECI) 상승 지표</strong>:
+<ul>
+<li>2025년 8월 이후 OpenAI 프론티어 모델 능력 상승률: 연간 <strong>16.4포인트</strong> (Epoch의 업계 평균 14포인트 대비 우수)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 보고서와 소스 문서 자체에서는 다음과 같은 조사 방법론상의 한계, 측정의 불확실성, 미다루어진 영역을 밝히고 있습니다.</p>
+<ol>
+<li><strong>내부 하네스 효율성 개선(Harness Efficiency Improvement)에 따른 지출 데이터 착시 (Footnote 2)</strong>
+<ul>
+<li>2026년 8월 21일 내부적으로 에이전틱 하네스 효율성 개선 조치가 임시 적용되면서 입력 토큰 활용량이 급감하여 지출 금액이 착시 현상으로 크게 감소했던 기록이 있습니다. 해당 변경 사항은 지출 금액과 무관한 이유로 9월 10일부터 단계적으로 철회되었으며, 이후 토큰 지출이 다시 급증했습니다. 이에 따라 8월~9월 사이의 지출 트렌드 측정에 일시적 데이터 왜곡이 존재합니다.</li>
+</ul>
+</li>
+<li><strong>주관적 설문 조사 및 임의 표본 추출(Ad-hoc sampling)의 한계</strong>
+<ul>
+<li>연구원 대상 설문 결과(연산량/인원 포기 용의 등)는 자기 보고에 의존하고 있으며 표본 추출 방식이 임의적(Ad-hoc)으로 진행되어 정량적 생산성 증가치를 완벽하게 측정하는 데 한계가 있습니다.</li>
+</ul>
+</li>
+<li><strong>에이전트 일수(Agent Workdays) 측면의 미집계 가능성</strong>
+<ul>
+<li>에이전트 일수 지표는 주로 연구원과의 대화형 사용만을 집계하도록 설계되어 있어, 완전 자동화된 백그라운드 스크립트나 외부 자동화 작업량이 수치에서 누락되었을 가능성이 있습니다.</li>
+</ul>
+</li>
+<li><strong>미래 자율적 AI 개발 예측의 한계 및 돌파구 평가</strong>
+<ul>
+<li>인간과 AI의 협업 형태를 기반으로 한 과거 트렌드 및 지표 분석 결과가 향후 완전히 자율화될 AI 중심의 R&amp;D 개발 속도를 완벽히 예측하거나 보증하지는 못합니다. 특히 최근 수학 분야에서 프론티어 모델이 보여준 것과 같은 급격하고 돌발적인 돌파구가 딥러닝 연구 자체에서도 일어날 수 있으므로 지속적인 모니터링이 요구됩니다.</li>
+</ul>
+</li>
+<li><strong>향후 보고 확장 영역 및 수석 기술 분석가 종합 평가</strong>
+<ul>
+<li>소스 문서의 결론(Conclusion)에 따르면, OpenAI는 향후 보고서에서 다음과 같은 3가지 핵심 영역으로 측정을 확장할 계획을 밝히고 있습니다:
+<ul>
+<li>첫째, AI 능력 향상 연구 대비 안전 연구의 차등 가속(Differential acceleration) 분석</li>
+<li>둘째, 전체 모델 개발 및 평가 주기를 완료하지 않고도 가속화를 감지할 수 있는 선행 지표(Leading indicators) 개발</li>
+<li>셋째, AI에 의한 연구 가속이 전체 모델 능력의 장기 트렌드에 미치는 영향 분석</li>
+</ul>
+</li>
+<li>이러한 확장은 AI 시스템이 스스로를 개선하는 재귀적 속도가 빨라짐에 따라 인간의 감독 능력을 유지하고 지배구조 과제를 해결하기 위한 필수적인 분석 체계입니다.</li>
+</ul>
+</li>
+<li><strong>소스에서 다루지 않거나 확인 불가능한 항목 (확인 불가)</strong>
+<ul>
+<li><strong>연구원 개별 실명 및 인구통계학적 정보</strong>: 소스 내 미기재 (확인 불가)</li>
+<li><strong>완전 자율 RSI 달성 예상 시점 및 인프라 원가 세부 내역</strong>: 소스 내 미기재 (확인 불가)</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

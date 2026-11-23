@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jalapeño’s first results show industry-leading speed and efficiency in AI inference | OpenAI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Jalapeño’s first results show industry-leading speed and efficiency in AI inference | OpenAI</h1>
+<p class="page-meta">웹 · 2026-08-26</p>
+<h2 id="요약">요약</h2>
+<p>OpenAI의 추론 칩 Jalapeño 초기 성능과 전력 비교 조건, 독립 검증의 한계를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://openai.com/index/jalapeno-first-results/">출처</a> · <a href="https://www.youtube.com/watch?v=84xgDvzeses">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/openai/">OpenAI</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+<li><a href="../../topics/semiconductors-infra/">반도체·인프라</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="openai-jalapeño-첫-결과-빠른-추론-칩의-약속과-검증-경계">OpenAI Jalapeño 첫 결과: 빠른 추론 칩의 약속과 검증 경계</h3>
+<h4 id="1-핵심-요약-executive-summary">1. 핵심 요약 (Executive Summary)</h4>
+<p>본 보고서는 2026년 8월 25일 OpenAI가 발표한 자체 설계 추론 칩 'Jalapeño'의 초기 성능 데이터를 분석한 것입니다. 주요 요약은 다음과 같습니다.</p>
+<ul>
+<li><strong>성격 명시:</strong> 본 데이터는 독립적인 제3자 검증이나 동료 심사를 거친 논문이 아닌, OpenAI의 **공식 기업 발표(Engineering/Company announcement)**에 기반합니다.</li>
+<li><strong>조건부 성과:</strong> OpenAI는 세 공개 모델의 피크 지점에서 published package TDP로 정규화한 mixed TPS/kW가 비교 시스템보다 약 1.5~1.9배 높았다고 보고했습니다. 약 104.3배는 피크나 평균이 아니라 DeepSeek R1에서 비교 시스템의 최소 TBT에 맞춘 특정 국소 운영점의 OpenAI 표기입니다.</li>
+<li><strong>지연시간 단축:</strong> GPT‑OSS 120B 모델 기준 엔드 투 엔드(E2E) 지연시간을 약 1.7배, 최소 토큰 간 간격(Min TBT)을 약 2.7배 개선했습니다.</li>
+<li><strong>전력 규격:</strong> 패키지 TDP는 700W로 설정되었으며, 실측 지속 소비 전력은 550W 이하로 보고되었습니다.</li>
+<li><strong>협력 생태계:</strong> Broadcom(실리콘/네트워킹) 및 Celestica(시스템 통합)와의 협업을 통한 풀스택 시스템으로 구현되었습니다.</li>
+<li><strong>AI 보조 설계:</strong> 칩 설계 및 포팅에 AI를 활용하여 9개월 만에 테이프아웃을 완료했으나, 블록 단위의 성능 향상을 시스템 전체 성과로 확대 해석하는 것은 경계해야 합니다.</li>
+<li><strong>검증 부재:</strong> 사용된 InferenceX 프레임워크 내에 Jalapeño의 원시 로그나 실행 레시피가 아직 공개되지 않아 독립적 재현은 불가능한 상태입니다.</li>
+</ul>
+<h4 id="2-jalapeño-시스템의-정체와-협력-구조">2. Jalapeño 시스템의 정체와 협력 구조</h4>
+<p>Jalapeño는 단순한 가속기 단품이 아니라, 현대적 LLM 추론과 인터랙티브 에이전트 워크로드를 위해 최적화된 <strong>추론 전용 풀스택 시스템</strong>입니다. OpenAI는 칩의 아키텍처 정의와 워크로드 관점의 최적화 지표를 제공했으며, 실리콘 구현과 네트워킹은 <strong>Broadcom</strong>이, 보드 및 랙 단위의 시스템 통합은 <strong>Celestica</strong>가 담당하는 긴밀한 협력 구조를 가집니다.</p>
+<h4 id="3-식당-주방-비유를-통한-기술-용어-해설">3. 식당 주방 비유를 통한 기술 용어 해설</h4>
+<p>복잡한 HPC 지표를 '식당 주방' 운영에 비유하여 정의합니다.</p>
+<ul>
+<li><strong>Throughput (처리량):</strong> 주방에서 한 시간 동안 내놓는 전체 그릇 수입니다. 시스템이 단위 시간당 처리하는 전체 토큰 양입니다.</li>
+<li><strong>Latency (지연시간):</strong> 손님이 주문한 후 음식이 서빙될 때까지의 총 대기 시간입니다. (E2E 지연시간)</li>
+<li><strong>TBT (Time Between Tokens):</strong> 식사 중 다음 한 입이 준비되는 간격입니다. LLM이 답변을 생성할 때 각 토큰 사이의 시간 차이를 의미합니다.</li>
+<li><strong>tokens per user:</strong> 한 사용자의 응답 스트림이 초당 받는 토큰 수입니다. 같은 정의라면 대략 <code>1/TBT</code>와 연결되지만, 집계 방식과 반올림에 따라 표 값은 조금 달라질 수 있습니다.</li>
+<li><strong>TPS/kW:</strong> 전력 1kW당 처리량입니다. 이번 발표의 분모는 실제 데이터센터 전력이나 비용이 아니라 published package TDP이므로, 실측 에너지 효율이나 TCO와 같은 뜻이 아닙니다.</li>
+<li><strong>Pareto frontier:</strong> 선택된 후보·축·조건 안에서 다른 점이 처리량과 지연 두 축을 동시에 개선하지 못하는 비지배 운영점들의 경계입니다. 후보나 소프트웨어, 전력 경계가 바뀌면 frontier도 바뀝니다.</li>
+</ul>
+<h4 id="4-llm-추론의-기술적-병목과-jalapeño의-접근법">4. LLM 추론의 기술적 병목과 Jalapeño의 접근법</h4>
+<ul>
+<li><strong>prefill vs decode:</strong> OpenAI는 연산 집약적인 경향이 있는 prefill(프롬프트 초기 처리)과 메모리 대역폭의 영향을 크게 받는 decode(토큰 생성)의 특성을 설계에 반영했다고 설명합니다. 병목은 모델·배치·하드웨어에 따라 달라질 수 있고, 단계별 독립 ablation은 공개되지 않았습니다.</li>
+<li><strong>KV cache locality:</strong> OpenAI는 생성 중 필요한 KV cache를 연산 장치 가까이에 유지해 데이터 이동과 대기를 줄이는 것을 설계 목표로 설명합니다. 실제 기여량을 분리한 측정은 공개되지 않았습니다.</li>
+<li><strong>Network Domain:</strong> 여러 자원을 하나의 연결 영역으로 묶어 요청 처리 중 발생하는 유휴 시간(Idle time)을 최소화하려는 아키텍처적 의도를 가집니다.</li>
+</ul>
+<h4 id="5-벤치마크-시험-조건-주요-모델-구성">5. 벤치마크 시험 조건: 주요 모델 구성</h4>
+<p>InferenceX 프레임워크 하에서 측정된 주요 모델의 nominal 8k/1k STP 조건은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:left">파라미터 규모</th>
+<th style="text-align:left">정밀도 (Precision)</th>
+<th style="text-align:left">비교 시스템</th>
+<th style="text-align:left">정규화 TDP (J vs N)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>GPT‑OSS</strong></td>
+<td style="text-align:left">120B</td>
+<td style="text-align:left"><strong>미공개</strong></td>
+<td style="text-align:left">NVIDIA GB200</td>
+<td style="text-align:left">700W vs 1200W</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek R1</strong></td>
+<td style="text-align:left">670B</td>
+<td style="text-align:left">MXFP4</td>
+<td style="text-align:left">NVIDIA GB300</td>
+<td style="text-align:left">700W vs 1400W</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kimi K2.5</strong></td>
+<td style="text-align:left">1T</td>
+<td style="text-align:left">MXFP4</td>
+<td style="text-align:left">NVIDIA GB300</td>
+<td style="text-align:left">700W vs 1400W</td>
+</tr>
+</tbody>
+</table>
+<h4 id="6-공개-수치-기반-성능-재계산-분석">6. 공개 수치 기반 성능 재계산 분석</h4>
+<p><strong>아래 표는 OpenAI가 발표한 공개 수치로부터 직접 계산된 비율입니다.</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 및 측정 지표</th>
+<th style="text-align:center">Jalapeño 수치</th>
+<th style="text-align:center">비교군(NVIDIA)</th>
+<th style="text-align:center">계산 비율 (배수)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>[GPT-OSS 120B]</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Peak mixed TPS/kW</td>
+<td style="text-align:center">85,448</td>
+<td style="text-align:center">44,960</td>
+<td style="text-align:center"><strong>약 1.9배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">E2E Latency</td>
+<td style="text-align:center">1.03 s</td>
+<td style="text-align:center">1.80 s</td>
+<td style="text-align:center"><strong>약 1.7배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Min TBT</td>
+<td style="text-align:center">0.69 ms</td>
+<td style="text-align:center">1.87 ms</td>
+<td style="text-align:center"><strong>약 2.7배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Previous TBT TPS/kW</td>
+<td style="text-align:center">22,935</td>
+<td style="text-align:center">427</td>
+<td style="text-align:center"><strong>약 53.7배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>[DeepSeek R1 670B]</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Peak mixed TPS/kW</td>
+<td style="text-align:center">19,641</td>
+<td style="text-align:center">11,781</td>
+<td style="text-align:center"><strong>약 1.7배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">E2E Latency</td>
+<td style="text-align:center">1.65 s</td>
+<td style="text-align:center">5.99 s</td>
+<td style="text-align:center"><strong>약 3.6배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Min TBT</td>
+<td style="text-align:center">1.43 ms</td>
+<td style="text-align:center">5.90 ms</td>
+<td style="text-align:center"><strong>약 4.1배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Previous TBT TPS/kW</td>
+<td style="text-align:center">12,258</td>
+<td style="text-align:center">118</td>
+<td style="text-align:center"><strong>약 103.9배</strong>*</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>[Kimi K2.5 1T]</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Peak mixed TPS/kW</td>
+<td style="text-align:center">18,195</td>
+<td style="text-align:center">11,862</td>
+<td style="text-align:center"><strong>약 1.5배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">E2E Latency</td>
+<td style="text-align:center">1.56 s</td>
+<td style="text-align:center">5.31 s</td>
+<td style="text-align:center"><strong>약 3.4배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Min TBT</td>
+<td style="text-align:center">1.44 ms</td>
+<td style="text-align:center">5.48 ms</td>
+<td style="text-align:center"><strong>약 3.8배</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Previous TBT TPS/kW</td>
+<td style="text-align:center">6,744</td>
+<td style="text-align:center">120</td>
+<td style="text-align:center"><strong>약 56.2배</strong>*</td>
+</tr>
+</tbody>
+</table>
+<p><em>* 데이터 불확실성 지적: DeepSeek R1의 경우 OpenAI는 104.3배로 표기했으나 수치상 계산은 103.9배이며, Kimi K2.5 역시 본문 표기(56.1배)와 단순 계산(56.2배) 사이에 미세한 차이가 존재합니다. 이는 반올림되지 않은 원값 사용에 따른 오차로 추정됩니다.</em></p>
+<h4 id="7-전력-소비의-입체적-분석-정규화-vs-실측">7. 전력 소비의 입체적 분석: 정규화 vs 실측</h4>
+<ul>
+<li><strong>package TDP 정규화:</strong> OpenAI는 Jalapeño(700W), GB200(1200W), GB300(1400W)의 published package TDP를 분모로 사용했습니다. 이는 한 가지 일관된 정규화 방식이지만 실제 칩·보드·서버·랙 전력을 맞춘 공정성까지 자동으로 보장하지 않습니다.</li>
+<li><strong>실측 지속 전력:</strong> OpenAI는 실제 워크로드 테스트 중 Jalapeño가 550W 이하의 전력을 소모했다고 밝혔습니다.</li>
+<li><strong>주의:</strong> 700W는 비교에 사용된 정격이고, 550W 이하는 OpenAI가 시험한 워크로드에서 보고한 지속 측정 상한입니다. 두 값을 같은 의미로 혼용하거나 550W를 모든 워크로드의 고정 소비전력으로 표현하면 안 됩니다.</li>
+</ul>
+<h4 id="8-성능-지표의-올바른-해석-104-3배-의-진실">8. 성능 지표의 올바른 해석: '104.3배'의 진실</h4>
+<p>DeepSeek R1에서 나타난 104.3배라는 수치는 '평균적인 성능 우위'가 아닙니다.</p>
+<ul>
+<li><strong>국소 운영점 비교:</strong> 이 수치는 비교 시스템의 최소 TBT, 즉 최고 interactivity에 가까운 저동시성 운영점에서 mixed TPS/kW를 맞춰 비교한 값입니다. 표시된 baseline 분모 118은 해당 baseline 피크 11,781의 약 1%이므로 비율이 크게 나타날 수 있습니다.</li>
+<li><strong>안전한 해석:</strong> OpenAI의 데이터는 그 특정 TBT에서 Jalapeño가 더 높은 처리량을 유지했다고 주장합니다. 그러나 원시 좌표, 보간 규칙, 칩 수와 토폴로지가 없으므로 전체 curve의 지배를 외부에서 판정할 수 없습니다. 따라서 이를 “104배 빠른 칩”이나 전 운영 범위의 일반 우위로 바꾸면 안 됩니다.</li>
+</ul>
+<h4 id="9-검증-체계와-데이터-신뢰성-검토">9. 검증 체계와 데이터 신뢰성 검토</h4>
+<p>InferenceX는 공개 벤치마크 프레임워크이나, 현재 해당 저장소에는 Jalapeño의 원시 데이터나 재현 가능한 레시피가 등록되어 있지 않습니다. 따라서 현재 결과는 **'공급자가 통제한 내부 측정치(Vendor-controlled first-party result)'**이며, 독립적인 제3자의 검증을 통한 객관적 재현 단계가 남아 있습니다.</p>
+<h4 id="10-투명성을-위한-누락-정보-리스트">10. 투명성을 위한 누락 정보 리스트</h4>
+<p>정밀한 검증을 위해 공개가 필요한 정보들은 다음과 같습니다.</p>
+<ol>
+<li>시스템 내 가속기(Accelerator) 총 수 및 상세 토폴로지</li>
+<li>칩, 보드, 랙 간의 물리적 연결 세부 명세</li>
+<li>구체적인 양자화(Quantization) 기법 및 KV 캐시 데이터 타입</li>
+<li>GPT-OSS 측정에 사용된 구체적인 정밀도(Precision)</li>
+<li>측정에 사용된 원시 로그 및 실행 파라미터(Batch size 등)</li>
+<li>칩 획득 비용, 수율 및 실제 운영 비용(TCO)</li>
+</ol>
+<h4 id="11-ai-보조-설계-ai-assisted-design-의-성과와-경계">11. AI 보조 설계(AI-assisted Design)의 성과와 경계</h4>
+<p>OpenAI는 자사 AI 모델을 설계·검증 반복과 소프트웨어 포팅에 활용했다고 설명합니다. AI 도입이 일정 단축을 인과적으로 만들었다는 비교 실험은 공개되지 않았습니다.</p>
+<ul>
+<li><strong>OpenAI의 자체 보고:</strong> 초기 설계부터 tapeout까지 9개월이 소요되었으며, selected GPT‑OSS attention 및 MoE 블록에서 AI 생성 구현이 기존 human-expert 구현보다 1.5~1.8배 빠르다고 발표했습니다.</li>
+<li><strong>비판적 관점:</strong> 이러한 커널 수준의 블록 개선이 시스템 전체 벤치마크 결과(예: 104.3배)에 기여한 구체적인 비중은 확인되지 않았습니다. 특정 블록의 효율 향상을 아키텍처 전체의 비약적 발전으로 확대 해석해서는 안 되며, AI는 인간 전문가와의 협업 루프 내에서 도구로 활용된 것입니다.</li>
+</ul>
+<h4 id="12-개발-현황과-로드맵-현재-vs-미래">12. 개발 현황과 로드맵: 현재 vs 미래</h4>
+<ul>
+<li><strong>현재 (2026.08.25):</strong> OpenAI는 작동하는 실리콘과 초기 측정을 보고했습니다. production qualification, 소프트웨어 성숙화, 대규모 운용 준비와 추가 모델 검증은 여전히 진행 중입니다.</li>
+<li><strong>미래:</strong> OpenAI는 연말까지 자사 인프라에서 배포를 시작할 계획이라고 밝혔습니다. 완료 사실, 배포 규모, 외부 고객 가용성은 공개되지 않았고 Gen 2·Gen 3도 미래 로드맵입니다.</li>
+</ul>
+<h4 id="13-결론-및-반증-조건">13. 결론 및 반증 조건</h4>
+<p><strong>OpenAI의 발표에 따르면</strong>, Jalapeño는 추론 전용 풀스택 시스템이 처리량과 지연시간 사이의 상충 관계를 어디까지 개선할 수 있는지 보여주는 강력한 지표를 제시했습니다. 그러나 이 결과가 업계의 표준적 사실로 수용되기 위해서는 향후 다음과 같은 조건이 충족되어야 합니다.</p>
+<ul>
+<li>InferenceX 공식 저장소에 Jalapeño 실행 레시피 및 원시 로그 등록</li>
+<li>독립적 제3자 기관에 의한 측정 결과의 재현 및 발표</li>
+<li>실제 데이터센터 운영 환경에서의 신뢰성 및 전력 데이터 공개</li>
+</ul>
+<p>본 보고서는 OpenAI의 공식 발표를 기반으로 하며, 모든 성능 주장은 해당 기업의 자체 측정 결과에 근거합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/openai/">OpenAI</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+<li><a href="../../topics/semiconductors-infra/">반도체·인프라</a></li></ul></section>
+</main>
+</body>
+</html>

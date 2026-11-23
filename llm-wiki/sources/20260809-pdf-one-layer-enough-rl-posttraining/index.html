@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is One Layer Enough? Training A Single Transformer Layer Can Match Full-Parameter RL Training</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Is One Layer Enough? Training A Single Transformer Layer Can Match Full-Parameter RL Training</h1>
+<p class="page-meta">논문 · 2026-08-09</p>
+<h2 id="요약">요약</h2>
+<p>사전 공개 논문은 특정 중간층만 강화학습해도 전체 층 훈련과 대등할 수 있다고 보고했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=oEI9yqUJvm0">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="쉬운-풀이-is-one-layer-enough-training-a-single-transformer-layer-can-match-full-parameter-rl-training-arxiv-2607-01232v2-preprint">[쉬운 풀이] Is One Layer Enough? Training a Single Transformer Layer Can Match Full-Parameter RL Training (arXiv:2607.01232v2, preprint)</h3>
+<blockquote>
+<p><strong>문서 정보</strong></p>
+<ul>
+<li><strong>원제:</strong> Is One Layer Enough? Training a Single Transformer Layer Can Match Full-Parameter RL Training</li>
+<li><strong>arXiv 번호:</strong> 2607.01232v2 (Preprint, 동료 검토 전 단계)</li>
+<li><strong>핵심 요약:</strong> LLM의 강화학습 시 모든 층을 훈련하는 대신, 특정 중간층 하나만 훈련해도 전체 훈련과 대등하거나 더 높은 성능을 얻을 수 있음을 발견하고 그 구조적 원인을 분석한 연구입니다. 본 리포트는 논문 본문과 상세 팩트카드를 기반으로 작성되었습니다.</li>
+</ul>
+</blockquote>
+<hr />
+<h5 id="2-비전공자를-위한-배경지식-rlvr이란-무엇인가">2. 비전공자를 위한 배경지식: RLVR이란 무엇인가?</h5>
+<p>**RLVR(검증 가능한 보상을 통한 강화학습)**은 정답이 객관적으로 확인 가능한 태스크(수학 문제 풀이, 코드 작성 등)를 통해 모델을 정렬하는 기법입니다. 모델이 내놓은 결과가 정답이면 보상을 주고, 틀리면 주지 않는 방식으로 스스로 정답에 이르는 경로를 학습하게 합니다.</p>
+<ul>
+<li><strong>기존 방식:</strong> 모델을 구성하는 수십 개의 모든 층(Layer)의 파라미터를 동시에 업데이트합니다.</li>
+<li><strong>본 논문의 의문:</strong> &quot;모든 층이 강화학습에 똑같이 기여할까? 혹시 특정 층이 개선의 핵심은 아닐까?&quot;라는 질문을 던졌습니다.</li>
+</ul>
+<hr />
+<h5 id="3-층별-기여도-layer-contribution-의-수사적-수학적-정의">3. '층별 기여도(Layer Contribution)'의 수사적·수학적 정의</h5>
+<p>연구진은 각 층의 중요도를 정량화하기 위해 <strong>층별 기여도($C(k)$)</strong> 지표를 도입했습니다. 이는 '전체 층을 훈련했을 때의 개선분' 대비 '특정 층 하나만 훈련했을 때의 개선분'의 비율을 의미합니다.</p>
+<ul>
+<li>
+<p><strong>수학적 정의:</strong>
+$$C(k) = \frac{S_k - S_{base}}{S_{full} - S_{base}}$$</p>
+<ul>
+<li>$S_k$: $k$번째 층 하나만 훈련했을 때의 성능</li>
+<li>$S_{base}$: 기초 모델의 성능</li>
+<li>$S_{full}$: 전체 층을 훈련했을 때의 성능</li>
+</ul>
+</li>
+<li>
+<p><strong>데이터 해석의 주의점:</strong> 예를 들어 Qwen3-1.7B 모델의 10번 층 기여도가 **1.14(114%)**라는 것은, 전체 층을 다 훈련해서 얻은 성능 향상 폭을 100이라고 했을 때 단일 층 훈련만으로 그보다 14% 더 큰 향상을 이루어냈다는 뜻입니다. (절대적인 정확도 수치가 아닙니다.)</p>
+</li>
+</ul>
+<hr />
+<h5 id="4-핵심-발견-rl-적응의-중심축-central-axis-은-중간층에-있다">4. 핵심 발견: &quot;RL 적응의 중심축(Central Axis)은 중간층에 있다&quot;</h5>
+<p>연구진은 7개 모델, 2개 모델 계열, 3개 알고리즘에 걸친 광범위한 실험을 통해 고기여 층이 네트워크 깊이의 **중간 구간(40~60%)**에 집중되어 있다는 공통된 패턴을 발견했습니다.</p>
+<p><strong>[실험 모델 및 알고리즘 구성]</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 계열</th>
+<th style="text-align:left">규모 (Parameters)</th>
+<th style="text-align:left">사용 알고리즘</th>
+<th style="text-align:left">주요 태스크</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Qwen3</strong></td>
+<td style="text-align:left">1.7B / 4B / 8B</td>
+<td style="text-align:left">GRPO</td>
+<td style="text-align:left">수학 (NuminaMath)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen2.5-Math</strong></td>
+<td style="text-align:left">1.5B</td>
+<td style="text-align:left"><strong>Dr. GRPO</strong></td>
+<td style="text-align:left">수학 (MATH)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen2.5-Instruct</strong></td>
+<td style="text-align:left">1.5B / 3B</td>
+<td style="text-align:left"><strong>GiGPO</strong></td>
+<td style="text-align:left">에이전트 (ALFWorld)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek-Distilled</strong></td>
+<td style="text-align:left">7B (Qwen 기반)</td>
+<td style="text-align:left">GRPO</td>
+<td style="text-align:left">수학 (Skywork)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>구체적 수치 예시 (Qwen3-1.7B):</strong>
+<ul>
+<li>기초 모델(Base): 44.1</li>
+<li>전체 층 훈련(Full RL): 50.8</li>
+<li><strong>10번 층(Layer 10) 단독 훈련: 51.8</strong> ($C=1.14$)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-기술-체크-오해-바로잡기-훈련-계산량이-1-l로-줄어드는가">5. [기술 체크] 오해 바로잡기: &quot;훈련 계산량이 1/L로 줄어드는가?&quot;</h5>
+<p>파라미터 업데이트를 한 층만 한다고 해서 훈련 속도가 드라마틱하게 빨라지는 것은 아닙니다.</p>
+<ol>
+<li><strong>역전파(Backpropagation)의 특성:</strong> 업데이트 대상은 한 개 층이지만, 그 층의 가중치를 얼마나 수정할지 결정하는 경사(Gradient) 값을 계산하려면 <strong>데이터가 여전히 전체 네트워크의 모든 층을 통과</strong>해야 합니다.</li>
+<li><strong>구조적 필수성:</strong> 나머지 층들은 업데이트되지 않을 뿐, 데이터를 전달(Forward)하고 오차 신호를 전달(Backward)하는 통로 역할을 수행해야 하므로 전체 모델이 여전히 메모리와 연산에 필요합니다.</li>
+</ol>
+<hr />
+<h5 id="6-실험의-일관성-모델의-고유한-구조적-특성">6. 실험의 일관성: 모델의 고유한 구조적 특성</h5>
+<p>중간층의 높은 기여도 패턴은 이 논문의 Qwen3-1.7B 실험에서 데이터나 태스크가 바뀌어도 <strong>유의한 순위 상관</strong>을 보였습니다. 이는 저자들이 보고한 경험적 일관성이며, 모든 모델에 대한 구조적 법칙을 통계적으로 증명한 것은 아닙니다.</p>
+<ul>
+<li><strong>데이터셋 변경:</strong> 수학 데이터셋을 바꿔도 층별 기여도 순위의 상관계수는 $\rho=0.76(p &lt; 0.001)$로 매우 높았습니다.</li>
+<li><strong>태스크 변경:</strong> 수학과 코드라는 서로 다른 도메인 사이에서도 $\rho=0.59(p &lt; 0.001)$의 유의미한 상관관계를 보였습니다.</li>
+</ul>
+<hr />
+<h5 id="7-실용적-전략-선별적-층-selected-layer-훈련의-성과">7. 실용적 전략: '선별적 층(Selected-Layer)' 훈련의 성과</h5>
+<p>연구진은 단일 층 실험을 넘어, 기여도가 높은 층들만 골라 훈련하는 전략을 제시했습니다.</p>
+<ul>
+<li><strong>용어 정의:</strong> **B10(Best 10)**은 기여도 상위 10개 층을, **W10(Worst 10)**은 하위 10개 층을 의미합니다.</li>
+<li><strong>성과 비교 (Qwen3-8B):</strong>
+<ul>
+<li><strong>전체 층 훈련(Full RL):</strong> 66.43 ± 0.40 (3회 평균값)</li>
+<li><strong>상위 10개 층 선택 훈련(Only B10):</strong> <strong>69.11 ± 0.10</strong></li>
+<li><em>참고: 논문 Table 2의 단일 실행 수치와 Section 4의 3회 평균 수치에 미세한 차이가 있으나, 선별 훈련이 우세하다는 결론은 동일합니다.</em></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="8-심층-분석-왜-중간층-하나로-충분한가-전문가적-통찰">8. 심층 분석: 왜 중간층 하나로 충분한가? (전문가적 통찰)</h5>
+<p>본 연구가 제공하는 가장 중요한 기술적 통찰은 '다양성'과 '파라미터 공간'의 효율성입니다.</p>
+<ul>
+<li><strong>층별 출력의 다양성(Diversity):</strong> 서로 다른 고기여 층만 훈련한 모델들은 해결한 문제 집합이 완전히 같지 않았습니다. 상위 기여 층들 간의 정답 집합 Jaccard similarity는 약 **34.1%**로 보고됐고, 이를 다수결(Majority Voting)로 합칠 경우 해당 OlympiadBench 실험에서 전체 훈련 모델보다 높은 성능(26.9% → 33.6%)을 보였습니다. 이것은 출력의 상호 보완성을 시사하지만, “각 층이 서로 다른 지식을 저장한다”는 직접 증거는 아닙니다.</li>
+<li><strong>가중치 변화량의 관찰:</strong> 실험 결과(Figure 9), <strong>전체 훈련 시 층별 가중치 변화량은 대체로 비슷</strong>했으며, 변화량만으로 기여도 차이를 설명하지 못했습니다. 저자들은 중간층의 파라미터 하위 공간이 RL 적응에 더 유리할 가능성을 제시하지만, 그 원리에 대한 이론은 아직 확립되지 않았습니다.</li>
+</ul>
+<hr />
+<h5 id="9-이-연구의-한계와-경계-비판적-검토">9. 이 연구의 한계와 경계 (비판적 검토)</h5>
+<ul>
+<li>[ ] <strong>도메인 편향:</strong> contribution-guided·선별 층 훈련 전략의 개선 효과는 현재 수학 추론에서 검증되었습니다. 코드·agentic task에서 관찰된 것은 주로 층별 contribution 패턴이며, 같은 전략의 성능 개선 검증은 future work입니다.</li>
+<li>[ ] <strong>부분 스캔:</strong> Qwen2.5 agentic 모델과 DeepSeek-Distilled-Qwen-7B는 계산 제약으로 대표 층만 훈련했으므로 전 층 순위를 직접 확인한 결과가 아닙니다.</li>
+<li>[ ] <strong>실질 자원 데이터 부재:</strong> 실제 시간(Wall-clock time)이나 VRAM 절감에 대한 구체적 벤치마크 수치가 부족합니다.</li>
+<li>[ ] <strong>이론적 근거 미비:</strong> 왜 중간층이 '고효율 하위 공간'을 형성하는지에 대한 심층적인 이론은 아직 연구 과제로 남아 있습니다.</li>
+<li>[ ] <strong>모델 규모의 한계:</strong> 주로 8B 이하 Qwen 계열 모델에서의 실험 결과이며, 독립적인 재현 절차가 필요합니다.</li>
+</ul>
+<hr />
+<h5 id="10-결론-실무적-의미와-향후-관전-포인트">10. 결론: 실무적 의미와 향후 관전 포인트</h5>
+<p>이 연구는 자원이 한정된 LLM 훈련 환경에서 모든 파라미터를 업데이트하는 비효율을 줄일 수 있는 가능성을 열어주었습니다. 특히 중간층에 집중하는 전략은 복잡한 프로파일링 없이도 적용 가능한 강력한 휴리스틱이 될 수 있습니다.</p>
+<p><strong>[향후 검증 질문 — 제작 검토]</strong>
+논문이 다루지 않은 <strong>70B 이상 모델</strong>, <strong>MoE 아키텍처</strong>, 다른 RL 목적에서도 중간층 집중이 재현되는지 확인해야 합니다. 반대 결과가 나오면 이번 발견의 일반화 범위를 Qwen 계열 중소 규모와 해당 실험 설정으로 낮춰야 합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

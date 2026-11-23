@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</h1>
+<p class="page-meta">웹 · 2026-08-14</p>
+<h2 id="요약">요약</h2>
+<p>Z.ai의 GLM-5.3 코딩·보안 평가, 훈련 효율, 가중치 공개 계획과 검증 한계를 정리한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://z.ai/blog/glm-5.3">출처</a> · <a href="https://www.youtube.com/watch?v=IQ-D-tqyFmo">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/post-training/">Post-training</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/z-ai/">Z.ai</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="glm-5-3-frontier-coding-with-emergent-cyber-capabilities">GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</h3>
+<p><strong>1. 보고서의 성격 및 문서 개요</strong>
+본 보고서는 2026-08-14 Z.ai가 발표한 자사 제품 및 연구 자료를 분석한 쉬운 기술 해설입니다. 본 문서의 성능 지표와 기술적 주장은 Z.ai 발표에 근거하며, 이 N2Y는 외부 독립 재현이나 객관적인 보안 감사를 수행하지 않았습니다.</p>
+<ul>
+<li><strong>문서 제목:</strong> GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</li>
+<li><strong>발행 주체:</strong> Z.ai</li>
+<li><strong>발행 날짜:</strong> 2026-08-14</li>
+</ul>
+<p><strong>2. 핵심 기술 아키텍처: Post-training 중심의 성능 확장</strong>
+Z.ai는 GLM-5.3이 GLM-5.2와 <strong>같은 base model에서 출발</strong>했고 성능 증가는 scaled post-training에서 왔다고 설명합니다. 이것은 post-training 동안 최종 모델 가중치가 전혀 바뀌지 않았다는 뜻이 아닙니다. 일반적으로 post-training은 가중치를 업데이트하며, 여기서 ‘same base model’은 사전훈련 출발점이 같다는 회사 측 표현으로 이해해야 합니다.</p>
+<p>이 과정에서 활용된 핵심 기술 스택은 다음과 같습니다:</p>
+<ul>
+<li><strong>IndexShare:</strong> 효율적인 롱 컨텍스트(Long-context) 처리를 위한 레이어.</li>
+<li><strong>SAO (with Compaction):</strong> 장기 과제(Long-horizon tasks)에 최적화된 강화학습 방법론.</li>
+<li><strong>slime:</strong> 대규모 비동기 훈련을 지원하는 프레임워크로, 후술할 시스템 최적화의 핵심입니다.</li>
+<li><strong>장기 과제 환경(Long-horizon task environments):</strong> 실제 전문가의 워크플로우를 모방한 실행 가능하고 검증 가능한 훈련 데이터셋.</li>
+</ul>
+<p><strong>3. 코딩 성능 평가 및 공개 벤치마크 분석</strong>
+GLM-5.3의 코딩 및 에이전트 성능은 <strong>Claude Code 2.1.207</strong> 등 여러 하네스와 서로 다른 예산·집계 방식으로 측정됐다고 Z.ai가 보고합니다. 아래 표는 회사가 공개한 비교 수치이며, 모든 행을 동일 조건의 객관적 순위표로 읽어서는 안 됩니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크 (Benchmark)</th>
+<th style="text-align:center">GLM-5.3</th>
+<th style="text-align:center">Kimi K3</th>
+<th style="text-align:center">Fable 5</th>
+<th style="text-align:center">GPT-5.6 Sol</th>
+<th style="text-align:left">평가 환경 및 예산 (Harness/Budget)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Terminal-Bench 3.0</strong></td>
+<td style="text-align:center">28.3</td>
+<td style="text-align:center">17.4</td>
+<td style="text-align:center">33.7</td>
+<td style="text-align:center"><strong>34.6</strong></td>
+<td style="text-align:left">Claude Code 2.1.207, avg@3, 10h timeout</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSWE v1.1</strong></td>
+<td style="text-align:center">66.9</td>
+<td style="text-align:center">67.5</td>
+<td style="text-align:center">69.7</td>
+<td style="text-align:center"><strong>72.7</strong></td>
+<td style="text-align:left">mini-swe-agent, 6h timeout, 400K context</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>ALE-CLI</strong></td>
+<td style="text-align:center">28.5</td>
+<td style="text-align:center">27.6</td>
+<td style="text-align:center">23.8</td>
+<td style="text-align:center"><strong>28.6</strong></td>
+<td style="text-align:left">Claude Code 2.1.207, 4-8h timeout</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FrontierSWE</strong></td>
+<td style="text-align:center">78.1</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center"><strong>88.2</strong></td>
+<td style="text-align:center">-</td>
+<td style="text-align:left">Proximal 측정, 1M context, Max effort</td>
+</tr>
+</tbody>
+</table>
+<p><strong>감사 결과 요약:</strong>
+GLM-5.3은 전작 대비 큰 향상을 보였다고 Z.ai가 보고하지만, Terminal-Bench 3.0 및 DeepSWE v1.1 표에서 Fable 5나 GPT-5.6 Sol보다 낮습니다. 사내 <strong>Z.ai Code Bench</strong>의 50% 향상은 회사 주장입니다. 비공개 평가가 공개 test-set 오염 위험을 줄일 수 있다는 장점과, 외부가 task 분포·채점·분산·실패 사례를 감사하기 어렵다는 한계를 함께 봐야 합니다.</p>
+<p><strong>4. 창발적 사이버 보안 역량 (Emergent Cyber Capability)</strong>
+Z.ai는 post-training 규모가 확장되면서 모델이 단순한 코드 결함 식별을 넘어 다단계 exploitation benchmark에서 향상됐다고 보고하고 이를 ‘창발적 사이버 역량’이라고 부릅니다. ‘창발적’은 회사의 해석이며 독립적으로 성립이 확인된 과학적 분류가 아닙니다.</p>
+<ul>
+<li><strong>CyberGym (Vulnerability Discovery):</strong> 회사 표에서 GLM-5.3은 **84.5%**로 비교군 중 가장 높습니다. 이는 1,507 tasks, single-run Pass@1, max reasoning, no web, domain whitelist를 포함한 Z.ai의 평가 조건에 묶인 결과입니다.</li>
+<li><strong>ExploitBench:</strong> 54.4% (GLM-5.2 대비 2배 이상 향상되었으나, Fable 5의 78.0%에는 미치지 못함)</li>
+<li><strong>ExploitGym:</strong> 2시간 예산 내 105개, 6시간 내 130개 과제 수행.
+<ul>
+<li><strong>중요 기술 사양:</strong> 본 수치는 <strong>Artificial Analysis의 TPS(Tokens Per Second) 데이터</strong>를 기반으로 모델별 처리량을 재조정한(Time-normalized) 결과입니다. GLM-5.3의 결과는 115 TPS를 기준으로 리스케일링되었습니다.</li>
+</ul>
+</li>
+</ul>
+<p><strong>5. Z.ai 보안 공개 원장(Ledger) 및 취약점 발견 실적</strong>
+Z.ai는 실제 코드베이스 분석에서 발견했다고 주장하는 보안 이슈를 자체 Security Disclosure Ledger로 관리합니다. 이 보고서는 공개 페이지의 표시를 비교했을 뿐 원장 전체나 embargo 항목을 감사하지 않았습니다.</p>
+<ul>
+<li><strong>통계 데이터 (Z.ai 주장):</strong> 총 2,436건의 Findings, 269개의 프로젝트 분석.</li>
+<li><strong>Severity 용어 불일치:</strong> 발표 본문은 &quot;medium-to-high&quot; 1,097건이라고 쓰지만 같은 페이지의 ledger summary는 <strong>Critical 107 + High 990 = 1,097</strong>로 표시합니다. 어느 표현이 권위 있는 분류인지 확인되지 않았으므로 단순 오기로 단정하지 않고 분모·중복제거·severity 기준의 설명을 요구해야 합니다.</li>
+<li><strong>공개 현황:</strong> 현재 53건이 공식 공개되었으며, 2,383건은 보안 유지를 위해 Embargo(공개 유예) 상태입니다.</li>
+</ul>
+<p><strong>6. slime 프레임워크와 시스템 효율성</strong>
+훈련 프레임워크인 <strong>slime</strong>은 학습 측면에서 <strong>Megatron</strong>을, 롤아웃(Rollout) 측면에서 <strong>SGLang</strong>을 통합하여 설계되었습니다.</p>
+<ul>
+<li><strong>효율성 지표:</strong> 특정 **장기 코딩 RL 학습 작업(Long-horizon coding RL tasks)**에서 End-to-end RL 학습 처리량이 2.3배 이상 향상되었습니다.</li>
+<li><strong>최적화 메커니즘:</strong> 이러한 성능 향상은 로컬 스토리지에 모델 상태를 계층적으로 저장하는 **'Hierarchical Caching'**과 환경별 특성을 고려한 <strong>'Workload-aware heuristics'</strong>(Prefill/Decode 비율 및 동시성 설정 최적화)를 통해 달성되었습니다.</li>
+<li><strong>주의 사항:</strong> 해당 2.3배 수치는 특정 RL 워크로드에 국한된 시스템 최적화 결과이며, 모델 전체의 추론 속도나 일반적인 훈련 비용 절감을 의미하는 범용 지표가 아닙니다.</li>
+</ul>
+<p><strong>7. 가중치 공개 계획 및 안전성 정책</strong>
+Z.ai는 발표 시점에 weights가 아직 공개되지 않았으며, 안전성 평가와 hardening 완료 후 <strong>2주 뒤 공개할 계획</strong>이라고 밝혔습니다. 따라서 ‘open weights model’이라는 홍보 문구와 현재 실제 다운로드 가능 상태를 구분해야 합니다.</p>
+<p>**보안 역량(Capability)**과 **안전성(Safety)**은 분리해서 평가해야 합니다. 취약점을 찾아내는 능력은 그 자체로 안전한 사용을 보장하지 않습니다. 이 보고서는 공격 재현 절차나 payload를 제공하지 않으며, target 정보, 명령, credential, 탐지 우회 방법도 제공하지 않습니다.</p>
+<p><strong>8. 향후 검증 요구 사항 및 결론</strong>
+GLM-5.3의 기술적 주장을 최종 확립하기 위해 다음과 같은 독립적 검증 절차가 요구됩니다:</p>
+<ul>
+<li>외부 연구자에 의한 공개 하네스(Claude Code 2.1.207) 기반의 독립적 성능 재현 여부.</li>
+<li>2주 후 weights가 실제 공개되는지, 그리고 model card·safety report·license·misuse safeguards가 함께 제공되는지 확인.</li>
+<li>Z.ai Ledger에 등록된 취약점들이 실제 CVE로 등록되고 해당 프로젝트 메인테이너에 의해 공식적으로 확인되는지 여부.</li>
+<li>RL 과정에서 발생할 수 있는 리워드 해킹(Reward hacking) 및 훈련 데이터 오염(Contamination)에 대한 정밀 감사.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/post-training/">Post-training</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/z-ai/">Z.ai</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

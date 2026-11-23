@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Groupwise Agentic Grading and Advantage Redistribution for Code Agent RL</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Groupwise Agentic Grading and Advantage Redistribution for Code Agent RL</h1>
+<p class="page-meta">논문 · 2026-09-30</p>
+<h2 id="요약">요약</h2>
+<p>코드 에이전트 대상 강화학습(Reinforcement Learning, RL)에서는 저장소 탐색, 코드 수정, 환경 검증 등 다단계 의사결정 과정을 최적화하기 위해 실행 가능한 테스트 기반의 이진 리워드(Binary Reward)와 그룹 상대 정책 최적화(Group Relative Policy Optimization,…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/abs/2609.32577">출처</a> · <a href="https://www.youtube.com/watch?v=9qE42IT2lwM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="가가르-gagar-기술-심층-분석-보고서-코드-에이전트-강화학습을-위한-그룹-단위-에이전트-채점-및-양의-어드밴티지-보존-재분배">가가르(Gagar) 기술 심층 분석 보고서: 코드 에이전트 강화학습을 위한 그룹 단위 에이전트 채점 및 양의 어드밴티지 보존 재분배</h3>
+<hr />
+<h4 id="1-가가르-gagar-의-문제의식-및-연구-배경">1. 가가르(Gagar)의 문제의식 및 연구 배경</h4>
+<p>코드 에이전트 대상 강화학습(Reinforcement Learning, RL)에서는 저장소 탐색, 코드 수정, 환경 검증 등 다단계 의사결정 과정을 최적화하기 위해 실행 가능한 테스트 기반의 이진 리워드(Binary Reward)와 그룹 상대 정책 최적화(Group Relative Policy Optimization, GRPO)를 결합하여 주로 활용해 왔다. 그러나 이러한 기존 방식은 동일한 롤아웃 그룹(Rollout Group) 내에서 테스트를 통과한 성공 궤적(Test-passing trajectories) 모두에 동일한 결과 어드밴티지(Outcome Advantage)를 부여하는 근본적인 한계를 가진다.</p>
+<p>단순히 동일한 테스트를 통과했다는 결과만으로는 코드의 실제 구현 품질, 과제 명세 준수 여부, 또는 실제 소프트웨어 생태계에서의 유지보수 가치를 구분할 수 없다. 단일 평가 시에는 잘 드러나지 않는 불필요한 코드 리팩토링, 우회적 로직, 과도한 수정 범위 등이 그룹 단위 상호 대조 과정을 통해서 비로소 선명하게 식별됨에도 불구하고, 이진 리워드는 이를 방치하여 다음과 같은 심각한 고질적 문제를 야기한다:</p>
+<ul>
+<li><strong>코드 품질 및 가독성 저하:</strong> 근본적인 원인을 해결하기보다 증상만 우회하는 임시방편(Workaround) 코드나 특수 케이스 예외 분기를 무분별하게 양산함.</li>
+<li><strong>과도하고 불필요한 수정 범위:</strong> 과제 명세가 요구하는 범위를 벗어나 저장소의 타 영역까지 무분별하게 수정하거나 불필요한 헬퍼 함수를 추가함.</li>
+<li><strong>유지보수성 약화 및 병합 난조:</strong> 저장소의 기존 추상화 및 컨벤션과의 일관성을 상실하여 코드 리뷰 및 실제 병합(Merge) 단계에서 막대한 추가 공수를 유발함.</li>
+<li><strong>비효율적 문제 해결 전략:</strong> 에이전트가 문제 원인을 정밀하게 탐색하는 대신 불필요하게 긴 상호작용 턴(Turn)과 토큰을 오버헤드로 소비함.</li>
+</ul>
+<p>가가르(Gagar, Groupwise Agentic Grading for Advantage Redistribution) 프레임워크는 이러한 한계를 극복하기 위해 제안되었다. 저진들이 제시하는 핵심 목표는 <strong>테스트 통과라는 결과적 성공에 더해, 문제의 근본 원인을 정밀하고 최소한으로 해결하는 간결·합치 가능한(Merge-ready) 고품질 코드 생성을 유도하고, 불필요한 탐색 턴과 토큰 소모를 억제함으로써 에이전트의 정밀하고 효율적인 문제 해결 전략을 강화하는 것</strong>이다.</p>
+<h5 id="기존-방식과-가가르-gagar-접근법-비교">기존 방식과 가가르(Gagar) 접근법 비교</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">기존 방식 (이진 리워드 + GRPO)</th>
+<th style="text-align:left">가가르(Gagar) 접근법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>리워드 구조</strong></td>
+<td style="text-align:left">실행 테스트 통과 여부에 따른 이진 리워드 ($R_i \in {0, 1}$)</td>
+<td style="text-align:left">이진 리워드 + 그룹 단위 에이전트형 품질 평가 연동</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>성공 궤적 어드밴티지</strong></td>
+<td style="text-align:left">그룹 내 모든 성공 궤적에 동일한 양의 어드밴티지 부여 ($1 - \bar{R}$)</td>
+<td style="text-align:left">품질 평가 기반 할인을 반영한 양의 어드밴티지 차등 재분배</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 품질 반영 여부</strong></td>
+<td style="text-align:left">미반영 (코드 복잡도, 과도한 수정 범위, 편법 구별 불가)</td>
+<td style="text-align:left">5가지 차원(적절성, 정밀성, 최소성, 부작용 방지, 일관성) 평가 반영</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>신호 세기 및 신뢰성</strong></td>
+<td style="text-align:left">결과적 성공만 보상하여 꼼수/편법 코드도 동등하게 강화</td>
+<td style="text-align:left">편법 코드 차단($R_i \leftarrow 0$) 및 고품질 구현에 선택적 어드밴티지 집중</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상호작용 및 학습 효율성</strong></td>
+<td style="text-align:left">궤적 길이 급증 및 토큰 오버헤드로 학습 불안정 유발</td>
+<td style="text-align:left">고품질·최소 변경 구현 강화로 턴 수 및 토큰 사용량 대폭 감소</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="2-그룹-단위-에이전트-채점-groupwise-agentic-grading-메커니즘">2. 그룹 단위 에이전트 채점(Groupwise Agentic Grading) 메커니즘</h4>
+<p>가가르 프레임워크는 단순 이진 결과를 넘어 코드 구현의 질적 우수성을 정밀히 평가하기 위해 그룹 단위 에이전트 채점 방식을 도입한다.</p>
+<h5 id="그룹-단위-비교-groupwise-comparison-및-동적-샘플링-dynamic-sampling">그룹 단위 비교(Groupwise Comparison) 및 동적 샘플링(Dynamic Sampling)</h5>
+<p>단일 궤적에 대한 독립적 평가는 코드의 불필요한 복잡성이나 과도한 수정 범위를 포착하기 어렵다. 동일한 과제에 대해 생성된 성공 궤적과 실패 궤적들을 한 작업 공간에 모아놓고 상대 비교할 때 비로소 어떤 구현이 꼭 필요한 최소한의 수정만을 포함하고 있는지 선명하게 드러난다. 실패 궤적 역시 에이전트가 범한 오류 양상과 미충족 요건에 대한 중요한 맥락 정보(Context)를 채점자에게 제공한다.</p>
+<p>가가르는 이러한 상대 비교 신호를 극대화하기 위해 성공 궤적과 실패 궤적이 공존하는 혼합 성과 그룹(Mixed-outcome rollout group, $0 &lt; \bar{R} &lt; 1$)만을 선별하여 학습에 활용하는 동적 샘플링(Dynamic Sampling)을 적용한다.</p>
+<h5 id="공유-작업-공간-및-에이전트형-검증-agentic-inspection">공유 작업 공간 및 에이전트형 검증 (Agentic Inspection)</h5>
+<p>에이전트 평가자(Grader)는 과제 명세, 저장소 맥락, 전체 궤적, 제출된 패치(Patch), 테스트 실행 로그가 포함된 공유 작업 공간에 접근한다. 단순 텍스트 입력만으로는 복잡한 저장소 변경 사항을 정밀히 판단할 수 없으므로, 평가자는 다음과 같이 능동적이고 반복적인 검증 절차를 수행한다:</p>
+<ol>
+<li><strong>요약 검토:</strong> 롤아웃의 턴 바이 턴(Turn-by-turn) 요약을 정독하여 정밀 검증이 필요한 핵심 구간을 식별함.</li>
+<li><strong>코드 읽기 및 상호 대조:</strong> 개별 궤적의 주요 수정 부위를 직접 읽고, 제출된 패치를 저장소 원본 코드 및 테스트 로그와 상호 대조함.</li>
+<li><strong>표적 실행 점검 (Targeted Execution Checks):</strong> 텍스트 검토만으로 판단이 불분명한 경우, 작업 공간 내에서 표적 실행 점검을 직접 수행하여 작동 여부 및 부작용을 점검함.</li>
+</ol>
+<h5 id="채점자-인프라-및-지연-시간-latency-개선">채점자 인프라 및 지연 시간(Latency) 개선</h5>
+<p>초기 연구 단계에서 Claude Opus 5를 온라인 채점자로 사용할 경우 그룹당 평균 채점 지연 시간이 약 <strong>2,000초</strong>에 달해 RL 학습 전체의 심각한 병목으로 작용했다. 이를 해결하기 위해 가가르는 Pre-RL SFT 단계를 거친 <strong>MiMo-V2.6-Pro</strong> 체크포인트를 온라인 채점자로 전환하여 채점 정밀도를 유지하면서 지연 시간을 약 <strong>600초</strong> 수준으로 대폭 단축했다. 또한, 이미 완결된 그룹의 채점 작업과 타 과제의 롤아웃 생성을 병렬로 중첩시키는 <strong>부분 롤아웃 스케줄링(Partial-rollout scheduling)</strong> 공학적 기법을 도입하여 RL 파이프라인의 가동률을 극대화했다.</p>
+<h5 id="5가지-코드-품질-평가-차원">5가지 코드 품질 평가 차원</h5>
+<p>평가자는 테스트 통과 성공 솔루션들을 대상으로 다음 5가지 핵심 차원에서 1~5점의 정수 점수를 부여한다:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 차원</th>
+<th style="text-align:left">상위 품질 신호 (Higher-Quality Signals)</th>
+<th style="text-align:left">하위 품질 신호 (Lower-Quality Signals)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>접근 방식의 적절성&lt;br&gt;(Approach Suitability)</strong></td>
+<td style="text-align:left">문제의 근본 원인 해결, 적절한 솔루션 전략</td>
+<td style="text-align:left">증상만 임시방편으로 우회(<code>Symptom-level workarounds</code>), 결함이 있는 전략</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>구현의 정밀성&lt;br&gt;(Implementation Precision)</strong></td>
+<td style="text-align:left">정확한 수정 위치 지정, 요구되는 예외/동작 완전 커버</td>
+<td style="text-align:left">산발적인 특수 케이스 분기 추가, 불필요한 중복 융통성 로직</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>변경의 최소성&lt;br&gt;(Minimality of Changes)</strong></td>
+<td style="text-align:left">꼭 필요한 구현 수정, 과제 범위에 집중된 수정</td>
+<td style="text-align:left">과제와 무관한 코드 리팩토링, 불필요한 헬퍼 함수/가지치기 추가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>의도치 않은 부작용 방지&lt;br&gt;(Unintended Side Effects)</strong></td>
+<td style="text-align:left">주변 동작 및 기존 인터페이스 보존, 안정적 퍼블릭 API</td>
+<td style="text-align:left">관련 없는 영역의 동작 변경, 핵심 코드 경로 내 새로운 위험 요소 유발</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드베이스 일관성&lt;br&gt;(Codebase Consistency)</strong></td>
+<td style="text-align:left">기존 추상화 재사용, 프로젝트 코드 컨벤션 준수</td>
+<td style="text-align:left">일회성 ad-hoc 메커니즘 도입, 불일치한 스타일 및 주석</td>
+</tr>
+</tbody>
+</table>
+<h5 id="품질-등급-t1-t2-t3-및-할인율-매핑">품질 등급(T1, T2, T3) 및 할인율 매핑</h5>
+<ol>
+<li><strong>최초 점수 산출:</strong> 평가자는 가중치 수식 $W_i = 0.30 s^{\text{app}}_i + 0.25 s^{\text{prec}}_i + 0.20 s^{\text{min}}_i + 0.15 s^{\text{side}}_i + 0.10 s^{\text{style}}_i$를 바탕으로 1차 순위를 도출함.</li>
+<li><strong>품질 등급(Tier) 분류:</strong>
+<ul>
+<li><strong>T3 (하위 등급):</strong> 요청되지 않은 코드 전체 재작성, 테스트 전용 우회 꼼수(<code>Test-specific workarounds</code>), 접근 방식 적절성 최하점, 또는 최소성과 부작용 방지 점수가 모두 2점 이하인 경우.</li>
+<li><strong>T1 (상위 등급):</strong> 결함이나 미해결 성능 퇴보가 없으며, 모든 평가 차원에서 4점 이상을 받은 우수한 구현.</li>
+<li><strong>T2 (중위 등급):</strong> T1 및 T3에 해당하지 않는 중간 단계 구현.</li>
+</ul>
+</li>
+<li><strong>할인율($f_i \in (0, 1]$) 매핑 규칙:</strong>
+$$f_i = \begin{cases} 1, &amp; i \in \text{T1}, k_i = 0 \ f_{\text{runner}} (0.9), &amp; i \in \text{T1}, k_i &gt; 0 \ f_{\text{max}} - (f_{\text{max}} - f_{\text{min}}) \frac{k_i}{K_2 - 1}, &amp; i \in \text{T2}, K_2 &gt; 1 \ f_{\text{max}} (0.85), &amp; i \in \text{T2}, K_2 = 1 \ f_{\text{low}} (0.2), &amp; i \in \text{T3} \end{cases}$$
+<em>(여기서 $k_i$는 등급 내 순위, $K_2$는 T2 등급 내 동점 그룹 수이며, 기본 설정값은 $f_{\text{runner}}=0.9, f_{\text{max}}=0.85, f_{\text{min}}=0.4, f_{\text{low}}=0.2$임)</em></li>
+<li><strong>확인된 꼼수(<code>Confirmed Hacks</code>) 및 답안 유출(<code>Leaked solutions</code>) 처리:</strong> 외부 답안 유출이나 단순 테스트 속임수(<code>Confirmed Hacks</code>, <code>Test-specific workarounds</code>)로 판명된 솔루션은 리워드가 $R_i \leftarrow 0$으로 강제 재설정되며, 품질 평가 순위에서 즉시 제외되어 실패 처리됨.</li>
+</ol>
+<hr />
+<h4 id="3-양의-어드밴티지-합-보존-재분배-및-실패-궤적-유지">3. 양의 어드밴티지 합 보존 재분배 및 실패 궤적 유지</h4>
+<h5 id="단순-감량-downweighting-의-문제점-및-동역학적-파탄-수식화">단순 감량(Downweighting)의 문제점 및 동역학적 파탄 수식화</h5>
+<p>품질 평가 결과 도출된 할인율 $f_i$를 단순히 성공 궤적의 기존 어드밴티지 $A_i$에 곱하기만 하는 경우($A_i \leftarrow f_i A_i$), 그룹 내 양의 어드밴티지 총합이 감소하는 결손(Deficit, $D$)이 발생한다.</p>
+<p>$$D = \sum_{i \in P} (1 - f_i) A_i \ge 0, \quad \sum_{i=1}^n A_i = -D$$</p>
+<p>이로 인해 그룹 내 어드밴티지의 총합이 0이 되지 않고 음수로 기울어지면서($\sum A_i = -D \le 0$), 음의 어드밴티지(실패에 대한 벌칙)가 상대적으로 비대해진다.</p>
+<p>이러한 신호 불균형은 정책 최적화 과정에서 치명적인 동역학적 문제를 유발한다. 모델은 성공 궤적을 강화하는 양의 신호를 잃고 방황하게 되며, 이에 따라 정책 그래디언트 손실(PG Loss)이 $0.0021$에서 <strong>$0.0304$로 급증</strong>한다. 동시에 모델의 확신도가 떨어지면서 정책 엔트로피가 $0.359$에서 <strong>$0.905$로 폭증</strong>하고, 비정상적으로 긴 궤적(평균 $114.1\text{k}$ 토큰)을 생성하며 학습이 파탄에 이른다.</p>
+<h5 id="양의-어드밴티지-합-보존-재분배-sum-preserving-advantage-redistribution">양의 어드밴티지 합 보존 재분배 (Sum-Preserving Advantage Redistribution)</h5>
+<p>가가르는 하위 품질 성공 궤적에서 삭감한 어드밴티지를 고품질 성공 궤적들로 재분배함으로써, 성공 궤적 집합의 양의 어드밴티지 총합을 엄격히 보존한다. 성공 궤적 집합을 $P$, 실패 궤적 집합을 $F$라 할 때, 양의 어드밴티지 총합 $S^+ = \sum_{j \in P} A_j$를 보존하기 위한 <strong>공통 재계측 인자 $\lambda$</strong> 및 **변환된 어드밴티지 $A^*_i$**의 정식화는 다음과 같다:</p>
+<p>$$\mathbf{\lambda = \frac{S^+}{\sum_{j \in P} f_j A_j}}$$</p>
+<p>$$\mathbf{A^*_i = \begin{cases} \lambda f_i A_i, &amp; i \in P \ A_i, &amp; i \in F \end{cases}}$$</p>
+<p>이진 리워드 GRPO 환경에서 모든 성공 궤적이 동일한 초기 어드밴티지 $(1 - \bar{R})$를 가질 때, 변환된 어드밴티지는 다음과 같이 등가 표현된다:</p>
+<p>$$\mathbf{A^*<em>i = (1 - \bar{R}) \frac{f_i}{f_P} \quad (i \in P), \quad \text{단, } f_P = \frac{1}{|P|} \sum</em>{j \in P} f_j}$$</p>
+<ul>
+<li><strong>제로섬(Zero-sum) 및 보존 성질:</strong> 성공 궤적 집합 내에서만 어드밴티지가 재분배되므로 $\sum_{i \in P} A^<em><em>i = S^+$가 성립하며, 전체 그룹의 평균은 0으로 유지된다 ($\sum</em>{i=1}^n (A^</em>_i - A_i) = 0$).</li>
+<li><strong>비율 유지 성질:</strong> 모든 성공 궤적에 동일한 $\lambda$가 곱해지므로, 품질 평가에 의해 설정된 궤적 간 어드밴티지 상대 비율이 그대로 유지된다 ($\frac{A^<em>_i}{A^</em>_j} = \frac{f_i}{f_j}, \forall i, j \in P$).</li>
+</ul>
+<h5 id="실패-궤적-유지의-이론적-당위성">실패 궤적 유지의 이론적 당위성</h5>
+<p>실패 궤적 집합($F$)에 속한 궤적들의 어드밴티지($A_i, i \in F$)는 <strong>원래의 값($-\bar{R}$)으로 엄격히 유지</strong>된다. 이는 성공 궤적의 품질을 정제하는 과정이 실패한 탐색에 대한 벌칙 신호의 크기를 훼손하거나 변형하지 않도록 신호 균형을 유지하기 위함이다.</p>
+<h5 id="직접-리워드-할인-direct-reward-discounting-과의-비교-분석">직접 리워드 할인(Direct Reward Discounting)과의 비교 분석</h5>
+<p>논문 부록(Appendix A.3)에 명시된 바와 같이, 어드밴티지 공간에서의 재분배가 아닌 <strong>직접 리워드 할인($\hat{R}_i = f_i$)</strong> 방식을 적용할 경우 심각한 이론적 결함이 발생한다. 성공 궤적의 리워드를 $\hat{R}_i = f_i$로, 실패 궤적의 리워드를 $\hat{R}_i = 0$으로 직접 설정하면 그룹 리워드 평균은 $\bar{R} f_P$로 변형된다. 이에 따른 어드밴티지는 다음과 같이 산출된다:</p>
+<p>$$\hat{A}_i = \begin{cases} f_i - \bar{R} f_P, &amp; i \in P \ -\bar{R} f_P, &amp; i \in F \end{cases}$$</p>
+<p>이 방식은 다음과 같은 세 가지 치명적인 문제를 유발한다:</p>
+<ol>
+<li><strong>실패 궤적 어드밴티지 변형:</strong> 실패 궤적의 어드밴티지가 원래의 $-\bar{R}$에서 $-\bar{R} f_P$로 축소되어 실패에 대한 페널티 신호가 약화됨.</li>
+<li><strong>성공 궤적의 음의 어드밴티지 전환:</strong> $f_i &lt; \bar{R} f_P$ 조건에 해당하는 하위 품질 성공 궤적은 테스트를 통과했음에도 불구하고 <strong>음의 어드밴티지($\hat{A}_i &lt; 0$)를 부여받아 억제되는 기현상</strong>이 발생함.</li>
+<li><strong>상대 비율 왜곡:</strong> 성공 궤적 간 어드밴티지 비율이 $f_i / f_j$를 유지하지 못하고 왜곡됨.</li>
+</ol>
+<p>따라서 가가르의 양의 어드밴티지 합 보존 재분배만이 이론적으로 완전한 zero-sum 및 신호 보존을 보장한다.</p>
+<h5 id="등가-리워드-공간-수식화-equivalent-reward-space-formulation">등가 리워드 공간 수식화 (Equivalent Reward-Space Formulation)</h5>
+<p>평균 차감 어드밴티지 계산 환경에서 가가르의 어드밴티지 재분배는 다음과 같은 변환된 리워드 $R'_i$를 사용하는 것과 이론적으로 완전히 등가이다:</p>
+<p>$$\mathbf{R'_i = A^*_i + \bar{R} = \begin{cases} \bar{R} + (1 - \bar{R}) \frac{f_i}{f_P}, &amp; i \in P \ 0, &amp; i \in F \end{cases}}$$</p>
+<p>변환된 리워드의 그룹 평균은 $\bar{R}' = \bar{R}$로 기존과 동일하며, 편차를 구하면 $R'_i - \bar{R}' = A^*_i$가 되어 동일한 정책 그래디언트 손실 및 수렴 특성을 도출한다.</p>
+<hr />
+<h4 id="4-실험-조건-및-결과-분석-통제-실험-대-혼합-과제-실험">4. 실험 조건 및 결과 분석: 통제 실험 대 혼합 과제 실험</h4>
+<h5 id="실험-모델-및-환경-설정">실험 모델 및 환경 설정</h5>
+<ul>
+<li><strong>실험 모델 스케일:</strong>
+<ul>
+<li><code>MiMo-V2.6-Flash</code>: 3,100억 전체 파라미터 / 150억 활성 파라미터 (MoE)</li>
+<li><code>MiMo-V2.6-Pro</code>: 1조 200억 전체 파라미터 / 420억 활성 파라미터 (MoE)</li>
+</ul>
+</li>
+<li><strong>온라인 평가자(Grader):</strong> RL 적용 전 SFT 단계를 거친 <code>MiMo-V2.6-Pro</code> 체크포인트 활용.</li>
+<li><strong>평가 벤치마크:</strong> DeepSWE v1.1 (장기 호흡 소프트웨어 공학 과제) 및 SWE-bench Pro (저장소 수준 이슈 해결 과제). 평가 지표는 3회 반복 측정 평균인 <code>avg@3</code> 패스율(%) 사용.</li>
+</ul>
+<h5 id="코드-전용-통제-실험-controlled-code-only-flash-experiments">코드 전용 통제 실험 (Controlled Code-Only Flash Experiments)</h5>
+<p><code>MiMo-V2.6-Flash</code> 모델을 사용하여 기존 이진 리워드 베이스라인과 가가르(Gagar) 적용 모델을 통제된 조건에서 비교했다.</p>
+<ul>
+<li><strong>과제 수행 능력:</strong>
+<ul>
+<li>베이스라인은 스텝 20에서 58.5%를 기록한 후 성능이 급격히 저하되어 스텝 28에서 패스율 50.2%로 파탄 현상을 보이며 학습이 중단됨.</li>
+<li>가가르 적용 모델은 스텝 28에서 **62.2%**의 패스율을 달성(베이스라인 대비 +12.1%p)했으며, 지속적인 학습을 통해 스텝 44에서 최고 **63.4%**에 도달함.</li>
+<li>SWE-bench Pro에서도 베이스라인이 ~59%에 정체된 반면, 가가르는 지속 상승하여 스텝 52에서 **62.5%**를 기록함.</li>
+</ul>
+</li>
+<li><strong>상호작용 및 토큰 효율성:</strong>
+<ul>
+<li>스텝 28 기준, DeepSWE의 평균 턴 수가 132.3회에서 <strong>111.6회로 15.6% 감소</strong>함.</li>
+<li>평균 토큰 길이는 191.9k에서 <strong>172.9k로 9.9% 감소</strong>함.</li>
+<li>SWE-bench Pro에서도 스텝 28 기준 평균 턴 수가 58.4회에서 54.6회로(6.5% 감소), 평균 토큰 길이는 79.9k에서 68.6k로(14.1% 감소) 줄어듦.</li>
+</ul>
+</li>
+<li><strong>블라인드 품질 평가 (Claude Opus 5 심사):</strong>
+<ul>
+<li>30개 임의 샘플링 과제 대상 블라인드 블록 평가 결과, 가가르 생성 코드의 **승률은 69.8%**를 기록함.</li>
+<li>루브릭 가중 품질 점수는 베이스라인 3.70점 대비 <strong>4.03점</strong>으로 상승함.</li>
+<li>최상위 품질 등급인 <strong>T1 비율이 25.4%에서 34.3%로 크게 증가</strong>했고, 그룹 내 1위 점유율은 65.0%에 달함.</li>
+<li>특히 5가지 차원 중 <strong>구현의 정밀성(<code>Implementation Precision</code>), 변경의 최소성(<code>Minimality of Changes</code>), 의도치 않은 부작용 방지(<code>Unintended Side Effects</code>)</strong> 차원에서 가장 현저한 품질 향상이 관찰됨.</li>
+</ul>
+</li>
+</ul>
+<h5 id="대규모-혼합-과제-실험-large-scale-mixed-task-rl">대규모 혼합 과제 실험 (Large-Scale Mixed-Task RL)</h5>
+<p>산업용 스케일 환경(업데이트당 1,568개 프롬프트, 프롬프트당 16개 롤아웃)에서 코딩 외 이질적 워크로드가 섞인 혼합 학습을 수행했다.</p>
+<ul>
+<li><strong>산업용 스케일 최종 성과:</strong>
+<ul>
+<li><code>MiMo-V2.6-Flash</code>: DeepSWE v1.1 67.9%, SWE-bench Pro 60.9% 달성.</li>
+<li><code>MiMo-V2.6-Pro</code>: DeepSWE v1.1 <strong>71.9%</strong>, SWE-bench Pro <strong>62.7%</strong> 달성.</li>
+</ul>
+</li>
+<li><strong>최첨단 외부 프론티어 모델과의 비교:</strong>
+<ul>
+<li><code>MiMo-V2.6-Pro</code>(1.02T 전체/42B 활성)는 절반 이하의 파라미터 크기로 2.8T 파라미터 스케일의 <code>Kimi K3</code>(DeepSWE 69.0%, SWE-Pro 63.3%)를 DeepSWE v1.1에서 능가함.</li>
+<li>SWE-bench Pro에서는 <code>GPT-5.6 Sol</code>(60.5%)을 상회하는 62.7%를 기록하였으며, DeepSWE v1.1에서도 <code>GPT-5.6 Sol</code>(73.0%) 및 <code>Claude Opus 5</code>(74.0%)에 육박하는 성과를 도출함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="종합-실험-결과-비교표">종합 실험 결과 비교표</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">실험 구분 / 평가 모델</th>
+<th style="text-align:left">파라미터 스케일&lt;br&gt;(전체 / 활성)</th>
+<th style="text-align:left">평가 벤치마크</th>
+<th style="text-align:left">베이스라인 / 비교 프론티어 모델</th>
+<th style="text-align:left">가가르(Gagar) 적용 성과</th>
+<th style="text-align:left">비고 / 효율성 및 품질 개선</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>통제 실험</strong>&lt;br&gt;(Flash / 스텝 28)</td>
+<td style="text-align:left">310B / 15B</td>
+<td style="text-align:left">DeepSWE v1.1</td>
+<td style="text-align:left">50.2%</td>
+<td style="text-align:left"><strong>62.2%</strong> (최고 63.4%)</td>
+<td style="text-align:left">턴 수 15.6%↓, 토큰 9.9%↓</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>통제 실험</strong>&lt;br&gt;(Flash / 스텝 52)</td>
+<td style="text-align:left">310B / 15B</td>
+<td style="text-align:left">SWE-bench Pro</td>
+<td style="text-align:left">59.0% (스텝 28 정체)</td>
+<td style="text-align:left"><strong>62.5%</strong></td>
+<td style="text-align:left">턴 수 6.5%↓, 토큰 14.1%↓</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>품질 심사</strong>&lt;br&gt;(Opus 5 블라인드)</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">DeepSWE 품질 점수</td>
+<td style="text-align:left">3.70점</td>
+<td style="text-align:left"><strong>4.03점</strong></td>
+<td style="text-align:left">승률 69.8%, T1 비율 34.3% 상승&lt;br&gt;(정밀성/최소성/부작용 집중 개선)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>혼합 과제 RL</strong>&lt;br&gt;(Flash)</td>
+<td style="text-align:left">310B / 15B</td>
+<td style="text-align:left">DeepSWE / SWE-Pro</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left"><strong>67.9% / 60.9%</strong></td>
+<td style="text-align:left">대규모 이질적 워크로드 적용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>혼합 과제 RL</strong>&lt;br&gt;(Pro)</td>
+<td style="text-align:left">1.02T / 42B</td>
+<td style="text-align:left">DeepSWE / SWE-Pro</td>
+<td style="text-align:left">Kimi K3 (2.8T): 69.0% / 63.3%&lt;br&gt;GPT-5.6 Sol: 73.0% / 60.5%&lt;br&gt;Claude Opus 5: 74.0% / 79.9%</td>
+<td style="text-align:left"><strong>71.9% / 62.7%</strong></td>
+<td style="text-align:left">Kimi K3(2.8T) 대비 우수,&lt;br&gt;GPT-5.6 Sol 성능 상회</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-소거-연구-학습-안정성-한계-및-안전장치">5. 소거 연구, 학습 안정성, 한계 및 안전장치</h4>
+<h5 id="합-보존-재분배-소거-연구-ablation-study">합 보존 재분배 소거 연구 (Ablation Study)</h5>
+<p>단순 감량만 수행한 경우(Downweighting only)와 합 보존 재분배(Sum-preserving)를 적용한 경우의 학습 동역학 차이는 다음과 같다:</p>
+<blockquote>
+<p><strong>[정책 엔트로피 폭증 비교]</strong></p>
+<ul>
+<li><strong>단순 감량 (Downweighting only):</strong><br />
+<code>Step 1: 0.359</code> --------------------------------------&gt; <code>Step 30: 0.905</code> <em>(불안정 폭발 및 발산)</em></li>
+<li><strong>합 보존 재분배 (Sum-preserving):</strong><br />
+<code>Step 1: 0.358</code> -----------------&gt; <code>Step 30: 0.513</code> <em>(점진적/안정적 제어)</em></li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>정책 그래디언트 손실 (PG Loss):</strong> 단순 감량 시 양의 어드밴티지 결손으로 인해 음의 어드밴티지가 우세해져 스텝 1~30 평균 PG Loss가 <strong>0.0304</strong>로 높게 치솟은 반면, 합 보존 적용 시 <strong>0.0021</strong>로 매우 낮고 안정적인 수치를 보임.</li>
+<li><strong>정책 엔트로피 및 롤아웃 길이:</strong> 단순 감량 적용 시 정책 엔트로피가 스텝 1의 0.359에서 스텝 30의 <strong>0.905로 폭증</strong>했고, 평균 학습 롤아웃 길이는 47.1k에서 <strong>114.1k 토큰으로 급증</strong>함. 반면 합 보존 재분배는 엔트로피(0.358 -&gt; 0.513)와 토큰 길이(46.5k -&gt; 69.9k)가 매우 안정적으로 제어됨.</li>
+<li><strong>다운스트림 평가 성능 하락:</strong> 단순 감량 방식은 DeepSWE 패스율이 스텝 18의 56.5%에서 스텝 20에 <strong>48.8%로 폭락</strong>하고 턴 수가 158.3회까지 비정상적으로 치솟는 등 심각한 학습 불안정성을 유발함.</li>
+</ul>
+<h5 id="소거-연구의-3가지-핵심-발견">소거 연구의 3가지 핵심 발견</h5>
+<ul>
+<li><strong>신호 불균형 방지:</strong> 단순 감량은 양의 어드밴티지 총합을 줄여 상대적으로 음의 어드밴티지 페널티를 과도하게 강화하므로, 학습 생태계의 신호 균형을 깨뜨린다.</li>
+<li><strong>엔트로피 및 길이 제어:</strong> 양의 어드밴티지 총합을 보존함으로써 에이전트의 불필요한 장문 궤적 생성 및 정책 엔트로피의 비정상적 폭증을 억제한다.</li>
+<li><strong>품질 선호도 보존:</strong> 성공 궤적 간 할인 비율($f_i / f_j$)을 보존하는 재분배 방식만이 모델의 성능 저하 없이 고품질 코드 작성 습관을 유연하게 학습시킨다.</li>
+</ul>
+<h5 id="구현-안전장치-implementation-safeguards">구현 안전장치 (Implementation Safeguards)</h5>
+<ol>
+<li><strong>재계측 인자 상한선 설정 및 센터링 수식화:</strong> 재계측 인자가 과도하게 커지는 것을 방지하기 위해 $\lambda_{\text{bnd}} = \min(\lambda, \lambda_{\max})$를 적용한다. Flash 설정에서는 $\lambda_{\max} = 1.5$를 사용한다. 상한선이 활성화될 경우 그룹 평균을 0으로 맞추기 위해 다음과 같이 센터링(Centering) 조정을 수행한다:
+$$B_i = \begin{cases} \lambda_{\text{bnd}} f_i A_i, &amp; i \in P \ A_i, &amp; i \in F \end{cases}$$
+$$A_i^{\text{train}} = B_i - \frac{1}{n}\sum_{j=1}^n B_j$$</li>
+<li><strong>폴백(Fallback) 메커니즘:</strong> 채점 서버 오류, 응답 지연, 혹은 랭킹 결과 내 성공 궤적 누락 등 유효하지 않은 채점 결과가 발생하면, 즉시 기존 이진 결과 기반 어드밴티지로 복구(Fallback)하여 학습이 중단되지 않도록 보호한다.</li>
+<li><strong>길이 기반 리워드 후처리 지원:</strong> 길이 페널티 등 비이진 스칼라 리워드 $r_i$가 인프라 단에서 별도로 적용될 경우, 성공 궤적의 양의 편차 $a^+<em>i = \max(r_i - \bar{r}, 0)$를 기준으로 $\lambda</em>{\text{bnd}}$를 재계산하여 분모가 0이 되지 않는 안전장치를 유지하며 재분배를 연동한다:
+$$\lambda_{\text{bnd}} = \min \left( \frac{\sum_{j \in P} a^+<em>j}{\sum</em>{j \in P} f_j a^+<em>j}, \lambda</em>{\max} \right)$$</li>
+</ol>
+<h5 id="종합-결론-및-시사점">종합 결론 및 시사점</h5>
+<p>가가르(Gagar) 기술은 테스트 통과라는 결과론적 평가에만 의존하던 기존 코드 에이전트 강화학습의 한계를 극복했다. 에이전트형 채점자를 통한 그룹 내 상대 비교와 5차원 품질 평가, 그리고 양의 어드밴티지 합을 엄격히 보존하는 재분배 수식을 결합함으로써, 가가르는 학습의 안정성과 신호 균형을 유지하는 동시에 정밀하고 최소화된 합치 가능 코드를 생성하도록 정책을 효과적으로 유도할 수 있음을 입증했다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

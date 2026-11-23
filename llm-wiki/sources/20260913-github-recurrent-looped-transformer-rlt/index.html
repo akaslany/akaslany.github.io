@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recurrent Looped Transformer</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Recurrent Looped Transformer</h1>
+<p class="page-meta">PDF · 2026-09-13</p>
+<h2 id="요약">요약</h2>
+<p>본 기술 보고서는 Yifan Zhang의 2026년 9월 12일자 기술 보고서 &quot;Recurrent Looped Transformer&quot;를 바탕으로 작성되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://github.com/yifanzhang-pro/recurrent-looped-tranformer/blob/master/Recurrent_Looped_Transformer.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=ErQ2taAFIRg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="recurrent-looped-transformer-rlt-기술-보고서">Recurrent Looped Transformer (RLT) 기술 보고서</h3>
+<p>본 기술 보고서는 Yifan Zhang의 2026년 9월 12일자 기술 보고서 &quot;Recurrent Looped Transformer&quot;를 바탕으로 작성되었습니다. 본 보고서는 외부 자료를 배제하고 원문의 기술적 정의, 수식 및 아키텍처 분석 내용을 충실히 반영하며, 수석 AI 연구원의 관점에서 시스템의 메커니즘을 심층 분석합니다.</p>
+<h4 id="1-rlt의-세-가지-핵심-설계-원칙">1. RLT의 세 가지 핵심 설계 원칙</h4>
+<p>RLT는 기존 트랜스포머의 구조적 한계를 하드웨어 및 알고리즘과의 공동 설계(Co-design)를 통해 해결하고자 하며, 다음 세 가지 원칙을 기둥으로 삼습니다.</p>
+<ul>
+<li><strong>무한한 시간적 깊이(Unbounded Temporal Depth)를 통한 잠재 추론:</strong> '무한한 시간적 깊이'는 단일 토큰 내부의 무한한 연산을 의미하는 것이 아니라, 시퀀스가 길어질수록 시간적 계산 경로(Temporal computation path)가 아키텍처적 제한 없이 확장됨을 의미합니다. $L_D$개의 디코더 층을 가진 모델이 $t$번째 토큰을 처리할 때, 상태 경로(State path)가 통과하는 누적 블록 깊이는 $t \times L_D$에 달합니다. 이는 표준 트랜스포머의 깊이가 레이어 수($L$)에 의해 물리적으로 캡핑(Capping)되는 것과 대조되는 핵심적인 차별점입니다.</li>
+<li><strong>모델-하드웨어 공동 설계(Model-Hardware Co-design):</strong> 병렬 처리가 가능한 인코더의 특징 추출과 순차적인 디코더 상태 업데이트를 분리하여 효율적인 실행을 도모합니다. 이를 통해 벌크 인코더 커널(Bulk encoder kernels) 사용과 시퀀스 간 배치 처리가 가능해지며, 메모리 내 가중치 상주 및 KV 캐시 재사용 효율을 극대화합니다.</li>
+<li><strong>모델-RL 알고리즘 공동 설계(Model-RL Algorithm Co-design):</strong> 사전 학습(Pretraining), 미세 조정(SFT), 롤아웃 샘플링, RL 재현(Replay) 전 과정에서 동일한 상태 전이(State transition) 메커니즘을 공유합니다. 이는 프롬프트와 응답 경계에서의 구조적 불일치를 제거하여 일관된 정책 최적화를 가능케 합니다.</li>
+</ul>
+<h4 id="2-아키텍처-상세-구조-및-수식-분석">2. 아키텍처 상세 구조 및 수식 분석</h4>
+<p>RLT는 입력을 처리하는 <strong>Causal Encoder</strong>와 상태를 반복 업데이트하는 <strong>Recurrent Decoder</strong>로 구성됩니다.</p>
+<h5 id="2-1-causal-encoder-및-global-memory">2.1 Causal Encoder 및 Global Memory</h5>
+<p>인코더 $E_\theta$는 입력 $x_{1:T}$를 병렬로 처리하여 각 토큰의 표상 $e_t$를 생성합니다. 이를 통해 다음과 같이 <strong>글로벌 KV 메모리(Global KV Memory)</strong> $M_{\le t}$를 구축합니다.</p>
+<ul>
+<li>$k^g_t = P_K^g(e_t, t), \quad v^g_t = W_V^g \text{RMSNorm}_E(e_t)$</li>
+<li>$M_{\le t} = { (k^g_j, v^g_j) }_{j=1}^t$
+이 메모리는 인코더 표상에 기반하며, 디코더 상태와는 독립적으로 생성되어 디코더의 크로스 어텐션(Cross-attention) 시 공급됩니다.</li>
+</ul>
+<h5 id="2-2-gated-merge-메커니즘">2.2 Gated Merge 메커니즘</h5>
+<p>인코더의 출력 $e_t$와 이전 시점의 디코더 출력 $s_{t-1}$은 게이팅 메커니즘을 통해 결합됩니다.</p>
+<ul>
+<li>$r_{t-1} = \text{RMSNorm}<em>s(s</em>{t-1})$</li>
+<li>$g_t = \sigma(W_g[e_t; r_{t-1}] + b_g)$</li>
+<li>$u_t = e_t + \alpha g_t \odot W_s r_{t-1}$
+여기서 $\sigma$는 시그모이드(Sigmoid) 활성화 함수이며, $\alpha$는 피드백 스케일(Feedback scale)을 조절하는 파라미터입니다. $u_t$는 다음 디코더 블록의 입력이 됩니다.</li>
+</ul>
+<h5 id="2-3-recurrent-decoder와-상태-정의">2.3 Recurrent Decoder와 상태 정의</h5>
+<p>전체 디코더 상태는 $H_t = (s_t, C^D_t)$로 정의됩니다. 여기서 $s_t$는 최종 hidden-state 피드백이며, $C^D_t$는 층별 <strong>슬라이딩 윈도우 어텐션(SWA)</strong> 캐시입니다. 윈도우 크기 $W$ 내의 Key/Value 값만을 유지하여 상태의 크기를 제어합니다.</p>
+<h5 id="2-4-디코더-블록-연산-layer-ell">2.4 디코더 블록 연산 (Layer $\ell$)</h5>
+<p>각 디코더 층은 로컬 SWA와 글로벌 메모리 어텐션을 순차적으로 수행합니다.</p>
+<ol>
+<li><strong>Causal SWA:</strong> $q^{D,\ell}_t, k^{D,\ell}_t, v^{D,\ell}<em>t$를 생성한 후, 윈도우 $W$ 내의 디코더 캐시 $C^D</em>{t-1}$을 참조하여 로컬 문맥을 처리합니다.</li>
+<li><strong>Encoder-Memory Cross-Attention:</strong> 인코더가 제공하는 글로벌 메모리 $M_{g(\ell) \le t}$에 대해 어텐션을 수행하여 전역 문맥을 결합합니다.</li>
+<li><strong>FFN 및 출력:</strong> 최종적으로 FFN과 Residual Connection을 거쳐 $s_t = z^{L_D}_t$를 산출합니다.</li>
+</ol>
+<h4 id="3-운영-프로세스-및-불변성-원리">3. 운영 프로세스 및 불변성 원리</h4>
+<h5 id="3-1-prefill-및-generation의-연속성">3.1 Prefill 및 Generation의 연속성</h5>
+<p>RLT는 프롬프트와 응답을 구분하지 않는 <strong>단일 반복 계산(One recurrent computation)</strong> 구조를 가집니다.</p>
+<ul>
+<li><strong>서빙 경계(Serving Boundary):</strong> 프롬프트 처리가 완료된 시점 $T$에서도 상태 $H_T$는 리셋되지 않습니다. 응답 생성 단계는 $H_T$를 초기 상태로 하여 $H_{T+1}$을 계산하는 연속적인 과정입니다.</li>
+<li><strong>상태 유지:</strong> 인코더 메모리는 한 번 계산되면 불변(Immutable) 상태로 유지되며, 디코더 SWA 캐시는 매 토큰마다 업데이트되어 최근 $W-1$개의 상태를 보존합니다.</li>
+</ul>
+<h5 id="3-2-정리-3-1-서빙-분할에-대한-불변성-invariance-to-serving-split">3.2 정리 3.1: 서빙 분할에 대한 불변성 (Invariance to serving split)</h5>
+<p>수학적으로 RLT는 특정 접두사(Prefix)를 배치 프리필(Batched prefill)로 처리하든 증분 디코딩(Incremental decoding)으로 처리하든 동일한 상태와 다음 토큰 확률 분포를 생성합니다. 이는 정책 정의에서 프롬프트-응답 경계에 따른 수치적 불일치를 원천적으로 제거함을 증명합니다.</p>
+<h4 id="4-48-48-tied-configuration-분석">4. 48+48 Tied Configuration 분석</h4>
+<p>효율성 극대화를 위해 인코더($L_E=48$)와 디코더($L_D=48$) 간의 가중치 공유(Weight Sharing)를 채택합니다.</p>
+<ul>
+<li><strong>공유 대상:</strong> Query, Key, Value, Output 투영 행렬 및 FFN 가중치.</li>
+<li><strong>논리적 패스:</strong> 이는 단순한 활성화 복사가 아닌 <strong>매개변수의 재사용</strong>입니다. 토큰당 연산은 인코더와 디코더를 합쳐 총 96개의 논리적 블록 평가(Logical block evaluations)를 수행하지만, 메모리상 파라미터 점유는 48층 수준으로 최적화됩니다.</li>
+<li><strong>연산량(FLOPs) vs 파라미터:</strong> 파라미터는 공유되지만, 각 토큰당 96개 블록 분량의 FLOPs가 발생하며, 이를 통해 고정된 파라미터 대비 더 깊은 논리적 계산 경로를 확보합니다.</li>
+</ul>
+<h4 id="5-하드웨어-및-rl-공동-설계의-실현">5. 하드웨어 및 RL 공동 설계의 실현</h4>
+<h5 id="5-1-하드웨어-병렬성-및-최적화">5.1 하드웨어 병렬성 및 최적화</h5>
+<ul>
+<li><strong>벌크 인코더 커널:</strong> 이미 알려진 프롬프트 시퀀스에 대해 인코더 특징 및 메모리 투영을 병렬로 처리하여 대역폭 효율을 높입니다.</li>
+<li><strong>독립 시퀀스 간 배치 처리:</strong> 서로 다른 시퀀스들의 디코더 전이(Transition)를 하나의 배치로 묶어 행렬 연산 크기를 확대합니다.</li>
+<li><strong>메모리 상주성:</strong> 인코더 메모리가 불변이므로 가중치와 KV 데이터의 빈번한 이동을 최소화하는 최적화가 가능합니다.</li>
+</ul>
+<h5 id="5-2-rl-알고리즘-및-정밀-재현-exact-replay">5.2 RL 알고리즘 및 정밀 재현 (Exact Replay)</h5>
+<p>RLT의 강화학습은 **재현 정밀도(Replay Fidelity)**를 엄격히 준수합니다.</p>
+<ul>
+<li><strong>정밀 재현(Exact Replay):</strong> RL 학습 시 샘플러에서 생성된 오래된 상태(Stale states)를 재사용하지 않습니다. 현재 업데이트된 파라미터 하에서 프롬프트부터 응답까지의 모든 상태($s_t, C^D_t$)를 처음부터 재구축(Reconstruct)합니다.</li>
+<li><strong>Full BPTT (Backpropagation Through Time):</strong> 손실(Loss)은 응답 토큰에만 적용되더라도, 그래디언트는 프롬프트 구간의 인코더 메모리와 디코더 상태 전이 과정을 모두 통과합니다. 이는 프롬프트 문맥이 정책 결정에 미치는 영향을 정확히 역전파하기 위함입니다.</li>
+<li><strong>정밀 중요도 샘플링(Exact Importance Sampling):</strong> 행동 로그 확률(Log-probabilities) 기록 시 온도(Temperature), 절단(Truncation, top-k/p) 등의 모든 메타데이터를 포함하여 분모의 정확성을 보장해야 합니다.</li>
+</ul>
+<h4 id="6-결론-및-연구적-제언">6. 결론 및 연구적 제언</h4>
+<p>RLT는 하드웨어 인지적 반복 실행과 신뢰할 수 있는 RL 스케일링을 위한 명확한 아키텍처적 명세(Specification)를 제시합니다.</p>
+<ul>
+<li><strong>목표의 명확화:</strong> 본 보고서에서 언급된 추론 능력 향상, 실행 속도 개선, RL 스케일링의 안정성은 실제 측정치가 아닌 아키텍처 설계를 통해 달성하고자 하는 <strong>연구 목표</strong>입니다.</li>
+<li><strong>핵심 의의:</strong> 프롬프트와 응답 사이의 구조적 단절을 제거하고 '무한한 시간적 깊이'를 제공함으로써, 대규모 언어 모델이 시퀀스 길이에 비례하여 논리적 추론을 심화할 수 있는 물리적 기반을 마련했다는 데 의의가 있습니다.</li>
+</ul>
+<p>본 설계는 고성능 하드웨어 활용과 정교한 RL 최적화가 결합된 차세대 AI 시스템의 프로토타입으로서 기능할 것입니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

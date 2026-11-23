@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAI Jalapeño: Better Than Nvidia Blackwell</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>OpenAI Jalapeño: Better Than Nvidia Blackwell</h1>
+<p class="page-meta">웹 · 2026-08-31</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 반도체 아키텍처 및 데이터센터 경제성 분석 전문 기술 감사관의 관점에서 작성되었으며, 분석의 기초 자료는 SemiAnalysis가 2026년 8월 25일에 발행한 유료 게시물 'OpenAI Jalapeño: Better Than Nvidia Blackwell'의 공개 렌더링 구간으로 엄격히 제한됩니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://newsletter.semianalysis.com/p/openai-jalapeno-better-than-nvidia">출처</a> · <a href="https://www.youtube.com/watch?v=ytXbs42G1pk">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai-jalapeño는-정말-nvidia-blackwell보다-나을까">OpenAI Jalapeño는 정말 Nvidia Blackwell보다 나을까</h3>
+<h4 id="1-서론-조사-범위-및-접근-권한의-한계-고지">1. 서론: 조사 범위 및 접근 권한의 한계 고지</h4>
+<p>본 보고서는 반도체 아키텍처 및 데이터센터 경제성 분석 전문 기술 감사관의 관점에서 작성되었으며, 분석의 기초 자료는 SemiAnalysis가 2026년 8월 25일에 발행한 유료 게시물 'OpenAI Jalapeño: Better Than Nvidia Blackwell'의 공개 렌더링 구간으로 엄격히 제한됩니다. 본 감사관은 해당 게시물의 비로그인 상태에서 노출되는 텍스트와 데이터만을 수집하였으며, 'Direct Implications for NVIDIA, AMD and Cerebras' 섹션 직후에 나타나는 유료 결제 장벽(Paywall) 이후의 어떠한 내용도 본 분석 및 추론 과정에 포함하지 않았음을 선언합니다.</p>
+<p>본 보고서는 원문의 시각적 요소인 표, 차트, 로고, 레이아웃을 일절 복제하지 않았습니다. 대신 공개된 사실 관계와 기술적 주장을 바탕으로 독자적인 비대체적 기술 비평을 수행하였으며, 모든 도식은 마크다운 형식을 통한 텍스트 기반 분석으로 재구성되었습니다. 본 감사의 목적은 OpenAI의 하드웨어가 제시하는 지표가 실제 데이터센터 경제성과 운영 안정성 측면에서 Blackwell 및 Rubin 시스템과 비교 가능한 수준인지를 검증하는 데 있습니다.</p>
+<hr />
+<h4 id="2-제품-생명주기-타임라인-lifecycle-timeline">2. 제품 생명주기 타임라인 (Lifecycle Timeline)</h4>
+<p>반도체 제품의 우월성을 논하기 전에 해당 제품이 현재 '개념' 단계인지, '실험실' 단계인지, 아니면 '현장' 단계인지를 명확히 구분해야 합니다. Jalapeño와 경쟁 제품인 Blackwell/Rubin의 현재 위치를 대조 분석합니다.</p>
+<p><strong>[Jalapeño 생명주기 진행 현황]</strong></p>
+<ul>
+<li><strong>Disclosure (아키텍처 공개)</strong>: 완료</li>
+<li><strong>Tape-out (시제품 생산)</strong>: 완료</li>
+<li><strong>Engineering Sample (엔지니어링 샘플)</strong>: <strong>[현재 단계 - 2026-08-31 기준]</strong></li>
+<li><strong>In-lab Run (연구실 내 가동)</strong>: <strong>[현재 단계 - 2026-08-31 기준]</strong></li>
+<li><strong>Qualification (품질 인증)</strong>: 미실행</li>
+<li><strong>Production (양산)</strong>: 미실행</li>
+<li><strong>Customer Shipment (고객 출하)</strong>: 미실행 (2026년 말 초기 목표)</li>
+<li><strong>Volume Deployment (대규모 배포)</strong>: 미실행</li>
+<li><strong>Realized Economics (경제성 실현)</strong>: 미달성</li>
+</ul>
+<p><strong>감사 의견:</strong> 2026년 8월 31일 기준, OpenAI와 Broadcom의 공식 발표에 따르면 Jalapeño는 엔지니어링 샘플이 연구실 내에서 목표 주파수와 전력 하에 워크로드를 실행하는 단계에 있습니다. 반면, Nvidia Blackwell은 이미 'Production' 및 'Customer Shipment' 단계에 진입하여 실제 수익을 창출하고 있습니다. Jalapeño의 현재 수치는 '실전' 데이터가 아닌 '연구실 환경'의 최적화 값이며, 대규모 신뢰성이 증명되지 않은 '초기 지표'에 불과합니다. 따라서 현재 시점에서의 1:1 비교는 시제품과 양산 제품 간의 비대칭적 비교임을 강조합니다.</p>
+<hr />
+<h4 id="3-문장별-증거-사슬-evidence-chain-분석">3. 문장별 증거 사슬 (Evidence Chain) 분석</h4>
+<p>본 보고서에서 인용되는 모든 데이터의 신뢰 등급을 6단계로 분류하여 관리합니다. 이는 수치의 출처와 검증 가능성을 독자에게 투명하게 공개하기 위함입니다.</p>
+<ul>
+<li><strong>등급 1 (OpenAI 제공)</strong>: 하드웨어 로그 및 원천 수치. 독립 재현 불가.</li>
+<li><strong>등급 2 (SemiAnalysis 관찰)</strong>: 연구진이 OpenAI 연구실에서 실행을 직접 확인. 보도자료보다는 강하나 독립 재현은 아님.</li>
+<li><strong>등급 3 (SemiAnalysis 모델)</strong>: 전력 소모량(MW) 및 TCO 추정치. 가계에 의존함.</li>
+<li><strong>등급 4 (NVIDIA/CoreWeave 발표)</strong>: 경쟁사의 공식 발표 수치. 파트너 발표 데이터.</li>
+<li><strong>등급 5 (공식 사양)</strong>: 제조사의 초기 배포 목표 및 기술 사양서.</li>
+<li><strong>등급 6 (분석가 추론)</strong>: 시장 해석 및 조건부 경제성 전망.</li>
+</ul>
+<p><strong>필수 고지 사항:</strong></p>
+<blockquote>
+<p>&quot;모든 Jalapeño 수치는 OpenAI 제공; SemiAnalysis는 연구실에서 InferenceX 실행을 관찰했지만 전체 suite를 직접 수행하지 않았고 AgentX 결과를 보지 못했다. 이 관찰은 보도자료 재인용보다 강하지만 독립 재현은 아니다.&quot;</p>
+</blockquote>
+<hr />
+<h4 id="4-워크로드-매트릭스-workload-matrix">4. 워크로드 매트릭스 (Workload Matrix)</h4>
+<p>Jalapeño의 성능 측정에 사용된 환경은 매우 특수한 조건으로 설정되어 있습니다. 일반적인 데이터센터 워크로드와의 괴리를 파악하기 위해 아래 매트릭스를 제시합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">상세 내용</th>
+<th style="text-align:left">감사관 비평</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>모델명/버전</strong></td>
+<td style="text-align:left">DeepSeek R1, Kimi K2.5, GPT-OSS</td>
+<td style="text-align:left">특정 오픈 소스 모델에 최적화된 샘플링</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>파라미터 수</strong></td>
+<td style="text-align:left">미공개</td>
+<td style="text-align:left">모델 규모를 알 수 없어 연산 효율성 산출 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>입출력 길이</strong></td>
+<td style="text-align:left">8k Input / 1k Output</td>
+<td style="text-align:left">단일 턴(Single-turn) 기준; 장문/멀티턴 검증 결여</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>동시성 (Concurrency)</strong></td>
+<td style="text-align:left">1 (Single User)</td>
+<td style="text-align:left">STP(Single Token Processing) 환경의 극단적 최적화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>정밀도 (Precision)</strong></td>
+<td style="text-align:left">미공개 (FP8 추정)</td>
+<td style="text-align:left">정밀도 저하에 따른 모델 품질 유지 여부 미확인</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>병렬화 전략</strong></td>
+<td style="text-align:left">미공개 (TP/PP/EP)</td>
+<td style="text-align:left">연구실 단위의 수동 튜닝 가능성 농후</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MTP/STP 여부</strong></td>
+<td style="text-align:left">STP (Single Token Processing)</td>
+<td style="text-align:left">하드웨어 본연의 원시 속도만을 강조함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Speculative Decoding</strong></td>
+<td style="text-align:left">사용 안 함 (No Speculation)</td>
+<td style="text-align:left">알고리즘 이득을 배제한 하드웨어 순수 성능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>PD Disaggregation</strong></td>
+<td style="text-align:left">적용 안 함 (No Disaggregation)</td>
+<td style="text-align:left">Prefill/Decode 통합 처리로 인한 스케줄링 복잡도 누락</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소프트웨어 버전</strong></td>
+<td style="text-align:left">Bring-up용 초기 드라이버/커널</td>
+<td style="text-align:left">프로덕션 수준의 안정성 및 호환성 미검증</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-지표-경계-표-metric-boundary-table">5. 지표 경계 표 (Metric Boundary Table)</h4>
+<p>Jalapeño의 성능 지표에서 발견된 불일치와 경계 조건을 분석합니다. 특히 수치의 일관성 결여는 기술 감사에서 중요한 '레드 플래그(Red Flag)'로 간주됩니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">지표 항목</th>
+<th style="text-align:left">측정/주장 수치</th>
+<th style="text-align:left">신뢰 등급</th>
+<th style="text-align:left">감사관의 비판적 지적</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Throughput (Output)</strong></td>
+<td style="text-align:left">700+ to 1,400 tokens/s/user</td>
+<td style="text-align:left">등급 1, 2</td>
+<td style="text-align:left"><strong>레드 플래그</strong>: Kimi K2.5 모델에서 700과 1,400이라는 상이한 수치가 동시 존재함. 이는 측정 지점, 병렬화 정의, 혹은 운영 전압 설정의 불일치를 시사함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Interactivity</strong></td>
+<td style="text-align:left">고반응성 (Interactive 위주)</td>
+<td style="text-align:left">등급 2</td>
+<td style="text-align:left">단일 유저 환경에서의 결과이며, 다중 접속 시 지연 시간(TBT) 증가율은 미공개됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Tokens/s/MW</strong></td>
+<td style="text-align:left">Blackwell 대비 우위 주장</td>
+<td style="text-align:left">등급 3</td>
+<td style="text-align:left">전력 측정 경계가 모호함. 칩 단위인지 랙 전체인지 불분명.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Tokens/Joule</strong></td>
+<td style="text-align:left">고효율 주장</td>
+<td style="text-align:left">등급 3</td>
+<td style="text-align:left">워크로드의 분자와 전력의 분모가 동일 시간 구간에서 측정되었는지 확인 불가.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Quality (GSM8K)</strong></td>
+<td style="text-align:left">Parity (동등 수준)</td>
+<td style="text-align:left">등급 1</td>
+<td style="text-align:left">좁은 수학 문답 위주의 검증. 실제 복잡한 코딩, 추론, 에이전트 작업 품질은 증명되지 않음.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Reliability</strong></td>
+<td style="text-align:left">데이터 없음</td>
+<td style="text-align:left">등급 -</td>
+<td style="text-align:left">연구실 내 'Doom' 데모 가동 수준으로는 24/7 엔터프라이즈 신뢰성 입증 불가.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="6-blackwell-rubin-비교-분석-comparability-matrix">6. Blackwell/Rubin 비교 분석 (Comparability Matrix)</h4>
+<p>Jalapeño와 NVIDIA 하드웨어의 비교는 동일 세대, 동일 구성이 아니라는 점에서 근본적인 불공정성을 내포하고 있습니다. 특히 차세대 Rubin 아키텍처와의 비교에서 나타나는 데이터의 간극을 분석합니다.</p>
+<p><strong>[NVIDIA Rubin NVL72 하드웨어 제원 (CoreWeave 발표 기준)]</strong></p>
+<ul>
+<li><strong>구성</strong>: 72 Rubin GPUs, 36 Vera CPUs.</li>
+<li><strong>패브릭</strong>: 260 TB/s NVLink 6 fabric.</li>
+<li><strong>최적화</strong>: MTP(Multi-Token Prediction), NVFP4 정밀도, Disaggregated Prefill/Decode, TensorRT-LLM 및 Dynamo 풀 스택 적용.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">주장된 수치 (Tokens/s/MW)</th>
+<th style="text-align:left">데이터 출처</th>
+<th style="text-align:left">감사 비평</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>vs GB200</strong></td>
+<td style="text-align:left">Jalapeño 우위 주장</td>
+<td style="text-align:left">SemiAnalysis</td>
+<td style="text-align:left">SKU 구성 및 전력 경계 설정의 자의적 선택 가능성.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>vs Vera Rubin</strong></td>
+<td style="text-align:left">최대 10배 우위 주장</td>
+<td style="text-align:left">CoreWeave</td>
+<td style="text-align:left">파트너사의 최선 구성(Best-case) 수치이며 독립 재현 결과 아님.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공개 기사 수치</strong></td>
+<td style="text-align:left">Rubin 대비 5.4배 우위</td>
+<td style="text-align:left">SemiAnalysis</td>
+<td style="text-align:left"><strong>불일치</strong>: 5.4배와 10배라는 차이는 운영점 및 데이터 집계 정의의 차이에서 기인함.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>감사 결론:</strong> CoreWeave의 10배 주장과 SemiAnalysis의 5.4배 주장은 서로 다른 소프트웨어 스택과 전력 측정 방식을 사용했을 가능성이 큽니다. 따라서 이를 단일 성능 지표로 통합하여 Jalapeño의 우월성을 결론짓는 것은 기술적으로 위험하며, &quot;사과와 오렌지&quot;를 비교하는 격입니다.</p>
+<hr />
+<h4 id="7-올인-유틸리티-all-in-utility-mw-재구성-및-에너지-효율">7. 올인 유틸리티(All-in Utility) MW 재구성 및 에너지 효율</h4>
+<p>'Tokens/Joule'이라는 효율성 지표는 측정 범위(Boundary)에 따라 결과값이 수 배 이상 왜곡될 수 있습니다. 본 감사관은 다음과 같은 'All-in' 전력 구성 요소를 기준으로 한 투명한 데이터 공개를 요구합니다.</p>
+<ol>
+<li><strong>Chip Level</strong>: 칩 TDP 및 가속기 보드 전력.</li>
+<li><strong>Server Level</strong>: 호스트 CPU, 메모리, NIC, 스토리지 전력.</li>
+<li><strong>Rack Level</strong>: 랙 내 팬, 펌프 및 전력 분배 장치(PDU).</li>
+<li><strong>Facility Level</strong>: UPS 및 전압 변환 손실, 그리고 데이터센터 전체 PUE(Power Usage Effectiveness).</li>
+</ol>
+<p><strong>에너지 효율의 대수적 함정:</strong>
+Tokens/s를 W(Watt)로 나눈 값은 물리적으로 유효하지만, 분모인 전력이 '평균 전력'인지 '피크 전력'인지, 혹은 '시설 유틸리티 전력'인지에 따라 수치가 급변합니다. 특히 UPS/변환 손실과 시설 레벨의 누설 전력을 포함하지 않은 채 칩 TDP만을 기준으로 계산된 효율은 실제 운영 경제성(OpEx)과 아무런 상관이 없습니다. Jalapeño가 주장하는 효율이 이러한 물리적 경계 조건을 모두 충족했는지에 대한 증거는 현재 전무합니다.</p>
+<hr />
+<h4 id="8-tco-총소유비용-가상-원장-assumption-ledger">8. TCO(총소유비용) 가상 원장 (Assumption Ledger)</h4>
+<p>Jalapeño의 경제성을 분석할 때 흔히 발생하는 오류는 '내부 제조 원가'와 '시장 가격'을 직접 비교하는 것입니다. 이는 회계적으로 타당하지 않은 '내부 이전 가격(Internal Transfer Pricing)'의 오류입니다.</p>
+<ul>
+<li><strong>기회비용 (Opportunity Cost)</strong>: OpenAI가 자체 칩을 생산함으로써 포기하게 되는 NVIDIA 칩 활용의 유연성과, 해당 칩을 외부에 판매했을 때 얻을 수 있는 마진을 TCO 모델에 반영해야 합니다.</li>
+<li><strong>하드웨어 수명주기 리스크 (Lifecycle Risk)</strong>: 범용 GPU(Blackwell)는 광범위한 리세일 시장과 2차 활용도가 존재하지만, 특정 모델에 최적화된 커스텀 ASIC(Jalapeño)은 아키텍처 변화에 따라 자산 가치가 급격히 하락(0원)할 위험이 큽니다.</li>
+<li><strong>내부 R&amp;D 상각</strong>: 수십억 달러에 달하는 Broadcom 설계 수수료와 내부 엔지니어링 비용이 칩당 단가에 어떻게 배분되었는지 불분명합니다. 단순히 'TSMC 웨이퍼 가격'만으로 TCO를 논하는 것은 감사 거부 대상입니다.</li>
+</ul>
+<p><strong>주의:</strong> 아직 구현되지 않은 미래의 <strong>Speculative Decoding</strong> 이익(3~5배 비용 감소 주장)을 현재 시점의 실현된 TCO에 합산하는 행위는 미래 수익의 과도한 선반영으로 간주되어 배제되어야 합니다.</p>
+<hr />
+<h4 id="9-아키텍처-및-소프트웨어의-한계">9. 아키텍처 및 소프트웨어의 한계</h4>
+<p>하드웨어 사양(HBM4, N3P 공정, Out-of-Order 코어 등)이 아무리 화려하더라도, 이를 실제 워크로드로 전환하는 것은 소프트웨어의 영역입니다.</p>
+<ul>
+<li><strong>데모와 프로덕션의 간극</strong>: 'Doom' 실행이나 단순 모델의 bring-up 데모는 하드웨어가 작동한다는 증거일 뿐, 엔터프라이즈급 스케줄링, 장애 복구(Failure Recovery), 멀티노드 스케일아웃이 가능하다는 증거가 아닙니다.</li>
+<li><strong>소프트웨어 부재의 해자</strong>: NVIDIA의 CUDA는 수만 개의 최적화된 라이브러리와 커널을 보유하고 있습니다. Jalapeño의 컴파일러와 PyTorch 프레임워크 지원 수준이 과연 Blackwell의 TensorRT-LLM과 동등한 수준의 관측성(Observability)과 안정성을 제공하는지에 대한 의문은 해소되지 않았습니다.</li>
+<li><strong>STP 우위의 본질</strong>: Single Token Processing에서의 속도 우위는 하드웨어의 특정 경로를 극한으로 활용한 결과일 수 있으나, 실제 사용자 수만 명이 접속하는 대규모 병렬 환경(Multi-tenancy)에서도 이 효율이 유지될지는 미지수입니다.</li>
+</ul>
+<hr />
+<h4 id="10-배포-격차-deployment-gap">10. 배포 격차 (Deployment Gap)</h4>
+<p>실험실에서의 'In-lab Run'과 기가와트(GW) 규모의 'Volume Deployment' 사이에는 극복해야 할 거대한 기술적 장벽이 존재합니다.</p>
+<ul>
+<li><strong>Reliability (신뢰성)</strong>: 수만 개의 노드에서 발생하는 실리콘 에러, 메모리 고장, 네트워크 케이던스 붕괴에 대한 대응 로그가 전혀 없습니다.</li>
+<li><strong>Cache Management</strong>: 8k 입력을 넘어서는 장문 컨텍스트 환경에서 KV 캐시 관리 및 오프로딩 전략의 효율성이 검증되지 않았습니다.</li>
+<li><strong>Scalability</strong>: 단일 랙 내의 통신을 넘어 데이터센터 전체를 하나의 컴퓨터로 묶는 확장성 측면에서 NVIDIA의 NVLink/InfiniBand 생태계와 경쟁할 수 있는 데이터가 부족합니다.</li>
+</ul>
+<hr />
+<h4 id="11-헤드라인-반증-데이터-headline-falsifiers">11. 헤드라인 반증 데이터 (Headline Falsifiers)</h4>
+<p>&quot;Jalapeño가 Blackwell보다 낫다&quot;는 주장을 기술적으로 기각하거나 확정하기 위해 반드시 추가되어야 할 데이터 포인트들입니다.</p>
+<ol>
+<li><strong>독립 제3자 재현 결과</strong>: OpenAI의 통제된 환경이 아닌 외부 기관의 교차 검증 데이터.</li>
+<li><strong>시간 정렬 전력 로그</strong>: 가속기 단위부터 시설 전력계(Utility Meter)까지 동일 시간 구간에서 측정된 전력 로그.</li>
+<li><strong>AgentX 풀 스위트 데이터</strong>: 복잡한 라우팅과 장시간 추론이 요구되는 에이전트 환경에서의 p99 지연 시간 데이터.</li>
+<li><strong>장시간 안정성 및 장애율</strong>: 최소 수천 시간 이상의 연속 가동 시 발생하는 에러 로그 및 복구 시간(MTTR).</li>
+<li><strong>실제 양산 수율 및 공급량</strong>: TSMC N3P 공정에서의 실제 양산 수율과 이를 뒷받침할 수 있는 CAPEX 투자 명세.</li>
+</ol>
+<hr />
+<h4 id="12-안전한-결론-safe-conclusion">12. 안전한 결론 (Safe Conclusion)</h4>
+<p>본 기술 감사를 종합한 결과, 공개된 증거들은 Jalapeño 엔지니어링 샘플이 특정 조건(STP, 단일 턴, 특정 모델 인터랙티비티)에서 매우 인상적인 초기 파레토 지점(Pareto point)을 보여주고 있음을 시사합니다. 이는 OpenAI와 Broadcom의 엔지니어링 역량이 하드웨어 계층까지 성공적으로 확장되었음을 나타내는 고무적인 지표입니다.</p>
+<p>그러나 이러한 초기 지표를 근거로 **&quot;Jalapeño가 Blackwell/Rubin보다 포괄적으로 우월하다&quot;**거나 **&quot;양산 단계의 경제성을 입증했다&quot;**고 결론 내리는 것은 시기상조이며, 다음과 같은 근거로 인해 해당 주장을 유보합니다.</p>
+<ul>
+<li><strong>STP 및 No Speculation/PD-disaggregation</strong> 환경에서의 성과는 해당 하드웨어의 원시적인 특정 강점만을 부각시킨 결과이며, 실제 프로덕션 환경의 복잡성을 반영하지 못합니다.</li>
+<li>**NVIDIA Rubin NVL72(72/36/260TB/s)**와의 비교는 세부 구성, 전력 경계, 소프트웨어 성숙도 면에서 불완전하고 불공정한 비교가 될 가능성이 농후합니다. 특히 5.4배와 10배라는 데이터 불일치는 측정의 엄밀성에 의구심을 갖게 합니다.</li>
+<li><strong>소프트웨어 생태계와 신뢰성</strong>은 여전히 '실험실 단계'에 머물러 있으며, 기가와트 규모의 대규모 배포 시 발생하는 시스템 복잡도와 장애 대응력을 입증할 근거가 부족합니다.</li>
+</ul>
+<p>최종 결론적으로, Jalapeño는 NVIDIA의 독주를 견제할 수 있는 강력한 기술적 잠재력을 보유하고 있으나, '제품'으로서의 완성도와 '데이터센터 경제성'의 실현 측면에서는 아직 Blackwell이 구축한 실증된 성과를 넘어섰다고 보기에는 결정적인 증거가 부족합니다. 'Better than Blackwell'이라는 명제는 현재로서는 **&quot;특정 전력 모델과 제한된 운영점 하에서의 조건부 가능성&quot;**으로만 해석되어야 합니다.</p>
+<hr />
+<h3 id="공개-릴리스-기술감사-부록">공개 릴리스 기술감사 부록</h3>
+<h3 id="공개-릴리스용-사실-카드-jalapeño-대-blackwell-rubin">공개 릴리스용 사실 카드 — Jalapeño 대 Blackwell/Rubin</h3>
+<h4 id="1-접근-권리-경계">1. 접근·권리 경계</h4>
+<ul>
+<li>정본은 SemiAnalysis의 2026-08-25 유료 표시 게시물이다. 이 작업은 비로그인 상태에서 공개 렌더링된 구간만 감사한다. <code>Direct Implications for NVIDIA, AMD and Cerebras</code> 직전 유료 게이트 이후는 접근·추론·요약하지 않는다.</li>
+<li>원문 문장, 표, 차트, 사진, 로고, 레이아웃을 공개 산출물에 복제하지 않는다. 한국어 비대체적 기술 비평과 독립 도식만 사용한다.</li>
+</ul>
+<h4 id="2-증거-등급">2. 증거 등급</h4>
+<ol>
+<li><strong>OpenAI 제공 측정치</strong>: Jalapeño 하드웨어·설정·로그·수치의 원천. 원시 로그와 완전 레시피가 공개되지 않았다면 독립 재현이 아니다.</li>
+<li><strong>SemiAnalysis 현장 관찰</strong>: 연구진이 OpenAI 연구실에서 InferenceX 실행을 관찰했다. 보도자료 재인용보다 강하지만, OpenAI가 장비·설정·수치를 제공했고 연구진이 전체 InferenceX를 직접 돌린 것은 아니므로 독립 재현보다 약하다.</li>
+<li><strong>SemiAnalysis 계산/모델</strong>: all-in utility MW와 TCO 등은 경계와 가정에 의존한다. 공개 입력이 빠지면 계산을 재현할 수 없다.</li>
+<li><strong>NVIDIA/CoreWeave 공개 결과</strong>: Vera Rubin NVL72와 GB200 NVL72 결과는 공급자·파트너 발표다. 동일 워크로드의 독립 제3자 재현으로 격상하지 않는다.</li>
+<li><strong>공식 사양/배포 발표</strong>: OpenAI/Broadcom은 엔지니어링 샘플과 초기 배포 목표를 발표했다. 목표와 실현된 양산·고객 운영·인식된 경제성을 분리한다.</li>
+<li><strong>분석가 추론</strong>: ‘CUDA 해자 소멸’, ‘전력당 처리량=매출’ 같은 문장은 검증된 회계 항등식이 아니라 조건부 해석이다.</li>
+</ol>
+<h4 id="3-반드시-보존할-공개-구간의-자기-제한">3. 반드시 보존할 공개 구간의 자기 제한</h4>
+<ul>
+<li>SemiAnalysis는 모든 Jalapeño 수치가 OpenAI가 제공한 것이라고 명시한다.</li>
+<li>현장에서 InferenceX 실행을 확인했지만 전체 InferenceX 스위트를 직접 실행하지 않았다. AgentX 결과는 보지 못했다.</li>
+<li>8k 입력/1k 출력 단일턴은 장문·멀티턴 AgentX가 스트레스하는 라우터, prefix cache, KV cache 관리, offload, 스케줄링을 충분히 검증하지 않는다.</li>
+<li>Blackwell 비교 자체가 불완전하고 불공정할 수 있으며, HBM4 세대의 Rubin이 더 적합한 비교 상대라고 원문도 인정한다.</li>
+</ul>
+<h4 id="4-주장별-감사">4. 주장별 감사</h4>
+<h5 id="속도">속도</h5>
+<ul>
+<li>공개 구간은 DeepSeek R1에서 concurrency 1 기준 700 output tokens/s/user 초과, Kimi K2.5와 GPT-OSS에서 약 1,400 tokens/s/user를 언급한다. 이는 OpenAI 제공 또는 공동 관찰 수치이지 원시 로그·레시피가 공개된 독립 재현값이 아니다.</li>
+<li>다른 구간의 Kimi K2.5 약 700 tokens/s/user 표현과 약 1,400 수치는 모델/운영점/병렬화/측정 정의가 다를 수 있으므로 같은 값으로 합치지 않는다. 정확한 레시피가 없으면 불일치 원인을 단정하지 않는다.</li>
+<li>tokens/s/user는 지연·동시성 운영점을 포함한다. 총 throughput, TTFT, inter-token latency/TBT, p95/p99, 실패율과 분리한다.</li>
+</ul>
+<h5 id="품질">품질</h5>
+<ul>
+<li>GSM8K parity는 좁은 수학 문답 확인이다. DeepSeek R1, Kimi K2.5, GPT-OSS의 일반 정확도·장문·도구 사용·코딩·안전성·프로덕션 품질 동등성을 증명하지 못한다. 정확한 모델 버전, 프롬프트, decoding, quantization 후 정확도, 반복 횟수와 오차막대가 필요하다.</li>
+</ul>
+<h5 id="최적화-모드">최적화 모드</h5>
+<ul>
+<li>Jalapeño 결과는 STP, speculative decoding 없음, prefill/decode disaggregation 없음으로 제시된다. 경쟁 결과는 MTP와 최선 구성일 수 있다. 비활성화가 본질적으로 우월하다는 뜻이 아니다.</li>
+<li>raw 결과는 그대로 귀속해 보여주되, 같은 모델·정밀도·입출력 길이·품질·SLA·MTP/STP·speculation·분리 전략·소프트웨어 버전의 동조건 실험 없이는 하드웨어 우열을 분리할 수 없다고 명시한다.</li>
+</ul>
+<h4 id="5-all-in-utility-mw와-tokens-joule">5. all-in utility MW와 tokens/joule</h4>
+<ul>
+<li>전력 경계 후보: 칩 TDP, 실제 accelerator power, 서버/트레이 전력, 호스트 CPU, NIC·스위치, 스토리지, 랙 팬·펌프, 냉각, UPS/변환 손실, 시설 PUE.</li>
+<li><code>tokens/s ÷ W = tokens/J</code>는 대수적으로 맞지만, 분자 workload와 분모 전력 경계가 같은 시간 구간에서 측정되고 평균 방식이 일치할 때만 비교 가능하다. MW로 나누면 단위 환산 계수 10^6이 붙는다.</li>
+<li>TDP는 실제 평균 전력이나 시설 utility power가 아니다. ‘all-in’이 어떤 항목을 포함했는지 공개되지 않으면 tokens/s/MW 비교는 재현 불가다.</li>
+</ul>
+<h4 id="6-blackwell-rubin-비교">6. Blackwell/Rubin 비교</h4>
+<ul>
+<li>GB200, GB300, B200, NVL72는 상호 교환할 수 없다. SKU, 랙 구성, 날짜, TensorRT-LLM/Dynamo·드라이버 버전, 정밀도, 병렬화, 전력 경계를 고정한다.</li>
+<li>CoreWeave 공개 자료는 DeepSeek R1, matched interactivity에서 Vera Rubin NVL72가 GB200 NVL72 대비 최대 10배 tokens/s/MW라고 발표하며, expert parallelism, NVFP4, MTP, disaggregated prefill/decode, TensorRT-LLM과 Dynamo 사용을 밝힌다. 이는 CoreWeave/NVIDIA 파트너 발표이며 독립 재현이 아니다.</li>
+<li>공개 기사에서 인용한 ‘Rubin 5.4배’와 CoreWeave의 ‘최대 10배’는 운영점·기준·집계 정의가 다를 수 있다. 하나의 고정 배수로 합치지 않는다.</li>
+<li>CoreWeave는 NVL72를 72 Rubin GPU, 36 Vera CPU, 260 TB/s NVLink 6 fabric이라고 서술한다. peak 사양과 지속 성능, 칩과 랙 단위를 분리한다.</li>
+</ul>
+<h4 id="7-수명주기-배포">7. 수명주기·배포</h4>
+<ul>
+<li>단계: 아키텍처 공개 → tape-out → engineering sample → in-lab run → qualification → production → customer shipment → volume deployment → realized economics.</li>
+<li>2026-08-31 컷오프에서 OpenAI/Broadcom 공식 발표는 엔지니어링 샘플이 연구실에서 목표 주파수·전력으로 ML workload를 실행한다고 한다. 이는 양산·고객 출하·대규모 신뢰성 증명이 아니다.</li>
+<li>같은 공식 발표의 end-2026 초기 배포 목표와 gigawatt-scale 장기 계획은 목표다. 실현된 출하량이나 경제성으로 표현하지 않는다.</li>
+<li>CoreWeave는 Vera Rubin NVL72 end-to-end bring-up과 measured silicon result를 공개한다. ‘production scale’이라는 파트너 표현과 실제 광범위 고객 양산 가동을 구분한다.</li>
+</ul>
+<h4 id="8-아키텍처-소프트웨어">8. 아키텍처·소프트웨어</h4>
+<ul>
+<li>공개 구간은 HBM4, TSMC N3P compute die, N3E I/O chiplet, package/rack interconnect, host PCIe, slice 기반 메모리·collective network, OoO core 등의 주장을 담는다. 세부 수치는 OpenAI 또는 SemiAnalysis 귀속이며 독립 사양서가 부족한 항목은 확정 사양으로 쓰지 않는다.</li>
+<li>peak PFLOPs·TB/s·TDP는 sustained application throughput이 아니다. compute die, package, tray, rack, multi-rack 단위를 섞지 않는다.</li>
+<li>Doom과 몇 개 공개 모델 실행은 bring-up 데모다. compiler, kernels, PyTorch/framework 지원, observability, scheduler, reliability, multi-node scale, cache management, failure recovery, portability가 성숙했다는 증거가 아니다.</li>
+</ul>
+<h4 id="9-tco-가정-원장">9. TCO 가정 원장</h4>
+<ul>
+<li>TCO는 측정치가 아니라 모델이다. 필수 입력: accelerator/system acquisition 또는 내부 이전비용, 감가상각·수명, 이용률, 수율·생산량, 전기요금, PUE, 네트워크·호스트·스토리지, 데이터센터 capex, 소프트웨어·운영 인력, 장애율·spares, financing, scale.</li>
+<li>공개되지 않은 입력이 있으면 결과는 재현 불가다. 낮은 custom ASIC 제조비용은 total cost나 opportunity cost와 같지 않다. 판매되지 않는 내부 칩은 merchant GPU 시장가격과 직접 비교할 수 없다.</li>
+<li>speculative decoding이 3~5배 비용 감소를 준다는 문구도 draft 모델 비용, acceptance rate, 품질, latency와 workload에 따라 달라진다. Jalapeño에 아직 구현되지 않은 향후 이익을 실현값에 더하지 않는다.</li>
+</ul>
+<h4 id="10-전력-제한-데이터센터의-사업-해석">10. 전력 제한 데이터센터의 사업 해석</h4>
+<ul>
+<li>grid interconnection, 냉각, UPS, 변전과 시설 전력 한도는 실제 제약 메커니즘이다. 하지만 <code>throughput per watt is revenue</code>는 capacity, demand, pricing, utilization, SLA, sales mix, accounting recognition이 모두 충족될 때의 사업 프레이밍이지 보편 회계 항등식이 아니다.</li>
+</ul>
+<h4 id="11-헤드라인을-반증-확정할-데이터">11. 헤드라인을 반증·확정할 데이터</h4>
+<ul>
+<li>공개 AgentX 결과와 raw logs/recipes, 독립 실행 가능한 Jalapeño submission.</li>
+<li>같은 모델·버전·품질·8k/1k 또는 AgentX·동일 SLA에서 Jalapeño/GB200/GB300/Rubin 동시 실험.</li>
+<li>accelerator에서 utility meter까지 동일 경계의 시간 정렬 전력.</li>
+<li>p95/p99 latency, 반복·오차막대, 정확도/eval, 장애율과 장시간 안정성.</li>
+<li>production availability, customer deployment, 공급량을 증명하는 자료.</li>
+<li>공개 입력으로 재현 가능한 realized TCO.</li>
+</ul>
+<h4 id="안전-결론">안전 결론</h4>
+<p>공개 증거는 Jalapeño 엔지니어링 샘플이 일부 단일턴·특정 interactivity 및 전력 모델에서 매우 강한 초기 Pareto 지점을 보였다는 <strong>조건부 가능성</strong>을 지지한다. 그러나 일반 시스템·제품 우월성, 소프트웨어 성숙도, 신뢰성, 가용성, 대규모 scale-out, 양산 경제성까지 입증하지 않는다. 따라서 ‘Better than Blackwell’은 지표·운영점·전력 경계가 붙은 질문으로만 안전하다.</p>
+<h3 id="중복-차별성-부록">중복·차별성 부록</h3>
+<h3 id="중복-차별성-매트릭스">중복·차별성 매트릭스</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>기존 영상 84xgDvzeses</th>
+<th>이번 작업</th>
+<th>판정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정본</td>
+<td>OpenAI 공식 첫 결과 발표</td>
+<td>SemiAnalysis 공개 구간</td>
+<td>다른 정본</td>
+</tr>
+<tr>
+<td>핵심 질문</td>
+<td>Jalapeño 첫 결과가 무엇인가</td>
+<td>‘Blackwell보다 낫다’가 어떤 지표·경계에서만 성립하는가</td>
+<td>실질적 차별</td>
+</tr>
+<tr>
+<td>관찰 지위</td>
+<td>OpenAI 발표 감사</td>
+<td>SemiAnalysis 현장 관찰과 OpenAI 제공 수치의 증거등급 분리</td>
+<td>실질적 차별</td>
+</tr>
+<tr>
+<td>비교 기준</td>
+<td>Jalapeño 자체 벤치마크 설명</td>
+<td>GB200/GB300/NVL72 혼동 방지, Rubin 2026년 7월 수치의 동조건성 감사</td>
+<td>실질적 차별</td>
+</tr>
+<tr>
+<td>전력</td>
+<td>package TDP/TPS-kW 설명</td>
+<td>all-in utility MW 경계와 tokens/joule 등가 조건</td>
+<td>실질적 차별</td>
+</tr>
+<tr>
+<td>TCO</td>
+<td>중심 아님</td>
+<td>공개되지 않은 가격·수율·이용률·PUE를 전제로 한 모델 감사</td>
+<td>실질적 차별</td>
+</tr>
+<tr>
+<td>제품성</td>
+<td>엔지니어링 샘플 경계</td>
+<td>소프트웨어·신뢰성·출하·양산·실현 TCO 단계 분리</td>
+<td>실질적 차별</td>
+</tr>
+<tr>
+<td>결론</td>
+<td>초기 결과의 조건부 평가</td>
+<td>특정 Pareto 지점의 초기 우위는 가능하나 범용 제품 우월성은 미입증</td>
+<td>반복 아님</td>
+</tr>
+</tbody>
+</table>
+<p>결정: 정확한 정본 중복이 없을 때만 진행한다. 기존 영상의 일반적 첫 결과 설명을 반복하지 않고, 비교 가능성·전력 경계·TCO·배포 단계 감사를 중심으로 한다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li></ul></section>
+</main>
+</body>
+</html>

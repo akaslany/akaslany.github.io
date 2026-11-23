@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Context Language Models</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Context Language Models</h1>
+<p class="page-meta">논문 · 2026-09-30</p>
+<h2 id="요약">요약</h2>
+<p>기존 대형 언어 모델 서빙 및 에이전트 시스템에서는 맥락(Context) 관리를 모델 외부의 시스템 제어기인 하네스(Harness)에 전적으로 의존해 왔습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.37725">출처</a> · <a href="https://www.youtube.com/watch?v=fGPw-52fLo0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="context-language-models-clm-모델-자체-맥락-관리-체계와-학습-서빙-효율성-해설-보고서">Context Language Models(CLM): 모델 자체 맥락 관리 체계와 학습·서빙 효율성 해설 보고서</h3>
+<hr />
+<h4 id="1-핵심-개념-context-language-models-clm-의-정의와-패러다임-전환">1. 핵심 개념: Context Language Models(CLM)의 정의와 패러다임 전환</h4>
+<p>기존 대형 언어 모델 서빙 및 에이전트 시스템에서는 맥락(Context) 관리를 모델 외부의 시스템 제어기인 하네스(Harness)에 전적으로 의존해 왔습니다. 표준 언어 모델(Standard LM)은 하네스가 제공한 프롬프트 맥락 뒤에 새로 생성된 토큰을 순차적으로 덧붙이는 단순 누적(Append-only) 방식으로 작동합니다. 그러나 이 방식은 복잡한 장기 실행(Long-horizon) 과제에서 불필요하거나 오염된 정보가 맥락 내에 지속적으로 누적되는 구조적 한계를 가집니다. 이를 보완하기 위해 도입된 기존 하네스 중심 제어 방식은 인간이 미리 설계한 고정 규칙이나 제약된 형태의 요약·압축·검색 도구 집합에 의존하므로, 동적으로 변화하는 복잡한 맥락 상태에 유연하게 대응하지 못합니다.</p>
+<p>연구진은 리처드 서튼(Richard Sutton)의 &quot;쓰라린 교훈(The Bitter Lesson)&quot;에 기반하여, 인간의 사전 지식과 규칙 설계에 의존하는 하네스 제어 방식에서 벗어나 언어 모델 자체가 맥락 관리의 주체가 되는 <strong>Context Language Models(CLM)</strong> 패러다임을 제안합니다. CLM 체계에서는 맥락을 단일 파일 형태로 취급하며, 모델에게 해당 파일에 대한 무제한 읽기 및 쓰기 권한을 부여합니다. 이를 통해 모델은 추론 및 작업 수행 과정에서 중요한 정보를 맥락 내에 선별적으로 유지하고, 불필요한 관찰 기록을 삭제하거나 정제하는 자율성을 확보합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>구분</strong></th>
+<th style="text-align:left"><strong>기존 표준 언어 모델 (Standard LM)</strong></th>
+<th style="text-align:left"><strong>Context Language Models (CLM)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>맥락 갱신 방식</strong></td>
+<td style="text-align:left">단순 덧붙이기(Append-only) 연산 기반의 순차적 누적 방식</td>
+<td style="text-align:left">단일 파일 기반의 자율적 수정·삭제·재구성 및 임의 변환 방식</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주도권 위치</strong></td>
+<td style="text-align:left">외부 제어기(Harness) 및 인간 설계 절차식 로직</td>
+<td style="text-align:left">모델 내부(Intrinsic Model Behavior)의 내재적 자율 제어</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>수작업 규칙 의존성</strong></td>
+<td style="text-align:left">고정된 요약 임계값, 인간 작성 규칙 및 제한된 툴 집합에 크게 의존</td>
+<td style="text-align:left">수작업 규칙을 최소화하고 인맥락 학습 및 강화학습을 통해 동적 전략 수용</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>맥락의 단일 파일화 체계</strong>: 전체 대화 이력 및 라이브 맥락을 저장소 상의 단일 파일로 동기화하여 모델이 직접 편집할 수 있는 자율성을 제공합니다.</li>
+<li><strong>하네스 제약의 한계 극복</strong>: 인간이 정의한 정적 압축 제어 방식 대신, 모델이 작업 상황에 맞춰 맥락 구조를 능동적으로 변형할 수 있는 환경을 구축합니다.</li>
+</ul>
+<hr />
+<h4 id="2-작동-원리-및-시스템-아키텍처">2. 작동 원리 및 시스템 아키텍처</h4>
+<h5 id="2-1-수식적-정의-및-파일-기반-맥락-처리-매커니즘">2.1 수식적 정의 및 파일 기반 맥락 처리 매커니즘</h5>
+<p>연구진의 설명에 따르면, 표준 언어 모델의 맥락 전이는 턴 $t$에서의 맥락 $c_t$에 모델 생성 결과 $f_\theta^{\text{LM}}(c_t)$를 단순 연결(Concatenation, $\oplus$)하는 방식으로 수식화됩니다.</p>
+<p>$$c_{t+1} = c_t \oplus f_\theta^{\text{LM}}(c_t)$$</p>
+<p>반면 CLM은 맥락 관리의 주도권을 모델 자신에게 위임하여, 모델 파라미터 $\theta$가 제어하는 임의의 변환 함수 $f_\theta^{\text{CLM}}$을 통해 다음 턴의 맥락 $c_{t+1}$을 직접 생성합니다.</p>
+<p>$$c_{t+1} = f_\theta^{\text{CLM}}(c_t)$$</p>
+<p>이 수식적 정의는 매우 중요한 이론적 통찰을 제공합니다. 기존 하네스가 제공하던 요약, 정보 오프로딩, 검색 등의 개별 도구들은 모두 수식 (2)의 특수 사례로 흡수됩니다. 즉, CLM 환경에서 맥락 관리는 모델이 계획(Planning)을 통해 암묵적으로 수행하거나, <code>compact_turns</code>와 같은 코드 형태의 재사용 가능한 함수를 직접 정의하고 호출함으로써 수행하는 **메타 역량(Meta-capability)**으로 진화합니다.</p>
+<p>구체적인 시스템 작동을 위해 연구진은 모델의 라이브 맥락(Live context)을 저장 공간 상의 단일 파일로 동기화(Mirroring)하고, 해당 파일 경로를 시스템 프롬프트로 전달합니다. 모델은 표준 바시(Bash) 명령어 및 코드 인터페이스를 사용해 이 맥락 파일을 자유롭게 수정하고 저장할 수 있습니다. 수식이 적용된 파일의 변경 사항은 즉시 동기화되어 다음 턴의 프롬프트로 언어 모델 서버에 전달됩니다. 만약 모델이 특정 턴에서 맥락 파일을 수정하지 않는 경우, 생성된 토큰이 기본적으로 기존 맥락 뒤에 덧붙여지는(Append) 하이브리드 동기화 동작 방식을 채택하여 캐시 재사용성과 편집 유연성의 균형을 유지합니다.</p>
+<h5 id="2-2-다중-에이전트-확장성-및-창의적-맥락-편집-행동-패턴">2.2 다중 에이전트 확장성 및 창의적 맥락 편집 행동 패턴</h5>
+<p>파일 기반 맥락 설계는 단일 에이전트에 국한되지 않고, 다중 에이전트(Multi-agent) 및 서브에이전트(Subagent) 시스템으로 자연스럽게 확장됩니다. 작업 공간 내에 여러 맥락 파일을 동시 존재시키고 각각의 언어 모델 서버와 동기화함으로써 에이전트 스웜(Agent swarm)을 구성할 수 있습니다. 또한 메인 에이전트가 새로운 맥락 파일을 생성하거나 삭제하는 방식으로 서브에이전트를 동적으로 할당하고 종료할 수 있습니다.</p>
+<p>연구진이 제로샷(Zero-shot) CLM 평가에서 관찰한 모델의 질적(Qualitative) 맥락 편집 행동 패턴은 다음과 같습니다.</p>
+<ol>
+<li><strong>서브에이전트 오케스트레이션을 위한 맥락 내 점수판 및 트래커 유지</strong>: 에르되시 최소 중첩 문제 등에서 모델은 서브에이전트들의 진행 상황, 현재 상태, 최고 성과를 관리하는 내부 점수판을 맥락 내에 직접 작성했습니다. 제자리 편집(In-place edit)을 163회 수행하면서 전체 맥락 크기를 6,000~8,000 토큰 수준으로 일정하게 유지했습니다.</li>
+<li><strong>내부 메모 작성을 위한 새로운 대화 역할(Role) 추가</strong>: 맥락을 재작성할 때 기존 템플릿 역할(User, Assistant 등) 외에 자신의 내부 메모 및 상태 기록을 위한 <code>notes</code>와 같은 새로운 대화 역할을 직접 정의하여 활용했습니다.</li>
+<li><strong>불필요한 검색 결과 제거를 위한 반복문(Loop) 작성 및 제어</strong>: 파이썬 정규표현식 및 반복 코드를 작성하여 탐색 과정에서 발생한 무관한 검색 결과나 과도하게 긴 관찰 기록을 자동으로 필터링하고 요약문으로 대체했습니다.</li>
+<li><strong>재사용 가능한 맥락 압축 전용 함수 정의 및 호출</strong>: <code>compact_turns</code>와 같은 맥락 압축 헬퍼 함수를 직접 정의한 후, 이를 수십 차례(예: 37회) 재호출하여 진행 노트를 업데이트함과 동시에 상세 관찰 내역을 효율적으로 압축했습니다.</li>
+</ol>
+<h5 id="2-3-비용-측정-기준-접미부-재사용-플롭스-prefix-reuse-flops">2.3 비용 측정 기준: 접미부 재사용 플롭스 (Prefix-Reuse FLOPs)</h5>
+<p>맥락 중간에 수정(In-the-middle edit)이 발생하면 기존 LLM 서빙 시스템의 프레픽스 캐시(Prefix Cache) 구조상 첫 번째 불일치 지점 이후의 모든 기존 캐시 상태가 무효화되어 대규모 재프리필(Re-prefilling) 연산이 발생하는 문제가 생깁니다. 연구진은 이러한 맥락 편집 행위가 포함된 전체 추론 궤적의 실제 계산 비용을 정확히 반영하기 위해 '접미부 재사용 플롭스(Prefix-reuse FLOPs)' 지표를 제안하고 다음과 같은 수식으로 산출했습니다.</p>
+<p>$$\text{FLOPs}<em>{\text{prefix-reuse}} = \text{FLOPs}</em>{\text{prefill}}(\text{unmatched context suffix}) + \text{FLOPs}_{\text{decode}}(\text{generated tokens})$$</p>
+<ul>
+<li>$\text{FLOPs}_{\text{prefill}}(\text{unmatched context suffix})$: 이전 턴과의 프레픽스 불일치가 발생한 첫 토큰부터 시작하여, 재프리필이 필요한 맥락 접미부(Suffix) 전체 토큰 처리에 소모되는 계산량입니다.</li>
+<li>$\text{FLOPs}_{\text{decode}}(\text{generated tokens})$: 각 턴에서 모델이 새롭게 생성하는 디코딩 토큰 연산에 소모되는 계산량입니다.</li>
+</ul>
+<hr />
+<h4 id="3-주요-실험-결과-및-벤치마크-평가">3. 주요 실험 결과 및 벤치마크 평가</h4>
+<p>연구진의 보고에 따르면, CLM은 별도의 파라미터 미세조정 없이 제로샷(Zero-shot) 상태에서도 기존 하네스 기반 및 행동 기반 베이스라인 모델들의 성과를 대폭 상회했습니다.</p>
+<h5 id="3-1-코딩-및-심층-연구-벤치마크-성과">3.1 코딩 및 심층 연구 벤치마크 성과</h5>
+<p>쿠엔(Qwen) 3.6-27B 모델과 32K 토큰 맥락 제약 조건 하에서 수행된 제로샷 평가 결과는 다음과 같습니다.</p>
+<ul>
+<li><strong>브라우즈컴프 플러스(BrowseComp-Plus)</strong>: 심층 연구 벤치마크인 브라우즈컴프 플러스에서 CLM은 59.4%의 정확도를 달성했습니다. 이는 가장 강력한 베이스라인인 코덱스 스타일 요약(Codex-style summary) 하네스의 53.3% 대비 상대적으로 11.4% 높은 정확도이며, 접미부 재사용 플롭스 연산량을 21.5% 절감한 결과입니다.</li>
+<li><strong>터미널벤치 2.1(TerminalBench 2.1)</strong>: 터미널 코딩 평가에서 CLM은 코덱스 스타일 요약 베이스라인과 동등한 수준의 정확도를 유지하면서도 접미부 재사용 플롭스를 29.5% 절감(베이스라인 연산량의 70%만 사용)했습니다.</li>
+<li><strong>티비라이트(TBLite)</strong>: TBLite 벤치마크에서 CLM은 73.7%의 정확도를 기록하여 코덱스 스타일 요약 베이스라인(67.0%) 대비 성과를 높였으며, 연산량은 9% 절감(91% 수준 사용)했습니다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>벤치마크</strong></th>
+<th style="text-align:left"><strong>비교 대상 베이스라인</strong></th>
+<th style="text-align:center"><strong>CLM 정확도</strong></th>
+<th style="text-align:center"><strong>베이스라인 정확도</strong></th>
+<th style="text-align:right"><strong>계산량(FLOPs) 변화</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>BrowseComp-Plus</strong></td>
+<td style="text-align:left">Codex-style Summary</td>
+<td style="text-align:center">59.4%</td>
+<td style="text-align:center">53.3% (CLM이 상대적으로 11.4% 높음)</td>
+<td style="text-align:right">21.5% 절감</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TerminalBench 2.1</strong></td>
+<td style="text-align:left">Codex-style Summary</td>
+<td style="text-align:center">동률 수준</td>
+<td style="text-align:center">동률 수준</td>
+<td style="text-align:right">29.5% 절감</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TBLite</strong></td>
+<td style="text-align:left">Codex-style Summary</td>
+<td style="text-align:center">73.7%</td>
+<td style="text-align:center">67.0%</td>
+<td style="text-align:right">9% 절감 (91% 사용)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="3-2-개방형-탐색-및-최적화-과제-open-discovery-problems">3.2 개방형 탐색 및 최적화 과제 (Open Discovery Problems)</h5>
+<ul>
+<li><strong>수학적 최적화 과제</strong>: 클로드 4.6 소넷(Claude 4.6 Sonnet) 기반 실험에서 원 배향(Circle packing), 하일브론 삼각형(Heilbronn triangle), 민맥스 거리, 에르되시 최소 중첩 등 4개 과제 전체에서 CLM은 전문 진화 워크플로우인 오픈이볼브(OpenEvolve)를 상회했습니다. 원 배향 과제에서는 점수가 2.541에서 2.618로 상승하여 상대적으로 3.0% 개선되었고, 하일브론 삼각형 과제에서는 최고 점수가 0.03127에서 0.03653으로 상승하여 상대적으로 16.8% 개선되었습니다.</li>
+<li><strong>단일 리포지토리 최적화 (EdgeBench-10)</strong>: 12시간 연산 제약의 EdgeBench 10개 과제 평가에서, 쿠엔 3.6-27B 모델 기반 CLM은 요약 하네스(42.3점, 437 PFLOPs) 대비 59% 적은 연산량(179 PFLOPs)으로 절대 점수 기준 2.3점 높고 상대적으로 약 5.4%(연구진 보고 기준 5%) 높은 44.6점을 기록했습니다. 클로드 4.6 소넷 환경에서도 CLM은 51.0점을 기록해 요약 하네스(42.3점)를 대폭 앞섰습니다.</li>
+<li><strong>다중 리포지토리 에이전트 스웜 (Software World)</strong>: 24시간 동안 상호 의존적인 6개 리포지토리를 동시 최적화하는 GPT-5.6-Sol 환경 실험 결과, 동일한 계산 자원(비용) 집행 기준 CLM 에이전트 스웜은 요약 기반 스웜 대비 하류(Downstream) 미학습 패키지에 대한 속도 향상(Speedup) 성과가 65% 더 높게 나타났습니다 (CLM 스웜 1.044배 대 요약 스웜 1.026배 속도 향상).</li>
+</ul>
+<hr />
+<h4 id="4-맥락-관리-전략의-학습-방법">4. 맥락 관리 전략의 학습 방법</h4>
+<p>CLM은 맥락 관리가 외부 제어기가 아닌 모델의 내재적 행동으로 전환되었기 때문에, 프롬프트를 통한 인맥락 학습과 가중치 업데이트를 통한 파라미터 학습이 모두 가능합니다.</p>
+<h5 id="4-1-인맥락-학습-icl-및-자연어-프롬프트-조율">4.1 인맥락 학습(ICL) 및 자연어 프롬프트 조율</h5>
+<p>연구진에 의하면, 사용자가 프롬프트 마지막에 단 한 문장의 자연어 지시사항을 추가하는 것만으로 CLM의 맥락 관리 정책을 정밀하게 조율(Steering)할 수 있습니다.</p>
+<ul>
+<li><strong>압축 임계값 제어</strong>: &quot;맥락 크기가 Y 토큰에 도달하면 4천 토큰으로 압축하라&quot;는 지시를 통해 첫 압축이 발생하는 시점을 정확히 조절했습니다.</li>
+<li><strong>하위 질문 경계 기반 압축</strong>: &quot;하위 작업 경계에서만 압축을 수행하라&quot;는 지시를 통해 하위 질문 완료 직후 2턴 이내에 압축이 수행되는 비율을 기존 40%에서 88%로 향상시켰습니다.</li>
+<li><strong>백업 작성 행동</strong>: &quot;압축 전 디스크에 백업을 생성하라&quot;는 지시를 추가하여 편집 전 전체 백업을 수행하는 비율을 기존 0%에서 68%로 끌어올렸습니다.</li>
+</ul>
+<h5 id="4-2-스킬-진화-루프를-통한-인맥락-스킬-최적화">4.2 스킬 진화 루프를 통한 인맥락 스킬 최적화</h5>
+<p>연구진은 텍스트 진화 루프(Textual Evolution Loop)를 통해 프롬프트 형태의 맥락 관리 스킬 문서 $s$를 최적화했습니다. 이 루프는 훈련 분할에서의 롤아웃 제안, 검증 분할 평가, 최적 스킬 선정을 반복합니다.</p>
+<ul>
+<li><strong>보조 진화(Assisted evolution)</strong>: 외부의 강력한 모델(예: 클로드 페이블 5.1)이 스킬 제안자 역할을 수행하고 에이전트 모델이 이를 실행합니다.</li>
+<li><strong>자아 진화(Self-evolution)</strong>: 에이전트 모델 자체(예: 클로드 오퍼스 5)가 실행과 스킬 제안을 동시에 담당합니다.</li>
+</ul>
+<p>컨텍스트벤치(ContextBench) 진단 평가에서 스킬 진화를 적용한 결과, 미학습 보유 평가(Held-out test) 세트에서 정확도가 대폭 상승했습니다. 키-값 저장소(KV Store) 과제의 경우 보유 평가 정확도가 기존 38.3%에서 74.2%로 35.9 퍼센트포인트(points) 향상되는 동시에 계산 비용이 크게 감소했습니다.</p>
+<h5 id="4-3-온라인-강화학습-단계별-grpo-및-성공-조건부-효율성-이득">4.3 온라인 강화학습: 단계별 GRPO 및 성공 조건부 효율성 이득</h5>
+<p>에이전트의 맥락 편집은 턴마다 입력 환경을 변경하므로 연구진은 단계별 GRPO(Stepwise GRPO) 알고리즘을 적용했습니다. 전체 궤적(Trajectory)에서 얻은 최종 결과 보상을 각 구간별 정책 손실로 분배하여 학습을 진행합니다.</p>
+<p>이때 단순 연산량 단축이나 편집 빈도에 보상을 줄 경우, 모델이 필요한 주요 정보를 무단 삭제하거나 프레픽스 캐시 재사용성을 해치면서 보상만 취하는 '보상 해킹(Reward hacking)' 현상이 발생합니다. 이를 방지하기 위해 연구진은 성공한 궤적 내부에서만 연산 효율성을 경쟁시키는 '성공 조건부 효율성 이득(Success-gated efficiency advantage, $A_i^{\text{eff}}$)' 수식을 다음과 같이 제안했습니다.</p>
+<p>$$A_i^{\text{eff}} = \begin{cases} \text{clip}\left(\frac{c_g - c_i}{c_g}, -1, 1\right), &amp; i \in \mathcal{G}_g^+ \ 0, &amp; i \notin \mathcal{G}_g^+ \end{cases}$$</p>
+<p>여기서 $c_i$는 궤적 $i$의 접미부 재사용 플롭스, $\mathcal{G}_g^+$는 롤아웃 그룹 $g$ 내에서 성공한 궤적들의 집합, $c_g$는 성공한 궤적들의 평균 플롭스이며, $\text{clip}$ 연산은 이득값을 $[-1, 1]$ 범위로 제한합니다. 그룹 내 성공한 궤적이 2개 미만인 경우($|\mathcal{G}<em>g^+| &lt; 2$)에는 $A_i^{\text{eff}} = 0$으로 설정하여 불완전한 성공 사례에서의 보상 해킹을 차단합니다. 최종 보상 이득은 결과 이득 $A_i^{\text{out}}$과 가중치가 적용된 효율성 이득의 합($A_i = A_i^{\text{out}} + w</em>{\text{eff}} A_i^{\text{eff}}$)으로 산출됩니다.</p>
+<p>쿠엔 3.5-9B 모델을 오픈리서처(OpenResearcher) 데이터로 강화학습시킨 결과, 브라우즈컴프 플러스 정확도가 학습 전 28.8%에서 학습 후 42.5%로 대폭 상승하여 <strong>13.7 퍼센트포인트(%p 또는 points) 상승 및 상대적 47.6% 개선</strong>을 달성했습니다. 동시에 질문당 플롭스 사용량은 1.52 PFLOPs에서 1.34 PFLOPs로 12% 절감되었습니다.</p>
+<hr />
+<h4 id="5-서빙-효율성-한계-및-향후-연구-방향">5. 서빙 효율성, 한계 및 향후 연구 방향</h4>
+<h5 id="5-1-접미부-캐시-재사용-suffix-cache-reuse-scr-을-통한-서빙-최적화">5.1 접미부 캐시 재사용(Suffix Cache Reuse, SCR)을 통한 서빙 최적화</h5>
+<p>맥락 중간 수정이 일어난 후에도 보존된 뒤쪽 토큰(Suffix)의 기존 KV 캐시 상태를 재사용하기 위해 연구진은 '접미부 캐시 재사용(SCR)' 메커니즘을 고안하고 이를 SGLang 서빙 엔진에 구현했습니다.</p>
+<ul>
+<li><strong>기본 메커니즘 및 구간 제한 ($K=6$)</strong>: 맥락 $[A B C]$에서 $B$가 $B'$로 수정된 경우, SCR은 변경되지 않고 살아남은 접미부 $C$의 기존 KV 캐시 상태를 재배치(Relocate)하고 회전 위치 인코딩(RoPE)을 재회전시킨 후 연결함으로써, 새로 삽입·수정된 $B'$ 토큰에 대해서만 선택적으로 프리필을 수행합니다. 이때 연구진은 편집으로 발생하는 오차 누적을 방지하기 위해 이동 재배치되는 구간(Span)의 개수를 최대 $K=6$개로 제한(Capping)하는 엄격한 경계 조건을 적용했습니다.</li>
+<li><strong>하이브리드 아키텍처 적용</strong>: 전체 주의 레이어(Full-attention layer)와 선형 주의 레이어(Linear-attention layer)가 교차 배치된 쿠엔 3.6-27B(64개 레이어 중 48개가 선형 주의) 모델에서, 선형 주의 레이어는 편집 직전의 고정 크기 순환 상태(Recurrent state) 스냅샷을 재사용하고 편집 차이는 16개의 전체 주의 레이어에만 반영되도록 설계했습니다.</li>
+<li><strong>사고 토큰 제거 환경에서의 효율성 증대</strong>: 표준 대화 엔드포인트에서 이전 턴의 사고 토큰(Reasoning tokens)을 제거함에 따라 발생하는 재프리필 병목에서도 SCR은 뛰어난 효과를 보였습니다. 브라우즈컴프 플러스 평가에서 SCR이 재용한 7.8%의 토큰 중 5.3 퍼센트포인트(%p)가 사고 토큰 제거 후 보존된 텍스트의 캐시 재사용에서 기인했습니다.</li>
+<li><strong>서빙 연산량 절감 성과</strong>: 표준 SGLang 서빙 환경 대비 동일한 작업 정확도를 유지하면서 서버 측 연산량을 35% 절감했습니다.</li>
+</ul>
+<h5 id="5-2-모델-자율-편집의-한계-및-안전성-위협">5.2 모델 자율 편집의 한계 및 안전성 위협</h5>
+<ul>
+<li><strong>안전성 및 프롬프트 주입 위협</strong>: 모델이 자신의 맥락 파일에 직접 쓰기 권한을 가짐에 따라 새로운 안전성 문제가 발생합니다. 악의적인 프롬프트 주입(Prompt injection) 공격이 맥락 수정 과정을 통해 지워지지 않고 다음 턴으로 지속되거나, 요약 과정에서 모델이 스스로 생성한 무단 지시사항이 이후 턴에 영향을 미치는 '자가 생성 프롬프트 주입' 현상이 나타날 수 있습니다.</li>
+<li><strong>맥락 길이 인지 능력의 한계</strong>: 기존 LLM은 현재 사용 중인 맥락의 길이가 전체 버짓 중 어느 정도인지 인지하는 능력(Context length awareness)에 한계를 보입니다. 연구진의 진단 실험에 따르면, 모델들은 실제 프롬프트 길이와 관계없이 <strong>6.2K, 9.8K, 10.4K 토큰</strong> 등 특정 구간의 수치를 반복 예측하는 구간화된 예측 오류(Bucketed prediction errors)를 보였습니다. 이에 따라 25%, 50%, 75% 지점에 앵커를 제공하는 외부 토큰 힌트(Token hints)가 성능 보완에 중요한 역할을 합니다.</li>
+</ul>
+<h5 id="5-3-향후-연구-방향-및-결론">5.3 향후 연구 방향 및 결론</h5>
+<p>연구진은 향후 주요 연구 방향으로 기존 외부 하네스에 정의된 절차식 메모리 및 요약 로직을 CLM의 가중치 내부로 증류(Distillation)하는 '하네스-to-CLM (Harness-to-CLM)' 파이프라인 구축을 제안합니다. 외부 하네스가 수행하던 맥락 구성 및 변환 작업을 CLM의 동작 공간으로 포섭하고, 이를 강화학습 및 정밀 조정을 통해 모델의 파라미터로 흡수시키는 방식입니다.</p>
+<p>결론적으로 Context Language Models(CLM)는 맥락 관리를 외부 시스템의 제약적인 제어 대상이 아닌 언어 모델 고유의 내재적 능력으로 변환했습니다. 맥락을 파일 형태로 모델에 개방함으로써, CLM은 수작업 규칙을 능가하는 창의적이고 효율적인 맥락 관리 전략을 스스로 탐색·학습할 수 있음을 입증했으며, 대규모 장기 에이전트 시스템의 성능과 서빙 효율성을 동시에 극대화하는 새로운 아키텍처 표준을 제시합니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

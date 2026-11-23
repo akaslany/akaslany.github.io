@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advancing science &amp; engineering with Antigravity’s /teamwork</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Advancing science &amp; engineering with Antigravity’s /teamwork</h1>
+<p class="page-meta">웹 · 2026-11-14</p>
+<h2 id="요약">요약</h2>
+<p>본 분석 보고서는 2026년 11월 13일 Google Fellow이자 VP인 바합 미로크니(Vahab Mirrokni)가 발표한 Antigravity의 /teamwork 다중 에이전트 시스템(Multi-agent systems) 연구 성과 보고를 바탕으로 수석 기술 분석가의 시각에서 작성되었다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature">출처</a> · <a href="https://www.youtube.com/watch?v=Gv3QGCUrUlQ">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="antigravity-teamwork-다중-에이전트-시스템의-과학-엔지니어링-연구-성과-분석-보고서">Antigravity /teamwork 다중 에이전트 시스템의 과학·엔지니어링 연구 성과 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 분석 보고서는 2026년 11월 13일 Google Fellow이자 VP인 바합 미로크니(Vahab Mirrokni)가 발표한 Antigravity의 <code>/teamwork</code> 다중 에이전트 시스템(Multi-agent systems) 연구 성과 보고를 바탕으로 수석 기술 분석가의 시각에서 작성되었다. 본 성과는 AI 인공지능 에이전트와 인간 전문가 간의 인터랙티브 협업 체계를 기반으로, 수학, 이론 컴퓨터 과학, 분자 화학, 시스템 소프트웨어 및 머신러닝(ML) 엔지니어링 분야에서 장기간 난제로 남아있던 핵심 과제들을 해결한 기술적 궤적과 메커니즘을 다룬다. <code>[사실]</code></p>
+<p>본 보고서가 다루는 기술 인프라는 Gemini 4 Argon, Gemini 4 Carbon, Gemini 4 Hydrogen 파운대션 모델 및 Antigravity의 다중 에이전트 워크플로우(<code>/teamwork</code>, <code>/boost</code> 등)를 축으로 구축되었다. AI 에이전트 하네스는 장기 추론(Long-horizon reasoning), 맞춤형 솔버 작성, 대규모 탐색 공간 검증 및 논리 체인 검사를 자율 처리하고, 인간 연구자는 문제 정의 및 이론적·물리적 제약 조건을 설정하는 인터랙티브 발견 루프(Interactive discovery loop)를 구성함으로써 프론티어 연구를 완수하였다. <code>[사실]</code></p>
+<p>보고서 내 기술 기술 방식의 신뢰도를 보장하기 위하여 소스 문서에 언급된 정량적 데이터 및 검증 결과는 <code>[사실]</code>, 에이전트 하네스의 우수성 및 확장성에 관한 설명은 <code>[저자 주장]</code>, 그리고 시스템 아키텍처의 의의 및 산업적 영향성에 대한 기술적 평가 문맥은 <code>[분석가 해석]</code> 태그 및 서술 톤을 통해 엄격히 구분하여 기술한다.</p>
+<hr />
+<h4 id="2-주요-논점-및-세부-성과-key-arguments-technical-achievements">2. 주요 논점 및 세부 성과 (Key Arguments &amp; Technical Achievements)</h4>
+<h5 id="2-1-장기-추론-long-horizon-reasoning-확장-및-시스템-메커니즘">2.1. 장기 추론(Long-Horizon Reasoning) 확장 및 시스템 메커니즘</h5>
+<p><em>(소스 위치: &quot;Scaling long-horizon reasoning&quot; 절)</em></p>
+<ul>
+<li><strong>[주장]</strong> 기존 대형 언어 모델(LLM)의 근본적 한계인 '생성의 불확실성(Unpredictability)'과 '장기 작업 시 문맥 분산(Context dispersion)' 문제를 에이전트 하네스(Harness)의 구조적 메커니즘 설계를 통해 극복할 수 있다. <code>[저자 주장]</code></li>
+<li><strong>[근거 및 메커니즘]</strong>
+<ul>
+<li><strong>검증기(Falsifiers/Verifiers) 연동:</strong> 단일 생성 시도와 엄밀한 정답 간의 격차를 줄이기 위해 병렬 탐색 체계에 전용 검증기를 결합함. Lean 4 증명 검증기, 수정되지 않은 소프트웨어 테스트 수트, 실행 시뮬레이터, 웹 검색, 하드웨어 카운터를 활용하여 에이전트가 제안한 솔루션을 자동 검증함. <code>[사실]</code></li>
+<li><strong>문맥 분할 및 에이전트 역할 분담:</strong> 멀티데이(Multi-day) 작업 시 문맥 창(Context window) 비대화로 인한 주의력(Attention) 분산을 방지하기 위해 문맥을 구조적으로 격리(Context isolation)함. 각 전문 에이전트는 해당 단계에 필요한 파일과 도구만 수신함. **코디네이터(Coordinator)**는 컨텍스트가 비대해지기 전에 깨끗한 상태의 후속 에이전트(Fresh successor)에게 최소한의 필수 파일과 도구만 전달하여 작업 핸드오프를 수행함. **크리틱(Critic)**과 **오디터(Auditor)**는 생성 에이전트의 내부 추론 과정(Reasoning chain)이 완전히 제거된 **클린 컨텍스트(Clean context)**에서 결과를 검증하여 편향과 확증 편향을 차단함. <code>[사실]</code></li>
+<li><strong>선언적 패턴 및 하네스 자율 최적화:</strong> 자연어 기반의 자가 개선 패턴을 활용하며 프롬프트에 따라 동적 라우팅됨. 특히 standalone 복잡 코딩 패턴인 <code>/boost</code>는 정적 알고리즘이 아니라, 과거 실행 궤적(Trajectories) 분석을 통해 밀접하게 결합된 코드 작업의 경우 병렬 분동보다 순차적 구현·수정 단계를 택하도록 하네스가 자율 정제(Harness optimizing harness)된 토큰 효율적 구조를 가짐. <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>[구체적 사례/성과]</strong> Antigravity 내에 <code>/boost</code>, Long Proof 패턴, 문서 검토(Document review) 패턴 등이 성공적으로 탑재되어 외부 연구진 및 개발자가 자율 에이전트 오케스트레이션을 실제 연구 및 개발 프레임워크에 즉시 적용할 수 있는 환경을 구현함. <code>[사실]</code> 이는 단일 모델 성능 향상에 의존하던 기존 paradigm을 다중 에이전트 시스템 하네스 중심으로 전환시킨 중요한 엔지니어링 성과이다. <code>[분석가 해석]</code></li>
+</ul>
+<h5 id="2-2-수학-및-이론-컴퓨터-과학-분야의-미해결-과제-해결">2.2. 수학 및 이론 컴퓨터 과학 분야의 미해결 과제 해결</h5>
+<p><em>(소스 위치: &quot;Mathematics and theoretical computer science&quot; 절)</em></p>
+<ul>
+<li><strong>[주장]</strong> Gemini 4 및 <code>/teamwork</code> 하네스를 활용하면 미해결 문제 성명(Open problem statement)으로부터 직접 완전한 알고리즘과 증명을 생성하고 형식 검증을 자율 완수할 수 있다. <code>[저자 주장]</code></li>
+<li><strong>[근거 및 메커니즘]</strong> 미해결 과제 입력 시 Stellar Colosseum 및 Long Proof 패턴을 구동하여 parameter 공간 분할, 분석적 하한선 도출, 구간 산술 증명서 작성, Lean 4 형식화 코드 생성을 자율 연동 처리함. <code>[사실]</code></li>
+<li><strong>[구체적 사례/성과]</strong>
+<ul>
+<li><strong>쿠르타드-쿠마르 추측 (Courtade–Kumar conjecture):</strong> Google, CUHK, USC, CMU 연구진이 <code>/teamwork</code> Long Proof 패턴을 활용하여 2013년 정보 이론 난제를 완전한 일반성(Full generality)으로 증명함. CUHK 선행 논문의 일반화 추측에 대한 반례를 Gemini가 발견한 후, 문제 구조를 14변수 최적화 문제로 축소하고 분석적 하한선을 도출함. human input 없이 불균형 함수로 증명을 확장하였으며, Lean 4로 전체 증명을 형식화하여 5,000만 줄의 코드를 생성함. <code>[사실]</code></li>
+<li><strong>적응형 데이터 분석 (Adaptive data analysis):</strong> Gemini 4 Argon 기반 다중 에이전트가 적응적 통계 쿼리에 대한 표본 경계(Sample bounds)를 독립 증명하고 Lean 검증을 완료하여 2014년 이후 미해결 과제를 해결함. 이를 통해 삽입/삭제가 존재하는 데이터 스트림에서 적응적 공격자에 대응하는 최초의 공간 최적 알고리즘을 도출함. <code>[사실]</code></li>
+<li><strong>양자 컴퓨팅 (Quantum computing):</strong> 상수 오차에서 $n/2$개보다 엄격히 많은 양자 쿼리가 필요한 최초의 $n$-비트 Boolean 함수 구조를 발견하여 2014년 미해결 과제인 대칭 함수의 정확한 쿼리 오버헤드를 규명함. <code>[사실]</code></li>
+<li><strong>Boolean 행렬 곱셈 및 삼각형 탐지:</strong> 대수적 상쇄가 없는 조합 알고리즘 분야에서 입방 시간(Cubic time) 대비 로그 요소 이상의 확정적 속도 향상(Deterministic algorithm)을 달성하여 STOC 2024의 핵심 미해결 난제를 해결함. <code>[사실]</code></li>
+<li><strong>고차원 기하학 (High-dimensional geometry):</strong> Steiner spanners에 대한 새로운 하한선을 증명하여, 점 사이 거리를 상수 비율로 근사할 때 추가 Steiner 점이 존재하더라도 $n$보다 다항식적으로 더 많은 간선이 필요함을 입증함. <code>[사실]</code></li>
+<li><strong>무작위 선형대수 (Randomized linear algebra):</strong> 적층 희소 스케치(Stacked sparse sketches)를 통해 $r$차원 부분공간 방향 축소 없이 행렬을 압축하는 기술을 개발, 행당 $\sqrt{\log r}$개의 비제로 요소만 필요로 하는 2025년 미해결 희소성 장벽을 극복함. <code>[사실]</code></li>
+<li><strong>가중 그래프 Cut sparsification:</strong> 동적 가중치 환경에서 Stellar Colosseum이 FOCS 2022 미해결 문제를 해결하여 메모리, 업데이트 시간, 재구성 시간을 동시에 최적화하는 최초의 단일 패스 스트리밍 알고리즘을 도출함. <code>[사실]</code></li>
+<li><strong>온라인 역선형 최적화 (Online inverse linear optimization):</strong> 전문가의 숨겨진 목적 함수 추론 문제에서 최적 리그렛을 달성하며 실행 시간을 지수 시간에서 다항 시간(Polynomial time)으로 단축함. <code>[사실]</code></li>
+<li><strong>$n$-비트 정수 곱셈 (Integer multiplication):</strong> 튜링 머신 상한을 $n \log n$ 미만으로 단순화하고, 단일 2D 그리드상의 $O(n \log n)$ C 구현체가 GMP 라이브러리와 10억 비트까지 비트 단위(Bit-for-bit) 일치함을 검증함. <code>[사실]</code></li>
+<li><strong>타잔의 Deque 추측 (Tarjan's Deque Conjecture):</strong> 1985년 스플레이 트리 연산 비용 추측에 대해 유한 반복 역-아커만(Inverse-Ackermann) 상한선을 능가하는 연산 오버헤드 상한을 증명하고 Lean 4 형식화를 완료함. <code>[사실]</code></li>
+<li><strong>엘라스틱 넷 (Elastic net):</strong> 비더듬 희소 페널티를 갖는 엘라스틱 넷 모델에 대해 근사 일괄 배제 교차 검증(Approximate leave-one-out cross-validation)의 정확성을 이론적으로 증명함. <code>[사실]</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-형식-검증-formal-verification-및-심층-논문-검토-deep-review">2.3. 형식 검증(Formal Verification) 및 심층 논문 검토(Deep Review)</h5>
+<p><em>(소스 위치: &quot;Scaling formal verification and manuscript review&quot; 절)</em></p>
+<ul>
+<li><strong>[주장]</strong> LEAP 프레임워크 및 Deep Review 시스템을 통해 대규모 수학 논문의 자율적 형식 검증과 고도화된 동료 검토(Peer review)를 자동화할 수 있다. <code>[저자 주장]</code></li>
+<li><strong>[근거 및 메커니즘]</strong> Google Cloud AI와 협력 개발한 LEAP 프레임워크는 Argon 모델과 결합하여 비형식적 증명으로부터 Lean 4 기계 검증 코드를 합성함. Deep Review는 <code>/teamwork</code> 문서 검토 패턴으로 구현되어 제출 논문의 오류를 정밀 감사함. <code>[사실]</code></li>
+<li><strong>[구체적 사례/성과]</strong>
+<ul>
+<li><strong>LEAP 프레임워크 형식 검증 성과:</strong>
+<ul>
+<li><em>바일 추측 (Weil conjectures):</em> 28,800회 하위 에이전트 호출을 거쳐 약 180만 줄의 Lean 4 코드로 완전 자율 기계 검증 완료 (1974년 피에르 들리뉴 증명). <code>[사실]</code></li>
+<li><em>힐베르트 10번 문제 (Hilbert's tenth problem):</em> 일반 정수 환 상의 최근 증명을 91만 9천 줄의 Lean 코드로 최초 형식화함. <code>[사실]</code></li>
+<li><em>3D 나비에-스토크스 방정식 (3D Navier–Stokes equations):</em> 부드러운 강제력 하 유한 시간 폭발(Finite-time blowup) 증명을 독립 형식화함 (~90년 난제). <code>[사실]</code></li>
+<li><em>비르크호프 추측 (Birkhoff conjecture):</em> 1927년 제시된 동역학계 난제를 최초로 형식화함. <code>[사실]</code></li>
+<li><em>3D 보흐너-리스 추측 (3D Bochner–Riesz conjecture):</em> 50년 이상 미해결된 조화분석학 문제를 형식화하였으며, 기존 비공식 증명 내 비약/결함을 발견하여 직접 수정 완료함. <code>[사실]</code></li>
+<li><em>기타 검증:</em> 3차원 이상 무한 하모닉 함수 $C^1$ 정칙성(20년 난제), KdV 수파 방정식 $H^{-1}$ 적합성 형식화, Jamison Caterpillar 추측, Ağırseven-Ollis 추측, Erdős Problem #1063 상한선 개선 검증 완료. <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>Deep Review 제출작 검토 성과:</strong> STOC 2027 제출 논문 578건(전체 제출작의 1/3 이상) 대상 사전 적용.
+<ul>
+<li>저자 설문 결과 (N=70): 90%가 피드백이 사실에 기초한다고 평가, 90%가 재사용 의사 표명, &gt;30%가 실질적 증명 버그 또는 수학적 오타 감지, 14%가 수정에 1시간 이상 소요되는 기술적 결함 감지. <code>[사실]</code></li>
+<li>저자들은 정성 피드백을 통해 &quot;이러한 도구는 더 깨끗하고 정밀한 연구를 빠르고 안전하게 생산하는 데 도움을 주며, 과학적 발견에 대한 정서적 안도감을 제공한다&quot;고 평가함. <code>[사실]</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-분자-화학-발견-및-인과-추론-벤치마크-생성">2.4. 분자 화학 발견 및 인과 추론 벤치마크 생성</h5>
+<p><em>(소스 위치: &quot;Molecular chemistry discovery&quot;, &quot;Generating a causal inference benchmark&quot; 절)</em></p>
+<ul>
+<li><strong>[주장]</strong> 생성 에이전트와 독립 검증 에이전트를 물리 시뮬레이터와 결합하여 고난도 실험 과학 문제를 해결하고 인과 추론 벤치마크를 자율 구축할 수 있다. <code>[저자 주장]</code></li>
+<li><strong>[근거 및 메커니즘]</strong> 물리 기반 스펙트럼 시뮬레이터와 자가 수정 루프를 결합한 에이전트 앙상블 구성, 그리고 multi-round 감사 워크플로우를 통한 데이터 검증 메커니즘을 적용함. <code>[사실]</code></li>
+<li><strong>[구체적 사례/성과]</strong>
+<ul>
+<li><strong>NMR 스펙트럼 분석:</strong> 30개 전문 에이전트를 자가 수정 루프로 구성하고 물리 기반 스펙트럼 시뮬레이터와 연동함. 복잡 벤치마크 분자의 NMR 데이터 구조 해석에서 Top-1 95%, Top-3 100% 정확도를 달성하여 단일 에이전트 대비 성능을 2배 높임. <code>[사실]</code> 특히 화학 분야에서 **HIV 프로테아제 억제제(HIV protease inhibitors)**의 경우 단 하나의 결합(Bond) 위치 차이로 비활성 유사체와 실제 약물이 갈라지는 물리 화학적 난제 구조를 정밀하게 분별해냄. <code>[사실]</code></li>
+<li><strong>인과 추론 벤치마크 생성:</strong> Argon 기반 29개 에이전트가 11.5시간 동안 13개 공공 데이터 테이블을 처리하여 50개 과제 규모의 인과 추론 벤치마크를 자동 생성함. 리뷰어 및 오디터 에이전트가 지름길(Shortcuts), 텍스트 힌트, 환각 스크립트를 거부 및 차단하여 신뢰할 수 있는 영구 테스트 세트를 구축함. <code>[사실]</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="2-5-코딩-시스템-엔지니어링-및-구글-인프라-적용">2.5. 코딩, 시스템 엔지니어링 및 구글 인프라 적용</h5>
+<p><em>(소스 위치: &quot;Coding and systems engineering&quot;, &quot;Google infrastructure applications&quot; 절)</em></p>
+<ul>
+<li><strong>[주장]</strong> 객관적 평가기(Evaluators)와 결합된 다중 에이전트 캠페인을 통해 대규모 소프트웨어 재작성, TPU 커널 최적화 및 사내 프로덕션 인프라 효율화를 자율 완수할 수 있다. <code>[저자 주장]</code></li>
+<li><strong>[근거 및 메커니즘]</strong>
+<ul>
+<li><strong>의존성 기반 Rust 재작성 스케줄링 메커니즘:</strong> 에이전트가 미완성 코드를 임의로 통과시키는 편법(Stubbing)을 방지하기 위해, 각 모듈의 의존성(Dependencies)이 컴파일 완료된 후에만 해당 모듈의 재작성을 스케줄링하고, 모든 리프(Leaf) 모듈을 원본 소프트웨어의 수정되지 않은 테스트 수트에 직접 링크하여 검증함. <code>[사실]</code></li>
+<li><strong>프록시 평가기(Yardstick) 메커니즘:</strong> DuoDiscover 패턴을 통해 하드웨어 평가 시간(7~32분 소요)을 23초로 단축하는 프록시 평가기 구축 후, Kendall 순위 상관계수로 실제 하드웨어 실행과 지속적 교차 검증을 수행함. <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>[구체적 사례/성과]</strong>
+<ul>
+<li><strong>분산 시스템 (FarArray):</strong> SNAP 마이크로커널 기반 PGAS 구조 구축. 1조 개 간선 그래프 처리 시 TCP 키-값 저장소 대비 처리량 60~90배 향상, 6배 낮은 RAM 환경에서 40~180배 속도 향상. InstantEmbedding 피크 DRAM 14배 절감, 실행 시간 11~27배 단축. TPU GNN 커널 HBM 사용량 185배 절감, 전진/후진 패스 8~15배 속도 향상. <code>[사실]</code></li>
+<li><strong>자율 언덕 오르기 (Go 엔진):</strong> AlphaZero 기반 9x9 바둑 엔진 자율 학습. self-play 속도 2,300배 향상, 8일 미만 기간 동안 약 2,600 Elo를 획득하여 1,885 Elo 달성 (KataGo 16~32 visits/move 수준). <code>[사실]</code></li>
+<li><strong>안전한 Safe Rust 재작성:</strong>
+<ul>
+<li><em>Zircon 마이크로커널:</em> 2주간의 Argon 캠페인을 통해 약 80만 줄의 Safe Rust 작성 (arm64 부팅 및 모든 단위 테스트 통과). <code>[사실]</code></li>
+<li><em>libgav1 (AV1 디코더):</em> C++ 코드를 약 17만 줄의 Rust 코드로 포팅함. <strong>[단계적 궤적 복원]</strong> 초기 포팅 버전은 원본 C++ 대비 약 4배 느렸으나(around 4x slower), 에이전트에 프로파일링 도구 접근 권한과 속도 최적화 미션을 부여한 이터레이션을 거쳐, 최종적으로 원본 C++ 및 어셈블리 코드 대비 20~30% 성능 향상을 달성함. <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>TPU 커널 최적화 (DuoDiscover):</strong> JAXBench 17개 커널에서 4.09배(기하평균), vLLM Pallas 커널 7개에서 2.99배(기하평균) 속도 향상. <code>[사실]</code></li>
+<li><strong>구글 프로덕션 인프라 적용:</strong> 플릿 메모리 최적화 에이전트(Memory Efficiency Monitoring Agent) 배포를 통해 구조체 패딩 제거, 스칼라 축소 등을 적용하여 초기 목표치인 1 PiB(페타바이트) 이상의 메모리 절감을 초과 달성함. Borg 에이전트 스케줄링 최적화로 특정 하드웨어의 TPU 워크로드 선점(Preemption)을 24% 감소시킴. <code>[사실]</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-roles">3. 등장 인물 및 화자 (Key Figures &amp; Roles)</h4>
+<p>본 프로젝트에 참여한 주요 인물, 기여 그룹 및 기관별 학술 협력자 현황은 다음과 같다. <code>[사실]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 / 그룹 이름</th>
+<th style="text-align:left">소스 내 역할 및 소속</th>
+<th style="text-align:left">비고 / 상세 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>바합 미로크니 (Vahab Mirrokni)</strong></td>
+<td style="text-align:left">아티클 저자, Google Fellow 겸 VP, Google Research</td>
+<td style="text-align:left">본 연구 성과 발표의 총괄 보고자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Google 핵심 팀 (Core /teamwork Team)</strong></td>
+<td style="text-align:left">Yuan Deng, Honghao Lin, Jieming Mao, Vahab Mirrokni, Vishnu Veeramachaneni, David Woodruff, Song Zuo</td>
+<td style="text-align:left">Antigravity <code>/teamwork</code> 아키텍처 및 핵심 워크플로우 개발 기여진</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Google 연구진 및 기여진</strong></td>
+<td style="text-align:left">Shubham Agarwal, Santiago Balseiro, MohammadHossein Bateni 등 60여 명</td>
+<td style="text-align:left">연구, 알고리즘 구현 및 시스템 엔지니어링 수행 기여진</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>프로그램 관리진</strong></td>
+<td style="text-align:left">Carla Bromberg, Lauren Fraser</td>
+<td style="text-align:left">프로젝트 전체 프로그램 매니지먼트 담당</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>프로젝트 프로젝트 기여진</strong></td>
+<td style="text-align:left">Francis Duan, Pan-Pan Jiang, Xiyan Shao, Jane Shapiro, Weilun Shi, Xinyu Ye</td>
+<td style="text-align:left">시스템 및 인프라 구현 프로젝트 기여진</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Google &amp; DeepMind 리더십</strong></td>
+<td style="text-align:left">Sergey Brin, Demis Hassabis, Koray Kavukcuoglu, Pushmeet Kohli, James Manyika, Yossi Matias, Varun Mohan, Amin Vahdat</td>
+<td style="text-align:left">연구 프로젝트 지원 및 리더십 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학술 협력 기관: CUHK</strong></td>
+<td style="text-align:left">Zijie Chen, Amin Gohari, Chandra Nair</td>
+<td style="text-align:left">Courtade–Kumar 추측 증명 및 정보 이론 논문 공동 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학술 협력 기관: Columbia University</strong></td>
+<td style="text-align:left">Songbin Liu, Arian Maleki, Chen Shang, Hanbo Yang, Wenjin Zhang</td>
+<td style="text-align:left">통계학 및 이론 컴퓨터 과학 논문 공동 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학술 협력 기관: UCSD</strong></td>
+<td style="text-align:left">Zihan Hao, Qipeng Liu, Jianan Shao</td>
+<td style="text-align:left">알고리즘 및 구조 해석 논문 공동 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학술 협력 기관: MIT</strong></td>
+<td style="text-align:left">Mahbod Majid, Margalit Glasgow</td>
+<td style="text-align:left">무작위 선형대수 및 기하학 논문 공동 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학술 협력 기관: Princeton University</strong></td>
+<td style="text-align:left">Huacheng Yu, Elena Gribelyuk</td>
+<td style="text-align:left">고차원 기하학 및 형식 검증 논문 공동 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학술 협력 기타 기관</strong></td>
+<td style="text-align:left">Lorenzo Beretta (IBM Cambridge), Simone Bombari (BYU &amp; Flatiron Inst.), Raphael Arkady Meyer (UC Berkeley/ICSI/LBNL), Kijun Shin (CMU), Xin Lyu (UCB/ByteDance), Samson Zhou (Texas A&amp;M), Erik Waingarten (UPenn), Sorrachai Yingchareonthawornchai (ETH-ITS)</td>
+<td style="text-align:left">분야별 미해결 난제 해결 및 증명 검증 공동 연구 참여자</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-정보-key-metrics-timelines">4. 주요 수치 및 시점 정보 (Key Metrics &amp; Timelines)</h4>
+<h5 id="4-1-주요-시점-정보">4.1. 주요 시점 정보</h5>
+<ul>
+<li><strong>2026년 11월 13일:</strong> Antigravity <code>/teamwork</code> 성과 보고서 발표일. <code>[사실]</code></li>
+<li><strong>2026년 11월 5일 / 9일 / 11일:</strong> 관련 헬스케어 및 언어 AI 연구 포스팅 발표일. <code>[사실]</code></li>
+<li><strong>1927년:</strong> 비르크호프 추측(Birkhoff conjecture) 제시 시점 (약 100년간 미해결). <code>[사실]</code></li>
+<li><strong>1974년:</strong> 피에르 들리뉴의 바일 추측(Weil conjectures) 증명 완료 시점. <code>[사실]</code></li>
+<li><strong>1985년:</strong> 타잔(Tarjan)의 Deque 추측 제시 시점. <code>[사실]</code></li>
+<li><strong>2013년 / 2014년:</strong> Courtade–Kumar 추측, 적응형 데이터 분석, 양자 쿼리 오버헤드 난제 제시 시점. <code>[사실]</code></li>
+<li><strong>2022년 / 2024년 / 2025년:</strong> FOCS 2022 Cut sparsification, STOC 2024 행렬 곱셈, 2025 희소성 장벽 난제 제시 시점. <code>[사실]</code></li>
+<li><strong>STOC 2027:</strong> Deep Review 선제 검토 서비스가 적용된 컴퓨터 과학 학술대회. <code>[사실]</code></li>
+</ul>
+<h5 id="4-2-핵심-성과-수치-요약">4.2. 핵심 성과 수치 요약</h5>
+<h6 id="분류-항목별-정량-지표-목록">분류 항목별 정량 지표 목록</h6>
+<ul>
+<li><strong>코드 및 데이터 규모:</strong> Lean 4 코드 생성 (Courtade-Kumar 5,000만 줄, 바일 추측 180만 줄, 힐베르트 10번 문제 91만 9,000줄), Zircon Rust 재작성 80만 줄, libgav1 Rust 재작성 17만 줄. <code>[사실]</code></li>
+<li><strong>성능 및 속도 향상 지표:</strong> FarArray 처리량 60~90배 / 속도 40~180배 향상, 바둑 엔진 self-play 2,300배 속도 향상 (8일 미만 2,600 Elo 상승), libgav1 Rust 포팅 (4배 속도 저하 극복 후 20~30% 최종 속도 향상), DuoDiscover JAXBench 4.09배 / vLLM Pallas 2.99배 속도 향상. <code>[사실]</code></li>
+<li><strong>인프라 절감 및 검증 지표:</strong> 사내 프로덕션 메모리 절감 &gt;1 PiB, Borg TPU 선점 24% 감소, Deep Review STOC 2027 제출작 578건 대상 (N=70 중 90% 사실성 인정, &gt;30% 오류 발견). <code>[사실]</code></li>
+</ul>
+<h6 id="핵심-정량-지표-종합-마크다운-표">핵심 정량 지표 종합 마크다운 표</h6>
+<p>Below table synthesizes all primary metric domain data present in the report source. <code>[사실]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">지표 구분</th>
+<th style="text-align:left">수치 및 성과 데이터</th>
+<th style="text-align:left">대상 시스템 / 분야</th>
+<th style="text-align:left">비교 기준 및 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>코드 생성 규모</strong></td>
+<td style="text-align:left"><strong>5,000만 줄</strong> (Lean 4)</td>
+<td style="text-align:left">Courtade–Kumar 추측 증명</td>
+<td style="text-align:left">자율 기계 형식 검증 코드</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 생성 규모</strong></td>
+<td style="text-align:left"><strong>180만 줄</strong> (Lean 4)</td>
+<td style="text-align:left">바일 추측 (Weil conjectures)</td>
+<td style="text-align:left">28,800회 하위 에이전트 호출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드 생성 규모</strong></td>
+<td style="text-align:left"><strong>91만 9,000줄</strong> (Lean 4)</td>
+<td style="text-align:left">힐베르트 10번 문제</td>
+<td style="text-align:left">정수 환 상의 증명 최초 형식화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소프트웨어 포팅</strong></td>
+<td style="text-align:left"><strong>80만 줄</strong> (Safe Rust)</td>
+<td style="text-align:left">Zircon 마이크로커널 재작성</td>
+<td style="text-align:left">2주간 Argon 캠페인 (arm64 부팅)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소프트웨어 포팅</strong></td>
+<td style="text-align:left"><strong>17만 줄</strong> (Safe Rust)</td>
+<td style="text-align:left">libgav1 AV1 디코더</td>
+<td style="text-align:left">초기 4배 지연 후 <strong>20~30% 최종 속도 향상</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>처리량 / 속도</strong></td>
+<td style="text-align:left"><strong>60 ~ 90배</strong> 처리량 향상</td>
+<td style="text-align:left">FarArray 그래프 시스템</td>
+<td style="text-align:left">TCP 키-값 저장소 대비 (1조 간선)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>메모리 절감</strong></td>
+<td style="text-align:left"><strong>최대 185배</strong> HBM 절감</td>
+<td style="text-align:left">GNN 전용 TPU 커널</td>
+<td style="text-align:left">기존 TPU 커널 대비</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>자율 학습 속도</strong></td>
+<td style="text-align:left"><strong>2,300배</strong> self-play 향상</td>
+<td style="text-align:left">AlphaZero 기반 9x9 바둑 엔진</td>
+<td style="text-align:left">8일 미만 2,600 Elo 상승 (1,885 Elo)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>커널 최적화</strong></td>
+<td style="text-align:left"><strong>4.09배</strong> (JAX), <strong>2.99배</strong> (vLLM)</td>
+<td style="text-align:left">DuoDiscover TPU 커널</td>
+<td style="text-align:left">Reference 구현체 대비 (기하평균)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인프라 절감</strong></td>
+<td style="text-align:left"><strong>&gt; 1 PiB</strong> (페타바이트) 절감</td>
+<td style="text-align:left">Fleet-wide 프로덕션 메모리</td>
+<td style="text-align:left">사내 메모리 효율화 에이전트 배포</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>워크로드 선점</strong></td>
+<td style="text-align:left"><strong>24% 감소</strong></td>
+<td style="text-align:left">Borg 스케줄링 워크플로우</td>
+<td style="text-align:left">특정 하드웨어 타입 TPU 워크로드</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>외부 지원 / 리뷰</strong></td>
+<td style="text-align:left"><strong>10,000명</strong> / <strong>578건</strong> 적용</td>
+<td style="text-align:left">학술 계정 지원 / Deep Review</td>
+<td style="text-align:left">6개월 무료 지원 / STOC 2027 제출작</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>외부 미공개 기능의 일정 불확실성:</strong> Antigravity 내 일부 기능(<code>/boost</code>, Deep Review 등)은 상용화되어 사용 가능하나, 형식 증명 패턴(Formal proof pattern) 및 추가 전문 워크플로우 등의 전체 기능 외부 완결 제공 시점은 소스상 &quot;향후 수 주 내 업데이트 예정(in the coming weeks)&quot;으로만 명시되어 있어 정확한 일정을 확정할 수 없음. <code>[소스 미기재 / 사실]</code></li>
+<li><strong>하드웨어 세부 사양 미표기:</strong> 에이전트 검증 시 사용된 하드웨어 카운터(Hardware counters)의 기술 스펙 및 Borg 스케줄링 최적화가 적용된 '특정 하드웨어 타입'의 명칭은 소스에 기재되어 있지 않음. <code>[소스 미기재]</code></li>
+<li><strong>개별 기여자의 상세 역할 구분의 한계:</strong> 소스 하단에 60여 명 이상의 연구원 및 학술 협력자 이름이 명시되어 있으나, 일부 기관/프로젝트 리더를 제외한 개별 연구원의 세부 과제 담당 내역은 확인 불가능함. <code>[확인 불가]</code></li>
+<li><strong>소스 주장에 대한 기술적 한계선 선언:</strong> 본 보고서에 포함된 모든 분석 데이터, 성능 향상 지표 및 메커니즘 설명은 2026년 11월 13일 공개된 소스 문서의 기록에 엄격히 한정되며, 외부 데이터에 기초한 추측성 확장은 전면 배제됨. <code>[분석가 해석]</code></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

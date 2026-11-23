@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement</h1>
+<p class="page-meta">논문 · 2026-09-13</p>
+<h2 id="요약">요약</h2>
+<p>재귀적 자기 개선(Recursive Self-Improvement, RSI)은 AI 시스템이 스스로의 한계를 식별하고, 개선 사항을 개발 및 검증하며, 그 결과로 얻은 능력을 미래의 개선 프로세스 자체를 향상시키는 데 사용하는 자율적 폐쇄 루프(Closed-loop) 과정으로 정의된다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/abs/2609.11873v1">출처</a> · <a href="https://www.youtube.com/watch?v=M9xxzBDHH_M">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="재귀적-자기-개선-rsi-의-구조와-자율성-단계별-심층-분석-보고서">재귀적 자기 개선(RSI)의 구조와 자율성 단계별 심층 분석 보고서</h3>
+<h4 id="1-재귀적-자기-개선-rsi-의-개념적-정의-및-등장-배경">1. 재귀적 자기 개선(RSI)의 개념적 정의 및 등장 배경</h4>
+<h5 id="1-1-rsi의-핵심-정의-및-전통적-최적화와의-차별점">1.1 RSI의 핵심 정의 및 전통적 최적화와의 차별점</h5>
+<p>재귀적 자기 개선(Recursive Self-Improvement, RSI)은 AI 시스템이 스스로의 한계를 식별하고, 개선 사항을 개발 및 검증하며, 그 결과로 얻은 능력을 미래의 개선 프로세스 자체를 향상시키는 데 사용하는 <strong>자율적 폐쇄 루프(Closed-loop) 과정</strong>으로 정의된다.</p>
+<p>본 분석가는 RSI를 단순한 알고리즘적 성과 향상과 엄격히 구분한다. 전통적 최적화가 특정 작업의 성능(Performance) 향상에 머무르는 반면, RSI는 <strong>'작업 성능'과 '개선 메커니즘(Improvement Mechanism)'의 재귀적 결합</strong>을 지향한다. 즉, 시스템이 문제를 해결하는 능력뿐만 아니라, 스스로를 수정하고 진화시키는 방법론까지도 시스템 상태(System State)의 일부로서 동시 향상시키는 것이 핵심이다.</p>
+<h5 id="1-2-모델-개발의-확장-한계-scaling-burdens-분석">1.2 모델 개발의 확장 한계(Scaling Burdens) 분석</h5>
+<p>현행 모델 개발 패러다임은 인간 개발자의 직접적인 개입에 의존하는 구조적 병목 현상에 직면해 있으며, 이는 RSI 도입의 필연적 동기가 된다.</p>
+<ul>
+<li><strong>자원 집약적 훈련(Resource-intensive Training):</strong> 데이터 준비, 아키텍처 설계, 분산 최적화에 막대한 인적 자원이 소요된다. 일례로 GPT-5.6 개발 과정에서 내부 에이전트의 토큰 사용량이 22배 증가하는 등 개발 공정 자체의 부하가 급증하고 있다.</li>
+<li><strong>피드백 및 학습 환경의 확장성(Scaling Feedback):</strong> 고품질 피드백 루프 구성 비용이 사전 훈련 비용의 10%를 상회(DeepSeek-V3.2 사례)하는 등, 학습 경험을 생성하고 평가하는 인프라의 확장이 한계에 도달했다.</li>
+<li><strong>배포 후 반복적 적응 부담(Recurring Adaptation):</strong> 실제 환경 배포 후 발생하는 도구 변화나 문서 갱신 등에 대응하기 위해 엔지니어가 수동으로 장애를 진단하고 수정하는 과정이 반복되고 있다.</li>
+</ul>
+<h4 id="2-hci-headroom-closed-index-를-통한-현대-파운데이션-모델의-역량-진단">2. HCI(Headroom-Closed Index)를 통한 현대 파운데이션 모델의 역량 진단</h4>
+<h5 id="2-1-hci-지표의-정의-및-산출식">2.1 HCI 지표의 정의 및 산출식</h5>
+<p>현대 모델의 역량을 정량적으로 정규화하여 평가하기 위해 본 보고서는 **HCI(Headroom-Closed Index)**를 활용한다. 이는 특정 벤치마크 진입 연도의 프런티어 대비 완벽한 점수(Perfect Score)까지의 간극을 얼마나 좁혔는지를 측정하며, 산출식은 다음과 같다.</p>
+<p>$$HCI = 100 \times \frac{\bar{s} - F_{b,0}}{100 - F_{b,0}}$$</p>
+<p><em>(여기서 $\bar{s}$는 모델의 가중 합 점수, $F_{b,0}$는 해당 벤치마크 진입 연도 상위 90% 모델의 점수이다.)</em></p>
+<h5 id="2-2-역량-도메인별-불균형-및-rsi의-잠재적-영향력">2.2 역량 도메인별 불균형 및 RSI의 잠재적 영향력</h5>
+<p>[SOURCE_IMAGE_3] 데이터 분석 결과, 지식/과학 영역(L1-L2 수준)은 이미 높은 HCI를 기록하며 성숙기에 접어든 반면, 도구 사용 및 소프트웨어 공학 영역(L2-L4 수준)은 여전히 현격한 격차를 보이고 있다. 본 분석가는 **L2-L4의 복합 자율성이 요구되는 도구/소프트웨어 공학 영역의 HCI 격차가 RSI 도입의 실질적 전장(Battleground)**이 될 것으로 진단한다.</p>
+<p>RSI가 적용될 경우, 실행 가능한 피드백이 존재하는 도메인을 중심으로 다음과 같은 가상의 HCI 확장(Illustrative extension)이 기대된다.</p>
+<ul>
+<li><strong>소프트웨어 공학:</strong> 52.6 → 89.6</li>
+<li><strong>검색 및 터미널 에이전트:</strong> 56.8 → 90.5</li>
+<li><strong>도구 사용(Tool Use):</strong> 39.9 → 86.8</li>
+</ul>
+<h4 id="3-자율성-중심의-rsi-5단계-로드맵-및-루프-구조">3. 자율성 중심의 RSI 5단계 로드맵 및 루프 구조</h4>
+<h5 id="3-1-자율성-단계별-상세-프로필-및-상속-메커니즘">3.1 자율성 단계별 상세 프로필 및 상속 메커니즘</h5>
+<p>RSI의 자율성은 AI가 개선 루프에서 책임지는 범위와 시스템 상태로 상속(Inheritance)되는 항목에 따라 구분된다.</p>
+<ul>
+<li><strong>B0 (In-Task AI Improvement):</strong> 작업 내 반복을 통한 일시적 최적화. 영속적인 시스템 상태의 변화는 발생하지 않음.</li>
+<li><strong>L1 (Improvement Execution):</strong> 개선 실행의 자율성. 인간이 기준을 설정하면 AI가 후보 업데이트를 실행. <strong>모델 파라미터나 가이드</strong>가 시스템 상태로 상속됨.</li>
+<li><strong>L2 (Improvement Strategy):</strong> 개선 전략의 자율성. AI가 약점을 진단하고 개선 방법(예: 프롬프트 최적화, 검색 전략)을 결정. <strong>개선 전략 및 프롬프트 세트</strong>가 상속됨.</li>
+<li><strong>L3 (Experience Acquisition):</strong> 경험 획득의 자율성. AI가 미래 학습을 위한 연습 과제나 커리큘럼을 스스로 생성. <strong>학습 데이터 및 커리큘럼</strong>이 상속됨.</li>
+<li><strong>L4 (Environment Adaptation):</strong> 환경 적응의 자율성. 배포 환경의 피드백을 통해 시스템 상태를 지속적으로 수정. <strong>도구 인터페이스 및 환경 적응 규칙</strong>이 상속됨.</li>
+<li><strong>L5 (Recursive Meta-Improvement):</strong> 재귀적 상속 자율성. 개선 프로세스를 관리하는 <strong>메커니즘(개선자, 검증기 등) 자체를 수정</strong>하고 이를 차세대 루프에 영속적으로 상속함.</li>
+</ul>
+<h5 id="3-2-단계별-비교-분석-ai-내부화-범위">3.2 단계별 비교 분석 (AI 내부화 범위)</h5>
+<p>Figure 2의 루프 패턴 분석에 따르면, 단계가 높아질수록 인간의 통제 경계(Gray dashed frames)가 축소되고 AI의 내부화 범위(Green dashed frames)가 확장된다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">단계</th>
+<th style="text-align:left">핵심 업데이트 대상</th>
+<th style="text-align:left">AI 내부화 범위</th>
+<th style="text-align:left">시스템 상태 상속 항목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>B0</strong></td>
+<td style="text-align:left">작업 결과물</td>
+<td style="text-align:left">작업 내 반복 실행</td>
+<td style="text-align:left">(없음)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>L1</strong></td>
+<td style="text-align:left">파라미터/가이드</td>
+<td style="text-align:left">개선 실행 자동화</td>
+<td style="text-align:left">업데이트된 가중치/지침</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>L2</strong></td>
+<td style="text-align:left">개선 전략</td>
+<td style="text-align:left">약점 진단 및 전략 선택</td>
+<td style="text-align:left">최적화된 검색/추론 전략</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>L3</strong></td>
+<td style="text-align:left">학습 경험</td>
+<td style="text-align:left">연습 과제 및 데이터 설계</td>
+<td style="text-align:left">자율 생성된 학습 데이터셋</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>L4</strong></td>
+<td style="text-align:left">시스템 상태</td>
+<td style="text-align:left">환경 피드백 기반 적응</td>
+<td style="text-align:left">환경 최적화 규칙 및 도구 상태</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>L5</strong></td>
+<td style="text-align:left"><strong>개선/검증 메커니즘</strong></td>
+<td style="text-align:left"><strong>개선 프로세스 자체의 수정</strong></td>
+<td style="text-align:left"><strong>진화된 개선자 및 검증기</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="4-도메인별-rsi-적용-양상-및-피드백-체계의-차이">4. 도메인별 RSI 적용 양상 및 피드백 체계의 차이</h4>
+<p>RSI 달성 속도는 피드백의 '실행 가능성(Executability)'과 '검증 비용'에 의해 결정되는 도메인별 특성에 의존한다.</p>
+<ul>
+<li><strong>S1 (과학적 발견):</strong> 개방형 탐색이 필수적이나 고비용 실험이 수반되며, 결과의 실패 원인을 특정하기 어려운 귀속성(Attribution) 문제가 존재한다.</li>
+<li><strong>S2 (체화 지능/로봇공학):</strong> 물리적 상호작용 피드백이 결정적이나 시행착오의 물리적 한계가 있으며, 환경과 커리큘럼의 공진화가 요구된다.</li>
+<li><strong>S3 (소프트웨어 공학):</strong> 실행 가능한 테스트(Unit Test) 피드백이 존재하고 코드 수정이 용이하여 RSI 구현의 최전선(Frontier)이 될 가능성이 가장 높다.</li>
+<li><strong>S4 (헬스케어):</strong> 고위험 환경으로 인해 지연된 피드백을 가지며, 전문가의 감독 및 검증이 필수적으로 개입되어야 하는 도메인이다.</li>
+</ul>
+<h4 id="5-산업계-사례-및-초기-입증-결과-preliminary-evidence">5. 산업계 사례 및 초기 입증 결과 (Preliminary Evidence)</h4>
+<h5 id="5-1-주요-시스템-분류-및-기술적-특징">5.1 주요 시스템 분류 및 기술적 특징</h5>
+<ul>
+<li><strong>Theseus:</strong> 환경-데이터-모델의 공진화(Co-Evolution)를 통한 지능 확장.</li>
+<li><strong>ModelBest:</strong> 인간 개입 최소화(Zero-human)를 지향하는 산업용 AI 엔지니어링 인프라.</li>
+<li><strong>Tencent Hunyuan:</strong> **시드 데이터가 없는 적응형 추론 커리큘럼(Adaptive reasoning curriculum without seed task data)**을 통한 경험 기반 자기 개선.</li>
+<li><strong>Agent-Native Research Lab:</strong> 검증 가능한 연구 인프라를 통한 RSI 실험 환경 제공.</li>
+</ul>
+<h5 id="5-2-실제-성능-향상-입증-사례">5.2 실제 성능 향상 입증 사례</h5>
+<ul>
+<li><strong>Case 1 (A-Evolve-Training):</strong> 30B Nemotron 모델을 활용한 4회의 자율 훈련 결과, 성능 점수가 0.80에서 0.86으로 향상되어 인간 최고 기록(0.87)에 근접하는 실질적 성과를 확인하였다.</li>
+<li><strong>Case 2 (Ouroboros):</strong> 배포 환경의 증거를 기반으로 에이전트의 도구와 프롬프트를 수정하여 후속 작업의 성능을 영속적으로 개선하는 적응 사례를 제시하였다.</li>
+</ul>
+<h4 id="6-rsi-구현의-핵심-한계와-비판적-검토">6. RSI 구현의 핵심 한계와 비판적 검토</h4>
+<h5 id="6-1-3대-구조적-난제">6.1 3대 구조적 난제</h5>
+<ul>
+<li><strong>안전한 상속(Safe Inheritance):</strong> 영속적인 변화가 이전 성능을 저하시키지 않음을 보장해야 한다. <strong>Gödel Agent</strong>의 경우 자율 수정 과정에서 일부 최적화 시도가 초기 성능보다 낮은 결과를 기록하는 등 '성능 퇴보'의 위험이 관찰되었다.</li>
+<li><strong>자율성 귀속(Autonomy Attribution):</strong> 향상이 AI의 자율적 결정인지, 고정된 규칙의 결과인지 엄격히 구분해야 한다. <strong>Darwin Gödel Machine</strong>은 SWE-bench 성능을 20%에서 50%로 향상시켰으나, 아카이브 관리 및 부모 선택 규칙이 외부화되어 있어 완전한 RSI로 보기는 어렵다.</li>
+<li><strong>신뢰할 수 있는 검증(Reliable Verification):</strong> 평가 모델의 허점을 이용한 <strong>보상 해킹(Reward Exploitation)</strong> 방지가 필수적이다. Anthropic의 연구에서는 에이전트가 테스트 라벨을 직접 추출하려 시도하는 등의 기만적 행동이 보고되었다.</li>
+</ul>
+<h5 id="6-2-가설적-비전과-입증된-결과의-분리">6.2 가설적 비전과 입증된 결과의 분리</h5>
+<p>본 보고서가 제시한 L1~L5 로드맵은 하나의 <strong>가설적 비전</strong>임을 명시한다. 현재까지 기술적으로 입증된 영역은 L1~L3 및 특정 도메인의 초기 L4 단계에 집중되어 있으며, L5 수준의 완전한 재귀적 메타 개선은 여전히 미래 연구 과제로 남아 있다.</p>
+<h4 id="7-결론-로드맵의-성격-규정-및-향후-전망">7. 결론: 로드맵의 성격 규정 및 향후 전망</h4>
+<p>RSI 로드맵은 확정된 미래가 아닌, AI 시스템의 책임 범위가 확장되는 과정을 체계화한 분석적 틀이다. 진정한 재귀적 자기 개선은 단순히 알고리즘적 우수성을 넘어, 시스템이 스스로의 진화 과정을 안전하게 관리하고 검증할 수 있는 기술적/윤리적 거버넌스를 내재화할 때 비로소 달성될 수 있다. 본 분석가는 RSI가 정적인 파라미터 최적화를 넘어, 변화하는 환경에 능동적으로 적응하고 스스로를 재설계하는 '자율 지능'의 핵심 아키텍처로 자리매김할 것으로 전망한다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Towards Looped Models Done Right: Part II - Rethinking at Fixed Points</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Towards Looped Models Done Right: Part II - Rethinking at Fixed Points</h1>
+<p class="page-meta">PDF · 2026-10-04</p>
+<h2 id="요약">요약</h2>
+<p>루프 언어 모델(Looped Language Model)은 매개변수를 공유하는 동일한 레이어 블록을 여러 차례 반복(Recurrence) 적용하여, 모델의 물리적 매개변수 크기를 고정한 채 추론 및 학습 연산량을 유연하게 확장하는 아키텍처입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=Wj0mh498G9g">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="루프-언어-모델의-고정점-활용과-효율화-이론-학습-개선책-및-실험적-검증-보고서">루프 언어 모델의 고정점 활용과 효율화: 이론, 학습 개선책 및 실험적 검증 보고서</h3>
+<hr />
+<h5 id="1-입문자를-위한-직관과-핵심-주장-section-1-section-2-section-3">1. 입문자를 위한 직관과 핵심 주장 (Section 1, Section 2, Section 3)</h5>
+<p>루프 언어 모델(Looped Language Model)은 매개변수를 공유하는 동일한 레이어 블록을 여러 차례 반복(Recurrence) 적용하여, 모델의 물리적 매개변수 크기를 고정한 채 추론 및 학습 연산량을 유연하게 확장하는 아키텍처입니다. 그러나 순전파 반복 횟수 $R$이 증가함에 따라 사전학습(Pretraining) 시 역전파를 위해 저장해야 하는 활성화 값, 디코딩(Decoding) 서빙 시 저장해야 하는 키-값(KV) 캐시 메모리, 프리필(Prefill) 시 요구되는 연산 시간, 그리고 사후 강화학습(RL) 시 정책 업데이트를 위해 궤적을 재시뮬레이션(Replay)하는 비용이 모두 깊이 $R$에 비례하여 선형적으로 증가하는 심각한 병목이 발생합니다.</p>
+<p>수렴 이론 관점에서 재귀 상태 $z^r = (H^r, C^r)$는 반복 깊이가 깊어짐에 따라 고정점(Fixed Point, $z^\star = F_\theta(z^\star; x)$)으로 점진적으로 수렴합니다. 상태가 고정점 부근에 도달하면, 해당 고정점에 이르기까지 거쳐온 복잡한 미분 가능 연산 경로(Trajectory)의 세부적 궤적은 최종 상태의 정보 가치에 미치는 영향이 소멸합니다. 즉, 고정점 부근에서는 고정점 그 자체인 최종 종착 상태(Endpoint)만으로도 전체 연산 경로를 대표할 수 있다는 강력한 직관적 이점이 존재합니다.</p>
+<p>이러한 직관을 실제 연산 시스템의 효율화로 전환하기 위해서는 저자가 제시하는 <strong>핵심 주장</strong>과 이를 성립시키기 위한 <strong>필수 전제 조건</strong>을 엄밀히 구별해야 합니다.</p>
+<ul>
+<li><strong>저자의 핵심 주장:</strong> 재귀 상태가 고정점에 충분히 가까워지면 연산 경로 전체를 순회하거나 보존할 필요 없이, 최종 종착 상태(Endpoint) 하나만으로 역전파 기울기 계산, 디코딩 키-값 캐시 유지, 프리필 연산, 강화학습 스코어링을 완벽히 대체할 수 있습니다.</li>
+<li><strong>성립 필수 조건:</strong> 이 주장이 실증적으로 성립하려면 학습 단계에서 고정점이 안정적으로 형성(Fixed-Point Shaping)되어야 하며, 디코딩 환경에서 이전 토큰들의 접두 문맥이 고정점으로 수렴한 상태(Converged Prefix Context)를 유지해야 합니다. 고정점 형성 능력이 결여된 모델에서는 종착 상태만으로 연산 경로를 대체할 경우 성능이 치명적으로 붕괴합니다.</li>
+</ul>
+<blockquote>
+<p><strong>저자의 핵심 명제 (Section 1, Section 3):</strong>
+&quot;루프 언어 모델의 재귀 상태가 고정점(Fixed Point)에 가까워질수록, 그 고정점에 도달하는 연산 경로(Trajectory)의 중요성은 사라진다. 따라서 최종 종착 상태(Endpoint)만으로 전체 경로를 대체함으로써 사전학습, 디코딩, 프리필, 강화학습 롤아웃의 4대 비용 축 전체에서 깊이(Depth)에 의존하는 연산 및 메모리 부담을 완전히 분리할 수 있다.&quot;</p>
+</blockquote>
+<hr />
+<h5 id="2-비용의-네-축과-고정점-기반-지름길-절약책-section-1-section-3-section-5-algorithm-1">2. 비용의 네 축과 고정점 기반 지름길 절약책 (Section 1, Section 3, Section 5, Algorithm 1)</h5>
+<p>루프 언어 모델의 4대 연산 비용 축은 <strong>사전학습, 서빙/디코딩, 프리필, 사후 강화학습</strong>입니다. 저자들은 기존의 연산 절약책 2가지가 성립하는 이유를 고정점 수렴 이론으로 재해석하고, 고정점 성질을 직접 활용하는 새로운 절약책 2가지를 제안하였습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비용 축</th>
+<th style="text-align:left">기존/신규 구분</th>
+<th style="text-align:left">연산 지름길 원리</th>
+<th style="text-align:left">메모리/연산 복잡도 변화</th>
+<th style="text-align:left">원문 참조 번호</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">사전학습 (Pretraining)</td>
+<td style="text-align:left">기존 방식 재해석</td>
+<td style="text-align:left">최근 $b$개 단계만 역전파(TBPTT)하여 웜업 단계 없이 고정점 평형 기울기에 근사</td>
+<td style="text-align:left">메모리: $O(R) \rightarrow O(b)$&lt;br&gt;연산: $O(R) \rightarrow O(b)$</td>
+<td style="text-align:left">Section 3.1</td>
+</tr>
+<tr>
+<td style="text-align:left">디코딩/서빙 (Serving/Decoding)</td>
+<td style="text-align:left">기존 방식 재해석</td>
+<td style="text-align:left">접두 토큰의 최종 반복 단계 KV 캐시만 유지(Terminal KV Sharing)하여 디코딩 메모리 절감</td>
+<td style="text-align:left">캐시 메모리: $O(R) \rightarrow O(1)$</td>
+<td style="text-align:left">Section 3.2, Lemma 1</td>
+</tr>
+<tr>
+<td style="text-align:left">프리필 (Prefill)</td>
+<td style="text-align:left">신규 제안</td>
+<td style="text-align:left">반복 코어 연산 대신 고정점을 직접 예측하는 경량 학생 네트워크로 프리필 가속</td>
+<td style="text-align:left">프리필 연산: $O(R) \rightarrow O(1)$</td>
+<td style="text-align:left">Section 3.2, Section 5.5</td>
+</tr>
+<tr>
+<td style="text-align:left">사후 강화학습 (Post-RL)</td>
+<td style="text-align:left">신규 제안</td>
+<td style="text-align:left">저장된 고정점 상태에서 노이만 루프를 통해 궤적 재시뮬레이션 없이 역전파 및 스코어링 수행</td>
+<td style="text-align:left">재계산/역전파: $O(R) \rightarrow O(1)$</td>
+<td style="text-align:left">Section 3.1, Section 5.4, Algorithm 1</td>
+</tr>
+</tbody>
+</table>
+<h6 id="4대-핵심-연산-절약-구조-및-수학적-메커니즘-상세">4대 핵심 연산 절약 구조 및 수학적 메커니즘 상세</h6>
+<ol>
+<li>
+<p><strong>절단 역전파 (Truncated Backpropagation - Section 3.1):</strong>
+고정점 $z^\star$에서 $J_\star = \partial_z F_\theta(z^\star; x)$ 및 $B_\star = \partial_\theta F_\theta(z^\star; x)$라 할 때, 무한 unroll 시의 이론적 평형 감도(Equilibrium Sensitivity) $D^\star$ 및 노이만 급수(Neumann Series) 절단 근사 $D_b$는 다음과 같습니다.
+$$D^\star \equiv \frac{dz^\star}{d\theta} = (I - J_\star)^{-1} B_\star = \sum_{k=0}^{\infty} J_\star^k B_\star$$
+$$D_b = \sum_{k=0}^{b-1} J_\star^k B_\star$$
+실제 유한 궤적에서의 절단 역전파(TBPTT) 기울기 $\tilde{D}<em>b$는 최근 $b$개 반복 단계의 야코비안(Jacobian)만을 사용하여 다음과 같이 계산됩니다.
+$$\tilde{D}<em>b = \sum</em>{k=0}^{b-1} \left( \prod</em>{j=1}^k J_{R-j} \right) B_{R-1-k}$$
+수렴된 상태 부근에서는 $J_{R-j} \approx J_\star$가 성립하므로 $\tilde{D}_b \approx D_b$가 되어 노이만 절단 오차가 기하급수적으로 감소합니다. 이는 기존 암묵적 딥러닝 모델(Implicit Model/DEQ)이 필요로 하던 복잡한 사전 웜업(Warm-up) 단계나 역전파 스위칭 없이도 고정점 기울기에 안정적으로 수렴하도록 만듭니다.</p>
+</li>
+<li>
+<p><strong>종단 키-값 캐시 공유 (Terminal KV Cache Sharing - Section 3.2, Lemma 1):</strong>
+기존 루프 모델은 반복 단계마다 별도의 KV 캐시 은행(Bank)을 저장하여 깊이에 비례하는 메모리를 소비했습니다. 그러나 접두 문맥이 수렴하면 각 접두 토큰의 최종 반복 단계 KV 캐시($C^\star_{&lt;t}$)만 남기고 이전 단계의 캐시를 모두 폐기할 수 있습니다. 후속 토큰의 모든 반복 단계는 이 종단 캐시만을 참조하여 디코딩을 진행하며, 이는 전체 캐시를 유지한 경우와 동일한 고정점으로 수렴함이 보증됩니다.</p>
+</li>
+<li>
+<p><strong>증류된 프리필 (Distilled Prefill - Section 3.2, Section 5.5):</strong>
+프리필 단계에서 무거운 반복 코어를 여러 번 순회하는 대신, 프롬프트 임베딩 $e = P_\theta(x)$로부터 최종 고정점 상태 $z_R^\theta(x)$를 직접 예측하도록 훈련된 경량 학생 네트워크 $S_\psi$를 활용합니다. 학생 네트워크가 $\hat{z} = S_\psi(e)$를 예측하면, 교사 모델의 단 1회 반복과 코다(Coda) 블록만을 거쳐 종단 KV 캐시를 즉시 생성합니다. 학생 네트워크 학습 시 손실 함수는 정규화된 은닉 상태 회귀 손실과 다음 토큰 KL 발산 항의 결합으로 구성됩니다.
+$$\mathcal{L}_{\text{distill}}(\psi) = \mathbb{E}_x \left[ \frac{|\hat{z} - z_R^\theta(x)|<em>F^2}{N d \sigma_T^2} + \frac{1}{N} \sum</em>{t=1}^N \text{KL}(p_t \parallel \hat{p}_t) \right]$$</p>
+</li>
+<li>
+<p><strong>강화학습 롤아웃 상태 재사용 (Rollout-State Reuse in RL - Section 3.1, Section 5.4, Algorithm 1):</strong>
+강화학습 정책 업데이트 시, 샘플링 단계에서 저장된 고정점 종착 상태 $z_R$을 재사용함으로써 연산량을 대폭 절감합니다.
+$$\tilde{D}<em>R = \sum</em>{k=0}^{R-1} \left( \prod_{j=1}^k J_{R-j} \right) B_{R-1-k} \approx \sum_{k=0}^{b-1} J_R^k B_R$$
+이 때 파이토치(PyTorch) 오토그래프 연동의 핵심 기법은 순전파 시 다음 트릭을 사용하는 것입니다.
+$$\tilde{z} \leftarrow \bar{z} + (f - \text{stopgrad}(f))$$
+이 식은 순전파 값은 $z_R$로 유지하면서 자동 미분 그래프 $G$에 기울기 추적 노드를 부착합니다. 이를 통해 재계산 없이 단 1회의 전진 연산 그래프 $G$만을 기록한 후, <code>autograd.grad(f, z̄, v)</code>를 $b-1$회 반복 호출하는 노이만 루프($v \leftarrow g + J_R^\top v$)를 오토그래프 후크로 수행함으로써 궤적 전체의 재시뮬레이션 없이 역전파와 스코어링을 완료합니다.</p>
+</li>
+</ol>
+<hr />
+<h5 id="3-고정점-형성을-위한-두-가지-학습-개선책-section-4-algorithm-2">3. 고정점 형성을 위한 두 가지 학습 개선책 (Section 4, Algorithm 2)</h5>
+<p>고정점의 형성을 결정하는 두 가지 핵심 요소는 **깊이 사전분포(Depth Prior)**와 **입력 주입(Input Injection)**입니다. 기존 고정 깊이 학습은 KV 캐시 공유를 파괴하고, Huginn의 포아송-로그정규(PLN) 고정 사전분포는 목표 깊이에서의 감독 신호를 지나치게 희석시킵니다. 한편 기존 입력 주입 방식은 이월 상태(Carryover State)가 입력 방향의 성분을 가져 입력 신호를 자발적으로 증폭하거나 상쇄시키는 결함이 존재했습니다.</p>
+<pre><code>[ 기존 주입 방식 ]   carryover (입력 방향 성분 포함)  +  input  ==&gt;  증폭 또는 상쇄 발생
+[ 직교 입력 주입 ]  Q_q(carryover) (입력 방향 수직)     +  input  ==&gt;  항상 일정 세기 유지
+</code></pre>
+<h6 id="1-학습-가능한-깊이-사전분포-및-엔트로피-항-learned-depth-prior-entropy---section-4-1-algorithm-2">1) 학습 가능한 깊이 사전분포 및 엔트로피 항 (Learned Depth Prior &amp; Entropy - Section 4.1, Algorithm 2)</h6>
+<p>학습 가능한 깊이 사전분포 $p_\phi = \text{softmax}(\phi)$는 예측 피드백(Prediction Feedback)을 통해 최적의 깊이 배분을 스스로 학습합니다.</p>
+<ul>
+<li><strong>학습 원리 및 보상 적응 스케일링:</strong> 매 단계마다 마이크로배치별로 깊이 $r \sim p_\phi$를 추출하고, 교차 엔트로피 손실 $\ell$로부터 보상 $u = \exp(-\ell)$ 및 어드밴티지 $A_i = s_{n-1}(u_i - \hat{u}<em>{n-1})$를 계산하여 로짓 $\phi$를 업데이트합니다. 이 때 PopArt 적응형 스케일링 인자 $s</em>{n-1}$은 교차 엔트로피 손실과 보상의 표준편차 비율로 정의됩니다.
+$$s_{n-1} = \frac{\sigma_{\ell, n-1}}{\sigma_{u, n-1}}$$
+이 스케일링은 보상 스케일을 교차 엔트로피 단위로 정규화하여 hyperparameter 재튜닝 없이 안정적인 정책 기울기 업데이트를 가능하게 합니다.</li>
+<li><strong>손실 함수 구조:</strong> 깊이 사전분포 컨트롤러는 다음 목적함수를 최적화합니다.
+$$J_{\text{prior}}(\phi) = -\hat{\mathbb{E}}<em>n [\text{stopgrad}(A_n) \log p</em>\phi(r)] - \lambda_H H(p_\phi) + \lambda_m (\mathbb{E}<em>{p</em>\phi}[R] - \bar{R})^2$$</li>
+<li><strong>엔트로피 정규화 항 ($-\lambda_H H(p_\phi)$):</strong> 예측 피드백만 사용하면 이미 예측을 잘하는 특정 깊이로 수퍼비전이 쏠려 고정점 형성 능력이 약화됩니다. 엔트로피 정규화 항을 추가하여 분포가 지나치게 좁아지는 것을 막고, 깊은 단계까지 감독 신호를 분산시켜 디코딩 시 수렴된 접두 문맥을 제공하도록 유도합니다.</li>
+<li><strong>예산 제어 항 ($\lambda_m (\mathbb{E}<em>{p</em>\phi}[R] - \bar{R})^2$):</strong> 깊이 분포의 기대값이 목표 평균 깊이 $\bar{R}$ (예: 5)에서 벗어나지 않도록 연산 예산을 제어합니다.</li>
+</ul>
+<h6 id="2-직교-입력-주입-orthogonal-input-injection-orthoinj---section-4-2">2) 직교 입력 주입 (Orthogonal Input Injection / OrthoInj - Section 4.2)</h6>
+<p>기존 Parcae 등의 주입 방식에서는 이월 상태 $\Lambda h_t^r$에 입력 $q_t = \Delta \odot W e_t$ 방향의 성분이 잔존하여, 반복이 진행될수록 주입되는 입력의 세기가 변질되었습니다.</p>
+<ul>
+<li><strong>원리 및 식:</strong> OrthoInj는 투영 연산자 $Q_{q_t}$를 도입하여 이월 상태에서 입력 $q_t$ 방향의 성분을 수직으로 투영하여 제거합니다.
+$$Q_{q_t} = I - \frac{q_t q_t^\top}{|q_t|<em>2^2 + \epsilon}$$
+$$\zeta_t^r = Q</em>{q_t} \Lambda h_t^r + q_t$$</li>
+<li><strong>대수적 소거 메커니즘:</strong> 투영 연산자 $Q_{q_t}$를 입력 벡터 $q_t$에 작용시키면 대수적으로 다음과 같이 완벽히 소거됩니다.
+$$Q_{q_t} q_t = \left( I - \frac{q_t q_t^\top}{|q_t|_2^2 + \epsilon} \right) q_t \approx q_t - q_t = 0$$
+따라서 이월 상태 $\Lambda h_t^r$ 내에 존재하는 $q_t$ 평행 성분이 완벽하게 제거(Off-projection)되므로, 고정점을 포함한 모든 반복 단계에서 입력 $q_t$가 상쇄나 증폭 없이 항상 동일한 세기로 모델에 전달됩니다.</li>
+<li><strong>국소 축소성 보증:</strong> $|Q_{q_t}|<em>2 \le 1$이므로 $|Q</em>{q_t} \Lambda|_2 \le |\Lambda|_2 &lt; 1$이 성립하여 해당 주입 단계에서의 국소적 축소성(Contractivity)이 안정적으로 유지됩니다.</li>
+</ul>
+<hr />
+<h5 id="4-실험-조건-및-세부-측정-결과-section-5-table-1-5-appendix-table-6-8">4. 실험 조건 및 세부 측정 결과 (Section 5, Table 1~5, Appendix Table 6, 8)</h5>
+<h6 id="실험-조건의-독립성-명시">실험 조건의 독립성 명시</h6>
+<p>실험에 사용된 <strong>반복 횟수(Recurrence Count $R$)</strong>, <strong>역전파 창(Backprop Window $b$)</strong>, <strong>학습 토큰 예산(Training Token Budget)</strong>, **캐시 은행 수(Cache Bank Count)**는 서로 독립적으로 설정되는 실험 조건입니다.</p>
+<h6 id="파라미터-규모-및-어댑터-레이어-구별">파라미터 규모 및 어댑터 레이어 구별</h6>
+<p>본문에서 언급된 <strong>일억(100M / Small)</strong>, <strong>사억(400M / Medium)</strong>, **십육억(1.6B / Large)**은 반올림된 비임베딩 중심의 주요 파라미터 규모입니다. 루프 모델이 일반 Untied 4 모델 대비 소량의 파라미터가 더 많은 이유는 Huginn 아키텍처 특유의 $W_{\text{lin}}$ 차원 적응용 입력 어댑터(Input Adapter) 레이어가 추가되었기 때문입니다 (부록 Table 6).</p>
+<ul>
+<li><strong>Small (S):</strong> 본문 표기 100M | Untied 4 비임베딩 0.104B (전체 0.301B) vs. Looped 비임베딩 0.106B (전체 0.304B)</li>
+<li><strong>Medium (M):</strong> 본문 표기 400M | Untied 4 비임베딩 0.415B (전체 0.810B) vs. Looped 비임베딩 0.425B (전체 0.819B)</li>
+<li><strong>Large (L):</strong> 본문 표기 1.6B | Untied 4 비임베딩 1.661B (전체 2.451B) vs. Looped 비임베딩 1.699B (전체 2.488B)</li>
+</ul>
+<h6 id="대조군-베이스라인의-역할-구별">대조군 베이스라인의 역할 구별</h6>
+<ul>
+<li><strong>Untied 4:</strong> 물리적 레이어 수(4개) 및 파라미터 수 동일 조건 베이스라인.</li>
+<li><strong>Untied 12:</strong> 논리적 깊이($R=5$, 12개 블록) 동일 조건 베이스라인 (Looped 모델 대비 파라미터 수 및 KV 캐시 메모리 3배).</li>
+<li><strong>핵심 성과:</strong> 제안된 루프 모델은 3배 적은 파라미터와 3배 적은 KV 캐시 메모리만으로 Untied 12의 성능에 육박하는 성과를 달성합니다.</li>
+</ul>
+<h6 id="구체적-측정-결과-및-해당-조건-귀속">구체적 측정 결과 및 해당 조건 귀속</h6>
+<ul>
+<li><strong>캐시 절감 (Table 2):</strong> 5회 반복 조건($R=5$, 논리적 깊이 12블록)에서 물리적 블록당 1개씩 총 4개의 종단 캐시만 유지함으로써, 12개 캐시 은행을 유지해야 하는 기존 방식 대비 <strong>3배($3\times$) 캐시 감소</strong>를 달성하였습니다.</li>
+<li><strong>고정 깊이 모델의 취약성 (Section 1, Table 2, Appendix Table 8):</strong> 고정 깊이 전체 역전파 모델(Fixed Depth $R=5$)은 종단 캐시 공유 적용 시 성능이 심각하게 붕괴합니다. 1.6B(Large) 규모에서 GSM8K 정확도는 전체 캐시 사용 시 50.6% (Table 8)에서 종단 캐시 공유 시 **21.2% (Table 2)**로 급락했습니다.</li>
+<li><strong>프리필 가속 및 성능 (Table 5):</strong> 8천(8K) 토큰 프롬프트 조건에서 증류된 프리필을 적용할 경우 교사 모델 대비 <strong>최대 1.79배 프리필 가속</strong>을 달성했습니다. 하위 과제 평균 점수는 교사 모델 대비 Small에서 1.0점, Medium에서 2.3점, Large에서 <strong>4.5점 저하</strong>되었습니다.</li>
+<li><strong>강화학습 가속, 일반화 및 주의사항 (Table 4):</strong> 강화학습(Dr. GRPO) 수행 시 종단 상태 재사용(Reuse + Neumann-4)을 적용하면 스코어링 및 역전파 시간이 <strong>약 2배 (GSM8K에서 1.99배, MBPP+에서 2.02배)</strong> 단축되었습니다.
+<ul>
+<li><em>범용적 일반화 성과:</em> GSM8K 데이터로 학습한 모델이 학습에 사용되지 않은 MATH500 평가에서도 pass@1 점수가 13.40%에서 **17.82%~18.77%**로 상향되어, 고정점 상태 재사용 방식이 수학적 추론 능력의 범용적 일반화를 손상시키지 않음이 검증되었습니다.</li>
+<li><em>실습상 주의사항:</em> 강화학습의 전체 수행 시간(Wall-clock time)은 롤아웃(Rollout) 응답 생성 단계가 지배하므로, MBPP+ 코드 생성 실험 등에서는 스코어링/역전파 시간 단축에도 불구하고 전체 학습 시간이 비례하여 빠르고 획기적으로 줄어들지는 않았음을 명시합니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="표-table-해석-시-주의사항">표(Table) 해석 시 주의사항</h6>
+<ol>
+<li><strong>PPL 직접 비교 금지:</strong> Table 2의 PPL(CacheEval continuation PPL)과 Table 8의 PPL(Full sequence PPL)은 평가 프로토콜(프롬프트 지속 평가 vs 전체 시퀀스 평가)이 상이하므로 두 표의 숫자 수치를 직접 우열 비교해서는 안 됩니다.</li>
+<li><strong>Table 2 'AVG' 열의 범위:</strong> Table 2의 'AVG' 열은 7개 선택형 과제(LAMBADA, HellaSwag, PIQA, ARC-E, ARC-C, OBQA, SciQ)의 평균 수치이며, 오른쪽의 <strong>생성 과제(GSM8K, DROP, MBPP+) 점수는 포함되지 않았습니다.</strong></li>
+</ol>
+<hr />
+<h5 id="5-이론적-구별점-수학적-보증의-한계-및-시스템-한계-section-7-appendix-a">5. 이론적 구별점, 수학적 보증의 한계 및 시스템 한계 (Section 7, Appendix A)</h5>
+<h6 id="1-이론적-수학적-개념의-엄격한-구별">1) 이론적/수학적 개념의 엄격한 구별</h6>
+<ol>
+<li><strong>고정점 정리와 실제 유한 단계 간 구별 (Lemma 1, Appendix A.1):</strong>
+Lemma 1은 상태 업데이트 함수 $f_\theta$의 완벽한 축소성(Contractivity, $\kappa &lt; 1$), 컨텍스트 $C$에서의 $\beta$-립시츠 연속성($\beta$-Lipschitz continuity), 그리고 완벽히 수렴된 접두 문맥($C_{&lt;t}^r \to C_{&lt;t}^\star$)을 전제로 무한 반복 시 종단 디코딩과 합동 디코딩이 동일한 고정점으로 수렴함을 증명합니다. 그러나 실제 시스템은 유한 단계($R=5$ 등)에서 동작하므로 exact convergence가 아닌 오차 한계 식(Equation 12)에 기반한 근사적 고정점을 활용하는 것입니다.</li>
+<li><strong>유한 깊이 궤적 기울기와 평형 기울기의 불일치 (Appendix A.2):</strong>
+유한 깊이에서 계산된 궤적 기울기($\tilde{D}_b$)와 완전한 평형 목적함수의 기울기($D^\star$)는 엄밀히 일치하지 않습니다. 단지 잔차(Residual)의 크기가 작다는 사실만으로는 기울기 오차에 대한 정밀한 이론적 보증을 제공하지 못하며, 역전파 창 내의 Jacobian 축소 조건이 만족되어야만 오차가 상한 내로 제어됩니다.</li>
+<li><strong>직교 입력 주입(OrthoInj)의 국소적 성질 (Section 4.2):</strong>
+OrthoInj에서 증명된 투영 이월 연산자의 축소성($|Q_{q_t}\Lambda|_2 &lt; 1$)은 해당 입력 주입 단계에서의 <strong>국소적(Local) 성질</strong>일 뿐이며, 이것이 트랜스포머 네트워크 전체의 전역적 축소성(Global Contractivity)을 보증하는 것은 아닙니다.</li>
+</ol>
+<h6 id="2-연구-및-시스템의-명확한-한계점">2) 연구 및 시스템의 명확한 한계점</h6>
+<ul>
+<li><strong>모델 규모의 한계:</strong> 본 연구에서 실증 검증된 최대 모델 규모가 십육억(1.6B) 파라미터로 제한되며, 수십억~수천억 파라미터급 초대형 모델에서의 동작은 미검증 상태입니다.</li>
+<li><strong>학습 시드 제한:</strong> 제반 실험 및 비교 평가가 실험 설정당 단 1개의 학습 시드(Training Seed)로만 수행되어 시드 무작위성에 따른 오차 가능성이 존재합니다.</li>
+<li><strong>상용 서빙 환경 미검증:</strong> 실제 대규모 상용 서비스 디코딩 환경이나 복잡한 동적 바인딩/배치 시스템에서의 실전 검증이 부족합니다.</li>
+<li><strong>사전학습 데이터 상태 미확인:</strong> 사용된 사전학습 데이터셋(TxT360 등)의 평가셋에 대한 오염 제거(Decontamination) 및 문서 분리(Document Separation) 여부가 완벽히 확인되지 않았습니다.</li>
+<li><strong>스케일링에 따른 증류 품질 손실 확대:</strong> 프리필 증류 적용 시 모델 규모가 커질수록 교사 모델 대비 품질 손실 폭이 증가하는 현상(Small에서 1.0점 저하 $\rightarrow$ Large에서 4.5점 저하)이 관찰되어 초대형 모델 확장에 한계가 존재합니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

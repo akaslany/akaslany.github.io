@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TokenSpeed MLA 2 for NVIDIA Vera Rubin | LightSeek Foundation</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>TokenSpeed MLA 2 for NVIDIA Vera Rubin | LightSeek Foundation</h1>
+<p class="page-meta">웹 · 2026-10-16</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 엔비디아 베라 루빈(NVIDIA Vera Rubin) 아키텍처 환경에서 다중 헤드 잠재 아텐션(Multi-Head Latent Attention, MLA) 디코드 커널을 최적화한 TokenSpeed MLA 2의 기술적 구조와 성능 측정 결과를 다룹니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://lightseek.org/blog/tokenspeed-mla-2.html">출처</a> · <a href="https://www.youtube.com/watch?v=LPv-SwmmIpE">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="엔비디아-베라-루빈-기반-tokenspeed-mla-2-기술-및-성능-해설-보고서">엔비디아 베라 루빈 기반 TokenSpeed MLA 2 기술 및 성능 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>본 보고서는 엔비디아 베라 루빈(NVIDIA Vera Rubin) 아키텍처 환경에서 다중 헤드 잠재 아텐션(Multi-Head Latent Attention, MLA) 디코드 커널을 최적화한 TokenSpeed MLA 2의 기술적 구조와 성능 측정 결과를 다룹니다. TokenSpeed MLA 2는 LightSeek Foundation 산하의 TokenSpeed Team이 개발하였으며, 이전 세대인 엔비디아 블랙웰(NVIDIA Blackwell) 아키텍처용 커널인 MLA 1을 계승하는 후속 버전입니다. 본 프로젝트의 핵심 목적은 베라 루빈의 신규 하드웨어 역량을 적극적으로 활용하고 Kimi K3 AI 모델 워크로드에 특화된 커널 최적화를 적용하여 디코딩 성능을 대폭 향상시키는 것입니다.</p>
+<p>TokenSpeed 프로젝트는 2026년 5월 블랙웰 아키텍처 기반의 에이전트형 장문 맥락(Long-context agentic) 추론을 지원하기 위해 처음 공개되었습니다. 출시 당시 prefill 및 추론용 가상 디코딩(speculative-decoding) 워크로드에서 당대 최고 수준이었던 TensorRT-LLM MLA 베이스라인을 상회하는 성능을 기록한 바 있습니다. 초기에는 Kimi K2.5 모델을 지원하였으며 이후 Kimi K3 지원을 추가하였습니다. 패키지 배포 채널인 PyPI(pypistats.org)의 통계에 따르면 <code>tokenspeed-mla</code> 패키지는 월간 200만 회 이상의 다운로드 수를 기록하고 있으며, 2026년 10월 11일로 끝나는 주간에는 516,658회의 다운로드(미러 사이트 제외)를 달성하여 생태계 내에 광범위하게 정착했음을 입증하고 있습니다.</p>
+<p>TokenSpeed MLA 2는 베라 루빈 하드웨어의 연산 파이프라인 개선 및 Kimi K3 모델(96개 쿼리 헤드 구성) 전용 최적화를 결합하여 현저한 성능 향상을 달성하였습니다. 동일 조건의 장문 맥락 벤치마크 평가에서 TokenSpeed MLA 2는 블랙웰 기반 MLA 1 대비 엔비디아 B200 GPU에서 최대 3.44배, GB200 GPU에서 최대 2.84배의 커널 속도 향상(Kernel Speedup)을 기록하였습니다.</p>
+<hr />
+<h5 id="2-주요-논점-key-points-technical-analysis">2. 주요 논점 (Key Points &amp; Technical Analysis)</h5>
+<h6 id="2-1-엔비디아-베라-루빈-하드웨어-역량-및-아텐션-파이프라인-오버랩-attention-pipeline-overlap">2.1. 엔비디아 베라 루빈 하드웨어 역량 및 아텐션 파이프라인 오버랩 (Attention Pipeline Overlap)</h6>
+<ul>
+<li><strong>하드웨어 명령어 및 파이프라인 구조 변경:</strong>
+엔비디아 베라 루빈 아키텍처는 8비트 부동소수점(FP8) 데이터에 대해 K=64바이트 행렬 곱셈-누적(MMA) 명령어를 지원합니다. 이는 기존 K=32바이트 명령어 대비 스트리밍 다중 프로세서(SM) 및 클록당 산술 처리량을 2배 증가시킵니다. 또한 확장된 공유 메모리(Shared Memory)와 텐서 메모리(TMEM)를 통해 더 넓은 타일과 깊은 버퍼 구조 생성이 가능해졌습니다 (보고서 &quot;NVIDIA Vera Rubin capabilities&quot; 절 참조).</li>
+<li><strong>4-CTA 파이프라인 오버랩 설계:</strong>
+기존 Blackwell 기반 MLA 1은 128개 쿼리 헤드 행을 처리하는 M128 타일을 사용하며, 단일 협동 쓰레드 배열(Cooperative Thread Array, CTA) 쌍이 K=32바이트 MMA 명령어로 쿼리-키 점수(QK) 연산과 확률-밸류 곱셈(PV) 연산을 교대로 실행하는 구조를 취했습니다. 이 구조에서는 점수 및 출력 누적기가 TMEM을 공유하고 확률값은 로컬 공유 메모리에 보관되었습니다.
+반면 베라 루빈 기반 MLA 2는 FlashInfer 파이프라인을 계승·발전시켜 QK+Softmax 단계와 PV 단계를 2개의 CTA 쌍(총 4개 CTA)으로 분리하고 타일 간 오버랩 실행을 구현하였습니다. 256개 쿼리 헤드 행을 한 번에 처리하는 M256 타일을 적용하여 키-밸류(KV) 데이터의 재사용성을 극대화하였으며, K=64바이트 MMA를 수행합니다. 쿼리는 TMEM에 유휴 상태로 유지되고 확률값은 분산 공유 메모리(DSMEM)를 통해 CTA 쌍 간에 전송됩니다. 아울러 깊어진 KV 버퍼와 2개로 인터리빙된 Softmax 그룹이 파이프라인 오버랩을 안정적으로 지원합니다 (보고서 &quot;Attention pipeline overlap&quot; 절 참조).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">MLA 1 (Blackwell 기반)</th>
+<th style="text-align:left">MLA 2 (Vera Rubin 기반)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>타일 크기 (Tile Size)</strong></td>
+<td style="text-align:left">M128 (128개 쿼리 헤드 행)</td>
+<td style="text-align:left">M256 (256개 쿼리 헤드 행)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MMA 명령어 규격</strong></td>
+<td style="text-align:left">K = 32바이트 MMA</td>
+<td style="text-align:left">K = 64바이트 FP8 MMA (SM당 클록 처리량 2배)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CTA 구조 및 실행</strong></td>
+<td style="text-align:left">1개 CTA 쌍 (QK 연산과 PV 연산을 교대로 실행)</td>
+<td style="text-align:left">2개 CTA 쌍 (QK+Softmax / PV 단계 분리 및 오버랩 실행)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>데이터 전달 메모리</strong></td>
+<td style="text-align:left">로컬 공유 메모리 (Local Shared Memory)</td>
+<td style="text-align:left">분산 공유 메모리 (DSMEM) 기반 확률 전달</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>버퍼 단계 구조</strong></td>
+<td style="text-align:left">키 3단계 / 밸류 2단계 버퍼 <em>(※ 베라 루빈용 재컴파일 MLA 1은 키 4단계 / 밸류 4단계)</em></td>
+<td style="text-align:left">깊어진 KV 버퍼 및 인터리빙된 2개 Softmax 그룹</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-2-kimi-k3-워크로드-전용-최적화-native-row-packing-scheduling-reduction">2.2. Kimi K3 워크로드 전용 최적화 (Native Row Packing, Scheduling &amp; Reduction)</h6>
+<ul>
+<li><strong>네이티브 행 패킹(Native Row Packing)의 배경 및 동작 원리:</strong>
+Cognition의 코딩 에이전트 'SWE-2', Harvey의 법률 에이전트 'Tenet' 등 주요 AI 시스템은 Kimi K3 가중치를 기반으로 구축되고 있습니다. Kimi K3 모델은 토큰당 96개의 쿼리 헤드(H96)와 4개 또는 8개의 쿼리 토큰(Q4, Q8) 구조를 가집니다.
+기존 FlashInfer 베이스라인(MTP 커널+어댑터)은 본래 128개 쿼리 헤드(H128)와 2개 또는 4개 쿼리 토큰(Q2/Q4)을 네이티브로 지원하도록 설계되었습니다. 이 때문에 Kimi K3의 H96 Q8 요청을 처리할 때 어댑터 레이어가 H96을 H128로 패딩하고, Q8 요청을 2개의 Q4 요청으로 분할 실행함에 따라 불필요하게 총 4개의 M256 타일을 구동해야 하는 구조적 오버헤드가 발생했습니다.
+MLA 2는 어댑터 레이어를 완전히 제거하고 토큰당 96개 헤드를 연속 패킹(Native row packing)하는 방식을 도입했습니다. Q8 기준 768개의 유효 행을 패딩 없이 3개의 M256 타일에 맞춰 인과적 마스킹(Causal masking)을 유지하며 처리합니다. Q4의 경우 384행을 연산하기 위해 2개의 M256 타일을 사용하며 75%의 타일 점유율(512개 슬롯 중 128개 미사용)을 가집니다 (보고서 &quot;Native row packing&quot; 절 참조).</li>
+<li><strong>스케줄링 및 리듀서(Reducer) 최적화:</strong>
+KV 컨텍스트를 분할(Split-KV)하면 병렬성은 향상되지만, 분할 작업마다 파이프라인 및 리듀서 오버헤드가 누적됩니다. MLA 2는 작업 항목(Work item)당 4개의 CTA와 최대 2개의 스케줄링 파동(Wave)을 선택하도록 튜닝하여 병렬성을 확보하는 동시에 리듀서 통합 비용을 줄였습니다. 분할되지 않은 완전한 실행 그리드는 그대로 유지됩니다.</li>
+</ul>
+<h6 id="2-3-벤치마크-결과-및-성능-검증-benchmark-results">2.3. 벤치마크 결과 및 성능 검증 (Benchmark Results)</h6>
+<ul>
+<li>
+<p><strong>실험 방법론 및 하드웨어 통제 조건:</strong>
+벤치마크는 배치 크기(1, 4, 16, 64), 쿼리 토큰(Q4, Q8), KV 컨텍스트 길이(65,536 [KV64K], 131,072 [KV128K])의 조합으로 구성된 총 16개 H96 평가 환경에서 수행되었습니다. 동일 GPU 테스트(Vera Rubin)는 FP8 쿼리/KV/출력, 64-토큰 페이지 크기, KV 순환을 통한 cold L2 캐시 상태 유지, 그리고 프로그래밍 방식 의존적 실행(Programmatic Dependent Launch, PDL) 비활성화 조건을 엄격히 통제한 상태에서 진행되었습니다. 측정치는 20 CUDA 그래프 이터레이션을 15회 반복하여 산출한 지연 시간의 중앙값입니다 (보고서 각주 2 참조).</p>
+</li>
+<li>
+<p><strong>동일 GPU 비교 1: MLA 2 vs 재컴파일된 MLA 1 (Vera Rubin 환경)</strong></p>
+<ul>
+<li>베라 루빈 환경에 맞춰 4개 키/밸류 버퍼 단계를 적용하고 재컴파일한 MLA 1(M128 타일)과 비교 시, MLA 2는 16개 평가 구성 중 13개 조건에서 더 낮은 지연 시간을 기록했습니다.</li>
+<li>속도 향상 기하평균은 전체 <strong>1.142배</strong>, Q8 조건 <strong>1.271배</strong>, Q4 조건 <strong>1.027배</strong>입니다. Q8 조건은 6개의 M128 타일 대신 3개의 M256 타일을 유효 행으로 완전히 채워 활용하므로 8개 모든 구성에서 연산 효율이 대폭 개선되었습니다. 반면 Q4 조건은 최종 타일의 부분 채움(128개 빈 슬롯)으로 인해 MLA 1 대비 행 슬롯이 33% 늘어나는 효과가 생겨 개선 폭이 상대적으로 제한적이었습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>동일 GPU 비교 2: MLA 2 vs 어댑터 적용 FlashInfer (Vera Rubin 환경)</strong></p>
+<ul>
+<li>동일 베라 루빈 GPU 상에서 FlashInfer 베이스라인 대비 MLA 2의 속도 향상 기하평균은 전체 <strong>1.327배</strong>, Q4 조건 <strong>1.227배</strong>, Q8 조건 <strong>1.434배</strong>를 기록하였습니다.</li>
+<li><strong>대규모 배치 Q8 연산:</strong> 네이티브 패킹으로 타일 수가 4개에서 3개로 감소함에 따라 B64/KV64K에서 1.325배, B64/KV128K에서 1.271배의 속도 향상을 나타냈습니다. 이는 이론적 타일 감소 비율 추정치(4/3 = 1.33배)와 거의 정확히 일치합니다.</li>
+<li><strong>대규모 배치 Q4 연산:</strong> MLA 2와 FlashInfer 베이스라인 모두 75% 점유율의 M256 타일 2개를 동일하게 실행하므로, 네이티브 패킹에 따른 타일 수 감소 효과가 발생하지 않아 양측의 성능이 거의 동일하게 나타납니다.</li>
+<li><strong>소규모 배치 연산:</strong> 대규모 배치와 달리 고정 커널 런칭 비용(Fixed launch costs), 파이프라인 채우기/비우기(Pipeline fill/drain) 오버헤드, Split-KV 리듀서 오버헤드가 전체 지연 시간에서 차지하는 비중이 큽니다. 따라서 어댑터 레이어(쿼리 패킹 및 출력 언패킹)를 제거하고 Split-KV 리듀서를 최적화한 효과가 소규모 배치 지연 시간 단축에 더욱 주효하게 작용했습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>이종 하드웨어 비교: Vera Rubin (MLA 2) vs Blackwell (MLA 1)</strong></p>
+<ul>
+<li>단일 GPU 기준 cross-hardware 측정 결과, 베라 루빈 환경의 MLA 2는 블랙웰 B200(MLA 1) 대비 기하평균 <strong>2.62배</strong> (피크 <strong>3.44배</strong>), GB200(MLA 1) 대비 기하평균 <strong>2.05배</strong> (피크 <strong>2.84배</strong>)의 속도 향상을 달성했습니다.</li>
+<li>피크 성능이 측정된 조건은 모두 <strong>배치 크기 16, Q8, KV64K</strong> 구성입니다.</li>
+<li><strong>분석상의 주의사항:</strong> 본 이종 하드웨어 비교 지표는 하드웨어, 동작 클록, 전력 설정 및 커널 구현 방식이 동시에 변경된 독립적인 비교 결과입니다. 따라서 이 수치는 단일 GPU 내에서의 소프트웨어 속도 향상 비율과 <strong>절대 상호 곱셈하여 연산해서는 안 됩니다</strong> (보고서 각주 2 참조).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-key-figures-entities">3. 등장 인물 및 화자 (Key Figures &amp; Entities)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 (Entity)</th>
+<th style="text-align:left">역할 및 관련 기술 명세</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>TokenSpeed Team</strong></td>
+<td style="text-align:left">본 보고서의 작성 주체이자 TokenSpeed MLA 및 MLA 2 커널 개발 팀</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LightSeek Foundation</strong></td>
+<td style="text-align:left">TokenSpeed 프로젝트를 관장하고 본 보고서를 발행한 재단</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Cognition</strong></td>
+<td style="text-align:left">Kimi K3 모델 기반의 코딩 전용 에이전트 <code>SWE-2</code> 개발사</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Harvey</strong></td>
+<td style="text-align:left">Kimi K3 모델 기반의 장문 법률 업무용 에이전트 <code>Tenet</code> 개발사</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FlashInfer &amp; Fast Kernel 팀</strong></td>
+<td style="text-align:left">MLA 2 아텐션 파이프라인 구조의 기초가 된 초기 커널 개발 팀</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NVIDIA &amp; NVIDIA DevTech 팀</strong></td>
+<td style="text-align:left">베라 루빈 하드웨어 조기 액세스 제공 및 MLA 1/2 개발 협력 엔지니어링 팀</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>개별 연구자/개발자 개인명</strong></td>
+<td style="text-align:left"><strong>확인 불가</strong> (소스 문서 내 연구진 개인 성명 명시되지 않음)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점-data-points-timeline">4. 수치 및 시점 (Data Points &amp; Timeline)</h5>
+<ul>
+<li>
+<p><strong>주요 시점 (Timeline):</strong></p>
+<ul>
+<li><strong>2026년 5월:</strong> 블랙웰 아키텍처용 TokenSpeed MLA (MLA 1) 최초 공개.</li>
+<li><strong>2026년 10월 11일:</strong> PyPIStats 기준 <code>tokenspeed-mla</code> 주간 다운로드 통계 집계일.</li>
+<li><strong>2026년 10월 15일:</strong> TokenSpeed MLA 2 기술 보고서 공식 발행일.</li>
+</ul>
+</li>
+<li>
+<p><strong>정량적 수치 데이터 (Data Points):</strong></p>
+<ul>
+<li><strong>PyPI 다운로드 통계:</strong> 최근 30일 기준 월간 다운로드 2,000,000회 이상 기록. 10월 11일 자 주간 다운로드 수 516,658회 (알려진 미러 사이트 제외).</li>
+<li><strong>벤치마크 조건 통제 수치:</strong> 총 16개 조합 (배치 크기 1, 4, 16, 64 / 쿼리 토큰 Q4, Q8 / KV 컨텍스트 길이 65,536 [KV64K], 131,072 [KV128K] / 96개 쿼리 헤드). 64-토큰 페이지 크기, cold L2 캐시, PDL 비활성화. 15회 반복, 20 CUDA 그래프 이터레이션의 중앙값 측정.</li>
+<li><strong>동일 GPU 비교 (Vera Rubin 상의 MLA 2 vs 재컴파일된 MLA 1):</strong>
+<ul>
+<li>전체 기하평균 속도 향상: <strong>1.142배</strong></li>
+<li>Q8 조건 기하평균: <strong>1.271배</strong> (8개 모든 구성에서 성능 개선)</li>
+<li>Q4 조건 기하평균: <strong>1.027배</strong></li>
+</ul>
+</li>
+<li><strong>동일 GPU 비교 (Vera Rubin 상의 MLA 2 vs 어댑터 적용 FlashInfer):</strong>
+<ul>
+<li>전체 기하평균 속도 향상: <strong>1.327배</strong></li>
+<li>Q8 조건 기하평균: <strong>1.434배</strong> (B64/64K 조건 1.325배, B64/128K 조건 1.271배)</li>
+<li>Q4 조건 기하평균: <strong>1.227배</strong></li>
+</ul>
+</li>
+<li><strong>이종 하드웨어 비교 (Vera Rubin MLA 2 vs Blackwell MLA 1):</strong>
+<ul>
+<li>B200 대비 전체 기하평균: <strong>2.62배</strong> (피크 조건 <strong>3.44배</strong>)</li>
+<li>GB200 대비 전체 기하평균: <strong>2.05배</strong> (피크 조건 <strong>2.84배</strong>)</li>
+<li>피크 발생 조건: 배치 크기 16, Q8, KV64K</li>
+<li><em>※ 교차 하드웨어 배율은 단일 GPU 속도 향상 배율과 곱하여 복합 계산할 수 없음.</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ol>
+<li><strong>Q4 소규모 배치 프로파일링 필요성:</strong> Q4 조건의 소규모 배치 연산 시 고정 커널 런칭 비용, 파이프라인 채우기/비우기 오버헤드, Split-KV 리듀서 오버헤드가 전체 지연 시간에서 차지하는 비중이 커짐에 따라 성능 개선 폭이 정체되거나 일부 저하되는 현상이 관찰되어 추가적인 상세 프로파일링 분석이 필요합니다.</li>
+<li><strong>엔드투엔드 서빙 성능 미반영:</strong> 본 보고서에 제시된 모든 측정 결과는 단일 디코드 커널 지연 시간(Kernel Latency)만을 독립적으로 측정한 값이며, 실제 LLM 서빙 시스템 환경에서의 엔드투엔드(End-to-End) 서비스 처리 성능이나 시스템 병목을 직접적으로 나타내지는 않습니다.</li>
+<li><strong>아키텍처 단독 효과 분리 불가:</strong> 베라 루빈과 블랙웰(B200, GB200) 간의 비교 수치는 하드웨어 아키텍처, 동작 클록, 전력 설정 및 커널 구현 방식의 변경이 복합적으로 작용한 결과이므로, 순수한 하드웨어 아키텍처만의 독자적인 성능 이점을 별도로 분리해낸 것은 아닙니다. 또한 이종 하드웨어 간 속도 향상 비율은 독립적 수치로서 동일 GPU 지표와 곱하여 해석할 수 없습니다.</li>
+<li><strong>소스 미기재 사항 (확인 불가):</strong> 보고서 작성자 개인의 성명 및 개별 최적화 요소(예: 리듀서 튜닝 vs Split-KV 스케줄링) 각각이 독립적으로 가져오는 구체적인 기여도 비율 등은 소스 문서에 기술되지 않아 확인할 수 없습니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrastive Language Models: A System One Model for Fast and Generalizable Decision-Making</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Contrastive Language Models: A System One Model for Fast and Generalizable Decision-Making</h1>
+<p class="page-meta">웹 · 2026-09-24</p>
+<h2 id="요약">요약</h2>
+<p>CLM은 빠른 의사결정과 효율적인 스케일링을 위해 '상태 인코더(State Encoder)'와 '행동 인코더(Action Encoder)'를 분리하는 이분화된 구조를 채택했습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://contrastive-lm.notion.site/">출처</a> · <a href="https://www.youtube.com/watch?v=Fuib0NrG_jw">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="contrastive-language-models-clm-신속하고-일반화된-의사결정을-위한-시스템-1-모델-분석-보고서">Contrastive Language Models (CLM): 신속하고 일반화된 의사결정을 위한 시스템 1 모델 분석 보고서</h3>
+<blockquote>
+<p><strong>문서의 성격 및 출처 고지</strong>
+본 보고서는 2026년 9월 23일 Jacky Kwok 등이 작성한 제1당사자(First-party) Notion 게시글을 바탕으로 작성되었습니다. 본 내용은 독립적인 재현 실험이나 학계의 동료 심사(Peer-review)를 거친 결과가 아니므로, 실제 도입 및 해석 시 이 점을 유의하시기 바랍니다.</p>
+</blockquote>
+<hr />
+<h5 id="1-clm-아키텍처-상태와-행동의-분리-및-효율성">1. CLM 아키텍처: 상태와 행동의 분리 및 효율성</h5>
+<p>CLM은 빠른 의사결정과 효율적인 스케일링을 위해 '상태 인코더(State Encoder)'와 '행동 인코더(Action Encoder)'를 분리하는 이분화된 구조를 채택했습니다.</p>
+<ul>
+<li><strong>인코더 구성:</strong> 각 인코더는 고정된(Frozen) LLM 백본과 그 뒤에 연결된 약 20M 파라미터 규모의 학습 가능한 프로젝션 헤드(Projection Head)로 구성됩니다.</li>
+<li><strong>경제적인 실험 설계:</strong> 학습 및 스케일링 실험 시 LLM 백본은 동결된 상태로 유지되며 오직 프로젝션 헤드만 학습됩니다. 이 방식은 백본 임베딩을 한 번만 계산하여 재사용할 수 있게 하므로, RTX 4090 GPU 단 한 대에서 약 한 시간 만에 전체 사전 학습을 마칠 수 있을 정도로 비용 효율적입니다.</li>
+<li><strong>공유 임베딩 공간:</strong> 두 인코더의 출력값은 동일한 차원의 공유 임베딩 공간으로 투사됩니다. 여기서 상태와 행동 사이의 연관성은 **코사인 유사도(Cosine Similarity)**를 통해 점수화되며, 가장 높은 유사도를 가진 행동이 선택됩니다.</li>
+</ul>
+<h5 id="2-학습-알고리즘-및-손실-함수-loss-function">2. 학습 알고리즘 및 손실 함수(Loss Function)</h5>
+<p>CLM은 상태와 정답 행동 간의 정렬을 최적화하기 위해 대조 학습(Contrastive Learning)을 수행합니다.</p>
+<ul>
+<li><strong>양방향 InfoNCE 손실 함수:</strong> 모델은 배치 크기 $B$ 내에서 정답 쌍에 대해 $B \times B$ 유사도 행렬을 구성합니다. 단순히 상태에서 행동을 찾는 방향($s_i \to a_i$)뿐만 아니라, 행동에서 상태를 역으로 식별하는 방향($a_i \to s_i$)을 모두 최적화하는 양방향 손실 함수를 사용합니다. 이때 온도 파라미터($\tau$)를 적용하여 확률 분포의 선명도를 조절합니다.</li>
+<li><strong>Hard Negatives와 수식의 확장:</strong> Mid-training 단계에서는 변별력을 높이기 위해 '까다로운 오답(Hard Negatives)'을 도입합니다. 이 단계의 손실 함수는 분모에 정답과의 유사도뿐만 아니라, 오답이지만 의미적으로 유사한 $h_{ik}(a)$ 항들의 지수 합을 추가하여 모델이 미세한 차이를 더 강하게 밀어내도록(Push) 유도합니다.</li>
+</ul>
+<h5 id="3-3단계-데이터-레시피-data-recipe">3. 3단계 데이터 레시피 (Data Recipe)</h5>
+<p>CLM-8B는 점진적으로 난이도가 높아지는 세 단계의 학습 과정을 거치며 의사결정 능력을 정교화합니다.</p>
+<ol>
+<li><strong>Step 1. Pre-training (사전 학습):</strong>
+<ul>
+<li><strong>데이터:</strong> Nemotron DQA 데이터셋 6,000만(60M) 쌍.</li>
+<li><strong>내용:</strong> 질문을 상태로, 답변을 행동으로 간주하여 광범위한 의미론적 표현을 학습합니다. 제로샷 평가(Romeo and Juliet 작성자 확인)에서 기존 Qwen3-8B는 오답에 더 높은 확률을 부여했으나, CLM-8B는 54.2%의 확률로 정답인 'William Shakespeare'를 1순위로 정확히 분류했습니다.</li>
+</ul>
+</li>
+<li><strong>Step 2. Mid-training (중간 학습):</strong>
+<ul>
+<li><strong>데이터:</strong> Gemini 2.5 Flash-Lite로 생성한 3,000만(30M) 개의 합성 Hard Negatives.</li>
+<li><strong>내용:</strong> 정답과 유사한 오답을 구별하는 미세 변별력을 강화합니다. 사전 학습 후 이를 도입했을 때(69.2%)가 처음부터 혼합하여 학습했을 때(62.4%)보다 약 7% 높은 정확도를 기록했습니다.</li>
+</ul>
+</li>
+<li><strong>Step 3. Post-training (사후 학습):</strong>
+<ul>
+<li><strong>데이터:</strong> Agent Data Protocol(ADP), <strong>Endless-Terminals</strong>, <strong>LiteCoder-Terminal-SFT</strong> 등에서 추출한 100만(1M) 개의 에이전트 궤적.</li>
+<li><strong>망각 방지(Co-training):</strong> 치명적 망각을 방지하기 위해 사전 학습 데이터(40%)와 에이전트 데이터(60%)를 리플레이 방식으로 혼합합니다. 이 방식을 통해 정확도 하락을 최소화(69% → 68.5%)했으며, 리플레이가 없을 때의 급격한 성능 저하(56.2%)를 방지했습니다.</li>
+</ul>
+</li>
+</ol>
+<h5 id="4-성능-비교-및-벤치마크-결과-저자-보고치-기반">4. 성능 비교 및 벤치마크 결과 (저자 보고치 기반)</h5>
+<p>CLM-8B는 지연 시간과 검증(Verification) 능력 모두에서 기존 Jev 모델을 압도하는 성과를 보였습니다.</p>
+<ul>
+<li><strong>지연 시간 및 효율성:</strong> Jev 대비 <strong>최대 9배 낮은 지연 시간</strong>을 달성했습니다. 특히 WikiRacing처럼 후보군이 많거나, T-Rex Game처럼 <strong>행동 세트가 고정되어 재사용이 잦은 환경</strong>에서 극적인 속도 향상을 보였습니다. 후보가 1,000개일 경우 Jev보다 <strong>13배</strong> 빠릅니다.</li>
+<li><strong>검증자(Verifier)로서의 우위:</strong> 장기 과업(Long-horizon tasks)에서 Jev는 무작위 선택(Pass@1)보다 낮은 성능을 보이며 검증자로서 실패했으나, CLM은 뛰어난 변별력을 유지했습니다.</li>
+<li><strong>주요 벤치마크 (SOTA):</strong>
+<ul>
+<li><strong>DeepSWE (코딩 에이전트): 81.6%</strong></li>
+<li><strong>Terminal-Bench 2.1: 87.6%</strong></li>
+</ul>
+</li>
+</ul>
+<h5 id="5-행동-캐싱-action-caching-및-추론-효율성">5. 행동 캐싱(Action Caching) 및 추론 효율성</h5>
+<p>CLM의 아키텍처는 실시간 의사결정 환경에서 '행동 임베딩 캐싱'을 통해 연산 효율을 극대화합니다.</p>
+<ul>
+<li><strong>원리:</strong> Super Mario와 같은 환경에서는 가능한 행동(점프, 좌우 이동 등)이 고정되어 있습니다. CLM은 게임 시작 전 이러한 행동들의 임베딩을 미리 계산하여 캐시에 저장합니다.</li>
+<li><strong>추론 가속:</strong> 매 단계마다 모델 전체를 다시 실행하는 대신, 새로 입력되는 게임 화면(상태)의 임베딩만 생성하여 캐싱된 행동들과 대조합니다. 이는 기존의 5회 순전파(Forward pass)가 필요했던 연산량을 <strong>단 1회로 단축</strong>시키는 효과를 가져옵니다. 마치 시험 보기 전 미리 모든 선택지를 읽어두고, 문제가 나올 때마다 정답만 골라내는 것과 같은 원리입니다.</li>
+</ul>
+<h5 id="6-스케일링-법칙-scaling-laws">6. 스케일링 법칙 (Scaling Laws)</h5>
+<p>CLM의 테스트 대조 손실($L$)은 학습 연산량($C$), 데이터 크기($D$), 프로젝션 헤드 크기($N$), 그리고 인코더 크기($N_{enc}$)에 따라 거듭제곱 법칙(Power Law)을 따릅니다.</p>
+<ul>
+<li><strong>최적의 파라미터 배분:</strong> 데이터 예산과 프로젝션 헤드 크기 사이에는 거의 선형적인 관계($N^* \propto D^{1.02}$)가 관찰되었으며, 파라미터당 약 <strong>310개의 토큰</strong>을 학습시키는 것이 가장 효율적입니다.</li>
+<li><strong>핵심 동인:</strong> 다양한 스케일링 요소 중 **인코더(백본)의 크기를 확장($N_{enc}$)**하는 것이 성능 향상에 가장 결정적인 영향을 미치는 것으로 나타났습니다.</li>
+</ul>
+<h5 id="7-향후-계획-및-결론">7. 향후 계획 및 결론</h5>
+<p>본 연구는 빠른 반응 속도와 높은 일반화 능력을 갖춘 '시스템 1' 의사결정 모델로서 CLM의 잠재력을 입증했습니다.</p>
+<ul>
+<li><strong>현재 성과:</strong> CLM-8B를 통해 낮은 지연 시간과 에이전트 환경에서의 강력한 검증 성능을 확보했습니다.</li>
+<li><strong>향후 로드맵:</strong>
+<ul>
+<li>더 큰 백본 모델을 활용한 성능 확장 실험.</li>
+<li>이미지 및 비디오를 포함한 시각 및 멀티모달 지원 확장.</li>
+<li>더 많은 데이터와 연산을 투입한 <strong>멀티모달 CLM-35B</strong> 모델이 현재 학습 중이며, 다음 달 초 공개를 앞두고 있습니다.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

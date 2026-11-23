@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H-Nets - the Past | Goomba Lab</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>H-Nets - the Past | Goomba Lab</h1>
+<p class="page-meta">웹 · 2026-10-29</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 카네기 멜론 대학교(CMU) 및 Cartesia AI의 Albert Gu 교수가 주도하여 개발한 계층적 시퀀스 모델인 H-Net(Hierarchical Network)의 기술적 배경, 아키텍처 혁신, 그리고 기존 연구 대비 차별성을 기술적으로 해설한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://goombalab.github.io/blog/2025/hnet-past">출처</a> · <a href="https://www.youtube.com/watch?v=7p_pdsAwHr8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="h-net의-개발-배경과-핵심-기술-구조에-대한-해설-보고서">H-Net의 개발 배경과 핵심 기술 구조에 대한 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 카네기 멜론 대학교(CMU) 및 Cartesia AI의 Albert Gu 교수가 주도하여 개발한 계층적 시퀀스 모델인 H-Net(Hierarchical Network)의 기술적 배경, 아키텍처 혁신, 그리고 기존 연구 대비 차별성을 기술적으로 해설한다. Albert Gu 교수의 연구 여정은 이산 수학, 경진 프로그래밍의 트리 알고리즘, 개요 작성 습관 등 개인적 사고방식에서 출발했다. 이후 인지심리학의 '청킹(Chunking)' 개념을 접하며 인간의 인지 체계가 가진 계층적 정보 처리 방식이 인공지능의 본질적 요소라는 직관을 확립하였고, 이는 복잡한 시퀀스 데이터를 유의미한 상위 차원의 단위로 압축 및 계층화하는 딥러닝 아키텍처 개발의 원동력이 되었다.</p>
+<p>기술적 발전 과정은 계층적 순환 신경망(RNN) 및 상태 공간 모델(SSM) 연구에 뿌리를 두고 있다. 2019년 DeepMind 인턴십을 기점으로 S4, SaShiMi 등의 모델을 거치며 오디오 및 시각 지각 분야에서는 고정 폭 풀링 기반의 autoregressive U-Net 구조가 우수한 성과를 거두었으나, 동일한 구조가 가변적 간격을 지닌 언어 모델링에서는 성능이 저하되는 한계에 봉착했다. 저자는 기존 토큰화(Tokenization) 방식의 한계를 극복하고 원시 바이트 및 시퀀스 데이터를 동적으로 계층화하기 위해 '미분 가능한 동적 청킹 메커니즘(Differentiable Chunking Mechanism)'을 핵심 과제로 설정하였으며, 황석준(Sukjun Hwang) 연구원과의 협업을 통해 기술적 돌파구를 마련하였다.</p>
+<p>본 해설 보고서는 Albert Gu 교수가 공개한 연구 기록물(&quot;H-Nets - the Past&quot;)에 명시된 사실, 실험 데이터, 및 기술적 주장에 전적으로 근거하여 작성되었다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points-arguments">2. 주요 논점 (Key Points &amp; Arguments)</h4>
+<h5 id="2-1-계층-구조-hierarchy-와-청킹-chunking-의-필요성-신경망-원시-연산자로서의-정의">2.1 계층 구조(Hierarchy)와 청킹(Chunking)의 필요성: 신경망 원시 연산자로서의 정의</h5>
+<ul>
+<li><strong>주장:</strong> 인간의 인지 체계 및 언어/지각 처리는 본질적으로 계층적 구조를 가지며, 딥러닝 모델이 연속된 데이터로부터 추상화된 개념을 학습하기 위해서는 Self-Attention 및 SSM과 대등한 수준의 기본 연산자(Primitive)로서 '동적 청킹(Dynamic Chunking)' 메커니즘이 필수적이다.</li>
+<li><strong>근거 및 사례:</strong>
+<ul>
+<li><strong>신경망 원시 연산자(Primitives) 개념:</strong> Albert Gu 교수의 연구 철학에서 Self-Attention은 집합 상의 조밀한 상호작용(Dense Interactions)을 표현하는 연산자이며, SSM은 연속적인 순환성(Recurrence)을 다루는 연산자이다. 동적 청킹은 원시 바이트 스트림으로부터 계층적 추상화를 학습하는 핵심 연산자로 정의된다.</li>
+<li><strong>인지적·학술적 배경:</strong> 인간은 언어를 단어, 구, 절, 문장으로 파악하고 지각 데이터를 객체와 사건으로 구조화한다. 저자는 'Learning How to Learn' 강좌를 통해 인지심리학의 청킹 개념을 접했으며, 이산 수학의 트리 알고리즘 처리 경험 및 개요(Outline) 작성 패턴이 모델 아키텍처 설계의 기본 철학으로 작동했음을 제시한다.</li>
+</ul>
+</li>
+<li><strong>언급 위치:</strong> 소제목 <code>Hierarchy is Everywhere</code>, <code>A Differentiable Chunking Mechanism?</code></li>
+</ul>
+<h5 id="2-2-계층적-rnn-및-s4-sashimi-기반-u-net의-성과와-언어-모델링의-한계">2.2 계층적 RNN 및 S4/SaShiMi 기반 U-Net의 성과와 언어 모델링의 한계</h5>
+<ul>
+<li><strong>주장:</strong> 고정 폭 풀링(Fixed-width pooling) 기반의 autoregressive U-Net 아키텍처는 오디오 및 이미지처럼 균일한 샘플링 레이트를 가지는 지각 데이터에는 뛰어난 유도 편향(Inductive Bias)을 제공하지만, 가변적 간격을 가진 언어 모델링에서는 성능이 저하된다.</li>
+<li><strong>근거 및 사례:</strong>
+<ul>
+<li><strong>2D 모형에서의 발상 전환:</strong> S4 및 SaShiMi에서 1D 시퀀스에 적용된 autoregressive U-Net 구조는 2D 이미지 생성 모델인 PixelCNN++의 구조적 아이디어에서 직접적인 개념적 동기를 얻었다.</li>
+<li><strong>RNN 계층화 시도:</strong> Clockwork RNN, Hierarchical Multiscale RNN, Dilated RNN, Ordered Neuron LSTM 등은 게이팅 메커니즘을 통해 장기 의존성을 개선하려 했다.</li>
+<li><strong>S4 기반 autoregressive U-Net과 오디오 성과:</strong> S4 개발 당시 2단계 다운샘플링 구조의 U-Net을 도입하여 CIFAR-10 픽셀 밀도 추정에 성공했고, 이를 확장한 SaShiMi 모델은 원시 오디오 파형 생성에서 뛰어난 성능을 입증했다.</li>
+<li><strong>언어 모델링의 실패 및 원인:</strong> 동일한 U-Net 구조를 WikiText-103 언어 모델링에 적용했을 때, 고정 폭 다운샘플링 방식은 단일 스케일 백본보다 항상 낮은 성능을 보였다. 이는 고정 폭 풀링이 합성곱(Convolution)과 유사한 유도 편향을 가져 가변적 언어 구조를 반영하지 못함을 증명한다.</li>
+</ul>
+</li>
+<li><strong>언급 위치:</strong> 소제목 <code>Hierarchical RNNs</code>, <code>S4 and SaShiMi</code>, <code>Autoregressive U-Nets for image modeling</code>, <code>U-Nets don't work for language</code>, <code>But they work great for audio!</code></li>
+</ul>
+<h5 id="2-3-미분-가능한-청킹-메커니즘-differentiable-chunking-의-수립-과정">2.3 미분 가능한 청킹 메커니즘(Differentiable Chunking)의 수립 과정</h5>
+<ul>
+<li><strong>주장:</strong> 정보량 기반 휴리스틱 청킹의 이론적 한계를 극복하고, MoE(Mixture-of-Experts) 라우팅 기법에서 영감을 얻은 미분 가능한 동적 선택(Differentiable Selection) 기법이 H-Net의 핵심 기술적 돌파구이다.</li>
+<li><strong>근거 및 사례:</strong>
+<ul>
+<li><strong>NLL(음의 로그 우도) vs Conditional Entropy 분석:</strong> 정보량 기반 청킹에서 차기 토큰의 음의 로그 우도(NLL / Surprise) overflow 방식은 조건부 엔트로피 $H(x_t | x_{&lt;t})$ 방식보다 이론적으로 우수하다. 확률 질량이 특정 단어 $w$에 집중된 분포에서는 조건부 엔트로피가 0에 가깝게 유지되어 경계를 생성하지 못하지만, 실제로 예측과 다른 단어 $v \neq w$가 등장할 때 NLL 방식은 확실한 놀람(Surprise)을 측정하여 올바른 청킹 경계를 형성한다. 그러나 정보량 기반 방식은 별도의 프록시 모델을 사전 학습해야 하므로 완전한 엔드투엔드(End-to-End) 학습이 불가능했다.</li>
+<li><strong>MoE 기반 동적 라우팅 및 이산 선택의 연속적 근사:</strong> 황석준 연구원은 토큰을 전문가에게 할당하는 MoE의 이산 선택 문제를 경계 결정 라우팅 문제로 전환함으로써, 프록시 모델 없이 단일 모델 내에서 엔드투엔드로 미분 가능한 동적 선택 메커니즘을 완성했다.</li>
+<li><strong>입력 임베딩 재주입 시도와 잔차 연결:</strong> 초기에 메인 네트워크 이후에 새로운 입력 임베딩(Input Embeddings) 세트를 직접 주입하는 백보드 아이디어를 시도했다. 이 방식은 단일 스테이지 학습 초기 안정성을 높였으나, H-Net의 핵심 목표인 재귀적 다단계 계층화(Multi-stage recursive chunking)를 구조적으로 차단하는 문제가 발생하여 최종적으로 잔차 연결(Residual Projections) 방식으로 대체되었다.</li>
+<li><strong>학습 안정화 기술:</strong> Straight-Through Estimator(STE), Gumbel-Softmax(실험적으로 효과 미비 확인), 네트워크별 정규화(Per-network norms), 레이어 초기화 스케일링, 경계 이음새 완화를 위한 스무딩 모듈(EMA detokenizer) 등이 연구·적용되었다.</li>
+</ul>
+</li>
+<li><strong>언급 위치:</strong> 소제목 <code>A Differentiable Chunking Mechanism?</code>, <code>Information-based Chunking</code>, <code>Differentiable Selection with Modern Techniques</code></li>
+</ul>
+<h5 id="2-4-prior-concurrent-works와의-비교-분석-dpt-blt-spacebyte">2.4 Prior/Concurrent Works와의 비교 분석 (DPT, BLT, SpaceByte)</h5>
+<ul>
+<li><strong>주장:</strong> H-Net은 DPT, BLT, SpaceByte 등 기존 및 동시대 연구와 달리 외부 모델이나 구분자 규칙에 의존하지 않고 완전히 엔드투엔드로 동적 청킹 경계를 학습하며, 다단계 계층(Multi-stage) 중첩이 가능하다.</li>
+<li><strong>근거 및 비교 분석:</strong>
+<ul>
+<li><strong>SpaceByte vs BLT 비교 맥락:</strong> BLT 논문의 Figure 6에 따르면, 띄어쓰기 구분자 기반의 SpaceByte는 영어 텍스트에서 BLT Entropy 방식과 거의 대등한 성능을 보인다. 하지만 H-Net의 동적 선택 메커니즘은 공백 구분자가 없는 언어(중국어, 일본어 등) 및 연속적인 지각 데이터(오디오, 비전)로 유연하게 확장된다는 점에서 정적/엔트로피 기반 방식 대비 우월하다.</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">DPT (Dynamic Pooling Transformer)</th>
+<th style="text-align:left">BLT (Byte Latent Transformer)</th>
+<th style="text-align:left">SpaceByte</th>
+<th style="text-align:left">H-Net</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>청킹 결정 방식</strong></td>
+<td style="text-align:left">이진 경계 예측기 (Gumbel-Softmax 적용)</td>
+<td style="text-align:left">사전 학습된 조건부 엔트로피 모델</td>
+<td style="text-align:left">띄어쓰기 등 공백/구분자 기준 분할</td>
+<td style="text-align:left">MoE 기반 동적 라우터 (Differentiable Selection)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>진정한 엔드투엔드 여부</strong></td>
+<td style="text-align:left">예 (실험적 적용)</td>
+<td style="text-align:left">아니오 (별도 엔트로피 모델 필요)</td>
+<td style="text-align:left">아니오 (정적 규칙 기반)</td>
+<td style="text-align:left"><strong>예 (완전한 엔드투엔드 동적 학습)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>다단계 계층화 (Multi-stage)</strong></td>
+<td style="text-align:left">제한적</td>
+<td style="text-align:left">불가</td>
+<td style="text-align:left">제한적</td>
+<td style="text-align:left"><strong>가능 (H-Net 2-stage &gt; 1-stage 성능 입증)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아키텍처 특이사항</strong></td>
+<td style="text-align:left">Autoregressive U-Net 구조 초기 제안</td>
+<td style="text-align:left">Cross-Attention 및 Hash n-gram 임베딩 활용</td>
+<td style="text-align:left">구분자 기반 단순 다운샘플링</td>
+<td style="text-align:left">Mamba(SSM) + Transformer 혼합, 스무딩 모듈 적용</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>언급 위치:</strong> 소제목 <code>Discovering Prior and Concurrent Works</code>, <code>Hourglass and Dynamic Pooling Transformer</code>, <code>Byte Latent Transformer (BLT)</code></li>
+</ul>
+<h5 id="2-5-h-net-아키텍처-구성요소-및-ssm-mamba-과-transformer의-트레이드오프">2.5 H-Net 아키텍처 구성요소 및 SSM(Mamba)과 Transformer의 트레이드오프</h5>
+<ul>
+<li><strong>주장:</strong> 바이트 레벨 및 정보 압축 단계에서는 SSM(Mamba) 레이어가 Transformer보다 월등히 우수한 유도 편향과 정보 압축 능력을 제공하며, H-Net 아키텍처의 다차원 설계 축들은 정교하게 결합되어 있다.</li>
+<li><strong>근거 및 사례:</strong>
+<ul>
+<li><strong>12개 설계 축의 비선형적 결합 복잡성:</strong> 일반적인 LLM 스케일링은 깊이나 너비를 독립적으로 조정하는 좌표 하강법(Coordinate descent)이 가능하지만, H-Net은 정규화, 라우팅, STE, 초기화 스케일링, 잔차 프로젝션, EMA detokenizer 등 약 12개의 설계 축이 비선형적으로 상호작용하므로 전체 시스템의 전역적 동기화가 필수적이었다.</li>
+<li><strong>압축 능력 검증 통제 실험 (T2M2-M2T2):</strong> Mamba의 우수성이 단순 원시 바이트 처리 능력 때문인지, 아니면 하위 스테이지로 정보를 '압축'하는 본질적 능력 때문인지를 검증하기 위해 이미 BPE 토큰화된 데이터 상에서 1단계 H-Net 실험을 진행했다. 연산량 및 파라미터 예산을 엄격히 맞추기 위해 Transformer 레이어의 크기를 Mamba 레이어 대비 2배($2\times$ size)로 설정했다. 실험 결과, 인코더/디코더에 Mamba 레이어를 포함한 구성(T2M2-M2T2)이 순수 Transformer 구성보다 우수한 성능을 나타내어 Mamba가 가진 계층적 정보 압축의 유도 편향을 증명했다.</li>
+</ul>
+</li>
+<li><strong>언급 위치:</strong> 소제목 <code>A World of Improvements</code>, <code>Tradeoffs of SSMs and Transformers</code>, <code>SSMs as compressive models</code></li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-people-speakers">3. 등장 인물 및 화자 (People &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 (Affiliation)</th>
+<th style="text-align:left">역할 및 소스 내 언급 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Albert Gu</td>
+<td style="text-align:left">CMU, Cartesia AI</td>
+<td style="text-align:left">본 글의 저자. H-Net 프로젝트 총괄, S4 및 SSM 연구 주도, 정보 기반 청킹 개념 제시.</td>
+</tr>
+<tr>
+<td style="text-align:left">Sukjun Hwang (황석준)</td>
+<td style="text-align:left">[확인 불가] (Albert Gu의 지도 학생)</td>
+<td style="text-align:left">H-Net의 핵심 기술적 돌파구(MoE 기반 미분 가능 선택 메커니즘 및 EMA detokenizer 스무딩 모듈) 개발.</td>
+</tr>
+<tr>
+<td style="text-align:left">Caglar Gulcehre</td>
+<td style="text-align:left">DeepMind (2019년 기준)</td>
+<td style="text-align:left">2019년 인턴십 당시 Albert Gu의 멘토. GRU 논문 저자이자 RNN 계층 구조 연구 지도.</td>
+</tr>
+<tr>
+<td style="text-align:left">Nando de Freitas</td>
+<td style="text-align:left">DeepMind (2019년 기준)</td>
+<td style="text-align:left">2019년 인턴십 당시 Albert Gu의 멘토 및 상사.</td>
+</tr>
+<tr>
+<td style="text-align:left">Karan Goel</td>
+<td style="text-align:left">[확인 불가]</td>
+<td style="text-align:left">S4 기반 SaShiMi 오디오 생성 연구를 공동 수행하고 논문 작성에 기여.</td>
+</tr>
+<tr>
+<td style="text-align:left">Ricardo Buitrago</td>
+<td style="text-align:left">[확인 불가]</td>
+<td style="text-align:left">정보 기반 청킹 탐색 및 순환 모델의 길이 일반화(Length Generalization) 연구 수행.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-정보-numbers-timestamps">4. 주요 수치 및 시점 정보 (Numbers &amp; Timestamps)</h4>
+<ul>
+<li><strong>발행 및 작성 시점:</strong>
+<ul>
+<li>2025년 7월 10일: 블로그 게시글 발행일.</li>
+<li>Copyright 2026 Goomba AI Lab.</li>
+</ul>
+</li>
+<li><strong>주요 연구 이력 및 타임라인:</strong>
+<ul>
+<li>2019년: DeepMind 인턴십 수행 (RNN 계층 구조 및 게이팅 연구 시작).</li>
+<li>PhD 5년차: 연구 분야를 시퀀스 모델 및 상태 공간 모델(HIPPO, LSSL, S4)로 완전히 전환.</li>
+<li>2021년 10월: Hourglass Transformer 논문이 arXiv에 제출됨 (Albert Gu의 S4 논문 제출과 5일 차이).</li>
+<li>2022년~2023년: 미분 가능한 청킹(Differentiable Chunking)에 대한 개념적 아이디어 구상 시기.</li>
+<li>2024년 여름: CMU 연구실 랩톡에서 토큰화 문제 해결 및 정보 기반 청킹 아이디어 발표.</li>
+<li>2024년 10월 후반: Dynamic Pooling Transformer (DPT) 논문 확인.</li>
+<li>2024년 12월: Byte Latent Transformer (BLT) 논문 발표 확인.</li>
+<li>2025년 초: H-Net 최종 아키텍처 및 메커니즘 안정화.</li>
+</ul>
+</li>
+<li><strong>주요 수치 및 구조/참조 데이터:</strong>
+<ul>
+<li>S4 U-Net: 2단계 다운샘플링(Two stages of downsampling) 구조 적용.</li>
+<li>T2M2-M2T2 실험 통제 수치: Transformer 레이어는 연산량 및 파라미터 매칭을 위해 Mamba 레이어 대비 2배 크기($2\times$ size)로 설정.</li>
+<li>참조 문헌 번호: 총 23개의 인용 문헌 목록 포함.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>경계 생성 메커니즘의 미완성적 해석:</strong> H-Net이 데이터 내에서 정확히 어떤 이유와 이론적 근거로 청킹 경계(Chunk Boundary)를 나누는지에 대한 완전한 수학적·실증적 메커니즘은 완벽히 파악되지 않았다 (작동 원리에 대한 정밀 분석은 향후 연구 과제로 남김).</li>
+<li><strong>노이즈 제거 리트머스 시험의 실무 미검증:</strong> 무의미한 노이즈 토큰이 포함된 시퀀스를 압축 및 제거하는 '리트머스 시험(Litmus Test)' 아이디어는 아키텍처 설계를 위한 사고 실험으로 활용되었을 뿐, 실제 실무 H-Net 아키텍처에서 완벽히 작동하는지 실증적으로 검증하지 않았다.</li>
+<li><strong>공식적인 스케일링 법칙(Formal Scaling Laws) 부재:</strong> 제한된 컴퓨팅 자원 및 아키텍처 자체의 안정화와 개발에 자원을 집중함에 따라, 파라미터 증가에 따른 공식적인 스케일링 법칙을 도출하지 못했다 (손실 곡선을 통한 프록시 평가만 수행함).</li>
+<li><strong>글의 성격에 따른 소재적 한계:</strong> 본 출처 텍스트는 정식 학술 논문이 아닌 저자의 개인적 회고 및 서사적 기록(Informal personal recounting)이므로, 정밀한 수치적 데이터보다는 직관과 연구 비하인드 스토리 중심으로 작성되었다.</li>
+<li><strong>아키텍처 세부 구현 정보 누락 가능성:</strong> 각 서브 네트워크의 초기화 스케일링 조절 등 모델 구현에 적용된 다수의 미세한 테크닉 중 일부는 논문 본문에 완전히 보고되지 않았거나 누락되었을 가능성이 저자에 의해 언급되었다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

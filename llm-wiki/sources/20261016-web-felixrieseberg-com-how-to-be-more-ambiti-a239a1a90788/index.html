@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to be more ambitious: A tutorial for humans with models</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>How to be more ambitious: A tutorial for humans with models</h1>
+<p class="page-meta">웹 · 2026-10-16</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 앤스로픽(Anthropic)에서 클로드(Claude) 개발에 참여하고 있는 펠릭스 리제베르크(Felix Rieseberg)가 2026년 10월 13일에 발표한 글 &quot;How to be more ambitious: A tutorial for humans with models&quot; (모델을 사용하는 인간을 위한…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models">출처</a> · <a href="https://www.youtube.com/watch?v=_eqoFSBnH8A">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-인공지능-모델-활용의-야망-확장법-felix-rieseberg의-튜토리얼-분석">[해설 보고서] 인공지능 모델 활용의 야망 확장법: Felix Rieseberg의 튜토리얼 분석</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 앤스로픽(Anthropic)에서 클로드(Claude) 개발에 참여하고 있는 펠릭스 리제베르크(Felix Rieseberg)가 2026년 10월 13일에 발표한 글 <em>&quot;How to be more ambitious: A tutorial for humans with models&quot;</em> (모델을 사용하는 인간을 위한 야망 확장 튜토리얼)을 정밀 분석한 해설 보고서입니다. 저자는 클로드 개발 현장에서 사용자들이 달성하는 경이로운 성과들을 목격하는 동시에, 대다수의 사용자가 여전히 단순한 질의응답 수준에 머물러 있는 현실을 지적하며 AI 모델 활용 시 &quot;더 야망을 가져야 한다(we ought to be more ambitious)&quot;고 강조합니다.</p>
+<p>현재 AI 모델의 능력은 모든 영역에서 균일하게 발전하지 않으며, 특정 방향에서는 놀라운 성과를 내지만 다른 방향에서는 부족한 모습을 보입니다. 저자는 단순히 모델의 자체적인 성능 향상을 기다리는 것에 그치지 않고, 사용자가 모델에 요구하는 목표의 수준을 주도적으로 끌어올려야 한다고 주장합니다. 이를 위해 저자는 AI 활용에서의 '야망(Ambition)'을 네 가지 차원—속도(Speed), 고도(Altitude), 깊이(Depth), 범위(Range)—으로 체계화하여 구체적인 실무 적용 방법론을 제시합니다.</p>
+<p>또한, 본 글은 인간이 기술을 다룰 때 스스로 한계를 설정하는 심리적 기제와 이를 극복하기 위한 심리학적·역사적 배경을 함께 다룹니다. 알버트 반두라(Albert Bandura)의 자기효능감(Self-efficacy) 개념과 로크 및 레이섬(Locke and Latham)의 목표 설정 연구, 미켈란젤로의 자기 제한 사례, 그리고 조지 단치히와 로저 바니스터 등의 역사적 전례들을 결합하여, 사용자가 스스로의 한계 인식을 깨고 더 높은 목표를 설정할 때 AI 모델을 통한 성과가 극대화됨을 논리적으로 입증합니다.</p>
+<p><strong>보고서 핵심 다룸 내용 요약</strong></p>
+<ul>
+<li><strong>모델 능력의 특성과 야망의 필요성:</strong> 비균일하게 성장하는 AI 모델의 능력을 극대화하기 위해 단순 사용 수준을 넘어선 야망적 접근이 필요한 배경 분석.</li>
+<li><strong>야망 확장의 4가지 프레임워크:</strong> 속도(Speed), 고도(Altitude), 깊이(Depth), 범위(Range)의 개념과 실무 적용 사례(Acme Inc. 분기 사업 검토, 인프라 구축, 멀티 에이전트 및 프롬프트 구조) 제시.</li>
+<li><strong>자기효능감과 한계 극복:</strong> 로크와 레이섬의 연구 및 역사적 사례(미켈란젤로, 조지 단치히, 로저 바니스터, 서바스찬 사웨 등)를 통한 심리적 한계 극복의 근거 서술.</li>
+</ul>
+<hr />
+<h4 id="2-주요-논점-main-points">2. 주요 논점 (Main Points)</h4>
+<h5 id="2-1-모델-능력의-비균일성과-야망-ambition-의-필요성">2.1. 모델 능력의 비균일성과 '야망(Ambition)'의 필요성</h5>
+<p>AI 모델의 능력은 모든 영역에서 일정한 비율로 확장되지 않습니다. 저자는 수학자 테렌스 타오(Terence Tao)의 인용구(&quot;일부 방향에서는 놀랍지만 다른 방향에서는 불충분하다&quot;)를 통해 모델 능력의 비균일적 성장을 설명합니다.</p>
+<p>많은 이용자가 &quot;프랑스의 수도는 어디인가?&quot;라는 사실 확인용 질문이나 &quot;이 이메일 어조를 덜 화나게 수정해 줘&quot;와 같은 단순 작업에 모델을 한정하여 사용하고 있습니다. 반면, 일부 이용자들은 모델의 비약적인 능력을 활용하여 기존에는 불가능하다고 여겼던 성과를 내고 있습니다. 저자가 제시한 실제 성과 사례는 다음과 같습니다.</p>
+<ul>
+<li><strong>새로운 행성 발견 조력:</strong> 아마추어 천문학자가 클로드를 활용해 신규 행성을 발견하는 데 기여함.</li>
+<li><strong>AI 뮤직비디오 제작:</strong> 저자가 긍정적으로 평가한 최초의 AI 뮤직비디오 탄생.</li>
+<li><strong>수학의 새로운 시대 논의:</strong> 수학자 테렌스 타오가 2026년 10월 10일 블로그를 통해 언급한 '수학 2.0(Math 2.0)'으로 불리는 새로운 연구 형태 등장.</li>
+</ul>
+<p><strong>[사실 및 주장 구분]</strong></p>
+<ul>
+<li><strong>객관적 사실 (Fact):</strong> 테렌스 타오가 모델의 능력을 비균일하다고 평가한 점, 2026년 10월 기준 클로드가 행성 발견, AI 뮤직비디오, 수학 2.0 논의 등에 활용된 사례가 존재한다는 점.</li>
+<li><strong>소자의 주장 (Claim):</strong> 단순히 사용법을 익히는 것을 넘어 활용의 '야망'을 높이는 것만이 비균일하게 성장하는 AI의 능력을 완벽히 활용하는 유일한 방법이라는 점.</li>
+</ul>
+<hr />
+<h5 id="2-2-야망-확장을-위한-4가지-차원-및-실행-방법">2.2. 야망 확장을 위한 4가지 차원 및 실행 방법</h5>
+<p>저자는 야망의 형태를 <strong>속도(Speed)</strong>, <strong>고도(Altitude)</strong>, <strong>깊이(Depth)</strong>, **범위(Range)**의 4가지 유형으로 분류하고 실무 적용 방안을 제시합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">야망 차원</th>
+<th style="text-align:left">핵심 개념</th>
+<th style="text-align:left">적용 방법 및 구체적 사례 (Acme Inc. QBR 사례 등)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>속도 (Speed)</strong></td>
+<td style="text-align:left">동일한 작업을 더 짧은 시간에 수행함.</td>
+<td style="text-align:left">AI의 가장 기본적인 경제적 가치 창출 방식으로, 기존 업무 방식과 유사하며 높은 창의성을 요구하지 않으므로 본 튜토리얼에서는 비중 있게 다루지 않고 생략함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>고도 (Altitude)</strong></td>
+<td style="text-align:left">개별 작업 단위에서 벗어나 최종 결과물과 추상화 수준을 높임.</td>
+<td style="text-align:left"><strong>- 앱 크래시 대응 인프라 구축:</strong> 단순 '개별 오류 수정'에서 '앱 전체의 크래시 없는 상태 유지'로 전환. 이를 위해 저자는 크래시 리포트 수집, 앱 버전과 git 커밋 매핑, Windows/macOS/Linux 컴퓨터 접근 권한을 모델에 부여하여 독자적으로 오류를 재현하고 검증할 수 있는 워크플로우 인프라를 먼저 구축함.&lt;br&gt;<strong>- Acme Inc. QBR 프레젠테이션 적용:</strong>&lt;br&gt;1단계: 숫자를 템플릿에 채우는 대신 전체 데이터를 제공하여 &quot;이번 분기에 무엇이 변했고, 왜 변했으며, 어떻게 해야 하는가?&quot;를 질의.&lt;br&gt;2단계: &quot;가장 긴급한 3가지 의사결정을 도출하고 찬반 논거와 함께 방향성을 제시하라&quot;고 요구.&lt;br&gt;3단계: 분기별 발표 자료(Deck)를 만드는 기존 관행 대신 &quot;경영진이 문제를 조기에 포착하고 자원을 적절히 배분할 수 있는 더 나은 시스템을 설계하고 기존 방식과 병행 운영하라&quot;고 지시.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>깊이 (Depth)</strong></td>
+<td style="text-align:left">해당 분야 최고 전문가의 도구, 기법, 데이터에 직접 접근함.</td>
+<td style="text-align:left"><strong>- 최고 수준의 도구 요구:</strong> 마크다운 표 대신 데이터베이스 및 통계 모델 활용을 강제함.&lt;br&gt;<strong>- 비현실적 목표 설정 및 독려:</strong> 웹사이트 로딩 속도를 10초에서 5초가 아닌 200ms로 설정함. 모델이 특정 과제를 불가능하다고 판단할 때는 &quot;이 문제는 충분히 해결 가능하니 계속 시도하라&quot;고 재촉하여 한계를 부여하지 않음.&lt;br&gt;<strong>- 가설 검증 및 신규 지식 생성:</strong> 원시 데이터를 직접 주입해 기존 전제(예: 고객 이탈 원인)를 재검증하고, 로그 데이터 기반 시뮬레이션을 통해 미지의 이탈 신호를 탐지하도록 요구.&lt;br&gt;<strong>- 외부 판정 도구(Outside Judge) 활용:</strong> 모델 자체 평가 대신 외부 검증 도구 및 피드백 루프를 연결하여 결과 검증.&lt;br&gt;<strong>- 저자의 4단계 프롬프트 구조:</strong> (1) 최고 전문가가 할 법한 추가 작업 요구 (2) 가공되지 않은 원시 데이터 지정 (3) 구체적 전문 기법/도구 명시 (4) 외부 검증 기준 설정 후 프롬프트 재작성.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>범위 (Range)</strong></td>
+<td style="text-align:left">단일 분야를 넘어 다문항/다전문성 영역의 지식을 결합함.</td>
+<td style="text-align:left"><strong>- 명사를 동사로 전환:</strong> 톰 켈리 &amp; 조나단 리트만의 기법 적용. QBR을 '발표 자료'라는 명사 대신 '30분 안에 불확실성 속에서 원인과 결과를 설득하고 의사결정을 내리는 행위'라는 동사적 목표로 정의하여 필요 분야를 확장.&lt;br&gt;<strong>- 케이퍼 무비 식 팀 구성 및 멀티 에이전트 활용:</strong> 영화 초반 30분 동안 다양한 인재를 모으듯 분석가, 기자, 에디터, 모션/오디오 디자이너뿐만 아니라 공매도 세력(Short seller) 및 회계감사원 등 적대적 팀(Red team)의 관점과 기법을 적용. 단, 단순 역할극(Roleplay)에 그치지 않고 &quot;공매도 세력처럼 글을 쓰라&quot;가 아닌 &quot;공매도 세력이 입장을 조사할 때 실제로 수행하는 조사/연구 기법을 실행하라&quot;고 지시해야 함. 다중 스레드, 오케스트레이터, 서브에이전트 등 멀티 에이전트 시스템 활용 권장.&lt;br&gt;<strong>- 타 분야 도구 활용:</strong> 알렉스 알버트의 사례처럼 홈페이지 3D 환경 구축을 위해 블렌더(Blender) 도구를 연결해 활용.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[기술적 전제 조건 (Technical Prerequisites)]</strong>
+저자가 제시하는 모든 야망 확장법은 모델이 소프트웨어를 설치할 수 있는 컴퓨터 환경에 접근할 수 있고, <strong>MCP(Model Context Protocol) 커넥터</strong> 또는 기타 수단을 통해 관련 데이터 전반에 접근할 수 있는 권한을 보유하고 있음을 전제로 합니다.</p>
+<hr />
+<h5 id="2-3-자기효능감-self-efficacy-과-한계-극복의-심리적-역사적-배경">2.3. 자기효능감(Self-efficacy)과 한계 극복의 심리적·역사적 배경</h5>
+<p>인간이 AI를 다룰 때 스스로 한계를 설정하는 이유는 기술적 문제라기보다 심리적 기제에 기인합니다.</p>
+<ul>
+<li><strong>자기효능감(Self-efficacy)과 목표 설정:</strong> 알버트 반두라가 제시한 자기효능감 개념에 따라, 자신의 능력을 높게 믿는 사람이 더 높은 성과를 냅니다. 로크와 레이섬(Locke and Latham)의 35년간에 걸친 목표 설정 연구에 의하면, 단순히 &quot;최선을 다하라&quot;는 지시보다 &quot;구체적이고 어려운 목표&quot;를 부여받았을 때 인간의 수행 능력이 한층 더 향상됩니다. 패트릭 콜리슨(Patrick Collison)의 'Fast' 리스트 역시 대담한 목표와 엄격한 마감기한이 혁신적 성과를 이끈다는 사실을 증명합니다.</li>
+<li><strong>자신에 대한 한계 설정 사례:</strong> 미켈란젤로(Michelangelo)는 자신을 화가가 아닌 조각가로 정의했기 때문에 시스틴 성당 천장화를 그리는 것을 거부하려 했습니다. 이처럼 인간은 역사적으로 자신의 전문 영역을 너무 좁게 설정하여 능력을 제한하는 경향이 있습니다.</li>
+<li><strong>역사적·과학적 사례 분석:</strong>
+<ol>
+<li><strong>조지 단치히 (George Dantzig, 1939년):</strong> 버클리 대학교 통계학 수업에 지각하여 흑판에 적힌 미해결 통계 문제 2개를 단순 숙제로 오인하고 풀어서 제출함. '불가능하다'는 선입견이 없었기에 문제를 해결할 수 있었음.</li>
+<li><strong>로저 바니스터 (Roger Bannister, 1954년) 및 서바스찬 사웨 (Sabastian Sawe, 2026년):</strong> 인류가 불가능하다고 여겼던 '4분 마일' 기록을 로저 바니스터가 1954년 5월에 깨뜨린 후, 단 46일 만에 다른 선수가 동일한 기록을 깨뜨림. 마라톤의 서브 2시간 기록 역시 서바스찬 사웨가 2026년 4월 런던에서 달성한 직후 2위 선수도 함께 2시간 벽을 돌파함. 이는 타인의 성공 목격이 자기한계를 깨는 계기가 됨을 보여줌.</li>
+<li><strong>실패의 허용 및 내면 기법:</strong> <em>The Inner Game of Tennis</em>의 핵심 주장처럼 지나치게 인위적인 노력을 기울이기보다 실패할 수 있는 자유를 부여할 때 최선의 결과가 나옴. 리눅스(Linux) 초기 발표 당시 &quot;그저 취미일 뿐이며 gnu처럼 거대하거나 전문적이지 않을 것&quot;이라고 발표된 역사적 사례가 이를 뒷받침함.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-persons-speakers">3. 등장 인물 및 화자 (Persons &amp; Speakers)</h4>
+<p>소스 텍스트에 언급된 인물들의 이름, 소속/역할 및 언급 맥락은 다음과 같습니다. 소스에서 명확히 확인되지 않는 정보는 &quot;확인 불가&quot;로 표기하였습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 이름</th>
+<th style="text-align:left">소속 및 역할</th>
+<th style="text-align:left">소스 내 언급 맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>펠릭스 리제베르크 (Felix Rieseberg)</strong></td>
+<td style="text-align:left">앤스로픽(Anthropic) 엔지니어링 매니저(EM), 클로드 개발 주도</td>
+<td style="text-align:left">본 보고서의 원작자. Claude.ai, Cowork, Claude Code Desktop 엔지니어링을 이끌었으며 Electron 등의 오픈소스 관리자임.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>테렌스 타오 (Terence Tao)</strong></td>
+<td style="text-align:left">수학자 (소속 기관 확인 불가)</td>
+<td style="text-align:left">모델 능력이 비균일하다는 점(&quot;일부 방향에서는 놀랍지만 다른 방향에서는 불충분함&quot;)과 'Math 2.0' 논의의 출처로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>알렉스 알버트 (Alex Albert)</strong></td>
+<td style="text-align:left">저자의 동료 (소속 기관 확인 불가)</td>
+<td style="text-align:left">블렌더(Blender)를 활용해 인테리어 디자인 및 3D 환경을 구현하는 사례로 언급됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>톰 켈리 및 조나단 리트만 (Tom Kelley &amp; Jonathan Littman)</strong></td>
+<td style="text-align:left"><em>The Art of Innovation</em>의 저자 (소속 기관 확인 불가)</td>
+<td style="text-align:left">명사를 동사로 바꾸어 문제 해결 범위를 넓히는 사고 기법의 출처로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>로크와 레이섬 (Locke &amp; Latham)</strong></td>
+<td style="text-align:left">심리학/경영학 연구자 (소속 기관 확인 불가)</td>
+<td style="text-align:left">35년간의 목표 설정 연구를 통해 구체적이고 어려운 목표의 효과를 입증한 연구자로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>패트릭 콜리슨 (Patrick Collison)</strong></td>
+<td style="text-align:left">스트라이프(Stripe) 창업자</td>
+<td style="text-align:left">대담한 목표와 엄격한 마감기한을 통해 인류가 이룬 성과를 기록한 'Fast' 리스트 운영자로 언급됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조지 단치히 (George Dantzig)</strong></td>
+<td style="text-align:left">1939년 버클리 대학교 학생 (통계학자, 소속 기관 확인 불가)</td>
+<td style="text-align:left">미해결 통계 문제를 숙제로 오인하여 해결한 역사적 자기효능감 사례로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>로저 바니스터 (Roger Bannister)</strong></td>
+<td style="text-align:left">육상 선수 (소속/직업 확인 불가)</td>
+<td style="text-align:left">1954년 5월 최초로 4분 마일의 벽을 깨뜨려 타인의 심리적 한계를 허문 사례로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>서바스찬 사웨 (Sabastian Sawe)</strong></td>
+<td style="text-align:left">육상 선수 (소속/직업 확인 불가)</td>
+<td style="text-align:left">2026년 4월 런던 마라톤에서 공식 서브 2시간 기록을 최초로 달성한 사례로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>프란시스코 고야 (Francisco Goya)</strong></td>
+<td style="text-align:left">화가</td>
+<td style="text-align:left">원문 게시글의 상단 이미지인 &quot;Modo de volar&quot;(비행 방식)의 화가로 언급됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>미켈란젤로 (Michelangelo)</strong></td>
+<td style="text-align:left">화가 / 조각가 (소속 기관 확인 불가)</td>
+<td style="text-align:left">자신을 조각가로 한정하여 시스틴 성당 천장화 작화를 거부하려 했던 자기 제한의 역사적 예시로 언급됨.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-figures-timepoints">4. 수치 및 시점 (Figures &amp; Timepoints)</h4>
+<h5 id="시점-데이터-timepoints">시점 데이터 (Timepoints)</h5>
+<ul>
+<li><strong>원문 작성일:</strong> 2026년 10월 13일</li>
+<li><strong>원문 예상 읽기 시간:</strong> 8분</li>
+<li><strong>테렌스 타오의 'Math 2.0' 블로그 게시일:</strong> 2026년 10월 10일</li>
+<li><strong>조지 단치히의 미해결 문제 해결 시점:</strong> 1939년</li>
+<li><strong>로저 바니스터의 4분 마일 돌파 시점:</strong> 1954년 5월</li>
+<li><strong>로저 바니스터 기록 달성 후 타 선수 재달성 간격:</strong> 46일</li>
+<li><strong>서바스찬 사웨의 서브 2시간 마라톤 달성 시점:</strong> 2026년 4월 (올해 4월)</li>
+</ul>
+<h5 id="수치-데이터-figures">수치 데이터 (Figures)</h5>
+<ul>
+<li><strong>로크와 레이섬의 목표 설정 연구 분석 기간:</strong> 35년</li>
+<li><strong>케이퍼 무비(Heist movie) 팀 구성 언급 시간:</strong> 초반 30분</li>
+<li><strong>QBR 발표 및 의사결정 할당 시간:</strong> 30분</li>
+<li><strong>육상 달리기 목표 수치:</strong> 4분 마일(4-minute mile), 2시간 마라톤(Sub-two-hour marathon)</li>
+<li><strong>웹사이트 로딩 속도 비교 수치:</strong> 기존 10초, 일반적 개선 목표 5초, 야망적 요구 목표 200밀리초(ms)</li>
+<li><strong>저자의 프롬프트 재작성 단계:</strong> 4단계 구조</li>
+</ul>
+<hr />
+<h4 id="5-사실-주장-해석의-구분-및-한계-불확실성-distinction-limitations">5. 사실·주장·해석의 구분 및 한계/불확실성 (Distinction &amp; Limitations)</h4>
+<h5 id="5-1-구체적-정보-구분을-위한-가이드">5.1. 구체적 정보 구분을 위한 가이드</h5>
+<ul>
+<li><strong>객관적 사실 (Fact):</strong> 저자 펠릭스 리제베르크의 직무 및 이력, 2026년 10월 기준 클로드의 활용 사례, 인용된 인물 및 저서, 조지 단치히, 로저 바니스터, 미켈란젤로 등 역사적 사건의 기록 데이터.</li>
+<li><strong>소자의 주장 (Claim):</strong> AI 활용 시 사용자가 야망(Ambition)을 가지고 접근해야 한다는 점, 고도·깊이·범위의 차원을 확장해야 한다는 지침, 목표를 높게 잡을수록 실제 수행 결과가 향상된다는 심리적 프레임워크.</li>
+<li><strong>작성자의 해석 (Interpretation):</strong> 본 보고서에서 소스 텍스트의 내용을 체계적으로 전달하기 위해 4가지 야망 구조 및 사례를 표와 불릿 포인트 형태로 요약·재구성한 논리적 배치 (단, 소스의 사실적 범위를 절대 벗어나지 않음).</li>
+</ul>
+<h5 id="5-2-한계-및-불확실성-limitations-uncertainties">5.2. 한계 및 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ul>
+<li><strong>모델 자체의 절대적 한계:</strong> 2026년 10월 기준 클로드 모델은 &quot;클로드야, 돈 벌어와&quot;와 같은 완전히 추상적인 요구를 독립적으로 수행하는 것은 불가능함.</li>
+<li><strong>자가 평가 능력의 불확실성:</strong> 모델 스스로 자신의 결과를 완벽히 자가 평가(Self-judge)하는 능력은 미흡하여, 반드시 외부 검증 도구(Outside judge)나 시스템적 피드백 루프가 병행되어야 함.</li>
+<li><strong>기술적 전제 조건의 필요성:</strong> 모델이 야망을 실현하기 위해서는 소프트웨어 설치 권한, 컴퓨터 접근 권한, MCP 커넥터 또는 데이터 연동 수단이 필수적으로 제공되어야 함.</li>
+<li><strong>'속도(Speed)' 파트 상세 내용의 부재:</strong> 저자가 속도 영역은 높은 창의성을 요구하지 않는다고 판단하여 본문에서 의도적으로 설명을 생략함.</li>
+<li><strong>소재 정보의 명시적 부재:</strong> 인용된 인물(테렌스 타오, 알렉스 알버트, 로저 바니스터, 미켈란젤로 등)의 세부 소속 기관이나 직함 중 소스 텍스트에 표기되지 않은 항목은 추측을 배제하고 &quot;확인 불가&quot;로 남김.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

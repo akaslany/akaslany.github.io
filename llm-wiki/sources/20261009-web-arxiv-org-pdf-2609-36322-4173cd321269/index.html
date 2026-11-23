@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>청크 단위 Key-Value 캐시 압축의 위상 민감도 및 특화 현상 분석 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>청크 단위 Key-Value 캐시 압축의 위상 민감도 및 특화 현상 분석 보고서</h1>
+<p class="page-meta">논문 · 2026-10-09</p>
+<h2 id="요약">요약</h2>
+<p>트랜스포머(Transformer) 아키텍처 기반의 대형 언어 모델(LLM)에서 긴 문맥 추론(Long-context inference)을 수행할 때, Key-Value(KV) 캐시의 메모리 점유율과 주의집중(Attention) 연산 비용은 문맥 길이에 비례하여 급격히 증가하는 심각한 기술적 병목 요인으로 작용한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2609.36322">출처</a> · <a href="https://www.youtube.com/watch?v=9Qe1WCqrRig">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="청크-단위-key-value-캐시-압축의-위상-민감도-및-특화-현상-분석-보고서">청크 단위 Key-Value 캐시 압축의 위상 민감도 및 특화 현상 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>트랜스포머(Transformer) 아키텍처 기반의 대형 언어 모델(LLM)에서 긴 문맥 추론(Long-context inference)을 수행할 때, Key-Value(KV) 캐시의 메모리 점유율과 주의집중(Attention) 연산 비용은 문맥 길이에 비례하여 급격히 증가하는 심각한 기술적 병목 요인으로 작용한다. DeepSeek-V4 등 최신 오픈 웨이트(Open-weight) 모델에서는 이를 해결하기 위해 연속된 토큰 창(Window)을 고정된 보폭(Stride $S$)에 따라 적은 수의 캐시 항목으로 압축하는 '청크 단위 KV 캐시 압축(Chunked KV-cache compression)' 기법을 도입하고 있다. 이러한 압축 메커니즘은 쿼리(Query)가 주어지기 전 사전 단계에서 정적(Query-agnostic)으로 수행되므로, 향후 어떤 정보가 요청될지 알 수 없는 상태에서 사전 정보 보존 연산을 완료해야 한다.</p>
+<p>고정 보폭 기반의 청크 압축 기법은 입력 문맥 전체에 주기적 구조(Periodic structure)를 부여한다. 이에 따라 개별 토큰은 절대적 위치 좌표 외에도 압축 창 경계에 대한 상대적 위치 좌표인 '위상(Phase, $t \bmod S$)'을 새로 가지게 된다. 본 보고서의 기반이 되는 연구 논문(arXiv:2609.36322)에 따르면, 입력 텍스트가 쿼리 독립적으로 압축되므로 문맥 내 토큰의 위상 좌표($t \bmod S$)에 따라 정보 보존 상태가 결정되고 이는 곧 쿼리 시점의 검색 정확도 불균형으로 직결된다. 즉, 동일한 내용과 상대적 거리를 지닌 정보라 하더라도 토큰이 위치한 위상에 따라 검색 정밀도 및 정확도가 주기적으로 변동하는 '위상 민감도(Phase sensitivity)' 현상이 관찰된다. 이 주기는 압축 보폭 $S$와 정확히 일치하며, 기존 벤치마크의 전체 평균 점수는 특정 위상에서 나타나는 치명적인 성능 결함을 은폐하는 한계를 지닌다.</p>
+<p>본 연구진은 청크 압축이 위상 민감도의 직접적인 원인임을 검증하기 위해 Qwen3-0.6B 백본을 바탕으로 다양한 압축 커널 변형을 적용하여 스크래치 방식의 사전 학습(Pretrain from scratch)을 수행하였다. 메커니즘 해석학적 분석(Causal interventions / Knockouts)을 실시한 결과, 신경망 내부의 특정 어텐션 헤드와 레이어가 특정 위상의 정보 검색을 비대칭적으로 전담하는 '위상 특화(Phase specialization)' 현상을 규명하였다. 나아가 이념화된 인덕션(Induction) 모델에 대한 이론적 분석 및 그라디언트 플로우(Gradient flow) 역학 분석을 통해, 학습 과정에서 미래의 쿼리를 알 수 없음에도 불구하고 압축 게이트(Compression gate)가 입력 독립적인 정적 집중(Static concentration) 상태로 수렴하면서 위상 특화가 형성되는 수학적 원리를 증명하였다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-analysis">2. 주요 논점 (Key Arguments &amp; Analysis)</h4>
+<h5 id="2-1-청크-단위-kv-캐시-압축과-위상-민감도-phase-sensitivity-의-메커니즘">2.1 청크 단위 KV 캐시 압축과 위상 민감도(Phase Sensitivity)의 메커니즘</h5>
+<ul>
+<li><strong>논점:</strong> 청크 단위 KV 캐시 압축은 문맥 데이터에 압축 보폭 $S$에 따른 주기적 좌표계를 부여하며, 동일한 텍스트 정보라 할지라도 입력 위상(Phase)에 따라 압축 방식과 보존 정밀도(Fidelity)가 달라진다.</li>
+<li><strong>근거 및 실증 구조:</strong> 압축 보폭이 $S$일 때, 위치 $t$에 존재하는 토큰의 위상은 $t \bmod S$로 정의된다. 입력 텍스트 전반에 장식용 패딩(Filler)을 추가하여 위치를 이동(Shift)시키면, 입력 내용이나 토큰 간의 상대적 거리는 완벽히 동일하게 유지되더라도 압축 창 경계(Boundary)와 토큰의 상대적 위상이 변경된다.</li>
+<li><strong>패딩 패밀리(Family A~D) 검증:</strong> 연구진은 위상 민감도가 특정 문자의 반복이나 특수한 패딩에 국한된 예외적 현상이 아님을 입증하기 위해 총 4가지 패딩 패밀리(Family A~D)를 구성하여 실험을 진행하였다.
+<ul>
+<li><strong>Family A:</strong> 주석 문장에 <code>=</code> 기호를 반복 추가하는 독스트링(Docstring) 구조.</li>
+<li><strong>Family B:</strong> 주석 문장에 <code>=</code> 기호를 반복 추가하는 2줄 주석(Comment) 구조.</li>
+<li><strong>Family C:</strong> 주석 문장에 <code>*</code> 기호를 반복 추가하는 2줄 주석 구조.</li>
+<li><strong>Family D:</strong> 반복 기호 없이 자연어 문장만을 다채롭게 재표현(Rephrasing)하여 길이를 조절한 구조.
+실험 결과, 4가지 패딩 패밀리 전체에서 일관되게 압축 보폭 $S$에 맞춘 주기적 예측 뒤집힘 및 성능 변동이 관찰되었다. 이는 위상 민감도가 특정 주석 기호의 형태가 아닌, 청크 단위 KV 캐시 압축 구조 자체에서 비롯되는 보편적 현상임을 입증한다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-deepseek-v4-및-deepseek-v4-1에서의-실증적-위상-민감도-사례">2.2 DeepSeek-V4 및 DeepSeek-V4.1에서의 실증적 위상 민감도 사례</h5>
+<h6 id="코드-완성-예시-사례-section-2-1">코드 완성 예시 사례 (Section 2.1)</h6>
+<p>DeepSeek-V4 공식 인퍼런스 코드(<code>inference/kernel.py</code>)의 FP8 양자화 함수 내 코드 완성 실험에서 위상 민감도가 명확하게 실증되었다. 해당 코드 스니펫은 <code>compute_dtype</code> 내 <code>T.Cast(FP</code> 뒤에 올 토큰을 예측하는 과제로, 정답 토큰은 &quot;8&quot;(FP8 양자화)이며 경쟁 오답 토큰은 &quot;32&quot;(FP32 중복 캐스팅)이다.</p>
+<ul>
+<li><strong>실험 조작 및 주기적 뒤집힘(Flip):</strong> 상단 패딩의 길이 $L$을 1토큰씩 변경함에 따라 모델의 예측 토큰이 정답 &quot;8&quot;과 오답 &quot;32&quot; 사이에서 압축 보폭 $S$에 맞춰 주기적으로 뒤집히는 현상이 확인되었다.</li>
+<li><strong>DeepSeek-V4-Flash-Base ($S=4$):</strong> 압축 보폭이 4인 이 모델은 패딩 길이 $L \bmod 4 \in {2, 3}$일 때는 정답 &quot;8&quot;을 높은 확률로 예측하고, $L \bmod 4 \in {0, 1}$일 때는 오답 &quot;32&quot;를 높은 확률로 예측하였다. 확률 차이 $P(8) - P(32)$는 $-0.79$에서 $+0.95$까지 극단적으로 변동하며 정확히 4토큰 주기로 뒤집혔다.</li>
+<li><strong>DeepSeek-V4.1-Flash ($S=2$):</strong> 압축 보폭이 2로 줄어든 이 모델에서는 홀수/짝수 패딩 길이에 따라 예측 뒤집힘 주기가 정확히 2토큰으로 바뀌었다.</li>
+<li><strong>DeepSeek-V3.1-Base 모델과의 대비:</strong> 청크 단위 KV 캐시 압축이 존재하지 않는 DeepSeek-V3.1-Base 모델에 동일한 64개 입력 프롬프트를 주입한 결과, 64개 중 단 4개 경우에서만 미세한 차이(|$\Delta$| &lt; 0.07)로 &quot;32&quot;를 상위에 두었을 뿐 주기적인 예측 뒤집힘 현상이 전혀 나타나지 않았다.</li>
+</ul>
+<h6 id="조바늘-찾기-niah-검색-평가-사례-section-2-2">조바늘 찾기(NIAH) 검색 평가 사례 (Section 2.2)</h6>
+<p>128K 토큰 길이의 문맥 내에 16,000개의 Key-Value 쌍을 배치하고, Target Key의 위치 오프셋을 조절하여 위상(Modulo 8)에 따른 단일 토큰 검색 정확도를 측정하였다.</p>
+<ul>
+<li><strong>실험 데이터 정리 (표):</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명 (Model)</th>
+<th style="text-align:left">모델 구획 (Type/Checkpoint)</th>
+<th style="text-align:center">압축 보폭 ($S$)</th>
+<th style="text-align:center">평가 프롬프트 수 ($n$)*</th>
+<th style="text-align:center">평균 정확도 (Mean Acc.)</th>
+<th style="text-align:center">위상 간 최대 정확도 격차 ($\Delta$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DeepSeek-V4-Flash</strong></td>
+<td style="text-align:left">Base</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2,048 (256/gr)</td>
+<td style="text-align:center">52.6%</td>
+<td style="text-align:center"><strong>40.23%p</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek-V4-Flash</strong></td>
+<td style="text-align:left">Post-trained (0731)</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2,048 (256/gr)</td>
+<td style="text-align:center">91.4%</td>
+<td style="text-align:center"><strong>19.14%p</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek-V4-Pro</strong></td>
+<td style="text-align:left">Base</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2,048 (256/gr)</td>
+<td style="text-align:center">72.1%</td>
+<td style="text-align:center"><strong>34.77%p</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek-V4-Pro</strong></td>
+<td style="text-align:left">Post-trained (0813)</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2,048 (256/gr)</td>
+<td style="text-align:center">84.4%</td>
+<td style="text-align:center"><strong>14.84%p</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek-V4.1-Flash</strong></td>
+<td style="text-align:left">Post-trained (0910)</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">20,480 (2,560/gr)</td>
+<td style="text-align:center">92.38%</td>
+<td style="text-align:center"><strong>6.09%p</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>* 주석: $n$은 평가 프롬프트의 총수이며, (gr)은 Target Key의 위치 오프셋 모듈로 8($r = t_K \bmod 8$)로 구분된 8개 잔여군(Residue group) 각각에 할당된 프롬프트 개수를 의미함.</em></p>
+<ul>
+<li><strong>상세 데이터 분석:</strong> 사후 학습(Post-training)을 거치면 전체 평균 정확도는 상승하고 위상 간 격차가 줄어들지만, 여전히 상당한 위상 민감도가 잔재한다. 특히 DeepSeek-V4.1-Flash의 경우 짝수 위상 그룹(0, 2, 4, 6)의 정확도가 94.69%~95.31%를 기록한 반면, 홀수 위상 그룹(1, 3, 5, 7)의 정확도는 89.22%~90.31%에 머물러 짝수 위상이 홀수 위상보다 일관되게 높은 주기적 불균형을 나타냈다.</li>
+</ul>
+<h5 id="2-3-qwen3-기반-통제된-사전-학습-연구-controlled-pretraining-studies">2.3 Qwen3 기반 통제된 사전 학습 연구 (Controlled Pretraining Studies)</h5>
+<p>청크 압축이 위상 민감도의 직접적 원인인지 규명하기 위해 Qwen3-0.6B 아키텍처(28 레이어, 은닉 넓이 1,024, 16 쿼리 헤드, 헤드 차원 128)를 백본으로 설정하고 100B 토큰 데이터에 대해 처음부터 사전 학습(Pretrain from scratch)을 진행하였다.</p>
+<h6 id="커널-패밀리-및-아키텍처-변형">커널 패밀리 및 아키텍처 변형</h6>
+<ul>
+<li><strong>창 크기($W$)와 보폭($S$)의 분리:</strong> W8/S4, W8/S6, W8/S8, W12/S12, W4/S4 등 중첩(Overlapping, $S &lt; W$) 및 비중첩 조건 테스트.</li>
+<li><strong>게이트 및 압축 변형:</strong> 스칼라 게이트($d_g=1$), 벡터 게이트($d_g=d_h=128$), 게이트 없이 단순 균일 평균화(Uniform averaging)하는 모델, K/V 결합 게이트(Tied K/V), 회전 위치 임베딩 제거(NoPE), DeepSeek 스타일 CSA 커널 적용 모델 등.</li>
+</ul>
+<h6 id="핵심-발견-key-findings">핵심 발견 (Key Findings)</h6>
+<ol>
+<li><strong>압축 메커니즘과 주기의 일치:</strong> 풀 어텐션(Full attention) 베이스라인 모델들은 위상 간 정확도 격차가 최대 6.1%p 이하로 평탄한 성능을 유지한 반면, 청크 압축을 적용한 모든 모델은 압축 보폭 $S$에 정확히 비례하는 주기적 성능 변동을 보였다. (Prefix Padding 기준 최대 정확도 격차 <strong>최대 78%p</strong> 발생)</li>
+<li><strong>평균 수치의 은폐성:</strong> 8개의 KV 헤드를 가진 W8/S8 압축 모델은 풀 어텐션 베이스라인과 유사한 검증 손실(Validation loss) 및 높은 평균 정확도를 달성했으나, 최악의 위상 정확도(Worst residue)는 풀 어텐션이 58.4%인 반면 압축 모델은 **9.9%**에 불과했다.</li>
+<li><strong>창 내부(Within-window) 불균형:</strong> Key와 Value가 압축 창 경계에 걸쳐 분할(Straddling)되는 현상 외에도, Key와 Value가 동일한 하나의 창 내부(Phase 0~6)에 완벽히 포함되는 위상 간에서도 <strong>50%p 이상의 정확도 격차</strong>가 발생하였다. 이는 위상 민감도가 단순히 창 경계 손상 때문만이 아니라, 메모리에 정보를 쓰고 읽는 신경망 내부의 정적 게이트 집중 메커니즘에 근본적으로 기인함을 보여준다.</li>
+</ol>
+<h5 id="2-4-메커니즘-분석-위상-특화-phase-specialization-와-게이트-선호도">2.4 메커니즘 분석: 위상 특화(Phase Specialization)와 게이트 선호도</h5>
+<h6 id="kv-head-노크아웃-실험-section-4-1">KV Head 노크아웃 실험 (Section 4.1)</h6>
+<p>특정 KV Head 또는 레이어를 무력화하는 평균 대체(Mean replacement) 기법을 적용하여 인과적 개입 실험을 수행하였다.</p>
+<ul>
+<li>풀 어텐션 모델은 특정 레이어를 노크아웃했을 때 모든 위상에서 정확도가 균일하게 감소하였다.</li>
+<li>압축 모델 및 DeepSeek-V4-Flash-Base에서는 특정 KV Head를 노크아웃했을 때 손실이 특정 위상에만 극단적으로 집중되는 <strong>위상 특화(Phase Specialization)</strong> 현상이 관찰되었다. 즉, 서로 다른 어텐션 헤드가 서로 다른 위상의 정보 검색을 전담 분담하고 있음이 인과적으로 입증되었다.</li>
+</ul>
+<h6 id="게이트-선호도-형성-section-4-2">게이트 선호도 형성 (Section 4.2)</h6>
+<p>압축 게이트의 스코어를 섀넌 엔트로피 기반 효과적 오프셋 수 $\exp(H(\cdot))$로 측정한 결과, 연구진은 정적 집중과 창별 평균 입력 의존 집중을 명확히 구별하였다.</p>
+<ul>
+<li><strong>정적 집중(Static concentration):</strong> $\exp(H(\mathbb{E}[\alpha]))$ — 입력 내용의 평균에 대한 게이트 엔트로피.</li>
+<li><strong>창별 평균 입력 의존 집중(Per-window concentration):</strong> $\mathbb{E}[\exp(H(\alpha))]$ — 개별 창별 게이트 엔트로피의 기대값.</li>
+</ul>
+<p>사전 학습 초기에는 모든 게이트가 균일한 분포($\exp(H) \approx 8$)를 보였으나, 사전 학습이 진행됨에 따라 레이어 9, 10, 14 등의 게이트는 입력 내용과 무관하게 대각선 방향을 따라 수렴하며 특정 오프셋을 강력히 선호하는 정적 집중 상태($\exp(H(\mathbb{E}[\alpha])) \to 1$)를 형성하였다.</p>
+<p>레이어 14의 Key 게이트는 창의 앞쪽 오프셋, 레이어 10은 중간, 레이어 9는 뒤쪽 오프셋을 정적으로 선호하였으며, Value 게이트는 Key 게이트보다 정확히 1 오프셋 뒤를 선호하여 <strong>바이그램(Bigram) 형태</strong>의 K-V 쌍을 형성하였다. 게이트 파라미터를 $k$개 위치만큼 순환 이동시키는 게이트 순환(Gate cycling) 인터벤션을 수행했을 때, 창 내부의 정확도 손실 패턴도 정확히 $k$ 위상만큼 이동하여 게이트 선호도가 위상 민감도를 형성하는 직접적 원인임이 입증되었다.</p>
+<h5 id="2-5-이론적-분석-이념화된-모델에서의-위상-특화-출현-section-5">2.5 이론적 분석: 이념화된 모델에서의 위상 특화 출현 (Section 5)</h5>
+<p>미래의 쿼리를 모르는 상태에서 사전 압축을 수행함에도 왜 압축이 하드 선택으로 집중되고 정적 선호도가 형성되는지 수학적으로 분석하였다.</p>
+<ul>
+<li><strong>정리 1 (Theorem 1 - 최적 압축의 집중성):</strong> 미래의 쿼리를 알 수 없는 오라클 압축 클래스 $G_{oracle}$ 상에서, 어휘 집합의 크기 $N$이 충분히 크고 임베딩 비등방성(Anisotropy) 오차 $\varepsilon \to 0$인 조건하에, 손실 함수를 최소화하는 최적 압축 커널은 각 창 $\ell$ 및 헤드 $h$에 대해 Key 압축 계수를 $p^K_{h,\ell} = e_r$, Value 압축 계수를 $p^V_{h,\ell} = e_{r+1}$ 형태의 극단적 집중(Hard selection / Hard route) 상태로 설정함을 증명하였다. ($\varepsilon = 0$ 조건일 때 선택된 위치 $r$은 동일 창 내에서 헤드 간 서로 다르게 분산됨)</li>
+<li><strong>정리 2 (Theorem 2 - 그라디언트 플로우에 의한 정적 집중):</strong> 선형 게이트 파라미터화 $G_{linear}$ 모델에서 무작위 초기화 근방으로부터 그라디언트 플로우(Gradient flow)를 실행할 때, 학습 시간 $t \to \infty$에 따라 각 헤드 $h$의 Key 및 Value 게이트 스코어가 입력 독립적인 정적 오프셋 $r_h$ 및 $r_h+1$로 수렴하여 $p^K_{h,\ell}(r_h) \to 1$, $p^V_{h,\ell}(r_h+1) \to 1$을 달성함을 증명하였다. 다만, 대형 어휘 환경에서는 헤드 간 결합(Coupling)이 약화되어 서로 다른 헤드가 동일한 루트 $r_h$를 공유할 수 있으며, 헤드 간 상보적 커버리지(Complementary coverage)가 반드시 보장되지는 않는다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-연구진-figures-roles">3. 등장 인물 및 연구진 (Figures &amp; Roles)</h4>
+<p>본 연구를 수행하고 논문을 작성한 저자 및 소속 기관 정보는 다음과 같다.</p>
+<ul>
+<li><strong>핵심 기여 저자 (Core contributors - 바이트댄스 시드 인턴십 중 수행된 연구):</strong>
+<ul>
+<li><strong>주성위 (Xingyu Zhu):</strong> 바이트댄스 시드 (ByteDance Seed) / 프린스턴 대학교 (Princeton University)</li>
+<li><strong>이푸 (Pu (Luke) Yi):</strong> 바이트댄스 시드 (ByteDance Seed) / 스탠퍼드 대학교 (Stanford University)</li>
+<li><strong>정자형 (Ziheng Cheng):</strong> 바이트댄스 시드 (ByteDance Seed) / UC 버클리 (University of California, Berkeley)</li>
+</ul>
+</li>
+<li><strong>공동 저자 (Co-authors):</strong>
+<ul>
+<li><strong>여앙 (Ang Lv):</strong> 바이트댄스 시드 (ByteDance Seed)</li>
+<li><strong>유경 (Jing Liu):</strong> 바이트댄스 시드 (ByteDance Seed)</li>
+<li><strong>응렉싱 (Lexing Ying):</strong> 바이트댄스 시드 (ByteDance Seed)</li>
+</ul>
+</li>
+<li><strong>교신 저자 (Corresponding authors):</strong>
+<ul>
+<li><strong>마이원 (Yiyuan Ma):</strong> 바이트댄스 시드 (ByteDance Seed) (<code>mayiyuan.unicorn@bytedance.com</code>)</li>
+<li><strong>동신 (Xin Dong):</strong> 바이트댄스 시드 (ByteDance Seed) (<code>xin.dong@bytedance.com</code>)</li>
+</ul>
+</li>
+<li><strong>발표 기관 (Affiliation):</strong>
+<ul>
+<li><strong>바이트댄스 시드 (ByteDance Seed)</strong></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="4-핵심-수치-및-시점-key-statistics-timeframes">4. 핵심 수치 및 시점 (Key Statistics &amp; Timeframes)</h4>
+<ul>
+<li><strong>논문 공개 시점:</strong> 2026년 9월 30일 (September 30, 2026)</li>
+<li><strong>DeepSeek 평가 데이터 수치:</strong>
+<ul>
+<li>NIAH(Needle-in-a-Haystack) 평가 문맥 길이: <strong>128,000 토큰 (128K)</strong></li>
+<li>문맥 내 Key-Value 쌍 배치 개수: <strong>16,000개</strong></li>
+<li>DeepSeek-V4 패밀리 평가 세트 프롬프트 수: <strong>2,048개</strong> (8개 잔여군당 256개)</li>
+<li>DeepSeek-V4.1-Flash 평가 세트 프롬프트 수: <strong>20,480개</strong> (8개 잔여군당 2,560개)</li>
+</ul>
+</li>
+<li><strong>DeepSeek 모델별 위상 간 최대 정확도 격차 ($\Delta$):</strong>
+<ul>
+<li>DeepSeek-V4-Flash-Base: <strong>40.23%p</strong> (평균 정확도: 52.6%)</li>
+<li>DeepSeek-V4-Flash-0731 (Post-trained): <strong>19.14%p</strong> (평균 정확도: 91.4%)</li>
+<li>DeepSeek-V4-Pro-Base: <strong>34.77%p</strong> (평균 정확도: 72.1%)</li>
+<li>DeepSeek-V4-Pro-0813 (Post-trained): <strong>14.84%p</strong> (평균 정확도: 84.4%)</li>
+<li>DeepSeek-V4.1-Flash (Post-trained): <strong>6.09%p</strong> (평균 정확도: 92.38%)</li>
+</ul>
+</li>
+<li><strong>통제된 사전 학습(Qwen3) 연구 수치 및 프로토콜별 데이터:</strong>
+<ul>
+<li>백본 규격: Qwen3-0.6B (28 레이어, 은닉 차원 $d=1,024$, 쿼리 헤드 16개, 헤드 차원 $d_h=128$)</li>
+<li>사전 학습 데이터 규모: 총 <strong>100B (1,000억) 토큰</strong> (총 47,518 스텝)</li>
+<li><strong>Prefix Padding 프로토콜:</strong> 외곽 패딩을 통해 모든 레코드를 함께 이동시킴. 청크 압축 모델의 위상 간 최대 정확도 격차 <strong>최대 78%p</strong> (풀 어텐션 베이스라인: <strong>최대 6.1%p 이하</strong>).</li>
+<li><strong>In-sequence Padding 프로토콜:</strong> 레코드 간 간격을 불균일하게 변형하여 타겟과 디스트랙터의 위상 이동을 분리함.</li>
+<li>W8/S8 8-KV 헤드 압축 모델의 최악 위상 정확도(Worst residue): <strong>9.9%</strong> (풀 어텐션 베이스라인: <strong>58.4%</strong>).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계-및-불확실성-limitations-uncertainties">5. 한계 및 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>메커니즘 결론의 범용성 한계:</strong> 본 연구의 인과적 결론은 엄격히 통제된 실험 환경 및 합성 인덕션 환경에서 가장 강력하게 입증된 것으로, 구조가 크고 이질적인(Heterogeneous) 대형 오픈 웨이트 모델 전체에서 발생하는 위상 민감도의 단일하거나 보편적인 원인으로 일반화하여 단정할 수는 없다.</li>
+<li><strong>경계 위상(Boundary Phase) 문제 미해결:</strong> 게이트 순환(Gate cycling) 인터벤션이 압축 창 내부(Within-window) 오프셋 간의 정확도 손실 패턴을 이동시킬 수 있음은 입증되었으나, 압축 창 경계에 걸쳐진(Boundary straddling) Key-Value 쌍에서 발생하는 성능 저하까지 복원하지는 못하였다. 즉, 경계 불균형과 창 내부 불균형을 하나로 설명하는 통합적 메커니즘 이론은 아직 완성되지 않았다.</li>
+<li><strong>실제 응용 및 거부/준수(Refusal/Compliance) 안전성 영향 미확인:</strong> 본 연구는 단일 토큰 정보 검색 및 코드 완성 과제에 집중되어 있다. 실제 응용 환경에서 요청문의 의미를 유지한 채 위상을 약간 변경시켰을 때, 모델의 거부(Refusal) 또는 준수(Compliance) 행동 등 안전성 및 견고성(Robustness)에 미치는 영향에 대해서는 체계적 연구가 이루어지지 않았으며 향후 과제로 남아있다.</li>
+<li><strong>확인 불가 사항:</strong> 소스 데이터에 명시적으로 기술되지 않은 타 상용 대화형 모델의 가중치 파라미터 세부사항, 학습 하이퍼파라미터 세부 정보 및 타 아키텍처 적용 결과는 <strong>확인 불가</strong>하다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

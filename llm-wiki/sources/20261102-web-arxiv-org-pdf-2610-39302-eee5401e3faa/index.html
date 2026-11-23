@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proving and Improving the Platonic Representation Hypothesis with JEPAs</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Proving and Improving the Platonic Representation Hypothesis with JEPAs</h1>
+<p class="page-meta">논문 · 2026-11-02</p>
+<h2 id="요약">요약</h2>
+<p>플라톤적 표현 가설(Platonic Representation Hypothesis, PRH)은 서로 다른 모달리티(시각, 언어 등)로 학습된 머신러닝 모델들이 스케일이 확장됨에 따라 세계에 대한 공유된 통계적 표현(공통 표현)으로 수렴한다는 가설이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2610.39302">출처</a> · <a href="https://www.youtube.com/watch?v=QrK32XO1FuI">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="플라톤적-표현-가설의-증명-및-jepa를-통한-성능-개선-보고서">플라톤적 표현 가설의 증명 및 JEPA를 통한 성능 개선 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>플라톤적 표현 가설(Platonic Representation Hypothesis, PRH)은 서로 다른 모달리티(시각, 언어 등)로 학습된 머신러닝 모델들이 스케일이 확장됨에 따라 세계에 대한 공유된 통계적 표현(공통 표현)으로 수렴한다는 가설이다. 기존 연구(Huh et al.)는 이러한 정렬 현상을 관찰 수준에서 보고하고 데이터 및 모델 스케일링을 주요 동인으로 제시하였으나, 수학적 보증이나 이를 명확히 구현할 수 있는 구체적인 알고리즘적 레시피를 제공하지 못했다. 본 연구(Randall Balestriero &amp; Yann LeCun)는 관찰에 머물렀던 PRH를 Joint-Embedding Predictive Architectures(JEPAs) 프레임워크 상에서 엄밀하게 증명 가능한 '플라톤적 표현 정리(Platonic Representation Theorem)'로 정립하였다.</p>
+<p>연구진은 입력 뷰(View)의 성격에 따라 긍정적 쌍(Positive Pairs)을 '좋은 뷰(Good Views)'와 '나쁜 뷰(Bad Views)'로 개념적으로 명확히 구분하였다. Good Views는 동일한 세계 상태(World State)를 포착하는 서로 다른 관측값(예: 동일한 장면에 대한 두 장의 사진 또는 두 개의 텍스트 캡션)을 의미하며, 각 모달리티의 고유한 뉘앙스(카메라 각도, 구체적 문구 선택 등)를 배제하고 세계 상태의 공유된 공간만을 표현 공간에 반영하도록 유도한다. 반면, Bad Views는 단일 관측값의 변형이나 마스킹(예: 텍스트 마스킹, 이미지 자르기)을 의미하며, 각 모달리티 고유의 뉘앙스를 학습하는 데 임베딩 차원을 소모하게 만들어 모달리티 간 정렬 오차를 발생시킨다.</p>
+<p>분석 결과, 기존 대규모 언어 모델(LLM)의 핵심 학습 방식인 다음 토큰 예측(Next-Token Prediction, NTP)은 접두사(Prefix)와 그 이어지는 토큰을 긍정적 쌍으로 사용하는 Bad-View JEPA의 일종임이 밝혀졌다. 이러한 특성은 NTP 방식이 모달리티 간 정렬을 이루기 위해 극도로 대규모의 스케일과 높은 데이터 밀도에 의존해야 하는 원인을 설명한다. 반면 Good-View JEPA는 NTP 대비 동일 코퍼스 상에서 42배 적은 데이터 샘플만으로 동일한 정렬 성능을 달성하는 뛰어난 데이터 효율성을 보였다. 나아가 1억 9백만(109M) 파라미터 규모의 Good-View 텍스트 JEPA는 최대 720억(72B) 파라미터를 가진 대형 언어 모델(Qwen2.5-72B, Llama-3-70B) 및 CLIP 텍스트 인코더보다 우수한 시각-언어 정렬 성과(WIT-1024 벤치마크 기준)를 기록하였다.</p>
+<p>이러한 이론적 정립은 실용적 응용 측면에서도 획기적인 성과를 가져왔다. 별도의 이미지-텍스트 쌍(Pair) 데이터로 파라미터를 재학습하는 과정 없이, 독립적으로 학습된 비전 인코더와 텍스트 디코더 사이에 단 하나의 직교 선형 매핑(회전 변환, Rotation)만을 적용하는 것만으로 COCO 벤치마크에서 CIDEr .838의 고급 이미지 캡셔닝 성능을 달성하였다. 더욱이 이 회전 변환조차 이미지-텍스트 쌍 없이 기하학적 구조만을 매칭하여 추정할 수 있음을 입증함으로써, 쌍 없는(Pair-free) 제로샷 분류 벤치마크(ImageNet-100 top-5 64.4%)에서 기존 대형 언어 모델 기반 정렬 기록을 압도하였다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-논점-1-플라톤적-표현-정리의-정립-및-수학적-증명-theorem-1-prop-1-theorem-2">2.1. 논점 1: 플라톤적 표현 정리의 정립 및 수학적 증명 (Theorem 1, Prop 1, Theorem 2)</h5>
+<p>이론적 정립의 첫 단계로, 본 연구는 유한한 세계 상태 공간 $Z$와 이를 관측하는 $M \ge 2$개의 모달리티를 가정한다. 각 모달리티 $m$은 단사(Injective) 렌더링 함수 $x = g_m(z)$를 통해 세계를 관측하며, JEPA 인코더 $f_m: \mathcal{X}_m \to \mathbb{R}^k$는 긍정적 쌍 분포 $(z, z') \sim \pi_m$으로부터 추출된 샘플에 대해 손실 함수 $\mathcal{L}_m(f)$를 최적화한다.</p>
+<blockquote>
+<p><strong>정리 1: 플라톤적 표현 정리 (Platonic Representation Theorem - Theorem 1)</strong><br />
+$M \ge 2$개의 모달리티가 동일한 긍정적 쌍 분포 $\pi_1 = \dots = \pi_M = \pi$를 공유하고, 손실 함수 $\mathcal{L}<em>\pi$의 최솟값 달성자(Minimizer)가 회전 변환에 대해 유일하게 존재한다고 하자. 그러면 모든 모달리티 $m$의 최적 인코더 $f_m^\star$에 대해 $f_m^\star \circ g_m = Q_m h^\star$를 만족하는 공통 세계 임베딩 $h^\star: Z \to \mathbb{R}^k$와 직교 회전 행렬 $Q_m \in O(k)$가 존재한다. 즉, 임의의 두 모달리티는 단 하나의 회전 변환 $Q_m Q</em>{m'}^\top$을 제외하고 완전히 동일한 임베딩을 학습한다.</p>
+</blockquote>
+<p>위 정리는 서로 다른 모달리티가 동일한 세계 상태의 긍정적 쌍을 공유한다면, 각 인코더가 상대 모달리티를 전혀 관측하지 않고 독립적으로 학습되더라도 회전 변환 관계 내에서 동일한 표현 구조로 수렴함을 수학적으로 입증한다.</p>
+<blockquote>
+<p><strong>명제 1: 스펙트럼 JEPA의 회전 유일성 (Spectral JEPAs Are Unique Up to Rotation - Prop 1)</strong><br />
+예측 손실이 $\ell(a, b) = |a - b|^2$이고, 안티-콜랩스(Anti-collapse) 항 $\Omega$가 백색화(Whitening) 조건($\mathbb{E}<em>p h = 0, \mathbb{E}<em>p h h^\top = I_k$)을 강제할 때, 손실 함수의 최솟값은 $2 \sum</em>{i=1}^k (1 - \mu_i)$이다. normalized 인접 행렬 $K</em>\pi = D^{-1/2} \Pi D^{-1/2}$의 고유값 스펙트럼에 갭($\mu_k &gt; \mu_{k+1}$)이 존재하면, 최솟값 달성자는 상위 고유벡터로 구성된 스펙트럼 임베딩 $\Phi_\pi(z) = (v_1(z), \dots, v_k(z)) / \sqrt{p(z)}$에 직교 행렬 $Q \in O(k)$를 곱한 $Q \Phi_\pi$ 형태로 유일하게 결정된다.</p>
+</blockquote>
+<p>현실적으로 각 모달리티의 긍정적 쌍 분포가 완전히 일치하지 않는 경우($\pi_1 \neq \pi_2$), 정렬 오차의 상한은 다음과 같이 도출된다.</p>
+<blockquote>
+<p><strong>정리 2: 커널 불일치에 의한 정렬 오차 상한 (Kernel Mismatch Bounds Misalignment - Theorem 2)</strong><br />
+두 모달리티의 스펙트럼 임베딩을 $\Phi_1, \Phi_2$라 하고, $K_{\pi_2}$의 스펙트럼 갭을 $\delta = \mu_k - \mu_{k+1} &gt; 0$이라 하자. 이때 최적 회전 변환 적용 후의 제곱평균제곱근(RMS) 정렬 오차는 다음과 같은 상한을 가진다:<br />
+$$\min_{Q \in O(k)} \left( \mathbb{E}<em>p | \Phi_1(z) - Q \Phi_2(z) |^2 \right)^{1/2} \le \frac{2\sqrt{2}}{\delta} \min \left( \sqrt{k} |K</em>{\pi_1} - K_{\pi_2}|<em>2, |K</em>{\pi_1} - K_{\pi_2}|_F \right)$$</p>
+</blockquote>
+<ul>
+<li><strong>스펙트럼 갭($\delta$)의 정렬 보호 작용:</strong> 수식적으로 상위 고유값 스펙트럼 갭 $\delta = \mu_k - \mu_{k+1} &gt; 0$이 클수록 분모가 커져 정렬 오차의 상한선이 낮아진다. 이는 상위 주성분 방향(Leading directions)의 정렬 오차가 상한에 의해 강력하게 보호됨을 의미하며, 하위 방향으로 갈수록 정렬 보호가 약화되는 메커니즘을 설명한다. 실증적으로도 회전 매핑 적용 후 이미지-텍스트 임베딩 간 상관관계는 첫 번째 주성분 방향에서 0.70에 달하지만, 60번째 방향에서는 0.1 수준으로 감소함이 확인된다 (Figure 6 연계).</li>
+<li><strong>실증적 검증 [SOURCE_IMAGE_2 및 Figure 2]:</strong> 무작위로 생성된 300개의 유한 세계(8~39개 상태, 임베딩 차원 $k=1\sim5$) 실험에서, 커널 불일치 가중치를 $10^{-4}$에서 1까지 변형하며 실제 정렬 오차를 측정한 결과, 모든 조건에서 정렬 오차가 정리 2가 제시한 상한선 하단(상한값의 최대 18% 수준)에 완벽히 위치함을 실증하였다 <code>[SOURCE_IMAGE_2]</code>.</li>
+</ul>
+<hr />
+<h5 id="2-2-논점-2-good-views-vs-bad-views와-뉘앙스-nuisance-비용-theorem-3-prop-3-theorem-4">2.2. 논점 2: Good Views vs. Bad Views와 뉘앙스(Nuisance) 비용 (Theorem 3, Prop 3, Theorem 4)</h5>
+<p>각 관측값 $x = g_m(z, \nu)$가 세계 상태 $z$ 외에 모달리티 고유의 독립적 요소인 '뉘앙스 $\nu$'를 포함할 때, 뷰의 구성 방식이 정렬에 미치는 정량적 영향은 다음과 같이 명확히 대조된다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">Good Views</th>
+<th style="text-align:left">Bad Views</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>정의</strong></td>
+<td style="text-align:left">동일 장면에 대한 2개의 독립적 관측 (예: 두 장의 사진, 두 개의 캡션)</td>
+<td style="text-align:left">단일 관측의 변형 및 마스킹 (예: 이미지 자르기, 텍스트 마스킹)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>뉘앙스($\nu$) 처리</strong></td>
+<td style="text-align:left">뉘앙스를 상호 독립으로 배제하고 세계 상태 $z$만을 포착 ($\rho(f) = 1$)</td>
+<td style="text-align:left">단일 관측의 뉘앙스(구체적 단어 선택, 카메라 시점 등)를 두 뷰가 공유함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>임베딩 차원 소모</strong></td>
+<td style="text-align:left">뉘앙스 표현에 차원을 소모하지 않음</td>
+<td style="text-align:left">뉘앙스를 유지하는 데 임베딩 공간의 $r$개 차원을 소모함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>정렬 오차 영향</strong></td>
+<td style="text-align:left">모달리티 간 완전 정렬 가능 ($Q$ 변환으로 일치)</td>
+<td style="text-align:left">타 모달리티와의 정렬 오차 하한 형성 (오차 $\ge 2r$)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>정리 3: 뉘앙스 인코딩에 따른 정렬 비용 (Nuisance Costs Alignment - Theorem 3)</strong><br />
+뷰에 포함된 세계 상태 설명 비율을 $\rho(f) = \text{tr}(C_f^{1/2})/k \in [0, 1]$이라 할 때, 최적 회전 매핑 후 두 인코더 간 정렬 오차는 다음 하한을 갖는다:<br />
+$$\min_{Q \in O(k)} \mathbb{E} | Q f_1(x_1) - f_2(x_2) |^2 \ge 2k \left(1 - \min_m \rho(f_m)\right)$$</p>
+</blockquote>
+<blockquote>
+<p><strong>명제 3: Good Views와 Bad Views의 뉘앙스 포착 특성 (Prop 3)</strong><br />
+(i) Good-View JEPA는 뉘앙스를 완전히 배제하여 $\rho = 1$을 달성하며 회전 변환 내에서 완전 정렬을 이룬다.<br />
+(ii) Bad-View JEPA에서 뉘앙스 방향의 상관관계 $\beta_1$이 세계 상태 $k$번째 방향의 상관관계 $\alpha_k$보다 크면($\beta_1 &gt; \alpha_k$), 최소 $r \ge 1$개의 임베딩 차원을 뉘앙스 저장에 소모하게 되어 정렬 오차 하한이 $2r$ 이상 발생한다.</p>
+</blockquote>
+<ul>
+<li><strong>이론과 실증의 서사적 연계 (자르기/Trimming 메커니즘):</strong> 이론적으로 Bad-View JEPA가 단일 캡션의 구체적 단어 선택과 같은 뉘앙스를 유지하느라 $r$개 차원을 소모하면, 정렬 불가능한 오차가 오롯이 남게 된다. 실증적 측면에서 <code>[SOURCE_IMAGE_3]</code> (Figure 7)에 제시된 Flickr30k 캡션 자르기(Trimming) 실험은 이 메커니즘을 완벽히 보여준다. 텍스트 뷰 구성 시 전체 캡션을 자르지 않고 그대로 사용할 경우, 장면의 공통 상태 $z$ 외에 해당 문장 고유의 문체 및 어휘 뉘앙스가 임베딩 차원을 점유하게 된다. 그 결과 정렬 성능(R@1)이 기준 설정 대비 25% 하락(.246 $\to$ .185)하였으며, 일부만 자르는 약한 자르기(milder trimming)에서도 18% 성능 하락이 관찰되었다. 즉, 자르기는 두 캡션 간 공통 세계 상태만을 남기고 고유 뉘앙스를 거르는 핵심 알고리즘적 연산이다.</li>
+</ul>
+<hr />
+<h5 id="2-3-논점-3-next-token-prediction의-한계-및-bad-view-jepa로서의-특성-prop-4">2.3. 논점 3: Next-Token Prediction의 한계 및 Bad-View JEPA로서의 특성 (Prop 4)</h5>
+<p>언어 모델의 표준 학습 방식인 다음 토큰 예측(Next-Token Prediction, NTP)은 손실 함수 구조상 JEPA의 한 형태임이 수학적으로 입증된다.</p>
+<blockquote>
+<p><strong>명제 4: 다음 토큰 예측의 JEPA 구조성 (Next-Token Prediction Has the Form of a JEPA - Prop 4)</strong><br />
+컨텍스트 $c$의 임베딩 $h(c)$와 토큰 임베딩 테이블 ${w_v}$에 대한 다음 토큰 예측 손실은 다음과 같다:<br />
+$$-\log \frac{e^{\langle h(c), w_y \rangle}}{\sum_{v} e^{\langle h(c), w_v \rangle}} = \underbrace{-\langle h(c), w_y \rangle}<em>{\text{예측 항 (Prediction)}} + \underbrace{\log \sum</em>{v} e^{\langle h(c), w_v \rangle}}_{\text{안티-콜랩스 항 } A(h(c))}$$<br />
+이는 컨텍스트 인코더 $h$와 타겟 인코더 $y \mapsto w_y$, 내적 예측, Softmax log-partition 기반 안티-콜랩스 항을 갖춘 JEPA의 일종이다.</p>
+</blockquote>
+<ul>
+<li><strong>신경망 붕괴(Neural Collapse) 및 암묵적 긍정 쌍(Implicit Positives) 메커니즘:</strong>
+<ol>
+<li><strong>구조적 한계 (문서 뉘앙스 포착):</strong> NTP의 긍정적 쌍은 동일 문서 내의 접두사(Prefix)와 이어지는 토큰(Continuation)으로 구성된다. 이는 동일 작성자의 문체, 어휘 등 문서 고유의 뉘앙스를 두 뷰가 공유하는 대표적인 Bad-View JEPA이다.</li>
+<li><strong>Neural Collapse 지점에서의 수식적 귀결:</strong> NTP 최적화 지점에서는 $\langle h(c), w_y \rangle = \log p(y|c) + b(c)$가 성립한다. 이 최적점 수식에 따라, 동일한 연속 토큰 $y$를 타겟으로 공유하는 서로 다른 컨텍스트들은 출력 벡터 $w_y$ 주변으로 모이는 신경망 붕괴(Neural Collapse) 현상을 나타낸다.</li>
+<li><strong>Implicit Positives의 희소성과 스케일 의존성:</strong> 따라서 NTP에서 서로 다른 장면의 텍스트들이 연결되는 유일한 통로는 단일 토큰 공유라는 극히 좁은 '암묵적 긍정 쌍(Implicit Positives)' 연결 고리뿐이다. 단일 토큰 연결은 세계 상태 $z$ 전체를 포착하기에 지나치게 약하므로, 수많은 컨텍스트를 연쇄적으로 이어 붙여 세계 상태 커널을 구성하려면 15T~18T 토큰에 달하는 극단적인 데이터 밀도와 스케일이 필수적이다. 반면 Good-View JEPA는 서로 다른 표현의 캡션들을 직접 연결함으로써 단 1단계 만에 세계 상태 커널을 직접 형성한다.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-논점-4-스케일링-법칙-및-정렬의-샘플-효율성-section-4">2.4. 논점 4: 스케일링 법칙 및 정렬의 샘플 효율성 (Section 4)</h5>
+<p>Good-View JEPA는 대형 언어 모델 및 기존 NTP 학습 방식 대비 압도적인 샘플 효율성과 정렬 성능을 보였다.</p>
+<ul>
+<li>
+<p><strong>42배 샘플 효율성 [SOURCE_IMAGE_1]:</strong> 109M 파라미터 규모의 Good-View JEPA는 단 2,160만(21.6M) 개의 샘플(116B 텍스트 토큰) 학습만으로 WIT-1024 벤치마크 정렬도 .109를 달성하였다. 이는 동일 코퍼스 상에서 Next-Token Prediction 방식이 9억(900M) 개 샘플을 처리하여 달성한 정렬도(.111)와 대등한 수준으로, 정확히 <strong>42배 적은 샘플 수</strong>(14배 적은 텍스트 토큰, 435배 적은 고유 이미지 수)만으로 동일 정렬 성능에 도달했음을 입증한다 <code>[SOURCE_IMAGE_1]</code>.</p>
+</li>
+<li>
+<p><strong>대형 언어 모델과의 정렬 성능 비교:</strong> 9억 4천만(940M) 웹 이미지 텍스트 코퍼스(Recap-DataComp)로 학습된 109M Good-View JEPA(BERT-B)는 최첨단 초거대 언어 모델들을 크게 앞질렀다.</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 (Model)</th>
+<th style="text-align:left">파라미터 수</th>
+<th style="text-align:left">학습 토큰/샘플 수</th>
+<th style="text-align:left">WIT-1024 10-NN</th>
+<th style="text-align:left">Flickr30k R@1 (30k 회전)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Good-View JEPA (BERT-B)</strong></td>
+<td style="text-align:left"><strong>109M</strong></td>
+<td style="text-align:left"><strong>900M 샘플 (116B 토큰)</strong></td>
+<td style="text-align:left"><strong>.184</strong></td>
+<td style="text-align:left"><strong>.464</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Next-Token Prediction (BERT-B)</td>
+<td style="text-align:left">109M</td>
+<td style="text-align:left">900M 샘플</td>
+<td style="text-align:left">.111</td>
+<td style="text-align:left">.335</td>
+</tr>
+<tr>
+<td style="text-align:left">Bad-View JEPA (BERT-B)</td>
+<td style="text-align:left">109M</td>
+<td style="text-align:left">900M 샘플</td>
+<td style="text-align:left">.088</td>
+<td style="text-align:left">.318</td>
+</tr>
+<tr>
+<td style="text-align:left">Qwen2.5-72B</td>
+<td style="text-align:left">72B</td>
+<td style="text-align:left">15T~18T 토큰</td>
+<td style="text-align:left">.154</td>
+<td style="text-align:left">소스 미기재</td>
+</tr>
+<tr>
+<td style="text-align:left">Llama-3-70B</td>
+<td style="text-align:left">70B</td>
+<td style="text-align:left">15T~18T 토큰</td>
+<td style="text-align:left">.151</td>
+<td style="text-align:left">소스 미기재</td>
+</tr>
+<tr>
+<td style="text-align:left">CLIP Text Encoder</td>
+<td style="text-align:left">63M (B/32)</td>
+<td style="text-align:left">400M 쌍</td>
+<td style="text-align:left">.124</td>
+<td style="text-align:left">.489</td>
+</tr>
+<tr>
+<td style="text-align:left">all-mpnet-base-v2</td>
+<td style="text-align:left">110M</td>
+<td style="text-align:left">1B 문장 쌍</td>
+<td style="text-align:left">.118</td>
+<td style="text-align:left">.481</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>정렬 스케일링 법칙 (Eq. 7) 및 파라미터 해설:</strong> Good View 비율 $q$, 총 샘플 수 $M$, 고유 이미지 수 $N$에 따른 정렬도(Flickr R@1) 예측 수식을 다음과 같이 정립하였다:<br />
+$$\text{R@1} = a + d \log M + b \log \left( 1 + \frac{q \alpha M^\beta N^\gamma}{c} \right)$$<br />
+실험적 분석 결과, 샘플 수($M$)와 Good View 비율($q$) 간에는 하위 선형 대체 관계($q \propto M^{-0.30}$)가 존재함이 밝혀졌다. 즉, Good View 비율이 낮을 때 이를 보완하기 위해서는 샘플 수를 하위 선형적으로 크게 늘려야 한다. 또한 고유 이미지 수($N$)의 의존성은 $\gamma = 0.19$로 매우 약하게 나타났다. 이 법칙은 학습을 실행하지 않은 85건의 무작위 조건 실험 결과를 시드 노이즈 범주 내(실제 시드 간 오차 RMSE .0096 vs 예측 오차 RMSE .0093)에서 정확히 예측하였다 (Figure 11).</li>
+</ul>
+<hr />
+<h5 id="2-5-논점-5-이미지-텍스트-쌍-없는-정렬-및-이미지-캡셔닝-응용-section-5">2.5. 논점 5: 이미지-텍스트 쌍 없는 정렬 및 이미지 캡셔닝 응용 (Section 5)</h5>
+<p>플라톤적 표현 정리에 따라, 고정된(Frozen) 시각 인코더와 텍스트 디코더는 단 하나의 직교 회전 매핑만으로 결합하여 다양한 다중모달 과제를 수행할 수 있다.</p>
+<ul>
+<li><strong>네트워크 재학습 없는 이미지 캡셔닝 [SOURCE_IMAGE_5, SOURCE_IMAGE_6]:</strong>
+<ul>
+<li>고정된 DINOv2 및 DINOv3 시각 임베딩과 텍스트 전용 코퍼스로 미세조정된 언어 모델(Qwen2.5-1.5B) 사이에 30k Flickr 쌍으로 피팅된 단 하나의 선형 회전 매핑만을 적용함 <code>[SOURCE_IMAGE_5, SOURCE_IMAGE_6]</code>.</li>
+<li>회전 후 잔여 오차 노이즈를 반영하기 위해 노이즈 스케일 매칭 공식 $\sigma = (c^{-2} - 1)^{1/2} \approx 3$을 적용함. 이때 변수 $c \approx 0.3$은 회전 변환 적용 후 검증 및 테스트 이미지-캡션 임베딩 간의 평균 코사인 유사도(Mean Cosine Similarity, 검증 $0.29$, 테스트 $0.33$)를 명확히 정의함.</li>
+<li>이 매칭을 통해 <strong>COCO 벤치마크 CIDEr .838</strong>을 달성함.</li>
+</ul>
+</li>
+<li><strong>쌍 없는(Pair-free) 제로샷 분류 정렬:</strong>
+<ul>
+<li>Schnaus 등의 벤치마크 프로토콜에 따라, 이미지-텍스트 쌍이 완전히 배제된 상태에서 두 임베딩 공간의 기하학적 구조 매칭만으로 회전 변환을 추정함.</li>
+<li>109M Good-View JEPA는 **ImageNet-100 top-5 제로샷 정확도 64.4%**를 기록하여, 동일 조건의 Qwen3-8B(47.6%) 및 해당 벤치마크 기존 최강 모델 기록(56%)을 8~17%p 격차로 압도함 (Table 4).</li>
+</ul>
+</li>
+<li><strong>동영상 캡셔닝 확장 및 Theorem 3의 뉘앙스 상쇄 메커니즘:</strong>
+<ul>
+<li>별도의 비디오 학습 과정 없이, 동영상 클립 내 8개 프레임 임베딩의 평균값을 구해 정적 사진으로 학습된 회전 매핑을 적용하여 MSR-VTT 벤치마크에서 <strong>CIDEr .246</strong>을 기록함.</li>
+<li>이 프레임 평균화(Frame Averaging) 연산은 단순한 기술적 합산이 아니라, <strong>Theorem 3가 제시한 뉘앙스 상쇄 메커니즘</strong>의 직접적 실현이다. 단일 프레임이 가진 카메라 구도나 조명 등의 고유 뉘앙스 $\nu$는 평균화를 통해 상쇄되고 공통 세계 상태 $z$만이 정제되어 수렴하므로, 비동기 제로샷 동영상 캡셔닝 성능이 극대화된다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-roles">3. 등장 인물 및 화자 (Key Figures &amp; Roles)</h4>
+<p>소스 문헌에서 명시적으로 확인되는 연구진 및 관련 역할은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물/연구진 이름</th>
+<th style="text-align:left">소속/기관</th>
+<th style="text-align:left">소스상 역할 및 연구 기여</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Randall Balestriero</strong></td>
+<td style="text-align:left">Brown University / AMI Labs</td>
+<td style="text-align:left">본 논문의 주저자 및 교신저자 (<code>rbalestr@brown.edu</code>). 플라톤적 표현 정리 수립 및 JEPA 정렬 이론 증명 주도.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Yann LeCun</strong></td>
+<td style="text-align:left">New York University / AMI Labs</td>
+<td style="text-align:left">본 논문의 공동 저자. JEPA 아키텍처 제안자 및 정렬 이론 공동 개발.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Huh et al. [22]</strong></td>
+<td style="text-align:left">MIT / 이전 연구진</td>
+<td style="text-align:left">관찰 기반의 플라톤적 표현 가설(PRH) 제안, WIT-1024 벤치마크 및 Mutual 10-NN 평가 지표 최초 도입.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Schnaus et al. [54]</strong></td>
+<td style="text-align:left">이전 연구진</td>
+<td style="text-align:left">이미지-텍스트 쌍이 없는(Pair-free) 기하학적 구조 기반 정렬 기법 및 평가 벤치마크 프레임워크 제안.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 언급된 기타 인물/화자</strong></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left"><strong>확인 불가</strong> (소스 텍스트 내 개별 화자 성명 추가 언급 없음)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-key-metrics-data-points">4. 수치 및 시점 (Key Metrics &amp; Data Points)</h4>
+<h5 id="4-1-모델-규모-및-데이터셋-수치">4.1. 모델 규모 및 데이터셋 수치</h5>
+<ul>
+<li><strong>텍스트 JEPA 인코더 규모 (BERT 아키텍처):</strong>
+<ul>
+<li>BERT-T: 1,100만 (11M) 파라미터</li>
+<li>BERT-S: 3,300만 (33M) 파라미터</li>
+<li>BERT-B: 1억 9백만 (109M) 파라미터 (주요 실험 모델)</li>
+<li>BERT-L: 3억 3,500만 (335M) 파라미터</li>
+</ul>
+</li>
+<li><strong>비교 대상 언어 모델 규모:</strong>
+<ul>
+<li>Qwen2.5 계열: 0.5B, 3B, 7B, 72B (720억) 파라미터</li>
+<li>Llama-3 계열: 8B, 70B (700억) 파라미터</li>
+<li>기타: Mistral-7B, Qwen3-8B</li>
+</ul>
+</li>
+<li><strong>학습 데이터셋 및 샘플 규모:</strong>
+<ul>
+<li>Flickr30k (Karpathy split): 29,000개 학습 이미지 (각 5개 캡션), 1,014개 검증 쌍, 1,000개 테스트 쌍</li>
+<li>Recap-DataComp: 2.16M, 10M, 50M, 100M, 9억 4천만(940M) 웹 이미지 기반 알트텍스트 및 LLaVA 재캡션(Recaptions)</li>
+<li>대형 언어 모델 학습 토큰 수: 15T ~ 18T (15조~18조) 토큰</li>
+<li>Good-View JEPA 109M 수렴 샘플 수: 2,160만 (21.6M) 샘플 (116B 텍스트 토큰 읽음)</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-2-주요-성능-지표-performance-benchmark-metrics">4.2. 주요 성능 지표 (Performance Benchmark Metrics)</h5>
+<ul>
+<li><strong>WIT-1024 벤치마크 (DINOv2 ViT-B 기준 Mutual 10-NN):</strong>
+<ul>
+<li>Good-View JEPA (109M, 940M Recap): <strong>.184</strong> (최고 성능)</li>
+<li>Qwen2.5-72B: .154</li>
+<li>Llama-3-70B: .151</li>
+<li>CLIP Text Encoder (400M 쌍 학습): .124</li>
+<li>all-mpnet-base-v2 (1B 문장 쌍 학습): .118</li>
+<li>Next-Token Prediction (109M, 940M Recap): .111</li>
+<li>Bad-View JEPA (109M, 940M Recap): .088</li>
+</ul>
+</li>
+<li><strong>Flickr30k 테스트 R@1 (30k 회전 매핑 적용 기준):</strong>
+<ul>
+<li>Good-View JEPA (109M, 940M Recap): <strong>.464</strong> (1k 매핑 적용 시 .349)</li>
+<li>CLIP B/32 Text Encoder: .489</li>
+<li>all-mpnet-base-v2: .481</li>
+</ul>
+</li>
+<li><strong>COCO 캡셔닝 성능 (CIDEr 점수):</strong>
+<ul>
+<li>DINOv2/DINOv3 + Qwen2.5-1.5B (30k 회전 매핑 적용): <strong>0.838</strong> (0~1 스케일)</li>
+</ul>
+</li>
+<li><strong>Pair-Free 정렬 (ImageNet-100 Top-5 제로샷 정확도):</strong>
+<ul>
+<li>109M Good-View JEPA: <strong>64.4%</strong></li>
+<li>Qwen3-8B (동일 조건 재실행): 47.6%</li>
+<li>Schnaus et al. 기존 보고 최고치 (최대 8B 모델): 56%</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<h5 id="5-1-이론적-가정-및-조건의-한계">5.1. 이론적 가정 및 조건의 한계</h5>
+<ul>
+<li><strong>유한 세계 및 완전 단사 조건:</strong> 증명(Theorem 1, Prop 1)은 유한한 세계 상태 공간 $Z$ 및 단사(Injective) 렌더링을 전제로 하므로, 연속적이고 무한한 실제 세계 데이터 간의 완전 일치에는 이론과 실제 간 미세한 격차가 존재함.</li>
+<li><strong>예측자(Predictor) 미포함:</strong> 본 이론 분석은 임베딩을 직접 비교하는 예측자 없는(Predictor-free) JEPA 구조에 한정되며, 동작 조건부(Action-conditioned) 대형 세계 모델 방식의 예측자를 포함하는 아키텍처는 다루지 않음.</li>
+<li><strong>임베딩 차원 불일치 분석의 한계:</strong> 이미지와 텍스트의 임베딩 차원이 다를 때(예: DINOv2 768차원 vs 텍스트 JEPA 384차원) 직교 행을 갖는 선형 매핑을 사용하였으나, 차원 불일치 상황에서의 엄밀한 수학적 오차 상한 증명은 소스에서 제공하지 않음.</li>
+</ul>
+<h5 id="5-2-실증적-한계-및-소스-미다룸-항목">5.2. 실증적 한계 및 소스 미다룸 항목</h5>
+<ul>
+<li><strong>이미지 측 Good Views의 스케일링 미완료:</strong> MSR-VTT 동영상 실험을 통해 이미지/동영상 측면의 Good Views 효과를 입증했으나, 대규모 이미지 전용 Good-View JEPA를 처음부터(From scratch) 대규모로 학습시키는 스케일링 연구는 미래 과제로 남겨둠.</li>
+<li><strong>특수 하이퍼파라미터 조건에서의 시드 불안정성:</strong> SIGReg 안티-콜랩스 가중치를 2배($\lambda = 0.04$) 적용한 109M 모델의 4번째 시드 실험에서 WIT 점수가 .121로 급락하는 현상이 관찰됨 (4개 시드 전체 평균은 .168로 여전히 언어 모델을 상회함).</li>
+<li><strong>데이터 중복 및 LLaVA 재캡션 의존성:</strong> 940M Recap 데이터셋의 알트텍스트 중 43개 문장이 WIT 평가 캡션과 중복되었음(제거 후에도 성능 변화는 .002 이내로 미미함). 또한, 학습 텍스트 데이터의 상당수가 CLIP ViT-L/14 시각 인코더 기반의 LLaVA 모델로 작성된 재캡션이라는 의존성이 존재함.</li>
+<li><strong>기타 소스에서 확인할 수 없는 정보:</strong>
+<ul>
+<li>본 연구의 전체 모델 학습에 소요된 총 컴퓨팅 자원(GPU 시간)의 정확한 전체 액수: <strong>확인 불가</strong>.</li>
+<li>비전 인코더 자체를 Good-View JEPA 방식으로 대규모 학습시켰을 때 달성 가능한 최종 정렬 성능 수치: <strong>소스에서 다루지 않음</strong>.</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

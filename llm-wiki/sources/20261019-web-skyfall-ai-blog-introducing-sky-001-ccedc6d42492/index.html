@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing SKY-001: The First World Model for Engineering</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing SKY-001: The First World Model for Engineering</h1>
+<p class="page-meta">웹 · 2026-10-19</p>
+<h2 id="요약">요약</h2>
+<p>[사실] 본 보고서는 스카이폴 에이아이 블로그(Skyfall AI Blog)에 2026년 10월 19일 게시된 스카이폴 리서치(Skyfall Research)의 기술 아티클 &quot;Introducing SKY-001: The First World Model for Engineering&quot;을 바탕으로 작성되었습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://skyfall.ai/blog/introducing-sky-001">출처</a> · <a href="https://www.youtube.com/watch?v=o3UuE0dQDUA">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="sky-001-엔지니어링을-위한-최초의-공간-월드-모델-기술-해설-보고서">SKY-001: 엔지니어링을 위한 최초의 공간 월드 모델 기술 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>[사실] 본 보고서는 스카이폴 에이아이 블로그(Skyfall AI Blog)에 2026년 10월 19일 게시된 스카이폴 리서치(Skyfall Research)의 기술 아티클 &quot;Introducing SKY-001: The First World Model for Engineering&quot;을 바탕으로 작성되었습니다. 해당 자료는 헤드리스 크롬(<code>--dump-dom</code>) 방식으로 렌더링된 아티클 컨테이너의 동결 텍스트 데이터를 수집하여 분석에 활용하였습니다. 본 문서에서 다루는 SKY-001은 기존 대형 언어 모델(LLM)이 물리적 엔지니어링 영역에서 가지는 근본적인 한계점을 극복하기 위해 개발되었습니다. 기존 언어 모델은 추론, 코드 작성 및 일반적인 문제 해결에는 뛰어난 성과를 보이지만, 수천 개의 상호 연결된 부품 전반에서 기하학적 정밀도, 물리적 가용성, 제조 가능성 및 공간적 제약 조건을 일관되게 유지하거나 장기 계획(Long-horizon planning)을 수행하는 데 명확한 한계를 나타냅니다. (01 Introduction)</p>
+<p>[사실] SKY-001은 시각적 세계에서 직접 설계 및 생성 시퀀스를 계획하는 '공간 월드 모델(Spatial World Model)'입니다. 단순히 환경을 관찰하거나 탐색용 이미지를 생성하는 기존 월드 모델과 달리, SKY-001은 복잡한 물리적 시스템을 관리 가능한 요소로 분할하고 수백~수천 단계의 건설 과정을 거치는 동안 공간적 일관성을 유지합니다. 주요 적용 분야는 CAD(컴퓨터 가공/설계)와 BIM(건축 정보 모델링)입니다. CAD 영역에서는 단일 제품 이미지를 기반으로 어셈블리와 부품의 계층 구조를 도출하고 각 부품을 형성하는 스케치 및 작업 시퀀스를 생성합니다. BIM 영역에서는 건물 외곽선 정보를 바탕으로 유닛 배치 및 세부 방 구조 평면도를 생성합니다. (01 Introduction)</p>
+<p>[사실] SKY-001의 전체 파이프라인은 디자인을 계층적으로 분할하는 '계층적 작곡가(Hierarchical Composer)'와 분할된 각 부품의 시각적 생성 순서를 예측하는 '건설 월드 모델(Construction World Model)'의 2단계 구조로 구성되어 있습니다. 성능 평가 결과, SKY-001은 최신 프론티어 모델(GPT-6 Astra 등)과 동등하거나 그 이상의 생성 품질(IoU)을 유지하면서도, CAD 영역에서는 처리 속도 약 51배 향상 및 비용 약 150배 절감을 달성하였고, BIM 영역에서는 처리 속도 약 119배 향상 및 비용 약 186배 절감을 기록하는 독보적인 효율성을 입증하였습니다. (02 Pipeline Overview, 06 Performance)</p>
+<hr />
+<h5 id="2-주요-논점-main-issues-technical-details">2. 주요 논점 (Main Issues &amp; Technical Details)</h5>
+<h6 id="2-1-기존-언어-모델의-한계와-sky-001의-공간적-접근법">2.1. 기존 언어 모델의 한계와 SKY-001의 공간적 접근법</h6>
+<ul>
+<li><strong>논점</strong>: [소스 주장] 언어(Text)는 복잡한 물리적 엔지니어링 설계 시 정밀한 기하학적 관계 및 공학적 제약 조건을 표현하기에 비효율적인 매체입니다. (01 Introduction)</li>
+<li><strong>근거</strong>: [소스 주장] 단일 평면(Flat) 구조의 언어 기반 모델은 설계의 모든 부품과 생성 단계를 하나의 긴 사슬(Chain)로 연결하여 순차 생성합니다. 이 방식은 이전의 모든 결정이 다음 생성에 연속적으로 영향을 미치므로, 수천 단계의 생성 과정 속에서 오차가 누적되는 치명적인 문제가 발생합니다. (02 Pipeline Overview)</li>
+<li><strong>사례/구조</strong>: [사실] SKY-001은 계층적(Hierarchical) 방식을 도입하여 작업 사슬을 분쇄합니다. 상위 부모 노드(Parent Node)의 구조가 확정되면, 하위 요소들의 롤아웃(Rollout)은 실제 엔지니어링 팀이 업무를 분담하는 것처럼 병렬(Parallel)로 실행됩니다. 이에 따라 전체 순차 작업 단계의 길이는 시스템의 전체 크기가 아닌 '트리의 깊이(Depth)'에만 비례하게 되어 긴 시퀀스의 생성 작업이 가능해집니다. 또한, 상위 단계에서 하위 단계로 명확한 서브골(Subgoal)을 전달함으로써 수백 단계가 지난 후에도 개별 볼트 조인트 수준의 결정이 전체 엔진 구조와 일관성을 유지하도록 보장합니다. (02 Pipeline Overview)</li>
+</ul>
+<h6 id="2-2-sky-001의-2단계-파이프라인-구조">2.2. SKY-001의 2단계 파이프라인 구조</h6>
+<p>[사실] SKY-001은 계층적 작곡가와 건설 월드 모델이라는 2단계 파이프라인을 통해 정밀한 디자인 플랜을 도출합니다. (02 Pipeline Overview)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">계층적 작곡가 (Hierarchical Composer)</th>
+<th style="text-align:left">건설 월드 모델 (Construction World Model)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>주요 역할</strong></td>
+<td style="text-align:left">[사실] 전체 디자인 생성 -&gt; 계층적 분할 -&gt; 리프(Leaf) 부품 정교화 (03 Hierarchical Composer)</td>
+<td style="text-align:left">[사실] 각 리프 부품의 시각적 생성 순서(Visual Sequence) 예측 (04 Construction World Model)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CAD 적용</strong></td>
+<td style="text-align:left">[사실] - 단일 이미지 입력에서 개괄적 3D 형상 생성&lt;br&gt;- 어셈블리 및 하위 부품으로 단계별 트리 분할 (예: VMS-85 엔진의 5단계 트리)&lt;br&gt;- 정교화(Refiner) 과정을 통해 가려진 내부 기하 구조 및 미세 세부요소 완성</td>
+<td style="text-align:left">[사실] - 단계별 3D 서브골(중간 3D 형상) 계획&lt;br&gt;- 연속된 3D 상태 사이를 잇는 2D 스케치 생성&lt;br&gt;- 기저 외곽선 돌출(Extrusion), 추가 돌출, 절삭(Cut) 작업 등의 스케치 연산을 교차 수행하여 리프 부품 완성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BIM 적용</strong></td>
+<td style="text-align:left">[사실] - 건물 외곽선 및 요약서(Brief) 입력&lt;br&gt;- 요약서에 명시된 프로그램 및 면적을 기반으로 <strong>방 1개당 1개의 상자(one box per room)</strong> 형태의 레이아웃 스케치를 먼저 생성하여 모델에 공간적 위치 전달&lt;br&gt;- 외벽, 슬래브 및 공유 동선(복도, 계단, 엘리베이터) 배치 후 전체 층을 개별 유닛 및 방 단위로 분할</td>
+<td style="text-align:left">[사실] - 외곽선 -&gt; 유닛 간 분리 벽체 -&gt; 세부 방/문/창문/가구 순의 도면 생성&lt;br&gt;- 단계별 2D 도면 상태를 순차적으로 롤아웃하여 전체 평면도 완결</td>
+</tr>
+</tbody>
+</table>
+<p>[사실] <strong>2D 롤아웃 압축 기술 (Latent Compression &amp; Refinement)</strong>:
+CAD의 스케치 생성 및 BIM의 도면 작성 과정에서는 2D 디퓨전(Diffusion) 기술이 적용됩니다. 본 모델은 효율성을 위해 마트료시카(Matryoshka) 스타일 오토인코더를 활용합니다. 오토인코더는 초기 학습 시 코드의 뒷부분을 단계적으로 제거하며 전체적인 레이아웃을 전반부 코드에 압축 수록하도록 학습됩니다. 건설 월드 모델은 압축된 잠재 공간(Latent Space)에서 압축 코드를 사용해 전체 생성 시퀀스를 조밀하고 빠르게 롤아웃(Latent Rollout)한 후, 정교화 모델(Refiner)이 이를 받아 고해상도 캔버스로 재그림으로써 선명한 선, 정밀한 모서리 및 세부 디테일을 복원합니다. (04 Construction World Model - 2D Rollout)</p>
+<h6 id="2-3-학습-데이터셋-구축-및-데이터-품질-비교">2.3. 학습 데이터셋 구축 및 데이터 품질 비교</h6>
+<p>[사실] <strong>데이터 정제 프로세스</strong>:
+공개 데이터셋의 CAD 자산은 불일치하는 어셈블리 트리, 중복 표면, 무작위 개체 혼합 등의 문제가 존재합니다. 스카이폴 연구진은 모든 자산의 계층 구조를 공학적 표준 관례에 맞춰 재구축하였으며, 건설 히스토리가 누락된 부품에 대해서는 엔지니어링 툴과 LLM 기반 워크플로우를 활용해 역공학(Reverse-engineering) 방식으로 건설 트래젝터리를 복원·검증하였습니다. BIM 데이터 역시 평면도 축 정렬, 방 유형 매핑, 요약서 역생성 과정을 거쳐 정제되었습니다. (05 Training Data)</p>
+<p>[사실] <strong>학습 데이터 규모</strong>:</p>
+<ul>
+<li><strong>CAD 계층적 작곡가</strong>: 200,000개 이상의 부품 (05 Training Data)</li>
+<li><strong>CAD 건설 월드 모델</strong>: 600,000개 이상의 건설 예시 (05 Training Data)</li>
+<li><strong>BIM 모델</strong>: 약 35,000개의 실재 및 합성 평면도, 약 2,000,000개의 도면 상태 (05 Training Data)</li>
+</ul>
+<p>[사실] <strong>PartVerse 데이터셋과의 데이터 품질 비교</strong>:
+기존의 부품 분해용 최신 데이터셋인 PartVerse와 개체당 부품 수(Parts per object) 수치를 비교한 결과, SKY-001의 학습 데이터는 정밀도 측면에서 압도적인 차이를 보입니다. (05 Training Data)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">지표 / 사례</th>
+<th style="text-align:left">PartVerse 데이터셋</th>
+<th style="text-align:left">SKY-001 학습 데이터셋</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>개체당 부품 수 (중앙값)</strong></td>
+<td style="text-align:left">[사실] 6개</td>
+<td style="text-align:left">[사실] <strong>288개</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>개체당 부품 수 (99분위수)</strong></td>
+<td style="text-align:left">[사실] 33개</td>
+<td style="text-align:left">[사실] <strong>4,180개</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>자전거 (Bicycle) 사례</strong></td>
+<td style="text-align:left">[사실] 8개 (BMX 자전거)</td>
+<td style="text-align:left">[사실] <strong>988개</strong> (팻바이크 MTB)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오토바이 (Motorcycle) 사례</strong></td>
+<td style="text-align:left">[사실] 34개 (할리 오토바이)</td>
+<td style="text-align:left">[사실] <strong>751개</strong> (두카티 900SS Cafe Racer)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>로봇 (Robot) 사례</strong></td>
+<td style="text-align:left">[사실] 85개 (메카 로봇)</td>
+<td style="text-align:left">[사실] <strong>542개</strong> (4족 보행 로봇)</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-4-성능-평가-performance-benchmarks">2.4. 성능 평가 (Performance Benchmarks)</h6>
+<p>[사실] <strong>CAD 건설 벤치마크 (1,000개 부품 대상)</strong>:
+재규어 E-타입 로드스터(Jaguar E-Type Roadster), 화낙 아크메이트 100iB(FANUC ArcMate 100iB) 로봇 암, 미니트랙터 4×4(Minitractor 4×4), 벨 222 헬리콥터(Bell 222 helicopter), 제트 엔진(Jet Engine) 등 복잡한 객체에서 추출한 1,000개 부품을 대상으로 생성 속도, 비용, 품질(IoU)을 평가하였습니다. (06 Performance - CAD)</p>
+<ul>
+<li><strong>생성 속도 (건당)</strong>: SKY-001 (<strong>3.9초</strong>) vs GPT-6 Astra (199초) vs Gemini 4 (253초) vs Qwen 3.8 Max (764초) vs Kimi K3 (439초) vs Grok 4.7 (1,250초)
+<em>(SKY-001은 GPT-6 Astra 대비 약 51배 빠른 속도 달성)</em></li>
+<li><strong>건당 비용</strong>: SKY-001 (<strong>$0.005</strong>) vs GPT-6 Astra ($0.75) vs Gemini 4 ($0.25) vs Qwen 3.8 Max ($0.30) vs Kimi K3 ($0.13) vs Grok 4.7 ($0.59)
+<em>(SKY-001은 GPT-6 Astra 대비 약 150배 저렴한 비용 달성)</em></li>
+<li><strong>품질 (IoU)</strong>: SKY-001 (<strong>79.7%</strong>) vs GPT-6 Astra (79.1%) vs Gemini 4 (76.9%) vs Qwen 3.8 Max (34.4%) vs Kimi K3 (9.5%) vs Grok 4.7 (출력 실패/no output)</li>
+</ul>
+<p>[사실] <strong>CAD 계층적 작곡가 블라인드 평가</strong>:
+단일 이미지 기반 자동차, 오토바이, 엔진 생성을 두고 평가를 진행하였습니다. 비교 대상 프론티어 모델들은 단일 프롬프트 요청 시 전체 어셈블리에 대한 블렌더 스크립트(Blender script)를 작성하는 방식으로 평가되었으며, GPT-6.1 Sol 및 Claude Opus 5.5 등 2대의 LLM 심사위원이 블라인드 평가를 수행하였습니다 (1~10점 만점). (06 Performance - CAD)</p>
+<ul>
+<li><strong>부품 분해 (Part decomposition)</strong>: SKY-001 (<strong>7.8</strong>) vs GPT-6 Astra (6.4)</li>
+<li><strong>내부 구조 (Interior)</strong>: SKY-001 (<strong>7.3</strong>) vs GPT-6 Astra (6.3)</li>
+<li><strong>복잡성 (Complexity)</strong>: SKY-001 (<strong>8.0</strong>) vs GPT-6 Astra (7.3)</li>
+<li><strong>입력 이미지 일치도 (Match to input image)</strong>: SKY-001 (<strong>8.1</strong>) vs GPT-6 Astra (6.7)</li>
+<li><strong>외부 리얼리즘 (Exterior realism)</strong>: SKY-001 (<strong>7.7</strong>) vs GPT-6 Astra (7.4)
+<em>(참고: 비교 대상인 GPT-6 Astra는 자산의 82%에 대해서만 모델 출력을 완료함)</em></li>
+</ul>
+<p>[사실] <strong>BIM 건설 벤치마크 (1,000개 평면도 대상)</strong>:
+건물 전체 단위 350개, 아파트 유닛 단위 650개 평면도를 대상으로 평가를 진행하였습니다. (06 Performance - BIM)</p>
+<ul>
+<li><strong>생성 속도 (건당)</strong>: SKY-001 (<strong>1.22초</strong>) vs GPT-6 Astra (144.6초) vs Gemini 3.8 Flash (346.2초) vs Qwen 3.8 Max (255.3초) vs Kimi K3 (113.9초) vs Grok 4.7 (592.1초)
+<em>(SKY-001은 GPT-6 Astra 대비 약 119배 빠른 속도 달성)</em></li>
+<li><strong>건당 비용</strong>: SKY-001 (<strong>$0.0024</strong>) vs GPT-6 Astra ($0.446) vs Gemini 3.8 Flash ($0.218) vs Qwen 3.8 Max ($0.111) vs Kimi K3 ($0.270) vs Grok 4.7 ($0.305)
+<em>(SKY-001은 GPT-6 Astra 대비 약 186배 저렴한 비용 달성)</em></li>
+<li><strong>품질 (IoU)</strong>: SKY-001 (<strong>43.6%</strong>) vs GPT-6 Astra (40.6%) vs Gemini 3.8 Flash (42.3%) vs Qwen 3.8 Max (28.8%) vs Kimi K3 (33.7%) vs Grok 4.7 (28.2%)</li>
+</ul>
+<h6 id="2-5-향후-발전-방향-what-comes-next">2.5. 향후 발전 방향 (What Comes Next)</h6>
+<ul>
+<li><strong>CAD 영역 확장</strong>: [소스 주장] 스케치 롤아웃을 파라메트릭하게 수정 가능한 히스토리 기반 실행 작업으로 전환하고, 텍스트 명령어(예: 브래킷 폭 확장, 샤프트 위치 이동 등)를 입력받아 연동된 인접 부품들까지 자동으로 업데이트하는 시스템 구축. (07 What Comes Next)</li>
+<li><strong>BIM 영역 확장</strong>: 생성된 평면도 시퀀스를 건축가가 지속적으로 편집할 수 있는 BIM 요소(벽, 문, 창문, 방) 객체로 자동 변환. (07 What Comes Next)</li>
+<li><strong>타 산업 적용 및 비전</strong>: PCB(인쇄회로기판) 설계 및 하드웨어 분야로 동일한 계층적 공간 계획 접근법을 확장하여, 스카이폴의 장기적 비전인 '자율 기업(Autonomous Businesses)' 실현을 추진. (07 What Comes Next)</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-key-figures-speakers">3. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h5>
+<p>[사실] 본 문서 및 출처 소스에서 확인 가능한 주체 및 관련 시스템은 다음과 같습니다.</p>
+<ul>
+<li><strong>작성 기관 및 연구진</strong>: 스카이폴 리서치 (Skyfall Research) / [확인 불가] 연구진 개인 성명은 본문에 명시되지 않음.</li>
+<li><strong>발행 주체</strong>: 스카이폴 에이아이 (Skyfall AI).</li>
+<li><strong>평가 및 판정 시스템 (Blind LLM Judges)</strong>:
+<ul>
+<li>GPT-6.1 솔 (GPT-6.1 Sol)</li>
+<li>클로드 오퍼스 5.5 (Claude Opus 5.5)</li>
+</ul>
+</li>
+<li><strong>성능 비교 대상 프론티어 모델 주체</strong>:
+<ul>
+<li>GPT-6 아스트라 (GPT-6 Astra)</li>
+<li>클로드 페이블 5.1 (Claude Fable 5.1)</li>
+<li>제미나이 4 (Gemini 4)</li>
+<li>제미나이 3.8 플래시 (Gemini 3.8 Flash)</li>
+<li>쿠엔 3.8 맥스 (Qwen 3.8 Max)</li>
+<li>키미 K3 (Kimi K3)</li>
+<li>그록 4.7 (Grok 4.7)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="4-주요-수치-및-시점-key-metrics-timestamps">4. 주요 수치 및 시점 (Key Metrics &amp; Timestamps)</h5>
+<h6 id="4-1-주요-시점-및-데이터-규모">4.1. 주요 시점 및 데이터 규모</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">수치 / 내용</th>
+<th style="text-align:left">소스 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>문서 발행일</strong></td>
+<td style="text-align:left">[사실] 2026년 10월 19일</td>
+<td style="text-align:left">출처 메타데이터</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CAD 작곡가 학습 데이터</strong></td>
+<td style="text-align:left">[사실] 200,000개 이상의 부품</td>
+<td style="text-align:left">05 Training Data</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CAD 건설 월드 모델 학습 데이터</strong></td>
+<td style="text-align:left">[사실] 600,000개 이상의 건설 예시</td>
+<td style="text-align:left">05 Training Data</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BIM 학습 데이터</strong></td>
+<td style="text-align:left">[사실] 약 35,000개 평면도 / 약 2,000,000개 도면 상태</td>
+<td style="text-align:left">05 Training Data</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CAD 벤치마크 평가 규모</strong></td>
+<td style="text-align:left">[사실] 1,000개 부품 (사례당 약 100개 단계)</td>
+<td style="text-align:left">06 Performance - CAD</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BIM 벤치마크 평가 규모</strong></td>
+<td style="text-align:left">[사실] 1,000개 평면도 (사례당 평균 약 70개 단계)</td>
+<td style="text-align:left">06 Performance - BIM</td>
+</tr>
+</tbody>
+</table>
+<h6 id="4-2-cad-및-bim-벤치마크-성능-수치-비교">4.2. CAD 및 BIM 벤치마크 성능 수치 비교</h6>
+<p>[사실] 소스 06 Performance 섹션에 기술된 프론티어 모델들과의 벤치마크 수치 비교 종합 표입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 벤치마크</th>
+<th style="text-align:left">모델명</th>
+<th style="text-align:left">처리 시간 (Time)</th>
+<th style="text-align:left">건당 비용 (Cost)</th>
+<th style="text-align:left">생성 품질 (IoU)</th>
+<th style="text-align:left">소스 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>CAD 건설 벤치마크</strong></td>
+<td style="text-align:left"><strong>SKY-001</strong></td>
+<td style="text-align:left">[사실] <strong>3.9초</strong></td>
+<td style="text-align:left">[사실] <strong>$0.005</strong></td>
+<td style="text-align:left">[사실] <strong>79.7%</strong></td>
+<td style="text-align:left">06 Performance - CAD</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GPT-6 Astra</td>
+<td style="text-align:left">[사실] 199초</td>
+<td style="text-align:left">[사실] $0.75</td>
+<td style="text-align:left">[사실] 79.1%</td>
+<td style="text-align:left">06 Performance - CAD</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Gemini 4</td>
+<td style="text-align:left">[사실] 253초</td>
+<td style="text-align:left">[사실] $0.25</td>
+<td style="text-align:left">[사실] 76.9%</td>
+<td style="text-align:left">06 Performance - CAD</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Qwen 3.8 Max</td>
+<td style="text-align:left">[사실] 764초</td>
+<td style="text-align:left">[사실] $0.30</td>
+<td style="text-align:left">[사실] 34.4%</td>
+<td style="text-align:left">06 Performance - CAD</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Kimi K3</td>
+<td style="text-align:left">[사실] 439초</td>
+<td style="text-align:left">[사실] $0.13</td>
+<td style="text-align:left">[사실] 9.5%</td>
+<td style="text-align:left">06 Performance - CAD</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Grok 4.7</td>
+<td style="text-align:left">[사실] 1,250초</td>
+<td style="text-align:left">[사실] $0.59</td>
+<td style="text-align:left">[사실] 출력 없음 (no output)</td>
+<td style="text-align:left">06 Performance - CAD</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BIM 건설 벤치마크</strong></td>
+<td style="text-align:left"><strong>SKY-001</strong></td>
+<td style="text-align:left">[사실] <strong>1.22초</strong></td>
+<td style="text-align:left">[사실] <strong>$0.0024</strong></td>
+<td style="text-align:left">[사실] <strong>43.6%</strong></td>
+<td style="text-align:left">06 Performance - BIM</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">GPT-6 Astra</td>
+<td style="text-align:left">[사실] 144.6초</td>
+<td style="text-align:left">[사실] $0.446</td>
+<td style="text-align:left">[사실] 40.6%</td>
+<td style="text-align:left">06 Performance - BIM</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Gemini 3.8 Flash</td>
+<td style="text-align:left">[사실] 346.2초</td>
+<td style="text-align:left">[사실] $0.218</td>
+<td style="text-align:left">[사실] 42.3%</td>
+<td style="text-align:left">06 Performance - BIM</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Qwen 3.8 Max</td>
+<td style="text-align:left">[사실] 255.3초</td>
+<td style="text-align:left">[사실] $0.111</td>
+<td style="text-align:left">[사실] 28.8%</td>
+<td style="text-align:left">06 Performance - BIM</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Kimi K3</td>
+<td style="text-align:left">[사실] 113.9초</td>
+<td style="text-align:left">[사실] $0.270</td>
+<td style="text-align:left">[사실] 33.7%</td>
+<td style="text-align:left">06 Performance - BIM</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Grok 4.7</td>
+<td style="text-align:left">[사실] 592.1초</td>
+<td style="text-align:left">[사실] $0.305</td>
+<td style="text-align:left">[사실] 28.2%</td>
+<td style="text-align:left">06 Performance - BIM</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ul>
+<li><strong>스케치와 3D 기하학의 불일치 가능성</strong>: [사실] CAD 건설 시뮬레이션 과정에서 모델이 예측 및 저장한 2D 스케치 데이터와 실제 애니메이션으로 전환 구현되는 3D 기하학 형상 간에 불일치(disagree)가 존재할 수 있음이 비고에 명시되어 있습니다. (04 Construction World Model - CAD 하단 비고)</li>
+<li><strong>연구원 개인 화자 정보 부재</strong>: [사실] 스카이폴 리서치라는 연구 주체명 외에 기술 개발을 주도한 세부 연구진이나 저자 개인의 성명 및 조직 구성은 소스 내에 명시되어 있지 않습니다.</li>
+<li><strong>세부 모델 아키텍처 정보 부족</strong>: [소스 사실] 파이프라인에서 디퓨전 트랜스포머(DiT) 및 마트료시카 오토인코더 구조를 활용했음은 명시되어 있으나, 구체적인 신경망 매개변수(Parameter) 수치나 파인튜닝 하이퍼파라미터 등 세부 기술 스펙은 소스에 명시되지 않았습니다.</li>
+<li><strong>비교 모델의 작업 실패 (Grok 4.7)</strong>: [사실] CAD 건설 벤치마크 평가 과정에서 Grok 4.7 모델은 출력을 정상적으로 완료하지 못하고 작업에 실패(no output)하였습니다. (06 Performance - CAD)</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

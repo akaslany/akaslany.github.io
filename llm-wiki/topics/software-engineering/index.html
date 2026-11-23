@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>소프트웨어 공학</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>소프트웨어 공학</h1>
+<p class="page-meta">근거 소스 9편</p>
+<h2 id="실행-중-컴포넌트-교체">실행 중 컴포넌트 교체</h2>
+<p>Cordis 논문은 컴포넌트가 환경에 가하는 변경과 환경에 요구하는 자원을 같은 컨텍스트 타입으로 표현할 것을 제안한다. 런타임은 컴포넌트를 내릴 때 환경 변경의 역연산을 역순으로 실행한다. 컴포넌트는 필요한 자원을 선언하고 환경 변화에 따라 생명주기를 조정한다. <a href="../../sources/20260814-pdf-ppsc-spatiotemporal-composability/">근거 B</a></p>
+<p>논문 저자들은 Koishi를 운영 환경 적용 사례로 제시했다. 보고서는 저자들이 제시한 운영 지표를 독립적으로 확인하지 않았다. <a href="../../sources/20260814-pdf-ppsc-spatiotemporal-composability/">근거 B</a></p>
+<h2 id="병렬-실행과-장애-복구">병렬 실행과 장애 복구</h2>
+<p>Pi AgentHarness 설계 사양은 세션 안에서 작업을 병렬로 실행하면서 세션마다 단일 작성자를 둔다. 작업 로그는 대화 트리에 영향을 주지 않으며, 외부 효과가 발생하기 전에 작업 유형과 결과 항목의 식별자를 로그에 기록하도록 규정한다. <a href="../../sources/20260822-github-pi-agentharness-v2/">근거 E</a></p>
+<p>사양은 각 장애 경계에서 복구 동작을 결정론적으로 시험하는 방식을 제시한다. 보고서가 다루는 근거는 설계 계약에 한정되며, 구현 완료와 실운용 검증은 확인되지 않았다. <a href="../../sources/20260822-github-pi-agentharness-v2/">근거 E</a></p>
+<h2 id="아키텍처-문서-검증">아키텍처 문서 검증</h2>
+<p>특정 리비전을 대상으로 한 감사에 따르면 Archify는 다이어그램을 렌더링하기 전에 중간 표현의 스키마와 기하 제약을 검사하고, 근거로 지정된 파일과 줄 범위가 존재하는지 확인한다. 감사는 이 검사로 인용 코드가 다이어그램의 주장을 뒷받침하는지 판단할 수 없다고 밝혔다. <a href="../../sources/20260829-chatgpt-6a923de7-archify-analysis/">근거 I</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>context를 통해 수행하는 환경 변경에 역연산을 제공하도록 모델링합니다. 런타임은 이를 추적해 컴포넌트 언로드 시 역순으로 실행합니다.</p>
+</blockquote>
+<p><a href="../../sources/20260814-pdf-ppsc-spatiotemporal-composability/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260811-web-semianalysis-tilert-inferencex-nvidia/">[분석 보고서] NVIDIA GPU 기반 초고속 상호작용의 실체: TileRT와 InferenceX 기술 분석</a></li>
+<li><a href="../../sources/20260814-pdf-ppsc-spatiotemporal-composability/">A Programming Paradigm for Spatiotemporal Composability</a></li>
+<li><a href="../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</a></li>
+<li><a href="../../sources/20260818-youtube-wannacry-marcus-hutchins/">진짜 전세계를 구했던 화이트해커의 알려지지 않은 이야기</a></li>
+<li><a href="../../sources/20260822-github-pi-agentharness-v2/">Durable AgentHarness design</a></li>
+<li><a href="../../sources/20260823-arxiv-2608-16157-freetoken/">FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution</a></li>
+<li><a href="../../sources/20260824-web-alexzhang-spec-ptc/">Speculative Programmatic Tool Calling</a></li>
+<li><a href="../../sources/20260828-web-antigravity-teamwork-research-partner/">Teamwork: When AI Becomes a Research Partner</a></li>
+<li><a href="../../sources/20260829-chatgpt-6a923de7-archify-analysis/">Archify 기술 심층 보고서 (고정 커밋: 0853a805003514776bef3593ecca091409828902)</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260811-web-semianalysis-tilert-inferencex-nvidia/">[분석 보고서] NVIDIA GPU 기반 초고속 상호작용의 실체: TileRT와 InferenceX 기술 분석</a></li>
+<li><a href="../../sources/20260814-pdf-ppsc-spatiotemporal-composability/">A Programming Paradigm for Spatiotemporal Composability</a></li>
+<li><a href="../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</a></li>
+<li><a href="../../sources/20260818-youtube-wannacry-marcus-hutchins/">진짜 전세계를 구했던 화이트해커의 알려지지 않은 이야기</a></li>
+<li><a href="../../sources/20260822-github-pi-agentharness-v2/">Durable AgentHarness design</a></li>
+<li><a href="../../sources/20260823-arxiv-2608-16157-freetoken/">FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution</a></li>
+<li><a href="../../sources/20260824-web-alexzhang-spec-ptc/">Speculative Programmatic Tool Calling</a></li>
+<li><a href="../../sources/20260828-web-antigravity-teamwork-research-partner/">Teamwork: When AI Becomes a Research Partner</a></li>
+<li><a href="../../sources/20260829-chatgpt-6a923de7-archify-analysis/">Archify 기술 심층 보고서 (고정 커밋: 0853a805003514776bef3593ecca091409828902)</a></li>
+<li><a href="../">주제 색인</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Fix for Softmax and Cross-Entropy</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>A Fix for Softmax and Cross-Entropy</h1>
+<p class="page-meta">논문 · 2026-10-24</p>
+<h2 id="요약">요약</h2>
+<p>구글 딥마인드(Google DeepMind)의 조나단 T. 배런(Jonathan T. Barron), 단 그나나프라가삼(Dan Gnanapragasam), 마이클 차넨(Michael Tschannen) 연구진은 JAX, PyTorch, TensorFlow 등 주요 딥러닝 프레임워크의 표준 소프트맥스(Softmax),…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.31642">출처</a> · <a href="https://www.youtube.com/watch?v=gGvAdWMB7To">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="소프트맥스-및-크로스-엔트로피-수치-버그-분석과-해결-방안-해설-보고서">소프트맥스 및 크로스 엔트로피 수치 버그 분석과 해결 방안 해설 보고서</h3>
+<h4 id="1-개요">1. 개요</h4>
+<p>구글 딥마인드(Google DeepMind)의 조나단 T. 배런(Jonathan T. Barron), 단 그나나프라가삼(Dan Gnanapragasam), 마이클 차넨(Michael Tschannen) 연구진은 JAX, PyTorch, TensorFlow 등 주요 딥러닝 프레임워크의 표준 소프트맥스(Softmax), 로그-소프트맥스(Log-softmax), 크로스 엔트로피(Cross-entropy) 구현체에 존재하는 두 가지 핵심 수치 버그인 **'소프트맥스 붕괴(Softmax Collapse)'**와 **'소프트맥스 상쇄(Softmax Cancellation)'**를 정밀하게 규명하고, 이를 로그 공간 연산으로 근본적으로 해결하는 수치해석적 방안을 제안하였다.</p>
+<p>본 연구가 밝힌 소프트맥스 붕괴 현상은 모델이 특정 타깃 클래스에 대해 높은 확신도를 가질 때 발생한다. 타깃 로짓이 비타깃 로짓에 비해 매우 커지면, 부동소수점 정밀도의 한계로 인해 타깃 로짓의 그라디언트가 0.0으로 반올림되어 소실되는 반면, 비타깃 로짓의 그라디언트들은 0으로 소실되지 않고 양수로 잔류함으로써 전체 그라디언트의 합이 0이 되지 않는 수학적 불균형($\sum_k g_k &gt; 0$)을 야기한다. 한편, 소프트맥스 상쇄 현상은 지식 증류(Knowledge Distillation)나 KL 규제화 환경에서 학생 네트워크의 로짓이 교사 네트워크의 로짓에 가까워질 때 발생한다. 확률을 각각 구한 후 차감을 수행하는 기존 방식에서는 순전파와 역전파 연산 간의 수치적 미세 차이 및 정밀도 손실로 인해, 학생과 교사의 로짓이 완벽히 일치하는 상황에서도 0이 아닌 잔여 그라디언트(Residual gradient noise floor)가 지속되는 버그가 존재한다.</p>
+<p>실증적 데이터에 기반하여 연구진이 제시하는 바에 따르면, 제안된 로그 공간 수정 알고리즘(Fixed Softmax / Fixed Cross-Entropy)을 적용할 경우 고정밀도 연산(fp64)으로의 내부 캐스팅이나 모델 구조 변경 없이도 그로킹(Grokking) 학습 속도를 획기적으로 향상시킬 수 있다. 또한 적응형 최적화기(Adam/AdamW) 학습 도중 주기적으로 발생하는 슬링샷(Slingshot) 손실 스파이크 현상을 완전히 제거하며, 가중치 감쇠(Weight Decay)가 없는 조건에서의 정확도 급락을 방지한다. 지식 증류 과정에서도 학생 네트워크가 교사 네트워크로부터 이탈(Drift)하는 현상을 완벽히 차단한다.</p>
+<p>수치 해석 및 딥러닝 최적화 관점에서 본 연구의 의의를 종합해 보면, 그동안 최적화 손실 지형의 복잡한 고유 특성이나 손실 함수 지형의 동역학으로 이해되던 그로킹 지연 및 슬링샷 스파이크가 실제로는 부동소수점 연산식의 정밀도 한계에서 비롯된 단순한 소프트웨어적 버그였음을 명확히 증명하였다는 점에서 매우 뛰어난 기술적 가치를 지닌다.</p>
+<hr />
+<h4 id="2-주요-논점">2. 주요 논점</h4>
+<h5 id="2-1-소프트맥스-붕괴-softmax-collapse-의-원인과-그라디언트-불균형">2.1. 소프트맥스 붕괴(Softmax Collapse)의 원인과 그라디언트 불균형</h5>
+<p>소프트맥스 붕괴는 올바른 타깃 클래스 $t$에 대한 예측 확신도가 높아져 타깃 로짓 $z_t = z_{\max}$가 비타깃 로짓들보다 월등히 커질 때 발생한다. 이때 타깃 로짓이 비타깃 로짓들의 로그-합-지수(Log-sum-exp)에 비해 얼마나 큰지를 나타내는 **로짓 마진(Logit margin $m$)**은 다음과 같이 정의된다.</p>
+<p>$$m = z_t - \log \sum_{j \neq t} e^{z_j}$$</p>
+<p>표준 딥러닝 프레임워크는 지수 오버플로를 방지하기 위해 로짓에서 최댓값 $z_{\max} = z_t$를 차감하여 Shift 연산을 수행한다 ($\tilde{z}<em>k = z_k - z</em>{\max}$). 이 경우 분모 연산식은 $1 + \sum_{j \neq t} e^{z_j - z_t} = 1 + e^{-m}$ 형태가 된다.</p>
+<p>IEEE 754 부동소수점 표현식에서 $1.0$ 근처의 상대 정밀도(fp32 기준 가수부 23비트, $\approx 10^{-7}$)와 $0.0$ 근처의 절대 정밀도(지수부를 활용하여 $\approx 10^{-38}$까지 표현 가능) 간에는 극심한 정밀도 격차가 존재한다. $1.0$에 $e^{-m}$을 더할 때 $e^{-m}$이 정밀도 한계 이하로 작아지면 반올림 과정에서 $e^{-m}$ 정보가 완전히 소실된다. 이러한 현상이 시작되는 마진 경계를 **정밀도 절벽(Precision cliff $c_d$)**이라고 하며, 부동소수점 정밀도별 정밀도 절벽 수치와 동작 양상은 다음과 같다.</p>
+<ul>
+<li><strong>bf16 ($c_{16} \approx 5.5$):</strong> 마진 $m &gt; 5.5$ 일 때, $1 + e^{-m}$ 연산 결과가 정확히 $1.0$으로 반올림됨.</li>
+<li><strong>fp32 ($c_{32} \approx 16.6$):</strong> 마진 $m &gt; 16.6$ 일 때, $1 + e^{-m}$ 연산 결과가 정확히 $1.0$으로 반올림됨.</li>
+<li><strong>fp64 ($c_{64} \approx 36.7$):</strong> 마진 $m &gt; 36.7$ 일 때, $1 + e^{-m}$ 연산 결과가 정확히 $1.0$으로 반올림됨.</li>
+</ul>
+<p>마진이 정밀도 절벽을 초과하면 ($m &gt; c_d$), 표준 구현체와 본 논문의 수정 구현체 간의 타깃 그라디언트 계산 방식에서 치명적인 수치적 격차가 발생한다.</p>
+<ul>
+<li><strong>표준 구현체 (Standard):</strong>
+$$g_t^{\text{std}} = \frac{1}{1 + e^{-m}} - 1 \xrightarrow{m &gt; c_d} 1.0 - 1 = 0.0$$</li>
+<li><strong>수정 구현체 (Fixed):</strong>
+$$g_t^{\text{fix}} = \frac{-e^{-m}}{1 + e^{-m}} \xrightarrow{m &gt; c_d} \frac{-e^{-m}}{1.0} = -e^{-m}$$</li>
+</ul>
+<p>표준 구현체는 분모 $1 + e^{-m}$이 $1.0$으로 반올림되면서 타깃 확률 $q_t = 1.0$이 되고, 역전파 시 $1.0 - 1 = 0.0$으로 처리되어 타깃 그라디언트 $g_t$가 완전히 소실된다. 반면 수정 구현체는 분자에 $e^{-m}$을 온전히 유지하므로 분모가 $1.0$으로 반올림되더라도 지수 언더플로 한계($m \approx 88$)에 도달할 때까지 정밀한 그라디언트 $g_t \approx -e^{-m}$을 유지한다.</p>
+<p>한편, 비타깃 그라디언트 $g_j = q_j = e^{z_j - z_t} / (1 + e^{-m}) \quad (j \neq t)$는 분자 연산 시 $1.0$을 더하는 과정이 없으므로 $0.0$ 근처의 높은 절대 정밀도를 활용하여 지수 언더플로 지점까지 양수 값을 유지한다. 이 결과 표준 구현체에서는 타깃 그라디언트만 $0.0$으로 반올림되고 비타깃 그라디언트들은 양수로 살아남아, 그라디언트의 총합이 0이 되지 않는 수치적 결함이 나타난다.</p>
+<p>$$\tilde{g}_k = \mathbf{1}[k \neq t] g_k \implies \sum_k \tilde{g}_k = -g_t = \frac{e^{-m}}{1 + e^{-m}} &gt; 0 \quad (m &gt; c_d)$$</p>
+<h5 id="2-2-소프트맥스-상쇄-softmax-cancellation-와-지식-증류-오차">2.2. 소프트맥스 상쇄(Softmax Cancellation)와 지식 증류 오차</h5>
+<p>소프트 타깃 지식 증류 및 KL 규제화 환경에서는 교사 로짓 $z_T$로부터 생성된 확률 분포 $p = \text{softmax}(z_T)$를 학생 로짓 $z_S$의 예측 확률 $q = \text{softmax}(z_S)$가 추종하도록 학습하며, 수학적 참 그라디언트는 $g = q - p$이다.</p>
+<p>학생 로짓이 교사 로짓에 정밀하게 접근할 때 ($z_S \to z_T$), 기존 표준 방식은 순전파 과정에서 $q$와 $p$를 각각 독립된 확률값으로 계산한 후 감산($q - p$)하는 구조를 취한다. 이 과정에서 두 로짓 간의 미세한 차이 $\delta = z_S - z_T$ 정보가 확률로 변환되면서 반올림으로 인해 손실되는 심각한 자릿수 소실(Loss of precision)이 발생한다.</p>
+<p>또한 순전파의 소프트맥스 연산 수식과 역전파의 로그-소프트맥스 연산 수식 간에 존재하는 실행 연산 순서의 미세한 불일치로 인해, $z_S = z_T$ 인 상태에서도 $q$와 $p$가 기계 정밀도 내에서 일치하지 않게 된다. 이로 인해 학생과 교사 로짓이 완벽히 동일함에도 불구하고 0이 아닌 잔여 그라디언트 노이즈(Residual gradient noise floor)가 잔존한다.</p>
+<p>지식 증류 실험 시 온도 하이퍼파라미터 $T=4$를 적용하는 수치해석적 목적은 스케일링된 마진 $m/T$를 bf16 절벽 $c_{16} \approx 5.5$ 이하로 엄격히 유지시킴으로써 교사 확률 $p$가 원-핫(One-hot) 분포로 반올림되는 소프트맥스 붕괴 효과를 완전히 통제하고, 순수한 소프트맥스 상쇄에 의한 잔여 그라디언트 오차 현상만을 완벽히 격리·분석하기 위함이다.</p>
+<h5 id="2-3-버그-수정-알고리즘-및-로그-공간-구현">2.3. 버그 수정 알고리즘 및 로그 공간 구현</h5>
+<p>이 두 가지 수치 버그는 연산식 내부에서 $1.0$을 직접 더하거나 빼는 구조를 완전히 배제하고, <code>softplus(-m) = log(1 + e^-m)</code>, <code>expm1(x) = e^x - 1</code>, <code>log1p(x) = log(1 + x)</code> 함수를 사용하여 로그 공간에서 정밀하게 연산함으로써 해결된다.</p>
+<p>소프트맥스 붕괴를 해결하기 위해, 가장 큰 로짓 $i_{\max} = \arg\max_i z_i$ 위치를 마스크 처리하여 Exact 0.0으로 고정한 후 나머지 로짓들로 마진 $m$을 계산한다. 타깃 크로스 엔트로피 손실을 $L(z, t) = \text{softplus}(-m)$으로 정의하면, 자동 미분(Autodiff) 시 타깃 $t$ 위치의 값이 상수가 아닌 non-target 로짓과의 차이로만 입력되어 타깃 그라디언트가 비타깃 그라디언트 합의 음수값($g_t = -\sum_{j \neq t} g_j$)으로 정확히 자동 도출되며 $\sum_k g_k = 0$이 엄격히 보장된다.</p>
+<p>소프트맥스 상쇄를 해결하기 위해서는 로짓 차이 $\delta = z_S - z_T$를 구하고 교사 확률 $p$ 아래에서 정렬한 $d_k$를 산출한 뒤, 다음의 로그 공간 연산 체계를 통해 그라디언트 $g_k$를 직접 구성한다.</p>
+<p>$$d_k = \delta_k - \sum_i p_i \delta_i$$</p>
+<p>$$s_k = \log(q_k / p_k) = d_k - \text{log1p}\left(\sum_i p_i \text{expm1}(d_i)\right)$$</p>
+<p>$$u_k = q_k - p_k = p_k \text{expm1}(s_k)$$</p>
+<p>$$g_k = u_k - q_k \sum_i u_i$$</p>
+<p>상기 식은 $1.0$의 직접적 가감산이 없으므로 $z_S \to z_T$ 연산 시 극미한 차이를 손실 없이 정밀하게 보존하며, $z_S = z_T$ 일 때 정확히 $g_k = 0$을 출력한다.</p>
+<p>수치적 안정성이 확보되는 JAX 기반 알고리즘의 동작 구조는 아래 코드 및 단계별 설명과 같다.</p>
+<pre><code class="language-python">import jax
+import jax.numpy as jnp
+import optax
+
+def log_softmax(z):
+    i_max = jnp.argmax(z, axis=-1)
+    z_max = jnp.take_along_axis(z, i_max[..., None], axis=-1)
+    is_max = jax.nn.one_hot(i_max, z.shape[-1], dtype=bool)
+    shifted = jnp.where(is_max, 0.0, z - z_max) # argmax 위치를 정확히 0.0으로 고정
+    others = jnp.where(is_max, -jnp.inf, shifted) # Sum 연산에서 argmax 제외
+    m = -jax.nn.logsumexp(others, axis=-1, keepdims=True) # 정확한 로짓 마진 m 산출
+    return shifted - jax.nn.softplus(-m) # log_softmax 수치 정밀 반환
+
+softmax = lambda z: jnp.exp(log_softmax(z))
+
+def cross_entropy(z, t):
+    z_t = jnp.take_along_axis(z, t[..., None], axis=-1)
+    is_t = jax.nn.one_hot(t, z.shape[-1], dtype=bool)
+    others = jnp.where(is_t, -jnp.inf, z - z_t) # Sum 연산에서 타깃 제외
+    m = -jax.nn.logsumexp(others, axis=-1) # 마진 m 산출
+    return jax.nn.softplus(-m) # 1을 더하지 않는 stable cross-entropy
+
+def soft_target_cross_entropy(z_S, z_T):
+    log_q = log_softmax(z_S)
+    q, p = jnp.exp(log_q), softmax(z_T)
+    delta = z_S - z_T
+    d = delta - jnp.sum(p * delta, axis=-1, keepdims=True)
+    s = d - jnp.log1p(jnp.sum(p * jnp.expm1(d), axis=-1, keepdims=True))
+    u = p * jnp.expm1(s)
+    g = u - q * jnp.sum(u, axis=-1, keepdims=True) # sum(g) = 0 보장
+    sg = jax.lax.stop_gradient
+    loss = -jnp.sum(p * sg(log_q), axis=-1)
+    return loss + jnp.sum(sg(g) * (z_S - sg(z_S)), axis=-1) # 커스텀 그라디언트 g 주입
+</code></pre>
+<ul>
+<li><strong><code>log_softmax(z)</code>:</strong> <code>argmax</code>로 최댓값을 추출하여 해당 위치의 Shifted 값을 정확히 <code>0.0</code>으로 고정함으로써 연산 오차를 차단하고, 제외된 나머지 위치들의 <code>logsumexp</code>로 마진 $m$을 계산한 후 <code>shifted - softplus(-m)</code>을 수행한다.</li>
+<li><strong><code>cross_entropy(z, t)</code>:</strong> 타깃 $t$ 인덱스 위치를 명시적으로 마스킹하여 제외하고 마진 $m = -\text{logsumexp}(z - z_t)$를 산출한 후 <code>softplus(-m)</code>을 반환한다. 분모에 1을 더하는 연산이 없으므로 자동 미분 시 타깃 그라디언트 소실이 일어나지 않는다.</li>
+<li><strong><code>soft_target_cross_entropy(z_S, z_T)</code>:</strong> <code>expm1</code>과 <code>log1p</code> 함수를 조합하여 차이 공간에서 직접 그라디언트 $g$를 계산하고, <code>jax.lax.stop_gradient</code> 기반의 Custom Gradient 기법을 활용하여 역전파 시 $g$를 주입함으로써 $z_S = z_T$ 조건에서 잔여 오차 없이 $g = 0$이 보장된다.</li>
+</ul>
+<h5 id="2-4-슬링샷-메커니즘-slingshot-mechanism-과-아담-adam-adamw-동역학">2.4. 슬링샷 메커니즘(Slingshot Mechanism)과 아담(Adam/AdamW) 동역학</h5>
+<p>그로킹(Grokking) 과정에서 나타나는 슬링샷 메커니즘은 소프트맥스 붕괴 버그와 적응형 최적화기(Adam/AdamW)의 2차 모멘트 이동 평균 연산 간의 파괴적 상호작용으로 인해 발생한다.</p>
+<ol>
+<li><strong>암기 및 그라디언트 소실:</strong> 모델이 학습 데이터를 암기함에 따라 로짓 마진 $m$이 정밀도 절벽 $c_d$를 넘어서면, 표준 크로스 엔트로피는 타깃 그라디언트 $g_t$를 $0.0$으로 반올림하여 소실시킨다.</li>
+<li><strong>이동 평균 감쇄:</strong> 배치 내 데이터들의 마진이 $c_d$ 위에 체류하는 동안 매개변수 그라디언트가 소실되고, Adam의 2차 모멘트 이동 평균 $\hat{v}_i$는 $0$을 향해 지수적으로 감소한다.</li>
+<li><strong>마진 복원:</strong> $\hat{v}_i$가 계속 줄어드는 동안 가중치 감쇠(Weight decay)나 잔여 비타깃 업데이트에 의해 가중치 노름이 감소하면서 로짓 마진이 다시 $c_d$ 이하로 떨어진다.</li>
+<li><strong>폭발적 스파이크:</strong> 마진이 $c_d$ 이하로 복귀하는 순간 소실되었던 타깃 그라디언트 $g_t \approx -e^{-m}$가 갑자기 다시 활성화된다. 이때 분모인 $\sqrt{\hat{v}_i} + \epsilon$의 $\hat{v}_i$가 극도로 작아진 상태이므로, 매우 거대한 매개변수 업데이트 스텝이 가해져 학습 손실 스파이크(Training loss spike)를 일으키고 $\hat{v}_i$를 리셋시킨 후 이 주기를 반복한다.</li>
+</ol>
+<p><strong>정규화 기법 및 가중치 감쇠 조건별 영향:</strong></p>
+<ul>
+<li><strong>LayerNorm 사용 + 가중치 감쇠 미사용:</strong> Pre-LayerNorm 가중치 노름 $|\theta|_2$가 커지더라도 출력 로짓 스케일은 변경되지 않지만, 실질적 학습률 $\eta / |\theta|_2$을 지속적으로 감소시킨다. 이때 발생하는 각 슬링샷 스파이크는 $|\theta|_2$를 단대기적으로 팽창시켜 일종의 <strong>'의도치 않은 학습률 감쇄(Accidental Learning-Rate Decay)'</strong> 메커니즘으로 작동하며 우연히 일반화 성능을 돕는 현상이 관찰된다.</li>
+<li><strong>가중치 감쇠 적용 환경:</strong> 이미 가중치 감쇠에 의해 가중치 노름이 적절히 제어되는 상태에서 $c_{32}$ 절벽에 부딪혀 나타나는 슬링샷 스파이크는 그로킹 속도를 지연시키고 최종 정확도를 저해한다 ($a+b \pmod{31}$ 벤치마크 기준 테스트 정확도 $94 \pm 5%$ 대 수정 구현체의 $100 \pm 0%$).</li>
+<li><strong>LayerNorm 미사용 + 가중치 감쇠 미사용:</strong> 슬링샷 스파이크가 시스템을 파괴하는 소극적 악영향을 미친다. $a^2+b^2 \pmod{97}$ 벤치마크에서 마진이 $c_{32}$에 도달하는 1250 스텝 부근에서 발생한 단 한 번의 스파이크로 인해 테스트 정확도가 61%에서 23%로 급락한다.</li>
+</ul>
+<h5 id="2-5-마진-평형-margin-equilibria-과-epsilon-하이퍼파라미터">2.5. 마진 평형(Margin Equilibria)과 $\epsilon$ 하이퍼파라미터</h5>
+<p>수정된 크로스 엔트로피 적용 시 로짓 마진은 무한히 발산하지 않고, 가중치 감쇠 계수($\lambda$)와 Adam의 $\epsilon$ 하이퍼파라미터 간의 정지 상태(Stationary point)에서 정확한 수학적 평형에 도달한다.</p>
+<p>매개변수가 더 이상 변하지 않는 정지 상태에서는 이동 평균이 $\hat{m}_i = g_i$, $\hat{v}_i = g_i^2$ (즉 $\sqrt{\hat{v}_i} = |g_i|$)로 수렴하므로, 매개변수 업데이트 영점 조건은 다음과 같이 정리된다.</p>
+<p>$$\frac{g_i}{|g_i| + \epsilon} + \lambda \theta_i = 0$$</p>
+<p>암기 단계 이후 그라디언트는 마진 증가에 따라 지수적으로 감소한다 ($|g_i| \propto e^{-m}$). $|g_i| \ll \epsilon$ 구간에 진입하면 정규화된 스텝 크기는 $g_i / \epsilon \propto e^{-m}$으로 약화된다. 이 약화된 그라디언트 스텝이 가중치 감쇠 $\lambda \theta_i$와 수평을 이루는 조건은 $|g_i| \approx \epsilon \lambda |\theta_i|$ 이며, 이는 $\epsilon \lambda$ 가중치를 가진 L2 규제화처럼 동작한다. 이에 따라 로짓 마진의 최종 성장 한계는 다음의 <strong>평형 마진 수식</strong>으로 규정된다.</p>
+<p>$$m^*(\epsilon) \approx \log(1/\epsilon)$$</p>
+<p>Adam의 디폴트 설정값인 $\epsilon = 10^{-8}$을 적용하면 이론적 평형 마진은 $m^*(10^{-8}) \approx 18.4$가 된다. 이 수치는 fp32의 정밀도 절벽인 $c_{32} \approx 16.6$보다 약간 높은 위치이다. 기존 크로스 엔트로피 구현에서는 평형 마진 $18.4$에 도달하기 직전 $c_{32} \approx 16.6$ 절벽에 걸려 타깃 그라디언트가 $0$으로 반올림됨으로써 슬링샷 손실 스파이크가 유발되었던 것이다.</p>
+<p>한편, 표준 Adam 최적화기는 $|g_i| &lt; 2^{-63}$ (마진 $m \approx 38$) 구간에 진입하면 $g_i^2$ 연산 자체가 fp32 정밀도 한계 하에서 언더플로(Underflow)되어 이동 평균 구조가 파괴된다. 이를 방지하기 위해 연구진은 $g_i^2$을 구하지 않고 $\sqrt{\hat{v}_i}$를 직접 업데이트하는 <strong>LaProp</strong> 최적화기를 활용함으로써 $\epsilon = 10^{-32}$ 조건에 해당하는 극단적 마진 평형($m^* \approx 73.7$)까지 수식적 예측과 완전히 일치함을 실험적으로 실증하였다.</p>
+<h5 id="2-6-실험-결과-및-기존-대안-기법과의-비교">2.6. 실험 결과 및 기존 대안 기법과의 비교</h5>
+<p>모듈러 연산 벤치마크 및 다양한 부동소수점 정밀도(bf16, fp32, fp64) 환경에서 실험을 진행한 결과, 수정된 크로스 엔트로피(Fixed CE)는 모든 정밀도와 $\epsilon$ 조건에서 슬링샷 현상 없이 이론적 평형 마진 $m^*(\epsilon)$에 정밀하게 도달하였으며 99~100%의 최종 테스트 정확도를 달성하였다.</p>
+<p>아래 표는 모듈러 덧셈($a+b \pmod{31}$, $\lambda = 1$, 5개 시드) 벤치마크에서 본 논문의 수정 방식(Fixed CE)과 기존 표준 크로스 엔트로피(Standard CE), 그리고 최근 제안된 대안 기법들인 Zero-sum Proj. (Liu et al., 2026) 및 StableMax (Prieto et al., 2025)의 성과를 비교 정리한 수치 데이터이다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기법명</th>
+<th style="text-align:left">정밀도</th>
+<th style="text-align:left">$\epsilon = 10^{-8}$ 테스트 정확도 (%)</th>
+<th style="text-align:left">$\epsilon = 10^{-8}$ 최종 마진 $m$</th>
+<th style="text-align:left">$\epsilon = 10^{-12}$ 테스트 정확도 (%)</th>
+<th style="text-align:left">$\epsilon = 10^{-12}$ 최종 마진 $m$</th>
+<th style="text-align:left">$\epsilon = 10^{-16}$ 테스트 정확도 (%)</th>
+<th style="text-align:left">$\epsilon = 10^{-16}$ 최종 마진 $m$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Fixed CE (본 논문)</strong></td>
+<td style="text-align:left">fp32</td>
+<td style="text-align:left"><strong>100.0 ± 0.0</strong></td>
+<td style="text-align:left">17.9</td>
+<td style="text-align:left"><strong>99.6 ± 0.7</strong></td>
+<td style="text-align:left">27.4</td>
+<td style="text-align:left"><strong>99.0 ± 2.3</strong></td>
+<td style="text-align:left">36.8</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Standard CE</strong></td>
+<td style="text-align:left">fp32</td>
+<td style="text-align:left">94.3 ± 5.4</td>
+<td style="text-align:left">13.0</td>
+<td style="text-align:left">96.4 ± 5.1</td>
+<td style="text-align:left">15.1</td>
+<td style="text-align:left">96.5 ± 4.3</td>
+<td style="text-align:left">12.7</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Fixed CE (본 논문)</strong></td>
+<td style="text-align:left">bf16</td>
+<td style="text-align:left"><strong>100.0 ± 0.1</strong></td>
+<td style="text-align:left">17.9</td>
+<td style="text-align:left"><strong>99.8 ± 0.2</strong></td>
+<td style="text-align:left">27.4</td>
+<td style="text-align:left"><strong>98.9 ± 2.4</strong></td>
+<td style="text-align:left">36.8</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Standard CE</strong></td>
+<td style="text-align:left">bf16</td>
+<td style="text-align:left">93.3 ± 7.4</td>
+<td style="text-align:left">5.1</td>
+<td style="text-align:left">94.9 ± 4.9</td>
+<td style="text-align:left">5.6</td>
+<td style="text-align:left">94.2 ± 8.3</td>
+<td style="text-align:left">5.8</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Fixed CE (본 논문)</strong></td>
+<td style="text-align:left">fp64</td>
+<td style="text-align:left"><strong>100.0 ± 0.0</strong></td>
+<td style="text-align:left">17.9</td>
+<td style="text-align:left"><strong>99.5 ± 1.1</strong></td>
+<td style="text-align:left">27.4</td>
+<td style="text-align:left"><strong>99.0 ± 2.0</strong></td>
+<td style="text-align:left">36.8</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Standard CE</strong></td>
+<td style="text-align:left">fp64</td>
+<td style="text-align:left">100.0 ± 0.0</td>
+<td style="text-align:left">17.9</td>
+<td style="text-align:left">100.0 ± 0.1</td>
+<td style="text-align:left">27.4</td>
+<td style="text-align:left">97.2 ± 3.2</td>
+<td style="text-align:left">30.1</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Zero-sum Proj.</strong> (Liu et al., 2026)</td>
+<td style="text-align:left">fp32</td>
+<td style="text-align:left">97.9 ± 3.2</td>
+<td style="text-align:left">17.0</td>
+<td style="text-align:left">48.9 ± 2.6</td>
+<td style="text-align:left">18.9</td>
+<td style="text-align:left">49.3 ± 2.5</td>
+<td style="text-align:left">18.9</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>StableMax</strong> (Prieto et al., 2025)</td>
+<td style="text-align:left">fp32</td>
+<td style="text-align:left">97.3 ± 4.7</td>
+<td style="text-align:left">3200</td>
+<td style="text-align:left">95.6 ± 2.0</td>
+<td style="text-align:left">5661</td>
+<td style="text-align:left">97.3 ± 4.3</td>
+<td style="text-align:left">6313</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>StableMax</strong> (Prieto et al., 2025)</td>
+<td style="text-align:left">fp64</td>
+<td style="text-align:left">97.4 ± 4.2</td>
+<td style="text-align:left">3170</td>
+<td style="text-align:left">96.7 ± 5.3</td>
+<td style="text-align:left">21252</td>
+<td style="text-align:left">95.6 ± 2.7</td>
+<td style="text-align:left">2322</td>
+</tr>
+</tbody>
+</table>
+<p><em>기존 대안 기법 세부 비교 분석:</em></p>
+<ol>
+<li><strong>Zero-sum Proj. (Liu et al., 2026):</strong> 그라디언트의 평균을 차감하여 합이 0이 되도록 강제하는 방식을 취한다. 그러나 $m &gt; c_{32}$ 구간에 진입하여 타깃 그라디언트가 $0$이 된 후에는 평균을 빼더라도 타깃 로짓에 전체 비타깃 그라디언트의 $-1/K$ 만큼만 전달되어 마진이 18 근처에서 정체되며, $\epsilon \le 10^{-12}$ 조건에서 테스트 정확도가 50% 미만으로 급락한다.</li>
+<li><strong>StableMax (Prieto et al., 2025):</strong> 소프트맥스의 지수 함수 $\exp(x)$를 조각적 유리 함수($x \ge 0$ 일 때 $x+1$, $x &lt; 0$ 일 때 $1/(1-x)$)로 대체한다. 그러나 입력값 증가에 따른 지수적 감쇄(Exponential Decay) 능력을 잃어버리고 선형적으로 대응함에 따라 로짓 마진이 $10^3 \sim 10^4$ 수준으로 비이성적으로 폭발하며, 테스트 정확도 면에서도 Fixed CE에 미치지 못한다.</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-화자">3. 등장 인물 · 화자</h4>
+<p>본 연구 보고서 및 소스 콘텍스트에서 확인 가능한 주요 연구진과 인용 학자들의 역할은 다음과 같다.</p>
+<ul>
+<li><strong>저자 (Authors):</strong>
+<ul>
+<li><strong>조나단 T. 배런 (Jonathan T. Barron):</strong> Google DeepMind 소속 연구원 (<code>barron@google.com</code>). 주저자로서 소프트맥스 및 크로스 엔트로피의 수치 버그 정밀 분석과 로그 공간 수정 알고리즘 설계를 주도함.</li>
+<li><strong>단 그나나프라가삼 (Dan Gnanapragasam):</strong> Google DeepMind 소속 연구원 (<code>nanabyte@google.com</code>). 공저자.</li>
+<li><strong>마이클 차넨 (Michael Tschannen):</strong> Google DeepMind 소속 연구원 (<code>tschannen@google.com</code>). 공저자.</li>
+</ul>
+</li>
+<li><strong>인용 연구자 (Cited Researchers):</strong>
+<ul>
+<li><strong>Thilak et al. (2022):</strong> 적응형 최적화기 연구에서 그로킹 학습 시 발생하는 슬링샷 메커니즘을 최초로 관찰 및 정의함. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Prieto et al. (2025):</strong> 수치적 안정성 한계에서의 그로킹 연구 및 대체 손실 함수인 StableMax 제안. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Liu et al. (2026):</strong> 저정밀도 환경의 슬링샷 손실 스파이크 분석 및 Zero-sum Proj. 기법 제안. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Varma et al. (2023):</strong> 회로 효율성을 통한 그로킹 해설 및 모듈러 연산($a+b \pmod{31}$) 벤치마크 연구. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Doshi et al. (2024):</strong> 모듈러 다항식 그로킹 벤치마크($a^2+b^2 \pmod{97}$, $a^3+b \pmod{97}$) 연구. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Nanda et al. (2023):</strong> 메커니스틱 해석가능성 기반 그로킹 측정 및 모듈러 연산($a+b \pmod{113}$) 벤치마크 연구. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Higham (2002):</strong> 수치 알고리즘의 정밀도 및 안정성에 관한 학술적 기초 인용. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Hinton et al. (2015):</strong> 신경망 지식 증류(Knowledge Distillation) 기법 창시. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Kingma &amp; Ba (2015) / Loshchilov &amp; Hutter (2019):</strong> Adam 및 AdamW 최적화 알고리즘 연구. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Power et al. (2022):</strong> 알고리즘 데이터셋에서의 그로킹(Grokking) 현상 최초 보고. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>Ziyin et al. (2020):</strong> LaProp 최적화기 개발. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>기타 인용 연구자 (Lyle et al., Tieleman &amp; Hinton, Rosset et al., Soudry et al., Wortsman et al., Molybog et al., Everett et al., Kosson et al.):</strong> 최적화 동역학 및 스케일링 관련 인용 연구자들. (소속 및 개인 상세 정보: 확인 불가)</li>
+<li><strong>감사 대상 연구자 (Jean-Baptiste Alayrac, Forrester Cole, Roy Frostig, Mark Hamilton, Miki Rubinstein, Keith Rush, Brandon Zhao):</strong> 논문 작성 과정에서 학술적 조언을 제공함. (소속 및 개인 상세 정보: 확인 불가)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="4-수치-시점">4. 수치 · 시점</h4>
+<p>본 논문에서 명확히 검증된 핵심 수치 데이터 및 시점 정보는 다음과 같다.</p>
+<ul>
+<li><strong>부동소수점 정밀도 절벽 수치 ($c_d$):</strong>
+<ul>
+<li>bf16 정밀도 절벽: $c_{16} \approx 5.5$</li>
+<li>fp32 정밀도 절벽: $c_{32} \approx 16.6$</li>
+<li>fp64 정밀도 절벽: $c_{64} \approx 36.7$</li>
+</ul>
+</li>
+<li><strong>지수 및 연산 언더플로 한계 수치:</strong>
+<ul>
+<li>fp32 기준 지수 오버플로 한계: $\approx 88$</li>
+<li>fp32 기준 그라디언트 언더플로 한계 마진: $m \approx 81.2$</li>
+<li>fp32 기준 표준 Adam의 $g_i^2$ 연산 언더플로 조건: $|g_i| &lt; 2^{-63}$ (마진 $m \approx 38$)</li>
+</ul>
+</li>
+<li><strong>$\epsilon$ 하이퍼파라미터별 이론적 평형 마진 예측값 $m^*(\epsilon) = \log(1/\epsilon)$:</strong>
+<ul>
+<li>$\epsilon = 10^{-8} \implies m^* \approx 18.4$</li>
+<li>$\epsilon = 10^{-12} \implies m^* \approx 27.6$</li>
+<li>$\epsilon = 10^{-15} \implies m^* \approx 34.5$</li>
+<li>$\epsilon = 10^{-16} \implies m^* \approx 36.8$</li>
+<li>$\epsilon = 10^{-24} \implies m^* \approx 55.3$</li>
+<li>$\epsilon = 10^{-32} \implies m^* \approx 73.7$</li>
+</ul>
+</li>
+<li><strong>실험 하이퍼파라미터 설정치:</strong>
+<ul>
+<li>AdamW/Adam 학습률: $\eta = 10^{-3}$ (지식 증류 실험 시 $\eta = 2 \times 10^{-3}$)</li>
+<li>모멘텀 감쇄 계수: $\beta_1 = 0.9$, $\beta_2 = 0.98$</li>
+<li>가중치 감쇠 계수: $\lambda = 1$ ($a+b \pmod{31}$), $\lambda = 0.2$ ($a^2+b^2 \pmod{97}$ 및 $a^3+b \pmod{97}$), $\lambda = 0$ (슬링샷 분석 및 지식 증류)</li>
+<li>지식 증류 온도: $T = 4$ (마진을 $c_{16}$ 아래로 유지시켜 교사 확률 $p$의 소프트맥스 붕괴를 방지함)</li>
+<li>모델 아키텍처: 1레이어 폭 64 ReLU Transformer 또는 2레이어 MLP</li>
+<li>학습 에폭/스텝 수: 10,000 에폭 ($a+b \pmod{31}$), 2,000 스텝 (지식 증류)</li>
+</ul>
+</li>
+<li><strong>시점 정보:</strong>
+<ul>
+<li>논문 인용 연구 문헌들의 발표 시점: 2002년(Higham)부터 2026년(Liu et al.)까지 분포.</li>
+<li>비디오/오디오 타임스탬프 시점 정보: 확인 불가.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성">5. 한계와 불확실성</h4>
+<h5 id="5-1-실험적-조건의-특수성과-대규모-모델-적용의-불확실성">5.1. 실험적 조건의 특수성과 대규모 모델 적용의 불확실성</h5>
+<p>본 논문에서 제시하는 수치 버그 수정 알고리즘은 이론적·실험적으로 완벽한 성과를 보였으나, 실제 대규모 실무 환경 적용에 있어서는 다음과 같은 기술적 한계와 불확실성이 존재한다.</p>
+<ul>
+<li><strong>극단적 마진 조건의 특수성:</strong> 본 연구에서 집중적으로 다룬 극단적인 로짓 마진 조건($m &gt; 16.6$)이나 학생-교사 네트워크 간의 극소 오차 상황($z_S \to z_T$)은 일반적인 대규모 일반 모델 학습(Standard Large-scale Training) 과정에서는 매 에폭마다 빈번하게 발생하지 않을 수 있다.</li>
+<li><strong>초거대 언어 모델(LLM) 사전 학습에 대한 영향 (작성자의 해석 및 불확실성):</strong> 수백억~수천억 매개변수를 갖는 초거대 언어 모델(LLM) 사전 학습 환경에서 본 수정 수식이 모델의 최종 퍼플렉서티(Perplexity)나 학습 안정성에 구체적으로 얼마만큼 직접적인 실익을 제공하는지에 대해서는 소스 콘텍스트상에 실증적 데이터가 기술되어 있지 않다.</li>
+<li><strong>하드웨어 저수준 커널 구현의 미언급:</strong> 본 논문의 수정 수식이 GPU/TPU 등 최신 하드웨어 가속기 레벨에서 C++/CUDA 커널로 고도화되어 구현될 때 발생하는 메모리 점유율 변화나 추가적인 지연 시간(Latency) 병목 현상에 대해서는 소스상에 내용이 존재하지 않는다. (확인 불가 / 내용 없음)</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

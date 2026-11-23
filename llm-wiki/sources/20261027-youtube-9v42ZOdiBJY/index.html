@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why OpenAI Is Racing to Make Computer Use Superhuman</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Why OpenAI Is Racing to Make Computer Use Superhuman</h1>
+<p class="page-meta">YouTube · 2026-10-27</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 OpenAI의 컴퓨터 사용 에이전트(Computer-Using Agents) 기술 발전 현황, Astra 모델 적용에 따른 핵심 기술적 변화, 소비자(Consumer) 및 기업(Enterprise) 시장에서의 차별화된 적용 양상, 그리고 안전성 통제 메커니즘과 미래 인터페이스 방향성을 종합 분석한 연구…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=9v42ZOdiBJY">출처</a> · <a href="https://www.youtube.com/watch?v=snTHvak8jM8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai의-컴퓨터-사용-에이전트-computer-using-agents-기술-동향-및-종합-분석-보고서">OpenAI의 컴퓨터 사용 에이전트(Computer-Using Agents) 기술 동향 및 종합 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 OpenAI의 컴퓨터 사용 에이전트(Computer-Using Agents) 기술 발전 현황, Astra 모델 적용에 따른 핵심 기술적 변화, 소비자(Consumer) 및 기업(Enterprise) 시장에서의 차별화된 적용 양상, 그리고 안전성 통제 메커니즘과 미래 인터페이스 방향성을 종합 분석한 연구 보고서이다. 컴퓨터 사용 에이전트는 기존의 애플리케이션 프로그래밍 인터페이스(API)나 별도의 커넥터 구축에 의존하지 않고, 인간과 동일하게 유저 인터페이스(UI)를 시각적으로 인식하며 마우스와 키보드를 조작하여 업무를 자율 수행하는 범용 AI 기술이다.</p>
+<p>최신 플래그십 모델인 Astra의 도입으로 컴퓨터 사용 에이전트는 동일 과제 수행 시 사용되는 생각 토큰(thinking tokens) 수를 획기적으로 줄여 작동 속도를 향상시켰다. 또한 정렬(Alignment) 성능 강화를 통해 프롬프트 주입(Prompt Injection) 공격 방어력을 대폭 개선하였으며, 97%에서 99% 수준으로의 신뢰성 향상을 이루어냈다. 이러한 기술적 진보는 에이전트의 작업 속도를 평균적인 인간의 수준을 넘어 전문가 수준에 근접하는 '초인적(superhuman)' 단계로 진화시키고 있다.</p>
+<p>시장 적용 측면에서 소비자 영역은 개인의 반복적이고 번거로운 일상 과제를 자동화하고 신규 유즈케이스를 발굴하는 기술 한계선(Frontier) 확장 중심으로 발전하고 있다. 반면 기업 영역은 15~20년 이상 운용되어 온 레거시 소프트웨어의 업무 자동화와 함께 데이터 보안, 인간 개입(Human-in-the-Loop)을 통한 통제권, 감사 가능성(auditability) 확보에 초점을 맞추고 있다.</p>
+<p>OpenAI는 기업의 보안 우려를 완화하기 위해 가디언(Guardian) 모니터링 시스템, 앱 내 자동 승인(Auto-approve) 메커니즘, 결정론적 샌드박스(Sandbox) 환경 설정을 제공한다. 향후 웹 표준인 WebMCP 지원과 대량 생산형 소프트웨어에서 1인 또는 100인 규모의 초개인화 맞춤형 소프트웨어로의 전환, 그리고 시각적 커서 애니메이션 등 직관적 UI/UX 도입을 통해 인간과 에이전트의 협업 인터페이스는 새로운 패러다임을 맞이할 것으로 전망된다.</p>
+<hr />
+<h4 id="2-주요-논점-key-issues-detailed-analysis">2. 주요 논점 (Key Issues &amp; Detailed Analysis)</h4>
+<h5 id="2-1-아스트라-astra-모델-도입과-에이전트-성능의-기술적-진보">2.1. 아스트라(Astra) 모델 도입과 에이전트 성능의 기술적 진보</h5>
+<ul>
+<li><strong>[사실]</strong>: OpenAI의 Astra 모델은 기존 플래그십 에이전트 구동 모델이었던 Sol 모델에 비해 동일한 과제 수행 시 더 적은 수의 생각 토큰(thinking tokens)을 소비한다. 또한 최고 수준의 정렬(alignment) 성능을 갖추어 프롬프트 주입(Prompt Injection) 공격에 대한 방어 능력이 대폭 향상되었으며, 프롬프트가 모호할 경우 사용자에게 세부 정보를 역으로 질의하되 응답이 없으면 수집된 맥락을 바탕으로 자율적으로 작업을 계속 진행하는 '유연한 입력(flexible input)' 기능을 탑재했다.</li>
+<li><strong>[소스의 주장]</strong>: Astra 모델 적용을 통해 에이전트의 실행 속도가 빨라졌을 뿐만 아니라, 시스템 신뢰성이 97%에서 99% 수준으로 향상되었다. 97%와 99% 사이의 정량적 차이는 표면적으로 작아 보이지만 실질적인 사용자 신뢰 형성에 결정적인 분수령이 된다. 현재 에이전트는 일반적인 인간의 컴퓨터 조작 속도를 넘어섰으며, 숙련된 전문가 수준의 사용자를 능가하는 초인적(superhuman) 단계에 근접하고 있다.</li>
+<li><strong>[근거 및 사례]</strong>:
+<ul>
+<li><strong>마이크로소프트 페인트(Microsoft Paint) 시연</strong>: Astra 출시 영상에서 음성 명령을 수신한 후 마이크로소프트 페인트 프로그램을 직접 조작하여 그림을 그리는 시연을 통해 뛰어난 창의적 작업 수행력을 검증함.</li>
+<li><strong>Fallout 게임 플레이 및 내부 벤치마크</strong>: 내부 테스트 결과 Astra 모델은 이전 버전인 5.6 모델과의 비디오 게임 대결에서 매번 승리하였으며, 비디오 게임 Fallout을 자율 플레이하여 약 30시간 만에 완주하는 성과를 기록함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-소비자-consumer-대-기업-enterprise-영역별-에이전트-적용-양상">2.2. 소비자(Consumer) 대 기업(Enterprise) 영역별 에이전트 적용 양상</h5>
+<ul>
+<li><strong>[사실]</strong>: 소비자 영역은 사용자가 일상에서 겪는 시간 소모적이고 번거로운 과제를 해결하는 데 집중한다. 반면 기업 영역은 15~20년 이상 사용되어 MCP(Model Context Protocol) 도구나 최신 API가 부재하고 UI가 노후화된 레거시 소프트웨어의 업무 자동화를 주요 목적으로 한다.</li>
+<li><strong>[소스의 주장]</strong>: 소비자는 기술의 한계선(Frontier)을 확장하여 차세대 유즈케이스를 탐색하는 영역이며, 기업은 이미 입증된 에이전트 역량을 기존 업무 흐름에 안전하게 이식하고 적응시키는 영역이다.</li>
+<li><strong>[근거 및 사례]</strong>:
+<ul>
+<li><strong>DOTS 서비스 및 자율 수행</strong>: 클라우드 기반 가상 컴퓨터를 에이전트에 할당하여 웹 브라우저를 통한 이발소 예약, 물품 구매, 지메일(Gmail) 인박스 내 외부 초대를 감지한 캘린더 자동 수락, 슬랙(Slack) 메시지 필터링 등을 자율 수행함.</li>
+<li><strong>DOTS의 이중 브라우저 제어 건축 구조 (Cloud-Local Bridge)</strong>: 사용자가 오류 제보를 받아 업무를 수행할 때, 에이전트(DOTS)는 클라우드 가상 컴퓨터와 사용자의 로컬 브라우저를 동시에 조작 및 제어한다. 이를 통해 Sentry 인증 및 로컬 세션 토큰 등 로컬 상태를 유지한 채 에러 로그를 다운로드·분석하고 코덱스(Codex)에 전달하여 피드백을 생성하는 복합 자율 업무를 완료함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-기업용-안전성-제어-장치-및-인간-개입-human-in-the-loop-시스템">2.3. 기업용 안전성 제어 장치 및 인간 개입(Human-in-the-Loop) 시스템</h5>
+<ul>
+<li><strong>[사실]</strong>: OpenAI는 기업 고객의 보안 및 통제 요구에 대응하기 위해 가디언(Guardian) 모니터링 시스템, 앱 내 자동 승인(Auto-approve) 기능, 결정론적 샌드박스(Sandbox) 설정 기능을 제공한다.</li>
+<li><strong>[소스의 주장]</strong>: 에이전트의 작업 속도가 실시간 모니터링 범위를 벗어날 정도로 빨라짐에 따라, 기업 관리자가 인간 개입(Human-in-the-Loop)의 수준과 감사 가능성(auditability)을 다이얼을 조율하듯 세밀하게 통제할 수 있어야만 기업 내 실제 도입이 가능하다.</li>
+<li><strong>[근거 및 사례]</strong>:
+<ul>
+<li><strong>가디언(Guardian) / 자동 승인(Auto-approve)</strong>: 지능형 모니터링 모델이 에이전트의 모든 실행 동작을 실시간 평가하여 의도치 않은 행위나 보안 위협이 있는지 검증함.</li>
+<li><strong>샌드박스(Sandbox) 환경 설정</strong>: 기업 관리자가 에이전트가 접근할 수 있는 애플리케이션 및 웹사이트의 목록을 허용/제한 목록으로 엄격히 지정함.</li>
+<li><strong>단계별 인간 승인 요구</strong>: 에이전트가 파일 다운로드/업로드를 시도하거나, 미승인 신규 웹사이트에 방문할 때 반드시 인간 사용자의 승인을 거치도록 단계별 통제 메커니즘을 적용함.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-웹-표준-webmcp-및-소프트웨어-인터페이스-ui-의-미래">2.4. 웹 표준(WebMCP) 및 소프트웨어 인터페이스(UI)의 미래</h5>
+<ul>
+<li><strong>[사실]</strong>: 에이전트가 웹사이트를 자율적으로 이용할 경우 광고 노출(Ad impression)에 기반한 기존 웹 퍼블리셔 및 광고주의 수익 모델과 충돌이 발생한다. 현재 에이전트에 의한 광고 노출은 실질적 매출로 인정받지 못하고 있다.</li>
+<li><strong>[소스의 주장]</strong>: 웹사이트가 에이전트를 차단하기보다는 인간과 에이전트가 협업할 수 있도록 지원하는 웹 표준(WebMCP)을 채택하게 될 것이다. 미래 소프트웨어 생태계는 수백만~수십억 명을 대상으로 하는 대량 생산형 소프트웨어에서 1인 또는 100인만을 위한 초개인화 맞춤형 소프트웨어 시대로 전환될 것이며, 에이전트 작동 상태를 보여주는 직관적 UI 디자인이 사용자 신뢰 형성에 핵심적 역할을 한다.</li>
+<li><strong>[근거 및 사례]</strong>:
+<ul>
+<li><strong>WebMCP 표준 도입</strong>: 데스크톱 앱 브라우저에 WebMCP 지원을 추가하여, 에이전트가 조건 검색 및 비교 등 지루한 작업을 수행하고 결제 및 신용카드 정보 입력 등 최종 단계만 인간에게 전달하는 협업 방식 구현.</li>
+<li><strong>시각적 커서 애니메이션(Codex Cursor)</strong>: 에이전트가 컴퓨터를 제어할 때 마우스 커서의 움직임을 시각적으로 구현하여 사용자가 작업 진행 상황을 직관적으로 관찰하고 안심할 수 있도록 UX 설계.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-5-주요-업무-자동화-유즈케이스-구분">2.5. 주요 업무 자동화 유즈케이스 구분</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">거시 분류</th>
+<th style="text-align:left">시스템 / 분야</th>
+<th style="text-align:left">구체적 업무 내용 (소스 출처 기반)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>카테고리 1:&lt;br&gt;System of Record /&lt;br&gt;지루하지만 기회가 큰 업무</strong></td>
+<td style="text-align:left"><strong>구매 / 발주 (Procurement)</strong></td>
+<td style="text-align:left">1,000개 행(rows) 규모의 거대 실습 장비 주문 스프레드시트를 운영/구매 팀 대신 에이전트가 내부 구매 소프트웨어에 입력하고 공급업체(vendor) 발주까지 자동 처리.</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>ERP / 레거시 시스템</strong></td>
+<td style="text-align:left">API가 부재하고 UI가 노후화된 10~40년 전 작성된 기업용 프로덕션 레거시 시스템 자동 조작.</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>CRM / 영업 (Sales)</strong></td>
+<td style="text-align:left">다양한 고객 데이터 및 회의 트랜스크립트 소프트웨어에서 가망 고객(prospecting) 정보를 조회하여 CRM 및 아웃리치(outreach) 소프트웨어에 자동 등록.</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>재무 / 회계 (Finance)</strong></td>
+<td style="text-align:left">월말 정산 시 API가 없는 다수의 회계 장부(ledgers)를 에이전트가 직접 조회 및 대조(reconciliation)하여 이상 항목 조사 및 리포팅.</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>시장 조사 및 개인 프로젝트</strong></td>
+<td style="text-align:left">James Sun의 Bmon 비디오 주석 프로젝트: 피클볼(pickleball), 스쿼시(squash), 테니스(tennis) 등 스포츠 앱에 에이전트가 로그인하여 UI 스크린샷을 촬영하고 분석한 피드백을 코드베이스에 다시 반영함.</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>일반 소비자 (Consumer)</strong></td>
+<td style="text-align:left">DMV(운전면허시험창구) 서류 작성, 수신함 내 이메일 구독 취소, 개인 재무 및 식단 관리 스프레드시트(Apple Numbers) 작성, 이발소 예약.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>카테고리 2:&lt;br&gt;창의적 / 야심 찬 업무 흐름</strong></td>
+<td style="text-align:left"><strong>창의적 디자인 및 공학</strong></td>
+<td style="text-align:left">마이크로소프트 페인트 그림 그리기, 회로 설계(circuit design), 건축(architecture), 하드웨어 공학, 게임 디자인.</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>비전 기반 산업 자동화</strong></td>
+<td style="text-align:left">레스토랑 창고 사진을 비전 모델로 분석하여 예측 발주를 수행하고, 쇼피(Shopee) 등 구매 소프트웨어 주문 연동 및 ERP 연동을 통한 직원 근무 시간표 조정.</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>개인 맞춤형 소프트웨어</strong></td>
+<td style="text-align:left">트레이너의 고객 맞춤형 피트니스 소프트웨어 제작, 아내의 온라인 보드게임 실력 향상을 위한 맞춤형 오목 형태 전술 훈련 소프트웨어 제작.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-and-speakers">3. 등장 인물 및 화자 (Figures and Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속</th>
+<th style="text-align:left">역할 및 주요 발언 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Sema Amble</strong></td>
+<td style="text-align:left">a16z</td>
+<td style="text-align:left">팟캐스트 진행자 (공동 저자). 8월에 기업 내 컴퓨터 사용 에이전트 실무 적용에 관한 연구 글을 공동 작성함. 기술 동향, 기업 유즈케이스, 소프트웨어 생태계 영향 및 스타트업 조언에 관한 질의를 주도함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Fabrizio Sarapfiniti</strong></td>
+<td style="text-align:left">a16z</td>
+<td style="text-align:left">a16z 소속 동료 (공동 저자). Sema Amble과 함께 8월 연구 분석 글을 공동 작성함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ari Weinstein</strong></td>
+<td style="text-align:left">OpenAI</td>
+<td style="text-align:left">OpenAI 소속 (소비자 제품 및 UX 담당). Astra 모델의 속도/신뢰성 향상, MS Paint 시연, DOTS 서비스, Apple Numbers 활용, 사용자 경험(UX) 및 Codex 커서 애니메이션의 중요성, 1인 또는 100인 규모의 초개인화 맞춤형 소프트웨어 시대를 강조함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>James Sun</strong></td>
+<td style="text-align:left">OpenAI</td>
+<td style="text-align:left">OpenAI 소속 (기업용 제품, Atlas, 안전성/통제 담당). 올해 1월 OpenAI 입사 후 Atlas 제품 개발을 담당하다가 에이전트/안전성 분야로 전환함. 기업용 제어 장치(Guardian, Auto-approve, Sandbox), 레거시 SW 자동화, ERP/재무/구매(1,000행 스프레드시트) 사례, WebMCP 표준, Bmon 운동 앱 UI 스크린샷 피드백, 아내를 위한 오목 형태 보드게임 훈련 앱 제작 사례를 설명함.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-정보-numbers-timelines">4. 주요 수치 및 시점 정보 (Numbers &amp; Timelines)</h4>
+<h5 id="시점-정보">시점 정보</h5>
+<ul>
+<li><strong>8월 (August)</strong>: Sema Amble과 Fabrizio Sarapfiniti가 기업 내 컴퓨터 사용 에이전트의 실제 적용에 관한 분석 글을 작성한 시점.</li>
+<li><strong>1월 (January)</strong>: James Sun이 OpenAI에 입사하여 Atlas 제품 관련 업무를 시작한 시점.</li>
+<li><strong>최근 6~9개월</strong>: OpenAI 내부에서 컴퓨터 사용 에이전트 제품을 본격적으로 개발하고 제품화하여 급격한 기술적 진전을 이룬 기간.</li>
+<li><strong>최근 몇 달 간</strong>: 컴퓨터 사용 에이전트 제품의 사용량이 YC(Y Combinator) 수준으로 주차별 폭발적 성장을 기록한 기간.</li>
+</ul>
+<h5 id="정량적-수치-및-기간">정량적 수치 및 기간</h5>
+<ul>
+<li><strong>15~20년</strong>: 기업 내부에서 사용되어 온 오래된 레거시 소프트웨어의 운용 기간.</li>
+<li><strong>10년, 20년, 30년, 40년</strong>: ERP 등 기업용 프로덕션 소프트웨어가 처음 작성되어 지금까지 유지되어 온 역사/기간.</li>
+<li><strong>97% 대 99%</strong>: 에이전트 신뢰성 지표 비교 수치. 97%와 99% 사이의 정량적 차이는 작으나 사용자 신뢰감 형성에 결정적 차이를 만듦.</li>
+<li><strong>30시간</strong>: Astra 모델이 비디오 게임 Fallout을 자율 플레이하여 완주하는 데 걸린 소요 시간.</li>
+<li><strong>5.6</strong>: Astra 모델과 내부 비디오 게임 대결을 펼친 대상 모델 버전 (Astra가 모든 대결에서 승리함).</li>
+<li><strong>30분 / 1시간</strong>: James Sun이 기존에 슬랙(Slack) 메시지 수집 자동화 작업을 주기적으로 실행했던 시간 단위.</li>
+<li><strong>1,000개 행 (1,000 rows)</strong>: 구매 발주 프로세스 예시에서 언급된 거대 운영 스프레드시트의 행 규모.</li>
+<li><strong>5개의 돌 (5 pebbles)</strong>: James Sun의 아내가 즐겨하는 보드게임 승리 규칙(돌 5개를 연결하여 승리).</li>
+<li><strong>10억 명 (1 Billion users)</strong>: 모바일/스마트폰 환경을 통해 클라우드 컴퓨터 사용 에이전트를 확장하려는 OpenAI의 장기 전략적 목표 사용자 수.</li>
+<li><strong>4개의 서로 다른 브라우저 (4 different browsers)</strong>: Chrome 확장 프로그램, 데스크톱 앱 내장 브라우저, 클라우드 가상 컴퓨터 브라우저 등 사용자 환경 분절을 유발하는 브라우저 환경 개수.</li>
+<li><strong>100명 또는 1인 대 수백만, 수천만, 수억, 수십억 명 (100 people or 1 person vs. millions, tens of millions, hundreds of millions, billions)</strong>: 과거 수백만~수십억 명을 위해 제작되던 대량 생산형 소프트웨어에서 단 1인 또는 100명을 위해 제작되는 초개인화 소프트웨어로의 사용자 규모 패러다임 전환 수치.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>Astra 모델의 구체적 벤치마크 점수 및 비용 수치</strong>: Astra 모델의 구체적인 평가 벤치마크 점수, 토큰당 단가, 또는 구체적 구동 비용 수치는 소스 내에 언급되지 않아 확인이 불가능함.</li>
+<li><strong>특정 기업 고객사의 실제 회사명</strong>: OpenAI의 컴퓨터 사용 에이전트를 실제 업무에 도입하여 사용 중인 구체적인 기업 고객사의 실제 회사명은 소스 텍스트에 밝혀지지 않아 확인 불가함.</li>
+<li><strong>광고 수익 손실 해결 방안의 구체적 결과</strong>: 에이전트의 웹사이트 방문으로 인해 발생할 수 있는 퍼블리셔 및 광고주의 광고 수익 손실 문제에 대해 OpenAI 파트너십 팀이 협의 중이라고 명시되었으나, 구체적인 협의 결과나 수익 분배 모델은 확정되지 않아 불확실함.</li>
+<li><strong>보드게임의 정확한 명칭</strong>: James Sun의 아내가 온라인으로 즐기는 '돌 5개를 연결하는 보드게임'에 대해 James가 '오목(Omok)'으로 추측하여 언급했으나, 발언자 스스로 정확한 공식 명칭에 대한 확신을 갖지 못함(확인 불가).</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

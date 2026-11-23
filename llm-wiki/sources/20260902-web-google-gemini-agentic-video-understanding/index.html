@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing agentic video understanding with Gemini</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing agentic video understanding with Gemini</h1>
+<p class="page-meta">웹 · 2026-09-02</p>
+<h2 id="요약">요약</h2>
+<p>Google이 발표한 에이전틱 비디오 이해는 긴 영상을 무조건 한 번에 넣는 대신, 질의에 필요한 구간과 신호를 내부 도구로 골라 다시 보는 방식이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-agentic-video-in-gemini/">출처</a> · <a href="https://www.youtube.com/watch?v=zIsxv8lXTME">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="영상-토큰-88-절감-gemini-에이전틱-비디오-이해-검증">영상 토큰 88% 절감? Gemini 에이전틱 비디오 이해 검증</h3>
+<p>기준일: 2026-09-02 KST</p>
+<h4 id="결론부터">결론부터</h4>
+<p>Google이 발표한 에이전틱 비디오 이해는 긴 영상을 무조건 한 번에 넣는 대신, 질의에 필요한 구간과 신호를 내부 도구로 골라 다시 보는 방식이다. 공개 차트와 발표에서 Google 보고 최대 88% 토큰 감소, 최대 66% 비용 감소, 최대 7% 품질 향상을 제시한다. 그러나 세 수치는 동일한 평균 결과가 아니라 서로 다른 평가·비용 계산에서 고른 Google 보고 최대치다. 원시 실행 로그와 완전한 평가 명세가 공개되지 않아 독립적으로 재현된 결과는 아니다.</p>
+<p>핵심 가치는 분명하다. 긴 영상에서 모든 초의 프레임을 고정 비율로 컨텍스트에 넣는 낭비를 줄이고, 질문과 관련된 부분을 더 촘촘하게 볼 수 있다. 핵심 위험도 분명하다. 관련 구간을 처음부터 잘못 찾으면 보지 않은 증거는 추론으로 복구할 수 없고, 도구 왕복과 탐색 사고 토큰이 지연·비용을 늘릴 수 있다.</p>
+<h4 id="무엇이-바뀌었나">무엇이 바뀌었나</h4>
+<p>기본 정적 처리는 영상 프레임을 1 FPS로 추출하고 오디오와 함께 한 번에 컨텍스트에 넣는다. 빠른 동작은 1초 사이에 지나가므로 놓칠 수 있고, 긴 영상은 입력 토큰이 커진다.</p>
+<p>에이전틱 처리는 다음의 제한된 도구 루프다.</p>
+<ol>
+<li>질문에서 필요한 증거 유형을 추정한다.</li>
+<li>영상 타임라인에서 후보 구간을 찾는다.</li>
+<li>필요한 구간의 transcript, frame, audio를 불러온다.</li>
+<li>빠른 동작이나 경계가 의심되면 FPS나 해상도를 바꿔 다시 본다.</li>
+<li>수집한 증거를 바탕으로 답하고, 부족하면 다시 탐색한다.</li>
+</ol>
+<p>이것은 범용 자율 에이전트가 아니다. Gemini 모델의 추론 단계와 Google이 제공하는 내부 미디어 로드 도구가 반복되는 제품 기능이다. Developer API 응답의 <code>processing_call</code>과 <code>processing_result</code>를 확인해야 실제 동적 탐색을 썼는지 검증할 수 있다.</p>
+<h4 id="api-계약과-제공-범위">API 계약과 제공 범위</h4>
+<p>2026-09-01 문서에서 지원 모델은 Gemini 3.7 Flash, 3.6 Flash, 3.5 Flash-Lite다.</p>
+<ul>
+<li>Gemini Developer API Interactions: 비디오 입력에 <code>processing: &quot;agentic&quot;</code>.</li>
+<li>Gemini Enterprise Agent Platform GenerateContent: Python Part에 <code>media_processing=&quot;agentic&quot;</code>, REST에 <code>mediaProcessing: &quot;AGENTIC&quot;</code>.</li>
+<li>정적 처리가 기본이고 에이전틱은 명시적으로 켜야 한다.</li>
+</ul>
+<p>발표는 Gemini API를 Google AI Studio에서 쓰는 경로와 Gemini Enterprise Agent Platform을 현재 제공으로 적는다. 반면 Gemini 앱은 <code>soon</code>, Ask YouTube는 <code>in the coming months</code>라고 예고했을 뿐이다. 기준일에 소비자 제품 전면 rollout이 완료됐다고 말할 근거는 없다.</p>
+<h4 id="88-66-7-의-실제-의미">88%, 66%, 7%의 실제 의미</h4>
+<p>Google 차트의 Gemini 3.7 Flash 조건은 high thinking level, low media resolution, 정적 baseline 1 FPS다.</p>
+<ul>
+<li>Minerva: 80.9K에서 33.6K tokens로 계산상 58.47% 감소. 정확도 73.7%에서 79.0%로 상대 7.19% 증가.</li>
+<li>1H-VideoQA: 397.6K에서 47.7K tokens로 88.00% 감소. 정확도 87.5%에서 88.5%로 상대 1.14% 증가.</li>
+<li>LVBench: 300.3K에서 36.0K tokens로 88.01% 감소. 정확도 85.1%에서 88.6%로 상대 4.11% 증가.</li>
+</ul>
+<p>따라서 <code>88% 토큰 감소와 7% 품질 향상</code>은 전형적 한 쌍이 아니다. 토큰 최대치는 1H-VideoQA·LVBench, 품질 최대치는 Minerva에서 나왔다. 7%는 5.3 percentage points를 73.7로 나눈 상대 증가다.</p>
+<p>비용 66% 감소는 입력 토큰만으로 계산할 수 없다. 에이전틱 모드는 탐색 thought tokens와 tool-use tokens를 낸다. 2026-09-02 Gemini 3.7 Flash 유료 표준가는 2026-12-31까지 입력 100만 tokens당 0.75달러, 출력·thinking 100만 tokens당 3.75달러다. Google은 기능 추가요금이 없다고 하지만 평가별 입력·출력·thinking·tool-use 분해를 공개하지 않았다. 66%는 Google 보고 최대치로만 남는다.</p>
+<h4 id="benchmark를-어디까지-믿을-수-있나">benchmark를 어디까지 믿을 수 있나</h4>
+<p>LongVideoBench 공개 논문 v1은 최대 1시간의 3,763개 웹 비디오와 자막, 6,678개 인간 주석 객관식 문항, 17개 세부 범주를 제공한다. 이는 긴 입력에서 관련 장면을 찾고 추론하는 능력을 평가한다. Google 블로그는 별도 데모에서 LongVideoBench를 사용했다고 적지만, 헤드라인 차트의 세 행은 Minerva, 1H-VideoQA, LVBench다.</p>
+<p>문제는 재현 명세다. 발표는 Minerva와 1H-VideoQA의 공개 데이터셋 카드, split, 질문 구성, scorer, 반복 수를 연결하지 않았다. LVBench라는 이름도 공개 문헌에 유사 명칭이 둘 이상 있어 정확한 논문·버전·split을 확정할 수 없다. 두 번째 1H-VideoQA 비용-정확도 그림에는 GPT 5.6 Sol/Terra, Claude Opus 5.0, Grok 4.6 비교가 있지만 점의 정확 좌표표, 모델별 가격 시점, API 설정, 반복 수, 신뢰구간, raw outputs가 없다. Pareto frontier는 그 공개 점 집합과 가격 가정 안의 주장이지 보편적 우위가 아니다.</p>
+<p>최근 공개 연구 VESTA는 long-video agent에서 retrieval policy에 따라 benchmark별 gains가 달라지고 일부 benchmark에서는 기존 방법과 동률이라고 보고한다. 이는 <code>어떤 구간을 어떻게 찾느냐</code>가 독립적인 실패 원인임을 보여주는 강한 반대 근거다.</p>
+<h4 id="빠른-순간-탐색과-지연은-다른-문제">빠른 순간 탐색과 지연은 다른 문제</h4>
+<p><code>sub-second moment retrieval</code>은 1초보다 짧은 상태 변화나 컷 경계를 찾아내는 공간·시간 해상도 주장이다. 전체 API 응답이 1초 미만이라는 뜻이 아니다. Google 문서도 5분 미만 짧은 영상에서는 내부 추론과 도구 왕복 때문에 time to first token이 약간 늘 수 있다고 적는다.</p>
+<p>운영 판단에는 평균 정확도뿐 아니라 다음을 같이 재야 한다.</p>
+<ul>
+<li>end-to-end latency, TTFT, p95/p99.</li>
+<li>tool call 횟수와 재탐색 깊이.</li>
+<li>retrieval miss와 false negative.</li>
+<li>총 입력·출력·thinking·tool-use tokens.</li>
+<li>영상 길이와 질의 유형별 분포.</li>
+</ul>
+<h4 id="실패-모드와-적용-경계">실패 모드와 적용 경계</h4>
+<ul>
+<li>빠른 동작: 정적 1 FPS는 놓칠 수 있지만 에이전틱 탐색도 해당 구간을 먼저 발견해야 한다.</li>
+<li>전 구간 정밀 검사: 모든 프레임을 보아야 하는 compliance·forensics에서는 선택적 탐색이 증거 누락을 만들 수 있다.</li>
+<li>비언어 소리: 공식 문서는 오인 가능성을 명시한다.</li>
+<li>multi-turn: stateless 요청에서 <code>step_list</code>의 processing steps를 누락하면 비디오 컨텍스트가 사라진다.</li>
+<li>safety: 정책 위반 영상은 응답 거부가 가능하다.</li>
+<li>비용: 짧은 영상이나 광범위 질문에서는 탐색 overhead가 절감분을 상쇄할 수 있다.</li>
+<li>품질: benchmark multiple-choice gains가 open-ended production correctness를 보장하지 않는다.</li>
+</ul>
+<h4 id="youtube-입력과-데이터-처리">YouTube 입력과 데이터 처리</h4>
+<p>Gemini Developer API의 YouTube URL 입력은 공개 영상만 허용한다. Gemini 2.5 이상은 요청당 최대 10개이며 무료 tier는 하루 8시간, 유료 tier는 영상 길이 기반 일일 제한이 없다고 문서화한다. Enterprise Agent Platform 문서는 YouTube URL 요청당 1개와 모델군별 길이 제한을 별도로 둔다. 제품면의 제한을 서로 바꿔 쓰면 안 된다.</p>
+<p>데이터 처리도 tier별로 다르다. 무료 Gemini API와 일반 무료 Google AI Studio는 입력·응답이 제품 개선에 사용되고 인간 검토가 가능하므로 민감·기밀·개인정보를 넣지 말아야 한다. 활성 billing project 또는 Workspace enterprise account의 Paid Service는 prompts/files/responses를 제품 개선에 쓰지 않으며 안전·보안 목적의 제한된 로그 처리가 남는다.</p>
+<h4 id="파트너-testimonial은-독립-근거가-아니다">파트너 testimonial은 독립 근거가 아니다</h4>
+<p>Ponder는 자체 pipeline과 비슷한 recall에서 약 3.5배 적은 input tokens, Mosaic는 자체 production-style eval에서 median input tokens 97% 감소와 constraint coverage 약 2배, Resemble AI는 약 1,000개 라벨 영상·live deepfake workload에서 57% 적은 input tokens, Revyl은 빠른 앱 animation 검증 가능성을 말했다. 그러나 원시 로그, matched baseline, 평가자, 실패 사례, 불확실성이 없다. 공급자가 선택해 발표한 이해관계자 자기보고로 분리해야 한다.</p>
+<h4 id="도입-판단과-반증-기준">도입 판단과 반증 기준</h4>
+<p>긴 영상의 특정 장면 질의라면 에이전틱 모드를 먼저 시험할 이유가 있다. 다만 실제 도입은 같은 모델·가격·media resolution에서 정적 모드와 paired evaluation을 해야 한다.</p>
+<p>판단을 철회하거나 낮춰야 할 조건은 다음이다.</p>
+<ul>
+<li>동일 item에서 retrieval miss 때문에 정적 모드보다 오류가 늘어난다.</li>
+<li>thought/tool 왕복을 포함한 총비용에서 우위가 사라진다.</li>
+<li>TTFT 또는 p95가 서비스 요구를 넘는다.</li>
+<li>전 구간 감사에서 선택적 로딩이 중요 증거를 누락한다.</li>
+<li>외부 재현에서 최대치가 특정 benchmark·query mix에만 국한된다.</li>
+</ul>
+<p>반대로 item-level outputs, exact prompts, scorer, run count, latency distribution, token breakdown이 공개되고 제3자가 비슷한 분포를 재현하면 현재의 <code>Google 보고 최대치</code> 평가는 더 강해질 수 있다.</p>
+<h4 id="최종-판단">최종 판단</h4>
+<p>이 기능은 긴 영상의 토큰 병목을 <code>고정 샘플링</code>에서 <code>질문 기반 탐색</code>으로 바꾸는 실용적 설계다. 공개 수치만 놓고 보면 토큰 효율과 정확도를 동시에 개선할 가능성이 있다. 그러나 88%·66%·7%는 최대치이고, benchmark 정체와 실행 명세가 부분적으로 비공개이며, 지연·retrieval miss·개인정보 조건이 남는다. 따라서 현 단계의 정확한 표현은 <code>Google이 보고한 최대 효율 개선, 독립 재현 전</code>이다.</p>
+<h4 id="출처">출처</h4>
+<ul>
+<li>Google 공식 발표: https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-agentic-video-in-gemini/</li>
+<li>Gemini Developer API video understanding: https://ai.google.dev/gemini-api/docs/video-understanding</li>
+<li>Gemini Enterprise Agent Platform video understanding: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/video-understanding</li>
+<li>Gemini API pricing: https://ai.google.dev/gemini-api/docs/pricing</li>
+<li>Gemini API terms: https://ai.google.dev/gemini-api/terms</li>
+<li>LongVideoBench v1: https://arxiv.org/abs/2407.15754v1</li>
+<li>LVBench v3: https://arxiv.org/abs/2406.08035v3</li>
+<li>LvBench v2: https://arxiv.org/abs/2312.04817v2</li>
+<li>VESTA v1: https://arxiv.org/abs/2608.31005v1</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koray Kavukcuoglu on frontier models, coding agents, and building AGI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Koray Kavukcuoglu on frontier models, coding agents, and building AGI</h1>
+<p class="page-meta">YouTube · 2026-09-02</p>
+<h2 id="요약">요약</h2>
+<p>기준일: 2026-09-02 KST 분석 대상: Google for Developers 인터뷰, 2026-09-01 공개 최종 판정: 야심은 확인되지만 도착은 입증되지 않았다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=Rrr2gdbvNFU">출처</a> · <a href="https://www.youtube.com/watch?v=Rd5DLzQbOfE">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="gemini-4-코딩-에이전트-agi-구글-딥마인드-전략의-증거-수준">Gemini 4·코딩 에이전트·AGI: 구글 딥마인드 전략의 증거 수준</h3>
+<p>기준일: 2026-09-02 KST<br />
+분석 대상: Google for Developers 인터뷰, 2026-09-01 공개<br />
+최종 판정: <strong>야심은 확인되지만 도착은 입증되지 않았다.</strong> Gemini 3.7 Flash에는 공개 제품 문서가 있지만, Gemini 4는 아직 인터뷰 속 내부 로드맵 발언이다. 코딩 에이전트의 발전, 프런티어 복귀, AGI로의 진전, 그리고 “구글이 최적의 장소”라는 결론은 서로 다른 증거를 요구한다.</p>
+<h4 id="1-executive-conclusion">1. Executive conclusion</h4>
+<p>Koray Kavukcuoglu는 이 인터뷰에서 Google DeepMind가 Gemini 4를 작업 중이며 이를 지금까지 가장 야심 찬 사전학습 실행이라고 설명한다. 동시에 그는 잠재력이 실현됐다고 말하려면 모델이 내부 사용자를 거쳐 외부 사용자 앞에 놓여야 한다고 선을 긋는다. 이 문장이 전체 인터뷰를 읽는 가장 안전한 열쇠다. <strong>사전학습의 규모와 야심은 입력 조건이고, 공개 제품·재현 가능한 평가·신뢰성·비용·안전성은 별도의 결과 조건이다.</strong></p>
+<p>2026년 8월 26일자 Google AI for Developers 문서는 <code>gemini-3.7-flash</code>를 GA 모델로 확인하고, 1M 토큰 컨텍스트, 64k 최대 출력, 세 가지 thinking level, 기간 한정 가격을 공개한다. 그러나 “가장 지능적인 workhorse”, 코딩·에이전트 품질 향상, 실패 루프 감소는 공급자 평가다. 토큰 속도, 지연, 벤치마크 점수, 실제 이슈 해결, 리뷰 부담, 결함률, 비용/성공 과업은 한 숫자로 합칠 수 없다.</p>
+<p>카부쿠오글루가 현 모델이 프런티어보다 “조금 아래”일 수 있다고 인정한 대목은 중요한 자기평가다. 다만 이는 2026년 9월 1일의 전략적 발언이지, 모든 과제와 하네스에서 통용되는 객관적 순위가 아니다. 프런티어는 모델 버전, 도구 허용, 추론 예산, 채점 규칙, 데이터 오염, 날짜에 따라 달라진다.</p>
+<p>AGI에는 단일 시험이 없다는 그의 견해도 “아무 평가도 불가능하다”는 뜻으로 확장하면 안 된다. Google DeepMind 연구자들이 참여한 <code>Levels of AGI</code>는 성능 깊이, 능력 범위/일반성, 자율성을 분리한다. 여기에 지속학습, 신뢰성, 실제 환경 상호작용, 경제적 대체, 안전, 거버넌스를 더해야 한다. 한 벤치마크의 합격은 AGI의 증명이 아니지만, 그렇다고 모든 운영 정의가 무의미한 것도 아니다.</p>
+<p>결론적으로 구글은 연구 인력, 컴퓨트, 시스템, 제품 유통, 사용자 피드백이라는 강한 자산을 가진다. 그러나 조직 조정비용, 개인정보·동의, 규제, 경쟁사 혁신, 높은 학습·서빙 비용, 평가와 안전성의 불확실성도 함께 존재한다. “구글이 AGI를 만들 최적의 장소”는 경영진의 옹호 논리이지 반사실적으로 입증된 결론이 아니다.</p>
+<h4 id="2-소스와-이해관계">2. 소스와 이해관계</h4>
+<p>원 인터뷰는 Google for Developers가 공개했다. 공식 설명은 카부쿠오글루를 Google DeepMind의 SVP 겸 Chief AI Architect로 소개한다. 이는 2026년 9월 1일의 공개 역할 표기를 확인하지만, 모든 연구·제품 조직에 대한 단독 결정권이나 조직 전체의 합의를 입증하지 않는다.</p>
+<p>진행자 Logan Kilpatrick은 모델 출시 순서, 내부 반응, 조직 통합, 카부쿠오글루에 대한 평가를 질문과 해설로 제시한다. 따라서 진행자의 전제와 게스트의 답변을 분리했다. 이 보고서는 제작자가 제공한 수동 영어 자막을 1차 인터뷰 기록으로 사용했고, 명시적 화자 태그가 없는 구간은 장별 대화 흐름으로만 배정했다. 08:58 부근의 <code>I don't anyone has a test</code>는 문법과 앞선 콜드오픈상 <code>I don't think anyone...</code>일 가능성이 높지만, 원문을 고치지 않고 교정 ledger에만 기록했다.</p>
+<p>회사는 자사 제품, 전략, 인재, 투자 능력을 설명할 경제적·조직적 이해관계가 있다. 설명란에 협찬 표시가 없다는 사실은 중립성을 증명하지 않는다. Google 공식 문서는 Google의 공개 주장과 제품 상태를 확인하는 자료이지 독립 검증 자료가 아니다.</p>
+<h4 id="3-화자-주장-지도">3. 화자·주장 지도</h4>
+<table>
+<thead>
+<tr>
+<th>구간</th>
+<th>핵심 발언</th>
+<th>분류</th>
+<th>안전한 해석</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00:24-03:04</td>
+<td>3.5→3.6→3.7, 코딩에서 에이전트로, 병렬 연구</td>
+<td>진행자 전제 + 내부 증언</td>
+<td>제품 문서와 분리 검증; 인과효과 미확인</td>
+</tr>
+<tr>
+<td>03:07-03:55</td>
+<td>Gemini 4 작업, 가장 야심 찬 pre-training</td>
+<td>로드맵 + 내부 증언</td>
+<td>공개·GA·벤치마크·AGI 아님</td>
+</tr>
+<tr>
+<td>04:08-06:36</td>
+<td>현 모델은 프런티어보다 조금 아래, 복귀가 최우선</td>
+<td>날짜가 있는 자기평가 + 전략</td>
+<td>보편 순위·보장 아님</td>
+</tr>
+<tr>
+<td>06:38-10:56</td>
+<td>사용자와 함께 AGI를 만들고 단일 시험은 없음</td>
+<td>전략 + 개념적 견해</td>
+<td>피드백 루프와 AGI 판정을 구분</td>
+</tr>
+<tr>
+<td>10:58-15:06</td>
+<td>초기 DeepMind, Atari, DQN</td>
+<td>회고 + 논문으로 일부 검증</td>
+<td>제한된 게임 벤치마크, 실세계/AGI 아님</td>
+</tr>
+<tr>
+<td>15:08-18:45</td>
+<td>학습 원리는 비슷하나 도메인 모호성·규모가 커짐</td>
+<td>기술적 비유 + 회고</td>
+<td>“스케일만으로 충분”하다는 뜻 아님</td>
+</tr>
+<tr>
+<td>18:47-21:03</td>
+<td>stacked sigmoids, engineering hill climb</td>
+<td>비유 + 의견</td>
+<td>측정된 지수 법칙 아님</td>
+</tr>
+<tr>
+<td>21:05-22:17</td>
+<td>구글이 AGI를 만들 올바른 장소</td>
+<td>회사 임원의 옹호</td>
+<td>장점과 제약을 함께 시험해야 함</td>
+</tr>
+<tr>
+<td>22:19-25:56</td>
+<td>Pro/Flash/Gemini 4 병렬 개발, agentic coding</td>
+<td>로드맵 + 시장 해석</td>
+<td>일정·compute·품질·생산성 미공개</td>
+</tr>
+</tbody>
+</table>
+<h4 id="4-gemini-4-가장-야심-찬-사전학습과-가장-큰-증거-공백">4. Gemini 4: 가장 야심 찬 사전학습과 가장 큰 증거 공백</h4>
+<p>인터뷰가 직접 확인하는 것은 세 가지뿐이다.</p>
+<ol>
+<li>Google DeepMind가 <code>Gemini 4</code>라는 이름으로 작업 중이라고 말했다.</li>
+<li>카부쿠오글루는 이를 지금까지 가장 야심 찬 사전학습 실행이라고 불렀다.</li>
+<li>그는 진행 상황을 조심스럽게 낙관하면서도 내부·외부 사용자에게 도달하기 전에는 잠재력이 실현된 것이 아니라고 말했다.</li>
+</ol>
+<p>그 밖의 것은 공개 자료로 확정되지 않았다. 파라미터 수, 토큰 수, 학습 FLOPs, TPU 세대·수량, 데이터 구성, 학습 기간, 출시일, API ID, 가격, 벤치마크, 안전성 평가, 지역별 가용성은 인터뷰에 없다. “가장 야심 찬”은 자원 규모, 시스템 복잡도, 목표 범위, 연구 아이디어 수 중 무엇을 뜻하는지도 공개되지 않는다. 따라서 사전학습 야심을 능력·신뢰성·추론비용·제품 가용성·사업성과로 곧장 바꾸면 안 된다.</p>
+<p>교정 문구:</p>
+<ul>
+<li>안전: <code>구글 딥마인드는 Gemini 4 작업과 대규모 사전학습 계획을 공개적으로 언급했다.</code></li>
+<li>안전: <code>이는 2026년 9월 1일의 내부 진행 증언이며, 공개 제품 성과는 아니다.</code></li>
+<li>금지: <code>Gemini 4가 출시됐다.</code></li>
+<li>금지: <code>Gemini 4가 프런티어를 탈환했다.</code></li>
+<li>금지: <code>Gemini 4는 AGI다.</code></li>
+</ul>
+<h4 id="5-gemini-3-7-flash-제품-사실과-품질-주장-분리">5. Gemini 3.7 Flash: 제품 사실과 품질 주장 분리</h4>
+<p>Google AI for Developers의 2026년 8월 26일 문서는 다음을 공개한다.</p>
+<ul>
+<li>모델 ID: <code>gemini-3.7-flash</code></li>
+<li>상태: GA, production use 대상으로 설명</li>
+<li>컨텍스트: 1M 토큰</li>
+<li>최대 출력: 64k 토큰</li>
+<li>thinking level: low / medium / high</li>
+<li>소개 가격: 입력 100만 토큰당 0.75달러, 출력 100만 토큰당 3.75달러, 2026년 말까지라고 명시</li>
+<li>Antigravity agent의 기본 모델로 사용된다고 설명</li>
+</ul>
+<p>이것들은 날짜가 있는 공급자 제품 사실이다. 반면 “가장 지능적인 workhorse”, 코딩·에이전트 과업의 큰 품질 향상, 실패 루프 감소는 Google 평가다. 모델 카드나 벤치마크 표가 있더라도 정확한 모델 스냅샷, 하네스, 도구권한, 추론 예산, 시드·반복, 오염 감사, 채점 규칙이 맞지 않으면 다른 모델의 점수와 단순 평균할 수 없다.</p>
+<p>코딩 에이전트의 실제 가치는 다음을 따로 재야 한다.</p>
+<ul>
+<li>모델 출력 속도: decode TPS, TTFT, p50/p95 지연</li>
+<li>과업 성과: 이슈 해결, 테스트 통과, accepted patch</li>
+<li>품질: 회귀·결함·보안 취약점·롤백</li>
+<li>사람 비용: 리뷰 시간, 재시도, 프롬프트/환경 구축</li>
+<li>시스템 비용: 토큰, 툴 호출, 샌드박스, CI, 라이선스</li>
+<li>운영성: 권한 오류, 장기 실행 복구, 재현성</li>
+</ul>
+<p>더 빠른 모델은 도구 대기와 리뷰가 병목인 소프트웨어 작업에서 더 빠른 프로젝트 완료를 자동 보장하지 않는다.</p>
+<p>공식 문서: <a href="https://ai.google.dev/gemini-api/docs/latest-model">Google AI for Developers — What's new in Gemini 3.7 Flash</a></p>
+<h4 id="6-프런티어는-하나의-순위표가-아니다">6. 프런티어는 하나의 순위표가 아니다</h4>
+<p>카부쿠오글루의 “조금 아래” 인정은 자사 모델이 언제나 최고라는 홍보보다 더 구체적이다. 하지만 이 발언을 객관적 종합 순위로 해석할 수는 없다. 프런티어 비교에는 적어도 다음 튜플이 필요하다.</p>
+<p><code>모델 버전 × 공개일 × 과제 × 데이터 분할 × 하네스 × 도구 접근 × 추론 예산 × 샘플링 × 채점기 × 오염 가능성 × 불확실성</code></p>
+<p>코딩에서는 저장소 성숙도, 테스트 품질, 과제 길이, 샌드박스, 사람 검토까지 추가된다. 동적 리더보드의 하루 순위는 영구 지배를 뜻하지 않는다. 공급자가 스스로 설계·실행·채점한 표는 독립 검증이 아니다. 이 보고서는 조건이 다른 점수를 평균해 “종합 1위”를 만들지 않았다.</p>
+<p>프런티어 복귀가 설득력을 얻으려면 같은 하네스와 도구·예산에서 여러 과제를 반복하고, 품질·비용·신뢰성까지 함께 공개해야 한다. 벤치마크가 좋아져도 장기 에이전트의 권한 안전, 실패 복구, 사용자 수정률이 악화되면 제품 프런티어 결론은 철회돼야 한다.</p>
+<h4 id="7-병렬-개발-합리적-설명과-인과의-함정">7. 병렬 개발: 합리적 설명과 인과의 함정</h4>
+<p>인터뷰는 3.6, 3.7, 3.5 Pro, Gemini 4가 서로 다른 시간·규모의 병렬 트랙에서 진행됐다고 말한다. 이는 연구 조직에서 자연스러운 포트폴리오 설명이다. 빠른 Flash 반복이 상위 모델 연구와 동시에 존재할 수도 있다.</p>
+<p>하지만 병렬 진행 자체가 어떤 아이디어가 성능을 만들었는지 증명하지는 않는다. 사전학습, post-training, distillation, serving, agent harness, tool integration, 평가 개선이 같은 시기에 바뀌면 관찰된 품질 상승을 한 요소에 배분하기 어렵다. 코드 브랜치·실험 ablation·동일 체크포인트 비교·운영 로그가 없으면 <code>parallel tracks</code>는 과정 증언으로 남는다.</p>
+<p>안전한 설명은 “여러 연구 분기와 제품화 경로가 동시에 진행됐다”이다. “병렬 개발이 3.7의 성공을 일으켰다”는 인과 문장은 공개 증거보다 강하다.</p>
+<h4 id="8-agi-단일-시험-부재와-평가-불가능은-다르다">8. AGI: 단일 시험 부재와 평가 불가능은 다르다</h4>
+<p>카부쿠오글루는 AGI를 판정하는 단일 합격선이 없다고 본다. 이는 정의 불일치와 목표 이동을 지적하는 견해다. 그러나 단일 시험이 없다는 사실은 측정 자체가 불가능하다는 뜻이 아니다.</p>
+<p><code>Levels of AGI</code>는 다음 축을 분리한다.</p>
+<ul>
+<li>성능의 깊이</li>
+<li>능력의 폭과 일반성</li>
+<li>자율성</li>
+<li>배치 위험과 인간 관여</li>
+</ul>
+<p>이 보고서는 여기에 지속학습, 신뢰성/보정, 실제 환경 상호작용, 경제적 대체, 안전, 거버넌스를 별도 축으로 둔다. 한 코딩 벤치마크의 높은 점수는 광범위 일반성이나 안전한 자율성을 입증하지 않는다. 반대로 다중 지표 접근은 AGI를 영원히 정의할 수 없다는 선언도 아니다.</p>
+<p>연구 출처: <a href="https://arxiv.org/abs/2311.02462">Levels of AGI for Operationalizing Progress on the Path to AGI, arXiv:2311.02462v5</a></p>
+<h4 id="9-atari와-dqn-중요한-좁은-성공">9. Atari와 DQN: 중요한 좁은 성공</h4>
+<p>카부쿠오글루는 초기 DeepMind의 Atari 집중 프로젝트가 연구자들을 모았고 DQN으로 이어졌다고 회고한다. 2013년 논문은 이 역사에서 검증 가능한 핵심이다. 논문은 원시 픽셀을 입력받는 convolutional Q-learning 모델을 7개 Atari 2600 게임에 적용했고, 같은 아키텍처와 학습 알고리즘을 사용했다고 설명한다. v1 초록은 6개 게임에서 당시 이전 접근법을 앞서고 3개에서 인간 전문가를 넘었다고 보고한다.</p>
+<p>논문 출처: <a href="https://arxiv.org/abs/1312.5602">Playing Atari with Deep Reinforcement Learning, arXiv:1312.5602</a></p>
+<p>이 결과는 고차원 감각입력과 강화학습 결합의 중요한 실험적 증거다. 그러나 게임은 규칙·행동공간·보상구조가 제한된 환경이다. 실세계의 언어적 모호성, 장기 기억, 열린 도구 사용, 사회적 책임, 안전한 자율성을 직접 측정하지 않는다. DQN을 AlphaGo·AlphaFold·StarCraft·Gemini의 단일 원인으로 그리는 영웅 서사도 피해야 한다. 개념적 발명, 데이터·컴퓨트, 시스템 엔지니어링, 평가, 제품통합은 각각 기여했다.</p>
+<p>Google DeepMind의 공식 2023년 조직 발표는 DeepMind가 2010년에 출범했다고 서술하고 DeepMind와 Google Brain의 결합을 발표한다. 이는 조직 단계는 확인하지만, 인터뷰의 모든 초기 인물·회의·코드리뷰 일화를 독립 검증하지 않는다.</p>
+<p>조직 출처: <a href="https://deepmind.google/discover/blog/announcing-google-deepmind/">Announcing Google DeepMind, 2023-04-20</a></p>
+<h4 id="10-20년의-딥러닝-과-engineering-hill-climb">10. “20년의 딥러닝”과 engineering hill climb</h4>
+<p>인터뷰는 학습·최적화의 기본이 이어졌고, 도메인의 모호성과 규모가 커졌다고 설명한다. 이 관찰은 유용하지만 “스케일만 키웠다”는 결론은 아니다. 최근 시스템에는 대규모 분산학습, 데이터 큐레이션, post-training, 도구 사용, 평가, 추론·서빙, 안전정책, 제품 피드백이 결합된다.</p>
+<p><code>stacked sigmoids</code>와 <code>exponential takeoff</code>는 진행을 설명하는 비유다. 공개 수치가 붙은 성장곡선이나 미래 지속을 보장하는 법칙이 아니다. 개념적 돌파와 긴 engineering hill climb는 동시에 존재할 수 있다. 한쪽을 지우면 역사도, 현재의 병목도 잘못 읽게 된다.</p>
+<h4 id="11-구글이-agi를-만들-최적의-장소인가">11. 구글이 AGI를 만들 최적의 장소인가</h4>
+<h5 id="강한-논거">강한 논거</h5>
+<ul>
+<li>장기간 축적된 AI 연구 인력과 학술 네트워크</li>
+<li>자체 컴퓨트·가속기·분산시스템을 포함한 full-stack 역량</li>
+<li>수십억 사용자가 접하는 제품 유통</li>
+<li>모델을 실제 작업과 연결할 제품 통합 능력</li>
+<li>긴 투자 회수기간을 감수할 자본과 인프라</li>
+<li>과학·로보틱스·멀티모달 등 폭넓은 연구 포트폴리오</li>
+</ul>
+<h5 id="가장-강한-반론">가장 강한 반론</h5>
+<ul>
+<li>대규모 조직의 조정비용과 우선순위 충돌</li>
+<li>기존 제품 지표가 탐색적 연구를 왜곡할 가능성</li>
+<li>사용자 피드백이 대표성을 갖지 못하거나 편향될 가능성</li>
+<li>개인정보·동의·데이터 거버넌스 제약</li>
+<li>광범위한 배치가 실패·오용을 확대할 위험</li>
+<li>규제와 경쟁정책 노출</li>
+<li>학습·서빙·검증 비용과 전력·인프라 병목</li>
+<li>경쟁사와 오픈 생태계의 빠른 혁신</li>
+<li>“다른 조직보다 낫다”는 반사실 비교의 부재</li>
+</ul>
+<p>따라서 안전한 결론은 “구글은 AGI 연구·제품화를 위한 매우 강한 자산 조합을 보유한다”이다. “구글이 유일한 승자” 또는 “AGI 도달이 확실하다”는 결론은 아니다.</p>
+<h4 id="12-미해결-주장">12. 미해결 주장</h4>
+<ul>
+<li>Gemini 4의 공식 제품명과 출시 여부</li>
+<li>사전학습 규모의 정확한 정의와 비교 기준</li>
+<li>Gemini 3.5 Pro의 공개 일정과 최종 명칭</li>
+<li>3.6/3.7 개선에서 pre-training, post-training, harness, serving의 기여도</li>
+<li>코딩 에이전트의 실제 merge·defect·rollback·review-time 성과</li>
+<li>조직 통합이 연구속도와 안전성에 미친 인과효과</li>
+<li>사용자 피드백이 AGI 일반성과 신뢰성을 개선한다는 외부타당성</li>
+<li>단일 시험 대신 채택할 공식 AGI 운영 정의와 임계값</li>
+</ul>
+<h4 id="13-반증-업데이트-기준">13. 반증·업데이트 기준</h4>
+<p>이 보고서의 결론은 다음 사건이 발생하면 즉시 갱신한다.</p>
+<ol>
+<li>Gemini 4 공식 모델 카드·기술보고서·API ID·GA 발표가 나온다.</li>
+<li>Gemini 4가 다른 이름으로 출시되거나 프로젝트 명칭이 폐기된다.</li>
+<li>Koray Kavukcuoglu의 역할과 조직 범위가 공식적으로 바뀐다.</li>
+<li>Gemini 3.7 Flash의 가격·제한·가용성·deprecated 상태가 바뀐다.</li>
+<li>동일 하네스·도구·예산을 사용한 독립 평가가 프런티어 자기평가를 뒤집는다.</li>
+<li>에이전트 생산성 연구가 리뷰·결함·비용까지 포함해 지속적 순이익 또는 순손실을 재현한다.</li>
+<li>개인정보·권한·안전 사고가 사용자 피드백 전략의 편익을 상쇄한다.</li>
+<li>공인된 AGI 운영 표준이 단일 또는 복합 임계값과 재현 절차를 제시한다.</li>
+</ol>
+<p>유효기간은 2026-10-02까지다. 단, 위 사건이 먼저 발생하면 즉시 만료된다. 업로드 직전 역할, 제품명, Gemini 4 상태, 3.7 Flash 문서와 가격을 다시 읽어야 한다.</p>
+<h4 id="14-한-문장-판정과-공개-표현">14. 한 문장 판정과 공개 표현</h4>
+<p>안전하게 말할 수 있음:</p>
+<blockquote>
+<p>2026년 9월 1일 Google for Developers 인터뷰는 Google DeepMind의 Gemini 4 사전학습 야심, 코딩 에이전트 중심의 병렬 개발, 단일 AGI 시험에 대한 회의, 그리고 구글의 조직적 장점을 보여준다. 다만 Gemini 4는 아직 로드맵 발언이고, 프런티어·생산성·AGI·최적 조직이라는 결론은 공개 제품 사실과 독립 검증을 분리해야 한다.</p>
+</blockquote>
+<p>말하면 안 됨:</p>
+<ul>
+<li>Gemini 4가 출시됐거나 프런티어 1위다.</li>
+<li>Gemini 4가 AGI다.</li>
+<li>Gemini 3.7 Flash가 모든 코딩 벤치마크와 실제 개발에서 우월하다.</li>
+<li>병렬 연구가 품질 상승의 단일 원인이다.</li>
+<li>DQN이 현대 AGI의 직접·유일한 원인이다.</li>
+<li>AGI는 시험할 수 없거나, 특정 벤치마크가 AGI를 증명한다.</li>
+<li>구글이 AGI 경쟁의 확정 승자다.</li>
+</ul>
+<h4 id="출처">출처</h4>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Rrr2gdbvNFU">원 인터뷰 — Koray Kavukcuoglu on frontier models, coding agents, and building AGI</a></li>
+<li><a href="https://ai.google.dev/gemini-api/docs/latest-model">Google AI for Developers — What's new in Gemini 3.7 Flash</a></li>
+<li><a href="https://arxiv.org/abs/1312.5602">Playing Atari with Deep Reinforcement Learning, arXiv:1312.5602</a></li>
+<li><a href="https://arxiv.org/abs/2311.02462">Levels of AGI for Operationalizing Progress on the Path to AGI, arXiv:2311.02462v5</a></li>
+<li><a href="https://deepmind.google/discover/blog/announcing-google-deepmind/">Google DeepMind — Announcing Google DeepMind, 2023-04-20</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

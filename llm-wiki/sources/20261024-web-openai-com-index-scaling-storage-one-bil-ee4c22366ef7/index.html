@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II) | OpenAI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II) | OpenAI</h1>
+<p class="page-meta">웹 · 2026-10-24</p>
+<h2 id="요약">요약</h2>
+<p>Habitat은 OpenAI의 모든 제품이 빠르고 신뢰성 있게 데이터에 접근할 수 있도록 지원하는 핵심 온라인 저장소 플랫폼입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://openai.com/index/scaling-storage-one-billion-users-part-two">출처</a> · <a href="https://www.youtube.com/watch?v=D43OSHqrblY">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="openai-habitat-및-azure-cosmos-db-스케일링-기술-해설-보고서">OpenAI Habitat 및 Azure Cosmos DB 스케일링 기술 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>Habitat은 OpenAI의 모든 제품이 빠르고 신뢰성 있게 데이터에 접근할 수 있도록 지원하는 핵심 온라인 저장소 플랫폼입니다. 전 세계 40개 지리적 지역에서 10억 명 이상의 ChatGPT 사용자 및 500페타바이트(PB) 이상의 데이터를 처리하는 Habitat 인프라는 폭발적인 데이터 증가와 신규 유스케이스를 수용하는 과정에서 시스템 신뢰성, 성능, 그리고 제품 개발자의 개발 속도(Velocity)를 동시에 향상시켜야 하는 복합적인 기술적 과제에 직면했습니다. 이를 해결하기 위해 온라인 저장소 플랫폼의 설계 및 운영 메커니즘 전반에 대한 근본적인 재검토가 이루어졌습니다.</p>
+<p>플랫폼 고도화의 핵심 축으로서 Azure Cosmos DB를 기반으로 하는 하부 저장소 컴포넌트의 스케일링 작업이 추진되었습니다. 초기 단일 기본 컨테이너 사용 시 발생한 한계(Hot Key 충돌, 노이지 네이버, 약한 파티션 현상)를 극복하기 위해 전용 컨테이너를 분리하는 단일 테넌시(Single-tenancy) 방식을 시도했으나, 이는 서비스별 용량 계획 오버헤드 및 제품 출시 당일 스케일링 미비 등의 조직적/운영적 비효율을 초래했습니다. 이에 따라 Azure Cosmos DB 엔지니어링 팀과의 긴밀한 공동 개발을 진행하여 핫 키 스로틀링(Hot key throttling), 서비스 품질(QoS) 우선순위 제어, 그리고 물리 파티션당 최대 10K RU/s 확장 및 RU 사용량 기반 분할을 지원하는 개선된 서버리스 모드를 도입함으로써 기본 멀티테넌시(Multi-tenancy) 아키텍처로 성공적으로 복귀했습니다.</p>
+<p>글로벌 스케일에서 전체 요청의 90% 이상을 차지하는 읽기 작업의 성능을 극대화하기 위해, 글로벌 읽기 요청의 p50(상위 50 백분위) 지연 시간을 기존 약 120ms에서 약 10ms로 12배 단축하는 다층적(Layered) 최적화 전략을 정교하게 수립했습니다. 사용자 근접 데이터 배치와 더불어 인증 메타데이터 등 지연 시간에 민감한 소규모 데이터 세트를 전 세계 40개 지역에 광범위하게 복제하는 방식을 채택했습니다. 여기에 Valkey 기반 룩어사이드(Lookaside) 분산 캐시 및 Azure Cosmos DB 변경 피드(Change Feed) 기반의 글로벌 CDC 캐시 무효화 메커니즘을 결합하고, 서비스 프록시 계층을 Rust로 재작성함으로써 네트워크 및 컴퓨팅 프록시 오버헤드를 유기적으로 감축했습니다.</p>
+<p>아울러 초당 수백만 건의 데이터 변경 사항을 처리하기 위한 Change Data Capture(CDC) 플랫폼의 추상화 및 내결함성 확보 작업이 병행되었으며, 단일 최대 계정 기준 수십 PB의 데이터와 초당 2,000만 QPS 이상을 처리하는 초대형 스케일 운영을 위해 클라우드 제공업체의 제품을 단순 사용하는 관리형(Managed) 관계를 넘어선 '공동 관리 서비스(Co-managed services)' 운영 모델을 정립했습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points-arguments">2. 주요 논점 (Key Points &amp; Arguments)</h4>
+<h5 id="2-1-논점-1-멀티테넌시-아키텍처의-3단계-진화-과정">2.1. 논점 1: 멀티테넌시 아키텍처의 3단계 진화 과정</h5>
+<p>OpenAI Habitat의 데이터베이스 아키텍처는 단일 공유 컨테이너 구조에서 워크로드 격리를 위한 전용 컨테이너 분리 구조로 전환되었다가, 고도화된 제어 메커니즘을 갖춘 멀티테넌시 구조로 진화했습니다.</p>
+<ul>
+<li><strong>Phase I (기본 기능 의존)</strong>:
+<ul>
+<li><strong>구조 및 특징</strong>: 초기에는 각 Azure Cosmos DB 계정 내 단일 기본 컨테이너를 두고 모든 클라이언트 요청을 수용하며, 논리 파티션 키당 10K RU/s 제한 기능을 통한 백프레셔(Back pressure)에 의존했습니다.</li>
+<li><strong>문제점</strong>: 클라이언트에 논리 파티션 키 선택권이 직접 노출되어 <code>user_id</code>, <code>workspace_id</code> 등 동일한 키 공간에서 유스케이스 간 빈번한 충돌(Hot Key)이 발생했습니다. 또한 실제 성능 제한이 적용되는 단위는 물리 파티션(Physical Partition)이므로, 동일 물리 파티션에 함께 배치된 타 유스케이스의 과도한 부하가 로그인/회원가입 등 핵심 서비스에 영향을 주는 '노이지 네이버(Noisy Neighbors)' 현상이 유발되었습니다. 특히 데이터 용량이 증가함에 따라 물리 파티션이 분할(Split)되는 과정에서 전체 할당된 RU/s가 물리 파티션별로 절반씩 분할(예: 분할 전 물리 파티션 1개당 10K RU/s $\rightarrow$ 분할 후 자식 물리 파티션 2개당 각각 5K RU/s)되는 '약한 파티션(Weak Partitions)' 문제가 발생했습니다. 이로 인해 전체 컨테이너 할당량이 일정하더라도 저장 데이터 양이 늘어나면 파티션당 실효 처리량이 감소하여, 요청량이 동일함에도 스로틀링(HTTP 429 Error)이 유발되는 구조적 한계가 드러났습니다.</li>
+</ul>
+</li>
+<li><strong>Phase II (워크로드 격리 및 단일 테넌시 시도)</strong>:
+<ul>
+<li><strong>구조 및 특징</strong>: 독립적인 물리 파티션 및 파티션 키 공간을 보장하기 위해 신규 및 핵심 유스케이스별로 전용 컨테이너를 분리하고, 컨테이너의 물리 파티션 수 증가에 맞춰 전체 provisioned RU/s를 동기화하여 자동 조정하는 스크립트를 적용했습니다.</li>
+<li><strong>문제점</strong>: 기존 기본 컨테이너의 데이터 이관 난이도로 인해 부하가 지속되는 가운데, 안전성 확보를 위해 신규 서비스마다 컨테이너를 무분별하게 생성하면서 운영 오버헤드가 급증했습니다. 단일 테넌시 환경에서는 개별 컨테이너가 워크로드의 변동성을 직접 감내해야 하므로 '집계 성장 안정성(Stable aggregate growth)'을 상실했습니다. 이에 따라 트래픽이 급증하는 제품 출시 시 개별 제품 팀이 Cosmos DB 용량 계획(Capacity planning)을 직접 수행해야 했으며, 사전 용량 확장 미비로 인한 출시 당일 긴급 장애 대응(SEV room)이 빈번하게 발생했습니다.</li>
+</ul>
+</li>
+<li><strong>Phase III (기본 멀티테넌시 및 데이터 이동 기능)</strong>:
+<ul>
+<li><strong>구조 및 특징</strong>: Azure Cosmos DB 엔지니어링 팀과의 공동 개발을 통해 제어 기능을 고도화한 후, 단일 공유 멀티테넌시 컨테이너 구조로 복귀했습니다.</li>
+<li><strong>해결 방안</strong>: 가장 높은 부하를 일으키는 특정 키의 요청을 우선 차단하는 '핫 키 스로틀링(Hot key throttling)'을 도입하여 노이지 네이버의 장애 파급 범위를 국소화했습니다. 대량 데이터 삽입/추출 등 오프라인 작업의 요청 우선순위를 낮추는 '서비스 품질(QoS)' 제어를 적용하여 대화형 엔드유저 요청의 차단을 방지했습니다. 또한 Azure Cosmos DB 팀이 신규 구축한 개선된 서버리스 모드를 적용하여 물리 파티션당 최대 10K RU/s 확장을 지원함과 동시에, 용량 기준 스플릿뿐만 아니라 RU 사용량 기준의 분할(RU-usage-based splits)을 구현함으로써 수동 용량 산정 및 스케일링 관리 부담을 완벽히 제거했습니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="표-2-1-멀티테넌시-아키텍처-진화-단계-비교">[표 2.1] 멀티테넌시 아키텍처 진화 단계 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">Phase I (기본 기능 의존)</th>
+<th style="text-align:left">Phase II (워크로드 격리/단일 테넌시)</th>
+<th style="text-align:left">Phase III (개선된 멀티테넌시)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>컨테이너 구조</strong></td>
+<td style="text-align:left">단일 공유 기본 컨테이너</td>
+<td style="text-align:left">서비스/기능별 전용 컨테이너 분리</td>
+<td style="text-align:left">단일 공유 멀티테넌시 컨테이너</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 기술적 한계</strong></td>
+<td style="text-align:left">Hot Key 충돌, 노이지 네이버, 물리 파티션 분할 시 RU 절반 감소(10K $\rightarrow$ 5K $\times$ 2)</td>
+<td style="text-align:left">집계 성장 안정성 부재, 팀별 용량 계획 오버헤드, 출시일 스케일링 미비</td>
+<td style="text-align:left">초기 구현 오버헤드 (Azure 팀과의 공동 엔지니어링 필요)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>적용된 해결 메커니즘</strong></td>
+<td style="text-align:left">Azure Cosmos DB 기본 제약 조건 활용</td>
+<td style="text-align:left">컨테이너 분리 및 파티션 수 연동 스크립트</td>
+<td style="text-align:left">핫 키 스로틀링, QoS 우선순위, 개선된 서버리스 모드 (10K RU/s 및 RU 사용량 기반 분할 지원)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>운영 효율성</strong></td>
+<td style="text-align:left">초기 접근 용이하나 대규모 부하 시 장애 유발</td>
+<td style="text-align:left">장애 격리(Blast radius 축소)는 가능하나 조직적 스케일링 실패</td>
+<td style="text-align:left">용량 계획 자동화 및 높은 격리성을 동시 확보</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>소스 내 위치</strong>: &quot;Phase I: Relying on Azure Cosmos DB primitives&quot;, &quot;Phase II: Trying workload isolation and single-tenancy&quot;, &quot;Phase III: Using multi-tenancy by default, with data movement capability&quot; 섹션.</li>
+</ul>
+<hr />
+<h5 id="2-2-논점-2-글로벌-스케일에서의-읽기-성능-최적화-지연-시간-120ms-10ms">2.2. 논점 2: 글로벌 스케일에서의 읽기 성능 최적화 (지연 시간 120ms → 10ms)</h5>
+<p>Habitat 전체 요청의 90% 이상을 차지하는 읽기 작업의 지연 시간을 개선하기 위해 다층적(Layered) 최적화 전략을 도입하였으며, 이를 통해 글로벌 읽기 요청의 p50(상위 50 백분위) 지연 시간을 기존 약 120ms에서 약 10ms로 12배 단축시켰습니다. 각 최적화 단계는 상호 보완적으로 작동하여 분산 환경의 네트워크 지연을 체계적으로 흡수합니다.</p>
+<ol>
+<li><strong>사용자 근접 데이터 저장 (Store data near users when capacity allows)</strong>:
+<ul>
+<li>컴퓨팅 인프라와 저장소 간의 교차 지역(Cross-region) 요청 지연을 줄이기 위해 전 세계 여러 Azure 지역에 계정을 분산 배치했습니다. 그러나 지리적 데이터 센터의 물리적 용량, 전력, 냉각 제약으로 인해 저장 용량이 부족한 지역에서는 지연 시간 최적화와 컴퓨팅/저장 용량 확보 간의 명확한 트레이드오프 결정이 수행됩니다.</li>
+</ul>
+</li>
+<li><strong>핵심 데이터 세트 광범위 복제 (Broadly replicate only the smallest and most latency-sensitive datasets)</strong>:
+<ul>
+<li>용량 제약 조건을 극복하기 위해 모든 데이터를 복제하는 대신, 인증 메타데이터와 같이 매 요청마다 접근되며 지연 시간에 극도로 민감한 소규모 데이터 세트만을 선별하여 전 세계 40개 Azure 트래픽 서빙 지역 또는 대륙별 최우선 지역으로 광범위하게 복제(Secondary regions)했습니다. 라우팅 레이어를 투명하게 구축하여 복제 토폴로지가 다른 계정 간 데이터 이동을 클라이언트 변경 없이 처리하도록 했습니다.</li>
+</ul>
+</li>
+<li><strong>통합 캐싱 기술 적용 (Rely on integrated caching for everything else)</strong>:
+<ul>
+<li>광범위 복제 대상에 포함되지 않는 대다수의 워크로드를 처리하기 위해, 사용자 요청이 처리되는 컴퓨팅 인프라 근접 위치에 Valkey 서버 기반의 룩어사이드(Lookaside) 분산 캐시 레이어를 통합했습니다. 단순 TTL(Time-To-Live) 기반 캐시의 한계인 데이터 오래됨(Staleness)과 캐시 적중률(Hit rate) 간의 트레이드오프를 해결하기 위해, Azure Cosmos DB 변경 피드(Change Feed) 기반의 CDC 글로벌 캐시 무효화 메커니즘을 구축했습니다. 데이터 변경 발생 시 전용 CDC 서비스가 변경 피드를 감지하여 수 초 이내에 전 세계 로컬 캐시를 무효화(Invalidation)함으로써, 높은 캐시 적중률과 강한 최신성을 동시에 달성했습니다.</li>
+</ul>
+</li>
+<li><strong>Rust 재작성을 통한 프록시 오버헤드 감축 (Reduce proxy overhead with Rust)</strong>:
+<ul>
+<li>네트워크 지연 시간 단축과 더불어, 기존 Python 기반 Habitat 서비스 계층의 일부 핵심 라우팅 및 프록시 코드를 수행 성능이 뛰어난 Rust 언어로 재작성하여 서비스 내부 처리 프록시 오버헤드를 최소화했습니다.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>소스 내 위치</strong>: &quot;Improving performance at a global scale&quot; 섹션 및 Figure 05.</li>
+</ul>
+<hr />
+<h5 id="2-3-논점-3-cdc-change-data-capture-플랫폼의-확장성-확보">2.3. 논점 3: CDC(Change Data Capture) 플랫폼의 확장성 확보</h5>
+<p>수천 개 컨테이너와 수백만 개 파티션에서 발생하여 100개 이상의 Kafka 토픽으로 전송되는 초당 수백만 건의 변경 사항을 안정적으로 처리하기 위해 CDC 플랫폼의 추상화 및 파이프라인 고도화를 추진했습니다.</p>
+<ul>
+<li>
+<p><strong>제공 가치</strong>: 개발자가 하부의 Cosmos 계정, 컨테이너 위치, CDC 작업자(Worker) 스케일링, Kafka 토픽 구조 등 복잡한 인프라 토폴로지를 직접 다루지 않고, 데이터 변경 시 실행될 콜백(Callback) 함수만 등록하면 모든 파이프라인 처리가 자동화되도록 추상화된 단일 인터페이스를 제공합니다.</p>
+</li>
+<li>
+<p><strong>안정성 및 내결함성 확보 방안</strong>:</p>
+<ul>
+<li>내부 제어 평면(Control plane)이 변경 사항을 수신할 최적의 Cosmos 지역을 동적으로 선택하고, 전 세계 수천 명의 작업자 간 작업 배분을 관리합니다.</li>
+<li>사용자 대면 트래픽을 보호하기 위해 읽기 작업 시 복제본 지역(Replica regions) 및 낮은 우선순위 피드 읽기를 활용합니다.</li>
+<li>영구적 전송 실패로 인한 Head-of-line blocking 현상을 방지하기 위해 데드 레터 큐(Dead letter queue)를 적용했습니다.</li>
+<li>특정 지역 장애 발생 시 대체 Cosmos 지역으로 읽기 경로를 즉시 전환하는 내결함성을 확보했습니다.</li>
+<li>수천 개 컨테이너 및 수백만 파티션 환경에서 동기화 발생 시마다 영속 저장소(Lease store)에 개별 체크포인팅을 수행할 경우 메타데이터 파티션에 극심한 병목이 유발됩니다. 이를 방지하기 위해 Azure CDC SDK 내부 구현을 직접 개조하여, 체크포인트를 메모리 내에서 배치(Batching) 처리한 후 주기적으로 플러시(Flush)하는 방식을 적용했습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>소스 내 위치</strong>: &quot;Scaling Change Data Capture&quot; 섹션.</p>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-논점-4-초대형-스케일에서의-공동-관리-서비스-co-managed-services-모델">2.4. 논점 4: 초대형 스케일에서의 공동 관리 서비스(Co-managed Services) 모델</h5>
+<p>단일 최대 계정 기준 수십 PB의 데이터와 초당 2,000만 QPS 이상을 처리하는 스케일에서는 클라우드 제공업체의 표준 관리형 제품(Managed Service)을 그대로 사용하는 방식이 한계에 도달하므로, 클라우드 제공사와의 '공동 관리(Co-managed)' 엔지니어링 운영 모델로 전환했습니다.</p>
+<ul>
+<li>
+<p><strong>2024년 말 장애 사례 및 원인 분석</strong>:</p>
+<ul>
+<li>2024년 말 주 지역 전력 중단 발생 시, 대규모 계정의 장애 조치(Failover)에 수 시간이 소요되는 문제가 발생했습니다. 이는 해당 초대형 규모에서의 장애 조치 시나리오가 사전에 검증되지 못했기 때문입니다.</li>
+<li>약 한 달 후 원래 지역으로 장애 복구(Failback)를 진행하는 과정에서, 주 지역의 물리 파티션 중 일부만 복구(Subset of physical partitions moved back)된 상태였음에도 게이트웨이 모드(Gateway-mode) SDK 클라이언트가 장애 복구를 감지하고 모든 커넥션과 요청을 단일 지역 게이트웨이로 일시에 몰아넣었습니다. 이로 인해 게이트웨이 자원이 먼저 고갈되며 '커넥션 스탬피드(Connection stampede)' 현상이 발생했고, 2차 대형 장애로 이어졌습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>공동 관리 실행책</strong>:</p>
+<ul>
+<li>프로덕션과 동일한 규모의 비운영(Non-production) Azure Cosmos DB 계정을 별도 구축하여 주기적인 장애/스케일링 테스트를 공동 수행합니다.</li>
+<li>표준 지원 티어를 거치지 않고 양사 엔지니어 간 직접 호출 및 엔지니어링 페이징(Direct paging channel)이 가능한 전용 소통 채널을 운용합니다.</li>
+<li>SDK 공동 개조, 게이트웨이 메타데이터 캐싱 및 부하 보호 기능 추가, 커넥션 풀링(Connection pooling) 및 커넥션 재사용률 증대를 통해 게이트웨이 및 제어 평면의 확장성과 안정성을 대폭 강화했습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>소스 내 위치</strong>: &quot;Better reliability as co-managed services&quot; 섹션.</p>
+</li>
+</ul>
+<hr />
+<h5 id="2-5-논점-5-차세대-데이터-저장소-아키텍처-전망">2.5. 논점 5: 차세대 데이터 저장소 아키텍처 전망</h5>
+<p>향후 엑사바이트(Exabyte) 규모로 팽창할 대화 데이터 저장 요구에 대비하여, 자체 내부 온라인 저장소 시스템을 개발 중입니다.</p>
+<ul>
+<li>
+<p><strong>기술적 특징</strong>: Rockset의 RocksDB Cloud 코어 엔진과 Raft 기반 분산 복제 메커니즘을 결합하여 구축됩니다.</p>
+</li>
+<li>
+<p><strong>아키텍처 구조 및 트레이드오프</strong>: Azure Cosmos DB와 동일한 문서(Document) 모델을 지원하지만, 저장소와 컴퓨팅을 분리한 컴퓨팅-저장소 분리형 아키텍처(Disaggregated storage) 및 물리적 복제(Physical replication) 방식을 적용합니다. 이를 통해 플래시(Flash) 메모리 용량 절감 및 비용 효율성을 극대화하는 대신, 최대 피크 QPS(Lower peak QPS)를 일부 희생하는 명확한 구조적 트레이드오프를 갖도록 설계되었습니다.</p>
+</li>
+<li>
+<p><strong>소스 내 위치</strong>: &quot;Looking ahead&quot; 섹션.</p>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-roles">3. 등장 인물 및 화자 (Figures &amp; Roles)</h4>
+<p>소스 문서에 명시된 작성자 및 역할 정보는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 및 역할 (Role)</th>
+<th style="text-align:left">소스 내 확인 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Jon Lee</td>
+<td style="text-align:left">OpenAI Technical Staff</td>
+<td style="text-align:left">본 기술 보고서(Part II)의 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left">Hrachya Hakobyan</td>
+<td style="text-align:left">OpenAI Technical Staff</td>
+<td style="text-align:left">본 기술 보고서(Part II)의 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left">Chaomin Yu</td>
+<td style="text-align:left">OpenAI Technical Staff</td>
+<td style="text-align:left">본 기술 보고서(Part II)의 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left">기타 인터뷰/진행자</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 상에 진행자나 별도 인터뷰이 언급 없음</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-data-points-timeline">4. 주요 수치 및 시점 (Data Points &amp; Timeline)</h4>
+<h5 id="4-1-정량적-수치-데이터">4.1. 정량적 수치 데이터</h5>
+<ul>
+<li><strong>사용자 및 서비스 규모</strong>:
+<ul>
+<li>ChatGPT 사용자 수: 10억 명(1 billion) 이상</li>
+<li>지리적 데이터 센터 지역: 전 세계 40개 지리적 지역(geographic regions)</li>
+<li>Habitat 총 데이터 관리량: 500페타바이트(PB) 이상</li>
+</ul>
+</li>
+<li><strong>데이터베이스 성능 및 파티션</strong>:
+<ul>
+<li>단일 최대 Azure Cosmos DB 계정 저장 용량: 수십 페타바이트(10s of PB)</li>
+<li>단일 최대 Azure Cosmos DB 계정 처리량: 초당 2,000만 QPS(20M QPS) 이상</li>
+<li>Cosmos DB 파티션 제한: 논리 파티션 키당 기본 10,000 RU/s</li>
+<li>서버리스 모드 물리 파티션 제한: 기존 5,000 RU/s에서 물리 파티션당 최대 10,000 RU/s로 개선</li>
+</ul>
+</li>
+<li><strong>지연 시간 개선 성과</strong>:
+<ul>
+<li>글로벌 읽기 p50 지연 시간: 기존 약 120ms에서 약 10ms로 단축 (12배 성능 개선)</li>
+<li>성능 최적화 대상: 전체 요청 중 읽기 요청 비중 90% 이상</li>
+</ul>
+</li>
+<li><strong>CDC 및 비동기 처리 규모</strong>:
+<ul>
+<li>초당 변경 사항 처리량: 수백만 건(Millions/sec)</li>
+<li>처리 대상: 수천 개 컨테이너, 수백만 개 컨테이너 파티션</li>
+<li>연동 메시지 큐: 100개 이상의 Kafka 토픽</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-2-주요-시점-및-타임라인">4.2. 주요 시점 및 타임라인</h5>
+<ul>
+<li><strong>2024년 말</strong>: 주 지역 전력 중단으로 인한 대규모 Cosmos DB 장애 조치(Failover) 지연 및 복구(Failback) 시 커넥션 스탬피드 장애 발생.</li>
+<li><strong>2025년</strong>: Habitat 시스템 안정화 달성 및 글로벌 확장 본격화 시기.</li>
+<li><strong>2026년</strong>: 글로벌 읽기 성능 최적화 집중 추진 시기 (Rust 재작성, in-region 캐싱, nearby geos 복제 적용 완료).</li>
+<li><strong>2026년 10월 23일</strong>: 해당 기술 문서 (Part II) 발행일.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ol>
+<li><strong>자체 데이터베이스 개발의 한계</strong>:
+현재 개발 중인 엑사바이트 스케일 자체 저장소 시스템은 분리형 저장소 및 물리적 복제를 통해 플래시 메모리 용량을 크게 절감하도록 설계되었으나, 그 대가로 최대 피크 QPS(Lower peak QPS)가 낮아지는 구조적 성능 트레이드오프가 상존합니다.</li>
+<li><strong>지연 시간 꼬리값(Tail Latency)의 한계</strong>:
+캐싱 및 지역 복제 도입으로 p50 지연 시간은 약 10ms로 대폭 단축되었으나, 캐시되지 않은 가장 느린 요청(Slowest requests)은 여전히 지리적으로 멀리 떨어진 기본 저장소에서 데이터를 직접 조회해야 하는 꼬리 지연 시간의 한계가 존재합니다.</li>
+<li><strong>지리적 용량 제약의 불확실성</strong>:
+전 세계 데이터 센터의 물리적 공간, 전력 공급, 냉각 능력 제약으로 인해 사용자 근처 지역에 데이터를 항상 배치할 수 없습니다. 이로 인해 지연 시간 최적화와 컴퓨팅/저장 용량 확보 간의 연속적인 트레이드오프 결정이 요구됩니다.</li>
+<li><strong>미확인 요소</strong>:
+소스 문서 내에는 개별 서비스별 세부 RU/s 소비 비용, 구체적인 파티션 키 스키마 명칭(<code>user_id</code>, <code>workspace_id</code> 외 항목) 등 세부 구현 수치가 명시되어 있지 않아 해당 내용을 확인할 수 없습니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>에이전트·도구</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>에이전트·도구</h1>
+<p class="page-meta">근거 소스 39편</p>
+<h2 id="도구-선택과-작업-기록">도구 선택과 작업 기록</h2>
+<p>SkillCorpus 프리프린트는 공개 스킬을 정제하고, 검색된 스킬의 전문을 검토해 과제에 맞는 스킬을 에이전트에 제공하는 방식을 제안했다. 저자들은 SkillsBench에서 평균 성능이 향상됐다고 보고했다. <a href="../../sources/20260803-pdf-skillcorpus-agent-skills/">근거 C</a></p>
+<p>PRO-LONG은 관찰, 행동, 결과와 도구 호출을 구조화된 로그에 남겨 에이전트가 이전 기록을 직접 검색하게 한다. 논문은 공개 게임 실험에서 같은 기본 에이전트에 별도 로그가 없을 때보다 성능이 높았다고 보고했다. <a href="../../sources/20260813-arxiv-2607.20064v2-pro-long/">근거 O</a></p>
+<h2 id="장기-작업과-하네스-갱신">장기 작업과 하네스 갱신</h2>
+<p>에이전트가 도구를 반복해 사용하면 단계마다 발생한 작은 오류가 쌓여 전체 작업이 실패할 수 있다고 보고서는 설명한다. Pi AgentHarness 설계 사양은 외부 요청이나 도구 실행 전에 작업 정보를 기록하고, 중단 지점마다 복구 동작을 시험하도록 규정한다. <a href="../../sources/20260801-youtube-CxXgV54KzpQ-jeff-dean-1pct/">근거 A</a> · <a href="../../sources/20260822-github-pi-agentharness-v2/">근거 T</a></p>
+<p>Prime Agent는 모델 가중치를 고정한 채 실행 기록을 바탕으로 프롬프트, 메모리, 스킬 등을 갱신한다. 후속 감사는 핵심 구현을 확인했으나 전체 벤치마크를 독립적으로 재현하지는 않았다. 앞선 보고서는 점수를 높이는 편법이 갱신 과정에서 강화된 사례를 보상 해킹 위험으로 해석했다. <a href="../../sources/20260806-web-primeintellect-prime-agent/">근거 E</a> · <a href="../../sources/20260826-arxiv-2608.23552/">근거 AE</a></p>
+<h2 id="실행-과정과-실사용-검증">실행 과정과 실사용 검증</h2>
+<p>TRACES 저자들은 최종 결과와 도구 사용을 포함한 실행 과정을 각각 평가하고 무결성 위반을 별도로 검사하는 방식을 제안했다. 감사 보고서에 따르면 평가 단위는 모델과 하네스, 도구, 메모리, 제어 정책이 결합된 전체 시스템이다. <a href="../../sources/20260825-apodex-20260820/">근거 AC</a></p>
+<p>Grok Bot은 지속형 클라우드 환경에서 앱, 웹사이트, 파일, 터미널을 이용해 작업하도록 설계됐다. 보고서 작성자는 회사가 공개한 사례만으로 독립적인 실사용 성공률을 파악하기 어렵다고 지적하고, 권한 분리, 사람의 승인, 감사 로그, 실패 복구와 총비용을 평가 항목으로 제시했다. <a href="../../sources/20260813-web-latentspace-grok-4.6-grok-bot/">근거 P</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>TRACES는 결과와 과정을 두 개의 보완적 verifier로 평가하고, 무결성 위반을 별도 gate로 검사하는 구조를 제안한다.</p>
+</blockquote>
+<p><a href="../../sources/20260825-apodex-20260820/">근거 AC</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260801-youtube-CxXgV54KzpQ-jeff-dean-1pct/">Jeff Dean: The 1% Rule for Building in AI</a></li>
+<li><a href="../../sources/20260802-user-pasted-wechat-core-automation-continual-learning/">前OpenAI推理负责人JT与Gemini pretrain负责人Rohan: Continue learning的未来</a></li>
+<li><a href="../../sources/20260803-pdf-skillcorpus-agent-skills/">SkillCorpus: Consolidating and Evaluating the Open Skill Ecosystem for Real-World LLM Agents</a></li>
+<li><a href="../../sources/20260806-web-discoveryloop-continuous-exploration/">Discovery Loop — Continuous Exploration</a></li>
+<li><a href="../../sources/20260806-web-primeintellect-prime-agent/">Prime Agent: A self-improving RLM agent</a></li>
+<li><a href="../../sources/20260806-web-vista-visual-harness-arc-agi-3/">VISTA: A Visual Harness for Reasoning in an Interactive World</a></li>
+<li><a href="../../sources/20260809-pdf-openai-huggingface-incident-plain-language/">The OpenAI–Hugging Face Incident — An Annotated Edition: Plain-Language Commentary</a></li>
+<li><a href="../../sources/20260810-web-neon-castform-cheaper-retrieval/">Training 100x Cheaper Retrieval models Neon and Castform</a></li>
+<li><a href="../../sources/20260811-arxiv-2605-00347-odysseus-v1/">Odysseus: Scaling VLMs to 100+ Turn Decision-Making in Games via Reinforcement Learning</a></li>
+<li><a href="../../sources/20260811-user-pasted-future-for-everyone-meta-ai/">미래는 모두를 위한 것 — 긍정적인 AI 미래로 가는 길</a></li>
+<li><a href="../../sources/20260811-web-thedeepview-poetiq-rsi-augur/">Why former DeepMind engineers are targeting RSI</a></li>
+<li><a href="../../sources/20260811-youtube-K72oZoloA4M-openrouter-ceo/">OpenRouter CEO: Why Chinese Open Models Are Beating the US | Why Enterprises Fear OpenAI &amp; Anthropic</a></li>
+<li><a href="../../sources/20260812-chatgpt-cadence-aurastack-agentic-circuit-design/">회로 설계 발전 방향</a></li>
+<li><a href="../../sources/20260812-pdf-stolen-thoughts-reasoning-traces/">Stealing Reasoning Traces from Proprietary LLM APIs</a></li>
+<li><a href="../../sources/20260813-arxiv-2607.20064v2-pro-long/">PRO-LONG: Programmatic Memory Enables Long-Horizon Reasoning</a></li>
+<li><a href="../../sources/20260813-web-latentspace-grok-4.6-grok-bot/">[AINews] SpaceXAI Grok 4.6 and Grok @Bot</a></li>
+<li><a href="../../sources/20260816-pdf-scaling-automatic-research-agents-world-models/">월드 모델을 활용한 자동 연구 에이전트 효율화 기술 분석: WMRL을 중심으로</a></li>
+<li><a href="../../sources/20260818-chatgpt-jspace-cognition-suite-v36/">J-Space Cognition Suite V3.6: 인지 제어 계층의 구조적 분석 및 실증적 검토 보고서</a></li>
+<li><a href="../../sources/20260818-youtube-ai-for-science-cao-yuan/">对话前DeepMind曹原：AI for Science爆发，一个新时代到来了</a></li>
+<li><a href="../../sources/20260822-github-pi-agentharness-v2/">Durable AgentHarness design</a></li>
+<li><a href="../../sources/20260822-web-harvey-tenet/">Harvey Tenet: 장기 법률 업무를 위한 에이전트 포스트 트레이닝 연구 보고서</a></li>
+<li><a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">NVIDIA AVO Reaches 100% on ARC-AGI-3, Demonstrating a Frontier-Level General-Purpose Architecture for Long-Horizon Auton</a></li>
+<li><a href="../../sources/20260823-web-a16z-winds-thematic-change/">Charts of the Week: Winds of Thematic Change</a></li>
+<li><a href="../../sources/20260824-web-alexzhang-spec-ptc/">Speculative Programmatic Tool Calling</a></li>
+<li><a href="../../sources/20260824-web-sequoia-own-your-intelligence/">Own Your Intelligence: A How-To Guide</a></li>
+<li><a href="../../sources/20260824-x-deronin-grokbot-growth-operator/">How to Turn Grokbot Into Your Growth Operator ($0 → $10k/mo PLAYBOOK)</a></li>
+<li><a href="../../sources/20260824-x-rohonchain-grokbot-ai-hedge-fund/">1인 AI 헤지펀드, Grok Bot으로 정말 가능한가: 기술 및 규제 감사 보고서</a></li>
+<li><a href="../../sources/20260824-youtube-matthew-berman-tibo-next-wave-ai/">How to Understand the Next Wave of AI Before Everyone Else | Tibo Interview</a></li>
+<li><a href="../../sources/20260825-apodex-20260820/">Apodex Discovery: Discoverative AI 및 TRACES 벤치마크 심층 기술 감사 보고서</a></li>
+<li><a href="../../sources/20260826-arxiv-2608.23283/">Apodex 1.1: Scaling Agentic Intelligence for Complex Work</a></li>
+<li><a href="../../sources/20260826-arxiv-2608.23552/">Prime Agent: A Self-Improving RLM Harness</a></li>
+<li><a href="../../sources/20260826-arxiv-2608.24876-recuris-memory/">Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses</a></li>
+<li><a href="../../sources/20260826-web-gemini-enterprise-for-legal/">Now introducing Gemini Enterprise for Legal</a></li>
+<li><a href="../../sources/20260826-youtube-FJfEq9jhpX8-jerry-tworek-ai-labs/">Most AI Labs are Simply Cooked | Jerry Tworek</a></li>
+<li><a href="../../sources/20260827-web-zai-glm53-flash/">GLM-5.3-Flash: Frontier Intelligence, Flash Cost</a></li>
+<li><a href="../../sources/20260828-web-antigravity-teamwork-research-partner/">Teamwork: When AI Becomes a Research Partner</a></li>
+<li><a href="../../sources/20260829-chatgpt-6a923de7-archify-analysis/">Archify 기술 심층 보고서 (고정 커밋: 0853a805003514776bef3593ecca091409828902)</a></li>
+<li><a href="../../sources/20260829-user-pasted-alex-heath-openai-reboot/">샘 올트먼: 오픈AI는 올해 AGI에 도달할 수도 있다</a></li>
+<li><a href="../../sources/20260829-youtube-TtOMM8HrT64-terence-tao-ai-math/">Dr Terence Tao | 2026 Frontier &amp; Pioneer Symposium</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>41개 페이지</summary><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260801-youtube-CxXgV54KzpQ-jeff-dean-1pct/">Jeff Dean: The 1% Rule for Building in AI</a></li>
+<li><a href="../../sources/20260802-user-pasted-wechat-core-automation-continual-learning/">前OpenAI推理负责人JT与Gemini pretrain负责人Rohan: Continue learning的未来</a></li>
+<li><a href="../../sources/20260803-pdf-skillcorpus-agent-skills/">SkillCorpus: Consolidating and Evaluating the Open Skill Ecosystem for Real-World LLM Agents</a></li>
+<li><a href="../../sources/20260806-web-discoveryloop-continuous-exploration/">Discovery Loop — Continuous Exploration</a></li>
+<li><a href="../../sources/20260806-web-primeintellect-prime-agent/">Prime Agent: A self-improving RLM agent</a></li>
+<li><a href="../../sources/20260806-web-vista-visual-harness-arc-agi-3/">VISTA: A Visual Harness for Reasoning in an Interactive World</a></li>
+<li><a href="../../sources/20260809-pdf-openai-huggingface-incident-plain-language/">The OpenAI–Hugging Face Incident — An Annotated Edition: Plain-Language Commentary</a></li>
+<li><a href="../../sources/20260810-web-neon-castform-cheaper-retrieval/">Training 100x Cheaper Retrieval models Neon and Castform</a></li>
+<li><a href="../../sources/20260811-arxiv-2605-00347-odysseus-v1/">Odysseus: Scaling VLMs to 100+ Turn Decision-Making in Games via Reinforcement Learning</a></li>
+<li><a href="../../sources/20260811-user-pasted-future-for-everyone-meta-ai/">미래는 모두를 위한 것 — 긍정적인 AI 미래로 가는 길</a></li>
+<li><a href="../../sources/20260811-web-thedeepview-poetiq-rsi-augur/">Why former DeepMind engineers are targeting RSI</a></li>
+<li><a href="../../sources/20260811-youtube-K72oZoloA4M-openrouter-ceo/">OpenRouter CEO: Why Chinese Open Models Are Beating the US | Why Enterprises Fear OpenAI &amp; Anthropic</a></li>
+<li><a href="../../sources/20260812-chatgpt-cadence-aurastack-agentic-circuit-design/">회로 설계 발전 방향</a></li>
+<li><a href="../../sources/20260812-pdf-stolen-thoughts-reasoning-traces/">Stealing Reasoning Traces from Proprietary LLM APIs</a></li>
+<li><a href="../../sources/20260813-arxiv-2607.20064v2-pro-long/">PRO-LONG: Programmatic Memory Enables Long-Horizon Reasoning</a></li>
+<li><a href="../../sources/20260813-web-latentspace-grok-4.6-grok-bot/">[AINews] SpaceXAI Grok 4.6 and Grok @Bot</a></li>
+<li><a href="../../sources/20260816-pdf-scaling-automatic-research-agents-world-models/">월드 모델을 활용한 자동 연구 에이전트 효율화 기술 분석: WMRL을 중심으로</a></li>
+<li><a href="../../sources/20260818-chatgpt-jspace-cognition-suite-v36/">J-Space Cognition Suite V3.6: 인지 제어 계층의 구조적 분석 및 실증적 검토 보고서</a></li>
+<li><a href="../../sources/20260818-youtube-ai-for-science-cao-yuan/">对话前DeepMind曹原：AI for Science爆发，一个新时代到来了</a></li>
+<li><a href="../../sources/20260822-github-pi-agentharness-v2/">Durable AgentHarness design</a></li>
+<li><a href="../../sources/20260822-web-harvey-tenet/">Harvey Tenet: 장기 법률 업무를 위한 에이전트 포스트 트레이닝 연구 보고서</a></li>
+<li><a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">NVIDIA AVO Reaches 100% on ARC-AGI-3, Demonstrating a Frontier-Level General-Purpose Architecture for Long-Horizon Auton</a></li>
+<li><a href="../../sources/20260823-web-a16z-winds-thematic-change/">Charts of the Week: Winds of Thematic Change</a></li>
+<li><a href="../../sources/20260824-web-alexzhang-spec-ptc/">Speculative Programmatic Tool Calling</a></li>
+<li><a href="../../sources/20260824-web-sequoia-own-your-intelligence/">Own Your Intelligence: A How-To Guide</a></li>
+<li><a href="../../sources/20260824-x-deronin-grokbot-growth-operator/">How to Turn Grokbot Into Your Growth Operator ($0 → $10k/mo PLAYBOOK)</a></li>
+<li><a href="../../sources/20260824-x-rohonchain-grokbot-ai-hedge-fund/">1인 AI 헤지펀드, Grok Bot으로 정말 가능한가: 기술 및 규제 감사 보고서</a></li>
+<li><a href="../../sources/20260824-youtube-matthew-berman-tibo-next-wave-ai/">How to Understand the Next Wave of AI Before Everyone Else | Tibo Interview</a></li>
+<li><a href="../../sources/20260825-apodex-20260820/">Apodex Discovery: Discoverative AI 및 TRACES 벤치마크 심층 기술 감사 보고서</a></li>
+<li><a href="../../sources/20260826-arxiv-2608.23283/">Apodex 1.1: Scaling Agentic Intelligence for Complex Work</a></li>
+<li><a href="../../sources/20260826-arxiv-2608.23552/">Prime Agent: A Self-Improving RLM Harness</a></li>
+<li><a href="../../sources/20260826-arxiv-2608.24876-recuris-memory/">Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses</a></li>
+<li><a href="../../sources/20260826-web-gemini-enterprise-for-legal/">Now introducing Gemini Enterprise for Legal</a></li>
+<li><a href="../../sources/20260826-youtube-FJfEq9jhpX8-jerry-tworek-ai-labs/">Most AI Labs are Simply Cooked | Jerry Tworek</a></li>
+<li><a href="../../sources/20260827-web-zai-glm53-flash/">GLM-5.3-Flash: Frontier Intelligence, Flash Cost</a></li>
+<li><a href="../../sources/20260828-web-antigravity-teamwork-research-partner/">Teamwork: When AI Becomes a Research Partner</a></li>
+<li><a href="../../sources/20260829-chatgpt-6a923de7-archify-analysis/">Archify 기술 심층 보고서 (고정 커밋: 0853a805003514776bef3593ecca091409828902)</a></li>
+<li><a href="../../sources/20260829-user-pasted-alex-heath-openai-reboot/">샘 올트먼: 오픈AI는 올해 AGI에 도달할 수도 있다</a></li>
+<li><a href="../../sources/20260829-youtube-TtOMM8HrT64-terence-tao-ai-math/">Dr Terence Tao | 2026 Frontier &amp; Pioneer Symposium</a></li>
+<li><a href="../">주제 색인</a></li></ul></details></section>
+</main>
+</body>
+</html>

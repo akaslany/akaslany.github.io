@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Normalized Low-Rank Adaptation 검증 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Normalized Low-Rank Adaptation 검증 보고서</h1>
+<p class="page-meta">논문 · 2026-09-02</p>
+<h2 id="요약">요약</h2>
+<p>NoRA의 가장 설득력 있는 부분은 “LoRA의 rank가 아니라 down-projection A의 열 스케일도 초기 학습을 좌우한다”는 좁은 주장이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=TCE1-JyDAXc">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="normalized-low-rank-adaptation-검증-보고서">Normalized Low-Rank Adaptation 검증 보고서</h3>
+<h4 id="집행-판단">집행 판단</h4>
+<p>NoRA의 가장 설득력 있는 부분은 “LoRA의 rank가 아니라 down-projection A의 열 스케일도 초기 학습을 좌우한다”는 좁은 주장이다. 표준 LoRA에서 B를 0으로 초기화하면 첫 시점에 A의 기울기가 0이므로, 초기 A가 B의 첫 업데이트와 유효 입력 부분공간을 결정한다. 저자들은 A의 각 열을 rank 방향으로 단위 정규화하는 NoRA와, 이를 초기화 때만 적용하는 NoRA-init을 제안한다.</p>
+<p>저자 보고치에서 Llama-3.2-3B SFT 평균은 LoRA 37.93, NoRA-init 42.38, NoRA 43.37이다. 표시값 기준 NoRA의 차이는 5.44퍼센트포인트이며, NoRA-init이 4.45포인트를 차지하고 지속 정규화가 0.99포인트를 더한다. RLVR의 최종 평균 열은 LoRA 42.8, NoRA 44.4로 1.6포인트 차이다. 이 수치는 특정 모델·데이터·rank·alpha·평가 규약에 묶여 있고 독립 재현이 아니다.</p>
+<p>따라서 안전한 결론은 다음과 같다. “rank 방향 열 정규화가 저자들이 시험한 셀에서 LoRA의 초기 스케일 불균형을 줄이고 평균 성능 및 일부 안정성 지표를 개선했다.” 반면 “공짜 개선”, “모든 LoRA를 대체”, “full finetuning과 동등”, “망각 제거”, “학습 속도·에너지의 보편적 개선”은 근거를 넘는다.</p>
+<h4 id="1-원문-버전-권리">1. 원문·버전·권리</h4>
+<p>감사 대상은 2026년 8월 31일 제출된 arXiv <code>2608.31036v1</code>, 16쪽 PDF다. 최신 arXiv 기록도 v1이며 withdrawal 표시는 없다. 캡처한 API에는 journal reference가 없다. arXiv가 표시하는 식별자는 동료평가 완료를 뜻하지 않는다.</p>
+<p>PDF SHA-256은 <code>4f6c4574dcc50d7dff055989c795e215b96375616cce95b26ef7bf6e99635969</code>이다. 제출된 AlphaXiv URL은 PDF가 아니라 HTML wrapper였으므로 발견 경로로만 보존했다. 기술 권위는 버전 고정 arXiv PDF다.</p>
+<p>라이선스는 arXiv non-exclusive distribution license 1.0이다. 이는 일반적인 permissive derivative license가 아니다. 따라서 공개 산출물은 좁은 비평·교육 목적의 변형적 논평으로 제한하며, 논문 그림·표·스크린샷·로고·SphereLab/프로젝트 브랜딩·페이지 구성을 재사용하지 않는다.</p>
+<h4 id="2-표준-lora와-첫-기울기">2. 표준 LoRA와 첫 기울기</h4>
+<p>논문 표기를 따르면 base weight <code>W0 ∈ R^{d×k}</code>에 대해 <code>ΔW = αBA</code>, <code>A ∈ R^{r×k}</code>, <code>B ∈ R^{d×r}</code>다. A가 down-projection, B가 up-projection이다. 구현마다 명칭이 반대일 수 있으나 이 보고서는 논문 표기를 유지한다.</p>
+<p>표준 초기화는 A를 무작위로, B를 0으로 둔다. <code>G=∂L/∂W</code>라 하면 초기 기울기는 <code>∂L/∂B = αGA^T</code>, <code>∂L/∂A = αB^TG = 0</code>이다. 즉 첫 시점에서 A는 움직이지 않고, 초기 A가 B의 첫 업데이트를 결정한다. 이것은 “A가 학습 내내 고정”이라는 뜻이 아니라 <code>B(0)=0</code>인 초기 조건의 결과다.</p>
+<h4 id="3-세-개의-개입을-분리해야-한다">3. 세 개의 개입을 분리해야 한다</h4>
+<h5 id="nora">NoRA</h5>
+<p><code>A=[a1,...,ak]</code>의 각 열 <code>aj ∈ R^r</code>를 <code>aj/max(||aj||2, ε)</code>로 정규화한다. 학습 중 forward가 <code>B Norm(A)x</code>를 사용하므로 유효 A의 단위 열 제약이 계속 유지된다.</p>
+<h5 id="nora-init-무작위-1회-정규화">NoRA-init: 무작위 1회 정규화</h5>
+<p>무작위 A를 초기화할 때 한 번 정규화한 뒤, 학습은 제약 없는 표준 <code>BAx</code>로 진행한다. 지속 정규화와 다른 방법이다.</p>
+<h5 id="nora-init-bimi">NoRA-init: BIMI</h5>
+<p>A를 반복되는 단위행렬 블록과 나머지 열로 구성해 처음부터 모든 열의 norm을 1로 만든다. 이후 A와 B는 둘 다 학습된다. MiSS의 고정 block-identity projection과 연결되지만, BIMI는 A를 고정하지 않는다.</p>
+<p>SFT 표에서 NoRA-init이 대부분의 표시 이득을 차지하지만, 이는 해당 셀의 관찰이다. 지속 정규화가 모든 regime에서 불필요하다는 결론은 아니다.</p>
+<h4 id="4-병합-가능성의-정확한-경계">4. 병합 가능성의 정확한 경계</h4>
+<p><code>B Norm(A)x</code>는 Norm(A)가 adapter parameter에만 의존하므로 x에 대해 선형이다. 학습 후 <code>B Norm(A)</code>를 하나의 저랭크 업데이트로 계산해 W0에 대수적으로 합칠 수 있다. 반면 <code>B Norm(Ax)</code>는 x가 바뀔 때 정규화 결과가 바뀌는 비선형 변환이라 하나의 고정 행렬로 정확히 합칠 수 없다.</p>
+<p>다만 대수적 mergeability와 시스템 호환성은 다르다. repository README는 해당 PEFT fork의 <code>merge_and_unload()</code>가 같은 normalization을 적용한다고 설명하지만, 모든 quantization/export/distributed checkpoint/serving stack의 무마찰 병합을 검증한 것은 아니다.</p>
+<h4 id="5-preconditioner-해석과-조건">5. preconditioner 해석과 조건</h4>
+<p>초기에 B만 한 step 업데이트하면 merged weight 변화는 <code>ΔW=-ηGP</code>, <code>P=α²A^TA</code>로 쓸 수 있다. 이는 B가 작아 A-update 관련 항을 무시하는 초기/근사 해석이다. full finetuning은 P=I인 경우다.</p>
+<p>A의 열 norm은 각 입력 좌표의 diagonal gain을 정하고, 열 간 내적은 rank bottleneck의 crosstalk를 만든다. 단위 열과 unit effective scaling을 사용하면 저자들은 <code>diag(P)=I</code>, random direction에 대해 <code>E[P]=I</code>를 얻어 초기 gradient norm의 기대값을 full finetuning에 맞출 수 있다고 주장한다. 여기서 library의 <code>lora_alpha/r</code> convention이면 <code>lora_alpha=r</code>이 unit scaling에 해당한다.</p>
+<p>남는 조건은 중요하다. P는 rank r의 PSD matrix여서 off-diagonal crosstalk가 사라지지 않는다. 분석은 초기 및 B가 작은 구간에 초점이 있다. ε ablation, optimizer별 상호작용, mixed precision 안정성, 전 구간 convergence theorem은 제시되지 않는다. 따라서 universal convergence·optimality·full-FT equivalence를 주장할 수 없다.</p>
+<h4 id="6-실험-감사">6. 실험 감사</h4>
+<h5 id="pretraining">Pretraining</h5>
+<p>논문은 MLA L24-D1024와 MHA의 약 340M 설정, 10B token, 0.5M batch token 규모를 제시한다. Appendix는 20,480 steps, sequence 2,048, global batch 256, AdamW peak 3e-4, seed 42를 적는다. 이 실험은 pretrained W0를 LoRA로 사후 적응하는 통상적 fine-tuning이 아니라, low-rank parameterization을 포함해 model을 scratch pretraining한 설정으로 읽어야 한다.</p>
+<p>중대한 v1 내부 불일치가 있다. Table 2, Table 4 caption, 본문 §4.2는 SlimPajama를 말하지만 Appendix A와 Table 7은 FineWeb-10BT를 적는다. 저자 또는 code config가 해소하기 전 하나의 데이터셋으로 단정하지 않는다.</p>
+<p>MHA에서 full dense W의 downstream accuracy 평균은 41.06, 표준 BAx low-rank는 27.81, NoRA-init BAx는 39.69다. 표준 BAx row는 LAMBADA perplexity collapse를 보인다. 이는 테스트된 scratch-pretraining 저랭크 parameterization에서 initialization이 collapse를 피한 증거이지, wall-clock speedup이나 모든 pretrained-model LoRA의 개선 증거가 아니다.</p>
+<h5 id="sft">SFT</h5>
+<p>Llama-3.2-3B에 MetaMath와 CodeFeedback을 사용하고 GSM8K, MATH500, HumanEval, MBPP를 평가한다. rank 32, all attention/MLP projection target, AdamW lr 2e-5, 1 epoch가 명시된다. 다만 alpha는 method마다 다르고 각 method를 개별 tuning했다고 하므로 완전히 동일한 tuning budget 비교라고 할 수 없다.</p>
+<p>NoRA의 평균 43.37은 표의 비교 방법 중 가장 높지만 모든 column에서 최고는 아니다. Full FT는 GSM8K와 Math가 더 높고, rsLoRA는 MBPP가 더 높다. “best average in this table”이 정확한 표현이다.</p>
+<h5 id="rlvr">RLVR</h5>
+<p>DeepSeek-R1-Distill-Qwen-1.5B, DAPO objective, DAPO-Math-17K, 8 GPUs, bfloat16, 1,024 steps, 8 responses/prompt, max completion 16,384, seed 42가 명시된다. AIME24/25, AMC, HMMT는 @32, MATH500/Minerva는 @4로 평가한다. Table 6의 최종 Avg는 각 benchmark의 Avg 열 6개 평균이며 pass 열 평균이 아니다.</p>
+<p>NoRA 44.4는 LoRA 42.8보다 1.6포인트 높지만 individual cell은 혼합된다. AIME24 Avg는 NoRA가 낮고, AIME25 pass도 낮으며, HMMT는 동률이다. reward implementation의 실행 가능한 세부와 reward-hacking 검증은 PDF에서 충분히 확인되지 않는다. 따라서 “현실 reasoning quality의 보편적 향상”으로 확대할 수 없다.</p>
+<h5 id="catastrophic-forgetting">Catastrophic forgetting</h5>
+<p>망각은 SFT 뒤 MMLU, AGIEval, ARC-C 세 benchmark의 base 대비 변화로 측정한다. NoRA 평균 변화는 +0.02, LoRA -0.56, MiSS -0.70이다. 그러나 OFT는 +0.52다. 이 결과는 세 retention benchmark에서 NoRA가 LoRA보다 덜 떨어졌다는 근거이지, catastrophic forgetting 제거, 장기 continual learning 해결, safety alignment 보존이 아니다.</p>
+<h4 id="7-계산-검증">7. 계산 검증</h4>
+<ul>
+<li>SFT NoRA − LoRA: <code>43.37−37.93=5.44</code> points.</li>
+<li>같은 차이의 상대 변화: <code>43.37/37.93−1≈14.34%</code>. 공개 headline은 오해를 피하려고 5.44 percentage points를 사용한다.</li>
+<li>NoRA-init − LoRA: <code>42.38−37.93=4.45</code> points.</li>
+<li>지속 NoRA − NoRA-init: <code>43.37−42.38=0.99</code> points.</li>
+<li>RLVR NoRA − LoRA: <code>44.4−42.8=1.6</code> points.</li>
+<li>RLVR NoRA − Base: <code>44.4−41.0=3.4</code> points.</li>
+</ul>
+<p>Table 3의 2-task 평균, Table 4의 7 accuracy 평균, Table 5의 4-task SFT 평균과 3-task retention 평균, Table 6의 6 Avg 평균을 표시값에서 재계산했다. 반올림 범위 내 일치한다.</p>
+<h4 id="8-v1-errata와-공정성">8. v1 errata와 공정성</h4>
+<ul>
+<li>Table 3 prose는 <code>Normk provides little improvement, whereas Normk consistently improves</code>라고 쓰지만 두 번째 Normk는 표와 문맥상 Normr여야 한다.</li>
+<li>같은 문단은 세 번째 초기화를 Kaiming Uniform이라고 부르지만 표의 표기는 U(-1,1)이다.</li>
+<li>핵심 표는 충분한 multi-seed error bar나 confidence interval을 제공하지 않는다.</li>
+<li>baseline별 parameter count와 alpha가 다르고, tuning budget 전체는 공개되지 않는다.</li>
+<li>normalization ε, model family/scale, rank 전 범위, sequence length, quantized merge/export, training wall-clock, memory traffic, energy를 포괄적으로 검증하지 않았다.</li>
+</ul>
+<h4 id="9-프로젝트-재현-상태">9. 프로젝트·재현 상태</h4>
+<p>공식 project page는 paper와 GitHub repository를 연결한다. 2026-09-01 UTC 확인 시 repository <code>Joluck/NoRA</code>의 main HEAD는 <code>bda039e6898dfb42d6142b02bc9c9cf8bf9a7150</code>, MIT license, 0 releases, 0 tags였다. modified PEFT와 SFT scripts/configs가 있고 RL은 PeRL을 참조한다. model checkpoint 파일은 확인되지 않았다.</p>
+<p>이는 code availability의 증거이지, v1 table 전체를 같은 commit으로 재현할 수 있다는 보증, mature upstream integration, 독립 replication, production readiness는 아니다. README는 upstream PEFT merge가 진행 중이라고 말한다.</p>
+<h4 id="10-반론-반증-철회-조건">10. 반론·반증·철회 조건</h4>
+<p>가능한 반론은 성능 차이가 normalization principle보다 method별 alpha/tuning, dataset ambiguity, one-seed noise, 특정 benchmark 선택, 또는 implementation detail에서 왔을 수 있다는 것이다. 이를 줄이려면 동일 tuning budget·multi-seed·여러 model family/rank/sequence length에서 LoRA, NoRA-init random, BIMI, continuous NoRA를 matched protocol로 비교해야 한다. training wall-clock·memory traffic·energy와 merge/export regression도 공개해야 한다.</p>
+<p>다음이 확인되면 headline을 수정하거나 철회한다: 후속 arXiv version이 equation/dataset/table 값을 바꿈; author erratum이 5.44 또는 1.6 point comparison을 바꿈; repository가 v1과 다른 experiment code임이 드러남; matched independent replication이 재현에 실패함; release logs가 seed aggregation을 다르게 보여줌; license/author identity가 변경됨.</p>
+<h4 id="안전하게-말할-수-있음">안전하게 말할 수 있음</h4>
+<ul>
+<li>v1 저자들은 A의 rank-direction column normalization이 테스트한 SFT와 RLVR 평균을 LoRA보다 높였다고 보고한다.</li>
+<li>NoRA-init이 테스트된 SFT gain의 대부분을 차지했고 continuous constraint가 추가 gain을 냈다.</li>
+<li><code>B Norm(A)x</code>는 x에 대해 선형이며 algebraically mergeable하다.</li>
+<li>결과는 arXiv v1 프리프린트(preprint)의 저자 보고(author-reported) 근거이며 독립 재현되지 않았다.</li>
+</ul>
+<h4 id="말하면-안-됨">말하면 안 됨</h4>
+<ul>
+<li>정규화 한 번이면 모든 LoRA가 공짜로 좋아진다.</li>
+<li>NoRA는 full finetuning과 동등하거나 항상 더 좋다.</li>
+<li>학습 overhead가 0이고 energy가 줄어든다.</li>
+<li>catastrophic forgetting 또는 safety alignment 문제가 해결됐다.</li>
+<li>repository 공개만으로 v1 table 전체가 재현됐다.</li>
+</ul>
+<h4 id="출처">출처</h4>
+<ul>
+<li>Versioned paper: https://arxiv.org/abs/2608.31036v1</li>
+<li>Project page: https://spherelab.ai/NoRA</li>
+<li>Code snapshot: https://github.com/Joluck/NoRA/tree/bda039e6898dfb42d6142b02bc9c9cf8bf9a7150</li>
+</ul>
+<p>감사 기준 시점: 2026-09-02 KST. 이 보고서는 기술·학술 검토이며 법률 또는 투자 조언이 아니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

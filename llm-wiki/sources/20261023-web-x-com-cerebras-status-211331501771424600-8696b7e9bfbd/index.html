@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How we deploy Trillion-parameter frontier models on Cerebras</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>How we deploy Trillion-parameter frontier models on Cerebras</h1>
+<p class="page-meta">소셜 · 2026-10-23</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 세레브라스(Cerebras)의 웨이퍼 스케일 칩인 WSE-3T를 활용하여 3조(Trillion) 파라미터 규모의 프론티어 인공지능 모델을 효율적으로 분산 배포하는 하드웨어 및 소프트웨어 메커니즘을 심층 분석하는 데 목적이 있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/social/">소셜</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://x.com/cerebras/status/2113315017714246003">출처</a> · <a href="https://www.youtube.com/watch?v=irRpAqYfi34">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="cerebras-기반-조-단위-파라미터-모델-배포-메커니즘-분석-보고서">Cerebras 기반 조 단위 파라미터 모델 배포 메커니즘 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 세레브라스(Cerebras)의 웨이퍼 스케일 칩인 WSE-3T를 활용하여 3조(Trillion) 파라미터 규모의 프론티어 인공지능 모델을 효율적으로 분산 배포하는 하드웨어 및 소프트웨어 메커니즘을 심층 분석하는 데 목적이 있다. 초거대 AI 모델의 가중치를 저장하기 위해서는 테라바이트(TB) 단위의 메모리가 필수적이지만, 단일 세레브라스 WSE-3T 웨이퍼 칩이 보유한 온칩 메모리(SRAM) 용량은 44 GB로 제한되어 있다. 이러한 단일 칩 온칩 메모리의 물리적 한계를 극복하기 위해 세레브라스는 다중 웨이퍼에 모델 레이어를 분할하여 배치하는 멀티 웨이퍼 파이프라인 분할 배포 전략을 구사한다.</p>
+<p>본 분석에서는 3조 파라미터 규모의 오픈소스 프론티어 모델인 키미 K3(Kimi K3)를 주요 사례로 활용하여, 멀티 웨이퍼 파이프라인 구조로 모델을 매핑하는 구체적인 산출 로직과 연산 메커니즘을 다룬다. 모델 가중치를 각 웨이퍼의 온칩 SRAM에 고정(In-place)하고 웨이퍼 간에는 오직 활성화 값(Activations)만 전송하는 구조를 형성함으로써, 초당 1000개에서 2000개 이상의 토큰을 생성하는 고속 추론 성능을 실현한다.</p>
+<p>또한, 컨베이어 벨트 방식의 파이프라인 조립 라인 구조를 통해 여러 동시 요청(Concurrent requests)을 대기 없이 처리하는 고동시성 달성 메커니즘을 설명한다. 레이어 유형별(밀집 레이어 및 선형 주의 레이어) 메모리 할당 전략, 키-값(KV) 캐시 용량 한계, 그리고 전력 단위당 총 토큰 처리량을 핵심으로 하는 추론 시스템 성능 평가 지표를 종합적으로 정리한다. 나아가 추가되는 웨이퍼가 연산 능력과 온칩 메모리를 동시에 확장해 3조 파라미터를 초과하는 초거대 모델까지 유연하게 수용할 수 있는 확장성(Scalability) 원리를 명확히 제시한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
+<h5 id="2-1-kimi-k3-모델-성능-및-기본-설정-조건">2.1. Kimi K3 모델 성능 및 기본 설정 조건</h5>
+<p>분석의 기준 모델로 사용된 오픈소스 모델 키미 K3(Kimi K3)의 구체적인 아키텍처 사양, 벤치마크 평가 결과 및 실습 적용 조건은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>모델 아키텍처</strong></td>
+<td style="text-align:left">총 3조(3T) 파라미터, 69개 선형 주의(Linear-attention) 레이어, 24개 밀집(Dense) 레이어 (총 93개 레이어)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>벤치마크 성과</strong></td>
+<td style="text-align:left">- Terminal-Bench 2.1: 88.3% (비교 대상 GPT-5.6 Sol: 88.8%)&lt;br&gt;- BrowseComp: 91.2% (비교 대상 GPT-5.6 Sol: 90.4%)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>실습 예시 적용 조건</strong></td>
+<td style="text-align:left">- 평균 요청 크기: 256k 토큰 가정&lt;br&gt;- 가중치 양자화: 4비트 (허깅페이스 구현 방식 기준)&lt;br&gt;- KV 캐시 양자화: 8비트</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-2-레이어-유형별-메모리-할당-및-필요-웨이퍼-수-산출">2.2. 레이어 유형별 메모리 할당 및 필요 웨이퍼 수 산출</h5>
+<p>모델의 레이어 유형(밀집 레이어 및 선형 주의 레이어)에 따른 메모리 요구사항과 필요한 총 웨이퍼 수를 산출하는 단계별 논리는 다음과 같다.</p>
+<ol>
+<li><strong>레이어당 크기 산출</strong>: 3조 파라미터 모델의 가중치를 4비트로 양자화한 전체 가중치 용량을 총 93개 레이어(선형 레이어 69개 + 밀집 레이어 24개)로 분할하여 계산하면 레이어 1개당 약 16 GB의 메모리가 할당된다. (단, 원본 소스 문맥상 가중치 페이로드 수치 연산식 텍스트는 비어 있음)</li>
+<li><strong>밀집(Dense) 레이어 웨이퍼 할당</strong>: 밀집 레이어(전체 주의 메커니즘)는 활성화된 모든 요청의 모든 토큰에 대한 키(Key) 및 값(Value)을 저장하는 KV 캐시 공간이 필수적이다. 따라서 웨이퍼 1개당 1개의 밀집 레이어(16 GB)만 배정하며, 남아있는 SRAM 공간(44 GB - 16 GB = 28 GB)은 해당 레이어의 KV 캐시 전용으로 확보한다.</li>
+<li><strong>선형 주의(Linear-attention) 레이어 웨이퍼 할당</strong>: 선형 주의 레이어는 모든 토큰의 키/값을 개별 저장하지 않고, 컨텍스트 길이에 관계없이 요청당 고정된 크기의 작은 상태(State)만 유지하므로 추가적인 KV 캐시 용량이 필요하지 않다. 그 결과 웨이퍼 1개당 2개의 선형 레이어(2 x 16 GB = 32 GB)를 탑재한다.</li>
+<li><strong>총 필요 웨이퍼 수 산출</strong>: 69개의 선형 주의 레이어 처리를 위해 35개의 웨이퍼(69 / 2 올림 계산)가 할당되고, 24개의 밀집 레이어 처리를 위해 24개의 웨이퍼가 할당된다. 이를 합산하면 키미 K3 모델 배포에 필요한 총 웨이퍼 수는 35 + 24 = 59개로 결정된다.</li>
+</ol>
+<h5 id="2-3-파이프라인-연동-및-웨이퍼-간-데이터-전송-메커니즘">2.3. 파이프라인 연동 및 웨이퍼 간 데이터 전송 메커니즘</h5>
+<p>웨이퍼 간 파이프라인 연결 및 데이터 전송 구조의 핵심 메커니즘은 다음과 같다.</p>
+<ul>
+<li><strong>파이프라인 방식 실행 구조</strong>: 세레브라스 컴파일러가 모델 레이어를 각 웨이퍼 영역에 매핑하면 런타임이 토큰의 웨이퍼 간 이동 경로를 제어한다. 단일 웨이퍼의 SRAM(44 GB) 내에 16 GB 레이어가 직접 탑재되므로 모델 가중치는 온칩 메모리에 고정되어 이동하지 않는다.</li>
+<li><strong>이더넷 기반 RDMA 데이터 전송</strong>: 모델 가중치가 고정된 상태로 유지되므로 웨이퍼 간에는 오직 활성화 값(Activations)만 이동한다. 데이터 전송은 이더넷 기반 RDMA(RDMA over Ethernet)를 통해 실행되며, 홉(Hop)당 전송 지연 시간은 약 2마이크로초(μs) 수준에 불과하다.</li>
+<li><strong>단일 요청 처리 흐름</strong>: 각 웨이퍼는 조립 라인의 전용 스테이지(Stage)로 동작한다. 예를 들어 웨이퍼 1은 1~2번 레이어를 실행한 후 활성화 값을 웨이퍼 2로 전달하고, 웨이퍼 2는 3~4번 레이어를 실행하여 결과를 웨이퍼 3으로 넘기는 순차적 프로세스를 통해 최종 웨이퍼에서 다음 토큰을 생성한다.</li>
+</ul>
+<h5 id="2-4-동시-요청-처리-및-kv-캐시-계산-구조">2.4. 동시 요청 처리 및 KV 캐시 계산 구조</h5>
+<p>파이프라인 구조를 활용한 동시성(Concurrency) 증대 및 시스템 성능 평가 지표의 단락별 분석은 다음과 같다.</p>
+<p>전통적인 그래픽 처리 장치(GPU)의 배치 처리 방식은 동기식 구조를 취하므로 동일 배치 내 요청들이 서로의 처리가 완료될 때까지 대기해야 한다. 반면 세레브라스 파이프라인 시스템은 모델 레이어가 여러 파이프라인 스테이지로 분할되어 있어 스테이지 3이 요청 A의 토큰을 처리하는 동안 스테이지 2는 요청 B의 토큰을, 스테이지 1은 요청 C의 토큰을 동시에 처리할 수 있다. 즉, 스테이지들이 대기 상태(Idle)로 낭비되지 않고 연속적인 스트리밍 방식으로 서로 다른 요청을 동시에 연산한다. 실제 운용 환경에서는 더 세분화된 스테이지가 적용되며, 각 스테이지는 단일 요청이 아닌 마이크로 배치(Micro-batch) 단위의 요청 그룹을 연산한다. 이때 <strong>마이크로 배치 크기가 작을수록 개별 요청 처리 속도가 빨라지고, 마이크로 배치 크기가 클수록 전체 시스템 처리량이 증가한다</strong>는 명확한 성능 트레이드오프 관계가 성립한다.</p>
+<p>동시에 처리 가능한 최대 동시 요청 수(Concurrent requests)는 밀집 레이어 웨이퍼의 남은 온칩 메모리 공간에 의해 물리적으로 제어된다. 파이프라인을 통과하는 모든 활성 요청은 밀집 레이어 웨이퍼마다 전용 KV 캐시 공간을 차지하므로, 밀집 레이어 웨이퍼 1개당 남은 SRAM 용량(44 GB - 16 GB = 28 GB)이 동시 요청 수의 용량 상한선을 형성한다. 단일 256k 요청이 차지하는 정확한 캐시 용량 산출식 및 최종 동시 요청 수 계산을 위한 나눗셈 연산식은 원본 소스 텍스트 내 수치 미기재로 인해 구체적인 수치 산출이 불가능하다.</p>
+<p>추론 시스템의 실질적인 효율성을 평가할 때 단순히 동시 요청 수나 배치 크기만으로 성능을 판단하는 것은 한계가 있다. 동일한 출력 생성 속도를 유지한다는 전제 하에, 전력 단위당 총 토큰 처리량(예: 메가와트당 초당 토큰 수, tokens per second per megawatt)을 측정하는 것이 시스템의 고성능 추론 효율성을 입증하는 더 정밀하고 의미 있는 지표로 활용된다. 이러한 파이프라인 및 메모리 분할 접근 방식은 3조 파라미터를 초과하는 초거대 모델에도 동일하게 확장 적용되며, 웨이퍼가 추가될 때마다 연산력과 온칩 SRAM 용량이 동시에 확보되어 대규모 모델을 유연하게 처리할 수 있게 된다.</p>
+<hr />
+<h4 id="3-등장-인물-및-화자-entities-speakers">3. 등장 인물 및 화자 (Entities &amp; Speakers)</h4>
+<p>소스 문맥에서 확인되는 작성자, 디자인 담당자, 검토자 및 원문 게시 주체 정보는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 및 주체명</th>
+<th style="text-align:left">역할 및 관련성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">세레브라스 공식 계정 (@cerebras)</td>
+<td style="text-align:left">소스 게시 주체 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left">사란 치앙 (Sarah Chieng)</td>
+<td style="text-align:left">작성자 (Head of DevX, 계정: @MilksAndMatcha)</td>
+</tr>
+<tr>
+<td style="text-align:left">@halleychangg</td>
+<td style="text-align:left">디자인 담당자</td>
+</tr>
+<tr>
+<td style="text-align:left">아타르바 탈파데 (Atharva Talpade)</td>
+<td style="text-align:left">확인 불가 (피드백/검토 참여자로만 명시됨)</td>
+</tr>
+<tr>
+<td style="text-align:left">젠웨이 가오 (Zhenwei Gao)</td>
+<td style="text-align:left">확인 불가 (피드백/검토 참여자로만 명시됨)</td>
+</tr>
+<tr>
+<td style="text-align:left">안젤라 융 (Angela Yeung)</td>
+<td style="text-align:left">확인 불가 (피드백/검토 참여자로만 명시됨)</td>
+</tr>
+<tr>
+<td style="text-align:left">제시카 리우 (Jessica Liu)</td>
+<td style="text-align:left">확인 불가 (피드백/검토 참여자로만 명시됨)</td>
+</tr>
+<tr>
+<td style="text-align:left">조이스 어 (Joyce Er)</td>
+<td style="text-align:left">확인 불가 (피드백/검토 참여자로만 명시됨)</td>
+</tr>
+<tr>
+<td style="text-align:left">에마 콜 (Emma Call)</td>
+<td style="text-align:left">확인 불가 (피드백/검토 참여자로만 명시됨)</td>
+</tr>
+<tr>
+<td style="text-align:left">로한 구프타 (Rohan Gupta)</td>
+<td style="text-align:left">확인 불가 (피드백/검토 참여자로만 명시됨)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-metrics-timestamps">4. 주요 수치 및 시점 (Metrics &amp; Timestamps)</h4>
+<p>보고서와 관련된 소셜 메타데이터, 공식 서비스 창구 및 기술 수치 목록은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>메타데이터 및 시점</strong></p>
+<ul>
+<li>게시 시각: Thu Oct 22 17:02:18 +0000 2026</li>
+<li>수집 시각: 2026-10-23T17:52:42.780883+00:00 (UTC)</li>
+<li>게시물 소셜 메트릭: 좋아요 588회, 리트윗 71회, 답글 25회, 북마크 371회, 조회수 0회</li>
+<li>공식 서비스 및 문의 창구:
+<ul>
+<li>무료 API 서비스: cloud.cerebras.ai</li>
+<li>영업 문의 계정: sales@cerebras.ai</li>
+<li>공식 아티클 및 웹사이트: cerebras.ai</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>모델 및 기술 수치</strong></p>
+<ul>
+<li>모델 파라미터 규모: 약 3조(3 Trillion) 개</li>
+<li>단일 WSE-3T 웨이퍼 온칩 메모리(SRAM) 용량: 44 GB</li>
+<li>모델 레이어 구성: 총 93개 레이어 (선형 주의 레이어 69개, 밀집 레이어 24개)</li>
+<li>레이어당 메모리 크기: 약 16 GB</li>
+<li>밀집 레이어 웨이퍼당 KV 캐시용 잔여 SRAM: 28 GB (44 GB - 16 GB)</li>
+<li>모델 배포 필요 총 웨이퍼 수: 59개 (선형 레이어용 35개 + 밀집 레이어용 24개)</li>
+<li>웨이퍼 간 데이터 전송 지연 시간: 홉(Hop)당 약 2마이크로초(μs)</li>
+<li>토큰 생성 속도: 초당 1000~2000개 이상 (1000-2000+ tokens/sec)</li>
+<li>평균 요청 크기 가정: 256k 토큰</li>
+<li>양자화 설정: 가중치 4비트 양자화, KV 캐시 8비트 양자화</li>
+<li>벤치마크 점수: Terminal-Bench 2.1 점수 88.3% (비교 대상 GPT-5.6 Sol: 88.8%), BrowseComp 점수 91.2% (비교 대상 GPT-5.6 Sol: 90.4%)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 절에서는 검증된 사실(Fact), 소스의 주장(Claim), 및 작성자 해석과 불확실성(Uncertainty)을 엄격히 구별하여 명시한다.</p>
+<p><strong>사실 (Fact)</strong>: 원본 소스 텍스트 내부에는 연산식 수치가 비어 있는 기술적 결함이 존재한다. 3조 파라미터의 4비트 저장 시 전체 가중치 용량을 나타내는 구문(&quot;raw parameter payload is:&quot;), 이를 93개 레이어로 나누어 레이어당 용량을 구하는 구문(&quot;Dividing that payload by 93 layers then gives:&quot;), 단일 256k 요청의 KV 캐시 용량 계산식, 및 동시 요청 수 산출을 위한 최종 나눗셈 식의 연산 결과 수치가 원문 텍스트상에 기재되지 않고 생략되어 있다.</p>
+<p><strong>소스의 주장 (Claim)</strong>: 세레브라스 측은 WSE-3T 웨이퍼 파이프라인 구성을 통해 가중치 이동 없이 활성화 값만 전달함으로써 3조 파라미터 규모의 모델에서도 초당 1000~2000개 이상의 토큰 생성이 가능하다고 주장한다. 또한 키미 K3 모델이 기존 최고 수준의 상용 모델을 상회하거나 비등한 프론티어급 능력을 입증했다고 강조하며, 전력 단위당 총 토큰 처리량이 추론 시스템 평가의 핵심 지표라고 주장한다.</p>
+<p><strong>작성자 해석 및 불확실성 (Uncertainty)</strong>: 원본 소스에서 명시적으로 언급하지 않은 구체적인 마이크로 배치(Micro-batch)의 수치적 크기, 프론트엔드/백엔드 컴파일러 및 런타임의 내부 알고리즘은 제공된 문맥만으로 파악할 수 없다. 또한 소스 원문의 빈칸으로 처리된 가중치 페이로드 용량, 레이어당 세부 연산값, 256k 요청당 KV 캐시 용량 및 최종 동시 요청 수는 소스 내 수치 미기재로 인해 정확한 검증이 불가능하며, &quot;소스 내 수치 미기재로 확인 불가&quot; 상태로 남겨둔다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/social/">소셜</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

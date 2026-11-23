@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local AI Will Take Over Within One Year | Ian Weinberg</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Local AI Will Take Over Within One Year | Ian Weinberg</h1>
+<p class="page-meta">YouTube · 2026-10-31</p>
+<h2 id="요약">요약</h2>
+<p>유튜브 채널 'MTS'에서 진행자 소피아(Sophia)와 AMD의 이안 바인버그(Ian Weinberg)는 차세대 라이젠 AI 헬로(Ryzen AI Halo) 개발자 상자(Developer Box)의 실제 구동 성능과 기술적 구조를 검증하는 라이브 시연을 진행했습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=PJlTf2ACCuY">출처</a> · <a href="https://www.youtube.com/watch?v=J5TTFAPxzXQ">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="amd-라이젠-ai-헬로-ryzen-ai-halo-및-로컬-ai-동향-해설-보고서">AMD 라이젠 AI 헬로(Ryzen AI Halo) 및 로컬 AI 동향 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>유튜브 채널 'MTS'에서 진행자 소피아(Sophia)와 AMD의 이안 바인버그(Ian Weinberg)는 차세대 라이젠 AI 헬로(Ryzen AI Halo) 개발자 상자(Developer Box)의 실제 구동 성능과 기술적 구조를 검증하는 라이브 시연을 진행했습니다. 본 방송 데모의 핵심 목적은 하드웨어 단에서 최적화된 로컬 AI 실행 환경을 선보이고, 기존에 하드웨어와 소프트웨어가 파편화되어 있던 개발 경험을 단일화된 툴킷 및 인프라를 통해 어떻게 혁신할 수 있는지 직접 입증하는 데 있습니다.</p>
+<p>데모의 중심에 위치한 '라이젠 AI 맥스 플러스 프로 495(Ryzen AI Max Plus Pro 495, 이하 495)' 프로세서는 CPU와 GPU 간 192GB의 대용량 공유 시스템 메모리 구조를 갖추고 있습니다. 로컬 AI 개발 현장의 주요 병목 요인이 연산 능력(Compute)보다는 메모리 용량(Memory)에 있다는 점에 착안하여, 192GB 중 최대 160GB를 전용 GPU VRAM으로 할당할 수 있도록 설계되었습니다. 이를 통해 책 크기의 소형 폼팩터 단말기에서도 3000억 개(300B) 파라미터 수준의 대규모 AI 모델을 로컬 환경에서 직접 구동할 수 있는 획기적인 하드웨어 제반을 제시합니다.</p>
+<p>이번 발표에서는 표준 x86 기반 생태계와 소프트웨어 스택인 ROCm의 확장성도 함께 강조되었습니다. 소형 데스크톱 단말부터 대규모 랙 스케일(Helios) 및 인스틱트(Instinct) 데이터센터 스택까지 통일된 ROCm 환경을 제공함으로써 개발자의 학습 곡선을 일원화했습니다. 나아가 대형 언어 모델과 오디오/이미지 생성 모델을 결합한 멀티 에이전트(Multi-Agent) 워크플로우를 실제 시연하여 128GB 이상의 메모리를 점유하는 고성능 연산을 차질 없이 수행함을 보였습니다. 이는 오프라인 환경에서의 주권(Sovereign) AI 구축 수요 및 데이터 프라이버시 보호, 토큰 비용 절감이라는 시장 트렌드와 결합되어 로컬 AI에 대한 인식이 단순한 기술적 회의론에서 폭발적인 실무 도입으로 전환되었음을 보여줍니다.</p>
+<hr />
+<h5 id="2-주요-논점-key-points-detailed-syntheses">2. 주요 논점 (Key Points &amp; Detailed Syntheses)</h5>
+<h6 id="2-1-하드웨어-스펙-및-공유-메모리-구조-hardware-specs-shared-memory-architecture">2.1 하드웨어 스펙 및 공유 메모리 구조 (Hardware Specs &amp; Shared Memory Architecture)</h6>
+<ul>
+<li><strong>[사실] 공식 명칭 및 메모리 규격:</strong> 데모 하드웨어의 핵심 칩셋 공식 명칭은 <strong>'라이젠 AI 맥스 플러스 프로 495(Ryzen AI Max Plus Pro 495)'</strong>(약칭 495)이며, 시스템 전체에 <strong>192GB 공유 RAM</strong>을 탑재하고 있습니다.</li>
+<li><strong>[사실] VRAM 할당 능력:</strong> 전체 192GB 공유 메모리 중 <strong>최대 160GB</strong>를 전용 GPU VRAM으로 동적 예약 할당할 수 있습니다.</li>
+<li><strong>[사실] 폼팩터 및 산업 디자인:</strong> 본 제품은 <strong>높이(두께) 2인치 미만</strong>, 책 크기(Book-sized)의 소형 폼팩터로 제작되었으며, 외관 상단에는 백 개 이상의 <strong>AMD 로고</strong>가 패턴 형태로 조각된 독자적인 산업 디자인이 적용되었습니다. 소스상 방송 초반부 시연 장면에서 이안 바인버그가 소피아에게 제품을 직접 전달하며 확인되었습니다.</li>
+<li><strong>[소스의 주장] 로컬 AI의 제약 요인 및 3대 설계 축(Fit, Orchestrate, Stream):</strong>
+<ul>
+<li>로컬 AI 개발 현장에서 겪는 주요 제약은 연산 성능(Compute)의 부족이 아닌 <strong>메모리 용량(Memory)의 한계</strong>입니다.</li>
+<li>본 플랫폼은 <strong>Fit(메모리 용량 적합성)</strong>, <strong>Orchestrate(CPU 중심의 오케스트레이션)</strong>, **Stream(GPU/NPU 연산 스트리밍)**이라는 3대 시스템 균형 축을 바탕으로 설계되었습니다. 기존 AI 연산이 GPU 위주였던 것과 달리, 멀티 에이전틱 환경에서는 CPU가 툴 호출(Tool calls) 및 인코드/디코드 작업을 오케스트레이션하고, GPU와 소형 모델 구동에 특화된 NPU가 실제 연산 스트리밍을 나누어 담당하는 구조적 균형을 이룹니다.</li>
+</ul>
+</li>
+<li><strong>[소스의 주장] 300B 모델 구동 지원:</strong> 160GB GPU VRAM 할당 능력을 통해 **'GLM 5.3 플래시(GLM 5.3 Flash)'**와 같은 <strong>3000억 개(300B) 파라미터</strong> 규모의 프론티어급 대형 모델을 단일 소형 박스에서 직접 구동할 수 있습니다.</li>
+<li><strong>[작성자의 해석] 과거 제품 대비 성능 비약:</strong> 과거 컨퍼런스(지나간 7월 Advancing AI)에서 공개되었던 이전 세대(395 버전, 128GB 탑재)의 물리적 메모리 한계를 극복함으로써, 별도의 대형 서버 장비 없이도 초대형 모델을 구동할 수 있는 독보적인 공간/전력 대 메모리 효율성을 확보한 것으로 해석됩니다.</li>
+</ul>
+<h6 id="2-2-개발자-환경-및-소프트웨어-생태계-developer-environment-rocm-stack">2.2 개발자 환경 및 소프트웨어 생태계 (Developer Environment &amp; ROCm Stack)</h6>
+<ol>
+<li><strong>표준 x86 플랫폼 기반 및 네이티브 OS 지원</strong>
+<ul>
+<li><strong>[사실]</strong> ARM 계열 시스템과 달리 에뮬레이션 레이어(Emulation cost)를 거치지 않는 순수 네이티브 x86 플랫폼입니다. Windows 및 Linux 기반 환경을 모두 공식 지원합니다.</li>
+</ul>
+</li>
+<li><strong>사전 설치 플레이북 및 빠른 토큰 생성 (Minutes to first token)</strong>
+<ul>
+<li><strong>[사실]</strong> 제품 출하 시 '라이젠 AI 개발자 센터(Ryzen AI Developer Center)'가 사전 탑재되어 구동되며, 초기 설정 후 토큰이 생성되기까지 약 <strong>36초</strong> 수준의 대기 시간만 요구됩니다.</li>
+<li><strong>[소스의 주장]</strong> &quot;첫 토큰 생성까지 단 몇 분(Minutes to first token)&quot;이라는 개념을 바탕으로 초보 개발자도 복잡한 드라이버/소프트웨어 설치 과정 없이 전원 입력 즉시 테스트를 시작할 수 있습니다.</li>
+</ul>
+</li>
+<li><strong>입문자 및 중/고급자를 위한 계층형 개발 생태계</strong>
+<ul>
+<li><strong>[사실]</strong> ROCm, 파이썬(Python), Llama.cpp 등 표준 오픈소스 소프트웨어 스택이 완벽히 지원됩니다.</li>
+<li><strong>[소스의 주장]</strong> 입문자에게는 사전 설치된 앱(Pre-installed playbooks)을 통해 하드웨어 활용률을 극대화하는 길을 안내하고, 중/고급 개발자에게는 로컬 파인튜닝(LoRA, QLoRA) 및 오픈소스 모델 커스텀 환경을 자유롭게 개방합니다.</li>
+</ul>
+</li>
+<li><strong>소형 단말부터 랙 스케일(Rack-scale)까지 일원화된 ROCm 커리큘럼</strong>
+<ul>
+<li><strong>[소스의 주장]</strong> 개발자 책상 위의 소형 헬로 단말에 적용된 동일한 ROCm 소프트웨어 스택이 고성능 인프라인 헬리오스(Helios) 랙 스케일 시스템 및 인스틱트(Instinct) 데이터센터 스택까지 그대로 연동됩니다.</li>
+<li><strong>[작성자의 해석]</strong> 대학생이나 개인 개발자가 소형 박스에서 습득한 기술적 숙련도와 코딩 근육(Muscle)을 데이터센터급 인프라 구축 실무에 재교육 없이 그대로 투입할 수 있으므로, AMD 에코시스템 내의 사용자 락인(Lock-in) 및 학습 연속성을 극대화하는 전략으로 평가됩니다.</li>
+</ul>
+</li>
+</ol>
+<h6 id="2-3-실습-시연-사례-대규모-모델-및-멀티-에이전트-live-demos-music-gen-multi-agent">2.3 실습 시연 사례: 대규모 모델 및 멀티 에이전트 (Live Demos: Music Gen &amp; Multi-Agent)</h6>
+<ul>
+<li><strong>사례 A: 프롬프트 기반 음악 생성 및 ComfyUI 연동 워크플로우</strong>
+<ul>
+<li><strong>[사실]</strong> 시연에 활용된 '퀀 3.8 플래시(Qwen 3.8 Flash)' 계열 모델은 총 <strong>1,760억 개(176B)</strong> 파라미터 규모입니다. 이 중 1,200억 개(120B)는 전통적인 파라미터이며, 560억 개(56B)는 CPU 상에서 실행되는 엔그램(n-grams) 파이프라인으로 구성됩니다.</li>
+<li><strong>[사실 및 점유 궤적]</strong> 작업 관리자(Task Manager) 측정 수치에 따르면 메모리 로딩은 다음과 같은 단계적 상승 궤적을 보였습니다.
+<ol>
+<li><strong>1차 프롬프트 처리:</strong> 전용 GPU 메모리 98GB + 시스템 메모리 22GB (합계 약 120GB) 점유.</li>
+<li><strong>ComfyUI 댄스홀 비트 변환 진입:</strong> GPU 메모리가 105GB까지 지속 상승.</li>
+<li><strong>최종 디코딩(Decode) 연산 단계:</strong> 전용 GPU 메모리 128GB + 시스템 메모리 24GB가 동시에 사용되어 <strong>총 152GB의 메모리 점유</strong>를 기록했습니다.</li>
+</ol>
+</li>
+<li><strong>[소스의 주장]</strong> 이는 기존 128GB 한계 규격(128-bit/128GB 물리적 한계)의 기존 컴퓨팅 시스템 환경에서는 완전히 구동 불가능했던 대규모 연산 체계이며, 라이젠 AI 헬로의 192GB 메모리 환경을 통해서만 물리적 장벽을 깨고 구현 가능한 대목입니다.</li>
+</ul>
+</li>
+<li><strong>사례 B: 멀티 에이전트 구동 (Goose 및 Blender 연동 3D 생성)</strong>
+<ul>
+<li><strong>[사실]</strong> 구스(Goose) 에이전트 하네스, MCP(Model Context Protocol), 플럭스(Flux) 이미지 모델, <strong>350억 개(35B)</strong> 파라미터 LLM이 상호 연동되어 작동했습니다.</li>
+<li><strong>[소스의 주장]</strong> 프롬프트 지시를 통해 장난감 로봇(Toy robot) 3D 객체를 생성하여 3D 그래픽 소프트웨어인 블렌더(Blender) 장면 내부로 자동 배치하는 병렬 멀티 에이전트 워크플로우가 진행되었습니다. 이 과정에서 AMD 레모네이드(Lemonade) 소프트웨어가 백그라운드 연동 환경을 제공했습니다.</li>
+</ul>
+</li>
+<li><strong>[작성자의 해석]</strong> 대용량 VRAM 자원에 힘입어 단순 텍스트 처리를 넘어 오디오 생성 파이프라인과 3D 에이전트 연동 작업이 로컬 단말 내에서 병렬로 안전하게 처리될 수 있음을 증명합니다.</li>
+</ul>
+<h6 id="2-4-로컬-ai-시장-동향-및-주권-sovereign-ai-market-trends-sovereign-ai">2.4 로컬 AI 시장 동향 및 주권(Sovereign) AI (Market Trends &amp; Sovereign AI)</h6>
+<blockquote>
+<p><strong>&quot;2년 전 로컬 AI를 이야기했을 때는 '믿지 않는다'는 회의론자가 많았습니다. 1년 전에는 '어떻게 얻을 수 있는가?'라는 도입 문의가 잇따랐고, 이제는 '어떻게 해야 이것을 더 많이 확보할 수 있는가?'로 질문이 바뀌었습니다. 즉, 로컬 AI에 대한 관심의 장벽은 이미 완전히 소멸했습니다.&quot;</strong><br />
+— <em>AMD 이안 바인버그 (Ian Weinberg)</em></p>
+</blockquote>
+<ul>
+<li><strong>시장 패러다임의 3단계 전환 맥락:</strong>
+<ul>
+<li>회의론이 지배적이었던 **2년 전(&quot;믿지 않는다&quot;)**을 지나, 구체적 도입 방법을 찾던 **1년 전(&quot;어떻게 얻나?&quot;)**을 거쳐, <strong>현재</strong>는 장벽이 완전히 제거되어 인프라를 대량 확보하고자 하는 폭발적 수요 진입 단계로 진화했습니다.</li>
+</ul>
+</li>
+<li><strong>인터넷 비연결(Air-gapped) 환경에서의 실행성:</strong>
+<ul>
+<li><strong>[사실]</strong> Wi-Fi나 스타링크(Starlink)와 같은 인터넷 네트워크 연결을 끊은 상태에서도 오프라인으로 비행기 안에서 코딩 작업(Vibe coding) 및 에이전트 연동이 100% 완벽하게 동작합니다.</li>
+</ul>
+</li>
+<li><strong>데이터 소유권과 주권(Sovereign) AI 및 유럽 시장:</strong>
+<ul>
+<li><strong>[소스의 주장]</strong> 데이터 보안, 데이터 소유권, 프라이버시 문제 외에도 유럽 지역 등의 고객들은 차세대 프론티어 모델에 대한 접근이 차단되거나 제한될 수 있다는 우려 때문에 로컬 차원의 지능(Intelligence)을 직접 보유하고자 하는 욕구가 강하게 작용하고 있습니다.</li>
+</ul>
+</li>
+<li><strong>하이브리드 라우팅 및 토큰 비용 절감:</strong>
+<ul>
+<li><strong>[사실]</strong> AMD의 레모네이드(Lemonade) 소프트웨어 스택에는 **시맨틱 라우터(Semantic Router)**가 내장되어 있습니다.</li>
+<li><strong>[소스의 주장]</strong> 일반적인 사무 업무 연산 시험 결과, <strong>전체 작업의 70%는 로컬 하드웨어에서 처리</strong>하고, 고도의 추론이 필요한 <strong>30%의 작업만 클라우드 프론티어 모델로 이관</strong>시킴으로써 데이터 보안 유지 및 외부 토큰 비용을 대폭 절감하는 하이브리드 워크플로우가 가능해집니다.</li>
+</ul>
+</li>
+<li><strong>[작성자의 해석]</strong> 클라우드 온리(Cloud-only) 패러다임에서 벗어나, 데이터 주권 확보와 비용 효율성을 극대화하기 위해 로컬 AI와 클라우드 모델을 결합하는 '앤드(And)' 전략이 기업 및 개발자 시장의 핵심 표준으로 자리 잡고 있음을 나타냅니다.</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-persons-speakers">3. 등장 인물 및 화자 (Persons &amp; Speakers)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속 및 역할</th>
+<th style="text-align:left">소스상 확인 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>이안 바인버그 (Ian Weinberg)</strong></td>
+<td style="text-align:left">AMD 소속 / 데모 발표자 (게스트)</td>
+<td style="text-align:left">495 기반 개발자 박스 데모 진행, 하드웨어 메모리 구조, ROCm 소프트웨어 스택, 오프라인 로컬/주권 AI 및 하이브리드 라우팅 기술 설명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소피아 (Sophia)</strong></td>
+<td style="text-align:left">MTS 채널 진행자 (호스트)</td>
+<td style="text-align:left">데모 제품 언박싱 및 체감 소감 전달, 로컬 AI 개발 환경 질문, 유럽 및 글로벌 주권 AI 시장 트렌드 언급하며 인터뷰 진행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아누시 (Anous)</strong></td>
+<td style="text-align:left">확인 불가 (AMD 관련 인물로 언급됨)</td>
+<td style="text-align:left">소피아와 이안의 대화 중 언급됨. 지난 1년간 진행된 ROCm 소프트웨어 스택의 단순화(Simplification) 및 최적화 업데이트 소식을 개발자 커뮤니티에 전한 주체로 언급되나, 정확한 공식 직함/소속은 소스상 명시되지 않음 (확인 불가).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점-정리-verified-metrics-timeframes">4. 수치 및 시점 정리 (Verified Metrics &amp; Timeframes)</h5>
+<h6 id="4-1-수치-데이터-metrics-figures">4.1 수치 데이터 (Metrics &amp; Figures)</h6>
+<ul>
+<li><strong>192GB:</strong> 라이젠 AI 맥스 플러스 프로 495 프로세서의 시스템 공유 RAM 총용량.</li>
+<li><strong>160GB:</strong> 192GB 공유 메모리 중 전용 GPU VRAM으로 할당 가능한 최대 메모리 용량.</li>
+<li><strong>3000억 개 (300B):</strong> 본 단말기에서 로컬 구동 가능한 최적화 AI 모델 파라미터 상한선 (예: GLM 5.3 플래시).</li>
+<li><strong>128GB:</strong> 이전 395 세대의 메모리 용량 및 대다수 기존 고성능 컴퓨팅 시스템의 물리적 메모리 한계 기준선.</li>
+<li><strong>2인치 미만:</strong> 개발자 박스 제품의 높이(두께).</li>
+<li><strong>36초:</strong> &quot;토큰 생성까지 단 몇 분(Minutes to first token)&quot; 구동 테스트 중 언급된 실제 토큰 출력 도달 대기 예시 시간.</li>
+<li><strong>1,760억 개 (176B):</strong> 오디오 생성 데모에 사용된 퀀 3.8 플래시 계열 모델의 총 파라미터 수 (전통적 파라미터 1,200억 개 + CPU 연산 엔그램 560억 개).</li>
+<li><strong>98GB / 105GB / 128GB:</strong> 음악 생성 시연 진행 중 단계별(1차 로딩 98GB, 디코딩 진행 105GB, 최종 처리 128GB) 전용 GPU 메모리 로딩 수치.</li>
+<li><strong>22GB / 24GB:</strong> 음악 생성 시연 중 작업 관리자에 수집된 시스템 메모리 점유 수치 (최종단계에서 128GB GPU + 24GB System = 총 152GB 사용 기록).</li>
+<li><strong>350억 개 (35B):</strong> 구스 에이전트 및 블렌더(Blender) 3D 장면 연동 시연에 구동된 LLM의 파라미터 수.</li>
+<li><strong>70% / 30%:</strong> 레모네이드 시맨틱 라우터를 적용한 업무 연산 테스트에서 로컬로 자체 처리된 작업 비율(70%) 및 외부 프론티어 모델로 라우팅된 비율(30%).</li>
+</ul>
+<h6 id="4-2-시점-및-시간선-timeframes-milestones">4.2 시점 및 시간선 (Timeframes &amp; Milestones)</h6>
+<ul>
+<li><strong>2년 전:</strong> 로컬 AI의 기술적 실현 가능성에 대한 시장 회의론이 우세했던 시점.</li>
+<li><strong>1년 전:</strong> 로컬 AI 도입 구체화 및 장비 확보 방안 문의가 본격화된 시점.</li>
+<li><strong>지나간 7월 (Advancing AI 컨퍼런스):</strong> 128GB 사양의 이전 395 버전 기반 AMD 헬로 랙 시스템이 처음 공개되었던 시점.</li>
+<li><strong>현재:</strong> 수용 장벽이 완전히 해제되고 오프라인 주권 AI 및 대용량 로컬 AI 구동 수요가 글로벌하게 폭발하는 시점.</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainty">5. 한계와 불확실성 (Limitations &amp; Uncertainty)</h5>
+<ul>
+<li><strong>제품 가격 및 공식 출시일 미기재:</strong> 본 보고서의 바탕이 된 영상 내에서는 라이젠 AI 헬로 개발자 박스의 일반 소비자/기업용 공식 판매 가격 및 양산/출시 일정 정보가 제공되지 않았습니다 <strong>(확인 불가)</strong>.</li>
+<li><strong>데모 최종 출력물의 방송 내 확인 불가:</strong>
+<ul>
+<li>음악 생성 데모의 실제 오디오 출력 음원은 방송 시간 제약 및 오디오 연결 문제로 인해 라이브 상에서 최종 재생되지 않았습니다.</li>
+<li>블렌더(Blender) 3D 장난감 로봇 연동 생성 데모 역시 정밀 렌더링 작업 특성상 방송 종료 시점까지 연산 작업이 완료되지 않아 최종 3D 모델 형상을 방송 화면으로 검증하지 못했습니다.</li>
+</ul>
+</li>
+<li><strong>'아누시(Anous)' 인물의 상세 정보 부재:</strong> 대화 중 언급된 '아누시(Anous)'라는 인물의 정확한 소속 직함, 직책 및 풀네임은 본 소스에서 명시되지 않았습니다 <strong>(확인 불가)</strong>.</li>
+<li><strong>전력 소비량, 발열 및 소음 규격 미제시:</strong> 2인치 미만의 소형 폼팩터에서 192GB 메모리와 대형 모델을 구동할 때 발생할 수 있는 전력 소모량(W), 방열 시스템 조작 및 소음 수준에 대한 기술적 데이터는 다루어지지 않았습니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

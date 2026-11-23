@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capsule Network와 Attention은 왜 가까운 친척이라 불리는가</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Capsule Network와 Attention은 왜 가까운 친척이라 불리는가</h1>
+<p class="page-meta">AI 대화 공유 · 2026-08-24</p>
+<h2 id="요약">요약</h2>
+<p>캡슐 네트워크와 어텐션은 계산 골격을 공유하지만 정규화 축과 반복 연산에서 다르다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/ai-share/">AI 대화 공유</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://chatgpt.com/share/6a8b7447-c3bc-83ee-a7ad-8e70b420c8d2">출처</a> · <a href="https://www.youtube.com/watch?v=V4LoyPvBVls">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="capsule-network와-attention은-왜-가까운-친척이라-불리는가">Capsule Network와 Attention은 왜 가까운 친척이라 불리는가</h3>
+<p>본 보고서는 2026년 8월 24일을 기준으로 Capsule Network(이하 CapsNet)와 Attention 메커니즘의 기술적 연관성을 정밀 분석한다. 최근 AI 업계에서 제기된 두 알고리즘의 친족성에 대한 논의를 바탕으로, 수학적 공통점과 결정적인 엔지니어링 차이점을 규명하는 데 목적이 있다.</p>
+<h4 id="1-핵심-결론-5문장-요약">1. 핵심 결론: 5문장 요약</h4>
+<ol>
+<li>2026-08-24 기준, CapsNet의 routing-by-agreement와 Attention 연산은 '유사도 계산-정규화-가중 집계'라는 공통의 계산 골격을 공유하는 연산적 친척 관계임이 확인된다.</li>
+<li>두 알고리즘 모두 입력 데이터에 따라 연결 강도를 실시간으로 결정하는 '동적 메시지 전달' 방식을 취하고 있으나, 소프트맥스 적용 축과 반복 연산 유무 등의 세부 설계가 실제 성패를 가르는 결정적 요인이 되었다.</li>
+<li>트랜스포머(Transformer)는 병렬화와 학습 안정성을 극대화하여 범용적 효율성을 확보한 반면, CapsNet은 객체의 부분-전체 관계를 보존하는 구조적 엄밀성에 집중했다.</li>
+<li>제리 투렉(Jerry Tworek)의 최근 발언은 힌튼(Hinton)의 직관이 현대적 어텐션 연산 속에 기술적으로 녹아들어 있음을 재평가한 것이며, 시스템 전체의 동일성을 주장하는 것이 아니다.</li>
+<li>현재 두 기술은 별개의 경로를 걷고 있으나, 슬롯 어텐션(Slot Attention)과 같은 후속 연구를 통해 공통의 연산 원형으로 수렴하며 차세대 아키텍처의 가능성을 시사하고 있다.</li>
+</ol>
+<h4 id="2-기술적-오해-바로잡기-과잉-해석-의-경계">2. 기술적 오해 바로잡기: '과잉 해석'의 경계</h4>
+<p>최근 &quot;Transformer는 사실 CapsNet이었다&quot;는 주장이 제기되고 있으나, 이는 기술적 관점에서 과잉 해석이다. Jerry Tworek의 발언은 '전체 아키텍처(Architecture)'의 동일성이 아니라, 그 내부를 구성하는 '핵심 연산(Operation)'의 친족성을 언급한 것이다.</p>
+<ul>
+<li><strong>비교의 범위:</strong> CapsNet 전체 시스템과 Transformer 전체 시스템을 동일시해서는 안 된다. Tworek은 'Capsule Networks'와 'attention operation'이 가깝다고 표현하며 그 범위를 명확히 한정했다.</li>
+<li><strong>친족성의 의미:</strong> 이는 수학적으로 완전히 같은 알고리즘이라는 뜻이 아니라, 입력 의존적인 가중합을 수행하는 계산 원형이 유사함을 의미한다.</li>
+<li><strong>성패의 요인:</strong> Tworek이 언급한 '작은 세부사항(small details)'은 단순한 하이퍼파라미터가 아니라, 소프트맥스 축의 방향, 잔차 연결(Residual Connection), 병렬화 가능성 등 엔지니어링의 핵심 요소를 의미한다.</li>
+</ul>
+<h4 id="3-capsule-network의-직관적-이해-하부-객체의-합의-routing-by-agreement">3. Capsule Network의 직관적 이해: 하부 객체의 합의(Routing-by-Agreement)</h4>
+<p>CapsNet은 뉴런의 출력을 스칼라가 아닌 벡터(Capsule)로 정의하며, 하부 요소들이 상부 객체를 형성하기 위해 투표하는 구조를 가진다.</p>
+<ul>
+<li><strong>예측 벡터 생성:</strong> $u_{j|i} = W_{ij} u_i$
+<ul>
+<li>하위 캡슐 $i$가 상위 캡슐 $j$에 대해 예측한 상태값이다. 비유하자면 눈, 코, 입이라는 각각의 하위 요소들이 &quot;내가 이 위치에 있다면 얼굴은 이런 자세여야 한다&quot;라고 나름의 추측을 내놓는 과정이다.</li>
+</ul>
+</li>
+<li><strong>합의 기반 갱신:</strong> $b_{ij} \leftarrow b_{ij} + u_{j|i}^T v_j$
+<ul>
+<li>하위 요소의 예측($u_{j|i}$)과 실제 형성된 상위 객체의 상태($v_j$)가 일치(내적값이 큼)할수록 둘 사이의 연결 강도($b_{ij}$)를 높인다. 즉, &quot;내 예측이 실제 얼굴의 형태와 잘 맞으니, 이 정보를 얼굴 캡슐로 더 강하게 보내자&quot;라고 하위 요소가 상위 요소와 합의하는 과정이다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-scaled-dot-product-attention의-구조-쿼리에-의한-정보-추출">4. Scaled Dot-Product Attention의 구조: 쿼리에 의한 정보 추출</h4>
+<p>Transformer의 핵심인 Attention 연산은 주어진 쿼리(Query)에 가장 적합한 정보(Key-Value)를 찾아내는 데이터 검색 시스템과 같다.</p>
+<ul>
+<li><strong>Attention 수식:</strong> $\text{Softmax}(QK^T / \sqrt{d_k}) V$</li>
+<li><strong>Scaling의 목적:</strong> 수식 내 $\sqrt{d_k}$로 나누는 연산은 차원이 커질수록 내적값이 비대해져 소프트맥스 기울기가 소멸하는 것을 방지하고 학습의 안정성을 확보하기 위한 '작지만 결정적인' 장치다.</li>
+<li><strong>정보 읽기 비유:</strong> 'Query'는 현재 찾고자 하는 정보의 질문지이며, 이 질문지와 가장 잘 어울리는 'Key'를 가진 데이터를 찾는다. 검색 결과의 유사도에 따라 'Value'를 가중치 있게 가져오는 과정으로, 도서관에서 색인(Key)을 통해 필요한 내용(Value)을 발췌하는 것과 유사하다.</li>
+</ul>
+<h4 id="5-연산적-친족성-공통-계산-골격-분석">5. 연산적 친족성: 공통 계산 골격 분석</h4>
+<p>두 방식은 모두 '고정된 필터'를 사용하는 CNN과 달리, 입력 내용에 따라 실시간으로 연결 강도를 결정한다. 이를 수식 원형으로 정리하면 다음과 같다.</p>
+<p><strong>공통 원형:</strong> $\sum Normalize(Similarity(receiver, sender)) \cdot Message$</p>
+<p>이 흐름은 '입력 의존적 유사도 계산 → 정규화 → 가중합 기반 집계'라는 동일한 3단계 골격을 공유한다. 즉, 두 알고리즘 모두 데이터 사이의 관계를 동적으로 파악하여 정보를 전달하는 '동적 메시지 전달(Dynamic Message-passing)'의 형제 모델이라 할 수 있다.</p>
+<h4 id="6-결정적-차이-softmax-축과-경쟁의-방향">6. 결정적 차이: Softmax 축과 경쟁의 방향</h4>
+<p>두 알고리즘의 가장 큰 차이는 소프트맥스 정규화가 어느 방향(축)으로 일어나는가에 있으며, 이는 정보 흐름의 귀납적 편향(Inductive Bias)을 완전히 바꾼다.</p>
+<ul>
+<li><strong>Attention (부모가 자식을 선택):</strong> 각 Query별로 모든 입력을 대상으로 정규화한다. 즉, 상위 요소(Query)가 &quot;나는 어떤 하위 정보들을 읽어올 것인가&quot;를 독립적으로 결정한다. 이는 하나의 하위 정보가 여러 상위 요소에 동시에 읽힐 수 있는 <strong>'조회(Retrieval)'</strong> 중심 구조를 만든다.</li>
+<li><strong>CapsNet (자식이 부모를 선택):</strong> 각 하위 캡슐별로 후보 상위 캡슐들을 대상으로 정규화한다. 즉, 하위 요소가 &quot;나는 어느 상위 객체의 일부가 될 것인가&quot;를 결정한다. 이는 상위 객체들이 하위 요소의 소유권을 놓고 경쟁하는 <strong>'할당 및 그룹화(Assignment/Grouping)'</strong> 중심 구조를 만든다.</li>
+</ul>
+<h4 id="7-아키텍처적-세부-사항-비교-details-that-matter">7. 아키텍처적 세부 사항 비교 (Details that matter)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">Capsule Network (원형)</th>
+<th style="text-align:left">Transformer (Attention)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>반복 Routing</strong></td>
+<td style="text-align:left">존재 (Iteration 간 순차 의존성)</td>
+<td style="text-align:left">없음 (단일 행렬 연산)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비선형 활성함수</strong></td>
+<td style="text-align:left">Squash (벡터 길이 1 미만 제한)</td>
+<td style="text-align:left">LayerNorm + ReLU/GELU 등</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>파라미터 공유</strong></td>
+<td style="text-align:left">부모별 변환 ($W_{ij}$ 사용)</td>
+<td style="text-align:left">위치 간 공유 ($W_Q, W_K, W_V$)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPU 병렬화</strong></td>
+<td style="text-align:left">낮음 (순차 루프로 인한 효율 저하)</td>
+<td style="text-align:left">매우 높음 (대규모 행렬곱 최적화)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>확장성</strong></td>
+<td style="text-align:left">대용량 학습 시 병목 현상 발생</td>
+<td style="text-align:left">거대 모델 확장 및 학습에 용이</td>
+</tr>
+</tbody>
+</table>
+<p>트랜스포머는 행렬 연산 기반의 높은 GPU 효율성과 잔차 연결을 통한 학습 안정성을 확보한 반면, CapsNet은 순차적 루프와 복잡한 투표 구조로 인해 실무적 성패에서 뒤처지게 되었다.</p>
+<h4 id="8-계보의-연결-inverted-dot-product-attention-routing">8. 계보의 연결: Inverted Dot-Product Attention Routing</h4>
+<p>2020년 Apple과 CMU의 연구는 CapsNet의 라우팅을 '뒤집힌 어텐션(Inverted Attention)'으로 재해석하며 두 기술의 수학적 연결 고리를 확인했다. 이 연구는 캡슐 라우팅에 LayerNorm과 병렬 라우팅을 도입하여 효율성을 개선했다. 이는 트랜스포머의 역사적 유래는 아닐지라도, 캡슐의 아이디어가 어텐션의 변형된 형태로 구현될 수 있음을 증명한 <strong>제한적 확인</strong> 사례다.</p>
+<h4 id="9-후속-연구의-흐름-slot-attention과-glom">9. 후속 연구의 흐름: Slot Attention과 GLOM</h4>
+<p>현대 AI 아키텍처는 두 기술의 장점을 융합하는 방향으로 나아가고 있다.</p>
+<ul>
+<li><strong>Slot Attention:</strong> 범용적인 잠재 슬롯(Slot)들이 입력의 소유권을 놓고 뒤집힌 어텐션 방식으로 경쟁하며 업데이트되는 중간 형태다.</li>
+<li><strong>GLOM:</strong> 제프리 힌튼이 제안한 개념으로, 트랜스포머와 캡슐의 직관을 결합한다. '동일한 벡터의 섬'을 통해 부분-전체 계층 구조를 표현하며, 캡슐의 동적 라우팅 철학을 트랜스포머의 계산 효율성으로 수용하려 시도한다.</li>
+<li><strong>수렴의 방향:</strong> 후속 연구들은 '동적 라우팅'의 가치는 지지하지만, 특정 클래스에 고정된 <strong>'타입별 캡슐(Type-specific capsule)'</strong> 구조는 지양한다. 이는 지식 공유를 방해하고 대규모 확장을 저해하는 병목이 되기 때문이다.</li>
+</ul>
+<h4 id="10-jerry-tworek-게시물-및-core-automation-관련-공개-범위">10. Jerry Tworek 게시물 및 Core Automation 관련 공개 범위</h4>
+<p>2026-08-23 Jerry Tworek의 게시물은 기술적 영감과 역사적 재평가를 담은 짧은 관찰일 뿐이다.</p>
+<ul>
+<li>해당 게시물은 특정 모델의 명칭, 벤치마크 점수, 또는 코드를 포함하지 않는다.</li>
+<li>Core Automation의 홈페이지에서 밝힌 '가장 자동화된 AI 연구소 구축'이라는 일반적 목표와 연계하여, 이 게시물이 비공개 신모델 발표라고 단정할 근거는 현재로서 부족하다.</li>
+</ul>
+<h4 id="11-신뢰성-검증-결과-요약표">11. 신뢰성 검증 결과 요약표</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">내용</th>
+<th style="text-align:left">판정</th>
+<th style="text-align:left">근거 요약</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">CapsNet은 하위 요소의 합의로 라우팅한다</td>
+<td style="text-align:left"><strong>확인</strong></td>
+<td style="text-align:left">2017년 Sabour 외 원논문 수식으로 확인됨</td>
+</tr>
+<tr>
+<td style="text-align:left">표준 Attention은 Q-K 호환성으로 정보를 모은다</td>
+<td style="text-align:left"><strong>확인</strong></td>
+<td style="text-align:left">2017년 Vaswani 외 원논문 수식으로 확인됨</td>
+</tr>
+<tr>
+<td style="text-align:left">두 연산은 연산적 친척 관계이다</td>
+<td style="text-align:left"><strong>조건부 확인</strong></td>
+<td style="text-align:left">높은 수준의 계산 골격은 유사하나 시스템 전체는 다름</td>
+</tr>
+<tr>
+<td style="text-align:left">CapsNet과 Attention의 Softmax 축은 다르다</td>
+<td style="text-align:left"><strong>확인</strong></td>
+<td style="text-align:left">Retrieval(부모 선택) vs Assignment(자식 선택)의 차이</td>
+</tr>
+<tr>
+<td style="text-align:left">Inverted Attention과 Slot Attention의 연결성</td>
+<td style="text-align:left"><strong>제한적 확인</strong></td>
+<td style="text-align:left">후속 연구를 통한 수학적 연결일 뿐 역사적 유래는 아님</td>
+</tr>
+<tr>
+<td style="text-align:left">트랜스포머가 CapsNet에서 직접 유래했다</td>
+<td style="text-align:left"><strong>근거 없음</strong></td>
+<td style="text-align:left">두 논문의 발표 시점과 계보가 독립적임</td>
+</tr>
+<tr>
+<td style="text-align:left">Jerry Tworek이 신모델을 발표했다</td>
+<td style="text-align:left"><strong>근거 없음</strong></td>
+<td style="text-align:left">게시물은 기술적 감상이며 제품/모델 발표가 아님</td>
+</tr>
+</tbody>
+</table>
+<p><em>주석: 분석 과정에서 언급된 사용자 첨부 이미지는 소스 데이터 인터페이스 제한으로 인해 확인하지 못함.</em></p>
+<h4 id="12-실무적-시사점과-반증-철회-기준">12. 실무적 시사점과 반증·철회 기준</h4>
+<p>향후 'Post-Transformer' 아키텍처는 캡슐의 '부분-전체 결합 직관'과 트랜스포머의 '확장성 및 엔지니어링'이 결합된 형태(예: Universal Capsule + Engineering Optimization)가 될 가능성이 높다. 개발자와 투자자는 단순히 알고리즘의 이름에 매몰되기보다, '동적 계산 배분'과 '객체 중심 학습'이 실질적인 하드웨어 효율과 결합되는 지점에 주목해야 한다.</p>
+<p><strong>본 보고서의 주장이 뒤집힐 수 있는 기준:</strong></p>
+<ul>
+<li>Core Automation 또는 관련 연구진이 CapsNet의 순차 라우팅을 유지하면서도 트랜스포머를 능가하는 대규모 언어 모델 벤치마크를 공식 발표할 경우.</li>
+<li>트랜스포머의 어텐션 메커니즘이 CapsNet의 역사적 계보에서 직접 유래했다는 내부 문서나 서신 등 역사적 증거가 새로 발견될 경우.</li>
+</ul>
+<h4 id="편집-검증-경계">편집 검증 경계</h4>
+<ul>
+<li>공개 ChatGPT 공유 답변은 출발점인 2차 분석자료이며, 기술적 권위는 독립 대조한 원논문에 있다.</li>
+<li>공유 페이지의 원래 사용자 첨부 이미지는 DOM에 노출되지 않아 직접 확인하거나 OCR하지 못했다.</li>
+<li>Transformer 전체와 Capsule Network 전체는 동일하지 않으며, 연산적 친족성과 직접적인 역사적·구현 계보를 구분해야 한다.</li>
+<li>GLOM은 저자 스스로 working system을 제시하지 않는 개념 논문이라고 한정했으므로, Transformer와 CapsNet의 직접 결합이나 성능 우위를 입증하는 증거가 아니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/ai-share/">AI 대화 공유</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

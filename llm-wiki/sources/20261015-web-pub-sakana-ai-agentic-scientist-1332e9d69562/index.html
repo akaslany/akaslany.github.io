@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>web-pub-sakana-ai-agentic-scientist-1332e9d69562</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>web-pub-sakana-ai-agentic-scientist-1332e9d69562</h1>
+<p class="page-meta">웹 · 2026-10-15</p>
+<h2 id="요약">요약</h2>
+<p>소스 내 'TL;DR', 'Published', 그리고 'Modern coding agents...' 단락에 근거할 때, 사카나 AI(Sakana AI)가 발표한 본 연구 보고서는 에이전트 기반 자율 연구 자동화 시스템의 최신 성과와 구조적 메커니즘을 다룹니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://pub.sakana.ai/agentic-scientist">출처</a> · <a href="https://www.youtube.com/watch?v=znhqeeftf8g">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-디-에이전틱-사이언티스트-the-agentic-scientist-에이전트-기반-자동화-과학-코-디스커버리-시스템-분석">[보고서] 디 에이전틱 사이언티스트(The Agentic Scientist): 에이전트 기반 자동화 과학 코-디스커버리 시스템 분석</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>소스 내 <code>'TL;DR'</code>, <code>'Published'</code>, 그리고 <code>'Modern coding agents...'</code> 단락에 근거할 때, 사카나 AI(Sakana AI)가 발표한 본 연구 보고서는 에이전트 기반 자율 연구 자동화 시스템의 최신 성과와 구조적 메커니즘을 다룹니다.</p>
+<p><code>[사실/Fact]</code> 사카나 AI의 이전 연구인 '디 AI 사이언티스트(The AI Scientist, v1/v2 및 Nature 논문)'는 과학 연구 프로세스의 상당 부분을 자동화할 수 있음을 입증했으나, 생성된 아이디어가 충분히 발달하지 못하거나 코드 구현 과정에서 오류가 발생하는 한계를 나타냈습니다. 이러한 한계를 극복하기 위해 제안된 차세대 시스템이 '디 에이전틱 사이언티스트(The Agentic Scientist)'입니다. (논문 공개 시점: 2026년 10월, arXiv:2610.18933)</p>
+<p><code>[소스의 주장/Claim]</code> 디 에이전틱 사이언티스트는 단일 대화창에 의존하여 단순히 명령을 수행하는 방식(Autoresearch)을 지양합니다. 단순 대화형 연구는 AI를 코드 공간상의 하이퍼파라미터 최적화기에 그치게 만들 위험이 있습니다. 반면, 본 시스템은 에이전트가 접근하는 정보, 코드 작성, 평가 방식, 결과 전달 과정을 엄격한 비계(Scaffolding) 구조로 제어합니다. 이를 통해 작업 정의부터 아이디어 제안 및 평가, 실험 수행, 검증, 실패 기록 보존, 변형의 공정한 비교, 근거 기반 결과 설명까지 수행하는 엔드투엔드(end-to-end) 연구 워크플로우를 제공합니다. 또한 인간 연구자가 질문과 제약 조건을 설정하고 탐색을 주도하는 협업 연구(Co-Discovery) 패러다임을 핵심으로 삼습니다.</p>
+<p><code>[보고서 해석/Interpretation]</code> 디 에이전틱 사이언티스트는 장문 맥락 모델 적응(Long-context model adaptation), 강화학습 파인튜닝(RL fine-tuning), 학습된 최적화기(Learned optimizers), 생물학적 영감 학습 규칙 등 다양한 머신러닝 연구 분야에 적용되었습니다. 특히 시스템과 인간 연구자가 공동으로 수행한 '오차 확산(Error Diffusion)' 연구 논문은 외부 동료 평가(Peer Review)를 거쳐 ALIFE 2026 학회의 구두 발표(Oral presentation) 논문으로 최종 채택됨으로써 시스템의 실증적 가치를 입증했습니다.</p>
+<hr />
+<h5 id="2-주요-논점-및-연구-성과-key-arguments-and-findings">2. 주요 논점 및 연구 성과 (Key Arguments and Findings)</h5>
+<h6 id="2-1-디-에이전틱-사이언티스트의-구조-및-동작-메커니즘">2.1. 디 에이전틱 사이언티스트의 구조 및 동작 메커니즘</h6>
+<p>소스 내 <code>'What's Inside The Agentic Scientist?'</code> 단락에 근거할 때, 디 에이전틱 사이언티스트는 중앙 컨트롤러와 공유 메모리 레이어를 기반으로 작동하는 3단계 자율 워크플로우를 구사합니다.</p>
+<p><code>[사실/Fact]</code></p>
+<ul>
+<li><strong>1단계: 작업 설정 및 초안 작성 (Task Setup &amp; Drafting)</strong>
+<ul>
+<li><strong>작업 명세 및 검증</strong>: 연구자가 실행 가능한 작업 명세와 평가 절차를 직접 제공하거나, 작성 에이전트(Drafting Agent)가 연구 요약본을 바탕으로 이를 생성합니다. 에이전트가 작성한 작업은 실행 가능성 검사 및 독립적 리뷰를 거쳐 원래의 과학적 질문에 부합하는지 검증받습니다.</li>
+<li><strong>자원 배분</strong>: 검증이 완료되면 중앙 컨트롤러가 병렬 작업자(Workers)에게 정해진 연구 주기(Research cycles) 예산을 배분하며, 각 작업자는 독립된 작업 공간에서 가설을 탐색합니다.</li>
+</ul>
+</li>
+<li><strong>2단계: 병렬 조사 (Parallel Investigation)</strong>
+<ul>
+<li><strong>역할 분담</strong>: 작업자 내부의 아이디어 에이전트(Ideation Agent)가 가설, 실행 계획, 평가 루브릭(Rubric)을 제안하면, 실행 에이전트(Execution Agent)가 후보 프로그램을 수정하고 평가를 수행하여 지표를 기록합니다.</li>
+<li><strong>공유 메모리 및 컨텍스트 리셋</strong>: 모든 작업자는 사이클 경계마다 공유 메모리 레이어를 통해 성공적인 아이디어와 실패 기록을 공유합니다.</li>
+</ul>
+</li>
+<li><strong>3단계: 증거 생성 및 논문 작성 (Evidence Generation &amp; Paper Writing)</strong>
+<ul>
+<li><strong>소거 연구 및 분석</strong>: 전체 작업자 중 가장 우수한 정답 프로그램을 선정하고, 소거 에이전트(Ablation Agent)가 통제된 베이스라인과 소거 연구를 수행합니다. 분석 에이전트(Analysis Agent)는 로그 지표를 바탕으로 후속 추론을 실시합니다.</li>
+<li><strong>작성 및 감사</strong>: 데이터와 코드를 바탕으로 LaTeX 논문 작성, 오토일러스트레이트(AutoIllustrate)를 통한 개요도 생성, 명시적 증거 맵(Evidence map) 결합이 이루어집니다. 자동화된 체크 및 독립 감사를 통해 근거 없는 수치나 과장된 주장을 필터링하며, 리뷰어 에이전트(Reviewer Agent)의 피드백을 반영해 논문을 수정합니다.</li>
+</ul>
+</li>
+</ul>
+<p><code>[보고서 해석/Interpretation]</code> 단일 대화창 방식은 맥락이 누적됨에 따라 추론의 질이 저하되고 이전 실패에 갇히는 문제가 발생합니다. 본 시스템은 에이전트 간 인계(Agentic hand-off)를 통한 주기적 컨텍스트 리셋(Context reset)을 도입하여, 작업자의 최적 프로그램을 보존하면서도 대화창의 무한 증폭을 막고 완전히 새로운 가설 탐색으로 전환할 수 있는 구조적 비계(Scaffolding)를 완성했습니다.</p>
+<h6 id="2-2-오차-확산-error-diffusion-연구-및-alife-2026-구두-발표-채택-사례">2.2. 오차 확산(Error Diffusion) 연구 및 ALIFE 2026 구두 발표 채택 사례</h6>
+<p>소스 내 <code>'Successful Co-Discovered Paper'</code> 단락 및 <code>'Error Diffusion'</code> 다이어그램 설명에 근거할 때, 오차 확산 연구는 인간과 기계의 코-디스커버리(Co-discovery) 과정을 가장 잘 보여주는 사례입니다.</p>
+<p><code>[사실/Fact]</code> 오차 확산 연구는 역전파(Backpropagation)의 생물학적 대안 연구로서, 기존의 이진 분류 단계를 넘어 다중 학급 분류(Multiclass classification) 및 강화학습(PPO) 영역으로 성공적으로 확장되었습니다.</p>
+<ul>
+<li><strong>신경망 구조적 특성</strong>: 흥분성 및 억제성 스트림($\mathbf{p}, \mathbf{n}$)을 분리하여 레이어당 4개의 비음수(Non-negative) 가중치 행렬을 유지함으로써 딜의 법칙(Dale's principle)을 구조적으로 준수합니다.</li>
+<li><strong>오차 전달 메커니즘</strong>: 가중치 수송(Weight transport)이나 무작위 피드백 행렬(Random feedback matrices) 없이, 출력 오차 신호를 은닉층(Hidden layers)으로 직접 브로드캐스팅하는 방식을 취합니다.</li>
+<li><strong>과제별 적응</strong>: 분류 과제에서는 영역 특화 시그모이드 폭, 평균 중심 오차, 비대칭 초기화를 적용하였고, 강화학습 과제에서는 ReLU 활성화 함수 및 PPO(Proximal Policy Optimization) 알코리즘과 통합되었습니다.</li>
+</ul>
+<p><code>[사실/Fact]</code> 인간 연구자와 시스템 간의 세부 역할 분담은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인간 연구자의 역할</th>
+<th style="text-align:left">시스템(에이전트)의 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">초기 연구 방향, 베이스라인, 평가 루브릭 설정 및 정밀 루브릭 강화</td>
+<td style="text-align:left">가설 제안, 실험 구현, 오차 신호 라우팅 개발 및 초기 실패 원인 분석</td>
+</tr>
+<tr>
+<td style="text-align:left">분류에서 강화학습(PPO)으로의 전환 지원 및 테스트 환경 제공</td>
+<td style="text-align:left">과제별 알고리즘 변형 적응, 소거 연구 수행, 신뢰성 저하 구간 분석</td>
+</tr>
+<tr>
+<td style="text-align:left">제출 전 코드·결과·인용 독립 검증, 근거 초과 주장 수정, 외부 피드백 반영</td>
+<td style="text-align:left">지표 및 로그 기반 통합 분석, 논문 초안 작성, 최적화 솔루션 및 증거 생성</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>&quot;초기 실행 과정에서 인간 연구자의 검토를 통해 의도된 학습 규칙을 위반하고도 높은 점수를 얻은 후보(리워드 해킹)가 포착되었으며, 이를 계기로 평가 루브릭을 더욱 엄격하게 강화했습니다.&quot; (출처: 'Successful Co-Discovered Paper' 단락)</p>
+</blockquote>
+<p><code>[소스의 주장/Claim]</code> 이러한 긴밀한 협업을 통해 완성된 논문은 외부 동료 평가를 통과하여 ALIFE 2026 학회의 구두 발표 논문으로 최종 채택되었습니다.</p>
+<h6 id="2-3-추가-사례-연구-doc-to-lora-및-cma-es-진화-전략">2.3. 추가 사례 연구: Doc-to-LoRA 및 CMA-ES 진화 전략</h6>
+<p>소스 내 <code>'Additional Case Studies'</code> 단락에 기술된 두 가지 사례 연구는 시스템이 공개 코드베이스를 기반으로 개방형 방법론을 자율 개발하는 능력을 보여줍니다.</p>
+<ul>
+<li>
+<p><strong>Doc-to-LoRA 기반 장문 맥락 적응 개선</strong></p>
+<ul>
+<li><code>[사실/Fact]</code> <strong>기초 메커니즘 및 문제 발견</strong>: Doc-to-LoRA 공개 저장소에서 출발하여, 동결된 언어 모델(Frozen model)을 위해 문서 청크(Document chunks)를 저차원 어댑터(LoRA)로 인코딩하는 기존 방식의 병목을 분석했습니다. 질의를 확인하기 전에 어댑터들을 미리 결합하면 사실 간섭(Interference)이 발생하는 현상을 규명했습니다.</li>
+<li><code>[사실/Fact]</code> <strong>개선 및 성과</strong>: 질문 입력 시점에 관련 어댑터를 동적으로 선택하는 **쿼리 기반 어댑터 선택 방식(Query-Conditioned Merge-Time Selection)**과 텍스트 선택/청크 경계 정제 기법을 개발했습니다. 그 결과 합성 데이터셋(Multi-needle in-a-haystack) 기준 정확도를 <strong>52%에서 98%로 향상</strong>시켰으며, 추가 학습 파라미터나 재학습 과정이 필요하지 않았습니다.</li>
+<li><code>[소스의 주장/Claim]</code> 연구 진입 장벽을 낮추는 성공적 사례이나, 자연어 문서 및 복잡한 질문으로의 일반화 여부는 미검증 상태입니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>CMA-ES 기반 학습된 진화 전략 (Learned Evolution Strategies)</strong></p>
+<ul>
+<li><code>[사실/Fact]</code> <strong>목적 및 연구 방법</strong>: CMA-ES 기반 블랙박스 최적화기 설계를 개선하기 위해 소형 수학적 테스트 문제에서 메타 학습을 수행하고, 연속 제어(Continuous control) 정책 탐색 과제에서 평가를 진행했습니다.</li>
+<li><code>[사실/Fact]</code> <strong>소거 연구 결과</strong>: 소거 연구를 통해 학습된 조정 메커니즘을 비활성화한 대조군과 비교한 결과, 학습된 요소는 주로 <strong>초기 최적화 진전을 가속화</strong>하는 역할을 하며, 장기 실행 시에는 기본 제어 구조 자체가 최종 성능을 유지한다는 원인을 밝혀냈습니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-4-모델-및-에이전트-하네스-평가-결과">2.4. 모델 및 에이전트 하네스 평가 결과</h6>
+<p>소스 내 <code>'Evaluating The Agentic Scientist Across Tasks...'</code> 단락에 근거한 실험 설정 및 정량적 분석 결과는 다음과 같습니다.</p>
+<p><code>[사실/Fact]</code></p>
+<ul>
+<li><strong>평가 조건</strong>: 5개 머신러닝 연구 주제, 9개 프론티어 LLM(GPT 4종, Claude 4종, DeepSeek 1종), 4개 에이전트 하네스(Codex, Claude Code, OpenCode, Pi)를 조합하여 총 14개 모델-하네스 조합 및 70개 연구 캠페인을 진행했습니다. (캠페인당 20회 아이디어 반복 예산 통일)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 지표 및 요소</th>
+<th style="text-align:left">주요 분석 결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>최신 모델 성능</strong></td>
+<td style="text-align:left">Claude 모델군을 중심으로 최신 모델일수록 높은 AI 리뷰어 점수를 획득함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>하네스 대 모델 영향력</strong></td>
+<td style="text-align:left">에이전트 하네스의 선택보다 바탕이 되는 프론티어 LLM 자체의 성능 차이가 최종 결과에 더 결정적인 영향을 미침.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>성능-점수 상관관계</strong></td>
+<td style="text-align:left">수치적 성능의 백분위 순위(Percentile rank)와 AI 리뷰어 점수 간 양의 상관관계(<strong>r = 0.44</strong>)가 확인됨.</td>
+</tr>
+</tbody>
+</table>
+<p><code>[보고서 해석/Interpretation]</code> AI 리뷰어 점수가 수치적 성능 지표와 $r = 0.44$의 양의 상관관계를 보인다는 점은, 자동화된 평가지표가 실제 정량적 연구 성과를 정밀하게 추적하고 있음을 시사합니다.</p>
+<h6 id="2-5-오토일러스트레이트-autoillustrate-파이프라인">2.5. 오토일러스트레이트(AutoIllustrate) 파이프라인</h6>
+<p>소스 내 <code>'AutoIllustrate'</code> 단락에 기술된 과학 다이어그램 자동 생성 파이프라인의 메커니즘은 다음과 같습니다.</p>
+<p><code>[사실/Fact]</code></p>
+<ul>
+<li><strong>기존 방식 대 AutoIllustrate 방식의 비교</strong>:
+<ul>
+<li><em>기존 픽셀/벡터 방식</em>: 픽셀 기반(Raster) 이미지 생성 방식은 세부 수정이 불가능하며, 기존 벡터 기반 생성 방식은 시각적 레이아웃 검증이 결여되어 도면이 겹치는 오류가 발생함.</li>
+<li><em>AutoIllustrate의 벡터 우선(Vector-first) 방식</em>: 수정 가능한 **draw.io 벡터 다이어그램을 진실의 출처(Source of truth)**로 설정합니다. 기하학적 결정론적 검증기(Deterministic checker)가 도형 겹침 및 화살표 오기재를 사전 차단하며, 이후 이미지 생성 모델이 스타일과 세부 디테일을 향상시킵니다.</li>
+</ul>
+</li>
+<li><strong>평가 성과</strong>: PaperBananaBench 평가 결과, 기존 래스터 베이스라인인 PaperBanana 대비 신뢰성(Faithfulness)과 미적 요소(Aesthetics) 모두에서 향상된 성능을 기록했습니다.</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-역할-persons-and-roles">3. 등장 인물 및 역할 (Persons and Roles)</h5>
+<p>소스 내 <code>'Authors'</code> 및 <code>'Citation'</code> 단락에 명시된 저자 정보는 다음과 같습니다. 소스 상에 저자 개인별 세부 과제 분담 내역은 기재되어 있지 않습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속</th>
+<th style="text-align:left">소스 상 명시된 역할 및 기여</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">로베르트 탸르코랑게 (Robert Tjarko Lange)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">주저자 (*동등한 기여) / 세부 역할 확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">루카 그리로티 (Luca Grillotti)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">주저자 (*동등한 기여) / 세부 역할 확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">유타로 야마다 (Yutaro Yamada)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">주저자 (*동등한 기여) / 세부 역할 확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">루지콘 차라콘 (Rujikorn Charakorn)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">공저자 / 세부 역할 확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">데이비드 하 (David Ha)</td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">공저자 / 세부 역할 확인 불가</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-시점-numbers-and-timestamps">4. 주요 수치 및 시점 (Numbers and Timestamps)</h5>
+<p>소스 내 <code>'Published'</code>, <code>'Citation'</code>, <code>'TL;DR'</code>, <code>'Additional Case Studies'</code>, <code>'Evaluating The Agentic Scientist Across Tasks...'</code> 단락에서 추출된 정확한 수치 및 시점은 다음과 같습니다.</p>
+<ol>
+<li><strong>논문 공개 시점 및 식별 정보</strong>: 논문 공식 공개 시점은 <strong>2026년 10월</strong>이며, arXiv 식별자는 <strong>arXiv:2610.18933</strong>입니다.</li>
+<li><strong>채택 학회 연도</strong>: 오차 확산 논문이 구두 발표로 채택된 학회는 <strong>ALIFE 2026</strong>입니다.</li>
+<li><strong>Doc-to-LoRA 성능 수치</strong>: 쿼리 기반 어댑터 선택 적용을 통해 합성 데이터셋 정확도를 <strong>52%에서 98%로 향상</strong>시켰으며, 추가 학습 파라미터 수는 <strong>0개</strong>입니다.</li>
+<li><strong>시스템 평가 규모</strong>: <strong>5개</strong> 연구 주제, <strong>9개</strong> 프론티어 LLM, <strong>4개</strong> 에이전트 하네스, <strong>14개</strong> 모델-하네스 조합, <strong>70개</strong> 연구 캠페인, 캠페인당 <strong>20회</strong> 아이디어 반복 예산이 설정되었습니다.</li>
+<li><strong>성능-점수 상관계수</strong>: 수치적 성능 백분위 순위와 AI 리뷰어 점수 간의 양의 상관계수는 <strong>r = 0.44</strong>입니다.</li>
+<li><strong>소스 미기재 수치 지표</strong>: 모델별 세부 실행 시간, 개별 실험의 세부 정밀도 수치(Precision/Recall) 등 소스에 기술되지 않은 기타 정량적 지표는 <strong>확인 불가</strong>합니다.</li>
+</ol>
+<hr />
+<h5 id="5-한계-불확실성-및-윤리적-고려사항-limitations-uncertainties-and-ethical-considerations">5. 한계, 불확실성 및 윤리적 고려사항 (Limitations, Uncertainties, and Ethical Considerations)</h5>
+<p>소스 내 <code>'Lessons Learned and Limitations'</code> 및 <code>'Ethical considerations'</code> 단락에 근거한 시스템의 구조적 한계와 윤리적 방침은 다음과 같습니다.</p>
+<p><code>[소스의 주장/Claim]</code></p>
+<blockquote>
+<p>&quot;고득점 결과가 의도된 방법론을 위반하는 꼼수(리워드 해킹)에서 비롯될 수 있으므로, 명시적인 루브릭 설정과 인간 연구자의 검증이 필수적입니다.&quot;</p>
+</blockquote>
+<ul>
+<li><strong>시스템적 한계 및 벤치마크 변질</strong>: 이미 고도로 최적화된 성숙한 벤치마크에서는 자율 탐색이 단순 하이퍼파라미터 튜닝이나 소규모 공학적 수정으로 변질되어 과학적 의미가 퇴색될 위험이 있습니다.</li>
+<li><strong>선행 연구 활용 및 베이스라인 구축의 제한</strong>:
+<ul>
+<li>문헌 조사가 아이디어 제안 단계가 아닌 논문 작성 단계에 수행되어, 선행 연구와의 직접적 연결성이 제한됩니다.</li>
+<li>문헌상의 최첨단(SOTA) 베이스라인을 직접 구축하는 파이프라인이 부재하여, 대다수의 비교 대상이 프로그램 변형에 국한됩니다.</li>
+</ul>
+</li>
+<li><strong>평가 및 검증의 불확실성</strong>:
+<ul>
+<li>외부 동료 평가를 거친 것은 오차 확산 논문 1건뿐이며, AI 리뷰어 점수는 과학적 정밀도의 절대적 보증이 아닙니다.</li>
+<li>평가가 계산 머신러닝 분야로 제한되어 물리적 실험, 전용 장비, 사람 대상 연구 분야로의 확장성은 <strong>미검증</strong> 상태입니다.</li>
+<li>AutoIllustrate의 신뢰성 및 미적 향상은 단일 VLM 평가자를 기준으로 한 것이며, 가독성(Readability) 및 간결성(Conciseness)과의 트레이드오프(Trade-off)가 존재합니다.</li>
+</ul>
+</li>
+</ul>
+<p><code>[사실/Fact]</code></p>
+<ul>
+<li><strong>피어 리뷰 보호를 위한 실천 조치</strong>: AI 지원 연구가 학술 동료 평가(Peer Review) 시스템에 가할 부담을 방지하기 위해, 사카나 AI 연구진은 인간 연구자의 철저한 검증(코드, 결과, 주장, 인용 확인)을 거친 <strong>'오차 확산(Error Diffusion)' 논문 1건만 외부 학회에 제출</strong>하였습니다. 나머지 생성된 논문들은 외부에 제출하지 않고 <strong>내부 평가용 유물(Internal evaluation artifacts)로만 보관 및 사용</strong>했습니다.</li>
+<li><strong>책임 귀속 및 공개</strong>: 시스템을 책임 있게 활용하기 위해서는 생성된 코드와 텍스트의 출처(Provenance)를 명확히 하고 에이전트의 기여도를 공개해야 합니다. 연구의 최종 안전성, 저자권(Authorship), 최종 주장의 타당성에 대한 궁극적인 책임은 전적으로 <strong>인간 연구자</strong>에게 있습니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

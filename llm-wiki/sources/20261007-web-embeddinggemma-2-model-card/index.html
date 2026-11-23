@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmbeddingGemma 2 model card</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>EmbeddingGemma 2 model card</h1>
+<p class="page-meta">웹 · 2026-10-07</p>
+<h2 id="요약">요약</h2>
+<p>임베딩젬마 2(EmbeddingGemma 2)는 구글 딥마인드(Google DeepMind)가 개발한 오픈 멀티모달 임베딩 모델로, 텍스트(소프트웨어 코드 포함), 이미지, 비디오, 오디오 및 이들의 복합 조합(Interleaved Inputs)을 단일한 **768차원 통합 벡터 공간(Unified Vector…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://ai.google.dev/gemma/docs/embeddinggemma/model_card_2">출처</a> · <a href="https://www.youtube.com/watch?v=sKbHIWO7E2s">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="임베딩젬마-2-embeddinggemma-2-모델-카드-상세-해설-보고서">임베딩젬마 2(EmbeddingGemma 2) 모델 카드 상세 해설 보고서</h3>
+<blockquote>
+<p><strong>1. 문서의 성격 및 검증 범위 선언</strong><br />
+본 보고서는 독립적인 제3자 평가 기관이나 동료 심사(Peer Review)에 의한 검증 결과가 아니며, 모델 개발사인 구글 딥마인드(Google DeepMind)가 직접 작성하고 공개한 공식 기술 문서인 「EmbeddingGemma 2 model card」 단 1건만을 유일한 절대적 근거(Source of Truth)로 하여 작성된 시스템 연구원 관점의 상세 해설 보고서입니다.</p>
+</blockquote>
+<hr />
+<h4 id="2-모델-개요-및-핵심-정체성">2. 모델 개요 및 핵심 정체성</h4>
+<p>임베딩젬마 2(EmbeddingGemma 2)는 구글 딥마인드(Google DeepMind)가 개발한 오픈 멀티모달 임베딩 모델로, 텍스트(소프트웨어 코드 포함), 이미지, 비디오, 오디오 및 이들의 복합 조합(Interleaved Inputs)을 단일한 **768차원 통합 벡터 공간(Unified Vector Space)**으로 매핑하는 네이티브 멀티모달(Native Multimodal) 표현 학습 시스템입니다.</p>
+<p>모바일 기기, 노트북 등 사용자용 단말 및 엣지(Edge) 환경에서 최적화되어 동작하도록 설계되었으며, 저전력·저지연 의미론적 표현(Semantic Representation)을 제공하여 온디바이스(On-device) 검색, RAG(검색 증강 생성), 텍스트 및 미디어 분류, 클러스터링 등의 하류(Downstream) 과제를 강력하게 지원합니다.</p>
+<h5 id="주요-사양-요약">주요 사양 요약</h5>
+<ul>
+<li><strong>라이선스</strong>: 아파치 2.0 (Apache 2.0)</li>
+<li><strong>제작사</strong>: 구글 딥마인드 (Google DeepMind)</li>
+<li><strong>기반 아키텍처</strong>: 젬마 4(Gemma 4) 아키텍처</li>
+<li><strong>전체 파라미터 구성</strong>: 총 7억 4,000만 개 (740M)
+<ul>
+<li><strong>텍스트 백본(Text Backbone)</strong>: 2억 7,000만 개 (270M) — 트랜스포머 레이어 1억 3,000만 개(130M) + 임베더 1억 4,000만 개(140M)</li>
+<li><strong>비전 인코더(Vision Encoder)</strong>: 1억 7,000만 개 (170M)</li>
+<li><strong>오디오 인코더(Audio Encoder)</strong>: 3억 개 (300M)</li>
+</ul>
+</li>
+<li><strong>멀티모달 설계</strong>: 4가지 핵심 모달리티(텍스트, 이미지, 비디오, 오디오)를 별도의 변환 레이어 없이 공유된 768차원 공간에 투영하는 네이티브 멀티모달 구조</li>
+</ul>
+<hr />
+<h4 id="3-핵심-기능-및-기술적-특징">3. 핵심 기능 및 기술적 특징</h4>
+<h5 id="다국어-및-코드-지원-multilinguality-and-code">다국어 및 코드 지원 (Multilinguality and Code)</h5>
+<p>140개 이상의 언어를 아우르는 다국어 표현 능력을 보유하고 있으며, 특히 전작(EmbeddingGemma 1) 대비 코드(Code) 임베딩 및 검색 과제 성능이 약 14% 대폭 향상되었습니다.</p>
+<h5 id="유연한-메모리-공간-flexible-footprint">유연한 메모리 공간 (Flexible Footprint)</h5>
+<p>모듈형 인코더 구조로 구현되어 시스템 배포 파이프라인에서 불필요한 인코더를 로드하지 않고 필요한 모달리티만 선택적으로 메모리에 올릴 수 있습니다. 이를 통해 텍스트 전용 시스템 구축 시 모델 메모리 점유 크기를 2억 7,000만 개(270M) 파라미터 수준으로 경량화할 수 있습니다.</p>
+<h5 id="마트료시카-표현-학습-matryoshka-representation-learning-mrl">마트료시카 표현 학습 (Matryoshka Representation Learning, MRL)</h5>
+<p>MRL 기법이 적용되어 네이티브 출력인 768차원 벡터의 상위 차원을 절단(Truncation)하여 512차원, 256차원, 128차원으로 정규화 후 축소 사용할 수 있습니다. 표현 품질의 하락을 극도로 제한하면서 벡터 데이터베이스 저장 비용 및 유사도 연산 오버헤드를 최대 6배까지 절감합니다.</p>
+<h5 id="넓은-컨텍스트-창-8k-context-window">넓은 컨텍스트 창 (8K Context Window)</h5>
+<p>8,192(8K) 토큰의 대용량 컨텍스트 창을 제공하여 수천 단어의 장문 문서나 분 단위 길이의 오디오, 비디오 멀티모달 데이터 스트림을 단일 입력 패스로 처리합니다.</p>
+<h5 id="태스크-지시-프리픽스-task-instruction-prefixes">태스크 지시 프리픽스 (Task Instruction Prefixes)</h5>
+<p>경량 텍스트 지시 프롬프트를 입력 최전단에 결합하여 검색, 질의응답, 분류, 클러스터링 등 과제 특성에 부합하는 최적의 임베딩 표현으로 공간 구조를 조율(Task-steered representation)합니다.</p>
+<hr />
+<h4 id="4-모델-세부-구조-수치-model-structural-specifications">4. 모델 세부 구조 수치 (Model Structural Specifications)</h4>
+<p>임베딩젬마 2의 내부 아키텍처 및 세부 구조적 수치는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">세부 수치 및 사양</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>전체 파라미터 수 (Total Parameters)</strong></td>
+<td style="text-align:left">740M (7억 4,000만 개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>백본 파라미터 (Backbone)</strong></td>
+<td style="text-align:left">130M</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>임베더 파라미터 (Embedder)</strong></td>
+<td style="text-align:left">140M</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>모달리티 인코더 (Modality Encoders)</strong></td>
+<td style="text-align:left">비전: 170M / 오디오: 300M</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>레이어 수 (Layers)</strong></td>
+<td style="text-align:left">24</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>모델 차원 (Model Dimension)</strong></td>
+<td style="text-align:left">512</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>히든 차원 (Hidden Dimension)</strong></td>
+<td style="text-align:left">2,048</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>슬라이딩 윈도우 (Sliding Window)</strong></td>
+<td style="text-align:left">1,024 토큰</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>어휘 크기 (Vocabulary Size)</strong></td>
+<td style="text-align:left">262,144</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>어텐션 헤드 수 (# Heads)</strong></td>
+<td style="text-align:left">4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>키-값 헤드 수 (# KV-Heads Local/Global)</strong></td>
+<td style="text-align:left">2 / 1 (로컬:글로벌 비율 5:1)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>어텐션 방식 (Attention)</strong></td>
+<td style="text-align:left">GQA (Grouped Query Attention) / MQA (Multi-Query Attention)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>활성화 함수 (Activation)</strong></td>
+<td style="text-align:left">GELU가 적용된 게이트 FFN (Gated FFN with GELU)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>풀링 방식 (Pooling)</strong></td>
+<td style="text-align:left">평균 풀링 (Mean Pooling)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>투영 레이어 (Projection Layer)</strong></td>
+<td style="text-align:left">512 → 768</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지원 모달리티 (Supported Modalities)</strong></td>
+<td style="text-align:left">텍스트, 이미지, 비디오, 오디오</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>컨텍스트 창 (Context Window)</strong></td>
+<td style="text-align:left">8,192 토큰</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기본 출력 차원 (Native Output Dimension)</strong></td>
+<td style="text-align:left">768</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MRL 절단 지원 차원 (MRL Truncation Dimensions)</strong></td>
+<td style="text-align:left">128, 256, 512</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-벤치마크-평가-결과-768차원-전체-정밀도-기준">5. 벤치마크 평가 결과 (768차원 전체 정밀도 기준)</h4>
+<p>전체 정밀도(Full-precision) 체크포인트를 기준으로 주요 모달리티 벤치마크에서 평가된 성능 결과입니다. 전작인 EmbeddingGemma 1과의 비교 가능 항목과 신규 추가된 멀티모달 평가 항목을 구분하여 명시합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모달리티</th>
+<th style="text-align:left">벤치마크</th>
+<th style="text-align:left">평가 지표</th>
+<th style="text-align:center">임베딩젬마 2</th>
+<th style="text-align:center">임베딩젬마 1 (전작)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>텍스트</strong></td>
+<td style="text-align:left">MTEB (multilingual, v2)</td>
+<td style="text-align:left">Mean(Task), Multiple</td>
+<td style="text-align:center"><strong>61.36</strong></td>
+<td style="text-align:center">61.15</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코드</strong></td>
+<td style="text-align:left">MTEB (code, v1)</td>
+<td style="text-align:left">Mean(Task), NDCG@10</td>
+<td style="text-align:center"><strong>78.68</strong></td>
+<td style="text-align:center">68.76</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>이미지</strong></td>
+<td style="text-align:left">MIEB (lite)</td>
+<td style="text-align:left">Mean(TaskType), Multiple</td>
+<td style="text-align:center"><strong>64.64</strong></td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>이미지</strong></td>
+<td style="text-align:left">MMEB v2 (Image)</td>
+<td style="text-align:left">Mean(Task), Hit@1</td>
+<td style="text-align:center"><strong>57.28</strong></td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시각 문서</strong></td>
+<td style="text-align:left">MMEB v2 (VisDoc)</td>
+<td style="text-align:left">Mean(Task), NDCG@5</td>
+<td style="text-align:center"><strong>67.84</strong></td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비디오</strong></td>
+<td style="text-align:left">MMEB v2 (Video)</td>
+<td style="text-align:left">Mean(Task), Hit@1</td>
+<td style="text-align:center"><strong>50.67</strong></td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오디오 검색</strong></td>
+<td style="text-align:left">MSEB (Retrieval)</td>
+<td style="text-align:left">Mean(Task), MRR@10</td>
+<td style="text-align:center"><strong>69.54</strong></td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오디오</strong></td>
+<td style="text-align:left">MAEB</td>
+<td style="text-align:left">Mean(Task), Multiple</td>
+<td style="text-align:center"><strong>49.39</strong></td>
+<td style="text-align:center">-</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="6-벡터-절단-vector-truncation-평가-및-mrl-분석">6. 벡터 절단(Vector Truncation) 평가 및 MRL 분석</h4>
+<p>마트료시카 표현 학습(MRL) 적용 시 768차원 기본 출력을 하위 차원으로 절단하고 L2 재정규화했을 때의 압축비 및 모달리티별 성능 변화 데이터입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">출력 차원</th>
+<th style="text-align:center">압축비</th>
+<th style="text-align:center">MTEB 다국어 v2</th>
+<th style="text-align:center">MTEB 영어 v2</th>
+<th style="text-align:center">MTEB 코드 v1</th>
+<th style="text-align:center">MIEB lite</th>
+<th style="text-align:center">MMEB v2 전체</th>
+<th style="text-align:center">MSEB 검색</th>
+<th style="text-align:center">MAEB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>768d (전체)</strong></td>
+<td style="text-align:center">1:1</td>
+<td style="text-align:center">61.36</td>
+<td style="text-align:center">68.46</td>
+<td style="text-align:center">78.68</td>
+<td style="text-align:center">64.64</td>
+<td style="text-align:center">59.01</td>
+<td style="text-align:center">69.54</td>
+<td style="text-align:center">49.39</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>512d</strong></td>
+<td style="text-align:center">1:1.5</td>
+<td style="text-align:center">61.17</td>
+<td style="text-align:center">68.41</td>
+<td style="text-align:center">77.24</td>
+<td style="text-align:center">64.32</td>
+<td style="text-align:center">58.38</td>
+<td style="text-align:center">69.18</td>
+<td style="text-align:center">49.21</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>256d</strong></td>
+<td style="text-align:center">1:3</td>
+<td style="text-align:center">60.41</td>
+<td style="text-align:center">67.78</td>
+<td style="text-align:center">76.18</td>
+<td style="text-align:center">63.13</td>
+<td style="text-align:center">56.24</td>
+<td style="text-align:center">66.76</td>
+<td style="text-align:center">48.91</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>128d</strong></td>
+<td style="text-align:center">1:6</td>
+<td style="text-align:center">57.89</td>
+<td style="text-align:center">65.68</td>
+<td style="text-align:center">71.41</td>
+<td style="text-align:center">59.06</td>
+<td style="text-align:center">45.65</td>
+<td style="text-align:center">56.71</td>
+<td style="text-align:center">46.92</td>
+</tr>
+</tbody>
+</table>
+<h5 id="mrl-차원-축소에-따른-기술적-해설">MRL 차원 축소에 따른 기술적 해설</h5>
+<ul>
+<li><strong>256차원 영역</strong>: 256차원까지 절단 시 전체 MTEB 및 멀티모달 점수의 손실이 미미하여 실질적인 무손실(Lossless) 압축 효율을 달성합니다. 벡터 저장소 공간 및 메모리 대역폭을 3배 절감하면서도 프로덕션 환경의 정밀도를 유지할 수 있습니다.</li>
+<li><strong>128차원 영역</strong>: 128차원으로 절단할 경우, 텍스트 전용 과제(MTEB 다국어 57.89, MTEB 영어 65.68)에서는 비교적 견고한 성능을 나타내지만, 멀티모달 과제(MMEB v2 전체 점수가 59.01에서 45.65로 하락, MSEB 오디오 검색이 69.54에서 56.71로 하락)에서는 큰 폭의 품질 저하가 관찰됩니다. 따라서 128차원 축소는 <strong>텍스트 전용(Text-only) 워크로드</strong>에 국한하여 선택적으로 도용하는 것을 강력히 권장합니다.</li>
+</ul>
+<hr />
+<h4 id="7-실무-활용-및-구현-지침-best-practices">7. 실무 활용 및 구현 지침 (Best Practices)</h4>
+<h5 id="7-1-빠른-시작-및-태스크-지시-프리픽스-task-instruction-prefixes">7.1. 빠른 시작 및 태스크 지시 프리픽스 (Task Instruction Prefixes)</h5>
+<p>임베딩젬마 2는 입력 텍스트 최전단에 과제별 지시 프리픽스를 결합할 때 최고의 표현 정밀도를 발휘합니다.</p>
+<ul>
+<li><strong>적용 범위</strong>: 프리픽스는 <strong>텍스트 입력에만 적용</strong>하며, 이미지, 비디오, 오디오 파이프라인에는 접두사를 결합하지 않습니다.</li>
+<li><strong>과제 유형 구분</strong>:
+<ul>
+<li><strong>비대칭 과제 (Asymmetric Tasks)</strong>: 질의(Query)와 데이터베이스 코퍼스(Document)의 형식과 의미론적 성격이 다른 과제(예: 웹 검색, 질의응답, 사실 확인, 코드 검색). 질의와 문서에 각각 지정된 전용 프리픽스를 구분하여 부여합니다.</li>
+<li><strong>대칭 과제 (Symmetric Tasks)</strong>: 비교되는 대상들 간의 특성이 동등한 과제(예: 텍스트 분류, 클러스터링, 문장 유사도). 모든 입력에 동일한 프롬프트를 적용합니다.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>주의: 문서 제목 서식 및 <code>prompt_name=&quot;Document&quot;</code> 동작 메커니즘</strong><br />
+제목이 존재하는 문서의 경우 반드시 <code>title: {title} | text: {content}</code> 서식을 수동으로 구성해야 합니다. 제목이 없는 경우 <code>title: none</code>을 지정합니다.<br />
+SentenceTransformers 라이브러리에서 <code>prompt_name=&quot;Document&quot;</code>를 파라미터로 지정할 경우 내부에 <code>title: none</code> 접두사가 자동으로 결합됩니다. 따라서 <strong>제목이 존재하는 문서</strong>를 임베딩할 때 자동 프롬프트를 지정하면 제목 정보가 누락되므로, 자동 파라미터를 배제하고 <code>f&quot;title: {title} | text: {document}&quot;</code> 형태로 문자열을 직접 서식화하여 파이프라인에 전달해야 합니다.</p>
+</blockquote>
+<h6 id="과제별-프롬프트-매핑-표">과제별 프롬프트 매핑 표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">유즈케이스</th>
+<th style="text-align:left">과제 유형</th>
+<th style="text-align:left">프롬프트 이름 (Prompt Name)</th>
+<th style="text-align:left">질의 지시어 (Query Instruction)</th>
+<th style="text-align:left">문서 지시어 (Document Instruction)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">웹/문서 검색</td>
+<td style="text-align:left">비대칭</td>
+<td style="text-align:left">SearchQuery</td>
+<td style="text-align:left"><code>task: search result | query: {query}</code></td>
+<td style="text-align:left"><code>title: {title} | text: {content}</code></td>
+</tr>
+<tr>
+<td style="text-align:left">질의응답</td>
+<td style="text-align:left">비대칭</td>
+<td style="text-align:left">QuestionAnswering</td>
+<td style="text-align:left"><code>task: question answering | query: {question}</code></td>
+<td style="text-align:left"><code>title: {title} | text: {passage}</code></td>
+</tr>
+<tr>
+<td style="text-align:left">사실 확인</td>
+<td style="text-align:left">비대칭</td>
+<td style="text-align:left">FactChecking</td>
+<td style="text-align:left"><code>task: fact checking | query: {claim}</code></td>
+<td style="text-align:left"><code>title: {title} | text: {evidence}</code></td>
+</tr>
+<tr>
+<td style="text-align:left">코드 검색</td>
+<td style="text-align:left">비대칭</td>
+<td style="text-align:left">CodeRetrieval</td>
+<td style="text-align:left"><code>task: code retrieval | query: {query}</code></td>
+<td style="text-align:left"><code>title: {title or filename} | text: {code}</code></td>
+</tr>
+<tr>
+<td style="text-align:left">텍스트 분류</td>
+<td style="text-align:left">대칭</td>
+<td style="text-align:left">Classification</td>
+<td style="text-align:left"><code>task: classification | query: {content}</code></td>
+<td style="text-align:left">해당 없음 (N/A)</td>
+</tr>
+<tr>
+<td style="text-align:left">클러스터링</td>
+<td style="text-align:left">대칭</td>
+<td style="text-align:left">Clustering</td>
+<td style="text-align:left"><code>task: clustering | query: {content}</code></td>
+<td style="text-align:left">해당 없음 (N/A)</td>
+</tr>
+<tr>
+<td style="text-align:left">유사도 측정</td>
+<td style="text-align:left">대칭</td>
+<td style="text-align:left">SentenceSimilarity</td>
+<td style="text-align:left"><code>task: sentence similarity | query: {content}</code></td>
+<td style="text-align:left">해당 없음 (N/A)</td>
+</tr>
+</tbody>
+</table>
+<h6 id="기본-빠른-시작-예제-코드-quick-start">기본 빠른 시작 예제 코드 (Quick Start)</h6>
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer
+
+# 모델 로딩
+model = SentenceTransformer(&quot;google/embeddinggemma-2&quot;)
+
+# 검색 질의 및 문서 정의
+query = &quot;What causes the northern lights?&quot;
+document = &quot;The northern lights are caused by charged particles from the sun.&quot;
+
+# 태스크 프리픽스를 적용한 임베딩 생성
+query_emb = model.encode(query, prompt_name=&quot;SearchQuery&quot;)
+doc_emb = model.encode(document, prompt_name=&quot;Document&quot;)
+
+# 코사인 유사도 연산
+similarity_score = model.similarity(query_emb, doc_emb)
+print(f&quot;Similarity Score: {similarity_score}&quot;)
+</code></pre>
+<h5 id="7-2-선택적-인코더-로딩-selective-encoder-loading">7.2. 선택적 인코더 로딩 (Selective Encoder Loading)</h5>
+<p>온디바이스 및 모바일 시스템 환경의 메모리 제한을 극복하기 위해, 사용하지 않는 비전/오디오 인코더를 로딩 단계에서 제거할 수 있습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">활성화 모달리티</th>
+<th style="text-align:left"><code>config_kwargs</code> 설정 매개변수</th>
+<th style="text-align:center">유효 파라미터 크기</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>텍스트 전용 (Text only)</strong></td>
+<td style="text-align:left"><code>{&quot;vision_config&quot;: None, &quot;audio_config&quot;: None}</code></td>
+<td style="text-align:center"><strong>270M</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>텍스트 및 이미지 (Text and image)</strong></td>
+<td style="text-align:left"><code>{&quot;audio_config&quot;: None}</code></td>
+<td style="text-align:center"><strong>440M</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>텍스트 및 오디오 (Text and audio)</strong></td>
+<td style="text-align:left"><code>{&quot;vision_config&quot;: None}</code></td>
+<td style="text-align:center"><strong>570M</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전체 멀티모달 (Full multimodal)</strong></td>
+<td style="text-align:left"><code>{}</code></td>
+<td style="text-align:center"><strong>740M</strong></td>
+</tr>
+</tbody>
+</table>
+<h5 id="7-3-벡터-절단-후-l2-재정규화-및-차원-일치-조건">7.3. 벡터 절단 후 L2 재정규화 및 차원 일치 조건</h5>
+<blockquote>
+<p><strong>경고: L2 재정규화 생략 시 무오류 정밀도 붕괴 위험</strong><br />
+단위 길이를 가진 L2 정규화 벡터의 일부분을 슬라이싱(Truncation)하면 수학적으로 단위 길이가 유지되지 않으므로 L2 Norm이 1에서 벗어나게 됩니다. 벡터 절단 후 코사인 유사도를 연산하기 전에 <strong>반드시 L2 재정규화(Re-normalization)를 수행</strong>해야 합니다. 재정규화를 생략하면 런타임 오류가 발생하지 않는 대신, 겉보기에 그럴듯하지만 완전히 잘못된 유사도 랭킹 점수(Plausible-looking invalid scores)가 출력되어 시스템 정밀도를 파괴합니다.</p>
+</blockquote>
+<p>또한, 768차원 질의 벡터를 128차원 인덱스 코퍼스에 직접 연산하는 것과 같이 <strong>상이한 차원 간의 유사도 비교는 원천적으로 불가능</strong>하며, 질의와 코퍼스의 임베딩 차원은 반드시 동일해야 합니다.</p>
+<h6 id="mrl-벡터-절단-및-자동-정규화-구현-코드">MRL 벡터 절단 및 자동 정규화 구현 코드</h6>
+<pre><code class="language-python"># MRL 128차원 절단 및 L2 재정규화 동시 수행
+query_emb_128 = model.encode(
+    query,
+    truncate_dim=128,          # 지원 차원: 512, 256, 128
+    normalize_embeddings=True  # L2 재정규화 수행 (필수)
+)
+</code></pre>
+<h5 id="7-4-수치-정밀도-및-float16-엄격-금지-numerical-precision-dynamic-range">7.4. 수치 정밀도 및 float16 엄격 금지 (Numerical Precision &amp; Dynamic Range)</h5>
+<blockquote>
+<p><strong>경고: float16 연산 엄격 금지 (Do NOT Use float16)</strong><br />
+임베딩젬마 2 모델 추론 시 <code>float16</code> 정밀도를 절대 사용하지 마십시오.<br />
+<strong>구조적 사유</strong>: 임베딩젬마 2의 기반인 젬마 4 아키텍처는 내부 트랜스포머 레이어의 활성화 값 범위(Activation Range)가 <code>float16</code>의 표현 한계(최대 약 $65,504$)를 빈번하게 초과합니다. <code>float16</code>으로 추론할 경우 언더플로우/오버플로우가 발생하여, 예외 에러 메시지 출력 없이 **<code>NaN</code> 벡터를 반환하거나 임베딩 표현력이 소리 없이 붕괴(Silent degradation)**됩니다.</p>
+<p>반면 **<code>bfloat16</code>**은 <code>float32</code>와 동일한 8비트 지수부(Exponent)를 갖고 있어 동일한 동적 범위를 안전하게 표현합니다. GPU 메모리를 <code>float32</code> 대비 절반으로 줄이면서도 연산 안정성을 제공하므로 <code>bfloat16</code> 또는 <code>float32</code>만 사용해야 합니다.</p>
+</blockquote>
+<h6 id="동적-정밀도-설정-및-모델-로딩-코드">동적 정밀도 설정 및 모델 로딩 코드</h6>
+<pre><code class="language-python">import torch
+from sentence_transformers import SentenceTransformer
+
+# 하드웨어의 bfloat16 지원 여부를 판별하여 안전한 Precision 동적 선택
+dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float32
+
+# 안전한 torch_dtype 전달을 통한 모델 인스턴스화
+model = SentenceTransformer(
+    &quot;google/embeddinggemma-2&quot;,
+    model_kwargs={&quot;torch_dtype&quot;: dtype}
+)
+</code></pre>
+<h5 id="7-5-멀티모달-입력-인터리빙-및-토큰-예산-관리-multimodal-interleaving-vision-budget">7.5. 멀티모달 입력 인터리빙 및 토큰 예산 관리 (Multimodal Interleaving &amp; Vision Budget)</h5>
+<p>단일 8,192 토큰 컨텍스트 창 안에서 텍스트와 이미지, 비디오, 오디오를 자유롭게 시퀀스로 배치하는 **인터리빙(Interleaving)**을 지원합니다. 미디어 요소의 위치는 플레이스홀더 토큰(<code>&lt;|image|&gt;</code>, <code>&lt;|video|&gt;</code>, <code>&lt;|audio|&gt;</code>)을 텍스트 내에 배치하여 매핑합니다.</p>
+<h6 id="멀티모달-인터리빙-구현-코드">멀티모달 인터리빙 구현 코드</h6>
+<pre><code class="language-python"># 텍스트, 이미지, 비디오가 혼합된 인터리빙 데이터 임베딩 생성
+emb_interleaved = model.encode({
+    &quot;text&quot;: &quot;Waterproof running shoes. &lt;|image|&gt; Featuring a breathable mesh upper. &lt;|image|&gt; Grip test on wet rock: &lt;|video|&gt;&quot;,
+    &quot;image&quot;: [&quot;shoe.jpg&quot;, &quot;mesh.jpg&quot;],
+    &quot;video&quot;: &quot;demo.mp4&quot;,
+})
+</code></pre>
+<h6 id="모달리티별-컨텍스트-토큰-소모-비용-및-입력-한계">모달리티별 컨텍스트 토큰 소모 비용 및 입력 한계</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모달리티</th>
+<th style="text-align:left">토큰 소모 비용 (Token Cost)</th>
+<th style="text-align:left">최대 입력 한계 (단일 모달리티 전용 기준)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>텍스트</strong></td>
+<td style="text-align:left">서브워드당 1 토큰</td>
+<td style="text-align:left">8,192 토큰</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>이미지</strong></td>
+<td style="text-align:left">기본 이미지당 280 토큰</td>
+<td style="text-align:left">약 29장 (기본 설정 시)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비디오</strong></td>
+<td style="text-align:left">기본 프레임당 140 토큰</td>
+<td style="text-align:left">약 58 프레임 (기본 설정 시)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오디오</strong></td>
+<td style="text-align:left">초당 25 토큰</td>
+<td style="text-align:left">약 327 초</td>
+</tr>
+</tbody>
+</table>
+<h6 id="비전-토큰-예산-vision-token-budget-메커니즘">비전 토큰 예산(Vision Token Budget) 메커니즘</h6>
+<p>이미지 및 비디오 프레임당 생성되는 소프트 토큰(Soft token)의 수량을 기본 280/140개에서 <strong>70개부터 1,120개 범위</strong>로 엔지니어링 목적에 맞게 조정할 수 있습니다.</p>
+<ul>
+<li><strong>고예산 설정 (Up to 1,120 tokens)</strong>: 시각적 정밀도를 극대화하여 세밀한 이미지/문서 그래픽 인식 능력을 향상시키지만, 메모리 점유율과 컴퓨팅 지연시간(Latency)이 증가합니다.</li>
+<li><strong>저예산 설정 (70 tokens)</strong>: 개별 시각 해상도 표현력은 다소 감소하지만, 토큰 소모량을 최소화하여 8K 컨텍스트 창 내에 <strong>최대 114장의 이미지 또는 비디오 프레임</strong>을 동시에 입력받을 수 있도록 확장성을 제공합니다.</li>
+</ul>
+<h5 id="7-6-입력-샘플링-기본값">7.6. 입력 샘플링 기본값</h5>
+<ul>
+<li><strong>비디오 샘플링</strong>: 비전 인코더를 통과하는 비디오는 기본 **초당 1프레임(1 FPS)**으로 샘플링되며, FPS 비율은 애플리케이션 요구사항에 맞춰 수정 가능합니다.</li>
+<li><strong>오디오 샘플링</strong>: 오디오 인코더 파이프라인에는 <strong>16 kHz 모노(mono)</strong> 음원을 기본 형식으로 공급해야 합니다.</li>
+</ul>
+<hr />
+<h4 id="8-학습-데이터-및-데이터-전처리">8. 학습 데이터 및 데이터 전처리</h4>
+<h5 id="학습-데이터-구성">학습 데이터 구성</h5>
+<ul>
+<li><strong>컷오프 시점</strong>: 2025년 1월</li>
+<li><strong>언어 범위</strong>: 140개 이상의 자연어 언어 포함</li>
+<li><strong>데이터 유형</strong>: 웹 문서, 오픈소스 코드 코퍼스, 이미지, 비디오, 오디오 데이터 세트 및 모달리티 간 공간 정렬을 위한 교차 모달리티 교차 샘플(Cross-modality samples)</li>
+</ul>
+<h5 id="데이터-전처리-및-정제">데이터 전처리 및 정제</h5>
+<ul>
+<li><strong>CSAM 정밀 필터링</strong>: 파이프라인 전반에서 다단계 알고리즘을 적용해 아동 성 학대 소재(CSAM)를 완전히 검출 및 삭제.</li>
+<li><strong>개인정보 및 민감 정보 필터링</strong>: 개인 식별 정보(PII) 및 기타 민감 데이터를 자동화된 정제 기법으로 사전 제거.</li>
+<li><strong>안전성 및 품질 정제</strong>: 구글의 AI 원칙(AI Principles) 및 내부 책임 정책에 부합하는 정밀 컨텐츠 품질 필터링 적용.</li>
+</ul>
+<hr />
+<h4 id="9-안전성-윤리적-고려사항-및-하류-위험-완화책">9. 안전성, 윤리적 고려사항 및 하류 위험 완화책</h4>
+<h5 id="사후-정렬-및-안전-튜닝-부재">사후 정렬 및 안전 튜닝 부재</h5>
+<p>임베딩 모델은 문장을 생성하는 생성형 모델과 달리 <strong>사후 학습 정렬(Post-training alignment), RLHF, 안전 튜닝, 출력 수준 모더레이션 레이어가 존재하지 않습니다.</strong> 따라서 안전성 관리는 사전 학습 데이터 단계에서의 필터링에 집중되어 있습니다.</p>
+<h5 id="위험의-주체-및-하류-애플리케이션-책임">위험의 주체 및 하류 애플리케이션 책임</h5>
+<p>임베딩 모델은 고차원 표현 벡터만 출력하므로 실제 윤리적·기술적 위험은 해당 임베딩을 이용하는 하류(Downstream) 애플리케이션 구축 단계에서 발생합니다. 따라서 시스템 개발자 및 배포자는 구글의 'Gemma 금지된 사용 정책(Prohibited Use Policy)'을 준수해야 하며, 검색 필터링, 편향성 검증, 공정성 테스트 등 애플리케이션 차원의 안전장치를 직접 구현해야 합니다.</p>
+<h5 id="식별된-위험-요소-및-완화책">식별된 위험 요소 및 완화책</h5>
+<ul>
+<li><strong>악의적 오용 (Misuse)</strong>: 오용 방지를 위해 책임감 있는 AI 개발 툴킷(Responsible GenAI Toolkit) 및 개발자 교육 문서, 오용 신고 메커니즘을 제공.</li>
+<li><strong>개인정보 침해 (Privacy Violations)</strong>: 데이터셋 단계에서의 PII 제거 및 하류 개발자의 차분 프라이버시(Differential Privacy) 등 개인정보 보호 기술 준수를 권고.</li>
+<li><strong>편향 지속 (Perpetuation of Biases)</strong>: 대규모 실제 데이터셋에 잠재된 사회문화적 편향이 벡터 공간에 내재될 수 있으므로, 하류 시스템 구축 시 지속적인 편향 모니터링 및 편향 제거(De-biasing) 기법 적용을 권장.</li>
+</ul>
+<hr />
+<h4 id="10-의도된-사용-사례-및-기술적-한계">10. 의도된 사용 사례 및 기술적 한계</h4>
+<h5 id="의도된-사용-사례-intended-usage">의도된 사용 사례 (Intended Usage)</h5>
+<ul>
+<li><strong>검색 (Retrieval)</strong>: 텍스트, 코드, 이미지, 비디오, 오디오 전반에 걸친 의미론적 검색, 엔터프라이즈 지식베이스 대상 RAG, 음성 코퍼스 기반 검색.</li>
+<li><strong>분류 (Classification)</strong>: 입력 데이터의 사전 정의 레이블 분류 (감성 분석, 콘텐츠 모더레이션, 오디오 이벤트 감지, 이미지 카테고리화).</li>
+<li><strong>클러스터링 (Clustering)</strong>: 의미론적 유사도 기반의 데이터 그룹화, 고객 피드백 주제별 클러스터링, 교차 모달리티 중복 콘텐츠 감지.</li>
+<li><strong>의미론적 유사도 (Semantic Similarity)</strong>: 임베딩 간 거리 측정을 통한 추천 시스템, 패러프레이즈 식별, 다국어 콘텐츠 정렬.</li>
+<li><strong>사실 검증 (Fact Verification)</strong>: 명제/주장에 대한 증거 문서를 검색 및 추출하는 자동화된 사실 확인 시스템.</li>
+</ul>
+<h5 id="기술적-한계-limitations">기술적 한계 (Limitations)</h5>
+<ol>
+<li><strong>학습 데이터 범위 및 편향</strong>: 100개 이상의 언어를 지원하나 언어 및 문화권별 임베딩 표현의 정밀도가 완전하게 동일하지 않을 수 있습니다.</li>
+<li><strong>복잡한 개방형 과제</strong>: 프롬프트나 지시어가 명확하지 않은 개방형(Open-ended) 과제 및 극도로 복잡한 비구조적 수식/논리 처리 시 표현 능력이 하락할 수 있습니다.</li>
+<li><strong>언어적 미묘함과 은유</strong>: 자연어의 은유, 풍자(Sarcasm), 비유적 표현 및 미묘한 문맥 차이를 완벽히 공간상에 분리하지 못할 위험이 존재합니다.</li>
+<li><strong>프리픽스 누락 시 성능 하락</strong>: 텍스트 과제 수행 시 권장 태스크 프리픽스를 누락하면 의미론적 공간 조율이 실패하여 검색 정밀도가 저하됩니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Hitchhiker’s Guide to Training on Compute Islands | Core Automation</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>The Hitchhiker’s Guide to Training on Compute Islands | Core Automation</h1>
+<p class="page-meta">웹 · 2026-11-10</p>
+<h2 id="요약">요약</h2>
+<p>[사실(Fact)] 전 세계 AI 인프라 구축 현장에서 전력 공급망 한계, 핵심 전력 장비 조달 지연, 부지 확보 난항 등으로 인해 단일 대규모 데이터 센터를 적기에 준공하는 데 심각한 병목이 발생하고 있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.coreauto.com/hitchhikers-guide-to-training-on-compute-islands">출처</a> · <a href="https://www.youtube.com/watch?v=fyKEH-gdK5A">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="연산-섬-compute-islands-기반의-프론티어-ai-모델-분산-학습-가능성-및-기술적-실증-분석-보고서">연산 섬(Compute Islands) 기반의 프론티어 AI 모델 분산 학습 가능성 및 기술적 실증 분석 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>[사실(Fact)] 전 세계 AI 인프라 구축 현장에서 전력 공급망 한계, 핵심 전력 장비 조달 지연, 부지 확보 난항 등으로 인해 단일 대규모 데이터 센터를 적기에 준공하는 데 심각한 병목이 발생하고 있다. 이에 따라 최첨단 가속기 자원이 수백 내지 수천 개 단위로 파편화되어 여러 네오클라우드(Neocloud) 및 데이터 센터에 분산 배치되는 '연산 섬(Compute Islands)' 현상이 심화되고 있다.</p>
+<p>[소스의 주장(Claim)] 코어 오토메이션(Core Automation)의 로한 아닐(Rohan Anil) 연구진은 최첨단 AI 프론티어 모델 학습의 핵심 병목이 물리적 연산 자원의 절대적 부족이 아니라, 이격된 연산 섬들을 단일 프론티어 학습 시스템으로 묶어내지 못하는 기존 동기식 학습 소프트웨어 스택의 구조적 한계에 있다고 진단한다. 연구진은 네트워크 통신 빈도를 획기적으로 낮춘 저통신 분산 학습(Low-communication training) 접근 방식과 알고리즘-네트워크 계층의 공동 설계(Co-design)를 통해 이 문제를 해결할 수 있다고 제시한다.</p>
+<p>[사실(Fact)] 본 보고서에서는 약 9,000마일 이격된 미국과 아시아의 이종 가속기 클러스터(B300 및 GB300)를 25 Gbps 대역폭으로 연결하여 통합 학습을 완수한 32B 희소 전문가 혼합(MoE) 모델 사례 연구, 올리듀스(All-Reduce) 집계 통신 없이 셀 간 쌍대 교환을 활용한 버터플라이 믹싱(Butterfly Mixing) 실증 실험, 그리고 구글의 '프로젝트 선캐처(Project Suncatcher)'로 대표되는 궤도 상 학습(Training in Orbit)의 확장 가능성과 산업적·안전성 시사점을 기술적으로 분석한다.</p>
+<hr />
+<h5 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h5>
+<h6 id="2-1-연산-자원의-물리적-병목-현상과-연산-섬-compute-islands-의-대두-및-시장-구조">2.1. 연산 자원의 물리적 병목 현상과 '연산 섬(Compute Islands)'의 대두 및 시장 구조</h6>
+<ul>
+<li><strong>논점 요약</strong>: [사실(Fact)] 전력망 수용 한계, 전력 장비 수급난, 지역 사회의 반대로 단일 대형 데이터 센터 조성이 불가능해짐에 따라 연산 자원이 격리(Stranded compute)되고 있으며, 소프트웨어적 해결책이 필수적으로 요구된다.</li>
+<li><strong>상업적 연산 자원 시장 구조</strong>:
+<ul>
+<li>[사실(Fact)] 현재 상용 연산 자원 시장은 다음의 3가지 주요 형태로 분할되어 거래되고 있다:
+<ol>
+<li><strong>약정형 (Committed)</strong>: 네비우스(Nebius) 및 코어위브(CoreWeave)가 마이크로소프트(Microsoft) 및 메타(Meta)와 최대 194억 달러(19.4B) 규모로 체결한 다년간의 대규모 장기 계약 형태.</li>
+<li><strong>예약형 (Reservable)</strong>: AWS(Capacity Blocks), 람다(Lambda 1-Click Clusters), 투게더 AI(Together AI Instant Clusters) 등이 제공하는 수십~수백 개 GPU 클러스터를 수 시간에서 수개월 단위로 임대하는 형태.</li>
+<li><strong>스팟 및 재판매 (Spot &amp; Resale)</strong>: SF 컴퓨터(SF Compute, 시간당 GPU 임대 및 미사용 용량 재판매) 및 국립 연산 그리드(National Compute Grid, 여러 클라우드에 산재된 유휴 AI 용량 풀링) 형태의 단기/유휴 자원 시장.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>근거 및 출처 위치</strong> (<code>Stranded, or just inconvenient?</code> 및 <code>Compute comes in many shapes</code> 절):
+<ul>
+<li>[사실(Fact)] 블루버드/블룸 에너지(Bloom Energy) 등 시장 보고서에 따르면 전력 사업자와 개발사 간의 시간대별 전력 수급 불일치가 심화되고 있으며, 가스 터빈 판매 계약은 2028년까지 완료되었고 대형 변압기 조달 기간은 3년 이상 소요된다.</li>
+<li>[사실(Fact)] 히트맵(Heatmap) 조사 결과, 단일 분기 동안 지역 사회의 반대로 최소 20개 이상의 데이터 센터 프로젝트가 취소되었다.</li>
+<li>[사실(Fact)] 골드만삭스(Goldman Sachs)는 향후 1~2년 내 준공 예정인 미국 데이터 센터 용량의 온타임 완공 비율이 과거 평균 72%에서 50~60% 수준으로 하락할 것으로 전망했다.</li>
+<li>[사실(Fact)] 20 MW 미만 부지는 기존 전력망에 즉시 연결 가능하나, 이를 초과하는 대규모 단지는 송전망 및 발전소에 대한 신규 대형 투자가 필수적이다.</li>
+</ul>
+</li>
+<li><strong>주요 인물 발언 및 사례</strong>:
+<ul>
+<li>[사실(Fact)] 마이크로소프트 CEO 사티아 나델라(Satya Nadella): &quot;전력이 부족하여 실제 인벤토리에 보유하고도 플러그를 꽂지 못하는 GPU 재고가 다량 존재한다&quot;고 발언함.</li>
+<li>[사실(Fact)] 일론 머스크(Elon Musk): 2026년 10월 25일 X(구 트위터)를 통해 &quot;부분적으로 완공된 데이터 센터 내에 방치되고 격리된 연산 자원(stranded compute)을 수없이 보게 될 것&quot;이라며, 연산 자원을 보유하는 것과 이를 대규모로 안정적인 프론티어 학습 토큰으로 전환하는 것은 극도로 어려운 작업임을 지적함.</li>
+</ul>
+</li>
+<li><strong>분석적 평가</strong>:
+<ul>
+<li>[작성자의 해석(Interpretation)] 물리적 인프라 구축 지연은 2028년까지 해소가 불가능하므로, 파편화된 다양한 형태의 연산 시장 자원을 소프트웨어 계층에서 유연하게 수용하는 저통신 분산 학습 아키텍처의 도입이 AI 산업 생태계의 필수 과제로 부상하고 있다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-저통신-분산-학습-low-communication-training-의-역사-및-기술적-발전">2.2. 저통신 분산 학습(Low-Communication Training)의 역사 및 기술적 발전</h6>
+<p>[사실(Fact)] 저통신 분산 학습 기법은 현재의 LLM 스케일링 주기 이전부터 연구되어 왔으며, 2010년대 기틀을 마련한 4가지 핵심 기술 라인에 기반한다:</p>
+<ol>
+<li><strong>로컬 업데이트 (Local Updates)</strong>: 교환 주기 사이 여러 단계를 독자적으로 학습 (Local SGD, Federated Averaging).</li>
+<li><strong>압축 (Compression)</strong>: 전송 바이트 축소 (Quantization, Sparsification, Low-rank 등 PowerSGD).</li>
+<li><strong>가십 통신 (Gossip)</strong>: 전역 동기화 대신 일부 이웃 노드와만 통신 (D-PSGD).</li>
+<li><strong>내결함성 평균화 (Fault-tolerant Averaging)</strong>: 지연되거나 이탈하는 노드를 수용 (Downpour SGD, Elastic Averaging SGD).</li>
+</ol>
+<p>[사실(Fact)] 연합 학습(Federated Learning)에서는 매 교환 시 파라미터 변화량을 '의사 구배(pseudo-gradient)'로 취급하고 이를 외부 최적화기(outer optimizer)로 처리하는 아키텍처가 추가되었으며, 2022년 이후 대형 언어 모델에 본격 적용되었다.</p>
+<h6 id="시대별-주요-연구-발전사-summary">시대별 주요 연구 발전사 Summary</h6>
+<p><strong>1) 기초 연구 시대 (2010년 ~ 2021년)</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">연도</th>
+<th style="text-align:left">연구명 (작성자)</th>
+<th style="text-align:left">핵심 기술적 기여 내용</th>
+<th style="text-align:left">구분 태그</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">2010</td>
+<td style="text-align:left">Parallelized SGD (Zinkevich et al.)</td>
+<td style="text-align:left">분리된 데이터로 독립 학습된 모델의 파라미터 평균화 제시</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2011</td>
+<td style="text-align:left">Terascale linear learning (Agarwal et al.)</td>
+<td style="text-align:left">1,000대 기기 대상 AllReduce 구현, 신뢰도 가중 평균화 및 L-BFGS 적용</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2012</td>
+<td style="text-align:left">Downpour SGD (Dean et al.)</td>
+<td style="text-align:left">느리거나 고장 난 머신이 발생해도 학습이 유지되는 비동기식 설계</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2014</td>
+<td style="text-align:left">1-bit SGD (Seide et al.)</td>
+<td style="text-align:left">오차 피드백(Error Feedback)을 포함한 1비트 구배 양자화 기법</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2015</td>
+<td style="text-align:left">Elastic Averaging SGD (Zhang et al.)</td>
+<td style="text-align:left">중앙 복사본과 느슨하게 연결하여 지연 및 편차 수용</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2016</td>
+<td style="text-align:left">Federated averaging (McMahan et al.)</td>
+<td style="text-align:left">클라이언트별 수많은 로컬 단계를 거친 후 평균화 수행</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2016</td>
+<td style="text-align:left">QSGD (Alistarh et al.)</td>
+<td style="text-align:left">수렴성이 보장되는 구배 양자화 기법</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2017</td>
+<td style="text-align:left">D-PSGD (Lian et al.)</td>
+<td style="text-align:left">전역 올리듀스 대신 이웃 노드와 가십(Gossip) 평균화를 수행하는 탈중앙화 SGD</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2017</td>
+<td style="text-align:left">Deep Gradient Compression (Lin et al.)</td>
+<td style="text-align:left">모멘텀 보정을 포함하여 구배 값의 극소 비율만 전송</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2018</td>
+<td style="text-align:left">Local SGD (Stich / Lin et al.)</td>
+<td style="text-align:left">비빈번 평균화 기법에 대한 수렴성 분석 및 실증</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2019</td>
+<td style="text-align:left">PowerSGD (Vogels et al.)</td>
+<td style="text-align:left">올리듀스와 호환되는 저순위(Low-rank) 압축 기법</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2019</td>
+<td style="text-align:left">SlowMo (Wang et al.)</td>
+<td style="text-align:left">주기적 평균에 모멘텀을 적용 (DiLoCo 외부 최적화기의 전신)</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2019–20</td>
+<td style="text-align:left">FedAvgM / FedOpt (Hsu / Reddi et al.)</td>
+<td style="text-align:left">내부/외부 최적화기 수식화 및 서버 측 적응형 외부 단계 적용</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2020</td>
+<td style="text-align:left">Learning@home (Ryabinin &amp; Gusev)</td>
+<td style="text-align:left">자원봉사자 하드웨어 기반 탈중앙화 MoE 학습</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2021</td>
+<td style="text-align:left">Moshpit SGD (Ryabinin et al.)</td>
+<td style="text-align:left">동적 평균화 그룹을 활용한 동적/이종 노드 지원</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2021</td>
+<td style="text-align:left">DeDLOC (Diskin et al.)</td>
+<td style="text-align:left">자원봉사 기반 협동 사전학습 실증 (Bengali ALBERT)</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2) 대형 모델 시대 (2022년 ~ 2026년)</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">연도 / 월</th>
+<th style="text-align:left">연구명</th>
+<th style="text-align:left">유형</th>
+<th style="text-align:left">주요 결과 및 검증 내용</th>
+<th style="text-align:left">구분 태그</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">2023.01</td>
+<td style="text-align:left">SWARM Parallelism</td>
+<td style="text-align:left">모델 병렬</td>
+<td style="text-align:left">선점형/이종 기기 파이프라인 학습 (T4 GPU 기반 1B 트랜스포머)</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2023.11</td>
+<td style="text-align:left">DiLoCo</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">AdamW 내부/Nesterov 외부 최적화기. 500배 적은 통신으로 동기식 학습 성과 달성</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2024.07</td>
+<td style="text-align:left">OpenDiLoCo</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">오픈소스 구현체. 3개국 2개 대륙에 걸쳐 1.1B 모델 실증 학습</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2024.08~11</td>
+<td style="text-align:left">DisTrO / DeMo</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">변형된 표현 공간에서 최적화기 모멘텀을 압축하는 별도 라인</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2024.11</td>
+<td style="text-align:left">Photon</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">최대 7B 모델 대상 연합 사전학습 및 로컬 최적화 분석</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2024.12</td>
+<td style="text-align:left">INTELLECT-1</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">5개국 3개 대륙 112대 H100 GPU로 10B 모델 (1T 토큰) 사전학습 완료</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2025.01</td>
+<td style="text-align:left">Streaming DiLoCo</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">파라미터 조각 순차 동기화, 통신-연산 오버랩으로 대역폭 요구량 2개 차수 감소</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2025.03</td>
+<td style="text-align:left">DiLoCo scaling laws</td>
+<td style="text-align:left">연구 분석</td>
+<td style="text-align:left">모델 크기, 복제본 수, 하이퍼파라미터 간의 스케일링 법칙 규명</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2025.06</td>
+<td style="text-align:left">DiLoCoX</td>
+<td style="text-align:left">시스템 실증</td>
+<td style="text-align:left">160대 A800, 1Gbps 지연 에뮬레이션 환경에서 Qwen1.5-107B 학습 실증</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2025.08</td>
+<td style="text-align:left">SparseLoCo</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">Top-k 희소화, 오차 피드백, 저비트 양자화 결합</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2026.01</td>
+<td style="text-align:left">Pluralis Node0</td>
+<td style="text-align:left">모델 병렬</td>
+<td style="text-align:left">303명 참여자 소비자가전 GPU로 7.5B 모델 (36B 토큰) 3주간 학습</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2026.03</td>
+<td style="text-align:left">Covenant-72B</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">비허가형 참여 조건에서 SparseLoCo 기법으로 72B 모델 (1.1T 토큰) 사전학습</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2026.04</td>
+<td style="text-align:left">Decoupled DiLoCo</td>
+<td style="text-align:left">데이터 병렬+시스템</td>
+<td style="text-align:left">비동기 학습자, 정족수(Quorum) 집계. 미국 4개 지역 8개 학습자로 12B 실전 학습</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2026.06</td>
+<td style="text-align:left">Factored Gossip DiLoCo</td>
+<td style="text-align:left">데이터 병렬</td>
+<td style="text-align:left">전역 평균화 일부를 쌍대 가십(Pairwise gossip)으로 대체</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2026.07</td>
+<td style="text-align:left">Agora / Pluralis-8B</td>
+<td style="text-align:left">모델 병렬</td>
+<td style="text-align:left">330개 컨슈머 GPU 노드로 8.6B 모델 (500B 토큰) 40일간 사전학습</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">2026.10</td>
+<td style="text-align:left">Cross-facility HPC</td>
+<td style="text-align:left">시스템 실증</td>
+<td style="text-align:left">2개 대륙 3개 슈퍼컴퓨터로 0.6B 학습 (퍼플렉시티 34.7 vs 단일 거점 28.2)</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+</tbody>
+</table>
+<h6 id="병렬화-아키텍처-분류-비교-comparison-table">병렬화 아키텍처 분류 비교 (Comparison Table)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">데이터 병렬 (Data-Parallel) 기반</th>
+<th style="text-align:left">모델 병렬 (Model-Parallel) 기반</th>
+<th style="text-align:left">구분 태그</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>대표 연구</strong></td>
+<td style="text-align:left">DiLoCo, DisTrO, DeMo, Decoupled DiLoCo</td>
+<td style="text-align:left">SWARM, Node0, Agora</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>구조적 특징</strong></td>
+<td style="text-align:left">각 거점(Site)이 전체 모델 복제본(Replica)을 보유하며, 통신 주기 및 전송량을 축소함</td>
+<td style="text-align:left">단일 모델을 여러 참가자에 분할 배치하고 활성화 값(Activations)을 상호 전달함</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>적용 환경</strong></td>
+<td style="text-align:left">거점 내부 고속 인터커넥트 활용, 거점 간 저속 링크 주기적 통신</td>
+<td style="text-align:left">이종 기기, 소비자가전 GPU 및 선점형 환경에 유연하게 대응 가능</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-3-실증-사례-연구-1-9-000마일-이격된-이종-클러스터-간-통합-32b-moe-모델-학습">2.3. 실증 사례 연구 1: 9,000마일 이격된 이종 클러스터 간 통합 32B MoE 모델 학습</h6>
+<ul>
+<li><strong>실험 환경 아키텍처</strong>:
+<ul>
+<li>[사실(Fact)] 미국 클러스터(160×B300 GPUs, 호스트당 8 GPUs)와 아시아 클러스터(160×GB300 GPUs, 호스트당 4 GPUs)를 양방향 25 Gbps 링크로 연결 (약 9,000마일 거리).</li>
+<li>[사실(Fact)] 각 거점은 고유한 데이터 샤드(Data shard)와 로컬 전문가 병렬성(Local expert parallelism)을 사용하여 독립적으로 학습을 수행함. 거점별 스텝 당 소요 시간을 맞추기 위해 마이크로배치 및 구배 누적 설정을 별도로 튜닝함.</li>
+</ul>
+</li>
+<li><strong>모델 구조</strong>:
+<ul>
+<li>[사실(Fact)] 총 파라미터 약 32B 규모의 희소 전문가 혼합(Sparse MoE) 모델. 모든 트랜스포머 블록에 MoE 레이어 배치, 총 256개 전문가, Top-8 라우팅 적용 (공유 전문가 없음, 32x 희소성).</li>
+</ul>
+</li>
+<li><strong>핵심 적용 기술 및 스케줄링 대조</strong>:
+<ul>
+<li>[사실(Fact)] <strong>최적화기 및 동기화</strong>: 각 거점별로 디스트리뷰티드 샴푸(Distributed Shampoo) 변형 최적화기 사용. 50단계(step) 주기마다 전체 모델을 한 번에 동기화하지 않고, 조각(Fragment) 단위로 시차를 두어 분할 동기화 수행 (Streaming/Decoupled DiLoCo 기법 적용). 지연 도착한 업데이트도 커밋 수용.</li>
+<li>[사실(Fact)] <strong>통신 및 라우팅 동기화의 대조</strong>: 파라미터 조각은 50단계 주기로 분할 동기화되는 반면, 소규모 MoE 라우팅 통계 정보는 매 단계(every step)마다 전역 동기화가 수행되는 대조적 스케줄링을 적용함. 전송 시 확률적 반올림(Stochastic Rounding) 및 오차 피드백(Error Feedback)으로 데이터를 압축 전송함.</li>
+</ul>
+</li>
+<li><strong>꼬리 지연시간(Tail Latency) 완화 네트워크 공학 (4대 핵심 전략)</strong>:
+<ol>
+<li>[사실(Fact)] <strong>수요의 시간적 분산 (Stagger demand over time)</strong>: 파라미터 업데이트를 시차 분산시키고, 소켓당 전송 속도를 제한(cap per-socket send rates)하여 동시 폭주(Burst)를 방지함. 제어 및 복구 메시지는 독립 실행하여 차단을 방지함.</li>
+<li>[사실(Fact)] <strong>연결 유지 및 검증 (Keep connections warm and verified)</strong>: 웜 연결 재사용, 지터 기반 재연결 메커니즘(reconnect with jitter) 적용, 하트비트 감시(watched with heartbeats) 수행 및 전송 필요 메모리의 대부분을 사전 할당함.</li>
+<li>[사실(Fact)] <strong>청크 단위 분할 (Chunk everything)</strong>: 페이로드를 독립된 청크로 분할하여 정상 연결 노드가 즉시 처리하게 함으로써 느린 링크로 인한 지연을 차단함.</li>
+<li>[사실(Fact)] <strong>누락 부분 전용 복구 (Repair only what's missing)</strong>: 전송 지연 시 누락된 조각만 재요청하고 제한된 중복 전송을 허용하며, 데드라인 도달 시 중복 전송(Redundant transfers)을 실행하여 꼬리 지연시간을 대폭 단축함.</li>
+</ol>
+</li>
+<li><strong>학습 결과</strong>:
+<ul>
+<li>[사실(Fact)] 동일 연산량 기준, 9,000마일 이격 2개 지역 통합 학습 모델이 표준 단일 거점 학습 대비 두 가지 평가 지표 모두에서 약 1% 더 낮은 비트당 비트 수(about 1% lower bits per byte, ≈0.2525 bits per byte vs 0.2549 bits per byte)를 기록하여 우수한 평가 성과를 입증함.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-4-실증-사례-연구-2-버터플라이-믹싱-butterfly-mixing-을-통한-올리듀스-all-reduce-대체">2.4. 실증 사례 연구 2: 버터플라이 믹싱(Butterfly Mixing)을 통한 올리듀스(All-Reduce) 대체</h6>
+<ul>
+<li><strong>실험 조건</strong>:
+<ul>
+<li>[사실(Fact)] 단일 거점 내 64개 GB300 GPU를 8개의 독립된 셀(Cell, 셀당 8개 GPU)로 분할하고 각각 32B MoE 모델 복제본을 독립 학습시킴.</li>
+</ul>
+</li>
+<li><strong>작동 메커니즘 및 스케줄</strong>:
+<ul>
+<li>[사실(Fact)] 전역 올리듀스(All-Reduce) 집계 없이, Zhao &amp; Canny 연구 기반의 버터플라이 믹싱을 적용하여 파라미터 조각별 쌍대 교환(Pairwise exchange) 3단계를 수행함 ($2^0, 2^1, 2^2$ 분기 교환).</li>
+<li>[사실(Fact)] 50단계마다 총 6회의 쌍대 교환(2회 완전 버터플라이)을 수행하여 약 8단계마다 1회씩 교환이 발생함.</li>
+<li>[사실(Fact)] 각 셀은 단계 $t$에서 로컬 후보 업데이트를 생성하여 전송 후 학습을 지속하며, 단계 $t+2$에서 파트너의 결과값을 50:50 가중치 혼합 비율(<code>live ← 0.5 * live + 0.5 * pair_result</code>)로 혼합함.</li>
+<li>[사실(Fact)] 파라미터 조각별로 교환 파트너 조합을 다르게 설정하여 네트워크 트래픽을 시간 및 피어 노드 전체로 분산시킴.</li>
+</ul>
+</li>
+<li><strong>결과</strong>:
+<ul>
+<li>[사실(Fact)] 올리듀스 통신을 전면 제거했음에도 불구하고 표준 베이스라인 학습 성능과 완전 동등한 수준에 도달함.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-5-미래-확장성-궤도-상-학습-training-in-orbit-및-산업적-시사점">2.5. 미래 확장성: 궤도 상 학습(Training in Orbit) 및 산업적 시사점</h6>
+<ul>
+<li><strong>궤도 상 학습 (Training in Orbit)</strong>:
+<ul>
+<li>[사실(Fact)] 구글은 2025년 11월 태양광 TPU 위성 콘스텔레이션 프로젝트인 '프로젝트 선캐처(Project Suncatcher)'를 발표함. 2026년 10월 30일 시제품 발사 1개월 만에 궤도 상 TPU 데이터 센터에서 Gemma 4 모델 기반 최초의 AI 하이쿠 응답을 성공시킴.</li>
+<li>[작성자의 해석(Interpretation)] 극심한 통신 단절, 방열 한계, 방사선 노드 결함이 존재하는 궤도 환경은 '연산 섬'의 극단적 형태이며, 본 보고서에서 검증된 저통신·내결함성 분산 학습 알고리즘이 궤도 상 분산 사전학습의 핵심 솔루션이 될 수 있음.</li>
+</ul>
+</li>
+<li><strong>산업 생태계 이점</strong>:
+<ul>
+<li>[소스의 주장(Claim)] 대규모 단일 기가와트(GW) 데이터 센터 부지 확보 및 전력 계약 부담을 분산시킴.</li>
+<li>[소스의 주장(Claim)] 중고 GPU, 소규모 네오클라우드, 저우선순위 선점형(Preemptible) 미사용 자원을 유연하게 흡수하여 내결함성(Fault-tolerant) 확보.</li>
+<li>[소스의 주장(Claim)] 서로 다른 세대 및 벤더의 가속기(예: GB300과 B300) 및 이종 메모리 아키텍처의 혼합 사용 가능.</li>
+</ul>
+</li>
+<li><strong>안전성 및 무결성 리스크</strong>:
+<ul>
+<li>[소스의 주장(Claim)] 여러 제공업체(Provider) 및 분산 사이트에서 학습 진행 시, 악의적으로 손상되거나 결함이 있는 단일 거점이 조용히 모델 성능을 저하시키거나 변조(Tampering)할 위험이 존재하며 이를 추적·방어하는 난이도가 급증함.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-people-speakers">3. 등장 인물 및 화자 (People &amp; Speakers)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물명 (원문 표기)</th>
+<th style="text-align:left">소스 상의 역할 / 직책</th>
+<th style="text-align:left">주요 발언 또는 관여 내용</th>
+<th style="text-align:left">구분 태그</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">로한 아닐 (Rohan Anil)</td>
+<td style="text-align:left">아티클 저자 (Core Automation)</td>
+<td style="text-align:left">연산 섬 기반 프론티어 분산 학습 포지션 페이퍼 작성 및 실증 사례 연구 주도</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">일론 머스크 (Elon Musk)</td>
+<td style="text-align:left">인물 (X/트위터 화자)</td>
+<td style="text-align:left">2026년 10월 25일 X를 통해 미완성 데이터 센터 내 방치된 연산 자원(Stranded compute) 문제 및 대규모 가동의 기술적 난제 지적</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+<tr>
+<td style="text-align:left">사티아 나델라 (Satya Nadella)</td>
+<td style="text-align:left">마이크로소프트 (Microsoft) CEO</td>
+<td style="text-align:left">전력 공급 부족으로 인해 플러그를 꽂지 못하고 재고로 방치된 GPU 문제 지적</td>
+<td style="text-align:left">[사실(Fact)]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-시점-key-numbers-timestamps">4. 주요 수치 및 시점 (Key Numbers &amp; Timestamps)</h5>
+<h6 id="4-1-정량적-수치-데이터">4.1. 정량적 수치 데이터</h6>
+<ul>
+<li><strong>네트워크 및 인프라</strong>:
+<ul>
+<li>[사실(Fact)] <code>25 Gbps</code>: 미국-아시아 클러스터 간 양방향 링크 대역폭.</li>
+<li>[사실(Fact)] <code>~9,000 miles</code>: 미국과 아시아 두 클러스터 간의 물리적 이격 거리.</li>
+<li>[사실(Fact)] <code>20 MW</code>: 신규 전력망/발전소 투자 없이 기존 전력망에 즉시 접속 가능한 데이터 센터 용량 상한선.</li>
+<li>[사실(Fact)] <code>$19.4 Billion</code>: Nebius/CoreWeave가 Microsoft 및 Meta와 체결한 미상환/약정 인프라 계약 규모 상한선.</li>
+</ul>
+</li>
+<li><strong>가속기 및 클러스터 구성</strong>:
+<ul>
+<li>[사실(Fact)] <code>160 × B300 GPUs</code>: 미국 클러스터 가속기 구성 (호스트당 8 GPUs).</li>
+<li>[사실(Fact)] <code>160 × GB300 GPUs</code>: 아시아 클러스터 가속기 구성 (호스트당 4 GPUs).</li>
+<li>[사실(Fact)] <code>64 × GB300 GPUs</code>: 버터플라이 믹싱 실험 구성 (8개 셀 × 셀당 8 GPUs).</li>
+</ul>
+</li>
+<li><strong>모델 사양</strong>:
+<ul>
+<li>[사실(Fact)] <code>32B</code>: 실증 실험에 사용된 희소 MoE 모델의 총 파라미터 수.</li>
+<li>[사실(Fact)] <code>32x</code>: 모델 희소성(Sparsity) 배율.</li>
+<li>[사실(Fact)] <code>256</code>: 총 전문가(Experts) 수.</li>
+<li>[사실(Fact)] <code>Top-8</code>: 트랜스포머 블록당 선택되는 라우팅 전문가 수.</li>
+</ul>
+</li>
+<li><strong>성능 측정치</strong>:
+<ul>
+<li>[사실(Fact)] <code>≈0.2525 bits per byte</code>: 9,000마일 2개 지역 통합 학습 모델의 비트당 비트 수 성능 평가 결과.</li>
+<li>[사실(Fact)] <code>0.2549 bits per byte</code>: 동일 연산량 기준 표준 단일 학습 베이스라인의 비트당 비트 수 성능 평가 결과.</li>
+<li>[사실(Fact)] <code>about 1% lower bits per byte</code>: 표준 학습 대비 두 가지 평가 지표 모두에서 달성한 정량적 성능 우위 수치.</li>
+</ul>
+</li>
+</ul>
+<h6 id="4-2-타임라인-및-시점-데이터">4.2. 타임라인 및 시점 데이터</h6>
+<ul>
+<li>[사실(Fact)] <strong>2025년 11월</strong>: 구글, 궤도 상 AI 인프라 연구 프로그램 '프로젝트 선캐처(Project Suncatcher)' 발표.</li>
+<li>[사실(Fact)] <strong>2026년 10월 25일</strong>: 일론 머스크, X(구 트위터)를 통해 완공 지연 데이터 센터의 연산 자원 격리 문제 발언.</li>
+<li>[사실(Fact)] <strong>2026년 10월 30일</strong>: 구글, 궤도 상 TPU 데이터 센터에서 Gemma 4 모델 기반 최초의 AI 응답(하이쿠) 성공 발표.</li>
+<li>[사실(Fact)] <strong>2026년 11월 2일</strong>: 본 아티클(&quot;The Hitchhiker's Guide to Training on Compute Islands&quot;) 게시 일자.</li>
+<li>[사실(Fact)] <strong>2028년</strong>: 전력망 장비, 가스 터빈 판매 완료 및 수급 병목이 지속될 것으로 예측되는 상한 연도.</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ol>
+<li><strong>소스 미다룸 / 확인 불가 사항</strong>:
+<ul>
+<li>[확인 불가] 실증 실험에 사용된 사전학습 데이터셋의 정확한 명칭 및 총 훈련 토큰 수: <strong>[확인 불가]</strong></li>
+<li>[확인 불가] 미국 및 아시아 클러스터의 구체적인 물리적 도시 및 데이터 센터 위치: <strong>[확인 불가]</strong> (원문에 미국 및 아시아로만 기술됨)</li>
+<li>[확인 불가] 프로젝트 선캐처에 투입된 TPU 위성의 정확한 수량 및 궤도 고도: <strong>[확인 불가]</strong></li>
+<li>[확인 불가] 코어 오토메이션(Core Automation)의 구체적인 조직 규모, 연구진 전체 명단 및 자금 조달 규모: <strong>[확인 불가]</strong></li>
+</ul>
+</li>
+<li><strong>기술적 한계 및 위험 요인</strong>:
+<ul>
+<li>[소스의 주장(Claim)] 다자간 제공업체 간 분산 학습 진행 시, 일부 악의적이거나 결함이 있는 노드가 모델 성능을 조용히 저하시키거나 변조(Tampering)할 때 이를 검증, 추적 및 방어하는 구체적인 암호학적/알고리즘적 보안 메커니즘은 제시되지 않음.</li>
+<li>[작성자의 해석(Interpretation)] 조 단위 파라미터(Trillion-parameter)급 초대형 모델의 궤도 상 분산 사전학습 가능성은 먼 미래의 구상으로 설정되어 있으며 현재 단계에서는 실증되지 않음.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

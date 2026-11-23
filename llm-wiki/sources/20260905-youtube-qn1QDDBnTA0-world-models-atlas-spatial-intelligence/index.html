@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why World Models Could Change Robotics, 3D, and Creativity</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Why World Models Could Change Robotics, 3D, and Creativity</h1>
+<p class="page-meta">YouTube · 2026-09-05</p>
+<h2 id="요약">요약</h2>
+<p>설립된 지 단 2.5년 만에 World Labs가 출시한 프런티어 모델 ‘Atlas(아틀라스)’에 대한 현장의 반응은 그야말로 폭발적입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=qn1QDDBnTA0">출처</a> · <a href="https://www.youtube.com/watch?v=fLlpTt_UDOM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="월드-모델이-로봇-3d-창작을-바꾸는-법">월드 모델이 로봇·3D·창작을 바꾸는 법</h3>
+<h4 id="1-인트로-intro">1. 인트로 — Intro</h4>
+<p>설립된 지 단 2.5년 만에 World Labs가 출시한 프런티어 모델 ‘Atlas(아틀라스)’에 대한 현장의 반응은 그야말로 폭발적입니다. 이번 리서치 리포트는 출시 직후 진행된 대담을 바탕으로, 인공지능 분야의 석학 Fei-Fei Li와 컴퓨터 비전 혁신을 이끄는 Justin Johnson, Ben Mildenhall의 시각을 통해 Atlas가 왜 단순한 비디오 생성 모델을 넘어선 ‘월드 모델’의 이정표인지를 분석합니다. 기술의 정의에서 시작하여 50년 컴퓨터 비전 역사의 통합, 그리고 공간 지능(Spatial Intelligence)이 가져올 산업적 파급력을 구조적으로 살펴봅니다.</p>
+<h4 id="2-atlas란-무엇이며-왜-중요한가-what-atlas-is-why-it-matters">2. Atlas란 무엇이며 왜 중요한가 — What Atlas Is &amp; Why It Matters</h4>
+<p>Justin Johnson은 Atlas를 '생성(Generate), 복원(Reconstruct), 시뮬레이션(Simulate)'을 단일 체계 내에서 수행하는 차세대 월드 모델로 정의합니다. Atlas의 가장 큰 기술적 차별점은 ‘가상 카메라(Virtual Camera)’ 개념을 통해 공간과 시간 내 임의의 지점에서 세상을 바라보는 능력을 갖췄다는 점입니다.</p>
+<ul>
+<li><strong>불릿 타임(Bullet Time)의 민주화:</strong> 영화 ‘매트릭스’에서 네오가 총알을 피하는 장면을 구현하기 위해서는 수백 대의 카메라, 그린 스크린, 그리고 정교한 캘리브레이션이 필수적이었습니다. 그러나 Atlas는 단 3대의 아이폰으로 촬영한 영상(농구 슛, 우유에 딸기를 떨어뜨리는 순간 등)만으로 동일한 효과를 구현합니다. 이는 기존 공정 대비 <strong>50~100배의 효율성 향상</strong>을 의미합니다.</li>
+<li><strong>새로운 기본 프리미티브:</strong> Atlas의 핵심은 '차세대 뷰 예측(New-view prediction)'입니다. 이는 LLM의 다음 토큰 예측처럼, 특정 공간적 컨텍스트를 기반으로 임의의 관점과 시점에서의 비주얼을 정확히 생성해내는 새로운 지능의 단위입니다.</li>
+</ul>
+<h4 id="3-확장된-비디오-모델인가-새로운-아키텍처인가-is-this-a-scaled-up-video-model-or-a-new-architecture">3. 확장된 비디오 모델인가, 새로운 아키텍처인가 — Is This a Scaled-Up Video Model or a New Architecture?</h4>
+<p>Atlas는 기존 비디오 모델의 규모를 키운 확장판이 아니라, 지난 반세기 동안 분리되어 있던 연구 트랙들을 하나로 묶은 통합 아키텍처입니다.</p>
+<ul>
+<li><strong>통합 아키텍처:</strong> Fei-Fei Li는 지난 50년간 컴퓨터 비전 학계가 ‘인식(Recognition)’, ‘생성(Generation)’, ‘3D 복원(Reconstruction)’이라는 세 갈래로 파편화되어 있었다고 지적합니다. Atlas는 픽셀의 생성과 복원을 하나의 <strong>자기회귀(Auto-regressive) 모델</strong>로 결합하여 이들을 우아하게 통합했습니다.</li>
+<li><strong>네이티브 멀티모달 학습:</strong> Atlas는 텍스트와 이미지뿐만 아니라 ‘카메라 포즈(Camera poses)’와 ‘깊이 지도(Depth maps)’를 사전 학습 단계부터 네이티브 입력으로 처리합니다. 이를 통해 모델은 픽셀의 나열이 아닌, 공간의 기하학적 구조를 직접적으로 이해하게 됩니다.</li>
+</ul>
+<h4 id="4-공간-지능과-new-view-prediction의-의미-spatial-intelligence-why-new-view-prediction-matters">4. 공간 지능과 new-view prediction의 의미 — Spatial Intelligence &amp; Why New View Prediction Matters</h4>
+<p>Fei-Fei Li가 정의하는 '공간 지능'은 단순히 이미지를 생성하는 것을 넘어, 공간을 추론하고 그 안에서 물리적 법칙에 따라 상호작용하는 능력을 뜻합니다.</p>
+<ul>
+<li><strong>기하학적 접지(Grounding):</strong> 현재 수많은 비디오 모델들이 픽셀을 나열하는 수준에 머물러 있다면, Atlas는 물리적 기하학 구조와 일치하는, 즉 ‘공간적으로 문맥화되고 접지된’ 픽셀을 생성합니다.</li>
+<li><strong>4D로의 확장:</strong> 현재 Atlas는 3D 구조 이해에 강력한 강점을 보이지만, 궁극적인 목표는 시간 축이 포함된 **4D(공간+시간)**입니다. 이는 동역학(Dynamics)과 고충실도 시뮬레이션으로 이어지는 공간 지능 로드맵의 핵심 단계입니다.</li>
+</ul>
+<h4 id="5-성공할-것임을-알았는가-did-you-know-it-was-going-to-work">5. 성공할 것임을 알았는가 — Did You Know It Was Going to Work?</h4>
+<p>모델 개발 과정은 '스케일링 법칙(Scaling Law)'에 대한 확신과 기술적 전환의 연속이었습니다.</p>
+<ul>
+<li><strong>스케일링 사다리:</strong> 연구진은 초기 가우시안 스플랫 기반의 ‘Marble’ 모델에서 한계를 발견하고, 차세대 뷰 예측 기반의 Atlas로 아키텍처를 과감히 전환했습니다. Justin Johnson은 이를 &quot;스케일링 사다리를 오르는 과정&quot;이라 표현하며, 컴퓨팅 자원이 유일한 병목이었다고 회상합니다.</li>
+<li><strong>축구공 모멘트(The Soccer Ball moment):</strong> 결정적인 확신은 슬랙(Slack)을 통해 공유된 한 장의 영상에서 찾아왔습니다. 정원 테이블 아래에 놓인 축구공을 마치 비행하듯 통과하며 보여준 결과물을 본 순간, 연구진은 단 5초 만에 이 방식이 성공할 것임을 확신했습니다.</li>
+</ul>
+<h4 id="6-창작-게임-로보틱스-사용-사례-use-cases-creatives-games-robotics">6. 창작·게임·로보틱스 사용 사례 — Use Cases: Creatives, Games &amp; Robotics</h4>
+<p>Atlas는 창의적 영역과 산업 현장 모두에서 즉각적인 가치를 제공합니다.</p>
+<ul>
+<li><strong>창작 및 디자인:</strong> 3D 일관성을 유지하기 위해 수천 장의 사진을 찍던 고통스러운 과정을 30~40장의 입력만으로 단축합니다. 건축 및 산업 디자인에서 언어나 스케치를 통한 피드백을 실시간 3D 수정으로 연결하는 워크플로우 혁신이 가능해집니다.</li>
+<li><strong>로보틱스 (Real-to-Sim):</strong> World Labs가 Scenix를 인수한 배경은 로보틱스의 고질적인 '데이터 부족' 문제를 해결하기 위함입니다. Atlas는 현실의 복잡한 환경(예: 산업용 케이블 작업)을 신속하게 시뮬레이션으로 복원합니다.</li>
+<li><strong>신경 시뮬레이터(Neural Simulator):</strong> 물리 법칙을 직접 코딩하는 대신, 데이터 기반으로 학습된 시뮬레이터가 로봇의 정책 학습과 계획 수립을 돕습니다. 특히 상자의 크기, 색상, 덮개 유무 등을 무작위로 설정하는 '랜덤화(Randomization)' 기능을 통해 로봇의 강인함을 키울 수 있습니다.</li>
+</ul>
+<h4 id="7-비디오-모델과-월드-모델-the-elephant-in-the-room-video-models-vs-world-models">7. 비디오 모델과 월드 모델 — The Elephant in the Room: Video Models vs World Models</h4>
+<p>Atlas와 일반적인 비디오 모델의 결정적 차이는 '정밀 제어'와 '공간적 컨텍스트 윈도우'에 있습니다.</p>
+<ul>
+<li><strong>정밀 제어 vs 슬롯머신:</strong> 텍스트 프롬프트에 의존해 운 좋게 좋은 결과가 나오길 기다리는 기존 방식과 달리, Atlas는 카메라 포즈를 통해 사용자가 의도한 관점을 정확히 제어합니다.</li>
+<li><strong>압도적 효율:</strong> Ben Mildenhall은 과거 2,000장의 이미지가 필요했던 주택 내부 복원 작업을 Atlas로는 단 30~40장의 입력만으로 동일한 품질로 구현할 수 있다고 강조합니다. 이는 LLM의 컨텍스트 길이가 늘어남에 따라 정보 검색 능력이 향상된 것과 같은 원리입니다.</li>
+</ul>
+<h4 id="8-걸어-다닐-수-있는-4d-비디오-will-we-get-4d-video-you-can-walk-around-in">8. 걸어 다닐 수 있는 4D 비디오 — Will We Get 4D Video You Can Walk Around In?</h4>
+<p>미래의 월드 모델은 사용자가 자유롭게 돌아다니고 상호작용하는 4D 공간을 지향합니다.</p>
+<ul>
+<li><strong>베이비 동역학(Baby dynamics):</strong> 현재 Atlas 모델은 이미 파도의 움직임이나 주행하는 자동차와 같은 잠재적 동역학을 포함하고 있습니다.</li>
+<li><strong>산업용 편집 가능성:</strong> Ben Mildenhall은 단순한 시각적 효과를 넘어선 '산업용 강도(Industrial-strength)'의 편집 기능을 강조합니다. 제어 기능 때문에 품질이 희생되는 '파티 속임수(Party trick)' 수준을 넘어, 장면 내 객체와 레이아웃을 직관적으로 제어하는 시스템으로 발전할 것입니다.</li>
+</ul>
+<h4 id="9-다음-토큰-예측으로서의-new-view-prediction-why-new-view-prediction-is-the-next-token-prediction">9. 다음 토큰 예측으로서의 new-view prediction — Why New View Prediction Is the Next Token Prediction</h4>
+<p>Atlas의 철학적 기반은 'AI 완결성(AI Completeness)'에 있습니다.</p>
+<ul>
+<li><strong>지능의 근본 단위:</strong> LLM에서 ‘다음 토큰 예측’이 지능의 척도이듯, 물리적 세계를 다루는 인공지능에게는 ‘차세대 뷰 예측’이 그에 상응하는 근본 단위입니다.</li>
+<li><strong>진화론적 통찰:</strong> Fei-Fei Li는 자연이 움직이지 않는 나무에게는 눈을 주지 않았지만, 이동하는 동물에게는 눈을 주었다는 사실에 주목합니다. 새로운 관점을 본다는 것(New-view prediction)은 이동과 생존, 즉 지능의 본질과 직결됩니다.</li>
+<li><strong>결론:</strong> 시각과 경험, 그리고 상호작용 사이의 루프를 닫는 것이 지능의 완성입니다. Atlas는 차세대 뷰 예측을 통해 범용 인공지능이 물리적 세계를 이해하고 행동하게 만드는 강력한 기반이 될 것입니다.</li>
+</ul>
+<blockquote>
+<p>본 보고서는 정보 제공만을 목적으로 하며 법률, 사업, 세무 또는 투자 조언을 구성하지 않습니다. a16z 계열사는 본 논의에서 언급된 특정 회사에 대해 투자 이해관계를 보유할 수 있습니다.</p>
+</blockquote>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

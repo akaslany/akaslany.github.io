@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ripple-65B Preview, a Frontier Open-Weight Model | Ricursive Intelligence</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Ripple-65B Preview, a Frontier Open-Weight Model | Ricursive Intelligence</h1>
+<p class="page-meta">웹 · 2026-11-06</p>
+<h2 id="요약">요약</h2>
+<p>리커시브 인텔리전스(Ricursive Intelligence)는 하드웨어, 소프트웨어, 모델을 상호 최적화하여 스스로 성능을 개선하는 풀스택(Full-stack) AI 랩이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.ricursive.com/ripple">출처</a> · <a href="https://www.youtube.com/watch?v=mGGL3GEqwvc">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="ripple-65b-preview-오픈웨이트-ai-모델-기술-및-효율성-해설-보고서">Ripple-65B Preview 오픈웨이트 AI 모델 기술 및 효율성 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>리커시브 인텔리전스(Ricursive Intelligence)는 하드웨어, 소프트웨어, 모델을 상호 최적화하여 스스로 성능을 개선하는 풀스택(Full-stack) AI 랩이다. 리커시브 인텔리전스는 자사의 AI 칩 설계 플랫폼에 전력을 공급할 목적으로 바닥부터(from scratch) 자체 언어 모델을 사전학습시켰으며, 이를 바탕으로 개발된 범용 변형 모델인 <strong>Ripple-65B Preview</strong>를 공식 공개하였다.</p>
+<p>Ripple-65B Preview는 650억 개(65B)의 매개변수를 갖춘 조밀한 트랜스포머 아키텍처(Dense Architecture) 모델로, 12조(Trillion) 토큰의 대규모 데이터셋으로 사전학습되었으며 최대 1M(100만) 토큰의 롱 컨텍스트(Long-context) 길이를 지원한다. 해당 모델은 자사 AI 칩 설계 플랫폼을 가동하는 내부 독점 모델의 거대언어모델 기술에 기반을 두고 있으며, Hugging Face, Together AI, GMI Cloud, OpenRouter, Fireworks 등 주요 AI 플랫폼을 통해 오픈웨이트 형태로 배포되었다.</p>
+<p>성능 측면에서 Ripple-65B Preview는 에이전틱 코딩(Agentic Coding) 분야의 핵심 표준 벤치마크인 TerminalBench 2.1에서 80.52점을 기록하여 미국 오픈웨이트(U.S. Open-Weight) AI 모델 중 최고 수준(SOTA)의 성과를 달성하였다. 이는 수천억 개 파라미터 규모를 지닌 기존 미국 오픈웨이트 모델들의 성적을 대폭 상회하는 결과이다.</p>
+<p>본 보고서에 명시된 성능 수치, 개발 예산, 연산 효율성 및 아키텍처적 성과는 리커시브 인텔리전스가 공표한 기술 문서에 근거하며, 수석 시스템 분석가의 관점에서 데이터의 선언적 사실과 기술적 주장을 엄격히 구분하여 분석하였다. 외부 독립 기관을 통한 제3자 검증 여부는 소스 문서 내에 언급되지 않은 발표 주체의 주장 영역에 해당한다.</p>
+<hr />
+<h4 id="2-주요-논점-및-근거-서술-key-technical-arguments-evidence">2. 주요 논점 및 근거 서술 (Key Technical Arguments &amp; Evidence)</h4>
+<h5 id="2-1-미국-오픈웨이트-최고-수준-sota-에이전틱-코딩-성능-달성">2.1. 미국 오픈웨이트 최고 수준(SOTA) 에이전틱 코딩 성능 달성</h5>
+<p>Ripple-65B Preview는 에이전틱 코딩 및 시스템 추론 평가 항목에서 거대 파라미터 기반의 기존 오픈웨이트 모델들을 능가하는 Benchmarking 성과를 보여주었다. 아래 표는 주요 벤치마크 항목별 정량 비교 데이터이다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크 항목</th>
+<th style="text-align:center">Ripple-65B Preview</th>
+<th style="text-align:center">Reflection Beam 501B</th>
+<th style="text-align:center">Meta Muse Spark Open 816B</th>
+<th style="text-align:center">Thinking Machines Inkling 975B</th>
+<th style="text-align:center">NVIDIA Nemotron 3 Ultra 550B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>TerminalBench 2.1</strong></td>
+<td style="text-align:center"><strong>80.52</strong> (차트 80.5)</td>
+<td style="text-align:center">80.1</td>
+<td style="text-align:center">76.4</td>
+<td style="text-align:center">63.8</td>
+<td style="text-align:center">56.4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SWE-bench Pro v2.0 Hard</strong></td>
+<td style="text-align:center"><strong>79.1</strong></td>
+<td style="text-align:center">76.5</td>
+<td style="text-align:center">72.4</td>
+<td style="text-align:center">39.6</td>
+<td style="text-align:center">30.7</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSWE 1.1</strong></td>
+<td style="text-align:center"><strong>44.3</strong></td>
+<td style="text-align:center">43.3</td>
+<td style="text-align:center">60.0</td>
+<td style="text-align:center">5.0</td>
+<td style="text-align:center">0.6</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HMMT Feb 2026 (Math)</strong></td>
+<td style="text-align:center"><strong>90.5</strong></td>
+<td style="text-align:center">93.9</td>
+<td style="text-align:center">93.9</td>
+<td style="text-align:center">86.3</td>
+<td style="text-align:center">80.3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FORTRESS Adversarial (Safety)</strong></td>
+<td style="text-align:center"><strong>83.8</strong></td>
+<td style="text-align:center">92.1</td>
+<td style="text-align:center">94.2</td>
+<td style="text-align:center">78.0</td>
+<td style="text-align:center">79.3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AutomationBench (Public)</strong></td>
+<td style="text-align:center"><strong>36.4</strong></td>
+<td style="text-align:center">39.3</td>
+<td style="text-align:center">42.4</td>
+<td style="text-align:center">14.6</td>
+<td style="text-align:center">8.4</td>
+</tr>
+</tbody>
+</table>
+<p>Ripple-65B Preview는 TerminalBench 2.1에서 정밀 측정치 <strong>80.52점</strong>(차트 시각화 수치 80.5)을 기록하여 미국 오픈웨이트 최고 기록을 경신하였다.</p>
+<p><strong>하드웨어 및 시스템 생성 지연시간(Latency) 분석:</strong>
+시스템 아키텍처 관점에서 Ripple-65B Preview의 65B 조밀 아키텍처(Dense Architecture) 채택은 고성능 추론과 저지연(Low-latency) 토큰 생성을 동시에 충족시킨다. 500B~900B급 MoE(Mixture-of-Experts) 구조는 엑사플롭스급 연산력을 자랑하지만, 수많은 전문 전문가(Expert) 레이어로 인해 전체 메모리 풋프린트가 비대해지고 복잡한 섭외(Routing) 오버헤드와 지속적인 KV 캐시 로딩으로 인한 '메모리 대역폭 병목(Memory Bandwidth Wall)' 현상을 유발한다.</p>
+<p>반면 Ripple-65B는 콤팩트한 매개변수 봉투(Parameter envelope)를 유지함으로써 데이터센터급 가속기 대비 연산 FLOPs는 매우 높으나 메모리 대역폭이 제한적인 NVIDIA DGX Spark와 같은 로컬 워크스테이션/엣지 디바이스 환경에서도 전체 모델을 VRAM에 효율적으로 상주시키며 높은 서빙 처리량(Throughput)을 보장한다.</p>
+<h5 id="2-2-10분의-1-개발-비용을-통한-프론티어-모델-구축">2.2. 10분의 1 개발 비용을 통한 프론티어 모델 구축</h5>
+<p>프론티어 LLM 사전학습에 요구되는 컴퓨팅 예산은 기하급수적으로 증가해 왔다. OpenAI CEO 샘 알트만(Sam Altman)은 2023년 GPT-4 학습 비용이 1억 달러($100M)를 넘어섰다고 밝혔으며, 다리오 아모데이(Dario Amodei)는 프론티어 모델 학습 비용이 단일 모델당 10억 달러($1B)에 달하고 2026~2027년에는 사전학습 비용만 100억~1,000억 달러($10B~$100B)에 육박할 것으로 전망한 바 있다.</p>
+<p>이와 대조적으로 리커시브 인텔리전스는 **Ripple-65B Preview의 개발 및 학습 총비용으로 단 $32M (3,200만 달러)**만을 투입하였다. 이는 기존 에이전틱 코딩 오픈웨이트 SOTA 모델을 구축하는 데 소요된 비용의 약 10분의 1 수준이다.</p>
+<p>3,200만 달러의 예산은 단순 최종 사전학습 실행 비용에 국한되지 않으며, 바닥부터 시작된 R&amp;D 전체 파이프라인 수명주기를 모두 포함한다.</p>
+<ul>
+<li>사전학습 사다리(Pretraining ladder) 개발</li>
+<li>데이터 믹싱(Data mixing) 파이프라인 구축</li>
+<li>성능 평가(Evals) 및 디버깅(Debugging) 인프라</li>
+<li>합성 데이터 생성(Synthetic data generation)</li>
+<li>사후학습 레시피(Posttraining recipe) 개발</li>
+<li>최종 최종본(Hero) 사전학습 및 사후학습 실행</li>
+</ul>
+<h5 id="2-3-급경사-강화학습-steep-ascent-rl-및-연산-효율성">2.3. 급경사 강화학습(Steep Ascent RL) 및 연산 효율성</h5>
+<p>리커시브 인텔리전스는 대규모 컴퓨팅을 무차별 투입하는 무력 행사(Brute-force) 방식 대신, 연산 효율성에 극도로 최적화된 SFT(Supervised Fine-Tuning) 및 RL(Reinforcement Learning) 레시피를 설계하였다. 외부의 상용 사후학습 데이터셋을 구매하지 않고, 자체적인 합성 데이터 파이프라인, 품질 필터링, 커버리지 지표를 독립적으로 구축하였다.</p>
+<p>혼합 RL 레시피에 적용된 핵심 수학적/시스템적 기법은 다음과 같다:</p>
+<ul>
+<li><strong>절단 중요도 추출(Truncated importance sampling)</strong>: 정책 업데이트 시 편향 및 분산을 제어하여 안정적 학습 유도.</li>
+<li><strong>점수 중앙화(Score centering)</strong>: 보상 신호의 정규화를 통한 학습 효율성 극대화.</li>
+<li><strong>선형 길이 페널티(Linear length penalty)</strong>: 모델의 불필요한 장문 출력 낭비 방지.</li>
+<li><strong>고품질 장기 합성 환경(High-quality long-horizon synthetic environments)</strong>: 복잡한 multi-step 에이전틱 과제 수행력 이식.</li>
+</ul>
+<p>강력한 초기 SFT 체크포인트를 기반으로 모델 역량에 맞춰 과제 난이도를 연속적으로 상승시키는 급경사 강화학습을 수행한 결과, 이전 SOTA 모델인 Reflection Beam이 소요한 롤아웃 대비 **약 70배 적은 1.4M(140만) 회의 롤아웃(Rollout)**만으로 TerminalBench 2.1 점수 80.5를 달성하였다.</p>
+<h5 id="2-4-하드웨어-소프트웨어-co-design-모델-아키텍처">2.4. 하드웨어-소프트웨어 Co-Design 모델 아키텍처</h5>
+<p>Ripple-65B Preview의 아키텍처는 NVIDIA 하드웨어 인프라에서 최적의 연산 딜리버리를 달성하도록 Co-Design 되었다. 통상 MoE 아키텍처는 파라미터 활성화 효율을 노리지만, 대규모 분산 환경에서 샤딩 및 파이프라인 병렬화의 인프라 복잡도를 극심하게 증가시킨다. 리커시브 인텔리전스는 모던 조밀 트랜스포머(Modernized dense Transformer)를 선택함으로써 인프라 복잡성을 단순화하였다.</p>
+<p>분석가적 시각에서 주목할 점은, 별도의 커스텀 CUDA 커널을 작성하거나 양산형 양자화(Quantization) 기술을 적용하지 않고 심플한 샤딩 기법만으로 사전학습 및 사후학습 전반에 걸쳐 **40% MFU(Model FLOPs Utilization)**라는 매우 높은 하드웨어 연산 효율을 일관되게 유지했다는 사실이다.</p>
+<p>모델의 아키텍처 스펙은 d_model 5120의 좁고 80개 레이어로 구성된 '얇고 깊은(Thin-and-deep)' 비율을 채택하였으며, 다음과 같은 상세 기술 요소들이 도입되었다:</p>
+<ul>
+<li><strong>Attention head 과다 배치</strong>: 추론 및 에이전틱 코딩 성능(Reasoning performance) 향상을 위해 어텐션 헤드의 수치적 비중을 대폭 확대함.</li>
+<li><strong>SWA 비율 조정 및 윈도우 크기 축소</strong>: 헤드 증가에 따른 연산 및 메모리 오버헤드를 보쇄하기 위해 글로벌 레이어 대비 SWA(Sliding Window Attention) 레이어 비율을 올리고 SWA 윈도우 크기를 연산 효율적으로 축소함.</li>
+<li><strong>FFN 활성화 클리핑(FFN activation clipping)</strong>: 수치적 안정성 확보 및 텐서 폭발 방지.</li>
+<li><strong>시그모이드 게이트 어텐션(Sigmoid gated attention)</strong>: 어텐션 표현력 제어 및 정보 흐름 최적화.</li>
+<li><strong>글로벌 NoPE(Global NoPE)</strong>: 절대적 위치 임베딩(No Position Embedding)을 전역 적용하여 길이 가변성 확장.</li>
+<li><strong>벨류 레지듀얼(Value residuals)</strong>: 깊은 레이어 구조에서의 신호 감쇄 방지 및 구배 흐름 개선.</li>
+</ul>
+<h5 id="2-5-사다리-방식-model-laddering-점진적-실험-및-16배-연산-효율-개선">2.5. 사다리 방식(Model Laddering) 점진적 실험 및 16배 연산 효율 개선</h5>
+<p>사전학습 레시피 최적화를 위해 Allen Institute for AI (AI2)의 Olmo 3 모델 사다리를 출발점으로 삼아, 소규모 파라미터 단계부터 코딩 성능 향상을 목표로 점진적 실험(v1.0 ~ v1.6)을 전개하였다.</p>
+<ul>
+<li><strong>v1.0</strong>: StepFun 배치 사이즈 및 학습률(LR) 스케일링 법칙 반영.</li>
+<li><strong>v1.1</strong>: 아키텍처 치수 및 모델 깊이를 원활하게 확장하는 사다리 구조 설계.</li>
+<li><strong>v1.2</strong>: Post-norm에서 Pre+Post norm 구조로 전환 (소규모에서는 중립적이었으나 4B 매개변수 스케일부터 유의미한 성능 개선 확인).</li>
+<li><strong>v1.3</strong>: 시그모이드 게이트 어텐션(Sigmoid gated attention) 추가.</li>
+<li><strong>v1.4</strong>: 2-stream mHC 적용 시도. 소규모에서는 효과적이었으나 4B 스케일에서 성능 개선이 정체되어 최종 <strong>기각(Rejected)</strong> 처리.</li>
+<li><strong>v1.5</strong>: 글로벌 NoPE(Global NoPE) 적용 및 최종 LR 쿨다운 0 스케줄링 반영.</li>
+<li><strong>v1.6</strong>: 벨류 레지듀얼(Value residuals) 도입.</li>
+<li><strong>최종 단계</strong>: 코드가 대폭 업샘플링된 커스텀 사전학습 데이터셋으로 전환.</li>
+</ul>
+<p><strong>스케일링 기울기(Scaling Slope) 분석 및 기술적 통찰:</strong>
+4B 모델 스케일 기준, 이러한 복합적 개정 레시피는 Olmo 3 사다리 베이스라인 대비 동일한 코드 십진 교차 엔트로피 손실(dolma_stack CE Loss)을 달성하는 데 **16배 적은 연산량(16x less compute)**만을 소비함을 증명하였다.</p>
+<p>더욱 결정적인 시스템 분석적 통찰은 연산량(FLOPs) 대 CE Loss 그래프상의 기울기 특성에서 드러난다. <strong>Olmo 3 사다리 베이스라인의 스케일링 기울기는 v1.0+ 사다리의 기울기보다 완만(shallower)하게 형성되어 있다.</strong> 이는 단순한 고정 비율 개선에 그치는 것이 아니라, 모델의 매개변수 및 컴퓨팅 스케일이 상향 확장될수록 v1.0+ 레시피가 제공하는 연산 효율성 격차와 성능 우위 폭이 더욱 파격적으로 확대됨을 의미한다.</p>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-people-entities">3. 등장 인물 및 화자 (Key People &amp; Entities)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">역할 및 소스 내 맥락</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>리커시브 인텔리전스 (Ricursive Intelligence)</strong></td>
+<td style="text-align:left">본 보고서의 원문 저술 주체이자 하드웨어·소프트웨어·모델 상호 최적화 풀스택 AI 랩. Ripple-65B Preview 개발사.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>샘 알트만 (Sam Altman)</strong></td>
+<td style="text-align:left">OpenAI CEO. 2023년 GPT-4 사전학습 비용이 1억 달러($100M)를 초과했다고 언급한 발언자로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>다리오 아모데이 (Dario Amodei)</strong></td>
+<td style="text-align:left">소속 기관 및 직책 정보 소스 텍스트 내 미기재로 <strong>확인 불가</strong>. 프론티어 AI 모델 학습 비용이 $1B에 달하며 2026~2027년까지 사전학습 비용만 $10B~$100B로 폭증할 것으로 예측한 발언자로 인용됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Allen Institute for AI (AI2) Olmo 팀</strong></td>
+<td style="text-align:left">오픈소스 Olmo 3 모델 사다리를 제공하여 리커시브 인텔리전스의 사전학습 레시피 고도화 실험에 초기 베이스라인을 제공한 오픈 연구 기관.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Prime Intellect / RadixArk / NVIDIA</strong></td>
+<td style="text-align:left">리커시브 인텔리전스가 오픈웨이트 프론티어 모델을 구축하는 과정에서 인프라 및 생태계 자원을 활용한 협력 기여 단체 및 하드웨어 제조사.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Reflection (Reflection Beam 501B)</strong></td>
+<td style="text-align:left">경쟁 오픈소스 AI 랩 및 해당 랩의 501B 오픈웨이트 모델. SpaceX Colossus 인프라에 월 1억 5천만 달러($150M/mo) 규모의 컴퓨팅 계약을 맺은 것으로 보도됨(TechCrunch, 2026년 6월 22일). 소스 각주¹에 따르면 Reflection Beam 모델 구축에는 <strong>사전학습 4주 + 사후학습 4주</strong>가 소요됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Meta (Muse Spark Open 816B)</strong></td>
+<td style="text-align:left">816B 파라미터 오픈웨이트 모델 Muse Spark Open의 개발사. 벤치마크 비교 대상으로 명시됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Thinking Machines (Inkling 975B)</strong></td>
+<td style="text-align:left">975B 파라미터 오픈웨이트 모델 Inkling의 개발사. 벤치마크 비교 대상으로 명시됨.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-정리-key-metrics-timeline">4. 주요 수치 및 시점 정리 (Key Metrics &amp; Timeline)</h4>
+<h5 id="4-1-성능-및-비용-관련-정량적-수치">4.1. 성능 및 비용 관련 정량적 수치</h5>
+<ul>
+<li><strong>사전학습 토큰 수</strong>: 12조 (12 Trillion) 토큰</li>
+<li><strong>최대 컨텍스트 길이</strong>: 최대 1M (100만) 토큰</li>
+<li><strong>매개변수 아키텍처 규격</strong>: 650억 개 (65B), 80개 레이어, d_model 5120</li>
+<li><strong>전체 R&amp;D 개발 예산</strong>: $32M (3,200만 달러, 기존 SOTA 대비 1/10 수준)</li>
+<li><strong>강화학습 롤아웃(RL Rollouts) 횟수</strong>: 1.4M (140만) 회 (Reflection Beam 대비 약 70배 적은 롤아웃)</li>
+<li><strong>MFU (Model FLOPs Utilization)</strong>: 사전학습 및 사후학습 전 구간에서 40% 유지</li>
+<li><strong>연산 효율 개선 폭</strong>: Olmo 3 사다리 대비 동일 코딩 CE Loss 달성에 16배 적은 연산량(16x less compute) 소요</li>
+<li><strong>경쟁 모델(Reflection Beam 501B) 학습 기간</strong>: 사전학습 4주 + 사후학습 4주 (총 8주 소요)</li>
+</ul>
+<h5 id="4-2-주요-시점-및-연도">4.2. 주요 시점 및 연도</h5>
+<ul>
+<li><strong>2023년</strong>: 샘 알트만이 GPT-4 개발 비용($100M 초과)을 언론에 공식 발언한 시점.</li>
+<li><strong>2026년 2월 (Feb 2026)</strong>: 수학 벤치마크 HMMT 평가 수행 시점.</li>
+<li><strong>2026년 6월 22일</strong>: Reflection 랩이 SpaceX Colossus와 월 1억 5,000만 달러 컴퓨팅 계약을 체결했음이 테크크런치(TechCrunch)에 보도된 시점.</li>
+<li><strong>2026년~2027년</strong>: 다리오 아모데이가 프론티어 AI 사전학습 전용 비용만 100억~1,000억 달러에 달할 것이라 예견한 미래 시점.</li>
+<li><strong>2026년</strong>: 본 기술 소스 문서의 저작권 발간 연도 (© 2026 Ricursive Intelligence, Inc.).</li>
+</ul>
+<hr />
+<h4 id="5-한계-불확실성-및-소스-미다룸-사항-limitations-uncertainties-gaps">5. 한계, 불확실성 및 소스 미다룸 사항 (Limitations, Uncertainties &amp; Gaps)</h4>
+<ol>
+<li><strong>확인 불가 인적 사항 및 직책</strong>: 다리오 아모데이의 현재 소속 기관 및 정확한 직책, 그리고 리커시브 인텔리전스 내부 저자/연구진 개개인의 성명은 소스 텍스트 상에 명시되지 않아 <strong>확인 불가</strong>하다.</li>
+<li><strong>비공개 데이터셋 상세 믹스 및 출처</strong>: 12조 토큰 사전학습 데이터셋 및 사후학습 합성 데이터셋의 구체적 출처, 라벨링 방법론, 정량적 업샘플링 비율 등 상세 파이프라인 정보는 소스에 비공개되어 있다.</li>
+<li><strong>비교 모델의 실사용 총비용 데이터의 한계</strong>: Reflection Beam 등 비교 대상 모델의 실제 최종 학습 비용 단가는 내부 회계 수치가 아닌 외부 언론 보도(월 1억 5,000만 달러 인프라 계약 등) 및 소스 측의 추정 계산에 의존하고 있어 정확한 내부 개발비 액수는 소스상 <strong>확인 불가</strong>하다.</li>
+<li><strong>자체 AI 칩 딥 스펙 미제시</strong>: 자사 AI 칩 설계 플랫폼을 가동하기 위해 Ripple-65B를 개발했다고 명시했으나, 리커시브 인텔리전스가 자체 개발 중인 AI 반도체 칩의 실질적인 아키텍처, 공정, ISA, 명칭 및 세부 실리콘 스펙은 다루지 않는다.</li>
+<li><strong>소스 측 주장의 검증 불확실성</strong>: 소스 작성자(Ricursive Intelligence)가 제시한 &quot;미국 오픈웨이트 최고 성능(SOTA)&quot; 및 &quot;1/10 개발 비용 달성&quot; 주장은 제시된 벤치마크 수치 및 소스 측의 평가에 기반한 것이며, 외부 독립 검증 기관의 교차 교정이나 공인 감사를 거쳤는지 여부는 소스 문서에서 확인되지 않는다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

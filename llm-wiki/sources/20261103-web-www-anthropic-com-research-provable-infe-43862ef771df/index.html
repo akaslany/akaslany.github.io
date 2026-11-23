@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress on provable inference for large language models \ Anthropic</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Progress on provable inference for large language models \ Anthropic</h1>
+<p class="page-meta">웹 · 2026-11-03</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 앤트로픽(Anthropic)의 프론티어 레드팀(Frontier Red Team)이 발표한 거대 언어 모델(LLM)의 영지식 증명 기반 추론 검증 기술 및 '플래시프루브(FlashProve)' 시스템에 대한 정밀 기술 분석을 담고 있습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.anthropic.com/research/provable-inference">출처</a> · <a href="https://www.youtube.com/watch?v=kNSV6eaUMuY">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="llm-프루버블-인퍼런스-provable-inference-및-flashprove-시스템-기술-해설-보고서">LLM 프루버블 인퍼런스(Provable Inference) 및 FlashProve 시스템 기술 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 앤트로픽(Anthropic)의 프론티어 레드팀(Frontier Red Team)이 발표한 거대 언어 모델(LLM)의 영지식 증명 기반 추론 검증 기술 및 '플래시프루브(FlashProve)' 시스템에 대한 정밀 기술 분석을 담고 있습니다. 본 내용은 소스 문서의 '요약(Executive summary)' 및 '소개(Introduction)' 섹션(Chapter 01 &amp; 02)에 기초합니다.</p>
+<p>[확인된 사실] 현재 대규모 언어 모델을 이용하는 사용자들은 자신이 전달받은 응답이 실제 요청한 프론티어 모델로부터 생성된 것인지, 아니면 라우팅 서비스나 시스템에 의해 비용 절감 목적으로 비밀리에 하위 모델로 교체되었거나 공격자에 의해 토큰 스트림이 위변조되었는지 직관적으로 검증할 방법이 없습니다. LLM 출력이 고품질 텍스트를 제공하더라도 출력물 자체만으로는 실제 연산을 수행한 모델의 정품 여부와 정합성을 확신할 수 없습니다. 이처럼 AI 기술이 사회 전반으로 확산되는 환경에서 응답의 신뢰성과 무결성을 암호학적으로 보증하기 위해 '프루버블 인퍼런스(Provable Inference, PI)' 기술의 필요성이 크게 대두되고 있습니다.</p>
+<p>[소스의 주장] 앤트로픽 프론티어 레드팀은 강력한 영지식 비대화형 간결한 지식 증명(zkSNARK) 기법을 4,000억 개(400B) 파라미터 규모의 대형 언어 모델 추론에 성공적으로 적용하여, 기존 오픈소스 영지식 머신러닝(zkML) 시스템 대비 수십에서 수천 배 이상의 성능 향상을 이뤄낸 오픈소스 프로토타입 시스템 '플래시프루브(FlashProve)'를 공개했습니다. 플래시프루브는 모델 제공자가 특정 가중치에 대해 암호학적으로 커밋(Commit)한 후, 프롬프트 평가 시 생성된 각 응답 토큰이 가중치의 비밀성을 유지(Zero-Knowledge)하면서 커밋된 정확한 모델로부터 유래되었음을 간결하게 증명할 수 있게 지원합니다.</p>
+<p>[확인된 사실] 앤트로픽은 이번 연구 발표와 함께 다음의 5가지 핵심 산출물을 아파치 2.0(Apache 2.0) 라이선스로 완전하게 공개했습니다:</p>
+<ol>
+<li>시스템의 주요 개념과 응용 분야를 제시하는 블로그 포스트</li>
+<li>시스템의 세부 암호학 알고리즘 및 엔지니어링 구조를 설명한 기술 보고서(Technical Report)</li>
+<li>클로드(Claude)가 작성한 정밀 프로토콜 명세서(Protocol Specification)</li>
+<li>증명 생성기(Prover), C++ 기반 고속 검증기(Fast Verifier), Lean 기반 정형 검증기(Lean Verifier)를 포함한 실행 코드(Executable Code)</li>
+<li>최고 수준의 수학적 명제를 포함한 린(Lean) 정형 증명 코드 및 명세 감사를 돕기 위한 대화형 시각화 도구(<code>STATEMENTS.html</code>)</li>
+</ol>
+<p>[확인된 사실] 앤트로픽 연구진은 4,000억 개 파라미터를 가진 메타(Meta)의 라마 4 매버릭(Llama 4 Maverick) 모델을 대상으로 실증을 진행했습니다. 본 실증은 허깅페이스(Hugging Face)에 공개된 제3자의 4비트(4-bit) 양자화 가중치를 활용하였으며, 배포된 산출물에는 가중치 자체 대신 해당 가중치로부터 계산된 커밋먼트 식별자(Commitment IDs), 체크섬(Checksums), 성능 측정 데이터, 파라미터 설정 정보 등이 포함되어 있습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-issues-technical-evidence">2. 주요 논점 (Key Issues &amp; Technical Evidence)</h4>
+<h5 id="2-1-ai-확산에-따른-4대-신뢰-과제와-zksnark의-해결-역할">2.1. AI 확산에 따른 4대 신뢰 과제와 zkSNARK의 해결 역할</h5>
+<p>소스 문서의 'AI 확산에 따른 신뢰 과제(Trust challenges in AI proliferation)' 섹션에서는 AI 시스템의 확산에 따라 발생하는 4가지 신뢰 과제와 이를 해결하기 위한 영지식 증명(zkSNARK)의 기술적 역할을 제시하고 있습니다.</p>
+<ol>
+<li>
+<p><strong>속도 조절 및 규제 준수 (Pacing):</strong></p>
+<ul>
+<li>[소스의 주장] 국제적 규제나 안전성 프레임워크는 고성능 AI 하드웨어가 신규 미승인 모델의 무단 학습에 남용되지 않고, 승인된 추론 서비스에 전념하고 있음을 검증하도록 요구할 수 있습니다.</li>
+<li>[기술적 작동 방식] 서비스 제공자는 특정 기간 처리된 추론 요청에 대해 zkSNARK 증명서(Certificate)를 제출함으로써 연산 자원이 실제 지정된 모델의 추론에 사용되었음을 증명합니다. 규제 기관은 고성능 연산 장비나 모델 가중치에 대한 정보 없이도 간결성(Succinctness)을 활용해 이를 빠르게 검증할 수 있습니다.</li>
+<li>[확인된 사실 / 한계] zkSNARK 증명을 통해 해당 하드웨어가 실제 추론 연산을 수행했음은 확실히 검증할 수 있으나, 해당 하드웨어가 추론을 수행하는 동시간대에 백그라운드에서 모델 학습을 병행하지 않았음을 완전하게 증명하지는 못한다는 기술적 한계가 존재합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>위변조 및 서버 침해 감지 (Tamper Detection):</strong></p>
+<ul>
+<li>[소스의 주장] 추론 서버가 외부 적대적 공격자에게 침해당해 악성 토큰을 반환하거나 가중치가 무단 교체될 위험이 있습니다. 또한 자율적으로 진화하는 고성능 모델이 통제와 감시를 회피하기 위해 스스로를 하위 성능 모델로 위장하여 실행될 가능성도 존재합니다.</li>
+<li>[기술적 작동 방식] 서비스 제공자는 서버에서 출력되는 모든 응답에 대해 사전 커밋된 가중치 커밋먼트(Commitment)와 결합된 zkSNARK 증명을 첨부하도록 강제합니다. 서버 침해자나 자율 모델은 정품 가중치 커밋먼트에 부합하는 유효한 증명을 수학적으로 위조할 수 없으므로 무단 변경이나 우회 실행이 즉시 감지됩니다.</li>
+<li>[확인된 사실 / RSP 달성 경과] 앤트로픽은 프론티어 안전 로드맵(Frontier Safety Roadmap, RSP)을 통해 &quot;2026년 9월 30일까지 추론 트래픽을 정밀 서명하는 프루버블 인퍼런스 프로토타입을 개발하겠다&quot;는 공표 목표를 제시한 바 있습니다. 소스의 주석(Footnote 03)에 따르면, 앤트로픽은 2026년 10월 19일 자 업데이트를 통해 신뢰할 수 있는 서버에서 추론을 재연산하고 정밀 서명하는 내부 프로토타입 개발을 완료하면서 해당 RSP 목표를 달성했습니다. 이 과정에서 내부 프로젝트 명칭을 '추론 검증(Inference Verification)'으로 명확히 정립하였으며, 본 보고서에서 다루는 플래시프루브(FlashProve) 연구는 동일한 트래픽 무결성목표를 완전한 암호학적(cryptographic) 영지식 증명 방식으로 달성하기 위한 연속선상의 정밀 연구입니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>텍스트 출처 및 검증 (Text Provenance):</strong></p>
+<ul>
+<li>[소스의 주장] 소프트웨어 보안 취약점 스캔이나 법률 문서 검토 등 상당한 연산 자원과 고급 프론티어 모델이 투입되었음을 제3자에게 증명해야 하는 요구가 늘고 있습니다. 저렴한 하위 모델이나 조작된 로그로 결과를 거짓 제시하는 행위를 암호학적으로 방지해야 합니다.</li>
+<li>[기술적 작동 방식] 프롬프트 입력과 모델 출력에 zkSNARK 증명을 결합하여 검증자에게 전달함으로써, 검증자가 모델의 가중치에 접근하지 않고도 정품 프론티어 모델이 연산을 수행했음을 검증합니다.</li>
+<li>[구체적 사례 - 실패 증명(Proof-of-Failure)] 소프트웨어 개발자가 특정 패치 코드에 대해 프론티어 보안 모델을 사용하여 최소 100만(1M) 토큰 이상을 소비하며 다각도로 취약점 공격을 시도했으나 어떠한 보안 결함도 발견하지 못했음을 증명하는 '실패 증명(Proof-of-Failure)' 검증서를 발급하여 코드 안전성을 객관적으로 입증할 수 있습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>승인된 모델 사용 (Model Approval):</strong></p>
+<ul>
+<li>[소스의 주장] 규제 당국이 안전 검증을 통과한 승인된 AI 모델만 시장에 서비스하도록 강제할 수 있습니다.</li>
+<li>[기술적 작동 방식] 규제 기관은 서비스 제공자에게 제출받은 응답 토큰의 zkSNARK 증명이 사전에 안전 승인을 받은 가중치 커밋먼트와 일치하는지 여부만 간결하게 확인(Succinct Verification)함으로써, 미승인 위험 모델의 무단 배포를 효과적으로 차단할 수 있습니다.</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>신뢰할 수 있는 하드웨어(TEE)와의 비교:</strong>
+<ul>
+<li>[확인된 사실] 프루버블 인퍼런스를 구현하는 기존 방식 중 하나인 TEE(Trusted Execution Environment)는 하드웨어 제조사가 제공하는 변조 방지 기능 및 증빙(Attestation)에 의존하는 하드웨어 기반 솔루션입니다.</li>
+<li>[확인된 사실] 반면, zkSNARK는 수학적·암호학적 문제의 계산적 난이도(Computational Hardness)에만 보안성을 의존하는 순수 소프트웨어 암호화 방식입니다. 따라서 운영체제(OS)나 하드웨어 환경 전체가 침해당한 최악의 상황에서도 암호학적 난제를 해결하지 못하는 한 위조 증명을 생성할 수 없습니다. 소스에서는 TEE 하드웨어 방식과 zkSNARK 암호학 방식이 상호 배타적인 관계가 아니며, 상호 보완적인 관계로서 향후 다양한 신뢰 과제 해결에 병행 활용될 것임을 명시하고 있습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-2-flashprove-시스템-구조-및-동작-원리">2.2. FlashProve 시스템 구조 및 동작 원리</h5>
+<p>소스의 'Our system: FlashProve' 섹션에 기재된 플래시프루브의 프로토콜 단계, 증명 엔진 구조, 주요 보장 속성 및 시스템 엔지니어링 특징은 다음과 같습니다.</p>
+<ul>
+<li>
+<p><strong>프로토콜 실행 단계 구조:</strong></p>
+<ul>
+<li><strong>오프라인 단계 (Offline phase):</strong> 증명자(Prover)는 모델 가중치 전체에 대해 짧은 핑거프린트 형태인 '커밋먼트(Commitment)'를 생성하여 공개합니다. 가중치 자체는 완전 비공개로 유지되며, 이후 수행되는 모든 추론 증명은 이 오프라인 커밋먼트에 결합됩니다. 400B 모델 기준 약 39분이 소요되며, 생성된 커밋먼트는 약 1,600만 회의 추론 요청 동안 유효하게 재사용됩니다.</li>
+<li><strong>온라인 단계 (Online phase):</strong> 검증자(Verifier)가 프롬프트와 출력 토큰을 보유한 상태에서, 증명자는 &quot;커밋된 모델을 해당 프롬프트로 평가했을 때 정확히 이 출력 토큰들이 생성됨&quot;을 증명하는 약 18.78 MB의 증명 파일을 생성하여 제출합니다. 검증자는 클라이언트 CPU 환경에서 이를 단 수 초 내에 검증합니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>4대 암호학적 보장 속성:</strong></p>
+<ol>
+<li><strong>완전성 (Completeness):</strong> 정직한 증명자가 올바른 연산 과정을 거쳐 생성한 증명 파일은 검증자에 의해 반드시 승인(Accept)됩니다.</li>
+<li><strong>건전성 (Soundness):</strong> 거짓된 문장에 대해 유효한 증명을 위조하는 것은 암호학적 난제 가정을 깨뜨리지 않는 한 수학적으로 불가능하므로, 검증자는 증명자를 신뢰할 필요가 없습니다.</li>
+<li><strong>영지식성 (Zero-Knowledge):</strong> 증명 파일은 모델의 가중치, 레이어별 중간 연산값, 각 토큰 생성 시 선택된 전문가(Experts) 정보 등 내적 데이터를 일체 유출하지 않습니다. (단, 모델의 기본 아키텍처 구조 자체는 은닉 대상이 아닙니다.)</li>
+<li><strong>간결성 (Succinctness):</strong> 400B 파라미터(4비트 양자화 기준 약 232 GB) 규모의 대형 모델 연산 결과에 대한 증명 파일 크기가 약 19 MB에 불과하며, 24코어 CPU 환경에서 17초 만에 검증이 완료됩니다.</li>
+</ol>
+</li>
+<li>
+<p><strong>암호학적 증명 엔진 (IOP 및 기하학적 파이프라인):</strong></p>
+<ul>
+<li>[기술적 작동 방식] 플래시프루브의 zkSNARK 핵심 엔진은 해시(Hash) 기반의 대화형 오라클 증명(Interactive Oracle Proof, IOP) 체계를 컴파일하여 구축되었습니다. 해시 함수 기반으로 설계되어 양자 컴퓨터 환경에서도 안전한 양자 후 암호(Post-quantum Security) 내구성을 가집니다.</li>
+<li>[기술적 작동 방식] 해당 IOP 증명 구조는 부호 이론(Coding Theory) 및 계산 복잡도 이론(Complexity Theory)에 기반을 둔 '선형 제약 조건을 포함하는 코드 근접성 검사(Code proximity tests with linear constraints)'와 '룩업 아규먼트(Lookup arguments)' 등의 첨단 암호학적 기법을 결합하여 정밀하게 구성되었습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>시스템 엔지니어링 및 메모리 스트리밍 특징:</strong></p>
+<ul>
+<li><strong>MoE(Mixture-of-Experts) 활성화 파라미터 연산 최적화:</strong> 플래시프루브는 400B 전체 파라미터가 아닌, 토큰당 실제 활성화되는 약 17B(170억 개) 파라미터 연산량에 비례하여 증명 연산을 수행하도록 설계되었습니다. 이를 통해 연산 오버헤드를 비약적으로 줄이면서도, 영지식 속성에 의해 어떤 전문가가 라우팅되었는지는 검증자에게 철저히 은닉됩니다.</li>
+<li><strong>사후 배치 증명 (Post-hoc Batch Proving):</strong> 실시간 생성과 동시에 증명하는 인라인 방식 대신, 추론이 완료된 텍스트(24개 요청 배치)를 대상으로 프리필(Prefill) 단계와 같이 병렬 처리하여 사후 증명합니다. 배치 단위 처리를 통해 가중치 커밋먼트를 요청당 매번 열지 않고 배치당 1회만 열어(Open) 연산 오버헤드를 극적으로 축소했습니다.</li>
+<li><strong>단일 GPU 메모리 스트리밍 아키텍처:</strong> 80 GB VRAM을 가진 단일 H100 GPU 메모리에는 400B 모델 가중치(~232 GB)와 증명 연산 중간 상태를 동시에 적재할 수 없습니다. 따라서 플래시프루브는 모델 레이어를 세그먼트(Segment) 단위로 분할하여 증명 연산을 수행합니다. 전체 가중치는 호스트 시스템 메모리(RAM ~290 GB)에 저장된 상태에서 GPU로 레이어 세그먼트별로 순차 스트리밍 입출력됩니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>인라인 증명 대 사후 증명 비교:</strong></p>
+<ul>
+<li><strong>인라인 증명 (In-line Proving):</strong> 추론 연산과 동시에 증명을 생성하는 방식으로 극도로 짧은 지연 시간을 목표로 하지만, 효율성을 위해 암호학적 보안 수준을 타협해야 하는 위험이 존재합니다.</li>
+<li><strong>사후 증명 (Post-hoc Proving):</strong> 추론이 완료된 후 사후적으로 증명을 생성하는 방식으로 플래시프루브가 채택한 구조입니다. 보안성의 타협 없이 강력한 cryptographic 증명이 가능하지만, 재연산 복잡성, 증명 완료까지의 시간 지연, 부동소수점 연산의 비결정성(Non-determinism) 대응 체계 구축 등의 과제가 동반됩니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-형식-검증-formal-verification-을-통한-신뢰성-확보">2.3. 형식 검증(Formal Verification)을 통한 신뢰성 확보</h5>
+<p>소스의 'Trustworthiness from formal verification' 섹션에서는 암호학 코드(code)의 오류 가능성을 차단하고 시스템 신뢰성을 확보하기 위해 린(Lean) 증명 보조 도구를 활용한 형식 검증 체계에 대해 서술합니다.</p>
+<ul>
+<li>
+<p><strong>3가지 핵심 증명 속성 (Random Oracle Model 하):</strong>
+해당 정형 명세 및 증명은 해시 함수를 사용하는 암호학 프로토콜 분석 모델인 '랜덤 오라클 모델(Random Oracle Model)' 하에서 컴파일러 오류 가능성을 제외하고 기계적으로 검증(Machine-checkable)되었습니다.</p>
+<ol>
+<li><strong>완전성 (Completeness):</strong> 올바른 명제에 대해 정식 증명자가 생성한 증명은 검증기에 의해 100% 승인됨.</li>
+<li><strong>건전성 (Soundness):</strong> 위조된 증명은 무시할 수 있는 수준(Negligible probability)의 예외를 제외하고는 검증기에 의해 반드시 거부됨.</li>
+<li><strong>영지식성 (Zero-Knowledge):</strong> 증명 자체에서 가중치 정보나 중간 연산 데이터가 일체 유출되지 않음.</li>
+</ol>
+</li>
+<li>
+<p><strong>남아있는 신뢰 격차 (Trust Gaps):</strong></p>
+<ol>
+<li><strong>Lean 명세 자체의 인적 감사 필요성:</strong> Lean 언어로 작성된 최상위 수학적 명제(Top-level Statements)가 연구진의 실제 보안 의도와 정확히 일치하는지 인간에 의한 수동 감사가 필요합니다. 앤트로픽은 외부 보안 감사자의 명세 검토를 지원하기 위해 대화형 시각화 도구인 <code>STATEMENTS.html</code>을 제작하여 함께 배포했습니다.</li>
+<li><strong>실행 코드와 정형 명세 간의 일치성 감사:</strong>
+<ul>
+<li>[건전성 관점 - 검증기 구별] 실제 현장에 적용되는 C++ 고속 검증기(Fast Verifier)는 명세(specification)상 수학적 정형 증명과 직접적으로 완전하게 연결되어 있지 않습니다. 이에 따라 앤트로픽은 속도는 늦지만 Lean 언어 엔진 상에서 직접 실행되어 수학적 건전성을 100% 보증하는 'Lean 실행 검증기(Lean Verifier)'를 함께 제공합니다. C++ 검증기는 실무용으로 사용되며, 테스트 환경에서 Lean 검증기와 모든 증명 결과에 대해 100% 일치함이 확인되었습니다.</li>
+<li>[완전성 관점] 정직한 증명자와 Lean 검증기를 교차 실행하는 소프트웨어 테스트 방식을 통해 완전성을 검증합니다.</li>
+<li>[영지식성 관점 - 증명기 감사] 증명기(Prover) 연산은 대규모 연산 자원이 투입되므로 Lean 환경에서 증명기 전체를 직접 정형 실행하는 것이 불가능합니다. 따라서 증명기 실행 코드가 영지식성 명세를 완벽히 준수하는지에 대해서는 인공지능 에이전트 및 인간 보안 전문가의 정밀한 코드 감사(Audits) 체계에 의존해야 합니다.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-people-key-entities">3. 등장 인물 및 화자 (People &amp; Key Entities)</h4>
+<p>소스 문서에 기재된 주요 참여 팀 및 저자 목록과 소속 기관 및 역할 정보는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 / 팀명</th>
+<th style="text-align:left">소속 기관 / 프로그램</th>
+<th style="text-align:left">소스 상의 서술 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>프론티어 레드팀 (Frontier Red Team)</strong></td>
+<td style="text-align:left">앤트로픽 (Anthropic)</td>
+<td style="text-align:left">프로젝트 주관 연구 팀</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>로이 린버그 (Roy Rinberg)</strong></td>
+<td style="text-align:left">앤트로픽 (Anthropic)</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>알렉스 알랭 (Alex Allain)</strong></td>
+<td style="text-align:left">앤트로픽 (Anthropic)</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>알레산드로 치에사 (Alessandro Chiesa)</strong></td>
+<td style="text-align:left">EPFL, StarkWare</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>미란다 크리스토 (Miranda Christ)</strong></td>
+<td style="text-align:left">MIT, RESI</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라훌 다랄 (Rahul Dalal)</strong></td>
+<td style="text-align:left">Anthropic STEM Fellows Program, Succinct</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지아코모 펜치 (Giacomo Fenzi)</strong></td>
+<td style="text-align:left">EPFL</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>벤 메이어 (Ben Mayer)</strong></td>
+<td style="text-align:left">Anthropic Fellows Program, MIT</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>가이 바이센베르크 (Guy Weissenberg)</strong></td>
+<td style="text-align:left">EPFL</td>
+<td style="text-align:left">소속 저자 (Author)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-metrics-timelines">4. 수치 및 시점 (Metrics &amp; Timelines)</h4>
+<h5 id="4-1-flashprove-성능-수치-및-평가-환경">4.1. FlashProve 성능 수치 및 평가 환경</h5>
+<p>[확인된 사실] 소스 문서에 제시된 플래시프루브 시스템의 정량적 평가 데이터 및 시스템 사양은 다음과 같습니다.</p>
+<ul>
+<li><strong>발행일:</strong> 2026년 11월 2일 (Published Nov 2, 2026)</li>
+<li><strong>대상 모델:</strong> 메타(Meta)의 라마 4 매버릭 (Llama 4 Maverick)
+<ul>
+<li>총 파라미터: 400B (4,000억 개) MoE 구조 (4비트 양자화 시 약 232 GB)</li>
+<li>토큰당 사용 파라미터: 약 17B (170억 개)</li>
+<li>적용 양자화: 허깅페이스(Hugging Face)에 공개된 제3자의 4비트(4-bit) 양자화 가중치 사용 (Meta 라이선스 준수)</li>
+</ul>
+</li>
+<li><strong>증명자 (Prover) 성능 및 오버헤드:</strong>
+<ul>
+<li>하드웨어 환경: 단일 NVIDIA H100 GPU(80 GB VRAM) 1대 + 24 CPU 코어 (호스트 RAM 약 290 GB)</li>
+<li>오프라인 커밋먼트 단계: 약 39분 소요 (생성된 커밋먼트는 약 1,600만 회 요청 동안 유효)</li>
+<li>온라인 증명 단계: 24개 요청 배치(Batch) 처리 시 약 223초 소요 -&gt; <strong>초당 약 110토큰 (110 tokens/second)</strong> 증명 속도 달성</li>
+<li>증명 파일 크기: 1,024 토큰 요청당 <strong>약 18.78 MB</strong> (약 19 MB)</li>
+<li>GPU 연산 오버헤드: 8대의 H100 GPU에서 FP8 정밀도로 동작하는 일반적인 추론 엔진 vLLM 기준 대비, 단일 GPU당 증명 연산 시간은 일반적 실행 조건에서 <strong>66배 ~ 77배</strong> (평균 약 72배), 최대 부하(Highest load) 조건에서 <strong>최대 94배</strong>의 GPU 연산 시간이 추가 소요됨</li>
+</ul>
+</li>
+<li><strong>검증자 (Verifier) 성능 사양:</strong>
+<ul>
+<li>하드웨어 환경: 클라이언트 CPU 전용 (GPU 불필요)</li>
+<li>최초 다운로드 데이터: 가중치 커밋먼트 파일 총 약 6.5 MB</li>
+<li>검증 소요 시간: 24개 스레드 활용 시 <strong>17초</strong>, 단일 스레드 처리 시 <strong>21초</strong> (오프라인 검증 항목 포함)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="4-2-선행-연구-prior-work-와의-수치적-비교-타임라인">4.2. 선행 연구(Prior Work)와의 수치적 비교 타임라인</h5>
+<p>소스의 'Prior work' 및 'Executive summary' 섹션에 수록된 영지식 증명 머신러닝(zkML) 분야의 연도별 성능 발전 수치 타임라인은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">연도</th>
+<th style="text-align:left">연구 / 시스템 명칭</th>
+<th style="text-align:left">대상 모델 및 파라미터 규모</th>
+<th style="text-align:left">주요 성능 수치 및 증명 속도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>2017년</strong></td>
+<td style="text-align:left">SafetyNets</td>
+<td style="text-align:left">2개 합성곱 계층 MNIST CNN, 소형 음성 모델</td>
+<td style="text-align:left">zkML 분야 초기 정형 증명 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2021년</strong></td>
+<td style="text-align:left">zkCNN</td>
+<td style="text-align:left">VGG-16 (1,500만 / 15M 파라미터)</td>
+<td style="text-align:left">증명 생성당 88.3초 소요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2022년</strong></td>
+<td style="text-align:left">Kang et al.</td>
+<td style="text-align:left">MobileNet v2</td>
+<td style="text-align:left">고해상도 ImageNet 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2023년</strong></td>
+<td style="text-align:left">ZKML</td>
+<td style="text-align:left">GPT-2 (1억 1,700만 / 117M)</td>
+<td style="text-align:left">토큰당 약 159초 (≈0.006 tok/s)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2023년</strong></td>
+<td style="text-align:left">Modulus Labs</td>
+<td style="text-align:left">GPT-2 XL (15억 / 1.5B)</td>
+<td style="text-align:left">증명 생성에 90시간 이상 소요</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2023년</strong></td>
+<td style="text-align:left">EZKL</td>
+<td style="text-align:left">GPT 스타일 트랜스포머 (100만 / 1M)</td>
+<td style="text-align:left">토큰당 약 966초 (≈0.001 tok/s)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2024년</strong></td>
+<td style="text-align:left">zkLLM</td>
+<td style="text-align:left">LLaMA-2-13B (130억 / 13B)</td>
+<td style="text-align:left">2,048 토큰 입력 시 GPU 15분 소요 (신규 토큰당 ≈0.001 tok/s, 배치 내 ~2.5 tok/s)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2025년</strong></td>
+<td style="text-align:left">zkGPT</td>
+<td style="text-align:left">GPT-2 (117M)</td>
+<td style="text-align:left">증명 시간 21.8초로 단축 (≈0.05 tok/s)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2025년</strong></td>
+<td style="text-align:left">zkPyTorch</td>
+<td style="text-align:left">Llama-3 8B (80억 / 8B)</td>
+<td style="text-align:left">CPU 1코어당 토큰당 ~150초 (≈0.007 tok/s)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2025년</strong></td>
+<td style="text-align:left">ZKTorch</td>
+<td style="text-align:left">GPT-J (60억 / 6B)</td>
+<td style="text-align:left">증명 생성에 약 20분 소요 (≈0.001 tok/s)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년</strong></td>
+<td style="text-align:left">VerInf</td>
+<td style="text-align:left">Llama 4 Maverick (400B MoE)</td>
+<td style="text-align:left">DGX Spark 환경 1,000 토큰에 14.3시간 소요 (≈0.02 tok/s), 증명 크기 93.6 GB (검증에 하루 가까이 소요)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년</strong></td>
+<td style="text-align:left">DeepProve</td>
+<td style="text-align:left">GPT-2 / Gemma 3</td>
+<td style="text-align:left">GPT-2 약 2.9 tok/s, Gemma 3 단일 기기 1.4 tok/s, 분산 환경 31 tok/s</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2026년</strong></td>
+<td style="text-align:left">SASH</td>
+<td style="text-align:left">Llama 3.1 8B (8B)</td>
+<td style="text-align:left">단일 H100 1대에서 약 1.25 tok/s</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상용 (비공개)</strong></td>
+<td style="text-align:left">Attestable</td>
+<td style="text-align:left">Gemma 4 31B (31B 덴스 모델)</td>
+<td style="text-align:left">단일 H100 1대에서 53 ~ 77 tok/s (오픈소스 미공개 상용 솔루션)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최신 (본 연구)</strong></td>
+<td style="text-align:left"><strong>FlashProve</strong></td>
+<td style="text-align:left"><strong>Llama 4 Maverick (400B MoE)</strong></td>
+<td style="text-align:left"><strong>단일 H100 1대에서 초당 110토큰 (110 tok/s), 증명 크기 ~19 MB (검증에 수 초 소요)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>소스 문서의 'Limitations' 섹션 및 각주에서 명시하고 있는 본 시스템의 기술적 한계 및 미해결 불확실성 요소는 다음과 같습니다.</p>
+<ol>
+<li>
+<p><strong>고속 실행 코드(C++) 정형 검증 미비:</strong></p>
+<ul>
+<li>Lean 언어로 작성된 프로토콜 명세 및 정형 수학 증명이 제공되지만, 실제 고속 연산을 수행하는 C++ 증명기 및 검증기 실행 코드가 Lean 명세와 수학적으로 100% 완벽히 일치한다는 정형 증명(Formal Proof)은 완성되지 않았습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>정수(Integer) 모델 및 탐욕적 디코딩(Greedy Decoding) 제약:</strong></p>
+<ul>
+<li>본 시스템은 공개된 가중치의 정확한 정수 변환 버전 및 탐욕적 디코딩(Greedy Decoding) 방식만을 대상으로 증명합니다. 일반적인 부동소수점(Floating-point) 연산 환경이나 확률적 샘플링 디코딩 체계에서는 정품 모델의 추론 결과라 할지라도 증명 조건과 일치하지 않아 검증에 실패할 수 있습니다. (단, 적대적으로 설계된 프롬프트 공격 상황은 본 분석에 포함하지 않음)</li>
+</ul>
+</li>
+<li>
+<p><strong>모델 아키텍처 은닉 불가 (Architecture Hiding 미지원):</strong></p>
+<ul>
+<li>본 시스템은 연산 효율성을 위해 MoE 구조를 노출하여 증명 연산을 수행합니다. 가중치는 영지식 속성에 의해 완전 비공개로 보호되나, 전문가 개수, 레이어 구조 등 모델의 아키텍처 자체는 은닉되지 않으며 외부로 노출됩니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>부채널 공격 (Side-Channel Attacks) 취약성:</strong></p>
+<ul>
+<li>증명 생성에 걸리는 시간을 측정한 부채널 공격 기법 등을 통해 가중치 정보가 간접 유출될 가능성이 존재합니다. 플래시프루브의 보안 범위에서는 이러한 부채널 공격 방어를 다루지 않고 대상 외(Out of scope)로 지정했습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>문맥 길이 제한 (Context Window Limit):</strong></p>
+<ul>
+<li>현재 시스템은 최대 1,024 토큰 문맥 길이(Context Window) 범위 내에서만 증명을 지원합니다. 최신 프론티어 LLM이 제공하는 수십만~수백만 토큰 수준의 전체 문맥 영역으로 증명 범위를 확장해야 하는 기술적 과제가 남아 있습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>기타 미다룸 사항 (소스에서 다루지 않음):</strong></p>
+<ul>
+<li>TEE 등 하드웨어 기반 보안 환경과 zkSNARK의 결합 구현체 최적화 방안 및 부채널 공격 방어를 위한 구체적 하드웨어/소프트웨어 방어 기법 등은 본 소스 문서에서 상세히 다루지 않거나 확인이 불가능합니다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

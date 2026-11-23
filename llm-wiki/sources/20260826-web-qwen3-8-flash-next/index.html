@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qwen3.8-Flash-Next: A New Architecture, Towards Ultimate Cost-Efficiency</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Qwen3.8-Flash-Next: A New Architecture, Towards Ultimate Cost-Efficiency</h1>
+<p class="page-meta">웹 · 2026-08-26</p>
+<h2 id="요약">요약</h2>
+<p>Qwen4 후보 설계의 학습 연산량 절감 주장과 평가·배포·라이선스 제약을 정리한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://qwen.ai/blog?id=qwen3.8-flash-next">출처</a> · <a href="https://www.youtube.com/watch?v=UK463in6wJQ">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/hugging-face/">Hugging Face</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="qwen3-8-flash-next-a-new-architecture-towards-ultimate-cost-efficiency">Qwen3.8-Flash-Next: A New Architecture, Towards Ultimate Cost-Efficiency</h3>
+<h4 id="1-결론-효율성과-성능의-새로운-임계점-conclusion">1. 결론: 효율성과 성능의 새로운 임계점 (Conclusion)</h4>
+<p>Qwen Team은 Qwen3.8-Flash-Next가 아키텍처·시스템·학습 스케일링 법칙의 공동 설계를 통해 비용 효율성을 높였다고 보고합니다. 기술보고서의 정확한 비교는 이전 세대 <strong>Qwen3.7-Plus (397B-A17B)</strong> 대비 약 1/3의 활성 파라미터와 약 1/3의 학습 토큰을 사용해 <strong>training FLOPs가 약 1/9</strong>이었다는 것입니다. 이는 가격·VRAM·지연시간·전체 소유비용이 1/9이라는 뜻이 아니며 독립 재현 결과도 아닙니다. 14개 pre-training 벤치마크에서는 8개가 앞섰고 나머지 6개는 최대 2.6점 뒤졌습니다.</p>
+<p>이러한 수렴 효율성 개선은 다음의 4대 핵심 아키텍처 혁신을 통해 달성되었습니다:</p>
+<ul>
+<li><strong>Attention (GDN + QSA):</strong> Gated Delta Rule 기반의 선형 재귀와 마이크로 블록 단위의 희소 어텐션을 결합하여 정보 기억과 검색의 연산 복잡도를 획기적으로 낮췄습니다.</li>
+<li><strong>Residual (Gated Residual):</strong> 잔차 경로를 4개 분기(Branch)로 확장하고 데이터 기반 동적 게이트를 도입하여, 신호 희석을 방지하고 심층 네트워크의 학습 안정성 마진을 확보했습니다.</li>
+<li><strong>Embedding (N-gram Embedding):</strong> 호스트 메모리 오프로딩과 비동기 프리페칭을 통해, 연산 오버헤드 없이 모델의 지식 수용량을 확장했습니다.</li>
+<li><strong>Optimization (Muon + AdamW):</strong> 행렬 최적화 도구인 Muon과 전통적인 AdamW의 하이브리드 운용을 통해, 가중치의 직교성을 유지하며 최적의 수렴 경로를 탐색했습니다.</li>
+</ul>
+<p>따라서 이 모델은 완성된 Qwen4나 보편적으로 검증된 최적해가 아니라, Qwen4에 적용할 후보 설계를 공개한 early architecture preview로 보는 편이 정확합니다.</p>
+<hr />
+<h4 id="2-공개-단계와-qwen4-preview의-의의">2. 공개 단계와 Qwen4 Preview의 의의</h4>
+<p>Qwen3.8-Flash-Next는 차세대 파운데이션 모델인 <strong>Qwen4</strong>의 핵심 아키텍처를 사전에 검증하기 위한 <strong>'Early Architecture Preview'</strong> 성격을 띠고 있습니다.</p>
+<ul>
+<li><strong>하이브리드 설계의 계승과 발전:</strong> Gated DeltaNet과 Gated Attention 계열 설계는 Qwen3.5~3.8 시리즈에 사용됐습니다. 이번에는 QSA·Gated Residual·N-gram embedding 등을 결합한 후보 아키텍처를 open-weight 형태로 조기 공개해 커뮤니티 검토를 받는 단계입니다.</li>
+<li><strong>전략적 투명성:</strong> 아키텍처의 급격한 변화가 학습 안정성 및 하드웨어 가속에 미치는 영향을 조기에 검증하고, 연구 커뮤니티가 새로운 최적화 기법(Muon 등)을 직접 조사할 수 있도록 지원합니다.</li>
+</ul>
+<hr />
+<h4 id="3-모델-규모와-활성화-파라미터의-분리">3. 모델 규모와 활성화 파라미터의 분리</h4>
+<p>Qwen3.8-Flash-Next는 거대한 정적 용량과 효율적인 활성화 연산을 결합한 독보적인 파라미터 구성을 보여줍니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구성 요소</th>
+<th style="text-align:left">파라미터 규모</th>
+<th style="text-align:left">연산 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Main Backbone</strong></td>
+<td style="text-align:left">125B</td>
+<td style="text-align:left">48개 레이어, MoE 기반 본체</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>N-gram Embedding</strong></td>
+<td style="text-align:left">51B</td>
+<td style="text-align:left">레이어 2 배치, 2천만 개 엔트리의 보조 메모리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MTP Module</strong></td>
+<td style="text-align:left">4B</td>
+<td style="text-align:left">투기적 디코딩을 위한 Multi-Token Prediction</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>총 파라미터 (Total)</strong></td>
+<td style="text-align:left"><strong>약 180B+</strong></td>
+<td style="text-align:left">모델 전체 지식 용량</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>활성화 파라미터 (Activated)</strong></td>
+<td style="text-align:left"><strong>6B</strong></td>
+<td style="text-align:left">토큰당 실제 연산에 참여하는 가중치</td>
+</tr>
+</tbody>
+</table>
+<p>약 180B를 분모로 두면 6B는 산술적으로 약 3.3%지만, 이는 토큰당 계산 참여량일 뿐 다운로드·저장·모델 로딩 규모가 6B라는 뜻은 아닙니다. 메모리 대역폭과 처리량은 shard 배치, 정밀도, expert parallelism, host offload, sequence length와 serving framework에 따라 달라지므로 별도 실측이 필요합니다.</p>
+<hr />
+<h4 id="4-gated-deltanet-gdn-선형-재귀를-통한-압축적-기억">4. Gated DeltaNet (GDN): 선형 재귀를 통한 압축적 기억</h4>
+<p>GDN은 48개 레이어 중 3/4에 적용되어 문맥 정보를 선형 복잡도로 압축합니다. GDN의 핵심은 단순한 가산적 선형 어텐션을 넘어선 <strong>&quot;Erase-and-Write&quot;</strong> 메커니즘에 있습니다.</p>
+<ul>
+<li><strong>기술적 수식 분석:</strong> GDN의 상태 업데이트는 다음 수식(Equation 5)을 따릅니다:
+$$S_t = \alpha_t(I - \beta_t k_t k_t^\top)S_{t-1} + \beta_t k_t v_t^\top$$
+여기서 전역 감쇠 게이트($\alpha_t$)는 상태의 수명을 제어하며, 쓰기 게이트($\beta_t$)는 새로운 정보의 기록 강도를 결정합니다. 특히 랭크-1 델타 전이($- \beta_t k_t k_t^\top S_{t-1}$)를 통해 기존 정보와 유사한 입력이 들어올 경우 연관성을 정교하게 업데이트하여 상태 폭발을 방지합니다.</li>
+<li><strong>안정성 확보:</strong> <strong>L2Norm</strong> 기법을 $q, k$ 투영에 적용하여 델타 업데이트 시 수치적 안정성을 확보했습니다.</li>
+<li><strong>단계별 파라미터화:</strong>
+<ol>
+<li><strong>Projections:</strong> 입력 신호를 $q, k, v$ 스트림으로 투영.</li>
+<li><strong>ShortConv:</strong> 국소적 유도 편향(Local Inductive Bias) 부여를 위한 짧은 인과적 컨볼루션.</li>
+<li><strong>L2Norm:</strong> 수치 안정성을 위한 정규화.</li>
+</ol>
+</li>
+<li><strong>커널 가속 주장:</strong> 별도 FlashQLA 저장소는 특정 NVIDIA Hopper/Blackwell 구성의 커널 microbenchmark에서 FLA Triton 대비 전방향 2~3배, 후방향 약 2배를 보고합니다. 이는 전체 모델의 end-to-end throughput 향상률이 아닙니다.</li>
+</ul>
+<hr />
+<h4 id="5-qwen-sparse-attention-qsa-마이크로-블록-기반-정밀-검색">5. Qwen Sparse Attention (QSA): 마이크로 블록 기반 정밀 검색</h4>
+<p>하이브리드 구조에서 4개 레이어 중 1개는 전역 정보의 정밀한 검색을 위해 QSA를 사용합니다. QSA는 기존 DSA가 가졌던 인덱싱 비용 문제를 해결했습니다.</p>
+<ul>
+<li><strong>인덱싱 연산 최적화:</strong> QSA는 시퀀스를 <strong>마이크로 블록(Micro-block)</strong> 단위로 집계하는 Lightweight Indexer를 도입했습니다. 이를 통해 인덱싱 연산 비용을 기존 $O(n^2)$에서 **$O(n^2/r)$**로 대폭 감축했습니다 (여기서 $r=4$는 압축률).</li>
+<li><strong>동작 메커니즘:</strong> 인덱서가 마이크로 블록 레벨에서 중요도를 산출하면, Sparse Core Attention은 선택된 영역에 대해서만 정밀 연산을 수행합니다.</li>
+<li><strong>저자 측 kernel benchmark:</strong> 기술보고서는 특정 1M-token 실험에서 dense attention 대비 <strong>Prefill 7.6배, Decode 4.9배</strong>를 보고합니다. 하드웨어·batch·framework를 바꾼 독립 실측으로 일반화할 수 없습니다.</li>
+<li><strong>MTP와의 통합:</strong> MTP 모듈은 QSA의 인덱스를 재사용함으로써 투기적 디코딩(Speculative Decoding)의 효율을 높이고 추론 지연 시간을 개선합니다.</li>
+</ul>
+<hr />
+<h4 id="6-4-branch-gated-residual-gr-신호-희석-방지와-학습-안정화">6. 4-branch Gated Residual (GR): 신호 희석 방지와 학습 안정화</h4>
+<p>심층 네트워크에서 초기 레이어의 신호가 희석되는 병목 현상을 해결하기 위해 잔차 연결 구조를 4분기 병렬 경로로 확장한 GR 설계를 도입했습니다.</p>
+<ul>
+<li><strong>이미지 분석 [SOURCE_IMAGE_3] (Figure 7):</strong> 아키텍처 분석 결과, 4개의 분기 중 **Branch 0($b_0$)**는 레이어 0 GDN의 출력을 레이어 10~19의 Softmax Attention 레이어로 직접 전달하는 **'전용 장거리 경로(Long-range pathway)'**로 기능합니다. 이는 심층부 레이어가 초기 문맥의 핵심 정보를 직접 참조하게 함으로써 전역적 문맥 통합력을 극대화합니다.</li>
+<li><strong>동적 제어:</strong> 데이터 기반의 동적 게이트(Dynamic Gating)가 각 분기의 읽기/쓰기 강도를 조절하여 정보 흐름을 최적화합니다.</li>
+<li><strong>메모리 트래픽:</strong> 기술보고서는 residual-state 저장에 FP8을 사용해 해당 state의 메모리 트래픽을 줄이는 설계를 설명합니다. 이것이 약 360GB weight artifact 전체의 로딩·통신 병목을 절반으로 줄인다는 뜻은 아닙니다.</li>
+</ul>
+<hr />
+<h4 id="7-n-gram-host-offload-연산-비용-없는-용량-확장">7. N-gram Host Offload: 연산 비용 없는 용량 확장</h4>
+<p>Qwen3.8-Flash-Next는 <strong>20,000,000개</strong>의 엔트리를 보유한 <strong>51B 규모의 N-gram Embedding</strong>을 통해 지식 기억 능력을 비약적으로 향상시켰습니다.</p>
+<ul>
+<li><strong>아키텍처적 배치:</strong> 모델의 <strong>레이어 2</strong>에 단일 레이어로 배치되어, 현재 토큰과 이전 토큰 조합의 국소적 패턴을 기억합니다.</li>
+<li><strong>호스트 오프로딩:</strong> 대규모 엔트리 테이블을 호스트 메모리(Host Memory)에 저장하고, 모델의 전방 연산과 병렬로 **비동기 프리페칭(Asynchronous Prefetching)**을 수행합니다.</li>
+<li><strong>효율성 경계:</strong> 저자 측 구성에서는 조회 위치를 미리 결정하고 host memory에서 비동기 prefetch해 추가 FLOPs와 관측 latency가 작았다고 보고합니다. 실제 효과는 CPU 메모리, PCIe/NVLink 대역폭과 overlap 성공 여부에 달려 있으며, GPU 메모리 점유가 항상 0인 것으로 일반화하면 안 됩니다.</li>
+</ul>
+<hr />
+<h4 id="8-최적화-전략-muon과-adamw의-하이브리드-운용">8. 최적화 전략: Muon과 AdamW의 하이브리드 운용</h4>
+<p>학습 최적화를 위해 Muon 옵티마이저를 도입하고, 시스템적 한계를 극복하기 위해 Canzona 라이브러리를 활용했습니다.</p>
+<ul>
+<li><strong>분리 운용:</strong> 2D 선형 맵 웨이트(Attention, GDN, MoE Experts)에는 Muon을 적용하고, 임베딩과 라우터 등에는 AdamW를 사용하는 이원 최적화 전략을 취했습니다.</li>
+<li><strong>Muon 디테일:</strong> 직교화 성능을 높이기 위해 <strong>Newton-Schulz 반복을 8단계</strong>로 설정하여 학습 안정성을 확보했습니다. 또한 Fused Parameter Matrix를 독립적인 선형 변환 단위로 분할(Splitting)하여 수학적 엄밀성을 높였습니다.</li>
+<li><strong>Canzona를 통한 부하 분산:</strong> <strong>$\alpha$-balanced 파티셔닝</strong> 기법을 적용하여 Muon의 무거운 직교화 연산을 DP 랭크 간에 균등하게 분산시킴으로써 연산 병목을 해결했습니다.</li>
+<li><strong>Scaling Law 변화:</strong> 새로운 아키텍처에서는 <strong>Batch Size Warmup이 불필요</strong>하며, 오히려 이를 적용할 경우 <strong>18.8%의 연산 낭비</strong>가 발생함을 실측했습니다. 따라서 초기부터 목표 배치 사이즈로 학습을 진행하여 수렴 속도를 높였습니다.</li>
+</ul>
+<hr />
+<h4 id="9-문맥-길이-지원-native-262k에서-yarn-1m까지">9. 문맥 길이 지원: Native 262K에서 YaRN 1M까지</h4>
+<p>저자 측 장문맥 평가에서는 개선이 보고됐지만, 이는 모든 1M-token workload에서 성능 유지가 입증됐다는 뜻은 아닙니다.</p>
+<ul>
+<li><strong>지원 범위:</strong> <strong>Native 262,144 토큰</strong>을 지원하며, YaRN 기법을 통해 최대 <strong>1,000,000 토큰</strong>까지 확장이 가능합니다.</li>
+<li><strong>검증 결과:</strong> RULER 및 MRCR 벤치마크 결과, 512K 이상의 초장기 문맥 구간에서 QSA는 Full Attention 대비 검색 정확도를 약 3%p (90.08 → 93.00) 개선했습니다. 이는 GDN의 효율적인 기억과 QSA의 정밀한 검색이 결합된 결과입니다.</li>
+</ul>
+<hr />
+<h4 id="10-학습-효율성의-실체-1-9-flops의-정확한-산출-근거">10. 학습 효율성의 실체: 1/9 FLOPs의 정확한 산출 근거</h4>
+<p>벤더가 주장하는 1/9 학습 비용 절감은 이전 세대 플래그십인 <strong>Qwen3.7-Plus 397B-A17B</strong>와의 정밀 비교를 통해 산출되었습니다.</p>
+<ul>
+<li><strong>산출 논리:</strong>
+<ol>
+<li>활성화 파라미터를 17B에서 6B로 축소 (<strong>약 1/3</strong>).</li>
+<li>동일 성능 도달에 필요한 학습 토큰 수를 <strong>약 1/3</strong>로 단축.</li>
+<li>결과적으로 $(1/3 \text{ Activated Params}) \times (1/3 \text{ Tokens}) \approx \mathbf{1/9 \text{ Training FLOPs}}$.</li>
+</ol>
+</li>
+<li><strong>경계 사항:</strong> 이 수치는 순수 학습 단계의 연산량을 의미하며, 추론 API 가격이나 전체 소유 비용(TCO)이 반드시 1/9로 비례하여 감소하는 것은 아닙니다.</li>
+</ul>
+<hr />
+<h4 id="11-pre-training-및-post-training-벤치마크-분석">11. Pre-training 및 Post-training 벤치마크 분석</h4>
+<p>기술보고서의 pre-training 비교 14개 중 <strong>8개에서 앞섰고 6개에서 뒤졌습니다</strong>. 아래 수치는 Qwen Team의 평가 결과이며, 독립 평가기관의 재현 결과가 아닙니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">벤치마크</th>
+<th style="text-align:center">Qwen3.8-Flash-Next (6B act.)</th>
+<th style="text-align:center">Qwen3.7-Plus (17B act.)</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>MMLU-Pro</strong></td>
+<td style="text-align:center"><strong>73.23</strong></td>
+<td style="text-align:center">70.90</td>
+<td style="text-align:left">승리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SuperGPQA</strong></td>
+<td style="text-align:center"><strong>51.36</strong></td>
+<td style="text-align:center">48.42</td>
+<td style="text-align:left">승리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GSM8K</strong></td>
+<td style="text-align:center"><strong>93.29</strong></td>
+<td style="text-align:center">92.95</td>
+<td style="text-align:left">승리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EvalPlus (Coding)</strong></td>
+<td style="text-align:center"><strong>78.76</strong></td>
+<td style="text-align:center">78.06</td>
+<td style="text-align:left">승리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MMLU</strong></td>
+<td style="text-align:center">90.36</td>
+<td style="text-align:center"><strong>90.43</strong></td>
+<td style="text-align:left">-0.07p (대등)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MATH</strong></td>
+<td style="text-align:center">72.78</td>
+<td style="text-align:center"><strong>74.38</strong></td>
+<td style="text-align:left">-1.6p (열세)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>분석:</strong> 코딩(EvalPlus, SWEBench-Pretrain) 및 실무 에이전트 작업(CoWorkBench, 73.9점)에서 특히 강점을 보였습니다. 다만, MATH와 MMLU 등 전통적인 지식/수학 지표에서는 Qwen3.7-Plus에 비해 최대 2.6포인트 이내의 근소한 차이로 뒤처지는 모습도 보였습니다. 이는 'Ultimate Cost-Efficiency'가 성능의 절대적 압도가 아닌, 자원 대비 효율의 극대화에 초점이 맞춰져 있음을 시사합니다.</li>
+</ul>
+<hr />
+<h4 id="12-평가-프로토콜의-한계와-비선두-결과-caveats">12. 평가 프로토콜의 한계와 비선두 결과 (Caveats)</h4>
+<p>기술적 투명성을 위해 본 모델이 모든 지표에서 1위가 아님과 벤더 고유의 평가 방식이 포함되었음을 명시합니다.</p>
+<ul>
+<li><strong>비선두 결과:</strong> <strong>NL2Repo-Bench (54.2점)</strong> 및 <strong>HLE (40.0점)</strong> 등 특정 리포지토리 수준 코딩 및 초고난도 추론 지표에서는 타 모델 대비 비선두권을 형성했습니다.</li>
+<li><strong>평가 편향 가능성 (독립 검증 필요):</strong>
+<ul>
+<li><strong>Data Correction:</strong> SWE-bench Pro의 'Problematic tasks' 수정이나 MathVision의 'Ground-truth annotations' 수정 등 벤더 자체적인 데이터 정제가 결과에 영향을 미쳤을 수 있습니다.</li>
+<li><strong>Protocol:</strong> 두 가지 하네스 중 최고점을 선택하는 방식(DeepSWE 1.1)이나 CoWorkBench와 같은 자체 벤치마크 사용은 독립적인 재현 및 검증이 필요합니다.</li>
+<li><strong>In-house / harness / judge:</strong> CoWorkBench와 RecreationBench는 in-house benchmark입니다. DeepSWE 1.1은 두 harness 중 높은 결과를 택했고, HLE는 GPT-4o judge, Vision2Web은 GPT-5.4 judge를 사용했습니다. 표 전체에 confidence interval은 제시되지 않았습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="13-배포-현실-360gb-weight-index와-가용성">13. 배포 현실: 360GB Weight Index와 가용성</h4>
+<p>실제 시스템 도입을 위한 물리적 지표는 다음과 같습니다.</p>
+<ul>
+<li><strong>가중치 규모:</strong> Hugging Face 기준 약 <strong>359,999,963,128 bytes (약 360GB)</strong> 규모입니다.</li>
+<li><strong>샤드 구성:</strong> 총 <strong>131개</strong>의 샤드 아티팩트로 분할되어 있습니다.</li>
+<li><strong>리비전 정보:</strong> <code>f5d0827...</code> (공개, 비게이트 방식).</li>
+<li><strong>인프라 요건:</strong> 활성화 파라미터는 6B이지만, 전체 180B 규모의 가중치를 로드하고 FP8 Residual State를 관리하기 위한 충분한 VRAM 및 고속 스토리지가 요구됩니다.</li>
+</ul>
+<hr />
+<h4 id="14-라이선스-제한-custom-qwen-community-license-1-0">14. 라이선스 제한: Custom Qwen Community License 1.0</h4>
+<p>본 모델은 완전한 오픈 소스(Open Source)가 아닌 <strong>'Open-weight/Custom License'</strong> 모델입니다.</p>
+<blockquote>
+<p><strong>[주의: 라이선스 적용 범위 및 제한]</strong></p>
+<ul>
+<li>본 모델의 가중치 사용은 <strong>Custom Qwen Community License 1.0</strong>에 의거합니다.</li>
+<li>상업적인 <strong>모델-서비스(MaaS)</strong> 제공이나 <strong>AI 워크 어시스턴트(AI Work Assistant)</strong> 용도로 사용하는 경우 Qwen의 <strong>별도 라이선스</strong>가 필요합니다. 공개 조항만으로 유료 여부나 계약 조건을 추정하지 않습니다.</li>
+<li>공식 블로그는 managed **Qwen3.8-Flash API를 <code>coming soon</code>**으로 표시합니다. 공개 weight인 Qwen3.8-Flash-Next와 production Qwen3.8-Flash를 동일 artifact로 단정하면 안 됩니다.</li>
+</ul>
+</blockquote>
+<hr />
+<h4 id="15-반증-및-실측-체크리스트-verification-checklist">15. 반증 및 실측 체크리스트 (Verification Checklist)</h4>
+<p>사용자가 벤더의 주장을 실측하기 위해 확인해야 할 기술적 체크포인트입니다.</p>
+<ul>
+<li>[ ] <strong>학습 vs 추론 효율 비등가성:</strong> 학습 FLOPs 1/9 절감이 실제 추론 Latency 및 TCO 절감으로 직결되는지 프레임워크별 실측.</li>
+<li>[ ] <strong>Muon 연산 오버헤드:</strong> Muon의 Newton-Schulz 연산(8단계) 및 직교화 과정이 실제 추론 지연 시간에 미치는 영향 검증.</li>
+<li>[ ] <strong>YaRN 성능 저하:</strong> 1M 토큰 확장 시, 4K 이하 단기 문맥에서의 정보 손실 및 성능 저하 여부 측정.</li>
+<li>[ ] <strong>N-gram PCIe 병목:</strong> 호스트 메모리 오프로딩 시 PCIe 대역폭이 토큰 생성 속도를 저해하는 임계점 파악.</li>
+</ul>
+<hr />
+<h4 id="16-출처-및-참고-문헌-sources">16. 출처 및 참고 문헌 (Sources)</h4>
+<p>본 문서는 다음의 공식 기술 리포트 및 데이터를 바탕으로 작성되었습니다.</p>
+<p><strong>BibTeX Information:</strong></p>
+<pre><code class="language-bibtex">@techreport{qwen2026design,
+  title = {On the Design of {Qwen3.8-Next} Architecture: Evaluation, Efficiency, and Training Stability},
+  author = {{Qwen Team}},
+  institution = {Alibaba Group},
+  month = {August},
+  year = {2026}
+}
+
+@misc{qwen3.8flashnext,
+  title = {{Qwen3.8-Flash-Next}: A New Architecture, Towards Ultimate Cost-Efficiency},
+  author = {{Qwen Team}},
+  month = {August},
+  year = {2026},
+  url = {https://qwen.ai/blog?id=qwen3.8-flash-next}
+}
+</code></pre>
+<p><strong>참조 문서:</strong></p>
+<ol>
+<li>Qwen Team Blog (2026-08-26): 공식 배포 발표 및 아키텍처 가이드.</li>
+<li>Qwen3.8-Flash-Next Fact and Boundary Card: 모델 사양 및 물리적 수치 명세.</li>
+<li>Technical Claim Audit: 아키텍처 및 벤치마크 신뢰성 검증 보고서.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/hugging-face/">Hugging Face</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

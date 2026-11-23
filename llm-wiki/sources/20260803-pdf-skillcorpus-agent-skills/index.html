@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillCorpus: Consolidating and Evaluating the Open Skill Ecosystem for Real-World LLM Agents</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>SkillCorpus: Consolidating and Evaluating the Open Skill Ecosystem for Real-World LLM Agents</h1>
+<p class="page-meta">논문 · 2026-08-03</p>
+<h2 id="요약">요약</h2>
+<p>SkillCorpus 프리프린트는 오픈 에이전트 스킬의 정제·검색과 벤치마크 성능을 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=UhFKfKhy_bA">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="skillcorpus-실전형-llm-에이전트를-위한-오픈-스킬-생태계-통합-및-평가-분석-보고서-arxiv-2607-15557v4">SkillCorpus: 실전형 LLM 에이전트를 위한 오픈 스킬 생태계 통합 및 평가 분석 보고서 (arXiv 2607.15557v4)</h3>
+<p>본 보고서는 제공된 연구 자료(<code>SkillCorpus: Consolidating and Evaluating the Open Skill Ecosystem for Real-World LLM Agents</code>)를 바탕으로 작성되었습니다. 본 연구는 동료 평가(Peer-review)를 거치지 않은 2026년 2분기 기준의 프리프린트(Preprint) 상태임을 밝힙니다.</p>
+<hr />
+<h4 id="1-서론-skill-md와-skillcorpus의-개념-이해">1. 서론: SKILL.md와 SkillCorpus의 개념 이해</h4>
+<p>현대 LLM 에이전트의 능력 확장은 단순히 모델 파라미터를 늘리는 '스케일링'의 단계를 넘어, 외부 도구와 지식을 결합하는 시스템적 접근으로 진화하고 있습니다. 이를 요리에 비유하자면, LLM 에이전트는 다양한 요리법을 익힌 '숙련된 요리사'이며, <strong>SKILL.md</strong> 파일은 특정 요리 기법이나 특수 도구 사용법이 상세히 적힌 '레시피 카드'와 같습니다.</p>
+<p>요리사가 모든 레시피를 외울 수는 없지만, 주방에 잘 정리된 레시피 카드가 있다면 필요할 때마다 이를 참고해 복잡한 요리를 완수할 수 있습니다. 이는 에이전트 아키텍처에서 널리 활용되는 <strong>RAG(Retrieval-Augmented Generation)</strong> 원칙, 즉 지식을 외부에 저장하고(Externalize) 필요할 때 검색하는(Retrieve) 패턴의 확장판입니다. <strong>SkillCorpus</strong>는 인터넷에 흩어져 있는 수많은 오픈소스 레시피를 수집·검증하여, 요리사(에이전트)에게 필요한 순간 가장 적합한 도구를 제공하는 <strong>'지능형 레시피 라이브러리'</strong> 역할을 수행합니다.</p>
+<h4 id="2-데이터-큐레이션-821-000개에서-96-401개로의-압축-과정">2. 데이터 큐레이션: 821,000개에서 96,401개로의 압축 과정</h4>
+<p>연구팀은 약 821,000개의 원시 스킬 파일을 수집한 후, 이를 실제 활용 가능한 96,401개의 '활성 세트(Active Set)'로 정제하기 위해 다음과 같은 <strong>6단계 큐레이션 파이프라인</strong>을 구축했습니다.</p>
+<ol>
+<li><strong>Parse (구문 분석):</strong> SKILL.md 규격 준수 여부 및 구조적 필터링을 수행합니다.</li>
+<li><strong>Length/Form (길이 및 형식):</strong> 텍스트 양과 형식이 유효한지 검토합니다.</li>
+<li><strong>Deduplication (중복 제거):</strong> 전체 데이터 감소량의 **64%**를 차지하는 핵심 단계입니다. 지문 기반의 '정확 일치'와 1024차원 임베딩 기반의 '시맨틱 판정'을 병행합니다. 특히 시맨틱 계층에서의 중복 제거는 검색 스택(Retrieval Stack) 학습 시 기능적으로 동일한 스킬이 하드 네거티브(Hard Negative)로 샘플링되어 발생하는 **'거짓 음성 충돌(False-negative collisions)'**을 방지하여 데이터의 순도를 극대화합니다.</li>
+<li><strong>LLM Scoring (점수 산정):</strong> LLM 판독기를 통해 품질 점수를 부여합니다.</li>
+<li><strong>Safety + Licence (안전 및 라이선스):</strong> 보안 검사와 OSI 준수 여부를 판별합니다.</li>
+<li><strong>Source-prior + Embed (출처 우선순위 및 임베딩):</strong> 출처 신뢰도를 반영하고 인덱싱을 완료합니다.</li>
+</ol>
+<h4 id="3-분류-체계-및-품질-관리-프레임워크">3. 분류 체계 및 품질 관리 프레임워크</h4>
+<h5 id="16종-taxonomy-분류">16종 Taxonomy 분류</h5>
+<p>SkillCorpus는 수집된 스킬을 Dev, Data, Writing, DevOps-Infra 등 총 16가지 카테고리로 분류합니다. 특히 <strong>AI-ML</strong> 분류에는 엄격한 규칙이 적용됩니다. 단순히 내부적으로 LLM을 호출하는 도구가 아니라, 페르소나, 에이전트, 모델 등 <strong>AI 시스템 자체를 주요 결과물로 제공</strong>하는 경우에만 이 카테고리로 분류됩니다.</p>
+<h5 id="3대-품질-facet과-19개-flag">3대 품질 Facet과 19개 Flag</h5>
+<p>스킬의 품질은 유용성(Utility), 강건성(Robustness), 안전성(Safety)의 세 가지 측면에서 평가됩니다. 총 19개의 플래그가 사용되며, 특히 다음의 **5개 하드 게이트(Hard Gate)**와 <strong><code>blocked.malware</code> 정규표현식</strong>에 적발된 스킬은 즉시 배제됩니다.</p>
+<ul>
+<li><strong>하드 게이트 항목:</strong> 프롬프트 주입(Prompt Injection), 명령 주입(Command Injection), 안전하지 않은 실행, 권한 우회, CSAM(아동 성착취물) 위험.</li>
+</ul>
+<h4 id="4-기술-스택-검색-및-선택-시스템-retrieval-and-selection-stack">4. 기술 스택: 검색 및 선택 시스템(Retrieval-and-Selection Stack)</h4>
+<p>사용자의 작업 쿼리에 최적화된 스킬을 매칭하기 위해 SkillCorpus는 전용 검색 스택을 제공합니다.</p>
+<ol>
+<li><strong>후보 회상(Recall) 및 재순위화(Rerank):</strong> <strong>Qwen3-Emb-0.6B</strong> 및 <strong>Qwen3-Rank-0.6B</strong> 모델을 백본으로 삼아 fine-tuning된 시스템을 사용합니다. 1024차원의 임베딩 공간에서 관련성 높은 후보를 추출합니다.</li>
+<li><strong>LLM 선택(Selector):</strong> 최종 단계에서 LLM이 스킬의 전문을 검토하여 0~2개의 정교한 도구만을 에이전트 프롬프트에 주입합니다.</li>
+</ol>
+<p>이 과정에서 에이전트가 스킬을 실행하는 구조인 **Harness(하네스)**의 역할이 결정적입니다. 특히 본 연구에서 활용된 <strong>Raven</strong> 하네스는 단순히 코드를 실행하는 데 그치지 않고, 결과가 잘못되었을 때 이를 바로잡는 **'실행-검증-수정(Execute–verify–fix) 루프'**를 완수한다는 점에서 정적인 추론 위주의 <strong>OpenClaw</strong>보다 우수한 성능을 보였습니다.</p>
+<h4 id="5-성능-평가-결과-및-핵심-수치-분석">5. 성능 평가 결과 및 핵심 수치 분석</h4>
+<p>연구팀은 3개의 벤치마크와 오픈 백본(Q-27B, Q-397B), 그리고 Claude Opus 4.7을 통해 성능을 측정했습니다.</p>
+<ul>
+<li><strong>SkillsBench (결정론적 검증 작업):</strong> 평균 <strong>+7.5±2.3%p</strong> 향상 (<strong>z=3.2</strong>). 특히 Raven × Q-397B 조합에서 9.2% → 22.6%로 최대 성능을 기록했습니다.</li>
+<li><strong>GDPVal (실제 경제 및 금융 작업):</strong> 평균 <strong>+1.51±0.49%p</strong> 향상 (<strong>z=3.1</strong>).</li>
+<li><strong>QwenClawBench (실제 사용자 분포 기반 작업):</strong> 평균 <strong>+2.79±0.70%p</strong> 향상 (<strong>z=4.0</strong>).</li>
+<li><strong>Frontier Check:</strong> Claude Opus 4.7에서도 39.1% → 47.1%로 <strong>+8.0%p</strong> 향상되어 상용 모델에 대한 유효성을 입증했습니다.</li>
+</ul>
+<p>단, SkillCorpus가 만능은 아닙니다. 특정 작업에서는 오히려 성능이 하락하는 <strong>퇴행(Regression)</strong> 현상이 발생할 수 있으며, 이는 주입된 스킬의 절차가 작업의 구조와 맞지 않을 때 발생합니다.</p>
+<h4 id="6-분석의-한계와-경계-조건-boundary-analysis">6. 분석의 한계와 경계 조건(Boundary Analysis)</h4>
+<ul>
+<li><strong>커버리지 경계(Coverage Boundary):</strong> 스킬의 도메인 포괄 범위와 성능 향상 사이에는 높은 상관관계(+2.2%p ~ +25.1%p)가 확인되었습니다. 성능 향상이 저조한 도메인의 병목 현상은 검색 로직의 문제가 아니라 해당 분야의 스킬 자체가 부족한 **'공급(Supply)의 문제'**입니다. 따라서 향후 과제는 단순 검색 최적화가 아닌 **스킬 생성(Generation)이나 자기 진화(Self-evolution)**에 집중되어야 합니다.</li>
+<li><strong>하네스 경계(Harness Boundary):</strong> 앞서 언급한 Raven의 우월성은 정성적 로그 분석 결과이며, '검증 루프' 유무가 성능 차이의 핵심 기제로 추정되나 확정된 메커니즘은 아닙니다.</li>
+<li><strong>실험 제약:</strong> 구성 요소별 기여도를 분석한 Ablation 수치는 단일 실행(Single-run) 기반이므로, 반복 실험을 통한 통계적 유의성 확보에는 한계가 있습니다.</li>
+</ul>
+<h4 id="7-연구의-제약-사항-및-윤리적-고려-사항">7. 연구의 제약 사항 및 윤리적 고려 사항</h4>
+<ul>
+<li><strong>데이터 스냅샷:</strong> 본 코퍼스는 <strong>영어 중심</strong>이며, <strong>2026년 2분기</strong> 시점의 데이터입니다. 태스크별 데이터 오염(Leakage)에 대한 완벽한 감사는 이루어지지 않았습니다.</li>
+<li><strong>평가 방식:</strong> LLM 판독기를 통한 텍스트 기반 평가는 샌드박스 기반의 실시간 보안 검증을 완벽히 대체할 수 없습니다.</li>
+<li><strong>공개 정책:</strong> 데이터와 모델, 코드는 논문 채택 후 공개 예정이므로 현시점에서 즉각적인 재현은 보장되지 않습니다.</li>
+<li><strong>라이선스 준수:</strong> 코퍼스 내 모든 스킬은 MIT, Apache-2.0 등 <strong>OSI 승인 오픈소스 라이선스</strong>를 준수하여 상업적 재배포가 가능하도록 설계되었습니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

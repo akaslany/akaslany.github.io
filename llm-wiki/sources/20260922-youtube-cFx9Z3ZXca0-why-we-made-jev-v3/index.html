@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why We Made Jev — Diogo Almeida, TypeSafe Co-founder &amp; CEO</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Why We Made Jev — Diogo Almeida, TypeSafe Co-founder &amp; CEO</h1>
+<p class="page-meta">YouTube · 2026-09-22</p>
+<h2 id="요약">요약</h2>
+<p>The launch of Jev was characterized by an intensity that CEO Diogo Almeida described in visceral terms, depicting himself as a &quot;ragged corpse of a person&quot; and &quot;unhinged&quot; by the…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=cFx9Z3ZXca0">출처</a> · <a href="https://www.youtube.com/watch?v=RW_0PqUFq3w">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="technical-report-the-launch-and-philosophy-of-jev-by-typesafe">Technical Report: The Launch and Philosophy of Jev by TypeSafe</h3>
+<h4 id="1-introduction-the-launch-context">1. Introduction: The Launch Context</h4>
+<p>The launch of Jev was characterized by an intensity that CEO Diogo Almeida described in visceral terms, depicting himself as a &quot;ragged corpse of a person&quot; and &quot;unhinged&quot; by the physical and mental toll of the release week. Amidst what he characterizes as an AI field resembling a &quot;carnival house of mirrors&quot;—where industry discourse is often detached from technical reality—Almeida views the Jev launch as a moment where the market finally came &quot;in sync with reality.&quot;</p>
+<p>A defining pillar of TypeSafe’s launch strategy was the explicit prioritization of engineers and developers over VIP investors. Almeida expressed a sense of &quot;internal gratitude&quot; toward the developer community, intentionally focusing on technical town halls rather than high-profile financial stakeholders. This reflects TypeSafe's core mission: building a tool for the &quot;builders&quot; who require AI to function as reliable software infrastructure.</p>
+<h4 id="2-defining-jev-and-system-one-models">2. Defining Jev and &quot;System One&quot; Models</h4>
+<p>Jev represents a departure from traditional &quot;decision models,&quot; introducing a new class of &quot;System One&quot; models. Almeida identifies three primary characteristics that distinguish this class: it is machine-native, large programmable, and optimized for code consumption. Unlike pre-trained LLMs designed for internet-scale autocomplete or RLHF models tuned for chatbot replies, Jev is built from the &quot;deep internals&quot; up to be consumed by code rather than humans.</p>
+<p>The name &quot;Jev&quot; is a direct reference to the Jevons Paradox. By optimizing for the &quot;intelligence per dollar&quot; frontier, TypeSafe posits that as the cost of intelligence decreases, the total economic consumption of it will paradoxically explode. Jev is positioned not as a human coworker, but as the &quot;TCP&quot; layer of intelligence—a core, programmable utility.</p>
+<h4 id="3-technical-critique-rlhf-mode-collapse-and-calibration">3. Technical Critique: RLHF, Mode Collapse, and Calibration</h4>
+<p>Almeida uses his &quot;soap box&quot; to deliver a sharp critique of Reinforcement Learning from Human Feedback (RLHF), arguing that it introduces &quot;total poison&quot; into a model’s probability distribution. The primary failure mode identified is &quot;mode dropping&quot; or &quot;mode collapse.&quot; To avoid errors that are easily detectable in long strings, RLHF models become overly conservative, dropping minority classes and outliers to focus on common patterns. This results in a loss of calibration—the model’s ability to represent its own internal confidence accurately.</p>
+<p>This critique directly addresses Yan LeCun’s famous &quot;LMs are doomed&quot; slide, which features a pie chart where the probability of error is represented as a tiny slice that grows exponentially with sequence length. Almeida argues that while LeCun is mathematically correct, his thesis fails empirically because models mode-drop to maintain consistency over long strings. However, this consistency comes at the cost of &quot;fracturing&quot; the model's intelligence. Consequently, TypeSafe pursues a &quot;pragmatic&quot; approach, prioritizing immediate reliability over early-stage research concepts like JEPA.</p>
+<h4 id="4-rlcd-a-new-north-star-for-training">4. RLCD: A New &quot;North Star&quot; for Training</h4>
+<p>TypeSafe’s training methodology, &quot;RLCD&quot; (Reinforcement Learning from Code/Data), establishes a new North Star for the industry: creating programmable AI by replacing the human-in-the-loop with programs-in-the-loop. This marks a significant evolution in the history of Reinforcement Learning:</p>
+<ul>
+<li><strong>PPO:</strong> Historically linked to the work of Paul Christiano, famously used to teach a robot to perform a backflip.</li>
+<li><strong>RLHF:</strong> Popularized by OpenAI's &quot;learning to summarize&quot; research, focusing on instruction following for human preferences.</li>
+<li><strong>RLCD:</strong> TypeSafe’s methodology aimed at creating a &quot;cognitive core&quot; that follows programmatic instructions with high-nines reliability.</li>
+</ul>
+<p>Almeida emphasizes the &quot;bitterest lesson&quot; of this development: data quality and the selection of the &quot;right task&quot; (the North Star) are far more load-bearing than raw compute or architecture. TypeSafe views itself fundamentally as a &quot;Data Lab,&quot; where surgical data intervention is what provides the reliability raw scaling laws cannot.</p>
+<h4 id="5-api-design-and-programming-primitives">5. API Design and Programming Primitives</h4>
+<p>The Jev API rejects traditional chatbot abstractions in favor of three specific primitives designed to map to standard programming logic:</p>
+<ul>
+<li><strong>Nu:</strong> Derived as a subset of the name &quot;Bernoulli,&quot; this primitive represents a continuous Bernoulli probability. Almeida argues that standard Booleans are a &quot;lossy&quot; and &quot;jagged&quot; abstraction for AI; Nu allows for probabilistic logic that integrates smoothly into a computer's &quot;guts.&quot;</li>
+<li><strong>Score:</strong> Unlike simple integers or floats, the Score primitive is specifically optimized for sorting and thresholding. It allows developers to define clear boundaries for model confidence in automated workflows.</li>
+<li><strong>Choice:</strong> Positioned as the &quot;right way&quot; to handle enums and switch/match statements, this primitive prevents the model from &quot;going off the rails&quot; into free-text when a programmatic selection is required.</li>
+</ul>
+<p>Almeida’s &quot;pro-tips&quot; for developers involve breaking problems down into their &quot;smallest semantic units.&quot; He advises against using &quot;disgusting&quot; system messages or global variables, advocating instead for nested JSON structures and parallelized independent queries to maximize verifiability and engineering hygiene.</p>
+<h4 id="6-reliability-robustness-and-determinism">6. Reliability, Robustness, and Determinism</h4>
+<p>While developers often request strict determinism, Almeida argues that &quot;robustness&quot; is the more critical property for software. Robustness ensures that semantically identical prompts yield similar outputs. TypeSafe tests this by injecting UUIDs or nonces into prompts; a robust model should remain unaffected by this minor noise.</p>
+<p>TypeSafe is committed to not changing model versions once deployed, as Almeida views the stochastic breaking of developer dependencies as &quot;insanity.&quot; However, the company plans to iterate on new versions at a higher velocity than other providers to stay on the frontier of intelligence per dollar.</p>
+<h4 id="7-data-strategy-and-dark-data">7. Data Strategy and &quot;Dark Data&quot;</h4>
+<p>TypeSafe prioritizes synthetic data over user data, which Almeida claims &quot;fractures intelligence&quot; by overfitting the model to the present. Instead, &quot;data artists&quot; at TypeSafe surgically address &quot;jaggedness&quot; in the model's cognitive core. This strategy targets four major use case families:</p>
+<ol>
+<li><strong>Dark Data:</strong> Massive, hoarded datasets that were previously too expensive to process. Jev’s &quot;intelligence per dollar&quot; efficiency makes these datasets economically viable for the first time.</li>
+<li><strong>Coding Agents:</strong> Autonomous software development environments that require high-reliability programmatic loops.</li>
+<li><strong>Real-time/Assistant-like things:</strong> Low-latency applications such as voice interfaces or e-commerce.</li>
+<li><strong>Smart/Composable Software:</strong> Deep integration into the internal logic of software where AI disappears into the background.</li>
+</ol>
+<h4 id="8-safety-alignment-and-refusals">8. Safety, Alignment, and Refusals</h4>
+<p>Almeida is staunchly opposed to &quot;safety alignment&quot; (refusals) in APIs, characterizing it as a &quot;type error.&quot; He argues that developers are currently suffering from &quot;Stockholm Syndrome,&quot; having been forced to build fragile workarounds for models that refuse tasks. For a dependency running in the background, a refusal is not a safety feature—it is &quot;straight up insanity&quot; that breaks software systems.</p>
+<p>TypeSafe distinguishes between <strong>Capability Alignment</strong> (doing what the user wants) and <strong>Safety Alignment</strong> (following a third party's moral instructions). Almeida contends that intelligence should be treated as a utility or a database; the provider is not responsible for the downstream task. Fracturing intelligence to meet external moral criteria is viewed as a fundamental degradation of the technology's power.</p>
+<h4 id="9-future-outlook-economic-revolution-and-automation">9. Future Outlook: Economic Revolution and Automation</h4>
+<p>Almeida forecasts an &quot;inverse SaaS apocalypse,&quot; where AI-driven automation finally unblocks Total Factor Productivity (TFP), predicting growth will reach 3% within five years. This revolution will be driven by &quot;unearthing&quot; machine-native features—capabilities that humans may not understand but that provide immense value to automated systems.</p>
+<p>The report concludes with a tease regarding &quot;weird&quot; future model types. Almeida suggests that the next generation of machine-native intelligence will move beyond &quot;decision models&quot; to establish a broader, more powerful technological infrastructure.</p>
+<h4 id="10-source-and-scope">10. Source and Scope</h4>
+<p>Source and scope: This report is based exclusively on the interview 'Why We Made Jev — Diogo Almeida, TypeSafe Co-founder &amp; CEO' available at: https://www.youtube.com/watch?v=cFx9Z3ZXca0</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

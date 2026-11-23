@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한국 증권사 REST API 7곳 비교·분석 보고서 (2026.09.01 기준)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>한국 증권사 REST API 7곳 비교·분석 보고서 (2026.09.01 기준)</h1>
+<p class="page-meta">AI 대화 공유 · 2026-09-08</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 2026년 9월 1일 시점의 공개된 조사 답변 및 기술 문서를 바탕으로 재구성된 2차 분석 결과입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/ai-share/">AI 대화 공유</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://chatgpt.com/share/6a9f8757-1144-83e9-91e4-719c214d2d66">출처</a> · <a href="https://www.youtube.com/watch?v=QnW_uTodqso">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="한국-증권사-rest-api-7곳-비교-분석-보고서-2026-09-01-기준">한국 증권사 REST API 7곳 비교·분석 보고서 (2026.09.01 기준)</h3>
+<h4 id="1-보고서-개요-및-면책-고지">1. 보고서 개요 및 면책 고지</h4>
+<p>본 보고서는 <strong>2026년 9월 1일 시점</strong>의 공개된 조사 답변 및 기술 문서를 바탕으로 재구성된 2차 분석 결과입니다.</p>
+<ul>
+<li><strong>정보의 시점성:</strong> 보고서에 포함된 API 제공 여부, 호출 한도, 신청 조건, 출시 상태 등의 모든 정보는 영구적 사실이 아닌 해당 기준일 당시의 **'시점상 주장(point-in-time claim)'**입니다.</li>
+<li><strong>검증 한계:</strong> 답변 및 문서 내 포함된 외부 링크와 개별 증권사의 주장은 제작 과정에서 별도로 실사(Due Diligence) 검증을 거치지 않았습니다.</li>
+<li><strong>활용 주의:</strong> 실제 시스템 구축 전 반드시 해당 증권사의 최신 공식 명세서와 이용 약관을 재확인하십시오.</li>
+</ul>
+<h4 id="2-조사-결론-및-확인된-7개-서비스">2. 조사 결론 및 확인된 7개 서비스</h4>
+<p>공식 기술 포털 및 개발자 문서를 통해 REST 방식의 거래 기능(시세, 계좌, 주문) 제공이 확인된 서비스는 다음과 같습니다.</p>
+<ol>
+<li><strong>한국투자증권:</strong> KIS Developers</li>
+<li><strong>DB증권:</strong> OPEN API</li>
+<li><strong>LS증권:</strong> OPEN API</li>
+<li><strong>키움증권:</strong> REST API</li>
+<li><strong>NH투자증권:</strong> Namuh PLUG</li>
+<li><strong>토스증권:</strong> Open API</li>
+<li><strong>KB증권:</strong> Open API</li>
+</ol>
+<p><strong>주의 사항(Caveat):</strong> 본 목록은 한국 내 모든 금융기관을 포함하는 전수 조사 결과가 아닙니다. 검색 결과에 노출되지 않은 비공개 API, 기관 전용 FIX/DMA 채널, 특정 법인 간의 BaaS 제휴 API 등은 분석 대상에서 제외되었습니다.</p>
+<h4 id="3-rest-판정-기준-및-제외-범주">3. REST 판정 기준 및 제외 범주</h4>
+<p>본 보고서에서 'REST API'로 분류한 4가지 핵심 기준은 다음과 같습니다.</p>
+<ul>
+<li><strong>공식성:</strong> 증권사 공식 채널에서 고객 또는 승인된 법인에 제공함을 명시.</li>
+<li><strong>HTTPS 기반:</strong> 로컬 모듈 없이 표준 웹 프로토콜(HTTPS/JSON)로 통신 가능.</li>
+<li><strong>핵심 거래 기능:</strong> 단순 종목정보를 넘어 시세, 계좌, 주문 중 핵심 거래 기능을 지원.</li>
+<li><strong>문서 존재 여부:</strong> 공식적인 신청 절차와 기술 명세서(API Spec)가 존재.</li>
+</ul>
+<p><strong>제외된 범주:</strong></p>
+<ul>
+<li><strong>Windows 종속 모듈:</strong> OCX/DLL/COM 방식(예: 키움 Open API+, 유안타 tRadar 등).</li>
+<li><strong>HTS 연동형:</strong> 독립적인 HTTP 서비스가 아닌 HTS 엔진에 종속된 시스템트레이딩(예: 신한 i indi 등).</li>
+<li><strong>플러그인/특수 함수:</strong> 영업점 문의와 별도 모듈 적용이 필요한 구조(예: 미래에셋 AnyLink 등).</li>
+<li><strong>기타:</strong> 기관용 전용선 기반 FIX/DMA 채널.</li>
+</ul>
+<p>특정 증권사에 대해 &quot;API가 없다&quot;는 단정적 표현 대신, **&quot;공식 공개 고객용 REST 거래 API 근거를 확인하지 못했다&quot;**는 신중한 판단을 유지합니다.</p>
+<h4 id="4-7개-증권사-종합-비교">4. 7개 증권사 종합 비교</h4>
+<p>각 서비스의 운영 조건과 핵심 특이사항을 정리한 데이터입니다.</p>
+<ul>
+<li><strong>한국투자증권 (KIS Developers)</strong>
+<ul>
+<li>상품: 주식, 채권, 선물옵션 등 광범위한 멀티에셋.</li>
+<li>특징: 공식 AI/LLM 도구 및 백테스터 제공. 실전과 모의 환경의 엄격한 분리.</li>
+</ul>
+</li>
+<li><strong>DB증권 (OPEN API)</strong>
+<ul>
+<li>상품: 국내외 주식·파생, 장내채권, 야간 파생시장.</li>
+<li>특징: 앱 전체 및 API별 이중 유량 관리. <strong>액세스 토큰 발급 분당 1회 제한</strong>.</li>
+</ul>
+</li>
+<li><strong>LS증권 (OPEN API)</strong>
+<ul>
+<li>상품: 국내외 주식 및 선물옵션.</li>
+<li>특징: xingAPI 선신청 구조. 토큰이 발급 시간과 무관하게 <strong>익일 07시 만료</strong>.</li>
+</ul>
+</li>
+<li><strong>키움증권 (REST API)</strong>
+<ul>
+<li>상품: 국내 및 미국 주식 집중.</li>
+<li>특징: 호출 한도가 가장 투명하게 공개됨. 3개월간 실서버 미접속 시 서비스 자동 해지 정책.</li>
+</ul>
+</li>
+<li><strong>NH투자증권 (Namuh PLUG)</strong>
+<ul>
+<li>상품: 주식, 파생, 채권, 금현물.</li>
+<li>특징: 2026년 8월 10일 출시. KRX/NXT/통합 피드별 개별 구독 지원.</li>
+</ul>
+</li>
+<li><strong>토스증권 (Open API)</strong>
+<ul>
+<li>상품: 국내/미국 주식 통합 모델.</li>
+<li>특징: 2026년 8월 13일 출시. 단순화된 인터페이스를 지향하나 운영 데이터 부족.</li>
+</ul>
+</li>
+<li><strong>KB증권 (Open API)</strong>
+<ul>
+<li>상품: 국내외 주식 중심.</li>
+<li>특징: 2026년 8월 초 오픈베타 시작. 현대적인 웹 표준 문서 환경 제공.</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-상품-범위-비교">5. 상품 범위 비교</h4>
+<ul>
+<li><strong>최상위 멀티에셋 (한국투자·DB·NH):</strong> 주식, 해외주식, 국내외 선물옵션, 장내채권 등 자산군 전반을 지원합니다. 특히 NH는 금현물 지원이 명시되어 있으며, DB는 국내 파생 야간시장까지 커버합니다.</li>
+<li><strong>중간 범위 (LS):</strong> 국내외 주식/파생을 지원하며, 거래원 및 프로그램 매매 등 한국 시장 특화 데이터 항목이 매우 풍부한 것이 특징입니다.</li>
+<li><strong>주식 특화 (키움·토스·KB):</strong> 주식 중심의 단순화된 인터페이스를 제공합니다. 키움은 조건검색 기능이 강력하여 퀀트 전략 수립에 유리하며, 토스와 KB는 초기 MVP 개발에 적합한 구조를 가집니다.</li>
+</ul>
+<h4 id="6-rest와-websocket-실시간-시세">6. REST와 WebSocket/실시간 시세</h4>
+<p>실시간 시세 수신을 위한 WebSocket 지원 현황 및 한도 분석입니다.</p>
+<ul>
+<li><strong>지원 확인:</strong> 한국투자, DB, NH, LS, 키움 (공식 SDK 및 문서 존재).</li>
+<li><strong>부분 확인/미확인:</strong> 토스(실시간 시세 언급은 있으나 WebSocket 상세 명세 미비), <strong>KB증권(공유 조사에서 공개 원문의 WebSocket 엔드포인트를 확인하지 못해 고빈도·실시간 전략 적용 전 재확인 필요).</strong></li>
+<li><strong>실무적 제약:</strong> 키움증권은 공개 안내에서 <strong>실시간 200종목</strong> 한도가 제시되어 있습니다. NH투자증권은 시장별(KRX, NXT) 피드와 통합 피드를 구분한다고 문서화되어 있어 전략에 따른 확인이 필요합니다.</li>
+</ul>
+<h4 id="7-nxt-sor-통합시세-대응">7. NXT·SOR·통합시세 대응</h4>
+<p>국내 주식 복수 시장(KRX, NXT) 환경에서의 기술적 차별점입니다.</p>
+<ul>
+<li><strong>한국투자증권:</strong> 주문 파라미터에서 KRX, NXT, <strong>SOR(Smart Order Routing)</strong> 선택이 명시되어 있습니다.</li>
+<li><strong>DB증권:</strong> NXT 전용 주문 엔드포인트를 별도로 운영하여 시장별 직접 제어가 가능합니다.</li>
+<li><strong>키움증권:</strong> KRX 시세와 통합시세 중 하나를 선택해야 하며, <strong>두 피드를 동시에 수신하는 것은 불가능</strong>하므로 설계 단계에서 고정해야 합니다.</li>
+</ul>
+<h4 id="8-호출-한도와-확장성">8. 호출 한도와 확장성</h4>
+<ul>
+<li><strong>키움증권 (상세 수치 공개):</strong>
+<ul>
+<li>국내 주식 주문/조회: 초당 5회.</li>
+<li>미국 주식 주문: 초당 10회 (단, 09~10시 KST에는 초당 3회로 제한).</li>
+<li><strong>미국 주식 전체 계열 합산 한도: 초당 50회.</strong></li>
+<li><strong>차트 조회 한도: 초당 20회.</strong></li>
+</ul>
+</li>
+<li><strong>DB증권:</strong> 공식 클라이언트에서 앱 전체 약 20 TPS와 API별 한도를 함께 고려하는 구조가 확인되며, 액세스 토큰 발급은 분당 1회로 안내됩니다. 실제 운영 수치는 공식 가이드의 해당 API별 기준을 최종 확인해야 합니다.</li>
+<li><strong>기타사:</strong> KIS, LS, NH는 계층형 제한 방식을 사용하나 세부 수치는 신청 등급에 따라 변동될 수 있습니다. 토스/KB는 이번 공유 조사에서 공식 원문으로 확정할 수 있는 상세 호출 한도표를 찾지 못했습니다.</li>
+</ul>
+<h4 id="9-인증-보안-네트워크-제약">9. 인증·보안·네트워크 제약</h4>
+<ul>
+<li><strong>인증 및 토큰:</strong> 대부분 OAuth2 기반이나, <strong>LS증권은 토큰이 발급 시점과 무관하게 익일 07:00에 일괄 만료</strong>되므로 오전 7시 경계에서 선제 교체하도록 설계해야 합니다.</li>
+<li><strong>네트워크 보안:</strong> 키움증권은 <strong>최대 10개의 허용 IP</strong>를 등록해야 하므로 클라우드 환경(Serverless 등) 이용 시 고정 IP(NAT Gateway 등) 확보가 전제되어야 합니다.</li>
+<li><strong>식별 정보:</strong> NH투자증권은 MAC 주소 정보와 법인 IP 조건을 안내합니다.</li>
+</ul>
+<h4 id="10-모의투자-및-테스트-환경">10. 모의투자 및 테스트 환경</h4>
+<ul>
+<li><strong>제공 현황:</strong> 한국투자, DB, LS, 키움은 실전과 구분된 모의 투자 환경을 제공합니다.</li>
+<li><strong>주의 사항:</strong> 모의 환경은 실거래와 체결 엔진이 다르므로 **슬리피지(Slippage) 및 시장 충격(Market Impact)**이 반영되지 않을 수 있습니다. 특히 휴장일 대응이나 실시간 스트림 단절 후 복구 시나리오는 반드시 실거래 PoC 단계에서 검증해야 합니다.</li>
+</ul>
+<h4 id="11-문서-sdk-개발자-경험-dx">11. 문서·SDK·개발자 경험 (DX)</h4>
+<ul>
+<li><strong>전통적 구조 (LS, DB):</strong> 데이터 구조가 증권 도메인 고유의 <strong>TR(InBlock/OutBlock)</strong> 형태를 유지합니다. 웹 개발자에게는 초기 학습 비용이 높으나, 전문 트레이더에게는 데이터 매핑의 정밀함을 제공하는 장점이 있습니다.</li>
+<li><strong>현대적 웹 구조 (키움, KB, 토스, NH):</strong> 상대적으로 현대적인 웹 문서와 개발 도구를 지향하며, 일부는 Postman Collection이나 인터랙티브 문서를 제공해 접근 경로가 명확합니다.</li>
+<li><strong>생태계:</strong> 한국투자증권과 키움증권은 공식 AI·MCP 자료와 실행 가능한 코드가 구체적이며, DB증권과 NH투자증권도 관련 개발 지원이 확인됩니다.</li>
+</ul>
+<h4 id="12-수수료-데이터-비용-및-상업적-이용">12. 수수료·데이터 비용 및 상업적 이용</h4>
+<p>비용 구조는 5개 층(API 사용료, 매매 수수료, 거래세, 실시간 시세료, 인프라 비용)으로 관리되어야 합니다.</p>
+<ul>
+<li><strong>상업적 이용 경고:</strong> 개인용 API 키만으로 다계좌 관리 SaaS, 데이터 재판매, 타인 주문 대행 등이 가능하다고 가정해서는 안 되며 별도 계약·라이선스·법률 검토가 필요할 수 있습니다. 시세 데이터의 제3자 표시·재배포는 증권사 제휴와 코스콤 등 별도 시세정보 계약이 필요할 수 있으므로 사업모델별 확인이 필요합니다.</li>
+</ul>
+<h4 id="13-운영-성숙도-분석">13. 운영 성숙도 분석</h4>
+<ul>
+<li><strong>상대적으로 확립된 서비스:</strong> KIS, DB, LS는 폭넓은 API 범주와 누적 문서·공지가 확인되며, 키움 REST API는 2025년 공개 후 기능을 확장했습니다. 이는 공개 SLA가 아닌 서비스 연혁에 따른 정성 판단입니다.</li>
+<li><strong>신생 서비스:</strong> **NH(8/10), 토스(8/13), KB(8월 초)**는 2026년 8월에 출시된 서비스입니다. 이들은 조사 기준일 당시 운영 이력과 커뮤니티 사례가 짧으므로 자체 PoC와 회귀시험을 거쳐 보수적으로 접근해야 합니다.</li>
+</ul>
+<h4 id="14-증권사별-상세-개별-평가">14. 증권사별 상세 개별 평가</h4>
+<h5 id="한국투자증권-kis-developers">[한국투자증권 KIS Developers]</h5>
+<ul>
+<li><strong>강점:</strong> 전 자산군 지원, SOR 선택권, 가장 앞선 AI/LLM 개발 생태계.</li>
+<li><strong>약점:</strong> TR ID 기반의 복잡한 응답 구조로 인한 어댑터 개발 부담.</li>
+<li><strong>적합 사용자:</strong> 멀티에셋 퀀트, 해외상품 확장 팀 및 공식 AI 도구를 활용하려는 개발자.</li>
+</ul>
+<h5 id="db증권-open-api">[DB증권 OPEN API]</h5>
+<ul>
+<li><strong>강점:</strong> 야간 파생 및 장내채권 지원, 상세한 실시간 스트림 범위.</li>
+<li><strong>약점:</strong> 토큰 발급 빈도 제한(분당 1회)으로 인한 세션 관리 난이도.</li>
+<li><strong>적합 사용자:</strong> 전문 파생상품 트레이더 및 채권 자동매매 시스템 구축자.</li>
+</ul>
+<h5 id="nh투자증권-namuh-plug">[NH투자증권 Namuh PLUG]</h5>
+<ul>
+<li><strong>강점:</strong> 금현물 포함 넓은 상품 폭, 통합 시세 피드 선택 기능.</li>
+<li><strong>약점:</strong> 신규 서비스로 인한 커뮤니티 및 운영 사례 부족.</li>
+<li><strong>적합 사용자:</strong> 멀티에셋과 NXT 통합시세가 필요하고 신생 서비스의 자체 PoC 역량이 있는 팀.</li>
+</ul>
+<h5 id="키움증권-rest-api">[키움증권 REST API]</h5>
+<ul>
+<li><strong>강점:</strong> 가장 투명한 호출 정책, 강력한 조건검색 연동, 3개월 미접속 관리 등 명확한 운영 규칙.</li>
+<li><strong>약점:</strong> 주식 외 자산군 부재, 고정 IP 등록 수 제한(10개).</li>
+<li><strong>적합 사용자:</strong> 국내·미국 주식 퀀트와 조건검색 기반 매매 개발자.</li>
+</ul>
+<h5 id="토스-kb증권-open-api">[토스/KB증권 Open API]</h5>
+<ul>
+<li><strong>강점:</strong> 표준 웹 기술(OAuth2, JSON) 준수 및 단순한 인터페이스.</li>
+<li><strong>약점:</strong> 공유 조사에서 WebSocket 세부와 상세 호출 한도를 확정하지 못해 고빈도·실시간 전략 후보로 삼기 전 추가 확인이 필요함.</li>
+<li><strong>적합 사용자:</strong> 저빈도 주식 조회 및 주문 위주의 초기 MVP 프로젝트.</li>
+</ul>
+<h4 id="15-목적별-최종-추천">15. 목적별 최종 추천</h4>
+<ul>
+<li><strong>멀티에셋 자동매매:</strong> 한국투자증권, DB증권</li>
+<li><strong>주식 퀀트 및 조건검색:</strong> 키움증권</li>
+<li><strong>국내 시장 분석 데이터 중심:</strong> LS증권, DB증권</li>
+<li><strong>AI 에이전트 연계:</strong> 한국투자증권, 키움증권</li>
+<li><strong>빠른 주식 MVP 개발:</strong> 토스증권, KB증권 (단, 조회 중심)</li>
+</ul>
+<h4 id="16-권장-2주-poc-개념-증명-절차">16. 권장 2주 PoC(개념 증명) 절차</h4>
+<p>정식 도입 전 반드시 다음 체크리스트를 통과해야 합니다.</p>
+<ol>
+<li><strong>인증:</strong> 토큰 만료 전 갱신 로직 및 세션 유지 안정성 확인.</li>
+<li><strong>주문 상태 머신:</strong> **&quot;주문 타임아웃은 실패가 아니다&quot;**라는 원칙하에 중복 주문 방지를 위한 상태 전이 검증.</li>
+<li><strong>WebSocket:</strong> 단절 시 자동 재접속 및 기존 구독 종목의 재구독 안정성 측정.</li>
+<li><strong>호출 한도:</strong> 버스트 요청 시 HTTP 429 응답 및 Retry-After 헤더 준수 여부 측정.</li>
+<li><strong>대사:</strong> API 잔고와 실제 HTS/MTS 잔고 간의 데이터 일치성 확인.</li>
+</ol>
+<h4 id="17-권장-시스템-구조">17. 권장 시스템 구조</h4>
+<p>증권사 종속성을 최소화하기 위한 논리적 계층 구조입니다.</p>
+<ul>
+<li><strong>전략/신호 계층:</strong> 매매 로직 수행.</li>
+<li><strong>주문 정책 엔진:</strong> 킬스위치, 일일 손실 한도 필터링.</li>
+<li><strong>증권사 어댑터:</strong> 공통 모델을 증권사별 특화 TR/필드로 변환.</li>
+<li><strong>핵심 컴포넌트:</strong>
+<ul>
+<li><strong>유량 제한기(Rate Limiter):</strong> 증권사별 TPS 준수.</li>
+<li><strong>주문 상태 머신(Order State Machine):</strong> 타임아웃 발생 시 재주문 대신 상태 조회를 강제하여 중복 주문 방지.</li>
+<li><strong>토큰 관리자:</strong> 만료 시점 모니터링 및 자동 갱신.</li>
+</ul>
+</li>
+</ul>
+<h4 id="18-최종-상대평가-요약">18. 최종 상대평가 요약</h4>
+<ul>
+<li><strong>상품 폭 &amp; 실시간 범위:</strong> KIS, DB, NH 우세.</li>
+<li><strong>정책 투명성:</strong> 키움증권이 가장 구체적인 공개 후보.</li>
+<li><strong>개발자 경험:</strong> 현대적 인터페이스는 키움/KB/토스/NH, 정밀 데이터는 KIS/DB/LS.</li>
+<li><strong>운영 이력:</strong> KIS·DB·LS가 상대적으로 앞서고 키움이 다음 그룹으로 평가되지만, 공개 SLA·가동률·장애통계가 부족해 정량적 안정성 순위는 만들 수 없음.</li>
+</ul>
+<h4 id="19-미확정-항목-및-추가-검증-과제">19. 미확정 항목 및 추가 검증 과제</h4>
+<p>향후 실사 과정에서 증권사에 확인해야 할 핵심 리스트입니다.</p>
+<ul>
+<li><strong>토스/KB:</strong> 공식 WebSocket 엔드포인트 지원 시점 및 상세 호출 한도(TPS) 수치.</li>
+<li><strong>NH:</strong> 모든 사용자에게 적용되는 보편적 TPS 숫자 및 실시간 구독 종목 한도.</li>
+<li><strong>공통:</strong> 상업적 목적(SaaS 등) 활용 시 별도 라이선스 비용 및 인허가 가이드.</li>
+<li><strong>공통:</strong> 장애 발생 시 공식 장애 대응 및 기술 지원 절차.</li>
+</ul>
+<h4 id="출처">출처</h4>
+<p>https://chatgpt.com/share/6a9f8757-1144-83e9-91e4-719c214d2d66</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/ai-share/">AI 대화 공유</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

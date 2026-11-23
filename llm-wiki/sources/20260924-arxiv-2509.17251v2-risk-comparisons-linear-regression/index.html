@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Risk Comparisons in Linear Regression: Implicit Regularization Dominates Explicit Regularization</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Risk Comparisons in Linear Regression: Implicit Regularization Dominates Explicit Regularization</h1>
+<p class="page-meta">논문 · 2026-09-24</p>
+<h2 id="요약">요약</h2>
+<p>본 연구는 선형 회귀에서 정규화를 달성하는 세 가지 핵심 추정량의 통계적 성능을 인스턴스별(instance-wise)로 비교한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2509.17251v2">출처</a> · <a href="https://www.youtube.com/watch?v=Pgeh-deEusA">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="논문-보고서-risk-comparisons-in-linear-regression-implicit-regularization-dominates-explicit-regularization">[논문 보고서] Risk Comparisons in Linear Regression: Implicit Regularization Dominates Explicit Regularization</h3>
+<h4 id="1-논문-정보-및-배경-publication-context">1. 논문 정보 및 배경 (Publication Context)</h4>
+<ul>
+<li><strong>연구 식별:</strong> 본 보고서는 Jingfeng Wu, Peter L. Bartlett, Sham M. Kakade, Jason D. Lee, Bin Yu의 연구 저서인 **'Risk Comparisons in Linear Regression: Implicit Regularization Dominates Explicit Regularization'**을 분석한다.</li>
+<li><strong>학술대회 채택:</strong> 본 논문은 이론 기계학습 분야의 최고 권위 학술대회인 <strong>COLT(Conference on Learning Theory) 2026</strong>에 발표 채택되었다.</li>
+<li><strong>버전 정보:</strong> 소스 컨텍스트에 따라 2026년 6월 10일(수정 v2) 기준으로 작성된 최신 수리 통계적 연구 결과를 반영한다.</li>
+<li><strong>연구의 범위 한정:</strong> 본 연구의 분석 대상은 일반적인 딥러닝 모델이 아닌, <strong>'잘 지정된 선형 회귀(well-specified linear regression)'</strong> 문제에서의 <strong>유한 표본 초과 위험(finite-sample excess risk)</strong> 비교로 엄격히 한정된다.</li>
+</ul>
+<h4 id="2-분석-대상-알고리즘-및-수학적-정의-core-algorithms-and-definitions">2. 분석 대상 알고리즘 및 수학적 정의 (Core Algorithms and Definitions)</h4>
+<p>본 연구는 선형 회귀에서 정규화를 달성하는 세 가지 핵심 추정량의 통계적 성능을 인스턴스별(instance-wise)로 비교한다.</p>
+<ul>
+<li><strong>릿지 회귀 (Ridge Regression):</strong> 명시적인 $\ell_2$ 정규화 계수($\lambda$)를 사용하는 방식이다. $\hat{w}_{ridge} = (X^\top X + n\lambda I)^{-1}X^\top y$로 정의된다.</li>
+<li><strong>경사 하강법 (Gradient Descent, GD):</strong> 반복 횟수 $t$를 조절하는 **조기 종료(early stopping)**를 통해 암시적 정규화를 달성한다. $1/\eta t$가 릿지의 $\lambda$와 유사한 정규화 역할을 수행한다.</li>
+<li><strong>확률적 경사 하강법 (Stochastic Gradient Descent, SGD):</strong> 본 논문에서는 실제 관행에 가깝고 이론적으로 최적인 **지수적으로 감소하는 단계 크기($\eta_s$)를 갖는 마지막 반복 추정량(last-iterate)**을 분석 대상으로 한다.</li>
+<li><strong>초과 위험 (Excess Risk) 정의:</strong> 알고리즘의 통계적 효율성을 평가하기 위해 기대 초과 위험을 다음과 같이 정의한다: $\mathbb{E}[\mathcal{E}(\hat{w})] = \mathbb{E}[R(\hat{w}) - R(w^<em>)] = \mathbb{E}[|\hat{w} - w^</em>|_{\Sigma}^2]$. 여기서 $\Sigma$는 공분산 행렬 $\mathbb{E}[xx^\top]$이다.</li>
+</ul>
+<h4 id="3-gd와-릿지-회귀의-비교-암시적-정규화의-우위-gd-vs-ridge-regression">3. GD와 릿지 회귀의 비교: 암시적 정규화의 우위 (GD vs. Ridge Regression)</h4>
+<p>연구의 가장 중요한 결과 중 하나는 모든 문제 인스턴스에서 **GD가 릿지 회귀를 지배한다($GD \prec_L ridge$)**는 사실을 입증한 것이다.</p>
+<ul>
+<li><strong>지배 관계 설명:</strong> 모든 잘 지정된 선형 회귀 문제에 대해, GD의 초과 위험은 릿지의 초과 위험보다 기껏해야 상수 배(constant factor) 이내이며, 특정 상황에서는 다항식 배(polynomially)로 더 우수할 수 있다.</li>
+<li><strong>핵심 비교 포인트:</strong>
+<ul>
+<li><strong>정규화 매개변수 매칭:</strong> GD의 종료 시간 $t$와 릿지의 정규화 계수 $\lambda$가 $1/\eta t \approx \lambda$의 역수 관계를 가질 때, GD는 릿지와 대등하거나 그 이상의 성능을 보장한다.</li>
+<li><strong>릿지의 포화 효과(Saturation Effect):</strong> 릿지 회귀는 소스 조건 $r &gt; 1$인 영역에서 편향(bias)을 효율적으로 줄이지 못하는 한계가 있다. 반면, GD는 &quot;제한 없는 최적화 능력(unlimited optimization power)&quot;을 통해 이러한 포화 현상을 피하며, 최적으로 튜닝된 릿지보다 훨씬 낮은 위험을 달성한다.</li>
+</ul>
+</li>
+<li><strong>결과 해석:</strong> 이는 조기 종료를 통한 암시적 정규화가 명시적 $\ell_2$ 정규화보다 통계적으로 훨씬 유연하고 강력한 도구임을 시사한다.</li>
+</ul>
+<h4 id="4-gd와-온라인-sgd의-비교-상호-비교-불가능성-gd-vs-sgd">4. GD와 온라인 SGD의 비교: 상호 비교 불가능성 (GD vs. SGD)</h4>
+<p>GD와 SGD의 관계는 모든 인스턴스에서 한 알고리즘이 우월하지 않은 **상호 비교 불가능성($GD \neq_L SGD$)**을 보인다.</p>
+<ul>
+<li><strong>배치(Batch)와 온라인(Online)의 격차:</strong> 두 알고리즘 사이의 성능 차이는 **유효 차원(effective dimension, $D$)**과 <strong>1차 유효 차원(order-1 effective dimension, $D_1$)</strong> 사이의 관계에 의해 결정된다.</li>
+<li><strong>상호 반례 기술:</strong>
+<ul>
+<li><strong>GD가 SGD보다 나은 경우:</strong> 기존 연구에서 확인된 바와 같이 배치 학습의 최적화 정밀도가 요구되는 경우 GD가 우월하다.</li>
+<li><strong>SGD가 GD보다 나은 경우:</strong> 본 논문은 <strong>'양성 과적합(benign overfitting)'</strong> 환경, 즉 공분산 스펙트럼이 매우 느리게 감소하는 <strong>스파이크 스펙트럼(spike spectrum, $1/d$ tail)</strong> 구조의 반례를 제시한다. 이러한 고차원 노이즈 환경에서는 온라인 학습 특성을 가진 SGD가 최적으로 종료된 GD보다 다항식 배 더 낮은 위험을 가질 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-gd가-sgd를-지배하는-하위-문제-부류-gd-dominance-subclass">5. GD가 SGD를 지배하는 하위 문제 부류 (GD Dominance Subclass)</h4>
+<p>특정한 스펙트럼 조건 하에서는 GD가 SGD를 지배($GD \prec_S SGD$)하는 하위 부류 $S$가 존재한다.</p>
+<ul>
+<li><strong>스펙트럼 조건 (Assumption 3):</strong> 공분산 스펙트럼($\lambda_i$)이 **'빠르고 연속적으로 감소(fast and continuously decaying)'**하는 경우를 의미한다. 이 조건은 지수적(exponential) 및 다항식적(polynomial) 감소 스펙트럼을 포함하지만, 양성 과적합을 유발하는 로그적(polylogarithmic) 또는 스파이크 스펙트럼은 제외한다.</li>
+<li><strong>지배 관계의 수학적 근거:</strong> 위 조건을 만족할 때 $D \approx D_1$ 관계가 성립하여 GD의 **유효 분산(effective variance)**이 효과적으로 제어된다.</li>
+<li><strong>범위 포함:</strong> 이 부류는 표준 수용력 조건(standard capacity condition)을 만족하는 모든 전형적인 선형 회귀 문제를 포함하며, 이 범위 내에서 GD는 항상 SGD보다 통계적으로 유리하다.</li>
+</ul>
+<h4 id="6-minimax-최적성과-인스턴스별-결과의-구분-minimax-vs-instance-wise">6. Minimax 최적성과 인스턴스별 결과의 구분 (Minimax vs. Instance-wise)</h4>
+<p>본 연구는 최악의 상황(worst-case)을 가정하는 Minimax 분석과 개별 문제 상황(instance-wise)을 구분하여 정밀한 성능 지도를 제시한다.</p>
+<ul>
+<li><strong>알고리즘별 Minimax 성능 요약 (Power-law class $P_{a,r}$ 기준):</strong>
+<ul>
+<li><strong>GD:</strong> 모든 소스 조건($r \ge 0$)에서 항상 minimax 최적(optimal)이다. <strong>세 알고리즘 중 전체 범위를 커버하는 유일한 알고리즘이다.</strong></li>
+<li><strong>Ridge:</strong> $0 \le r \le 1$인 영역에서만 최적이며, $r &gt; 1$에서는 포화 효과로 인해 다항식적으로 성능이 저하된다.</li>
+<li><strong>SGD:</strong> $r \ge (a-1)/(2a)$ 조건에서만 (거의) 최적이며, $r &lt; (a-1)/(2a)$인 경우 최적화 능력의 한계로 인해 성능이 저하된다.</li>
+</ul>
+</li>
+<li><strong>핵심 통찰:</strong> 릿지와 SGD의 장점을 합쳐야 겨우 GD의 성능과 대등해질 수 있다는 점은 GD의 암시적 정규화가 갖는 독보적인 위치를 보여준다.</li>
+</ul>
+<h4 id="7-결론-및-연구의-시사점-conclusion">7. 결론 및 연구의 시사점 (Conclusion)</h4>
+<ul>
+<li><strong>핵심 결론:</strong> 잘 지정된 선형 회귀 문제에서 GD의 조기 종료는 릿지 회귀의 명시적 정규화를 통계적으로 지배하며, 전형적인 스펙트럼 조건 하에서는 SGD보다도 우수하다. 이는 배치 기반의 암시적 정규화가 가지는 통계적 이점을 수학적으로 규명한 결과이다.</li>
+<li><strong>연구의 주의사항:</strong> 본 결과는 **잘 지정된 선형 모델(well-specified linear models)**에 국한된 것이며, 이 이론적 우위를 비선형 모델이나 일반적인 딥러닝 구조로 무분별하게 확장하는 것은 경계해야 한다. 데이터 재사용 방식(data reuse)과 다중 에포크(multi-epoch) 학습에 대한 향후 연구가 필요하다.</li>
+<li><strong>참조 원문:</strong> <a href="https://arxiv.org/abs/2509.17251v2">https://arxiv.org/abs/2509.17251v2</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

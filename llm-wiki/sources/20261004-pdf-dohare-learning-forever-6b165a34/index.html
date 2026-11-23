@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Forever using Artificial Neural Networks</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Learning Forever using Artificial Neural Networks</h1>
+<p class="page-meta">PDF · 2026-10-04</p>
+<h2 id="요약">요약</h2>
+<p>본 종합 해설 보고서는 캐나다 앨버타 대학교(University of Alberta) 컴퓨터과학과 시반시 도하레(Shibhansh Dohare) 박사의 학위 논문(&quot;Learning Forever using Artificial Neural Networks&quot;, 2026년) 원문만을 정밀 분석하여 작성되었다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=ovgNmG-Rs5I">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="인공신경망의-지속적-가소성-유지-기법-지속적-역전파-continual-backpropagation-종합-해설-보고서">인공신경망의 지속적 가소성 유지 기법: 지속적 역전파(Continual Backpropagation) 종합 해설 보고서</h3>
+<h4 id="1-보고서-개요-및-출처-명시">1. 보고서 개요 및 출처 명시</h4>
+<p>본 종합 해설 보고서는 캐나다 앨버타 대학교(University of Alberta) 컴퓨터과학과 시반시 도하레(Shibhansh Dohare) 박사의 학위 논문(&quot;Learning Forever using Artificial Neural Networks&quot;, 2026년) 원문만을 정밀 분석하여 작성되었다.</p>
+<p>본 분석의 바탕이 된 원문은 별도의 공개 인터넷 주소(URL)가 제공되지 않은 단일 학술 문서 자료이다. 논문 표지에 명시된 정식 저작권 및 공용 도메인 표기는 <code>© Shibhansh Dohare, 2026, CC Public Domain Mark 1.0</code>이며, 이는 원문의 정식 표기이다.</p>
+<p>본 보고서는 단기 학습이나 사전 학습 후 미세 조정(Pre-training and Fine-tuning) 패러다임이 현대 인공지능 응용 분야에서 거둔 뛰어난 성공과 학술적 성과를 부정하거나 과장하여 폄하하지 않는다. 다만, 배포 후 정적이지 않은 데이터 스트림을 실시간으로 계속해서 학습해야 하는 장기 연속 학습(Continual Learning) 환경과, 학습과 배포가 엄격히 분리된 기존 사전 학습 환경 간의 비대칭적 구조 차이에 집중한다. 이를 통해 인공신경망이 장기 학습 과정에서 겪는 가소성 상실 현상의 실체와 이를 해결하기 위한 지속적 역전파(Continual Backpropagation, CBP) 알고리즘의 메커니즘을 심층 기술한다.</p>
+<hr />
+<h4 id="2-핵심-질문-가소성-상실-loss-of-plasticity-과-재앙적-망각-catastrophic-forgetting-의-개념적-구별">2. 핵심 질문: 가소성 상실(Loss of Plasticity)과 재앙적 망각(Catastrophic Forgetting)의 개념적 구별</h4>
+<p>인공신경망이 장기 연속 학습 환경에 투입될 때 맞닥뜨리는 학술적 및 기술적 핵심 의제는 다음과 같다.</p>
+<blockquote>
+<p><strong>&quot;신경망이 오랫동안 새로운 데이터를 지속해서 배울 때 왜 점점 학습 능력이 떨어지는가?&quot;</strong></p>
+</blockquote>
+<p>이 질문에 명확히 답하기 위해서는 연속 학습 연구 분야에서 오랫동안 혼용되거나 오해받아 온 두 가지 핵심 구조적 문제인 '재앙적 망각'과 '가소성 상실'을 직관적이면서도 엄밀하게 구별해야 한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 항목</th>
+<th style="text-align:left">재앙적 망각 (Catastrophic Forgetting)</th>
+<th style="text-align:left">가소성 상실 (Loss of Plasticity)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>개념적 정의</strong></td>
+<td style="text-align:left">이미 학습하여 확보한 과거의 지식이나 데이터를 새로운 학습 과정에서 잊어버리는 현상</td>
+<td style="text-align:left">새로운 데이터나 변화하는 환경으로부터 <strong>'새로운 지식을 배울 능력(가소성, Plasticity)'</strong> 자체가 줄어드는 현상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>발생 메커니즘</strong></td>
+<td style="text-align:left">새 데이터에 맞춰 파라미터를 업데이트할 때 과거 지식을 표현하던 파라미터가 덮어씌워짐</td>
+<td style="text-align:left">휴면 유닛 누적, 가중치 크기 발산, 표현 다양성 고갈 등으로 인해 손실면(Loss Landscape) 최적화 형성 불능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>문제의 본질</strong></td>
+<td style="text-align:left">지식의 <strong>'보존 및 안정성(Memory / Stability)'</strong> 문제</td>
+<td style="text-align:left">지식의 <strong>'수용 및 최적화(Learning / Plasticity)'</strong> 문제</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>핵심 증상</strong></td>
+<td style="text-align:left">과거 작업(Old Tasks)에 대한 평가 오차 및 성능 급락</td>
+<td style="text-align:left">현재/미래 작업(New Tasks)에 대한 훈련 손실 감소 불능</td>
+</tr>
+</tbody>
+</table>
+<p>현재 대규모 언어 모델(LLM)을 비롯한 대부분의 심층학습 시스템은 모델 배포 후 추가적인 실시간 연속 학습을 진행하지 않거나, 새로운 데이터가 대량 누적되면 처음부터 전체 모델을 다시 학습(Retraining from scratch)하는 방식을 취한다. 그러나 주식 시장 변화 예측, 실시간 기상 관측, 가변적 인간 선호도 반영 로봇 제어 등 정적이지 않은(Non-stationary) 현실 세계 환경에서는 매번 처음부터 모델을 재훈련하는 방식이 막대한 계산 비용으로 인해 불가능하다. 따라서 재앙적 망각 방지책과 독립적으로, 인공신경망이 배포 후에도 새로운 지식을 무한히 수용할 수 있도록 '지속적 가소성'을 유지하는 기술이 필수적으로 요구된다.</p>
+<hr />
+<h4 id="3-심층-연속-학습-환경에서의-가소성-상실-실증-실험-분석">3. 심층 연속 학습 환경에서의 가소성 상실 실증 실험 분석</h4>
+<p>원문에서는 인공신경망이 장기 continuous 데이터 스트림을 학습할 때 가소성을 상실하는 현상을 지도학습의 세 가지 대표적 실험 환경을 통해 실증하였다. 특히 단순히 시간이 지남에 따라 정확도가 떨어지는 현상을 보여주는 것에 그치지 않고, 동일 시점에서 **'처음부터 새로 학습한 네트워크(Retrained Network)'**와의 비교 분석을 수행함으로써 신경망 내부의 최적화 능력 자체가 상실되었음을 객관적 수치로 증명하였다.</p>
+<h5 id="3-1-반복-순열-손글씨-분류-online-permuted-mnist">3.1. 반복 순열 손글씨 분류 (Online Permuted MNIST)</h5>
+<ul>
+<li><strong>실험 환경 및 세부 조건:</strong> Standard MNIST 데이터셋(28x28 해상도, 60,000개 훈련 이미지)의 픽셀 위치를 무작위로 재배열(Permutation)한 800개의 연속된 순열 작업(Task) 환경을 구축하였다. 각 작업당 60,000개의 이미지를 단 1회씩만(Single pass, Online) 신경망에 순차 제시하며 미니배치를 사용하지 않는 순수 온라인 학습을 진행하였다.</li>
+<li><strong>네트워크 아키텍처:</strong> 3개의 은닉층과 각 층당 2,000개의 유닛을 가진 피드포워드 신경망(ReLU 활성화 함수, Kaiming 무작위 초기화)을 확률적 경사하강법(SGD)으로 학습시켰다.</li>
+<li><strong>실험 결과 및 양상:</strong> 학습 초기 몇 개 작업 동안은 이전 작업에서 학습한 하위 레이어의 특징 재사용(Feature Reuse) 효과로 분류 정확도가 상승했으나, 이후 작업이 진행됨에 따라 온라인 분류 정확도가 지속해서 하락하였다. (예: 학습률 $\eta = 0.01$ 조건에서 초기 93% 이상이던 온라인 정확도가 800번째 작업에 이르러 90% 수준으로 하락)</li>
+<li><strong>네트워크 너비 및 데이터 변동 속도의 영향:</strong>
+<ul>
+<li><strong>네트워크 너비(Width)의 영향:</strong> 은닉층 유닛 수 100개(파라미터 약 10만 개), 1,000개(약 300만 개), 10,000개(약 2억 개) 환경을 비교 실험하였다. 네트워크 너비가 좁을수록 가소성 상실 속도가 비약적으로 빨라졌으며, 2억 개의 파라미터를 가진 극도로 과파라미터화된(Over-parameterized) 대규모 네트워크조차 장기 학습 시 가소성 상실 현상을 피하지 못함이 확인되었다.</li>
+<li><strong>데이터 분포 변화 속도(Non-stationarity Rate)의 영향:</strong> 순열 변경 주기를 1만, 10만, 100만 예시 단위로 다르게 설정하여 실험한 결과, 데이터 분포가 더 자주, 빠르게 변할수록(비정상성이 높을수록) 가소성 상실 속도와 세기가 훨씬 가파르게 나타났다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="3-2-지속적-이미지-분류-continual-imagenet">3.2. 지속적 이미지 분류 (Continual ImageNet)</h5>
+<ul>
+<li><strong>실험 환경 및 세부 조건:</strong> 32x32 해상도로 축소된 ImageNet 데이터셋(1,000개 클래스, 클래스당 700개 이미지)에서 무작위로 2개 클래스를 선정하여 이진 분류 작업을 수행하는 환경을 구축하였다. 총 1,000개 클래스로 구현 가능한 약 50만 개의 이진 분류 작업 시퀀스 중 2,000개 이상의 연속 작업을 진행하였다.</li>
+<li><strong>작업 구성 및 학습 스케줄:</strong> 태스크당 선택된 2개 클래스에서 총 1,200개 훈련 이미지(클래스당 600개)와 200개 테스트 이미지(클래스당 100개)를 추출하였다. 미니배치 크기 100 조건으로 태스크당 <strong>250 에포크(Epochs)</strong> 동안 학습을 수행하였다.</li>
+<li><strong>네트워크 구조 및 출력 레이어 초기화:</strong> 3개의 합성곱(Convolutional) 레이어와 3개의 전결합(Fully Connected) 레이어로 구성된 심층 신경망을 사용하였다. 태스크가 전환될 때마다 최종 출력 레이어(Head)의 입력 가중치를 0으로 리셋하는 설정을 적용하였다. 이는 각 태스크에 새로운 출력 헤드를 할당하는 것과 기술적으로 동일하며, 태스크 간 간섭을 제거한 상태에서 백본 네트워크의 가소성을 측정하기 위함이다.</li>
+<li><strong>실험 결과 및 최적화 능력 상실 증명:</strong> 초기 작업들에서는 테스트 정확도가 최고 88% 수준까지 달성되었으나, 작업이 지속됨에 따라 학습 능력이 붕괴하여 2,000번째 작업 이후에는 단일 레이어 선형 베이스라인(Linear Baseline) 수준 이하로 정확도가 떨어졌다. 특히 테스트 정확도 하락뿐만 아니라 해당 태스크의 <strong>온라인 훈련 정확도(Online Training Accuracy)</strong> 자체가 선형 베이스라인 이하로 동반 급락하였다. 이는 모델이 과적합된 것이 아니라, 새로운 데이터의 훈련 손실(Training Loss)을 줄이는 <strong>'최적화 능력(Optimization Capacity)'</strong> 자체를 상실했음을 정밀히 입증한다.</li>
+</ul>
+<h5 id="3-3-과거-데이터를-모두-사용하는-클래스-증가-분류-class-incremental-cifar-100">3.3. 과거 데이터를 모두 사용하는 클래스 증가 분류 (Class-Incremental CIFAR-100)</h5>
+<ul>
+<li><strong>실험 환경 및 세부 조건:</strong> CIFAR-100 데이터셋(100개 클래스, 클래스당 600개 이미지: 훈련 450, 검증 50, 테스트 100)을 활용하여 5개 클래스씩 단계를 늘려가며 총 20단계(총 4,000 에포크) 동안 클래스 증가 학습을 진행하였다. 리플레이 버퍼 등을 이용해 과거 모든 클래스의 데이터를 보존하고 함께 학습하므로 '재앙적 망각'이 완전히 차단된 설정이다.</li>
+<li><strong>네트워크 구조 및 정밀 학습 스케줄:</strong> 배치 정규화(Batch Normalization), 데이터 증강(Random Crop, Flip, Rotation), L2 정규화가 적용된 18층 리지듀얼 네트워크(ResNet-18)를 사용하였다. 단계당 200 에포크를 학습하며, 단계별로 학습률을 $0.1 \rightarrow 0.02 \rightarrow 0.004 \rightarrow 0.0008$ (각각 60, 60, 40, 40 에포크)로 감쇠시키는 스케줄러를 적용하였다. 또한 조기 종료(Early Stopping) 효과를 구현하기 위해 각 단계 학습 중 검증 세트 성능이 가장 뛰어났던 최적 가중치를 복원하여 다음 단계를 시작하도록 설계하였다.</li>
+<li><strong>실험 결과:</strong> 초기 40개 클래스 구간까지는 순차 학습 시스템이 이전 특징 재사용 덕분에 이점을 보였으나, 100개 클래스에 도달했을 때 처음부터 새로 학습한 네트워크(Retrained Network, 약 76% 정확도) 대비 순차 학습된 시스템(Base Deep-Learning System, 약 71% 정확도)은 약 5%의 현저한 성능 열세를 나타냈다.</li>
+<li><strong>학술적 결론:</strong> 과거 데이터를 완벽히 유지하여 재앙적 망각을 방지하더라도, 심층 인공신경망은 가소성 상실이라는 별개의 구조적 결함으로 인해 지속적 학습 환경에서 최적의 성능을 발휘하지 못한다.</li>
+</ul>
+<hr />
+<h4 id="4-가소성-상실의-주요-상관-지표-correlates-분석">4. 가소성 상실의 주요 상관 지표 (Correlates) 분석</h4>
+<p>실증 분석 결과, 심층 신경망이 가소성을 잃어갈 때 내부 구조에서 공통적으로 관찰되는 세 가지 대표적 변화 지표가 확인되었다. 다만 원문 및 후속 연구에 따르면 이 지표들이 가소성 상실을 일으키는 '유일하고 완전히 입증된 단일 원인'은 아니며, 가소성 상실 현상과 강력하게 연동되는 **주요 상관 지표(Correlates)**로 이해해야 한다.</p>
+<h5 id="4-1-휴면-및-죽은-유닛-dormant-dead-units-의-누적">4.1. 휴면 및 죽은 유닛 (Dormant / Dead Units)의 누적</h5>
+<ul>
+<li><strong>원리 및 관찰:</strong> ReLU 활성화 함수를 사용하는 신경망에서 특정 유닛의 활성화 출력이 모든 입력 데이터에 대해 0이 되면, 역전파 시 해당 유닛으로 흐르는 그래디언트(Gradient)가 0이 된다. 이에 따라 유닛의 입력 가중치가 더 이상 업데이트되지 않는 '죽은 상태(Dead state)' 또는 '휴면 상태(Dormant state, 테스트 샘플 중 1% 미만 활성화)'에 빠진다.</li>
+<li><strong>실증 데이터:</strong> Permuted MNIST 및 Class-Incremental CIFAR-100 실험 결과, 학습이 진행될수록 휴면 유닛의 비율이 비약적으로 증가하여 전체 은닉 유닛의 50% 이상이 휴면 상태에 빠졌다. 이는 네트워크의 실질적인 유효 매개변수 용량(Effective Capacity)이 절반 이하로 급감함을 의미한다.</li>
+</ul>
+<h5 id="4-2-가중치-크기-weight-magnitude-의-지속적-발산">4.2. 가중치 크기 (Weight Magnitude)의 지속적 발산</h5>
+<ul>
+<li><strong>원리 및 수렴 지연:</strong> 연속 학습이 진행됨에 따라 레이어 간 가중치(Weight)의 평균 절댓값 $\frac{1}{|\theta|}\sum |\theta_i|$이 지속해서 증가한다.</li>
+<li><strong>손실면 곡률 악화:</strong> 가중치 크기가 비대해지면 손실 함수 헤시안(Hessian) 행렬의 조건수(Condition Number)가 악화된다. 이는 경사하강법(SGD) 수행 시 손실 경사면의 곡률을 극도로 왜곡시켜 최적화 수렴 속도를 현저히 느리게 만든다.</li>
+</ul>
+<h5 id="4-3-표현-다양성-representation-diversity-감소-유효-순위-및-안정-순위-하락">4.3. 표현 다양성 (Representation Diversity) 감소: 유효 순위 및 안정 순위 하락</h5>
+<ul>
+<li><strong>원리:</strong> 은닉층 출력 표현 행렬 $\Phi \in \mathbb{R}^{n \times m}$의 특산값(Singular Values) $\sigma_k$ 분배를 통해 표현 공간의 정보 다양성을 평가한다.</li>
+<li><strong>유효 순위(Effective Rank):</strong> 특이값 분포의 정규화된 엔트로피를 측정한다.
+$$\text{erank}(\Phi) = \exp \left( -\sum_{k=1}^{q} p_k \log p_k \right), \quad p_k = \frac{\sigma_k}{|\sigma|_1}$$</li>
+<li><strong>안정 순위(Stable Rank):</strong> 정규화된 행렬의 정보 점유 비율을 측정한다.</li>
+<li><strong>실증 데이터:</strong> 학습이 진행될수록 유효 순위와 안정 순위가 지속해서 감소하였다. 이는 은닉층 유닛들이 생성하는 정보가 서로 유사해지고 중복되어, 신경망이 새로운 입력을 다채롭고 독립적인 차원으로 표현할 능력을 상실함을 보여준다.</li>
+</ul>
+<h5 id="4-4-기존-주요-대안-기법들과의-비교-분석">4.4. 기존 주요 대안 기법들과의 비교 분석</h5>
+<p>가소성 상실을 완화하기 위해 기존 심층학습 기법들을 적용했을 때, 세 가지 상관 지표의 제어 능력 및 한계는 다음과 같이 대조된다.</p>
+<ul>
+<li><strong>L2 정규화 (L2 Regularization):</strong> 가중치 크기 발산은 완벽히 억제하지만, 휴면 유닛의 급증과 유효 순위의 지속적 감소를 막지 못하여 가소성 상실을 일부만 완화한다.</li>
+<li><strong>Shrink and Perturb:</strong> 매 스텝 가중치 감쇠(Shrink)와 무작위 가우시안 노이즈 주입(Perturb)을 수행한다. 가중치 크기와 휴면 유닛 수를 효과적으로 제어하여 Permuted MNIST 등에서 높은 성능을 보이지만, 노이즈 주입으로 인해 표현의 유효 순위가 낮게 유지되며 하이퍼파라미터 민감도가 매우 높다.</li>
+<li><strong>Adam 옵티마이저 / Dropout / Online Norm:</strong> Adam은 초기 수렴은 빠르나 유효 순위를 극도로 파괴하고 휴면 유닛을 40% 이상 발생시켜 가소성을 가장 참혹하게 붕괴시킨다. Dropout과 Online Norm 역시 장기 학습 시 가소성 상실을 오려 심화시키는 결과를 초과하였다.</li>
+</ul>
+<hr />
+<h4 id="5-지속적-역전파-continual-backpropagation-cbp-의-작동-원리">5. 지속적 역전파 (Continual Backpropagation, CBP)의 작동 원리</h4>
+<h5 id="5-1-학술적-맥락-표현-공간-탐색-representation-search-과-시간-대칭성">5.1. 학술적 맥락: 표현 공간 탐색(Representation Search)과 시간 대칭성</h5>
+<p>전통적인 역전파 알고리즘은 초기화 단계에서만 파라미터에 무작위성(Variability)을 부여하고 이후에는 경사하강법만을 수행하는 <strong>시간 비대칭적(Time-asymmetric)</strong> 구조를 갖는다. 이로 인해 장기 학습 시 신경망 내부의 다양성이 고갈된다.</p>
+<p>지속적 역전파(CBP)는 경사하강법과 유닛 단위의 무작위 표현 탐색을 결합하여 학습 전 과정에 걸쳐 동일한 연산 형태를 유지하는 **'시간 대칭적 연산(Time-symmetric Computation)'**을 실현한다. 이는 역사적으로 셀프리지(Selfridge, 1958)의 '판데모니엄(Pandemonium)' 모델, 무치아르디와 고스(Mucciardi &amp; Gose, 1966), 클롭과 고스(Klopf &amp; Gose, 1969), 그리고 마무드와 서튼(Mahmood &amp; Sutton, 2013)으로 이어져 온 <strong>'표현 공간 탐색(Representation Search)'</strong> 연구의 계보를 현대 심층 신경망 구조에 맞게 성공적으로 확장 및 융합한 것이다.</p>
+<h5 id="5-2-기여-효용-contribution-utility-평가-공식">5.2. 기여 효용 (Contribution Utility) 평가 공식</h5>
+<p>CBP는 네트워크 전체를 리셋하지 않고 기여 효용이 낮은 저효용 유닛만을 선택적으로 교체한다. 각 유닛의 가치는 **'유닛의 활성화 상태(Activity)'**와 **'다음 레이어로 나가는 출력 가중치(Output Weights) 크기'**의 곱에 대한 이동 평균으로 평가된다.</p>
+<ul>
+<li><strong>피드포워드 레이어 유닛 $i$의 기여 효용 공식:</strong>
+$$u_l[i] \leftarrow \eta \cdot u_l[i] + (1 - \eta) \cdot |h_{l,t}[i]| \cdot \sum_{k=1}^{n_{l+1}} |W_{l,t}[i, k]|$$</li>
+<li><strong>합성곱 레이어 필터 $i$의 기여 효용 공식:</strong>
+$$u_l[i] \leftarrow \eta \cdot u_l[i] + (1 - \eta) \cdot \sum_{m=1}^{M} \sum_{n=1}^{N} |H_{l,t}[i, m, n]| \cdot \sum_{k} |W_{l,t}[i, k]|$$
+<em>(여기서 $H_{l,t}[i, m, n]$은 필터의 $M \times N$ 출력 피처 맵, $W_{l,t}[i, k]$는 해당 필터의 출력 가중치이다.)</em></li>
+</ul>
+<blockquote>
+<p><strong>실용적 엔지니어링 팁 (Mini-batch Computation):</strong> 미니배치 단위 학습 시 기여 효용의 이동 평균을 계속 유지하는 대신, **'단일 미니배치에서의 순간 기여 효용(Instantaneous Utility)'**만을 계산하여 적용하더라도 연산 메모리와 복잡도를 획기적으로 줄이면서 동일한 수준의 가소성 유지 성능을 달성할 수 있음이 실증되었다.</p>
+</blockquote>
+<h5 id="5-3-선택적-재초기화-step-by-step-절차">5.3. 선택적 재초기화 Step-by-Step 절차</h5>
+<p>기여 효용 평가를 통해 가치가 가장 낮은 유닛이 선정되면 다음의 정밀한 단계를 거쳐 교체된다.</p>
+<ol>
+<li><strong>입력 가중치 무작위 재초기화 (Input Weights Reinitialization):</strong>
+선택된 저효용 유닛의 입력 가중치 $W_{l-1}[:, r]$를 최초 네트워크 초기화 시 사용했던 무작위 분포(예: Kaiming Normal 분포 등)에서 다시 샘플링하여 재설정한다. 이를 통해 표현 공간에 새로운 무작위성(Variability)을 주입한다.</li>
+<li><strong>출력 가중치 0 설정 (Zeroing Output Weights):</strong>
+해당 유닛에서 다음 레이어로 나가는 출력 가중치 $W_l[r, :]$를 <strong>정확히 0으로 설정</strong>한다. 이 절차는 새로 주입된 유닛의 초기 무작위 출력이 기존 신경망이 이미 학습해 둔 유효한 함수 출력에 어떠한 노이즈나 악영향도 주지 않도록 완벽히 보호하는 차단막 역할을 한다.</li>
+<li><strong>부분 교체 (Selective Partial Replacement):</strong>
+전체 신경망의 리셋이 아닌, 매 스텝 당 전체 유닛 중 아주 적은 비율(스텝당 평균 1개 미만의 유닛)만을 점진적으로 교체하는 부분 교체 프로세스를 수행한다.</li>
+</ol>
+<h5 id="5-4-성숙-임계값-m-과-교체율-rho-의-수식화-및-작동-양상">5.4. 성숙 임계값($m$)과 교체율($\rho$)의 수식화 및 작동 양상</h5>
+<p>재초기화된 새 유닛이 출력 가중치를 형성하고 경사하강법을 통해 의미 있는 피처를 학습할 수 있도록 <strong>성숙 임계값($m$, 스텝 단위 보호 기간)</strong> 동안 재초기화 대상에서 면제한다.</p>
+<p>레이어 내 교체 자격을 갖춘 성숙한 유닛의 수 $n_e$는 성숙 임계값 $m$과 교체율 $\rho$의 곱에 의해 정량적으로 결정된다. 유효 평형 상태(Equilibrium)에서 보호 풀에 진입하는 유닛 수($n_e \cdot \rho$)와 보호 기간이 끝나 이탈하는 유닛 수($(n - n_e)/m$)가 동일해지므로 수식은 다음과 같이 도출된다.</p>
+<p>$$n_e \cdot \rho = \frac{n - n_e}{m} \implies m \cdot n_e \cdot \rho = n - n_e \implies n_e (1 + m \times \rho) = n \implies n_e = \frac{n}{1 + m \times \rho}$$</p>
+<p>이 정량적 수식은 $m \times \rho$ 값에 따라 CBP가 보여주는 두 가지 극단적이며 유효한 작동 양상을 수학적으로 증명한다.</p>
+<ul>
+<li><strong>$m \times \rho \ll 1$ 인 경우 ($n_e \approx n$, 안정적 휴면 유닛 제거):</strong>
+보호받는 유닛 수가 매우 적고 대부분의 유닛이 교체 자격을 갖는다. 새로 생성된 유닛도 빠르게 교체 대상이 되므로, 시스템은 오직 완전히 죽어있는 휴면 유닛만을 선택적으로 제거하여 전체 시스템의 안정성(Stability)을 유지하며 가소성을 보존한다.</li>
+<li><strong>$m \times \rho \approx 1$ 인 경우 ($n_e \approx n/2$, 적극적 표현 공간 탐색):</strong>
+전체 유닛의 절반 정도만 교체 자격을 갖고 나머지 절반은 성숙 기간 동안 보호받는다. $m$이 충분히 길어 새 유닛이 충분히 성숙할 시간을 보장하며, 효용이 아주 낮지 않은 유닛까지 포함하여 표현 공간 전체를 적극적으로 탐색(Aggressive Search)한다.</li>
+</ul>
+<hr />
+<h4 id="6-강화학습에서의-정책-붕괴-policy-collapse-와-가소성-유지">6. 강화학습에서의 정책 붕괴 (Policy Collapse)와 가소성 유지</h4>
+<h5 id="6-1-정책-붕괴-policy-collapse-현상과-발생-기전">6.1. 정책 붕괴 (Policy Collapse) 현상과 발생 기전</h5>
+<p>PPO(Proximal Policy Optimization) 알고리즘을 활용한 Ant-v3, Hopper-v3, Walker-v3 등 정적 강화학습 환경 실험에서, 초기 학습 성공 후 성능이 정체되다가 장기 학습 진행 시 에이전트의 성능이 갑자기 하락하고 영구히 복구되지 못하는 <strong>'정책 붕괴(Policy Collapse)'</strong> 현상이 관찰되었다.</p>
+<p>강화학습은 정책 변화 및 부트스트래핑(Bootstrapping) 특성으로 인해 환경 자체가 정적이라도 학습 데이터 분포가 계속 변하는 본질적 연속 학습 환경이다. 2-상태 MDP(2-state MDP) 분석 결과, Standard Adam 옵티마이저는 그래디언트가 작을 때도 과도하게 큰 파라미터 업데이트를 발생시켜 표현 공간의 급격한 변동을 야기하며, 가중치 크기가 발산함에 따라 손실면의 곡률이 악화되어 에이전트가 탐색 능력을 완전히 잃어버리는 것으로 밝혀졌다.</p>
+<h5 id="6-2-수정된-아담-tuned-adam-의-역할">6.2. 수정된 아담 (Tuned Adam)의 역할</h5>
+<p>Adam 옵티마이저의 moment 추정 모멘텀 파라미터를 기본값($\beta_1=0.9, \beta_2=0.999$) 대신 다음과 같이 동일하게 조정한 'Tuned Adam'을 적용한다.</p>
+<p>$$\beta_1 = \beta_2 = 0.99$$</p>
+<p>Tuned Adam은 노이즈가 심한 그래디언트로 인한 급격한 가중치 업데이트 폭발을 완화하고 표현 공간을 안정화하여 정책 붕괴의 발생 속도와 세기를 크게 줄여준다. 그러나 Tuned Adam 단독으로는 장기 학습 시 발생하는 가소성 상실을 완벽히 차단하지 못한다.</p>
+<h5 id="6-3-약한-정규화-weak-regularization-및-cbp의-결합-효과">6.3. 약한 정규화 (Weak Regularization) 및 CBP의 결합 효과</h5>
+<p>Tuned Adam 조건하에서 가중치 증가를 억제하는 약한 L2 정규화(Weak L2 Regularization, $\lambda = 10^{-4}$)와 지속적 역전파(CBP)를 결합했을 때, 강화학습 에이전트는 휴면 유닛 0%, 높은 안정 순위, 제어된 가중치 크기를 동시에 유지하였다. 그 결과 정적 및 비정적(마찰력 변화) 강화학습 환경 모두에서 정책 붕괴를 완벽히 극복하고 장기 수행 시 성능이 상향식으로 연속 향상되는 결과를 달성하였다.</p>
+<hr />
+<h4 id="7-가소성-상실의-형식화-formalization-한계-및-능력-구별">7. 가소성 상실의 형식화 (Formalization) 한계 및 능력 구별</h4>
+<h5 id="7-1-최적화-능력-상실-vs-일반화-능력-상실의-구별">7.1. 최적화 능력 상실 vs 일반화 능력 상실의 구별</h5>
+<ul>
+<li><strong>최적화 능력 상실 (Loss of Optimization Capacity):</strong> 새로운 데이터 스트림이 주어졌을 때, 훈련 손실(Training Loss) 자체를 줄이지 못하는 최적화 형성 불능 현상.</li>
+<li><strong>일반화 능력 상실 (Loss of Generalization Capacity):</strong> 훈련 손실은 성공적으로 줄이지만, 시험 데이터(Test Data)에서의 오차가 커지는 과적합 및 일반화 실패 현상.</li>
+</ul>
+<p>본 연구의 지속적 역전파(CBP)는 주로 <strong>'최적화 능력 상실'을 해결하는 데 집중</strong>되어 있으며, 훈련 손실 감소 능력을 복원함으로써 결과적으로 일반화 성능 향상까지 도모한다.</p>
+<h5 id="7-2-형식화-정의-방식과-각각의-수학적-실용적-한계">7.2. 형식화 정의 방식과 각각의 수학적/실용적 한계</h5>
+<ol>
+<li><strong>동일 난이도 작업의 성능 하락으로 정의하는 경우:</strong>
+<ul>
+<li><strong>한계:</strong> 작업이 진행될수록 클래스가 누적되어 난이도가 비선형적으로 높아지는 클래스 증가(Class-Incremental) 학습 환경을 설명하지 못함.</li>
+</ul>
+</li>
+<li><strong>처음부터 다시 학습(Retraining) 대비 성능 열세로 정의하는 경우:</strong>
+<ul>
+<li><strong>한계:</strong> 사전 학습 후 미세 조정(Pretraining-Finetuning) 설정의 경우, 가소성을 일부 잃었더라도 데이터 효율성 덕분에 처음부터 다시 학습한 모델보다 성적이 우수할 수 있어 가소성 손실 발생 여부를 포착하기 어려움.</li>
+</ul>
+</li>
+<li><strong>동적 리그렛 (Dynamic Regret) 증가로 정의하는 경우:</strong>
+수학적으로 가장 포괄적이고 우수한 정의 방식이며 공식은 다음과 같다.
+$$\text{Dynamic Regret} = \frac{1}{T} \sum_{t=1}^{T} \left( \mathbb{E}<em>{(x_t, y_t) \sim p_t} [\ell(f</em>{\theta_t}(x_t), y_t)] - \mathbb{E}<em>{(x_t, y_t) \sim p_t} [\ell(f</em>{\theta_t^*}(x_t), y_t)] \right)$$
+<ul>
+<li><strong>한계:</strong> 매 시점 $t$마다의 이론적 최적 파라미터 타겟 $\theta_t^*$를 현실 데이터 스트림에서 실제로 관찰하거나 추정하는 것이 불가능하여 실용적 측정에 명확한 한계가 존재한다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="8-단서-조항-한계-및-향후-연구-과제-future-work">8. 단서 조항, 한계 및 향후 연구 과제 (Future Work)</h4>
+<h5 id="8-1-주요-단서-및-과장-금지-조항">8.1. 주요 단서 및 과장 금지 조항</h5>
+<ul>
+<li><strong>과거 지식의 망각 문제 미해결:</strong> 지속적 역전파(CBP)는 새로운 지식을 수용하는 '가소성(Plasticity)'을 유지하는 기술이며, 과거 지식을 보존하는 '재앙적 망각(Forgetting)' 문제를 단독으로 완벽히 해결해 주는 것은 아니다.</li>
+<li><strong>트랜스포머 및 LLM 구조로의 확장 과장 금지:</strong> 본 연구의 실증 결과가 모든 대규모 언어 모델(LLM)이나 복잡한 트랜스포머(Transformer) 구조 전체에서 완전하게 검증되었다고 확장 주장할 수 없다.</li>
+<li><strong>수학적 영원성 미보장:</strong> 장기 실증 실험에서 가소성이 지속 유지되었다는 수치적 결과가 '문자 그대로 영원히 배울 수 있다'는 수학적 보증을 의미하는 것은 아니다.</li>
+<li><strong>외부 분야 무리한 응용 확장 금지:</strong> 본 보고서의 원문에 근거하지 않은 외부 의료, 금융, 법률 조언 등 타 분야로의 무리한 응용 확장을 도모하지 않는다.</li>
+</ul>
+<h5 id="8-2-남은-과제-및-후속-연구-방향">8.2. 남은 과제 및 후속 연구 방향</h5>
+<ol>
+<li><strong>휴리스틱 효용 지표의 이론적 개선:</strong> 현재의 기여 효용(Contribution Utility) 지표는 직관적 휴리스틱에 기반하므로, 손실면의 2차 곡률(Hessian) 정보를 반영한 더욱 정밀하고 엄밀한 유닛 가치 평가 수학적 모델 개발이 필요하다.</li>
+<li><strong>트랜스포머(Transformer) 전체 구조로의 확장:</strong> 셀프 어텐션(Self-Attention) 메커니즘, 잔차 연결, 레이어 정규화가 복합 결합된 트랜스포머 아키텍처에 선택적 재초기화 기법을 원활히 적용하기 위한 기술적 난제 해결이 요구된다.</li>
+<li><strong>안정성(Stability)과 가소성(Plasticity)의 동시 확보:</strong> 기존 지식을 보존하는 안정성(Stability)과 새로운 지식을 수용하는 가소성(Plasticity) 사이의 최적 딜레마(Stability-Plasticity Dilemma)를 단일 메커니즘으로 동시에 해소하는 통합 알고리즘 구현이 향후 연구 과제로 남는다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

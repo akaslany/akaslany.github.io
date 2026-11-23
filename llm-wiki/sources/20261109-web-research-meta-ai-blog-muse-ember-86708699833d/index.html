@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Our Smallest, Most Efficient Model: Muse Ember</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing Our Smallest, Most Efficient Model: Muse Ember</h1>
+<p class="page-meta">웹 · 2026-11-09</p>
+<h2 id="요약">요약</h2>
+<p>2026년 11월 9일 메타(Meta)는 자사의 가장 작고 효율적인 인공지능 모델인 '뮤즈 엔버(Muse Ember)'를 발표했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://research.meta.ai/blog/muse-ember">출처</a> · <a href="https://www.youtube.com/watch?v=yANc5zss8SM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="meta-ai의-소형-고효율-모델-muse-ember-기술-분석-보고서">Meta AI의 소형·고효율 모델 'Muse Ember' 기술 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>2026년 11월 9일 메타(Meta)는 자사의 가장 작고 효율적인 인공지능 모델인 '뮤즈 엔버(Muse Ember)'를 발표했다. 뮤즈 엔버는 복잡한 추론 실행을 비롯해 에이전트가 하루 종일 반복적으로 수행하는 작업(도구 호출, 코딩 하위 작업, 라우팅, 정보 추출, 긴 문서 파싱 등)을 전담 처리하기 위해 설계된 소형·고효율 모델이다.</p>
+<p>비용 대비 성능 측면에서 뮤즈 엔버는 경쟁 모델인 클로드 하이쿠 5.5(Claude Haiku 5.5) 및 지피티-6 루나(GPT-6 Luna) 대비 모든 추론 노력(reasoning effort) 설정 구간에서 더 높은 달러당 지능(intelligence per dollar)을 제공한다. 클로드 하이쿠 5.5의 최고 점수 수준(36.2점, 작업당 $0.411)을 약 3분의 1 비용 수준(35.8점, 작업당 $0.136)으로 달성하며, 지피티-6 루나의 모든 설정 점수를 능가한다. 또한 아티피셜 어낼리시스(Artificial Analysis) 리더보드의 효율성 프론티어 상단에 위치하여, 동일 작업당 비용 기준 최상위 성능을 나타낸다. 모델의 수수료 체계는 백만(1M) 입력 토큰당 $0.10, 백만 캐시 입력 토큰당 $0.004, 백만 출력 토큰당 $0.50로 책정되었다.</p>
+<p>뮤즈 엔버는 메타의 최상위 프론티어 모델인 '뮤즈 원더 풀(Muse Wonder Full)'을 활용해 훈련 및 개발된 첫 번째 전문화 모델이다. 메타의 전체 모델 포트폴리오 내에서 뮤즈 원더(Muse Wonder)는 가장 난이도가 높은 문제 해결 및 기획(Planning)을 담당하고, 뮤즈 스파크(Muse Spark)는 일반적인 코딩 및 에이전틱 워크플로우를 수행하며, 뮤즈 엔버는 대규모로 반복되는 코딩 및 에이전트 하위 작업을 아티피셜 어낼리시스 작업당 평균 약 $0.14 수준의 저비용으로 처리하는 역할을 맡는다. 본 모델은 메타 모델 API(Meta Model API)와 뮤즈 코드(Muse Code)에서 <code>muse-ember-1.0</code> 형태로 즉시 제공된다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
+<h5 id="2-1-논점-1-비용-대비-성능-최적화-및-벤치마크-효율성-소스-위치-intelligence-vs-cost-per-task-availability">2.1 논점 1: 비용 대비 성능 최적화 및 벤치마크 효율성 [소스 위치: Intelligence vs. Cost Per Task, Availability]</h5>
+<ul>
+<li><strong>사실 (Facts)</strong>: 뮤즈 엔버의 이용 가격은 1M 입력 토큰당 $0.10, 1M 캐시 입력 토큰당 $0.004, 1M 출력 토큰당 $0.50이다. 아티피셜 어낼리시스 인덱스 평가 데이터에 따르면, 뮤즈 엔버는 추론 설정에 따라 작업당 비용(Cost Per Task) $0.116일 때 33.9점, $0.136일 때 35.8점을 기록했으며, 소스 본문에서는 이를 대표값 기준 작업당 평균 약 $0.14 수준으로 산정하고 있다. 반면 클로드 하이쿠 5.5는 작업당 비용 $0.092~$0.411 구간에서 24.6~36.2점을, 지피티-6 루나는 $0.073~$0.152 구간에서 21.4~27.8점을 기록했다. 상위 모델인 뮤즈 스파크 1.3(Muse Spark 1.3)의 작업당 비용이 $2.39인 것에 비해서도 월등히 경제적이다.</li>
+<li><strong>소스의 주장 (Source Assertions)</strong>: 뮤즈 엔버는 모든 추론 노력 설정에서 클로드 하이쿠 5.5나 지피티-6 루나보다 달러당 뛰어난 지능을 제공하며, 클로드 하이쿠 5.5의 최고 점수 구간을 약 3분의 1 비용 수준으로 도달한다. 또한 아티피셜 어낼리시스 전수 리더보드 상에서 작업당 비용 대비 성능 비율이 가장 우수한 효율성 프론티어에 위치한다.</li>
+<li><strong>작성자 해석 (Author Interpretation)</strong>: 뮤즈 엔버는 절대적 지능 지수에서 고성능 모델 수준을 유지하면서도 운영 비용을 획기적으로 낮춤으로써, 비용 부담 때문에 제한적이었던 모든 상용 서비스 및 에이전틱 워크플로우의 상시·대규모 적용을 가능하게 하는 경제적 타당성을 제시한다.</li>
+</ul>
+<h5 id="2-2-논점-2-에이전트-작업-및-엔드투엔드-비즈니스-워크플로우-수행-능력-소스-위치-agents">2.2 논점 2: 에이전트 작업 및 엔드투엔드 비즈니스 워크플로우 수행 능력 [소스 위치: Agents]</h5>
+<ul>
+<li><strong>사실 (Facts)</strong>: 엔드투엔드 비즈니스 워크플로우를 평가하는 아키텍처 벤치마크 오토메이션벤치(AutomationBench-AA)에서 뮤즈 엔버(max 설정)는 37.8%를 기록하여 지피티-6 루나(20.2%)와 클로드 하이쿠 5.5(13.9%)를 압도했다. 에이전트 과제 수행 능력을 측정하는 에이전츠 라스트 이그잼(Agents' Last Exam)에서는 61.6%(지피티-6 루나: 57.1%, 클로드 하이쿠 5.5: 57.0%), 내부 종합 지표인 퍼스널 슈퍼인텔리전스 인덱스(Personal Superintelligence Index)에서는 46.8%(지피티-6 루나: 37.0%, 클로드 하이쿠 5.5: 36.1%)를 기록했다.</li>
+<li><strong>소스의 주장 (Source Assertions)</strong>: 뮤즈 엔버는 레코드 검색, 순차적 도구 호출, 애플리케이션 간 시스템 업데이트 등 에이전트가 소비하는 다량의 정형화된 하위 단계를 완수하도록 최적화되어 있다. 1M 토큰 컨텍스트 윈도우와 최대 512K 출력 토큰 지원을 통해 단일 호출 내에서 전체 코드베이스나 대용량 문서 세트를 전반적으로 처리할 수 있다.</li>
+<li><strong>작성자 해석 (Author Interpretation)</strong>: 단발성 텍스트 생성에 머무르던 기존 소형 모델의 한계를 극복하고, 대용량 입·출력 스펙을 바탕으로 복잡한 비즈니스 프로세스를 엔드투엔드로 완결할 수 있는 실무형 에이전트 엔진으로서의 자격을 입증했다.</li>
+</ul>
+<h5 id="2-3-논점-3-개발자-코딩-하위-작업-및-메인-서브에이전트-연계-소스-위치-coding">2.3 논점 3: 개발자 코딩 하위 작업 및 메인/서브에이전트 연계 [소스 위치: Coding]</h5>
+<ul>
+<li><strong>사실 (Facts)</strong>: 터미널 환경 코딩 능력을 측정하는 터미널 벤치 4.0(Terminal-Bench 4.0)에서 뮤즈 엔버는 40.9%를 기록하여 클로드 하이쿠 5.5(39.2%) 및 지피티-6 루나(16.4%)보다 우수한 성적을 냈다. 코딩 에이전트 인덱스(Coding Agent Index-AA)에서도 46점으로 가장 높은 점수를 달성했다. 다만 실제 코드 병합 가능성을 평가하는 프론티어코드 2.0(FrontierCode 2.0-AA)에서는 27.2%를 기록해 클로드 하이쿠 5.5(34.9%)보다 낮고 지피티-6 루나(25.2%)보다는 높은 결과를 보였다.</li>
+<li><strong>소스의 주장 (Source Assertions)</strong>: 뮤즈 엔버는 개발 세션 중 수백 번 실행되는 파일 읽기, 테스트 실행, 부분 코드 수정 등 코딩 하위 작업 처리에 특화되어 있다. 매우 난이도가 높은 고난도 엔지니어링 문제는 상위 모델인 뮤즈 원더가 전체 기획(Plan)을 세우고, 뮤즈 엔버가 대량의 하위 작업을 실행하는 대규모 분업 전략이 권장된다.</li>
+<li><strong>작성자 해석 (Author Interpretation)</strong>: 뮤즈 엔버는 단독으로 모든 소프트웨어 설계를 완결하기보다, 하네스(Harness) 내에서 메인 에이전트의 지시를 받아 반복적인 세부 구현 및 검증을 쾌속 수행하는 서브에이전트(Subagent) 역할에 최적화된 아키텍처적 유용성을 갖춘 것으로 판단된다.</li>
+</ul>
+<h5 id="2-4-논점-4-멀티모달-인식-및-문서-컴퓨터-조작-능력-소스-위치-multimodal">2.4 논점 4: 멀티모달 인식 및 문서/컴퓨터 조작 능력 [소스 위치: Multimodal]</h5>
+<ul>
+<li><strong>사실 (Facts)</strong>: 대용량 문서 전문 작업을 평가하는 GDP.pdf-AA 벤치마크에서 뮤즈 엔버는 22.8%를 기록하여 지피티-6 루나(22.8%)와 동률을 형성하고 클로드 하이쿠 5.5(20.8%)를 상회했다. 데스크톱 앱 조작 능력을 평가하는 OSWorld 2.1에서는 부분 점수 69.5%, 바이너리 점수 33.8%를 기록하여 경쟁 모델(클로드 하이쿠 5.5: 68.9%/27.8%, 지피티-6 루나: 50.5%/17.0%)을 앞섰다. 도구를 활용한 세밀한 시각 인식을 측정하는 퍼셉션벤치(PerceptionBench)에서는 80.6%를 기록했다.</li>
+<li><strong>소스의 주장 (Source Assertions)</strong>: 텍스트, 이미지, 오디오, 비디오를 네이티브(자체)로 지원하므로 별도의 외부 모듈 없이 스크린샷, 차트, 스캔 문서, 음성 메모, 회의 녹음 등을 직접 분석할 수 있으며, 스크린샷 기반의 컴퓨터 직접 조작 및 정밀한 시각 파악이 가능하다.</li>
+<li><strong>작성자 해석 (Author Interpretation)</strong>: 다양한 미디어 양식을 별도 변환기나 파이프라인 구성 없이 단일 모델 엔드포인트에서 통합 처리함으로써, 멀티모달 에이전트 구축 시 시스템 복잡도와 네트워크 지연 시간을 대폭 단축시킨다.</li>
+</ul>
+<h5 id="2-5-논점-5-산업-파트너사-검증-및-엔터프라이즈-실무-적용-사례-소스-위치-partner-testimonials">2.5 논점 5: 산업 파트너사 검증 및 엔터프라이즈 실무 적용 사례 [소스 위치: Partner Testimonials]</h5>
+<ul>
+<li><strong>사실 (Facts)</strong>: 메타의 초기 테스트 파트너사들은 뮤즈 엔버를 다양한 실무 에이전트 워크로드에 적용하여 검증을 완료했다.
+<ul>
+<li><strong>박스(Box)</strong>: 협상 플레이북에 맞춘 계약서 조항별 검토 및 종합 위험 등급 산출, 세부 조건에 맞춘 지원자 스크리닝 작업을 성공적으로 수행하여 속도, 정확도, 토큰 효율성을 검증함.</li>
+<li><strong>클라인(Cline)</strong>: 개발자가 신뢰할 수 있는 저비용·고속 모델로서 에이전트 하네스 내 서브에이전트로 작동 시 코딩 및 문서 분석 성능을 검증함.</li>
+<li><strong>오라클(Oracle)</strong>: 복잡한 엔지니어링 문제를 다루는 데 유망한 성능을 확인하여 엔지니어링 팀의 유용한 도구로서의 가능성을 입증함.</li>
+<li><strong>클라우드플레어(Cloudflare)</strong>: 테스트 대상 비교 모델 대비 테일(tail) 속도가 최대 30% 신속했으며, 다중 리포지토리(multi-repo) 조사 작업을 우수하게 이행함.</li>
+<li><strong>유닷컴(You.com)</strong>: p95 대기시간 2.2초(주요 오픈웨이트 모델 대비 약 4배~13배 신속) 및 36~48% 절감된 출력 토큰 소비량으로 모든 코딩 퀘스트를 성공적으로 수행함.</li>
+</ul>
+</li>
+<li><strong>소스의 주장 (Source Assertions)</strong>: 뮤즈 엔버는 엔터프라이즈 콘텐츠 분석부터 서브에이전트 코딩, 대규모 다중 리포지토리 조사, 대기시간 단축 작업에 이르기까지 실제 산업 현장에 즉시 투입 가능한 실용성을 보여준다.</li>
+<li><strong>작성자 해석 (Author Interpretation)</strong>: 파트너사들의 검증 사례는 뮤즈 엔버가 단독 메인 모델에 머무르지 않고, 대규모 엔터프라이즈 환경에서 에이전틱 워크플로우 구축 시 실행 속도 향상과 토큰 절감을 동시에 달성하는 '하강 작업 및 서브에이전트 전담 모델'로서 실효성을 확고히 인정받았음을 나타낸다.</li>
+</ul>
+<h5 id="2-6-논점-6-안전성-safety-평가-및-개발-프레임워크-소스-위치-safety">2.6 논점 6: 안전성(Safety) 평가 및 개발 프레임워크 [소스 위치: Safety]</h5>
+<ul>
+<li><strong>사실 (Facts)</strong>: 제품 출시 전 메타 초지능 스케일링 프레임워크(Meta Superintelligence Scaling Framework)에 근거하여 화학/생물학 위험, 사이버보안 위험, 통제 손실 위험 등에 대해 엄격한 평가를 거쳤다.</li>
+<li><strong>소스의 주장 (Source Assertions)</strong>: 소형 모델임에도 불구하고 플래그십 모델과 동일한 수준의 핵심 안전 훈련 및 테스트를 거쳤으며, 모든 평가 항목에서 고위험 임계값 미만을 유지했다. 사용자 의도 존중, 민감 정보의 안전한 처리, 웹페이지·문서·도구 출력 내 숨겨진 지시(prompt injection) 저항성, 고영향 행동 수행 전 인간 확인 요구 기능 등을 포함한다.</li>
+<li><strong>작성자 해석 (Author Interpretation)</strong>: 비용과 크기를 대폭 낮춘 경량형 모델 포트폴리오에서도 보안 및 거버넌스 수준을 타협하지 않고 프라이빗 및 엔터프라이즈 환경에 적용할 수 있는 안전 기반을 제공한다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-speakers">3. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">직책 (Role)</th>
+<th style="text-align:left">소속 회사 (Company)</th>
+<th style="text-align:left">주요 발언/평가 요약</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">야쇼다 바브나니 (Yashodha Bhavnani)</td>
+<td style="text-align:left">AI 제품 부사장 (VP of AI Products)</td>
+<td style="text-align:left">박스 (Box)</td>
+<td style="text-align:left">박스 AI 복합 작업 평가에서 뛰어난 정확도, 속도, 토큰 효율성을 입증함. 계약서 위험 평가 및 지원자 스크리닝 등 엔터프라이즈 콘텐츠 에이전트의 효율적 기반이 됨.</td>
+</tr>
+<tr>
+<td style="text-align:left">사우드 리즈완 (Saoud Rizwan)</td>
+<td style="text-align:left">설립자 (Founder)</td>
+<td style="text-align:left">클라인 (Cline)</td>
+<td style="text-align:left">신뢰할 수 있는 저비용·고속 모델. 개발 하네스 내 서브에이전트로 작동해 운영 비용을 절감하며, 코딩 및 문서 분석 작업에서 탁월한 성능을 발휘함.</td>
+</tr>
+<tr>
+<td style="text-align:left">콘스탄티노스 파파밀티아디스 (Konstantinos Papamiltiadis (kp))</td>
+<td style="text-align:left">글로벌 파트너십 수석 부사장 (SVP, Global Partnerships)</td>
+<td style="text-align:left">오라클 (Oracle)</td>
+<td style="text-align:left">복잡한 엔지니어링 작업 수행 능력을 검증했으며, 엔지니어링 팀의 가치 있는 도구로 발전할 강한 가능성을 확인함.</td>
+</tr>
+<tr>
+<td style="text-align:left">데인 네크트 (Dane Knecht)</td>
+<td style="text-align:left">최고 기술 책임자 (CTO)</td>
+<td style="text-align:left">클라우드플레어 (Cloudflare)</td>
+<td style="text-align:left">비교 모델 대비 테일(tail) 속도가 최대 30% 빠름. 다중 리포지토리 조사 작업 능력이 우수하여 고처리량 에이전트 워크로드에 매우 적합함.</td>
+</tr>
+<tr>
+<td style="text-align:left">착 포티나 (Chak Pothina)</td>
+<td style="text-align:left">인퍼런스 리드 (Inference Lead)</td>
+<td style="text-align:left">유닷컴 (You.com)</td>
+<td style="text-align:left">p95 대기시간 2.2초(선도적인 오픈웨이트 모델 대비 4~13배 신속) 및 36~48% 적은 출력 토큰 소비량으로 테스트 내 모든 코딩 퀘스트를 완료함.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-metrics-timeline">4. 주요 수치 및 시점 (Metrics &amp; Timeline)</h4>
+<h5 id="4-1-발표-시점-및-비용-구조">4.1 발표 시점 및 비용 구조</h5>
+<ul>
+<li><strong>발표일</strong>: 2026년 11월 9일</li>
+<li><strong>입력 토큰 가격</strong>: $0.10 / 1M 토큰</li>
+<li><strong>캐시 입력 토큰 가격</strong>: $0.004 / 1M 토큰</li>
+<li><strong>출력 토큰 가격</strong>: $0.50 / 1M 토큰</li>
+<li><strong>컨텍스트 윈도우 크기</strong>: 1,000,000 (1M) 토큰</li>
+<li><strong>최대 출력 토큰 수</strong>: 512,000 (512K) 토큰</li>
+<li><strong>평균 작업당 비용</strong>: 약 $0.14 (아티피셜 어낼리시스 인덱스 리더보드 산정 기준; 세부 추론 설정별로 $0.116~$0.136 구간 분포)</li>
+</ul>
+<h5 id="4-2-모델별-주요-벤치마크-비교표">4.2 모델별 주요 벤치마크 비교표</h5>
+<p><em>(주: 모든 모델은 최대 추론 노력(max reasoning) 설정에서 평가됨)</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 영역</th>
+<th style="text-align:left">벤치마크 항목</th>
+<th style="text-align:left">뮤즈 엔버 (Muse Ember, max)</th>
+<th style="text-align:left">클로드 하이쿠 5.5 (Claude Haiku 5.5, max)</th>
+<th style="text-align:left">지피티-6 루나 (GPT-6 Luna, max)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Agents</strong></td>
+<td style="text-align:left">AutomationBench-AA (비즈니스 워크플로우)</td>
+<td style="text-align:left"><strong>37.8%</strong></td>
+<td style="text-align:left">13.9%</td>
+<td style="text-align:left">20.2%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Agents</strong></td>
+<td style="text-align:left">Agents' Last Exam (에이전트 과제)</td>
+<td style="text-align:left"><strong>61.6%</strong></td>
+<td style="text-align:left">57.0%</td>
+<td style="text-align:left">57.1%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Agents</strong></td>
+<td style="text-align:left">Personal Superintelligence Index (종합 지표)</td>
+<td style="text-align:left"><strong>46.8%</strong></td>
+<td style="text-align:left">36.1%</td>
+<td style="text-align:left">37.0%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Coding</strong></td>
+<td style="text-align:left">Terminal-Bench 4.0 (터미널 코딩)</td>
+<td style="text-align:left"><strong>40.9%</strong></td>
+<td style="text-align:left">39.2%</td>
+<td style="text-align:left">16.4%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Coding</strong></td>
+<td style="text-align:left">Coding Agent Index-AA (실제 하네스 코딩)</td>
+<td style="text-align:left"><strong>46</strong></td>
+<td style="text-align:left">37</td>
+<td style="text-align:left">31</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Coding</strong></td>
+<td style="text-align:left">FrontierCode 2.0-AA (엔지니어링 병합 가능성)</td>
+<td style="text-align:left">27.2%</td>
+<td style="text-align:left"><strong>34.9%</strong></td>
+<td style="text-align:left">25.2%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Multimodal</strong></td>
+<td style="text-align:left">GDP.pdf-AA (대용량 문서 작업)</td>
+<td style="text-align:left"><strong>22.8%</strong></td>
+<td style="text-align:left">20.8%</td>
+<td style="text-align:left"><strong>22.8%</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Multimodal</strong></td>
+<td style="text-align:left">OSWorld 2.1 (부분 점수 / 바이너리 점수)</td>
+<td style="text-align:left"><strong>69.5% (부분) / 33.8% (바이너리)</strong></td>
+<td style="text-align:left">68.9% (부분) / 27.8% (바이너리)</td>
+<td style="text-align:left">50.5% (부분) / 17.0% (바이너리)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Multimodal</strong></td>
+<td style="text-align:left">PerceptionBench (도구 활용 시각 인식)</td>
+<td style="text-align:left"><strong>80.6%</strong></td>
+<td style="text-align:left">78.6%</td>
+<td style="text-align:left">62.8%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>General</strong></td>
+<td style="text-align:left">Artificial Analysis Index (종합 인덱스)</td>
+<td style="text-align:left"><strong>36</strong></td>
+<td style="text-align:left"><strong>36</strong></td>
+<td style="text-align:left">28</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>모델 구조 및 파라미터 미공개</strong>: 소스 문서에서는 뮤즈 엔버를 메타의 &quot;가장 작은 모델(Smallest model)&quot;로 정의하고 있으나, 모델의 정확한 파라미터 수(Parameter count) 및 구체적인 신경망 구조 수치는 공개되어 있지 않다 (확인 불가).</li>
+<li><strong>특정 고난도 코딩 벤치마크에서의 상대적 열세</strong>: 실제 고난도 엔지니어링 코드의 병합 가능성을 측정하는 프론티어코드 2.0(FrontierCode 2.0-AA) 벤치마크에서 뮤즈 엔버는 27.2%를 기록하여 경쟁 모델인 클로드 하이쿠 5.5(34.9%)에 미달하는 성능 한계를 보였다. 이에 대해 메타는 고난도 문제의 경우 상위 모델인 뮤즈 원더가 기획하고 뮤즈 엔버가 하위 작업을 처리하는 조합 활용 방안을 조언한다.</li>
+<li><strong>외부 독립 검증의 한계</strong>: 본 보고서에 포함된 벤치마크 수치 및 산업 파트너사(박스, 클라인, 오라클, 클라우드플레어, 유닷컴)의 테스트 소감은 메타의 발표 자료 및 내부 평가 체계에 기초한 것이며, 교차 검증을 거친 제3자의 독립된 검증 결과 포함 여부는 소스 자료에서 추가로 확인할 수 없다 (확인 불가).</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

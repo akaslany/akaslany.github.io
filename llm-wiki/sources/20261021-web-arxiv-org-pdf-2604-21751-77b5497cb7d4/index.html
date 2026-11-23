@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why are all LLMs Obsessed with Japanese Culture? On the Hidden Cultural and Regional Biases of LLMs</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Why are all LLMs Obsessed with Japanese Culture? On the Hidden Cultural and Regional Biases of LLMs</h1>
+<p class="page-meta">논문 · 2026-10-21</p>
+<h2 id="요약">요약</h2>
+<p>거대언어모델(LLM)은 뛰어난 자연어 처리 능력을 바탕으로 다각도의 지식 생성 업무에 활용되고 있으나, 문화적 포괄성과 역량 측면에서 일정한 한계를 보이며 특정 지역 및 문화에 대한 편향성을 드러내는 문제가 지속적으로 제기되어 왔습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2604.21751">출처</a> · <a href="https://www.youtube.com/watch?v=OB_E25b0DzA">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="거대언어모델-llm-의-잠재적-문화적-지역적-편향-및-일본-문화-편중-현상-분석-보고서">거대언어모델(LLM)의 잠재적 문화적·지역적 편향 및 일본 문화 편중 현상 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>거대언어모델(LLM)은 뛰어난 자연어 처리 능력을 바탕으로 다각도의 지식 생성 업무에 활용되고 있으나, 문화적 포괄성과 역량 측면에서 일정한 한계를 보이며 특정 지역 및 문화에 대한 편향성을 드러내는 문제가 지속적으로 제기되어 왔습니다. 기존의 인공지능 문화 편향 연구는 주로 미국이나 유럽 등 서구권 및 영어권 중심의 시각이 반영되는 현상에 집중하여, 사전 정의된 정답 집합이나 인간 답변과의 비교를 통해 모델의 성향을 평가하였습니다.</p>
+<p>본 연구는 기존 연구들과 달리, 특정 국가나 지역을 명시하지 않은 개방형 문화 관련 질문에 대해 거대언어모델이 스스로 선호하고 선택하는 지역적·문화적 편중 현상을 정량적으로 분석하였습니다. 그 결과, 기존에 널리 알려진 서구 중심 편향 외에도 모델들이 입력 언어를 불문하고 비자국 언급 시 일본(Japan) 문화 및 국가에 대해 매우 강력한 답변 편중 현상을 보인다는 사실을 새로이 발굴하였습니다.</p>
+<p>이러한 현상을 체계적으로 측정하기 위해 연구진은 위치 지시자 홀더 마스킹(Locational Placeholder Masking)을 적용한 질문 프롬프트와 지능형 판정 모델(LLM-as-a-judge)을 활용한 2차 평가 프레임워크를 제안하였습니다. 아울러 24개 언어로 구성된 CROQ(Culture-Related Open Questions) 데이터셋을 구축하여 11개 주요 문화 도메인과 66개 세부 주제에 걸쳐 거대언어모델의 내재적 문화 편향 발생 메커니즘을 다각도로 검증하였습니다.</p>
+<hr />
+<h4 id="2-주요-논점-및-연구-결과-key-research-points-findings">2. 주요 논점 및 연구 결과 (Key Research Points &amp; Findings)</h4>
+<h5 id="2-1-데이터셋-구축-및-평가-프레임워크-croq-dataset-framework">2.1. 데이터셋 구축 및 평가 프레임워크 (CROQ Dataset &amp; Framework)</h5>
+<ul>
+<li><strong>주장 (Claim)</strong>: 특정 지역이 명시되지 않은 개방형 문화 질문에서 위치 지시자 홀더 마스킹(Locational Placeholder Masking)과 지능형 판정 모델(LLM-as-a-judge) 기반 2차 평가 프레임워크를 결합함으로써, 거대언어모델 내부의 내재적·잠재적 문화 편향을 정량적으로 추출 및 측정할 수 있습니다.</li>
+<li><strong>근거 (Evidence)</strong>: 연구진은 대표성과 다채구조를 갖춘 11개 상위 도메인 및 66개 세부 주제로 구분된 CROQ 데이터셋을 구축하였으며, 인출된 무제한 텍스트 응답에서 지리적 대상 국가를 정밀 추출하기 위한 판정 모델의 신뢰성을 검증하였습니다.</li>
+<li><strong>실제 사례/데이터 (Examples &amp; Data)</strong>:
+<ul>
+<li><strong>CROQ 데이터셋 구조</strong>: 11개 상위 도메인(신념·가치관·정체성, 사회 구조·일상, 지식·통신·교육, 문화 표현·예술, 음식·음료·여가, 지리, 정치, 건강·웰빙, 미디어·엔터테인먼트, 역사, 경제·산업)과 66개 세부 하위 주제로 구성됩니다. 주제당 20개의 질문을 생성하여 1,320개의 기본 질문을 마련하고, 이를 24개 언어로 번역 및 검수하여 총 31,680개의 평가 프롬프트 데이터셋을 완성하였습니다.</li>
+<li><strong>프레임워크 및 프롬프트 설계</strong>: 모든 프롬프트에는 위치 지시자 홀더 마스킹인 <code>{in region/place}</code>를 적용하였습니다(예: &quot;What values shape family life {in region/place}? Be brief. Choose yourself the place.&quot;).</li>
+<li><strong>판정 모델 검증</strong>: 모델 응답에서 최대 5개 지리적 언급을 추출하는 지능형 판정 모델(LLM-as-a-judge) 프레임워크는 264개 무작위 샘플 대상 자체 검증에서 98%의 추출 정확도를 기록하였습니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-연구-질문-1-llm의-지역적-문화적-편향-특성-rq1-regional-cultural-biases">2.2. 연구 질문 1: LLM의 지역적·문화적 편향 특성 (RQ1: Regional Cultural Biases)</h5>
+<ul>
+<li><strong>주장 (Claim)</strong>: 거대언어모델은 입력 프롬프트 언어의 공식 사용국을 최우선적으로 반영하는 자기 참조율(Self-referential / Own-country association rate)이 높게 나타나며, 타국가(Exogenous)를 언급할 때는 특정 소수 국가로 출력이 극도로 편중됩니다.</li>
+<li><strong>근거 및 데이터 (Evidence &amp; Data)</strong>: 8개 주요 프론티어 API 모델(<code>gpt-4o-mini</code>, <code>gemini-2.5-flash</code>, <code>claude-3.5-haiku</code>, <code>llama-4-maverick</code>, <code>command-r-08-2024</code>, <code>magistral-small-2506</code>, <code>deepseek-v3.2-exp</code>, <code>qwen3-next-80b-a3b-instruct</code>)을 대상으로 24개 언어 응답을 분석한 결과, 자국 언어-지역 연관 비율은 최소 43%(<code>command-r-08-2024</code>)에서 최대 78%(<code>gpt-4o-mini</code>)에 달했습니다. (<code>magistral-small-2506</code>: 73%, <code>qwen3-next-80b-a3b-instruct</code>: 71%, <code>deepseek-v3.2-exp</code>: 69%, <code>llama-4-maverick</code>: 66%, <code>claude-3.5-haiku</code>: 65%, <code>gemini-2.5-flash</code>: 64%).</li>
+<li><strong>실제 사례 (Examples)</strong>:
+<ul>
+<li><strong>비자국(Exogenous) 언급 세부 분석</strong>: 자국 언어 연관 언급을 제외한 외부 국가 순위 분석 결과, 세부 정량 수치 및 모델별 특성에 따라 평가 대상 8개 모델 중 5개 모델(<code>gpt-4o-mini</code>, <code>claude-3.5-haiku</code>, <code>llama-4-maverick</code>, <code>magistral-small-2506</code>, <code>qwen3-next-80b-a3b-instruct</code>)에서 일본(Japan)이 독보적인 1위를 차지했습니다. <code>command-r-08-2024</code>와 <code>deepseek-v3.2-exp</code>는 미국(United States)을 상대적으로 더 높게 반영하였으며(<code>command-r-08-2024</code>는 미국 2,064회 대 일본 936회), <code>gemini-2.5-flash</code>는 일본(1,493회)과 미국(1,493회)이 정확히 동일한 수치로 동률을 이루었습니다.</li>
+<li><strong>상위 12개 외부 국가 계층</strong>: 글로벌 전반에서 정량적으로 도출된 상위 12개 비자국 언급 국가 순위는 <strong>일본(Japan), 미국(United States), 인도(India), 중국(China), 프랑스(France), 이탈리아(Italy), 영국(United Kingdom), 독일(Germany), 멕시코(Mexico), 브라질(Brazil), 러시아(Russia), 이집트(Egypt)</strong> 순으로 집계되었습니다.</li>
+</ul>
+</li>
+<li><strong>주제별 변동성 (Topic Variability)</strong>:
+<ul>
+<li>지리(Geography) 및 경제(Economy) 도메인에서는 미국의 언급 빈도가 일본을 제치고 1위로 상승했습니다.</li>
+<li>정치(Politics) 및 역사(History) 주제에서는 일본이 각각 3위와 4위로 하락하였으며, 정치에서는 중국(China), 역사에서는 프랑스(France), 신념(Beliefs) 주제에서는 그리스(Greece)가 주요 상위 국가로 부각되었습니다.</li>
+<li>특히 대한민국(South Korea, KR)은 타 도메인에서는 언급 빈도가 매우 낮았으나, 미디어 및 엔터테인먼트(Media and Entertainment) 도메인에 한하여 전체 3위 국가로 급상승하는 주제 특화적 문화적 두각을 나타냈습니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-연구-질문-2-언어-자원-수준이-편향에-미치는-영향-rq2-impact-of-language">2.3. 연구 질문 2: 언어 자원 수준이 편향에 미치는 영향 (RQ2: Impact of Language)</h5>
+<ul>
+<li><strong>주장 (Claim)</strong>: 입력 프롬프트 언어의 자원 수준(Resource Level)과 학습 데이터 점유율에 따라 출력의 지리적 다양성(Diversity)과 자국 편중도(Own-country rate)가 비대칭적으로 변화합니다.</li>
+<li><strong>근거 및 데이터 (Evidence &amp; Data)</strong>:
+<ul>
+<li><strong>언어군 선정 타당성</strong>: 데이터셋은 고자원부터 저자원을 아우르는 BLEnD의 13개 언어, 커먼크롤(CommonCrawl) 점유율이 높은 주요 통용어, 그리고 스페인의 저자원 공용어인 바스크어(<code>-eu-</code>), 갈리시아어(<code>-gl-</code>), 카탈루냐어(<code>-ca-</code>)를 결합하여 언어 자원 수준별 영향을 정밀 분석할 수 있도록 설계되었습니다.</li>
+<li><strong>고자원 언어 (High-Resource)</strong>: 영어(<code>-en-</code>), 중국어(<code>-zh-</code>), 스페인어(<code>-es-</code>), 프랑스어(<code>-fr-</code>), 러시아어(<code>-ru-</code>) 등은 출력 다양성(Diversity)과 정규화된 엔트로피(Normalized Entropy) 지표가 높고 자국 편중 비율이 상대적으로 낮았습니다.</li>
+<li><strong>저자원 언어 (Low-Resource)</strong>: 순다어(<code>-su-</code>), 아삼어(<code>-as-</code>), 암하라어(<code>-am-</code>), 하우사어(<code>-ha-</code>), 바스크어(<code>-eu-</code>) 등은 자국 편중 비율이 매우 높거나(최대 83%) 무응답(NA) 비율이 증가하고 출력의 지리적 다양성이 크게 하락했습니다.</li>
+</ul>
+</li>
+<li><strong>통계 검정 (Statistical Test)</strong>: 사전학습 코퍼스인 커먼크롤(CommonCrawl) 데이터 내 언어별 점유율과 모델 출력 다양성 간의 상관관계를 통계 검정한 결과, 스피어만 상관계수 $r_s = 0.843$ ($p &lt; 0.001$)로 극도로 높은 통계적 유의성과 정적 상관관계를 입증하였습니다.</li>
+</ul>
+<h5 id="2-4-연구-질문-3-문화적-편향의-발생-학습-단계-rq3-emergence-stage-in-llm-training">2.4. 연구 질문 3: 문화적 편향의 발생 학습 단계 (RQ3: Emergence Stage in LLM Training)</h5>
+<ul>
+<li><strong>주장 (Claim)</strong>: 거대언어모델의 특정 국가 편중 및 문화적 편향은 대규모 사전학습(Pre-training) 단계에서 형성되는 것이 아니라, 지도 미세조정(SFT) 및 사후 학습(Post-training/Alignment) 단계에서 집중적으로 유입되고 강화됩니다.</li>
+<li><strong>근거 및 데이터 (Evidence &amp; Data)</strong>:
+<ul>
+<li><strong>베이스 모델 평가를 위한 프롬프트 변형</strong>: 다음 토큰 예측에 최적화된 베이스(Base) 모델의 특성을 고려하여, 연구진은 문맥적 의미를 동일하게 유지하면서 개방형 질문을 문장 완성형(Sentence-completion) 포맷으로 전환하여 베이스 모델과 정렬 모델 간의 공정한 비교 평가를 수행하였습니다.</li>
+<li><strong>평가 대상 모델</strong>: <code>Llama-3.1</code> (8B, 70B), <code>Qwen2.5</code> (7B, 32B, 72B), <code>Gemma-2</code> (9B, 27B), <code>Mistral-7B-v0.3</code> 및 학습 단계별 체크포인트가 공개된 <code>OLMo-2</code> (7B, 32B), <code>OLMo-3</code> (7B, 7B-Think)를 분석하였습니다.</li>
+</ul>
+</li>
+<li><strong>사례 및 메커니즘 분석 (Examples &amp; Mechanistic Analysis)</strong>:
+<ul>
+<li><strong>정규화된 엔트로피(Normalized Entropy) 및 다양성 변화</strong>: 베이스(Base) 모델 상태에서는 다양한 국가(미국, 일본, 인도, 중국, 유럽 등)를 분산된 확률로 언급하며 높은 엔트로피 수치(예: <code>OLMo-2-7B</code> Base 0.84, <code>Llama-3.1-8B</code> Base 0.78, <code>Mistral-7B</code> Base 0.81)를 나타냈습니다.</li>
+<li><strong>SFT 단계의 편향 강화 효과</strong>: 베이스 모델에 지도 미세조정(SFT)을 적용하면 엔트로피가 급격히 하락하면서 특정 국가(미국, 일본)로의 출력 쏠림 현상이 급격히 심화되었습니다(예: <code>OLMo-2-7B</code> SFT 단계에서 엔트로피가 0.63으로 급감, <code>OLMo-3-7B</code> SFT에서 0.66으로 하락).</li>
+<li><strong>사후 정렬(Instruct/RLHF)의 영향 제한</strong>: SFT 이후 진행되는 정렬(Instruct) 단계는 엔트로피 지표에 거의 변화를 주지 않으며(<code>OLMo-2-7B</code> Inst 0.64, <code>OLMo-3-7B</code> Inst 0.64), SFT 단계에서 구축된 편향된 문화적 분포 구조를 그대로 유지·고착시키는 것으로 확인되었습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-연구진-authors-affiliations">3. 등장 인물 및 연구진 (Authors &amp; Affiliations)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 기관 (Affiliation)</th>
+<th style="text-align:left">이메일 / 비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">호세바 페르난데스 데 란다 (Joseba Fernandez de Landa)</td>
+<td style="text-align:left">바스크 주립대학교 HiTZ 센터 - Ixa (HiTZ Center - Ixa, University of the Basque Country EHU)</td>
+<td style="text-align:left">joseba.fernandezdelanda@ehu.eus</td>
+</tr>
+<tr>
+<td style="text-align:left">카를라 페레스알멘드로스 (Carla Perez-Almendros)</td>
+<td style="text-align:left">카디프 대학교 (Cardiff University)</td>
+<td style="text-align:left">소스 텍스트 내 이메일 미기재</td>
+</tr>
+<tr>
+<td style="text-align:left">호세 카마초콜라도스 (Jose Camacho-Collados)</td>
+<td style="text-align:left">카디프 대학교 (Cardiff University)</td>
+<td style="text-align:left">CamachoColladosJ@cardiff.ac.uk</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-statistics-timeline">4. 주요 수치 및 시점 (Key Statistics &amp; Timeline)</h4>
+<ul>
+<li><strong>발표 학회 및 논문 상태</strong>: EMNLP 2026 Findings 수락 (Accepted at EMNLP 2026 Findings)</li>
+<li><strong>데이터셋(CROQ) 구축 규모</strong>:
+<ul>
+<li>총 질문 수: 31,680개 (1,320개 기본 질문 × 24개 언어 번역)</li>
+<li>언어 수: 24개 언어 (고자원, 중자원, 저자원 및 스페인 지역 공용어 포함)</li>
+<li>상위 도메인: 11개 영역 (Beliefs, Social Structure, Education, Arts, Food, Geography, Politics, Health, Media, History, Economy)</li>
+<li>세부 하위 주제: 66개 주제 (주제당 20개 질문, 기본 질문 총 1,320개)</li>
+</ul>
+</li>
+<li><strong>평가 모델 수 및 주요 정량 수치</strong>:
+<ul>
+<li>프론티어 API 평가 모델: 8개 주요 모델 (<code>gpt-4o-mini</code>, <code>gemini-2.5-flash</code>, <code>claude-3.5-haiku</code>, <code>llama-4-maverick</code>, <code>command-r-08-2024</code>, <code>magistral-small-2506</code>, <code>deepseek-v3.2-exp</code>, <code>qwen3-next-80b-a3b-instruct</code>)</li>
+<li>지능형 판정 모델(LLM-as-a-judge) 추출 정확도: 264개 무작위 검증 샘플 기준 98% 정확도</li>
+<li>데이터 자원과 출력 다양성 상관관계: 스피어만 상관계수 $r_s = 0.843$ ($p &lt; 0.001$)</li>
+<li>자국 언어-지역 연관 비율 범위: <code>command-r-08-2024</code> (43%) ~ <code>gpt-4o-mini</code> (78%)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>베이스 모델 평가의 언어적 제약</strong>: 학습 단계별 문화 편향 발생 시점 분석(RQ3) 실험은 Open-weight 베이스 모델의 제공 조건 및 동작 제약으로 인해 영어(English) 프롬프트 환경에 한정하여 진행되었으며, 비영어권 언어에서의 사전학습 및 사후학습 단계별 편향 전이 메커니즘은 직접적으로 다루지 않았습니다.</li>
+<li><strong>지능형 판정 모델(LLM-as-a-judge)의 상세 고유 명칭</strong>: 평가 프레임워크(4.2절)에서 판정 모델의 추출 정확도(98%) 및 프롬프트 최적화 방식은 명시되었으나, 실제 2차 추출에 사용된 판정 모델의 정확한 상용 제품명 및 브랜드 명칭은 제공된 본문 출처 상에서 확인 불가합니다.</li>
+<li><strong>일부 연구자 이메일 및 파라미터 미기재</strong>: 저자 중 카를라 페레스알멘드로스(Carla Perez-Almendros)의 이메일 주소 및 상용 프론티어 API 모델 일부의 내부 세부 파라미터 수치는 소스 텍스트에 명시되어 있지 않아 확인 불가합니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neural Networks Are Already Clean</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Neural Networks Are Already Clean</h1>
+<p class="page-meta">웹 · 2026-10-15</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 닉 카마라타(Nick Cammarata, Goodfire 소속)가 발표한 연구 에세이 *&quot;Neural Networks Are Already Clean&quot;*을 바탕으로, 인공 신경망의 기계론적 해석가능성(Mechanistic Interpretability)에 대한 학계의 기존 통념을 재검토하고 최신 실증 연구…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://already-clean.goodfire.com/">출처</a> · <a href="https://www.youtube.com/watch?v=OtGKrkIPaIg">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-신경망의-내재적-해석가능성과-기계론적-분석-neural-networks-are-already-clean-심층-분석">[해설 보고서] 신경망의 내재적 해석가능성과 기계론적 분석: &quot;Neural Networks Are Already Clean&quot; 심층 분석</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>본 보고서는 닉 카마라타(Nick Cammarata, Goodfire 소속)가 발표한 연구 에세이 *&quot;Neural Networks Are Already Clean&quot;*을 바탕으로, 인공 신경망의 기계론적 해석가능성(Mechanistic Interpretability)에 대한 학계의 기존 통념을 재검토하고 최신 실증 연구 결과를 체계적으로 분석·해설한 기술 보고서이다.</p>
+<p>저자인 닉 카마라타는 **&quot;신경망은 이미 깨끗하다(Neural Networks Are Already Clean)&quot;**라는 파격적인 핵심 명제를 제시한다. 이는 신경망을 해석하기 위해 희소 오토인코더(Sparse Autoencoder, SAE)와 같은 외부 분해 도구에 의존해 얽힌 특징(Feature)을 사후적으로 풀어낼 필요 없이, 신경망 자체의 고유 메커니즘(뉴런, 회로, 가중치, 주의집중 흐름)을 직접 관찰하고 연구하는 '자연과학적 연구(Normal Science)'가 충분히 가능하다는 주장이다. 신경망은 하류(Downstream) 읽기 뉴런들이 명확하고 신뢰할 수 있는 신호를 필요로 하기 때문에 스스로 특징을 논리적으로 구조화한다. 즉, 신경망은 '자신의 독자(Its Own Reader)' 역할을 수행하도록 훈련되며, 해석가능성 연구자의 목표는 인공적인 서브 베이시스(Sub-basis) 벡터로 뉴런을 강제 해체하는 것이 아니라 신경망 고유의 언어를 읽어내는 **'또 다른 독자(Another Reader)'**가 되는 것이다.</p>
+<p>과거 신경망 분석에서 뉴런이 무관한 여러 개념을 동시에 처리하는 것처럼 보였던 다의성(Polysemanticity)과 중첩(Superposition) 현상은 신경망이 개념을 임의로 겹쳐 쌓는 본질적 학습 원리가 아니라, 복합적인 외적 요인에서 비롯된 착시였다. 실상 이는 특징 시각화(Feature Visualization) 최적화 과정에서 발생한 리워드 해킹(Reward Hacking) 등 불완전한 해석 도구, 잔류 스트림(Residual Stream) 및 레이어 정규화(LayerNorm)의 부재라는 아키텍처적 결함, 그리고 <strong>'재귀적 일반화(Recursive Generalization)'</strong> 모티프에 대한 오해에서 비롯된 도구적·관찰적 오류였음이 밝혀졌다.</p>
+<p>시각 모델(InceptionV1, ConvNeXt) 및 최신 대규모 언어 모델(Qwen3-32B, Kimi K3, GPT-2 XL)에 대한 실증적 분석 결과, 뉴런의 단일의미성(Monosemanticity) 비중이 과거 추정치보다 훨씬 높음이 입증되었다. 잔류 연결과 LayerNorm이 도입된 현대적 시각 아키텍처에서는 심층 레이어 뉴런의 $99 \sim 100%$가 명확히 해석 가능하며, 대규모 언어 모델에서도 뉴런 극(Pole)의 약 $90%$가 단일한 주요 역할을 수행한다는 점이 확인되어 기존의 '중첩 만능론'을 강하게 반박한다.</p>
+<hr />
+<h5 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h5>
+<h6 id="2-1-기존-중첩-superposition-가설의-재검토-및-오류-사례-분석">2.1 기존 중첩(Superposition) 가설의 재검토 및 오류 사례 분석</h6>
+<p>기존 연구에서는 단일 뉴런이 서로 무관한 개념에 반응하는 현상을 신경망이 뉴런 부족을 극복하기 위해 개념을 비선형적으로 겹쳐 쌓는 '중첩(Superposition)'으로 해석했다. 그러나 소스 저자(Cammarata)의 재분석에 따르면, 학계에 중첩의 결정적 증거로 인용되던 대표적 사례들은 해석 도구의 착시 및 일반화 회로에 대한 오독에서 비롯된 것으로 확인되었다.</p>
+<ul>
+<li><strong>고양이/자동차 뉴런 (InceptionV1 4e:55 뉴런):</strong>
+<ul>
+<li><strong>기존 논점 및 주장:</strong> 고양이 얼굴과 자동차 앞면에 동시에 반응하여 무작위 결합(OR 연산)을 수행하는 대표적 다의성/중첩 뉴런으로 인용됨.</li>
+<li><strong>재분석 사실 및 근거:</strong> 해당 뉴런은 고양이와 자동차라는 무관한 객체를 무작위 감지하는 것이 아니라, 두 객체가 공유하는 기하학적 뾰족함인 **'V 자 형상(V-shape)'**을 감지하는 단일 패턴 뉴런임. 입력 회로 분석 결과 V 자형 불꽃, V 자형 여우 얼굴, 소방정의 V 자형 물줄기 등에 반응하며, 음극(-) 극성에서는 V 자와 대비되는 라운드 형태인 <strong>'O 자 형상'</strong>(개, 골프공, 시계, 테니스공 등)에 반응함이 확인됨.</li>
+<li><strong>소스 저자(Cammarata)의 분석:</strong> 특징 시각화 도구가 뉴런 활성화를 극대화하는 경사하강법 과정에서 고양이 경로의 수염 패턴 등을 과도하게 그려내는 바람에 기하학적 공통점(V 자)이 은폐되었음. 뉴런 자체는 정갈한 기하학적 구분 장치였음.</li>
+</ul>
+</li>
+<li><strong>자동차/개 회로 (Zoom In, 2019년 논문):</strong>
+<ul>
+<li><strong>기존 논점 및 주장:</strong> 자동차 특징이 고차원 공간에 숨겨져 개(Dog) 뉴런 집합에 중첩 저장된 후 하류에서 읽혀지는 중첩 회로로 해석됨.</li>
+<li><strong>재분석 사실 및 근거:</strong> 자동차와 개 뉴런이 결합된 것은 중첩이 아니라, 자동차와 개가 공유하는 **'포즈(Pose, 카메라를 향한 방향 및 자세)'**를 감지하는 일반화 회로였음. InceptionV1에는 이러한 공통 포즈 뉴런이 100개 이상 존재함.</li>
+<li><strong>소스 저자(Cammarata)의 분석:</strong> 특징 시각화 최적화 알고리즘이 ImageNet 데이터셋에 풍부한 '개(Dog)' 특징으로 수렴해 버리는 리워드 해킹(Reward Hacking)에 빠지면서, 자동차-개 공유 포즈 회로의 본질이 은폐되었던 것임.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-재귀적-일반화-recursive-generalization-모티프">2.2 재귀적 일반화(Recursive Generalization) 모티프</h6>
+<p>다의성으로 오인된 수많은 뉴런 활성화의 실제 원인은 '재귀적 일반화' 모티프이다.</p>
+<ul>
+<li><strong>개념 정의:</strong> 하나의 뉴런이 훈련 과정에서 가지를 치듯 연관된 개념 축을 따라 국소적(Locally)으로 확장되는 프랙탈(Fractal) 구조의 일반화 과정이다. 이는 무관한 개념을 임의로 겹치는 중첩과 달리, 네트워크 입장에서 유사하다고 판단한 국소적 인접 영역으로 자연스럽게 확장되는 학습 현상이다.</li>
+<li><strong>대표 사례:</strong>
+<ul>
+<li><strong>음소 확장 뉴런:</strong> &quot;iy&quot; 소리를 감지하던 언어 모델 뉴런이 &quot;Miyazaki&quot;를 거쳐 &quot;diy&quot;로 확장된 후, 최종적으로 &quot;iy&quot; 음소가 전혀 포함되어 있지 않은 &quot;do it yourself&quot; 텍스트로 국소적 가지를 친 사례.</li>
+<li><strong>InceptionV1 뉴런 338의 학습 과정:</strong> 훈련 초기(Epoch 0.7) 유채밭(Rapeseed) 및 골짜기 감지에서 시작하여, 에포크 진행에 따라 유채밭 속 개의 존재를 매개로 테리어 종 개, 노란색/초록색 공(테니스 공), 과일(그랜니 스미스 사과), 브로콜리로 국소적 가지를 치며 확장됨 (현대적 ConvNeXt 399 뉴런은 동일 데이터에서 초기 유채밭 감지 본질을 유지함).</li>
+<li><strong>행성 지질학 뉴런:</strong> 달과 화성의 지각/암석을 감지하던 뉴런이 지질학 웹 문서 맥락을 타고 공간 데이터 시각화 JavaScript 라이브러리인 'CesiumJS' 및 이미지 처리 소프트웨어 'IDL' 코드 문서 감지로 확장된 사례.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-3-시각-모델-vision-models-구조-개선-및-압박-실험-결과">2.3 시각 모델(Vision Models) 구조 개선 및 압박 실험 결과</h6>
+<p>아키텍처의 구조적 결함을 개선하고 뉴런 수에 강력한 압박을 가했을 때의 변화를 실증 분석한 결과는 다음과 같다.</p>
+<h6 id="inceptionv1과-convnext-아키텍처-비교">InceptionV1과 ConvNeXt 아키텍처 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">InceptionV1 (2014)</th>
+<th style="text-align:left">ConvNeXt (동일 규모: 7.06M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>잔류 연결 및 LayerNorm</strong></td>
+<td style="text-align:left">미적용 (Residual Stream 없음)</td>
+<td style="text-align:left">적용 (Residual Connections &amp; LayerNorm)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최종 레이어 뉴런 해석가능성</strong></td>
+<td style="text-align:left"><strong>$0 \sim 5%$</strong> (초기 도구) / <strong>$\sim 70%$</strong> (재훈련)</td>
+<td style="text-align:left"><strong>$99 \sim 100%$</strong> (명확히 해석 가능)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>개념 표현 방식</strong></td>
+<td style="text-align:left">아키텍처 결함으로 심층 레이어 얽힘</td>
+<td style="text-align:left">전 구간에 걸쳐 개념이 정갈하게 분화됨</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>레이어 압축 실험 (Layer Squeezing) 및 SAE 대조군 검증:</strong>
+<ul>
+<li>InceptionV1의 3b 레이어를 480개 채널에서 10개 뉴런으로 <strong>48배 강력하게 압축</strong>하고 바이패스(Bypass) 없이 재훈련함.</li>
+<li><strong>실험 결과:</strong> 무관한 특징들이 중첩되어 임의로 얽히는 현상이 발생하는 대신, 뉴런이 더 포괄적이고 광범위한(Coarser-grained) 개념을 담당하도록 변화함 (예: 10개의 세부 곡선 감지 뉴런이 1개의 &quot;곡선과 루프&quot;, &quot;원&quot; 뉴런으로 통합됨).</li>
+<li><strong>SAE 대조군 검증 (중첩 가설 반증):</strong> 압축된 10개 뉴런 레이어에 희소 오토인코더(SAE, 640개 특징)를 훈련하여 기존의 세부 곡선 감지 뉴런들이 중첩 형태로 숨겨져 있는지 검증함. 그 결과, SAE는 원래의 정교한 단일 곡선 감지기를 <strong>전혀 복원하지 못함</strong> (넓은 양방향 형상만 추출되었으며, 실제 이미지 사진과의 상관관계가 $0.02 \sim 0.12$에 불과함). 이는 뉴런 공간 부족 시 중첩이 발생한다는 '공백의 중첩(Superposition of the Gaps)' 가설을 명확히 반증함.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-4-대규모-언어-모델-llm-에서의-뉴런-독해성-및-메커니즘">2.4 대규모 언어 모델(LLM)에서의 뉴런 독해성 및 메커니즘</h6>
+<ol>
+<li><strong>Qwen3-32B 및 Kimi K3 뉴런 독해성 분석:</strong>
+<ul>
+<li>Qwen3-32B 뉴런 극(Pole)의 **약 $90%$**가 단일한 주요 역할(주요 기능 + 국소적 연관 가지)을 수행함. 약 **$7%$**는 2개의 관련 역할을 수행하며, 단 **$2 \sim 4%$**만이 미이해 상태로 남음.</li>
+<li>조 단위 파라미터 모델인 <strong>Kimi K3</strong>의 분실물 귀환(Return) 결정 속성 그래프 분석 결과, 지갑·현금·신분증 입력이 습득물/정직성 뉴런을 거쳐 &quot;Return(반환)&quot; 출력으로 이어지는 메커니즘이 뉴런 수준에서 정밀하게 추적됨.</li>
+</ul>
+</li>
+<li><strong>&quot;Don't Say Dot&quot; (마침표 억제) 뉴런 재분석:</strong>
+<ul>
+<li>Anthropic의 2023년 <em>Towards Monosemanticity</em> 논문에서 학술 인용, 영어 대화, HTTP 요청, 한국어 텍스트가 얽힌 대표적 다의성 뉴런으로 제시된 단일 레이어 모델 뉴런을 재분석함.</li>
+<li>분석 결과, 해당 뉴런은 다의성 뉴런이 아니라 문맥 상 마침표(.) 출력을 억제하는 <strong>&quot;Don't Say Dot&quot; 구문 게이트 뉴런</strong>임이 밝혀짐. 해당 뉴런을 제거하면 상위 20개 맥락 전체에서 다음 토큰의 마침표 로짓(Logit)이 즉각 상승함($20/20$). 동일한 메커니즘이 Qwen3.6 모델에서도 동일하게 포착됨.</li>
+</ul>
+</li>
+<li><strong>SwiGLU 이중 음수(Double-Negative) 누출 메커니즘:</strong>
+<ul>
+<li>SwiGLU 활성화 함수는 게이트($g$)와 벨류($v$)의 곱 $a = \text{SiLU}(g) \times v$로 작동함. 게이트 $g &lt; 0$ 및 벨류 $v &lt; 0$일 때, $\text{SiLU}(g)$는 소량의 음수 값을 가지며 이것이 음수 $v$와 곱해져 **양수 출력($a &gt; 0$)**을 형성함.</li>
+<li>이로 인해 약 **$4%$**의 뉴런에서 부적절한 활성화(예: 게이트가 닫힌 상태에서 러시아어 완료 토큰 뉴런이 성경 콜로새서 구절 맥락에서 양수 활성화로 노출되는 현상)가 관측됨. 이는 중첩이 아닌 수식 특성에 의한 신호 누출(Leakage)임.</li>
+</ul>
+</li>
+<li><strong>요약 모티프 (Summary Motif):</strong>
+<ul>
+<li>주의집중(Attention) 메커니즘이 문장 전체의 맥락 정보(예: 콜로라도 관련 전화번호, 지역명, 구단 등)를 쉼표(,)나 마침표 등 문장 부호 위치에 집적시키고, 심층 잔류 스트림이 이를 요약 형태로 읽어내는 메커니즘임.</li>
+</ul>
+</li>
+</ol>
+<h6 id="2-5-해석-가능성의-접근-방식-블라인드-맥심과-에지-모티프">2.5 해석 가능성의 접근 방식: 블라인드 맥심과 에지 모티프</h6>
+<ul>
+<li><strong>블라인드 맥심 (Blind Maximum) 테스트:</strong>
+<ul>
+<li>가설의 완결성을 검증하는 엄격한 사블라인드 실험임. 에이전트 1이 뉴런을 관찰하여 텍스트 설명을 작성하면, 에이전트 2는 뉴런 활성화 수치를 보지 않고 <strong>오직 설명문만 보고</strong> 해당 뉴런을 최대 활성화할 합성 문장을 작성함.</li>
+<li>실험 결과, 에이전트 2가 생성한 문장이 <strong>100억 토큰 코퍼스 내 최상위 자연어 예시보다 뉴런을 더 강하게 활성화</strong>시킴 (예: 활성화 수치 $82.0 \rightarrow 99.5$ 달성). 이는 제시된 설명이 뉴런의 메커니즘적 핵심을 정확히 타격했음을 입증함.</li>
+</ul>
+</li>
+<li><strong>에지 모티프 (Edge Motifs):</strong>
+<ul>
+<li>25,000개 이상의 주석 그래프에서 추출한 레이어 간 연결 구조 패턴(예: 주전자/찻주전자 회로)을 식별함.</li>
+<li>특정 연결 에지 모티프를 절제(Ablation)했을 때 발생하는 성능 손상이 단순 뉴런 활성화 크기 기반 절제보다 모델의 예측 손실 및 정확도 저하를 훨씬 더 정확하게 예측함.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-persons-and-roles">3. 등장 인물 및 화자 (Persons and Roles)</h5>
+<p>소스 본문에서 명확히 확인되는 연구자 및 주요 인물의 역할과 언급 맥락은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소스 상 역할 및 소속 (Role &amp; Affiliation)</th>
+<th style="text-align:left">주요 언급 맥락 (Context)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>닉 카마라타 (Nick Cammarata)</strong></td>
+<td style="text-align:left">본 보고서 소스의 저자, Goodfire 연구원, 전 OpenAI 연구원</td>
+<td style="text-align:left">신경망의 내재적 명확성 및 재귀적 일반화 가설 제안, <em>Zoom In</em> 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>크리스 올라 (Chris Olah)</strong></td>
+<td style="text-align:left">Anthropic / Distill 연구원 (Cammarata의 공동 연구자)</td>
+<td style="text-align:left">2019년 자동차/개 중첩 회로 공동 발견, <em>Zoom In</em> 논문 공동 저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>커트 (Curt)</strong></td>
+<td style="text-align:left">저자(Cammarata)의 공동 연구자</td>
+<td style="text-align:left">언어 모델 뉴런 심층 분석 및 기술 논문 작성 공동 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조슈아 뱃슨 (Joshua Batson)</strong></td>
+<td style="text-align:left">Anthropic 연구원</td>
+<td style="text-align:left">보고서 초고 검토 및 퍼즐 조각 합성 관련 피드백 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>리치 서튼 (Rich Sutton)</strong></td>
+<td style="text-align:left"><em>&quot;쓴 교훈(The Bitter Lesson)&quot;</em> 저자</td>
+<td style="text-align:left">단순한 연구 접근법의 스케일링 우위성(Bitter Lesson) 관련 맥락에서 인용됨</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점-metrics-timelines">4. 수치 및 시점 (Metrics &amp; Timelines)</h5>
+<h6 id="4-1-연구-및-가설-발전-시점-timeline">4.1 연구 및 가설 발전 시점 (Timeline)</h6>
+<ul>
+<li><strong>2014년:</strong> InceptionV1 모델 체크포인트 및 학습 설정 시대 (이후 해당 아키텍처 환경 손실).</li>
+<li><strong>2017년:</strong> 특징 시각화(Feature Visualization) 연구 본격 시작 (<em>Distill</em>).</li>
+<li><strong>2019년 / 2020년:</strong> Olah &amp; Cammarata의 <em>Zoom In</em> 논문 출간 (자동차/개 회로 및 4e:55 뉴런 제시).</li>
+<li><strong>2021년:</strong> <em>Multimodal Neurons</em> 논문 출간 (재귀적 일반화의 전신 개념인 <strong>'결합된 특징(Conjoined Features)'</strong> 및 트럼프 뉴런 제시).</li>
+<li><strong>2022년:</strong> <em>SoLU</em> 논문 및 <em>Toy Models of Superposition</em> 논문 발표.</li>
+<li><strong>2023년:</strong> Anthropic의 <em>Towards Monosemanticity</em> 발표, OpenAI의 자동 해석 가능성(Automated Interpretability) 프로젝트 발표.</li>
+<li><strong>2024년:</strong> <em>Missing Curve Detectors</em> (Gorton) 논문 발표.</li>
+<li><strong>2025년:</strong> <em>On the Biology of a Large Language Model</em> 등 대규모 언어 모델 속성 그래프 연구 발표.</li>
+<li><strong>2026년:</strong> 본 보고서 소스 글(<em>&quot;Neural Networks Are Already Clean&quot;</em>, Goodfire) 발표 시점.</li>
+</ul>
+<h6 id="4-2-핵심-수치-및-정량-데이터-metrics-quantitatives">4.2 핵심 수치 및 정량 데이터 (Metrics &amp; Quantitatives)</h6>
+<ul>
+<li><strong>InceptionV1 및 ConvNeXt 뉴런 해석가능성 비율 변화:</strong>
+<ul>
+<li>InceptionV1 초기 연구 도구 기준: <strong>$0 \sim 5%$</strong> 수준</li>
+<li>해석 도구 개선(Path-guided optimization 적용): <strong>$\sim 50%$</strong></li>
+<li>동일 아키텍처 재훈련 및 현대적 정규화 적용: <strong>$\sim 70%$</strong></li>
+<li>ConvNeXt 아키텍처(동일 파라미터/데이터) 적용 시: <strong>$99 \sim 100%$</strong></li>
+</ul>
+</li>
+<li><strong>Qwen3-32B 뉴런 역할 분화 비중:</strong>
+<ul>
+<li>단일 주요 역할 수행: <strong>$\sim 90%$</strong></li>
+<li>2개의 관련 역할 수행: <strong>$\sim 7%$</strong></li>
+<li>미이해/미확인 상태: <strong>$2 \sim 4%$</strong></li>
+</ul>
+</li>
+<li><strong>약한 활성화(Weak Activations) 절제 실험 영향 (Medium ConvNeXt):</strong>
+<ul>
+<li>하위 <strong>$75%$</strong> 약한 활성화 제거 시: 정확도 $72% \rightarrow 71%$ (답변 변동 비중 10개 중 1개)</li>
+<li>상위 <strong>$7%$</strong> 강한 활성화 제거 시: 정확도 $72% \rightarrow 4%$ (답변 변동 비중 100개 중 96개)</li>
+</ul>
+</li>
+<li><strong>시각 모델 압축 및 스케일 비교 실험:</strong>
+<ul>
+<li>ConvNeXt Small (<strong>92k</strong>), Medium (<strong>7.06M</strong> - InceptionV1과 동일 크기), Large (<strong>28.6M</strong>) 파라미터 적용으로 <strong>300배</strong> 스케일 차이 검증.</li>
+<li>InceptionV1 3b 레이어: 480개 채널을 10개 뉴런으로 <strong>48배</strong> 압축 진행.</li>
+</ul>
+</li>
+<li><strong>Qwen3.6-35B-A3B 전문가(Experts) 수:</strong>
+<ul>
+<li>전체 레이어에 걸쳐 총 <strong>10,240개</strong> 전문가 존재 및 고도화된 전문화 확인.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ul>
+<li><strong>활성화 판단 임계값의 가변성:</strong> 단일 뉴런이 &quot;하나의 역할&quot;을 수행한다는 정량 수치($\sim 90%$ 등)는 약한 활성화를 세는 임계값 설정, 레이어 깊이, 관용구 통합 여부 정의에 따라 달라지는 대략적인 지표(Rough Pointer)임.</li>
+<li><strong>주의집중 헤드(Attention Heads)의 전역적 명칭 부여 한계:</strong> 주의집중 헤드가 국소적으로 정보를 어디서 읽고 쓰는지 뉴런과의 연결 흐름은 파악 가능하나, 각 헤드에 전역적(Global) 역할을 명명하는 방법론은 미완성 상태이며, 약 <strong>$5%$의 설명 잔차(Explanatory Residual)</strong> 병목이 존재함.</li>
+<li><strong>약한 활성화 전체의 의미 구명 문제:</strong> 단일 뉴런의 아주 약한 활성화 영역 전체가 가지는 비선형적 의미를 완전히 검증할 수 있는 의미론적 테스트 방법론은 아직 확립되지 않음.</li>
+<li><strong>초대형 언어 모델의 완전한 감사(Audit) 미완료:</strong> Kimi K3와 같은 조 단위 파라미터 모델 및 최전선 LLM은 순수한 거대함(Sheer Size) 때문에 전체 뉴런 및 회로의 완전한 지형도 구축이 아직 완료되지 않음.</li>
+<li><strong>확인 불가 사항:</strong> 소스 텍스트에 명시적인 데이터가 없거나 구별할 수 없는 관련 정보는 엄격히 &quot;확인 불가&quot;로 취급함.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

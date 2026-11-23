@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speculative Programmatic Tool Calling</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Speculative Programmatic Tool Calling</h1>
+<p class="page-meta">웹 · 2026-08-24</p>
+<h2 id="요약">요약</h2>
+<p>sPTC는 코드 생성 중 도구를 선행 실행하며, 실험상 최대 1.2배 속도 향상과 격리·캐시 결함이 보고됐다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://alexzhang13.github.io/blog/2026/spec-ptc/">출처</a> · <a href="https://www.youtube.com/watch?v=vwNMaj7KJCQ">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="독립감사-안내와-적용-경계">독립감사 안내와 적용 경계</h3>
+<p>이 보고서는 2026-08-24 기준 Alex Zhang의 기술 블로그와 공개 구현을 분석한 교육 자료다. sPTC는 저자가 제안하고 구현한 harness 최적화이며, 표준·공식 제품·독립적으로 재현된 production benchmark가 아니다.</p>
+<ul>
+<li><strong>메커니즘:</strong> LLM이 REPL 코드를 스트리밍하는 동안 안전하게 식별된 tool/sub-LLM call을 먼저 시작하고, 실제 실행이 동일 호출을 채택하면 future/cache를 사용한다.</li>
+<li><strong>다른 기술과의 경계:</strong> speculative decoding은 draft token을 검증·수용하는 decoding 기법이다. sPTC는 token을 고르는 대신 tool computation의 시작 시점을 당긴다.</li>
+<li><strong>성능 경계:</strong> 약 1~1.2배는 저자의 특정 Qwen3·OOLONG·vLLM·8×H100 node·4/8 concurrency·조건별 5회 실험에 귀속된다. 보편적 20% 향상, 비용 절감, 품질 향상 또는 tail-latency 개선 보장이 아니다.</li>
+<li><strong>구현 경계:</strong> 테스트 통과는 parser·shadow state·claim/store 동작의 개발 검증이다. 대규모 serving, adversarial code, secrets, 외부 side effects, cancellation, quota와 production isolation을 입증하지 않는다.</li>
+<li><strong>안전 경계:</strong> 기본 도입 순서는 pure/read-only sub-call, strict allowlist, idempotency, budgets, cancellation, trace, baseline equivalence, fail-closed fallback이다.</li>
+</ul>
+<hr />
+<h3 id="speculative-programmatic-tool-calling-sptc-기술-심층-분석-보고서">Speculative Programmatic Tool Calling (sPTC) 기술 심층 분석 보고서</h3>
+<h4 id="1-10줄-핵심-요약-key-takeaways">1. 10줄 핵심 요약 (Key Takeaways)</h4>
+<ol>
+<li><strong>기술적 본질</strong>: sPTC는 모델 가중치나 토큰 분포를 수정하는 지능형 기술이 아니라, REPL 코드 생성과 외부 도구 실행 시간을 겹쳐 수행하는 '하네스 스케줄링(Harness Scheduling)' 기법이다.</li>
+<li><strong>핵심 메커니즘</strong>: 루트 모델이 코드를 스트리밍하는 동안 부분적 REPL(Partial REPL)을 파싱하여, 고지연 도구(sub-LLM, 검색 등) 호출을 백그라운드 스레드에서 선행 실행(Overlap)한다.</li>
+<li><strong>실측 성능 한계</strong>: 저자 측 실험(Qwen3-30B-A3B-Instruct-0527, OOLONG 데이터셋)에서 확인된 속도 향상은 1.0~1.2배 수준으로, 도구 호출이 코드 끝부분에 위치하거나 GPU 자원이 포화된 경우 이득이 소멸한다.</li>
+<li><strong>Speculative Decoding과의 차이</strong>: 토큰 단위 확률 검증 알고리즘이 아닌, 외부 도구 계산(Computation)의 시작 시점을 앞당기는 분산 컴퓨팅의 파이프라이닝 전략에 해당한다.</li>
+<li><strong>구현 단계의 정체성</strong>: 현재 공개된 코드는 연구용 '프로토타입' 수준이며, 상용 환경(Production-ready)을 위한 보안 격리 및 무결성 검증 로직이 결여되어 있다.</li>
+<li><strong>Shadow REPL 보안 결함</strong>: 동일 프로세스 내에서 <code>exec()</code>를 호출하는 구조적 취약점이 존재하며, <code>asyncio</code> 서브프로세스 실행 및 공유 클로저 변조를 통한 실제 상태 오염이 재현되었다.</li>
+<li><strong>캐시 무결성 오류</strong>: JSON 직렬화 기반의 캐시 키 설계로 인해 Python의 List와 Tuple을 구분하지 못하는 'Lossy Conversion'에 따른 Wrong-result 버그가 확인되었다.</li>
+<li><strong>다중 클라이언트 격리 부재</strong>: 유닉스 소켓 데몬 환경에서 세션 격리 미비로 타 클라이언트의 추측 결과를 자신의 것으로 오인하여 Claim하는 치명적 설계 결함이 존재한다.</li>
+<li><strong>기술적 가치 판단</strong>: Novelty는 '상대적으로 단순하고 유용한 트릭(Simple and useful trick)'으로 정의되며, Recursive Language Models(RLM) 환경의 병목을 해결하기 위한 실험적 초석을 제시한다.</li>
+<li><strong>향후 과제</strong>: 실제 도입을 위해서는 프로세스 단위 샌드박스, 타입 보존형 캐시 키, Provider 측 API 취소(Cancellation) 보장 및 정교한 자원 제어 메커니즘이 선행되어야 한다.</li>
+</ol>
+<hr />
+<h4 id="2-sptc의-개념-정의-및-시간축-분석">2. sPTC의 개념 정의 및 시간축 분석</h4>
+<h5 id="2-1-sptc의-정의와-목적">2.1 sPTC의 정의와 목적</h5>
+<p>**Speculative Programmatic Tool Calling(sPTC)**은 LLM이 생성하는 REPL(Read-Eval-Print Loop) 코드 스트림을 실시간으로 관찰하여, 문장이 완성되기 전이라도 실행 가능한 도구 호출을 추측(Speculate)하여 디스패치하는 기술이다. 이는 모델의 내부 로직이나 지능(Weights)을 개선하는 것이 아니라, 실행 레이어에서의 <strong>하네스 스케줄링(Harness Scheduling)</strong> 최적화를 통해 전체 벽시계 시간(Wall-clock time)을 단축하는 것을 목적으로 한다. 특히 sub-LLM 호출이나 복잡한 검색 작업과 같이 지연 시간이 긴 도구가 병목이 되는 Recursive Language Models(RLM) 환경에서 제한적인 효과를 발휘한다.</p>
+<h5 id="2-2-speculative-decoding과의-차별점">2.2 Speculative Decoding과의 차별점</h5>
+<p>Leviathan 등이 제안한 <strong>Speculative Decoding</strong>은 작은 모델(Draft Model)이 생성한 토큰 시퀀스를 타겟 모델이 검증하여 한 번에 여러 토큰을 승인하는 '토큰 디코딩 알고리즘'이다. 반면, <strong>sPTC</strong>는 토큰 자체의 확률 분포를 검증하는 것이 아니라, 생성된 코드 내의 <strong>외부 도구 호출(External Tool Computation) 시작 시점</strong>을 앞당기는 데 집중한다. 즉, sPTC는 언어 모델링의 확률적 최적화가 아닌, 분산 컴퓨팅의 파이프라이닝(Pipelining) 기법을 LLM 하네스에 적용한 사례이다.</p>
+<h5 id="2-3-직렬-방식-vs-sptc-방식-시간축-비교">2.3 직렬 방식 vs sPTC 방식 시간축 비교</h5>
+<p>전형적인 직렬 실행(Serial Execution)은 모델이 REPL 셀의 모든 토큰 생성을 완료(예: 100개 토큰)한 후에야 파싱과 실행을 시작한다. 이 경우 도구 실행 시간은 고스란히 추가 대기 시간으로 작용한다.</p>
+<p>반면, <strong>sPTC 방식의 Overlap</strong> 시나리오는 다음과 같다:</p>
+<ol>
+<li><strong>Token 10~20</strong>: 루트 모델이 <code>ans = llm_query(</code>까지 생성하는 즉시 파서가 이를 포착한다.</li>
+<li><strong>Token 20~50</strong>: 모델이 인자(Argument)를 생성하는 동안 <strong>Shadow Namespace</strong>에서 인자 값을 선행 평가한다.</li>
+<li><strong>Token 50</strong>: 닫는 괄호 <code>)</code>가 포착되면 즉시 백그라운드 스레드에서 API 요청을 보낸다.</li>
+<li><strong>Token 50~100</strong>: 모델이 나머지 코드와 생각을 생성하는 동안, 외부 도구(API)는 이미 계산을 수행한다.</li>
+<li><strong>Real Execution</strong>: 모델이 생성을 마친 후 실제 실행 단계에서 해당 호출을 만나면, Future Store에 이미 도착해 있는 결과를 <strong>Claim</strong>하여 즉시 반환한다.</li>
+</ol>
+<hr />
+<h4 id="3-아키텍처-및-구현-프로세스-implementation-walkthrough">3. 아키텍처 및 구현 프로세스 (Implementation Walkthrough)</h4>
+<h5 id="3-1-partial-repl-파싱-및-쉐도우-실행">3.1 Partial REPL 파싱 및 쉐도우 실행</h5>
+<p>sPTC는 LLM의 출력을 Statement 단위로 분할하여 스트리밍한다. 파서는 미완성된 코드(Incomplete Tail)에 대해 <strong>AST(Abstract Syntax Tree) Peek</strong>를 수행하여 도구 호출 여부를 식별한다. 이때 시스템은 실제 프로그램 상태를 오염시키지 않기 위해 <strong>Deepcopy 기반의 Shadow Namespace</strong>를 운영한다. 이는 가상 실행 환경에서 부분적 코드를 평가함으로써 변수 의존성이나 루프 구조 내의 호출 시점을 포착하지만, 후술할 보안적 취약점을 내포하고 있다.</p>
+<h5 id="3-2-핵심-데이터-구조-identity-관리의-필연성">3.2 핵심 데이터 구조: Identity 관리의 필연성</h5>
+<p>단순 캐싱과 달리 sPTC는 다음과 같은 정교한 데이터 구조를 요구한다:</p>
+<ul>
+<li><strong>Call Identity &amp; Occurrence</strong>: 도구 이름과 인자의 해시값뿐만 아니라, 동일한 인자로 여러 번 호출되는 비결정적(Non-deterministic) 호출을 구분하기 위한 **발생 순서(Occurrence)**를 추적한다. 이를 통해 FIFO(First-In-First-Out) 방식으로 정확한 결과를 매칭한다.</li>
+<li><strong>Future Store</strong>: 백그라운드에서 실행 중이거나 완료된 도구 호출의 결과값(Promise)을 관리하는 전역 저장소이다.</li>
+<li><strong>Shadow Namespace</strong>: 실제 실행(Real Namespace)에 영향을 주지 않고 가상 실행을 수행하는 격리 환경이다.</li>
+</ul>
+<h5 id="3-3-도구-계약-contract-의-실체">3.3 도구 계약(Contract)의 실체</h5>
+<p>개발자는 <code>@spec.tool(speculatable=True, pure=True)</code> 데코레이터를 통해 도구의 성격을 선언한다. 여기서 <code>pure=True</code>는 해당 도구가 부수 효과(Side effect)가 없으며 멱등성(Idempotency)을 가짐을 의미한다. 그러나 시스템이 이를 자동 검증하는 기능은 부재하며, 이는 전적으로 통합자(Integrator)의 주관적 선언에 의존하는 <strong>Best-effort 계약</strong>이다. 잘못된 선언은 실제 실행 시 중복 실행으로 인한 데이터 무결성 파괴를 초래할 수 있다.</p>
+<hr />
+<h4 id="4-4대-주요-동작-시나리오-분석">4. 4대 주요 동작 시나리오 분석</h4>
+<h5 id="4-1-literal-리터럴-인자">4.1 Literal (리터럴 인자)</h5>
+<p>인자가 <code>llm_query(&quot;Hello&quot;)</code>와 같이 고정된 값인 경우이다. 구문 분석기가 닫는 괄호를 확인하는 즉시 도구를 디스패치할 수 있어 가장 확실한 이득을 제공한다. 단, 파서가 지원하는 AST 문법 범위를 벗어나거나 코드가 불완전할 경우 즉시 Miss 처리된다.</p>
+<h5 id="4-2-safe-variable-dependency-안전한-변수-의존성">4.2 Safe Variable Dependency (안전한 변수 의존성)</h5>
+<p>이전 상태에서 계산된 변수(<code>doc</code>)를 인자로 사용하는 경우이다. sPTC는 이전 REPL 상태의 스냅샷을 활용해 <code>llm_query(doc)</code>를 평가한다. 구현상 한계로 <code>deepcopy</code>가 불가능한 객체나 복잡한 커스텀 객체는 <code>opaque</code>로 처리되어 추측이 생략된다.</p>
+<h5 id="4-3-dependent-tool-chain-의존적-도구-체인">4.3 Dependent Tool Chain (의존적 도구 체인)</h5>
+<p>도구 A의 결과를 B의 입력으로 사용하는 구조(<code>B(A())</code>)이다. sPTC는 A의 Future 결과가 반환되는 즉시 B를 시작한다. 비록 체인 자체의 임계 경로(Critical Path)는 존재하지만, 전체 체인이 루트 모델의 디코딩 시간과 겹쳐 실행되므로 총 대기 시간이 단축된다.</p>
+<h5 id="4-4-blocked-dependency-차단된-의존성">4.4 Blocked Dependency (차단된 의존성)</h5>
+<p><code>open()</code>이나 <code>eval()</code> 등 보안 위험이 있거나 외부 상태를 변경하는 작업이 감지될 때이다. sPTC는 내부 Allowlist/Blocklist를 기반으로 위험을 감지하면 해당 경로의 추측을 즉시 중단(Speculative Skip)하고 실제 실행 단계로 처리를 위임한다. 그러나 이 차단 리스트는 완벽한 샌드박스가 아님에 유의해야 한다.</p>
+<hr />
+<h4 id="5-벤치마크-결과-및-성능-모델-분석">5. 벤치마크 결과 및 성능 모델 분석</h4>
+<h5 id="5-1-실험-조건-및-범위">5.1 실험 조건 및 범위</h5>
+<p>저자는 <strong>8×H100 80GB</strong> 노드와 <strong>vLLM</strong> 서버 환경에서 <strong>Qwen3-30B-A3B-Instruct-0527</strong> 모델을 사용하여 실험을 수행하였다. 데이터셋으로는 OOLONG(trec-coarse) 등이 활용되었으며, 8×H100 노드 사용은 자원 효율성을 증명하는 것이 아니라 해당 환경에서의 측정치를 의미한다.</p>
+<h5 id="5-2-성능-데이터-테이블-author-reported">5.2 성능 데이터 테이블 (Author Reported)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">데이터셋</th>
+<th style="text-align:center">동시 실행 수</th>
+<th style="text-align:center">평균 런타임 비율 (Baseline 대비)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">OOLONG (trec-coarse)</td>
+<td style="text-align:center">4 concurrent</td>
+<td style="text-align:center">1.0 ~ 1.2x</td>
+</tr>
+<tr>
+<td style="text-align:left">OOLONG-Pairs</td>
+<td style="text-align:center">8 concurrent</td>
+<td style="text-align:center">1.0 ~ 1.15x</td>
+</tr>
+</tbody>
+</table>
+<h5 id="5-3-성능-결정-요인-모델-t_-sptc-분석">5.3 성능 결정 요인 모델 ($T_{sPTC}$) 분석</h5>
+<p>sPTC의 기대 지연 시간은 다음 공식으로 모델링된다:
+$T_{sPTC} \approx T_{decode} + T_{unhidden_tool_tail} + T_{REPL} + T_{spec_overhead} + T_{waste_contention}$</p>
+<ul>
+<li><strong>성능 이득 요인</strong>: $T_{decode}$가 길고 도구 지연 시간($T_{tool}$)이 클수록, 그리고 호출 인자를 일찍 파악할수록 $T_{unhidden_tool_tail}$(숨겨지지 않은 도구 실행 잔여 시간)이 줄어들어 이득이 발생한다.</li>
+<li><strong>성능 병목 및 손실 요인</strong>:
+<ul>
+<li><strong>$T_{spec_overhead}$</strong>: 부분 파싱 및 쉐도우 실행에 따른 계산 부하.</li>
+<li><strong>$T_{waste_contention}$</strong>: 과도한 추측 실행이 GPU 배치(Batch) 자원을 점유하거나 API Rate Limit을 소진하여 메인 디코딩을 방해하는 현상. 특히 도구 실행이 매우 빠르거나 코드 마지막 부분에서 호출이 발생하면 성능은 오히려 저하된다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="6-관련-연구-비교-분석-related-work">6. 관련 연구 비교 분석 (Related Work)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기술명</th>
+<th style="text-align:left">분석 대상</th>
+<th style="text-align:left">핵심 메커니즘</th>
+<th style="text-align:left">sPTC와의 차별성 및 성과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>CPU Speculative Exe.</strong></td>
+<td style="text-align:left">명령어</td>
+<td style="text-align:left">분기 예측 및 선행 계산</td>
+<td style="text-align:left">하드웨어 수준의 물리적 격리 및 정밀 롤백 제공</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Speculative Decoding</strong></td>
+<td style="text-align:left">토큰</td>
+<td style="text-align:left">Draft 모델을 통한 토큰 검증</td>
+<td style="text-align:left">토큰 분포 보존이 목적이며 도구와 무관함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Conveyor (2024)</strong></td>
+<td style="text-align:left">도구 부분 실행</td>
+<td style="text-align:left">디코딩과 도구 실행의 오버랩</td>
+<td style="text-align:left">도구 개발자가 오버랩 지점을 직접 노출해야 함 (최대 38.8% 개선 보고)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Speculative Interaction</strong></td>
+<td style="text-align:left">입출력(I/O)</td>
+<td style="text-align:left">입력 대기 중 사고/행동 병렬화</td>
+<td style="text-align:left">상호작용 불확실성에 집중하며 1.3~1.7배 속도 향상 보고</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AsyncFC (2026)</strong></td>
+<td style="text-align:left">비동기 호출</td>
+<td style="text-align:left">Future 기반 명시적 비동기화</td>
+<td style="text-align:left">모델이 명시적 비동기 코드를 작성해야 함 (sPTC는 자동화)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="7-독립-코드-감사-보안-및-무결성-결함-critical-failures">7. 독립 코드 감사: 보안 및 무결성 결함 (Critical Failures)</h4>
+<h5 id="7-1-shadow-repl의-보안적-취약성">7.1 Shadow REPL의 보안적 취약성</h5>
+<p>현재의 Shadow REPL은 진정한 의미의 샌드박스가 아니다. 동일 프로세스/스레드 내에서 <code>exec()</code>를 호출하는 구조적 한계로 인해, 허용 리스트에 포함된 <code>asyncio</code>를 악용하여 서브프로세스를 실행하거나, 공유 클로저(Shared Closure)를 통해 실제 프로세스의 가변 상태(Mutable State)를 변조하는 행위가 가능하다. 이는 &quot;Best-effort guard&quot;에 불과하며, 추측 실행이 실제 시스템 상태를 영구적으로 오염시킬 수 있음을 시사한다.</p>
+<h5 id="7-2-캐시-키-설계-오류-타입-소실-lossy-conversion">7.2 캐시 키 설계 오류: 타입 소실(Lossy Conversion)</h5>
+<p><code>spec_key()</code> 함수는 JSON 직렬화를 기반으로 인자의 해시를 생성한다. 이 과정에서 Python의 <strong><code>list</code>와 <code>tuple</code>은 모두 JSON Array로 변환되어 타입 정보가 소실</strong>된다. 이로 인해 결정론적 도구에 <code>[1]</code>을 전달한 후 <code>(1,)</code>을 전달하면, 두 번째 호출이 첫 번째 리스트의 결과를 잘못 재사용하는 <strong>Wrong-result 버그</strong>가 재현되었다. 이는 도구 호출의 결정론적 신뢰성을 근본적으로 파괴한다.</p>
+<h5 id="7-3-다중-클라이언트-격리-부재">7.3 다중 클라이언트 격리 부재</h5>
+<p>Threaded Unix-socket 데몬 환경에서 전역 저장소를 공유하며, 클라이언트 ID나 턴(Turn) ID가 키에 포함되지 않는다. 결과적으로 클라이언트 B가 클라이언트 A가 생성한 추측 결과를 자신의 것으로 간주하여 가로채는(Claim) 데이터 격리 문제가 발생한다. 이는 상용 서비스 도입 시 심각한 데이터 프라이버시 침해 요인이다.</p>
+<hr />
+<h4 id="8-production-도입을-위한-기술-게이트-checklist">8. Production 도입을 위한 기술 게이트 (Checklist)</h4>
+<h5 id="8-1-correctness-정확성">8.1 Correctness (정확성)</h5>
+<ul>
+<li>[ ] <strong>Type-preserving key</strong>: 리스트와 튜플 등 Python 타입을 엄격히 구분하는 정교한 직렬화 방식 도입.</li>
+<li>[ ] <strong>Branch retraction</strong>: 모델이 코드를 수정하거나 삭제할 경우, 이미 발행된 추측 결과를 폐기하는 로직.</li>
+</ul>
+<h5 id="8-2-safety-보안">8.2 Safety (보안)</h5>
+<ul>
+<li>[ ] <strong>Out-of-process sandbox</strong>: 컨테이너나 별도 VM 단위의 물리적 격리 환경 구축.</li>
+<li>[ ] <strong>Credential isolation</strong>: Shadow 환경에서 인증 정보 및 민감 데이터에 대한 접근 원천 차단.</li>
+</ul>
+<h5 id="8-3-resource-control-자원-제어">8.3 Resource Control (자원 제어)</h5>
+<ul>
+<li>[ ] <strong>In-flight caps</strong>: 동시 추측 실행 수에 대한 엄격한 상한 및 큐(Queue) 관리.</li>
+<li>[ ] <strong>Cancellation propagation</strong>: 실제 실행에서 호출되지 않은 추측 건에 대해 Provider 측 API 호출을 즉각 취소하는 기능.</li>
+</ul>
+<h5 id="8-4-observability-관측-가능성">8.4 Observability (관측 가능성)</h5>
+<ul>
+<li>[ ] <strong>Waste/Contention metrics</strong>: 낭비된 자원 및 메인 디코딩 방해 지표 수집.</li>
+<li>[ ] <strong>Trace linking</strong>: 부분 파싱부터 최종 Claim까지의 전 과정을 추적하는 분산 트레이싱.</li>
+</ul>
+<hr />
+<h4 id="9-최종-판정-및-향후-과제">9. 최종 판정 및 향후 과제</h4>
+<h5 id="9-1-기술적-성숙도-판정">9.1 기술적 성숙도 판정</h5>
+<ul>
+<li><strong>확립 (Established)</strong>: 스트리밍 파싱과 Shadow 실행을 통한 도구 호출 오버랩 아이디어는 작동하는 프로토타입으로 증명되었으며, 83개의 회귀 테스트를 통과함.</li>
+<li><strong>조건부 (Conditional)</strong>: RLM 하네스에서 읽기 전용(Read-only) 고지연 도구를 사용할 경우에 한해 실험적 가치가 있음.</li>
+<li><strong>미확립 (Not Established)</strong>: 보편적인 성능 향상, 상용 수준의 보안성 및 격리, 그리고 다양한 언어에 대한 범용적 안정성은 입증되지 않음.</li>
+</ul>
+<h5 id="9-2-판정-전환을-위한-필요-증거">9.2 판정 전환을 위한 필요 증거</h5>
+<p>현재의 '미확립' 상태를 극복하기 위해서는 다음과 같은 데이터가 추가로 확보되어야 한다:</p>
+<ol>
+<li><strong>재현성 보완</strong>: 현재 저장소에는 블로그의 OOLONG 캠페인 결과(Plot)를 재계산할 전체 원시 데이터 패키지가 부재하며, 5회 반복 실험은 Trajectory Variance를 통제하기에 부족함.</li>
+<li><strong>보안 패치</strong>: 프로세스 격리 샌드박스와 타입 보존형 캐시 키가 적용된 독립적 감사 결과.</li>
+<li><strong>자원 최적화</strong>: 추측 실행이 실제 서비스의 지연 시간(p95, p99)과 비용에 미치는 영향에 대한 장기적 부하 테스트 결과.</li>
+</ol>
+<h5 id="9-3-결론">9.3 결론</h5>
+<p>sPTC는 기존의 분산 컴퓨팅 기법을 LLM 하네스에 접목한 &quot;상대적으로 단순하고 유용한 트릭&quot;으로서 가치가 있다. 그러나 <strong>Shadow REPL의 보안 격리 실패</strong>와 <strong>캐시 키 설계 결함</strong>은 실제 프로덕션 환경 도입을 가로막는 치명적인 장애물이다. 현시점에서 sPTC는 '프로토타입' 단계의 실험적 기술로 정의하며, 상용화 전 섹션 8에서 제시된 기술 게이트를 해결하는 과정이 필수적으로 요구된다. 기술적 혁신성보다는 실무적 한계에 대한 면밀한 검토가 우선되어야 할 시점이다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

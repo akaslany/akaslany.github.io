@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Gemini 4 Neon</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing Gemini 4 Neon</h1>
+<p class="page-meta">웹 · 2026-11-18</p>
+<h2 id="요약">요약</h2>
+<p>[사실] 2026년 11월 18일, 구글 딥마인드(Google DeepMind)의 수석 부사장이자 구글 수석 AI 아키텍트인 코레이 카부쿠오글루(Koray Kavukcuoglu)는 구글의 새로운 차세대 AI 모델인 '제미나이 4 네온(Gemini 4 Neon)'의 출시를 공식 발표했습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon">출처</a> · <a href="https://www.youtube.com/watch?v=jpG2n-jWKuE">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="제미나이-4-네온-gemini-4-neon-기술-발표-소스-해설-보고서">제미나이 4 네온(Gemini 4 Neon) 기술 발표 소스 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p><strong>[사실]</strong> 2026년 11월 18일, 구글 딥마인드(Google DeepMind)의 수석 부사장이자 구글 수석 AI 아키텍트인 코레이 카부쿠오글루(Koray Kavukcuoglu)는 구글의 새로운 차세대 AI 모델인 '제미나이 4 네온(Gemini 4 Neon)'의 출시를 공식 발표했습니다. <strong>[소스의 주장]</strong> 제미나이 4 네온은 프론티어급 지능을 바탕으로 복잡한 소프트웨어 공학, 지식 작업, 과학 워크플로우 전반에 걸쳐 신속한 종단간(end-to-end) 작업 완수 능력을 제공합니다.</p>
+<p><strong>[사실]</strong> 제미나이 4 제품군 내에서 네온(Neon)은 최고 난도의 장기 프로젝트를 담당하는 카본(Carbon)과 신속한 일상 실행을 담당하는 하이드로젠(Hydrogen) 사이에서 깊이와 효율성의 균형을 맞추는 모델로 위치합니다. 100만 토큰(1M tokens)의 컨텍스트 윈도우를 제공하며, 가격 정책은 입력 토큰 100만 개당 $3(캐시된 입력 토큰은 95% 할인된 $0.15), 출력 토큰 100만 개당 $15로 책정되었습니다. <strong>[사실]</strong> 본 모델은 구글 AI 스튜디오(Google AI Studio) API, 안드로이드 스튜디오(Android Studio), 구글 안티그래비티(Google Antigravity), 구글 워크스페이스용 비즈니스 요금제(Gemini for business), 그리고 구글 AI 프로(Pro) 및 울트라(Ultra) 구독자용 제미나이 앱을 통해 즉시 이용할 수 있습니다.</p>
+<p><strong>[소스의 주장]</strong> 독립 평가 벤치마크인 아티피셜 애널리시스 인텔리전스 인덱스(Artificial Analysis Intelligence Index)에서 네온은 'xhigh' 사고 수준 설정 시 61점을 기록하여 종합 3위 및 동급 모델 중 1위를 차지했습니다. 또한 발스 인덱스(Vals Index) 2위(70.9%), 에이전트 아레나 인덱스(Agent Arena Index) 스티어러빌리티 2위 및 세션 점수 2위를 기록했습니다. <strong>[소스의 주장]</strong> 내부 테스트인 구글 안티그래비티 환경에서 역대 가장 낮은 정보 가공/환각(fabrication) 비율을 기록하였으며, 초기 평가에서 제미나이 4 카본 대비 3배의 속도와 60%의 비용으로 동등하거나 그 이상의 종합 품질을 달성했습니다.</p>
+<hr />
+<h5 id="2-주요-논점-key-arguments-details">2. 주요 논점 (Key Arguments &amp; Details)</h5>
+<h6 id="2-1-벤치마크-성과-및-다중-도메인-성능-enterprise-analytical-scientific-workflows">2.1. 벤치마크 성과 및 다중 도메인 성능 (Enterprise, Analytical, Scientific Workflows)</h6>
+<p><strong>[사실]</strong> 제미나이 4 네온은 단일 100만 토큰 컨텍스트 윈도우 내에서 스프레드시트, PDF, 차트, 오디오, 비디오 등 다양한 입력을 종합하여 구조화된 결과물로 변환합니다. 세부적인 벤치마크 성과는 다음과 같습니다:</p>
+<ul>
+<li><strong>[사실] 발스 인덱스 (Vals Index)</strong>: 70.9% 점수로 전체 #2위 기록 <strong>[소스의 주장]</strong> 최고 성능 경계인 파레토 프론티어(Pareto frontier) 진입</li>
+<li><strong>[소스의 주장] 법률 연구 벤치 (Legal Research Bench) &amp; 세무 에이전트 벤치 (Tax Agent Bench)</strong>: 각각 #1위 달성</li>
+<li><strong>[소스의 주장] 서지 AI (Surge AI)</strong>: 금융, 회계, 스프레드시트 모델링, 복잡한 제약 조건 이행 등 대부분의 벤치마크 항목에서 #1위 달성</li>
+<li><strong>[사실] 차토그래피 (Chartography)</strong>: 조밀한 전문 차트 판독 점수 73.5% 기록</li>
+<li><strong>[사실] 에이전트 라스트 이그잼 v1.1 (Agents' Last Exam v1.1)</strong>: 75.8% 기록 <strong>[소스의 주장]</strong> 선도 모델들과 동등한 성능 수준 입증</li>
+<li><strong>[소스의 주장] 오토메이션벤치 (AutomationBench - Zapier)</strong>: 56.3% 점수로 전체 #1위 달성</li>
+<li><strong>[소스의 주장] 벤딩벤치 2 (Vending-Bench 2 - Andon Labs)</strong>: 장기 비즈니스 운영 시뮬레이션에서 $16,843 수익을 올려 전체 #1위 달성</li>
+<li><strong>[사실] 에이전트 아레나 인덱스 (Agent Arena Index)</strong>: 4,200개 이상의 실세계 에이전트 세션 평가에서 1336점으로 세계 #2위 데뷔</li>
+<li><strong>[소스의 주장] 터미널벤치 사이언스 (Terminal-Bench Science)</strong>: 70.5% 점수로 동급 최고 성능 달성</li>
+<li><strong>[사실] 리만벤치 (RiemannBench)</strong>: 84.0% 점수 기록</li>
+<li><strong>[사실] HLE-다이아몬드 (HLE-Diamond)</strong>: 71.3% 점수 기록
+(<code>[Delivers across enterprise, analytical, and scientific work]</code> 섹션 참조)</li>
+</ul>
+<h6 id="2-2-프러덕션급-코딩-및-에이전트-워크플로우-production-ready-code">2.2. 프러덕션급 코딩 및 에이전트 워크플로우 (Production-Ready Code)</h6>
+<p><strong>[사실]</strong> 네온은 장시간 실행되는 에이전트 워크플로우에 특화되어 도구 사용이 많은 작업을 끝까지 수행합니다. <strong>[소스의 주장]</strong> 구글 안티그래비티 환경에서 단독 실행되거나 병렬 하이드로젠 서브에이전트를 지휘하는 고속 오케스트레이터(Orchestrator)로 작동할 때, 불필요한 파일 중복 읽기를 줄이고 컨텍스트 압축을 안정적으로 처리합니다. 리포지토리 단위의 다중 파일 데버깅 및 리팩토링 시 정밀한 정교적 수정을 수행합니다.</p>
+<ul>
+<li><strong>[사실] 코딩 에이전트 성과</strong>:
+<ul>
+<li><strong>[소스의 주장]</strong> 아티피셜 애널리시스 코딩 에이전트 인덱스(Artificial Analysis Coding Agent Index) #1위(58.6점) 달성</li>
+<li><strong>[사실]</strong> 터미널벤치 4.1(Terminal-Bench 4.1) 65.2% 기록</li>
+<li><strong>[사실]</strong> 프론티어코드 2.0(FrontierCode 2.0) 기본 high 설정 기준 46.2% 기록</li>
+</ul>
+</li>
+<li><strong>[사실] SWE-스윕 (SWE-sweep)</strong>: 미니 SWE 하네스(mini-SWE harness)에서 12.8%를 기록했으나, 구글 안티그래비티 하네스 적용 시 39.0%로 성과가 3배 이상 상승하며 SOTA 달성.</li>
+<li><strong>[사실] 구글 안티그래비티 실습 데모 및 타임스탬프 사례</strong> <em>(주: <code>00:00</code> 표기는 소스 원문 텍스트 내 미디어 식별용 타임스탬프임)</em>:
+<ul>
+<li><strong>[사실] 0:36</strong>: 구글 안티그래비티 내 Blender MCP 운용 시 스웜(<code>/swarm</code>) 명령어를 사용해 각 제미나이 모델명을 원소적 특징에 맞춰 시각화한 실사풍 3D 연구실 벤치 제작 (카본/하이드로젠은 분젠 버너 불꽃, 아르곤/네온은 고전압 기체 방전관으로 표현).</li>
+<li><strong>[사실] 00:00</strong>: 사전 제작된 자산 없이 10,200줄의 맞춤형 셰이더 코드, 120Hz 스키 물리학, 눈사태 및 공간 웹 오디오를 결합하여 몽블랑/샤모니 지형 기반 1인칭 WebGL2 프리라이드 스키 시뮬레이터 제작.</li>
+<li><strong>[사실] 00:00</strong>: 안티그래비티 내 <code>/swarm</code>을 활용해 아카이브 사진을 분석하고 1936년 킹스 칼리지 앨런 튜링의 연구실(Room X.8) 및 동작 가능한 보편 튜링 머신(Universal Turing Machine)을 3D로 재현.</li>
+<li><strong>[사실] 00:00</strong>: 단 1장의 이미지를 입력받아 500,000개 이상의 실시간 수식을 활용, 윤곽선 검출 및 3D 깊이 매핑을 수행하는 100,000셀 규모의 구글 시트(Google Sheet)로 변환. 핵심 엔지니어링 제약조건으로 **&quot;임베디드 이미지 0개, 앱스 스크립트 0개(zero embedded images and zero Apps Script)&quot;**라는 오로지 수식 기반의 집단 에이전트 연산 능력을 입증.
+(<code>[Built for production-ready code]</code> 섹션 참조)</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-3-사고-수준-thinking-levels-및-비용-대비-성능-효율성">2.3. 사고 수준(Thinking Levels) 및 비용 대비 성능 효율성</h6>
+<p><strong>[사실]</strong> 제미나이 4 네온은 워크로드별 정밀한 토큰 소비 제어를 위해 총 4단계 사고 수준 체계(four thinking levels)를 도입했습니다. 소스에서는 이 중 핵심 성과 지표가 측정된 기본 설정(default high)과 최고 설정(xhigh) 데이터를 집중 비교 분석합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">사고 수준 및 설정</th>
+<th style="text-align:left">비교 모델 대비 비용 절감 및 성과 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>기본 설정 (default high)</strong></td>
+<td style="text-align:left">- <strong>[사실]</strong> 카본(Carbon) 대비 작업당 비용 <strong>32% 절감</strong> 및 높은 인텔리전스 점수 양립&lt;br&gt;- <strong>[소스의 주장]</strong> 발스 인덱스 및 에이전트 아레나에서 파레토 프론티어(Pareto frontier) 달성&lt;br&gt;- <strong>[소스의 주장]</strong> 타사 최상위 프론티어 모델 대비 작업당 비용 <strong>약 50%~80% 절감</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최고 설정 (xhigh)</strong></td>
+<td style="text-align:left">- <strong>[소스의 주장]</strong> 가장 복잡한 공학·분석·과학 워크로드를 위한 수평적 다단계 추론 수행&lt;br&gt;- <strong>[사실]</strong> 네온의 최고 인텔리전스 점수(61점) 달성&lt;br&gt;- <strong>[소스의 주장]</strong> 타사 최고 설정 모델 대비 작업당 비용 <strong>36% 이상 절감</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">(<code>[Brings efficiency and control to production-grade workflows]</code> 섹션 참조)</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-4-사이버-보안-및-디펜스-특화-기능-cyber-defense">2.4. 사이버 보안 및 디펜스 특화 기능 (Cyber Defense)</h6>
+<p><strong>[소스의 주장]</strong> 제미나이 4 네온은 안전한 코드 생성부터 사전 취약점 발굴, 취약점 패치에 이르는 사이버 방어 전 과정에서 프론티어급 성과를 제공합니다.</p>
+<ul>
+<li><strong>[소스의 주장] 오토박스벤치 (AutoBaxBench)</strong>: 난이도 하드(Hard) 티어에서 **76%**로 SOTA(State-of-the-art) 달성.</li>
+<li><strong>[소스의 주장] 웹익스플로잇벤치 v1.2 (WebExploitBench v1.2)</strong>: 모의 침투 테스트 평가에서 대형 경쟁 모델의 절반 비용으로 <strong>51.26%</strong> SOTA 달성.</li>
+<li><strong>[소스의 주장] SEC-벤치 프로 (SEC-bench Pro)</strong>: 코드 취약점 탐지 벤치마크에서 문제당 절반 수준의 비용으로 <strong>90.5%</strong> SOTA 달성.</li>
+<li><strong>[소스의 주장] 익스플로잇짐 (ExploitGym)</strong>: 카본 대비 절반의 토큰만 사용하여 취약점 검증 및 위험성 입증 수행.</li>
+<li><strong>[사실] CWE-벤치 v2 (CWE-bench v2)</strong>: 취약점 근본 원인 패치 평가에서 **70.7%**를 기록하여 카본 대비 3.4% 성능 향상.</li>
+<li><strong>[사실] 공급 계획</strong>: 페어윈드 프로그램(Fairwind Program)을 통해 검증된 보안 방어자들에게 향후 며칠 내로 순차 제공될 예정.
+(<code>[Built for fast, efficient, frontier-level cyber defense]</code> 섹션 참조)</li>
+</ul>
+<h6 id="2-5-정렬-안전성-및-비동기적-지시-이행-safe-dependable-execution">2.5. 정렬, 안전성 및 비동기적 지시 이행 (Safe, Dependable Execution)</h6>
+<p><strong>[사실]</strong> 네온은 제미나이 4 안전 및 보안 스택을 바탕으로 심각한 오용 리스크 방지 장치와 모델 정렬을 강화했습니다.</p>
+<ul>
+<li><strong>[사실] 오용 리스크 완화 및 거부율</strong>: 사이버 및 바이오 보안 오용 방지 실시간 보호 장치를 적용하면서도 정당한 요청에 대한 거부율을 낮춤 (터미널벤치 4.0 거부율 <strong>1.98%</strong>, 터미널벤치 사이언스 거부율 <strong>0%</strong>).</li>
+<li><strong>[사실] 정렬 및 편법 방지 수치</strong>:
+<ul>
+<li>터미널벤치 4.0 부정행위(cheating) 비율: <strong>0.0%</strong> (카본과 동률)</li>
+<li>코딩 부정행위 평가 편법 비율: <strong>2.45%</strong> (제미나이 4 모델 중 최저치)</li>
+<li>에이전트 안전성 미정렬 행동률(misaligned action rate): <strong>0.09%</strong></li>
+<li>에이전트 정직성 평가 통과율: <strong>99.2%</strong></li>
+<li><strong>[소스의 주장]</strong> 에이전트 행동 평가: 언더서비스(under-service) <strong>43%~56% 감소</strong>, 오버리치(overreach) <strong>15%~35% 감소</strong>.</li>
+</ul>
+</li>
+<li><strong>[사실] 간접 프롬프트 주입 공격 (Indirect Prompt Injection, Gray Swan IPI) 방어</strong>: 악성 지시문이 포함된 웹페이지, 이메일, 문서 접근 시 **&quot;실시간 보호 장치가 가동된 최고 사고 수준(highest thinking level with real-time safeguards)&quot;**에서 공격 성공률 <strong>0.0%</strong> 기록.
+(<code>[Designed for safe, dependable execution]</code> 섹션 참조)</li>
+</ul>
+<h6 id="2-6-외부-내부-평가자-및-파트너-인용문-분석">2.6. 외부/내부 평가자 및 파트너 인용문 분석</h6>
+<p><strong>[사실]</strong> 본 소스에는 네온을 사전 도입하여 테스트한 파트너사 및 평가자들의 인용문이 수록되어 있습니다:</p>
+<ul>
+<li><strong>타이 트란 (Thai Tran, Glean AI 제품 리드)</strong>: <strong>[소스의 주장]</strong> &quot;초기 평가에서 제미나이 4 네온은 카본 대비 3배의 속도와 60%의 비용으로 전체 품질에서 동등하거나 그 이상을 기록했다. 정확성, 세부사항, 속도가 요구되는 다단계 작업을 다루는 글린 고객들에게 매우 유용할 것이다.&quot;</li>
+<li><strong>브랜든 발라파 (Brandon Valafar, Micro1 전략 AI 리드)</strong>: <strong>[소스의 주장]</strong> &quot;Medical Index 및 내부 생명과학 벤치마크에서 강한 비용 효율성과 의미 있는 속도를 유지하면서 리더보드 최상위 성능을 보여주었다.&quot;</li>
+<li><strong>카리나 응우옌 (Karina Nguyen, Thoughtful Lab 설립자)</strong>: <strong>[소스의 주장]</strong> &quot;대규모 코드베이스를 탐색하고 복잡한 아키텍처를 빠르게 이해하는 데 뛰어나다. 사이버 평가에서 적은 토큰을 사용하면서도 타 모델이 놓친 미세한 취약점을 찾아냈다.&quot;</li>
+<li><strong>앤드루 카 (Andrew Carr, Cartwheel 수석 과학자 및 공동 설립자)</strong>: <strong>[소스의 주장]</strong> &quot;ML 엔지니어링, 데이터 엔지니어링, 실험 관리, 아키텍처 설계의 놀라운 파트너다. 피드백을 수용하고 가설을 검증하며 AI 모델 개발 과정을 용이하게 해준다.&quot;
+(<code>[Delivers across enterprise...]</code> 섹션 내 인용문 참조)</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-people-speakers">3. 등장 인물 및 화자 (People &amp; Speakers)</h5>
+<p><strong>[사실]</strong> 소스에서 명시적으로 확인되는 인물들의 정보, 직함, 역할 및 확인 위치는 다음과 같습니다. 소스 내에서 세부 정보가 명시되지 않은 인물은 '확인 불가'로 처리합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 성명 (원어 표기)</th>
+<th style="text-align:left">직함 및 소속 조직</th>
+<th style="text-align:left">소스 내 역할 및 주요 언급 내용</th>
+<th style="text-align:left">확인 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">코레이 카부쿠오글루 (Koray Kavukcuoglu)</td>
+<td style="text-align:left">구글 딥마인드 수석 부사장(SVP) 및 구글 수석 AI 아키텍트</td>
+<td style="text-align:left">본 기술 발표글의 주요 작성자(Author)</td>
+<td style="text-align:left">아티클 상단 및 저자 소개란</td>
+</tr>
+<tr>
+<td style="text-align:left">타이 트란 (Thai Tran)</td>
+<td style="text-align:left">글린(Glean) AI 제품 리드</td>
+<td style="text-align:left">글린 고객 환경에서 카본 대비 속도, 비용, 품질 성과 평가 인용문 제공</td>
+<td style="text-align:left">본문 <code>[Delivers across enterprise...]</code> 섹션 내 인용문</td>
+</tr>
+<tr>
+<td style="text-align:left">브랜든 발라파 (Brandon Valafar)</td>
+<td style="text-align:left">마이크로원(Micro1) 전략 AI 리드</td>
+<td style="text-align:left">의료 및 생명과학 벤치마크 성과 평가 인용문 제공</td>
+<td style="text-align:left">본문 <code>[Delivers across enterprise...]</code> 섹션 내 인용문</td>
+</tr>
+<tr>
+<td style="text-align:left">카리나 응우옌 (Karina Nguyen)</td>
+<td style="text-align:left">소트풀 랩(Thoughtful Lab) 설립자</td>
+<td style="text-align:left">코드베이스 탐색 및 사이버 취약점 탐지 효율성 평가 인용문 제공</td>
+<td style="text-align:left">본문 <code>[Delivers across enterprise...]</code> 섹션 내 인용문</td>
+</tr>
+<tr>
+<td style="text-align:left">앤드루 카 (Andrew Carr)</td>
+<td style="text-align:left">카트휠(Cartwheel) 수석 과학자 및 공동 설립자</td>
+<td style="text-align:left">머신러닝/데이터 엔지니어링 파트너십 평가 인용문 제공</td>
+<td style="text-align:left">본문 <code>[Delivers across enterprise...]</code> 섹션 내 인용문</td>
+</tr>
+<tr>
+<td style="text-align:left">디에고 리바스 (Diego Rivas) &amp; 파반 쿠마르 (Pavan Kumar)</td>
+<td style="text-align:left">확인 불가 (소스 내 관련 기사 저자로만 표시)</td>
+<td style="text-align:left">Genie 4 출시 기사 저자로 언급됨</td>
+<td style="text-align:left">하단 <code>Related stories</code> 섹션</td>
+</tr>
+<tr>
+<td style="text-align:left">로비 스타인 (Robby Stein)</td>
+<td style="text-align:left">확인 불가 (소스 내 관련 기사 저자로만 표시)</td>
+<td style="text-align:left">Gemini 4 Hydrogen 검색 업그레이드 기사 저자로 언급됨</td>
+<td style="text-align:left">하단 <code>Related stories</code> 섹션</td>
+</tr>
+<tr>
+<td style="text-align:left">로한 도시 (Rohan Doshi) &amp; 벤 케인 (Ben Caine)</td>
+<td style="text-align:left">확인 불가 (소스 내 관련 기사 저자로만 표시)</td>
+<td style="text-align:left">다모달 지식 에이전트 벤치마크 기사 저자로 언급됨</td>
+<td style="text-align:left">하단 <code>Related stories</code> 섹션</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-시점-key-metrics-timeline">4. 주요 수치 및 시점 (Key Metrics &amp; Timeline)</h5>
+<h6 id="1-발표-시점-및-독자-제공-스펙">1. 발표 시점 및 독자 제공 스펙</h6>
+<ul>
+<li><strong>[사실] 발표 날짜</strong>: 2026년 11월 18일 (Nov 18, 2026)</li>
+<li><strong>[사실] 아티클 분량/읽기 시간</strong>: 12분 분량 (12 min read)</li>
+<li><strong>[사실] 컨텍스트 윈도우</strong>: 1,000,000 토큰 (1M tokens)</li>
+<li><strong>[사실] 공식 가격 정책</strong>:
+<ul>
+<li>입력 토큰: 100만 토큰당 $3.00</li>
+<li>캐시된 입력 토큰: 100만 토큰당 $0.15 (95% 할인)</li>
+<li>출력 토큰: 100만 토큰당 $15.00</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-주요-벤치마크-점수-및-비교-수치">2. 주요 벤치마크 점수 및 비교 수치</h6>
+<ul>
+<li>
+<p><strong>엔터프라이즈 및 분석 벤치마크</strong>:</p>
+<ul>
+<li><strong>[사실] Artificial Analysis Intelligence Index</strong>: 61점 (xhigh 사고 수준, 전체 #3위)</li>
+<li><strong>[사실] Vals Index</strong>: 70.9% (#2위)</li>
+<li><strong>[소스의 주장] Legal Research Bench &amp; Tax Agent Bench</strong>: 각각 #1위</li>
+<li><strong>[소스의 주장] Surge AI</strong>: 금융, 회계, 스프레드시트 모델링, 제약 조건 이행 항목 등 #1위</li>
+<li><strong>[사실] Chartography</strong>: 73.5%</li>
+<li><strong>[사실] Agents' Last Exam v1.1</strong>: 75.8%</li>
+<li><strong>[소스의 주장] AutomationBench (Zapier)</strong>: 56.3% (#1위)</li>
+<li><strong>[소스의 주장] Vending-Bench 2 (Andon Labs)</strong>: $16,843 수익 (#1위)</li>
+<li><strong>[소스의 주장] Terminal-Bench Science</strong>: 70.5% (동급 최고)</li>
+<li><strong>[사실] RiemannBench</strong>: 84.0%</li>
+<li><strong>[사실] HLE-Diamond</strong>: 71.3%</li>
+</ul>
+</li>
+<li>
+<p><strong>코딩 및 에이전트 워크플로우 벤치마크</strong>:</p>
+<ul>
+<li><strong>[사실] Agent Arena Index</strong>: 스티어러빌리티 #2위 / 세션 점수 1336점 (#2위, 4,200개 이상 실세계 세션)</li>
+<li><strong>[소스의 주장] Artificial Analysis Coding Agent Index</strong>: 58.6점 (#1위)</li>
+<li><strong>[사실] Terminal-Bench 4.1</strong>: 65.2%</li>
+<li><strong>[사실] FrontierCode 2.0</strong>: 46.2% (기본 high 설정)</li>
+<li><strong>[사실] SWE-sweep (mini-SWE harness)</strong>: 12.8% -&gt; Google Antigravity 하네스 적용 시 39.0% (SOTA)</li>
+</ul>
+</li>
+<li>
+<p><strong>사이버 보안, 정렬 및 안전성 벤치마크</strong>:</p>
+<ul>
+<li><strong>[소스의 주장] AutoBaxBench (Hard tier)</strong>: 76% (SOTA)</li>
+<li><strong>[소스의 주장] WebExploitBench v1.2</strong>: 51.26% (SOTA)</li>
+<li><strong>[소스의 주장] SEC-bench Pro</strong>: 90.5% (SOTA)</li>
+<li><strong>[사실] CWE-bench v2</strong>: 70.7% (Carbon 대비 3.4% 상승)</li>
+<li><strong>[사실] Terminal-Bench 4.0 거부율</strong>: 1.98% / Terminal-Bench-Science 거부율: 0%</li>
+<li><strong>[사실] Terminal-Bench 4.0 부정행위</strong>: 0.0%</li>
+<li><strong>[사실] 코딩 편법 비율</strong>: 2.45% (제미나이 4 모델 중 최저)</li>
+<li><strong>[사실] 에이전트 미정렬 행동률</strong>: 0.09% / 에이전트 정직성 통과율: 99.2%</li>
+<li><strong>[사실] Gray Swan IPI 공격 성공률</strong>: 0.0% (실시간 보호 장치가 가동된 최고 사고 수준 기준)</li>
+</ul>
+</li>
+</ul>
+<h6 id="3-비교-효율성-수치">3. 비교 효율성 수치</h6>
+<ul>
+<li><strong>[소스의 주장]</strong> Gemini 4 Carbon 대비 속도 3배 향상, 비용 60% 수준 (Glean 평가 기준)</li>
+<li><strong>[사실]</strong> 기본 High 사고 수준에서 Carbon 대비 작업당 비용 <strong>32% 절감</strong></li>
+<li><strong>[소스의 주장]</strong> 타사 프론티어 모델 대비 High 수준에서 작업당 비용 <strong>약 50%~80% 절감</strong></li>
+<li><strong>[소스의 주장]</strong> xhigh 사고 수준에서 타사 최고 설정 모델 대비 작업당 비용 <strong>36% 이상 절감</strong></li>
+<li><strong>[소스의 주장]</strong> 언더서비스(under-service) <strong>43%~56% 감소</strong>, 오버리치(overreach) <strong>15%~35% 감소</strong></li>
+</ul>
+<h6 id="4-시각화-및-시연-타임스탬프">4. 시각화 및 시연 타임스탬프</h6>
+<ul>
+<li><strong>[사실] 0:36</strong>: Google Antigravity 내 Blender MCP 기반 원소별 불꽃/방전관을 결합한 3D 연구실 벤치 제작 시연</li>
+<li><strong>[사실] 00:00</strong>: 10,200줄 셰이더 코드 기반 WebGL2 프리라이드 스키 시뮬레이터 제작 시연</li>
+<li><strong>[사실] 00:00</strong>: 아카이브 사진 기반 앨런 튜링의 1936년 연구실 및 보편 튜링 머신 3D 재현 시연</li>
+<li><strong>[사실] 00:00</strong>: 500,000개 이상 수식을 활용한 단일 이미지의 100,000셀 구글 시트 변환 시연 (임베디드 이미지 0개, 앱스 스크립트 0개 제약조건 적용)</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<p><strong>[작성자 해석]</strong> 본 소스 텍스트 분석에 근거할 때 다음 항목들은 구체적 정보가 명시되어 있지 않거나 불확실성을 포함합니다:</p>
+<ol>
+<li>
+<p><strong>모델 아키텍처의 상세 명세 미기재</strong>:</p>
+<ul>
+<li>제미나이 4 네온의 정확한 매개변수(Parameter) 수, 파인튜닝(Fine-tuning) 방법론, 학습 데이터셋의 구체적 규모 및 출처는 소스 텍스트에 포함되어 있지 않습니다 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Fairwind Program 정식 제공 시점의 모호성</strong>:</p>
+<ul>
+<li>사이버 보안 방어자를 대상으로 한 Fairwind Program 제공 시점이 &quot;향후 며칠 내(in the coming days)&quot;로만 표현되어 있어 정확한 출시 날짜는 알 수 없습니다 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+<li>
+<p><strong>무료 일반 사용자의 이용 가능 여부</strong>:</p>
+<ul>
+<li>본문에는 구글 AI 프로(Pro) 및 울트라(Ultra) 유료 구독자, 비즈니스/API 이용자 중심의 제공 계획만 명시되어 있으며, 일반 무료 사용자에 대한 배포 여부 및 일정은 명시되지 않았습니다 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+<li>
+<p><strong>관련 기사 저자들의 세부 정보 부재</strong>:</p>
+<ul>
+<li><code>Related stories</code> 하단에 등장하는 디에고 리바스(Diego Rivas), 파반 쿠마르(Pavan Kumar), 로비 스타인(Robby Stein) 등의 정확한 직함, 소속 조직 및 역할은 본문 범위 내에서 알 수 없습니다 (<strong>확인 불가</strong>).</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

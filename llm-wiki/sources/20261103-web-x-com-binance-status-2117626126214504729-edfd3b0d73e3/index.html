@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>29 October Binance Security Incident: Initial Findings and Response Update</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>29 October Binance Security Incident: Initial Findings and Response Update</h1>
+<p class="page-meta">소셜 · 2026-11-03</p>
+<h2 id="요약">요약</h2>
+<p>2026년 10월 29일, 글로벌 가상자산 거래소 바이낸스(Binance)에서 정교하고 심각한 보안 침해 사고가 발생했습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/social/">소셜</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://x.com/binance/status/2117626126214504729?a=6qZzzoVXAb3S7l4QlEg&amp;s=20">출처</a> · <a href="https://www.youtube.com/watch?v=0yZ01GUeJL0">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="바이낸스-2026년-10월-29일-보안-침해-사고-해설-보고서">바이낸스 2026년 10월 29일 보안 침해 사고 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>2026년 10월 29일, 글로벌 가상자산 거래소 바이낸스(Binance)에서 정교하고 심각한 보안 침해 사고가 발생했습니다. 본 보고서는 바이낸스 공식 X(구 트위터) 계정(@binance)을 통해 2026년 11월 3일 14:33:06 UTC에 최초 공개된 초기 조사 및 대응 경과 보고서(Initial Findings and Response Update) 소스 문서를 바탕으로 작성되었습니다. 해당 소스 정보는 2026년 11월 3일 22:24:48 UTC에 수집되었으며(수집 URL: <code>https://x.com/binance/status/2117626126214504729</code>, 원본 HTML SHA-256: <code>2e2bf43f67f2b8c4714300703d7ec98d57cb57e9efdd976beb719f98c96f68fe</code>), 본 보고서의 모든 기술적 분석과 사실관계 판단은 해당 소스 텍스트에 엄격히 기반합니다. <strong>[사실]</strong></p>
+<p>이번 보안 사고로 영향을 받은 전체 디지털 자산의 규모는 약 63억 4천만 달러(USD 6.34 billion)에 달합니다. 바이낸스는 사고 발생 직후 즉각적인 동결 및 차단 조치를 통해 약 28억 5천만 달러(USD 2.85 billion) 규모의 자산을 차단·동결했음을 발표했습니다. 유출된 자산에 대해 바이낸스는 사용자 피해를 방지하기 위해 손실액의 100% 이상에 해당하는 준비금을 전액 확보하여 재무적 영향 및 손실을 전액 자체 흡수하겠다는 방침을 밝혔습니다. 2026년 10월 31일 기준으로 영향받은 토큰 자산의 98%는 보충이 완료되어 준비금 증명(Proof of Reserves) 페이지에서 온체인 검증이 가능하며, 유동성이 상대적으로 낮은 잔여 미확정 자산에 대해서는 시장 매수를 통한 보충 절차가 진행 중입니다. <strong>[소스 주장]</strong></p>
+<p>기술적 관점에서 본 침해 사고는 단일 피싱이나 단순 단말기 침입이 아닌, 다단계 공급망 공격(Supply Chain Attack), 고도화된 사회공학적 기법(Social Engineering), 내부 AI 도구 기반 발판 이동(Springboard), 제로데이(0-day) 악성코드 배포, 그리고 이더리움 EIP-7702 권한 부여 메커니즘 악용이 수개월에 걸쳐 시점별로 치밀하게 결합된 지속적 위협 세력(APT)의 다단계 복합 공격 기법으로 분석됩니다. 바이낸스는 식별된 공격 침입 경로를 차단하고 관련 시스템을 완전히 재구축 및 교체하는 한편, 제3자 전문 기관의 검토와 AI 기반 보안 강화를 포함한 종합적 봉쇄 및 후속 조치를 단행하고 있습니다. <strong>[작성자 해석]</strong></p>
+<hr />
+<h5 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h5>
+<h6 id="2-1-논점-1-공격-주체-및-전반적-침해-규모">2.1. 논점 1: 공격 주체 및 전반적 침해 규모</h6>
+<ul>
+<li><strong>공격 배후 주체:</strong> 미국 연방수사국(FBI)이 공개한 최신 정보에 따르면, 이번 보안 침해 사고의 책임을 지는 공격 주체는 조선민주주의인민공화국(DPRK) 연계 사이버 해킹 집단으로 밝혀졌습니다. <strong>[소스 주장]</strong></li>
+<li><strong>전반적 침해 자산 규모:</strong> 이번 사고로 영향권에 노출되거나 무단 이체 위험에 직접 직면했던 전체 디지털 자산 규모는 약 63억 4천만 달러(USD 6.34 billion) 수준입니다. <strong>[소스 주장]</strong></li>
+<li><strong>동결 및 차단 자산:</strong> 사고 발생 후 핫월렛 서비스 중단, 파트너사 협력, 온체인 권한 철회 절차 등을 통해 동결 또는 차단에 성공한 자산 규모는 약 28억 5천만 달러(USD 2.85 billion)입니다. 해당 금액은 최종 정산 절차 및 시장 가격 변동성에 따라 일부 조정될 수 있습니다. <strong>[소스 주장]</strong></li>
+</ul>
+<h6 id="2-2-논점-2-공격-준비-및-다단계-침투-과정-attack-preparation">2.2. 논점 2: 공격 준비 및 다단계 침투 과정 (Attack Preparation)</h6>
+<p>바이낸스의 자체 내부 조사에 따르면, 본 사고는 단일 침입 사건이 아니라 장기간에 걸쳐 전개된 다단계 사슬형 공격(Multi-stage Campaign)에 해당합니다. <strong>[소스 주장]</strong></p>
+<ul>
+<li><strong>2026년 6월 (공급망 공격 및 타깃 정보 수집):</strong>
+지갑 데브옵스 엔지니어 A(Wallet DevOps Engineer A)가 검색 엔진에서 검색 후 인기 AI 코딩 도구를 설치하는 과정에서 변조된 홈브루(Homebrew) 설치 파일을 다운로드했습니다. 바이낸스 보안팀이 비정상 행위를 감지하고 선제적 조치로 기기를 교체하고 관련 인증서를 회전(rotate)시켰으나, 공격자는 이 과정에서 엔지니어 A의 역할 및 지갑 인프라 팀 내 관련 동료들에 관한 핵심 접근 정보와 프로필을 이미 파악했습니다. <strong>[소스 주장]</strong></li>
+<li><strong>2026년 연중 지속 위협 (APT 공격 지속):</strong>
+바이낸스 보안팀은 2026년 한 해 동안 북한 연계로 의심되는 사이버 위협 시도 57건을 감지하고 차단했습니다. 공격자들은 가짜 채용 면접, 개발자 도구로 위장한 악성 소프트웨어, 변조된 소프트웨어 패키지 및 브라우저 확장 프로그램, 가짜 화상 회의 앱, 계정 탈취 목적의 사회공학적 캠페인 등 다양한 수단을 지속적으로 동원했습니다. <strong>[소스 주장]</strong></li>
+<li><strong>2026년 9월 (표적화된 사회공학적 공격 및 제로데이 악성코드 감염):</strong>
+소프트웨어 엔지니어 B(Software Engineer B)는 정식 구직 플랫폼에서 프로젝트 디렉터(Project Director)를 사칭한 인물로부터 접근을 받았습니다. 엔지니어 B는 해당 구직 플랫폼 프로필상에 바이낸스 근무 경력을 명시하고 있었으며, 공격자는 이를 파악하고 표적 공격을 수행했습니다. <strong>[소스 주장]</strong>
+<ul>
+<li><strong>1차 면접:</strong> HR 대표를 사칭한 인물이 라이브 영상 면접을 진행했으며, 신뢰를 구축하기 위해 개인 사진과 동영상이 포함된 본인의 소셜 미디어 계정을 공유하는 정교함을 보였습니다. <strong>[소스 주장]</strong></li>
+<li><strong>2차 면접:</strong> 소셜 차트 앱에서 가상 회사의 CEO를 사칭한 인물과 진행되었습니다. 면접 종료 직전, 엔지니어 B는 업무용 PC에 악성 코드 저장소가 포함된 과제(assignment)를 다운로드하도록 지시받았습니다. <strong>[소스 주장]</strong></li>
+<li><strong>악성코드 실행 및 <code>pyenv</code> 파일 교체 상세 메커니즘:</strong> 과제 파일 설정 과정에서 제로데이(0-day) 악성코드가 실행되었습니다. 해당 악성코드는 당시 단말 보안 엔드포인트 보호 도구(EDR)를 우회하였으며, 보안 탐지를 피하기 위해 난독화 기술을 적용하여 정상적인 파이썬 환경 관리 도구(<code>pyenv</code>)의 부품을 악성 버전으로 교체하고 외부 제어 서버와 통신을 확립했습니다. <strong>[소스 주장]</strong><pre><code class="language-text">CREATE  /opt/homebrew/Cellar/pyenv/2.8.0/libexec/pyenv_
+MODIFY  pyenv_ → 3,414 B
+DELETE  .../libexec/pyenv  (3,344 B)      ← 정상적인 pyenv 도구 제거
+RENAME  pyenv_ → pyenv  (3,414 B)         ← 악성 실행 파일로 명칭 교체
+DELETE  /opt/homebrew/bin/pyenv  (3,414 B)
+ln  (신규 악성 심볼릭 링크 생성)  +  spawn zsh (zsh 셸 실행을 통한 제어권 확보)
+</code></pre>
+위 스크립트 흐름은 정상 <code>pyenv</code> 실행 파일을 삭제(<code>DELETE</code>)하고 동일 위치에 악성 파일(<code>pyenv_</code>)을 <code>pyenv</code>로 이름 변경(<code>RENAME</code>)한 후 심볼릭 링크(<code>ln</code>)를 재설정하여, 엔지니어의 명령어 입력 시 zsh 셸(<code>spawn zsh</code>)을 통해 공격자 제어 서버로 원격 제어 권한을 즉시 넘기도록 설계되었습니다. <strong>[작성자 해석]</strong></li>
+</ul>
+</li>
+<li><strong>2026년 10월 20일 (내부 AI 도구를 발판으로 한 권한 확장):</strong>
+공격자는 침해된 엔지니어 B의 컴퓨터와 내부 AI 도구를 발판(springboard)으로 활용하여 지갑 데브옵스 엔지니어 A와 지갑 소프트웨어 엔지니어 C(Wallet Software Engineer C)에 대한 제어권을 확장했습니다. 이 과정에서 공격자는 엔지니어 A의 PC에 존재하던 컨테이너 배포 권한 토큰(container deployment permission token)을 발견하고 탈취했습니다. <strong>[소스 주장]</strong></li>
+<li><strong>2026년 10월 29일 (지갑 서명 권한 침투 및 공격 개시):</strong>
+17:15~19:56 UTC 사이, 공격자는 엔지니어 C의 PC에 무단 로그인한 후, 엔지니어 A로부터 탈취한 인증 토큰을 사용하여 악성 컨테이너를 배포하고 악성 스크립트를 실행함으로써 무단 서명 요청을 위한 내부 침입 조치를 완료했습니다. <strong>[소스 주장]</strong></li>
+</ul>
+<h6 id="2-3-논점-3-10월-29일-공격-실행-및-기술적-악용-메커니즘">2.3. 논점 3: 10월 29일 공격 실행 및 기술적 악용 메커니즘</h6>
+<p>공격자는 내부 지갑 서명 서비스에 대한 무단 접근 권한을 악용하여 바이낸스의 정상적인 출금 절차를 우회하고 온체인 무단 트랜잭션을 실행했습니다. <strong>[소스 주장]</strong></p>
+<ul>
+<li><strong>핫월렛 자금 유출 시퀀스 (20:05 ~ 20:09 UTC):</strong>
+<ul>
+<li><strong>20:05~20:09 UTC 사이:</strong> 5개의 바이낸스 핫월렛에서 공격자 제어 주소로 <strong>2억 3,346만 개(233.46 million)의 XRP</strong>가 무단 전송되었습니다. <strong>[소스 주장]</strong></li>
+<li><strong>동일 시간대:</strong> 솔라나(Solana) 및 옵티미즘(Optimism) 네트워크의 바이낸스 핫월렛에서 약 <strong>970,500 개의 SOL</strong>과 <strong>4,420만 개(44.2 million)의 OP</strong>가 공격자 주소로 전송되었습니다. <strong>[소스 주장]</strong></li>
+<li><strong>내부 알림 발생 및 조사 개시:</strong> 대규모 이체에 대한 바이낸스 내부 알림 시스템이 즉시 작동하였으며, 보안팀이 긴급 조사 및 원인 파악에 착수했습니다. <strong>[소스 주장]</strong></li>
+<li><strong>조사 진행 중 추가 이체:</strong> 바이낸스 핫월렛에서 <strong>18,270 개의 BTC</strong>가 공격자 주소로 추가 유출되었습니다. <strong>[소스 주장]</strong></li>
+</ul>
+</li>
+<li><strong>이더리움 EIP-7702 메커니즘 악용 및 계정 논스(Nonce) 조작:</strong>
+공격자는 무단 탈취한 서명 서비스를 통해 이더리움 계정에 스마트 계약 실행 권한을 부여하는 규격인 EIP-7702 권한 부여 메커니즘을 악용했습니다. EIP-7702는 개인키를 직접 외부로 노출하지 않고도 외부 소유 계정(EOA)이 특정 스마트 계약에 무단 실행 권한을 위임할 수 있도록 지원합니다. 공격자는 <strong>총 50개의 서명 트랜잭션(50 signing transactions)을 제출하여 계정 논스(nonce)를 정교하게 조작</strong>했으며, 이를 통해 바이낸스 핫월렛 계정의 부분 실행 권한을 공격자 제어 스마트 계약으로 무단 위임하는 코드를 온체인상에 최종 등록시켰습니다. 위임 권한이 온체인에 등록됨에 따라, 공격자는 바이낸스의 오프체인 출금 인프라 제어를 받지 않고 온체인상에서 독립적으로 자금을 연속 이동시킬 수 있었습니다. <strong>[소스 주장]</strong></li>
+</ul>
+<h6 id="2-4-논점-4-바이낸스의-봉쇄-조치-및-기술적-난제">2.4. 논점 4: 바이낸스의 봉쇄 조치 및 기술적 난제</h6>
+<ul>
+<li><strong>출금 정지 조치와 온체인 EIP-7702 권한 간의 기술적 격리 불가능성:</strong>
+바이낸스는 대규모 무단 이체 감지 즉시 출금을 전면 중단하고 파트너사와 협력하여 자금 동결에 나섰습니다. 그러나 거래소의 중앙화 출금 서비스 및 핫월렛 서버를 셧다운(shutting down)하거나 출금을 정지하더라도, 이미 블록체인 온체인상에 등록된 EIP-7702 악성 위임 권한 코드가 자동으로 무효화되지는 않았습니다. 이는 데이터베이스 중심의 서비스 중단 조치와 블록체인 스마트 계약 권한 간의 구조적 분리로 인해 온체인 자금 이체를 즉시 정지시킬 수 없었던 기술적 난제였습니다. <strong>[작성자 해석]</strong></li>
+<li><strong>MPC(다자간 계산) 지갑 구조로 인한 온체인 철회 지연:</strong>
+바이낸스 핫월렛은 다자간 계산(Multi-Party Computation, MPC) 암호화 기술을 적용하고 있어, 단일 개인키(single private key)가 존재하지 않는 구조입니다. 따라서 이미 등록된 온체인 EIP-7702 악성 권한을 단일 키 서명으로 즉각 취소(revoke)할 수 없었으며, 온체인 권한을 철회하기 위한 특수한 MPC 서명 절차와 트랜잭션을 새롭게 개발하고 검증·실행하는 데 추가적인 시간이 소요되었습니다. <strong>[소스 주장]</strong></li>
+<li><strong>최종 자달 유출 및 영번지 서명을 통한 온체인 봉쇄 완료:</strong>
+<ul>
+<li><strong>23:56 UTC (ETH 최종 확정):</strong> 이전에 브로드캐스트되어 대기 상태(pending)에 있던 마지막 무단 이체건인 <strong>2,961.9 ETH</strong>가 온체인에서 최종 확정(finalised)되었습니다. 이 트랜잭션 이후 추가적인 무단 이체는 감지되지 않았습니다. <strong>[사실]</strong></li>
+<li><strong>10월 30일 00:10 UTC (봉쇄 완료):</strong> 바이낸스는 <code>Binance14</code> 핫월렛에서 영번지(zero address)로 향하는 신규 EIP-7702 권한 부여 서명 트랜잭션을 성공적으로 실행하여, 온체인에 남아있던 기존 악성 위임 코드를 완전히 제거(clearing)함으로써 최종 온체인 봉쇄를 완료했습니다. <strong>[사실]</strong></li>
+</ul>
+</li>
+</ul>
+<h6 id="2-5-논점-5-후속-조치-및-향후-계획-what-we-have-done-further-actions">2.5. 논점 5: 후속 조치 및 향후 계획 (What we have done &amp; Further actions)</h6>
+<ul>
+<li>
+<p><strong>이미 완료된 보안 강화 조치 (2026년 11월 3일 기준):</strong> <strong>[소스 주장]</strong></p>
+<ol>
+<li>신규 독립 환경 내 영향받은 지갑 시스템 완제 재구축.</li>
+<li>침해 영향받은 내부 AI 도구 및 접근 제어 시스템 재구축.</li>
+<li>침해 단말 기기 전면 교체.</li>
+<li>영향받은 엔지니어들의 자격 증명(credentials) 및 토큰 전면 폐기.</li>
+<li>전 직원 기기 대상 강화된 보안 스캔 완료.</li>
+<li>AI 기반 행동 이상 탐지(AI-based behavioural anomaly detection) 시스템 강화.</li>
+<li>지갑 서비스 위험 제어 체계 강화.</li>
+<li>사법 당국, 블록체인 분석 업체, 업계 파트너와 협력하여 유출 자산 추적 및 동결 조치 지속.</li>
+</ol>
+</li>
+<li>
+<p><strong>즉각 추진할 3가지 주요 향후 계획:</strong> <strong>[소스 주장]</strong></p>
+<ol>
+<li><strong>독립적 사이버 보안 검토:</strong> 외부 제3자 전문 보안 업체를 선정하여 사고 전반에 대한 종합 검토를 실시하고, 조사 결과의 검증 및 보완책을 시스템 개선에 반영.</li>
+<li><strong>AI 보안 및 예방 투자 확대:</strong> AI 기반 탐지, 엔드포인트 보호, 개발자 환경 보안, 행동 이상 모니터링 분야 투자 대폭 확대.</li>
+<li><strong>보안 연구 기금 설립 및 업계 이니셔티브 구축:</strong> 주요 AI 기업, 보안 업체, 업계 참여자들과 협력하여 블록체인 환경 내 AI 보안에 특화된 연구 기금 및 이니셔티브 조성.</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-persons-speakers">3. 등장 인물 및 화자 (Persons &amp; Speakers)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 / 이름</th>
+<th style="text-align:left">소스상 역할 및 직책</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">바이낸스 공식 계정 (@binance)</td>
+<td style="text-align:left">보고서 작성자 및 수집 대상 소스의 발행 주체</td>
+<td style="text-align:left">화자 / 작성자</td>
+</tr>
+<tr>
+<td style="text-align:left">지갑 데브옵스 엔지니어 A (Engineer A)</td>
+<td style="text-align:left">바이낸스 지갑 인프라 팀 데브옵스 엔지니어</td>
+<td style="text-align:left">6월 변조된 홈브루 다운로드 피해 대상 및 10월 컨테이너 배포 토큰 탈취 대상</td>
+</tr>
+<tr>
+<td style="text-align:left">소프트웨어 엔지니어 B (Engineer B)</td>
+<td style="text-align:left">바이낸스 소프트웨어 엔지니어</td>
+<td style="text-align:left">구직 플랫폼 프로필에 바이낸스 경력을 명시하여 표적화되었으며, 9월 사회공학적 면접 공격을 통해 제로데이 악성코드 실행 피해를 입은 대상</td>
+</tr>
+<tr>
+<td style="text-align:left">지갑 소프트웨어 엔지니어 C (Engineer C)</td>
+<td style="text-align:left">바이낸스 지갑 소프트웨어 엔지니어</td>
+<td style="text-align:left">10월 29일 공격자가 계정에 무단 로그인하여 공격을 개시한 대상</td>
+</tr>
+<tr>
+<td style="text-align:left">프로젝트 디렉터 가칭 인물</td>
+<td style="text-align:left">공격자 측 사칭 인물</td>
+<td style="text-align:left">정식 구직 플랫폼을 통해 엔지니어 B에게 최초 접근한 가짜 페르소나</td>
+</tr>
+<tr>
+<td style="text-align:left">HR 대표 가칭 인물</td>
+<td style="text-align:left">공격자 측 사칭 인물</td>
+<td style="text-align:left">1차 라이브 영상 면접을 진행하고 신뢰 구축을 위해 개인 소셜 미디어를 공유한 가짜 페르소나</td>
+</tr>
+<tr>
+<td style="text-align:left">CEO 가칭 인물</td>
+<td style="text-align:left">공격자 측 사칭 인물</td>
+<td style="text-align:left">소셜 차트 앱에서 2차 면접을 진행하며 악성 코드 과제 다운로드를 지시한 가짜 페르소나</td>
+</tr>
+<tr>
+<td style="text-align:left">조선민주주의인민공화국 (DPRK)</td>
+<td style="text-align:left">사고 배후 주체</td>
+<td style="text-align:left">미국 연방수사국(FBI) 발표 기준 본 보안 침해 사고의 책임을 지는 국가 주체</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-시점-figures-timestamps">4. 주요 수치 및 시점 (Figures &amp; Timestamps)</h5>
+<h6 id="핵심-수치">핵심 수치:</h6>
+<ul>
+<li><strong>총 영향받은 디지털 자산:</strong> 약 63억 4천만 달러 (USD 6.34 billion)</li>
+<li><strong>동결 및 차단 성공 자산:</strong> 약 28억 5천만 달러 (USD 2.85 billion)</li>
+<li><strong>손실 커버 준비금 확보 비율:</strong> 100% 이상 (바이낸스 자체 자금으로 손실 흡수)</li>
+<li><strong>영향받은 토큰 자산 보충 완료율:</strong> 98% (2026년 10월 31일 기준 온체인 검증 가능)</li>
+<li><strong>탈취 유출 자산 상세 내역:</strong>
+<ul>
+<li>XRP: 2억 3,346만 개 (233.46 million XRP)</li>
+<li>SOL: 약 970,500 개</li>
+<li>OP: 4,420만 개 (44.2 million OP)</li>
+<li>BTC: 18,270 개</li>
+<li>ETH: 2,961.9 개 (최종 무단 유출건)</li>
+</ul>
+</li>
+<li><strong>계정 논스 조작용 서명 트랜잭션 수:</strong> 50개 (50 signing transactions)</li>
+<li><strong>2026년 중 차단한 북한 연계 사이버 위협 건수:</strong> 57건</li>
+</ul>
+<h6 id="주요-타임라인-utc-기준">주요 타임라인 (UTC 기준):</h6>
+<ul>
+<li><strong>2026년 6월:</strong> 엔지니어 A 변조된 홈브루 다운로드로 인한 공급망 공격 발생 및 인증서 회전/기기 교체 조치 실행.</li>
+<li><strong>2026년 9월:</strong> 엔지니어 B 구직 플랫폼을 통한 2단계 사회공학적 영상 면접 및 제로데이 악성코드 감염.</li>
+<li><strong>2026년 10월 20일:</strong> 엔지니어 B의 PC 및 내부 AI 도구를 발판(springboard)으로 엔지니어 A/C 권한 확장 및 컨테이너 배포 토큰 탈취.</li>
+<li><strong>2026년 10월 29일 17:15 ~ 19:56:</strong> 공격자가 엔지니어 C PC 로그인, 탈취한 토큰으로 악성 컨테이너 배포 및 스크립트 실행.</li>
+<li><strong>2026년 10월 29일 20:05 ~ 20:09:</strong>
+<ol>
+<li>5개 바이낸스 핫월렛에서 2억 3,346만 XRP 유출.</li>
+<li>솔라나 및 옵티미즘 핫월렛에서 약 970,500 SOL, 4,420만 OP 유출.</li>
+<li>바이낸스 내부 대규모 이체 알림 작동 및 긴급 조사 시작.</li>
+<li>바이낸스 핫월렛에서 18,270 BTC 추가 유출.</li>
+<li>EIP-7702 권한 부여 및 50개 서명 트랜잭션 제출을 통한 온체인 논스 조작 실행.</li>
+</ol>
+</li>
+<li><strong>2026년 10월 29일 23:56:</strong> 대기 중이던 마지막 무단 이체건(2,961.9 ETH) 온체인 최종 확정.</li>
+<li><strong>2026년 10월 30일 00:10:</strong> <code>Binance14</code> 핫월렛에서 영번지(zero address)로 신규 EIP-7702 권한 부여 실행하여 악성 위임 코드 제거 및 봉쇄 완료.</li>
+<li><strong>2026년 10월 31일:</strong> 영향받은 피해 토큰 자산 98% 보충 완료.</li>
+<li><strong>2026년 11월 3일 14:33:06:</strong> 바이낸스 공식 초기 보고서 최초 공개.</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ol>
+<li><strong>기밀 유지에 따른 기술적 세부사항 미공개:</strong> 추가적인 악의적 공격자가 시스템을 악용하는 것을 방지하기 위해, 침해 사고와 관련된 일부 세부 기술 사항은 비공개로 유지되고 있습니다. <strong>[소스 주장]</strong></li>
+<li><strong>미구입 비액체성 자산의 세부 내역 미기재:</strong> 98% 자산 보충 이후 시장 매수가 진행 중인 잔여 미확정/비액체성(illiquid) 자산의 정확한 토큰 종목, 개별 수량 및 매수 완료 예정 시점은 소스상에 명시되어 있지 않습니다. <strong>[확인 불가]</strong></li>
+<li><strong>제3자 독립 검토 기관 및 파트너사 명칭 미명시:</strong> 향후 추가 검토를 진행할 독립적 제3자 사이버 보안 업체, 협력 중인 사법 기관, 블록체인 분석 업체, 업계 파트너사의 구체적인 회사명이나 기관명은 공개되지 않았습니다. <strong>[확인 불가]</strong></li>
+<li><strong>조사 진행 상태에 따른 가변성:</strong> 본 사고 조사는 현재도 진행 중(ongoing)이므로, 추후 독립적 검토 및 추가 조사 결과에 따라 수치나 기술적 사실관계의 세부 사항이 변경될 가능성이 존재합니다. <strong>[소스 주장]</strong></li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/social/">소셜</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

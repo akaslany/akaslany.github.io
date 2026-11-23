@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Computational depth is all you need: Towards 107-layer neural nets</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Computational depth is all you need: Towards 107-layer neural nets</h1>
+<p class="page-meta">웹 · 2026-09-29</p>
+<h2 id="요약">요약</h2>
+<p>원문의 핵심 주장 및 실험적 성과를 세부 범주별로 정리한 요약표는 다음과 같습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://qlabs.sh/depth/">출처</a> · <a href="https://www.youtube.com/watch?v=gJJJlegXnz8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="상세-해설-보고서-computational-depth-is-all-you-need-towards-10-7--layer-neural-nets-q-research-2026">[상세 해설 보고서] Computational depth is all you need: Towards $10^7$-layer neural nets (Q Research, 2026)</h3>
+<hr />
+<h4 id="1-보고서-개요-및-문서-성격-규정-executive-notice-overview">1. 보고서 개요 및 문서 성격 규정 (Executive Notice &amp; Overview)</h4>
+<blockquote>
+<p><strong>[필독 공지] 본 보고서의 성격</strong><br />
+본 보고서는 2026년 9월, 연구자 Akshay Vegesna와 Samip Dahal이 Q의 공식 웹사이트(<code>qlabs.sh</code>)를 통해 공개한 연구 아티클 *&quot;Computational depth is all you need: Towards $10^7$-layer neural nets&quot;*의 내용을 학술적으로 심층 분석한 상세 해설서입니다. 본 원문은 동료 심사(Peer-review)를 거친 정식 학술 논문이 아니며, Q 연구팀의 가설, 신규 아키텍처 제안 및 실증적 실험 결과를 공유하기 위해 작성된 **비공식 연구 포스트(Research Blog Post)**임을 명백히 밝힙니다.</p>
+</blockquote>
+<h5 id="문제-배경-및-핵심-문제-의식">문제 배경 및 핵심 문제 의식</h5>
+<p>2020년 GPT-3가 등장한 이래 지난 6년 동안, 인공지능 연구 생태계는 테스트 타임 추론 연산량(10,000배 증가), 파라미터 수, 데이터셋 규모, 그리고 MoE(Mixture of Experts) 기반 희소성(Sparsity) 등 거의 모든 차원에서 기하급수적인 스케일링을 달성했습니다. 그러나 모델의 '깊이(Depth)' 축은 이상하리만치 완전한 정체 상태에 빠져 있습니다. Epoch AI(2026)의 최신 데이터에 따르면, 최첨단(Frontier) 언어 모델들의 깊이는 여전히 6년 전 GPT-3 수준인 <strong>100층(Layer) 안팎</strong>에 고착되어 있습니다.</p>
+<p>Q 연구진은 이러한 패러다임적 기형성을 가리켜 **&quot;우리는 딥러닝(Deep Learning)을 수행하는 것을 중단했다&quot;**라는 근본적인 화두를 던집니다. 현존하는 트랜스포머 아키텍처가 극단적인 깊이 확장을 수용하지 못하도록 설계적 한계를 안고 있으며, 이로 인해 인공지능 모델의 표현력(Expressive Power) 상한선이 인위적으로 억제되고 있다는 것이 본 연구의 핵심 출발점입니다.</p>
+<hr />
+<h4 id="2-핵심-요약-tl-dr-4-key-takeaways">2. 핵심 요약 (TL;DR: 4 Key Takeaways)</h4>
+<p>원문의 핵심 주장 및 실험적 성과를 세부 범주별로 정리한 요약표는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 (Category)</th>
+<th style="text-align:left">주요 내용 (Key Findings &amp; Claims)</th>
+<th style="text-align:left">비고 및 인용 (Reference Context)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>1. 깊이 확장 정체</strong></td>
+<td style="text-align:left">지난 6년간 프론티어 언어 모델의 깊이는 GPT-3 수준인 100층 부근에 머물러 있음.</td>
+<td style="text-align:left">Epoch AI (2026) 데이터 분석</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2. 깊이와 능력 획득</strong></td>
+<td style="text-align:left">대조적 RL(Contrastive RL) 에이전트에서 깊이를 1,024층까지 확장함에 따라 질적으로 새로운 연쇄적 행동 능력이 발현됨.</td>
+<td style="text-align:left">Wang et al. (2025) 재현 실험</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3. 고정 폭 LLM 성능 개선</strong></td>
+<td style="text-align:left">1024 고정 폭 및 1B FineWeb 토큰 조건에서 경계 연산자를 적용하여 128층까지 검증 손실(Validation Loss)이 정체 없이 지속 감소함.</td>
+<td style="text-align:left">Q 자체 언어 모델 실험</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>4. Compute 효율성 증대</strong></td>
+<td style="text-align:left">연산 깊이 확장을 통해 스케일링 지수($\gamma$) 자체를 개선함으로써, 연산 효율성이 $10^{20}$ FLOPs에서 1.6배, $10^{26}$ FLOPs에서 3.1배(전망) 향상됨.</td>
+<td style="text-align:left">Chen et al. (2026) Scaling Exponent 분석</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-연산-깊이-computational-depth-개념-및-측정-프록시">3. 연산 깊이(Computational Depth) 개념 및 측정 프록시</h4>
+<h5 id="물리적-층-수-raw-layer-count-vs-연산-깊이-computational-depth">물리적 층 수(Raw Layer Count) vs. 연산 깊이(Computational Depth)</h5>
+<p>트랜스포머 모델에서 단순 레이어 개수를 의미하는 '물리적 층 수'와 실제 최종 예측 확률 분포 계산에 실질적으로 기여하는 **'연산 깊이'**를 엄밀히 구분해야 합니다. 기존 트랜스포머 아키텍처는 레이어를 무작정 깊게 쌓을 경우, 상위 블록들이 어떠한 유용한 연산도 수행하지 않고 입력을 그대로 통과시키는 항등 함수(Identity Function)처럼 작동하는 <strong>'깊이의 저주(Curse of Depth)'</strong> 현상에 직면합니다(Sun et al., 2025). 따라서 단순 층 수 증설이 아닌, 연산에 실질적으로 참여하는 레이어의 절대적 깊이를 직접적으로 확장하는 아키텍처적 전환이 필수적입니다.</p>
+<h5 id="logit-lens-기반-측정-프록시-d_-text-lens">Logit Lens 기반 측정 프록시 ($d_{\text{lens}}$)</h5>
+<p>특정 레이어가 최종 예측 분포에 미치는 정밀한 기여도를 측정하는 것은 수학적으로 매우 까다롭습니다. 연구진은 nostalgebraist(2020)가 제안한 Logit Lens 개념을 확장하여, 연산 깊이를 측정하기 위한 경험적 프록시 $d_{\text{lens}}$를 다음과 같이 수학적으로 정의합니다.</p>
+<p>총 $L$개의 블록으로 구성된 트랜스포머에서 $\ell$번째 블록을 거친 잔차 스트림(Residual Stream) 상태를 $h_\ell$이라 할 때, 언임베딩 행렬(Unembedding Matrix) $W_U$를 통해 디코딩된 중간 상태 예측 분포 $q_\ell$과 최종 출력 분포 $p$는 다음과 같이 표기됩니다.</p>
+<p>$$q_\ell = \operatorname{softmax}\big(\operatorname{LayerNorm}[h_\ell] W_U\big), \qquad p = q_L$$</p>
+<p>이때 디코딩 분포 $q_\ell$과 최종 분포 $p$ 간의 KL 다이버전스(Kullback-Leibler Divergence)가 최대가 되는 피크 블록 인덱스 $\ell^\star$를 산출합니다.</p>
+<p>$$\ell^\star = \arg\max_\ell D_{\text{KL}}(p \parallel q_\ell)$$</p>
+<p>연산 깊이 프록시 $d_{\text{lens}}$는 피크 지점 $\ell^\star$ 이후, 디코딩 예측과 최종 출력 간의 KL 다이버전스가 지정된 임계값 $\varepsilon$ 이하로 수렴하는 최초의 블록 인덱스로 정의됩니다.</p>
+<p>$$d_{\text{lens}} = \min\big{ \ell &gt; \ell^\star : D_{\text{KL}}(p \parallel q_\ell) \le \varepsilon \big}$$</p>
+<p>이 프록시 지표를 활용하면 모델이 실제로 몇 번째 레이어까지 의미 있는 연산 및 정보 갱신을 수행하는지 정량적으로 추적할 수 있습니다.</p>
+<hr />
+<h4 id="4-표현력-논증-연산-깊이-depth-vs-생각의-사슬-chain-of-thought">4. 표현력 논증: 연산 깊이(Depth) vs 생각의 사슬(Chain of Thought)</h4>
+<p>현재 AI 산업계는 모델 내부의 깊이를 확장하기보다, 외부 텍스트 토큰을 순차적으로 생성하여 추론 연산 단계를 늘리는 <strong>생각의 사슬(Chain of Thought, CoT)</strong> 방식을 주류 추론 파라다임으로 채택하고 있습니다. 그러나 연속적 잠재 공간(Continuous Latent Space)의 깊이를 늘리는 방식과 비교할 때, 이산적(Discrete) 텍스트 기반 CoT는 심각한 표현력 한계를 가집니다.</p>
+<ul>
+<li><strong>비트 압축 손실 (Information Bottleneck)</strong><br />
+CoT 방식은 매 토큰을 생성할 때마다 최종 레이어의 약 100,000비트에 달하는 풍부한 은닉 상태(Hidden State) 정보를 불과 약 17비트 수준의 이산 토큰 하나로 강제 디코딩(압축)해야 합니다. 여러 단계의 연산을 합성(Composition)할 때 이 극단적인 병목으로 인해 막대한 정보 손실이 누적됩니다.</li>
+<li><strong>인위적 언어 사전지식 제약 (Artificial Language Prior Constraints)</strong><br />
+CoT는 모델의 탐색 공간을 인간이 사용하는 '자연어'라는 제약 조건에 강제로 맞춥니다. 반면 연속 잠재 공간 내부에서의 깊이 확장은 인간 언어의 제약을 받지 않으므로 최적의 표현 및 연산 구조를 자유롭게 형성할 수 있습니다. Gurnee et al.(2026)의 해석 가능성 연구에 따르면, 트랜스포머는 텍스트 디코딩 없이 깊이 방향으로 연산을 연결하는 내부 전역 작업공간(J-space)을 자발적으로 형성함이 확인되었습니다. 이는 사람이 설계한 언어적 사전지식보다 단대단(End-to-End) 기울기 기반 학습이 최적의 추론 구조를 스스로 창출한다는 <strong>'쓴 교훈(Bitter Lesson)'</strong> 철학과 완벽히 궤를 같이합니다.</li>
+</ul>
+<pre><code>[CoT 방식]  : 잠재 상태 (~100,000 bits) ──(토큰 디코딩 압축)──&gt; 언어 토큰 (~17 bits) ──&gt; 심각한 정보 손실 발생
+[Depth 방식]: 잠재 상태 ───────────────────(연속 유지 및 합성)───────────────────&gt; 잠재 상태 (최적 표현 창출)
+</code></pre>
+<h5 id="모니터링-가능성-monitorability-과의-조화-및-스케일링-축">모니터링 가능성(Monitorability)과의 조화 및 스케일링 축</h5>
+<p>연속 잠재 공간 내부 확장이 뛰어난 표현력을 보임에도 불구하고, 모델의 추론 과정을 사람이 감사(Audit)하고 통제하기 위해서는 외부 텍스트 형태의 CoT 역시 필수적입니다. 따라서 연구진은 **'토큰당 연산 깊이(Depth per token)'**와 **'토큰 간 추론 단계(CoT across tokens)'**를 상호 배제적인 관계가 아닌, <strong>독립적으로 동시에 확장해야 할 두 개의 스케일링 축</strong>으로 규정합니다. 또한 깊이 확장을 통해 확보된 일반화 능력은 모델의 얼라인먼트(Alignment) 성능을 향상시키고 환각(Hallucination) 현상을 근본적으로 줄이는 데 기여합니다(OpenAI, 2026).</p>
+<hr />
+<h4 id="5-아키텍처-혁신-및-scaling-law-exponent-수식-분석">5. 아키텍처 혁신 및 Scaling Law Exponent 수식 분석</h4>
+<p>극단적인 연산 깊이를 확보하고 깊이의 저주 현상을 해결하기 위해 연구진은 두 가지 핵심 아키텍처 기법을 제시합니다.</p>
+<ol>
+<li><strong>모델 성장 (Model Growth)</strong>: 신경망이 학습 초기에는 단순한 패턴을, 학습 후반에는 복잡한 구조를 수용하는 특성을 이용합니다. 학습 진행 과정에서 모델의 깊이를 단계적으로 늘림으로써 연산 예산을 최적으로 배분하고, 최종 모델의 깊이를 기존 대비 극적으로 확장합니다.</li>
+<li><strong>경계 연산자 (Boundary Operator)</strong>: 잔차 스트림을 정규화(Normalization)하고 이전 블록의 신호를 재주입(Re-injection)하는 연산자입니다. 이는 <strong>상위(후속) 레이어가 입력 신호로부터 이탈(drift)하지 않도록 입력에 고정(anchor)시키는 역할</strong>을 수행합니다. 이를 통해 표준 트랜스포머가 깊어질 때 레이어가 항등 함수로 퇴화하여 연산을 중단하는 '깊이의 저주'를 직접적으로 방지합니다.</li>
+</ol>
+<h5 id="scaling-law-exponent-수식적-검증">Scaling Law Exponent 수식적 검증</h5>
+<p>기존 스케일링 법칙 연구(Hestness et al., 2017; Bansal et al., 2022)에서는 아키텍처 개선이 스케일링 상수(Scaling Constant)만 바꿀 뿐, 기울기에 해당하는 스케일링 지수(Exponent)에는 영향을 주지 못한다는 것이 통념이었습니다. 그러나 본 연구는 연산 깊이를 올바르게 제어함으로써 <strong>스케일링 지수 $\gamma$ 자체를 상향 개선</strong>할 수 있음을 수학적·실험적으로 입증했습니다.</p>
+<p>학습 연산량 $C$에 따른 Compute-Optimal Frontier의 멱법칙(Power Law) 수식은 다음과 같습니다(Hoffmann et al., 2022).</p>
+<p>$$L(C) = E + \left(\frac{C}{C_0}\right)^{-\gamma}$$</p>
+<ul>
+<li>$E$: 표준 트랜스포머의 환원 불가능한 손실(Irreducible loss)</li>
+<li>$C_0$: 스케일링 상수 (Scaling constant)</li>
+<li>$\gamma$: 스케일링 지수 (Scaling exponent)</li>
+</ul>
+<p>FineWeb 데이터셋 기반 스케일링 실험 결과(Chen et al., 2026), 표준 트랜스포머의 지수는 $\gamma_{\text{vanilla}} = 0.1112$인 반면, Model Growth와 Boundary Operator를 결합한 신규 아키텍처의 지수는 **$\gamma_{\text{growth}} = 0.1168$**로 대폭 개선되었습니다.</p>
+<p>동일한 검증 손실을 달성하기 위해 표준 모델 대비 필요한 연산량의 절감 비율을 나타내는 연산 승수(Compute Multiplier) $M(C)$는 다음과 같이 유도됩니다.</p>
+<p>$$M(C) \propto C^{1 - \gamma_{\text{vanilla}}/\gamma_{\text{growth}}} = C^{1 - 0.1112 / 0.1168} \approx C^{0.048}$$</p>
+<p>이 수식에 따라 연산량이 1 Order of Magnitude(10배) 증가할 때마다 연산 승수는 $10^{0.048} \approx 1.12\times$ 배씩 지수적으로 누적 증가합니다. 그 결과, 연산 효율성 격차는 <strong>$10^{20}$ FLOPs 구간에서 1.6배</strong>, <strong>$10^{26}$ FLOPs 구간에서는 3.1배</strong>까지 기하급수적으로 벌어지게 됩니다.</p>
+<hr />
+<h4 id="6-실험-결과-및-실증-사례-empirical-results">6. 실험 결과 및 실증 사례 (Empirical Results)</h4>
+<h5 id="part-a-강화학습-rl-에이전트-실험-wang-et-al-2025-재현">Part A: 강화학습(RL) 에이전트 실험 (Wang et al., 2025 재현)</h5>
+<p>복잡한 물리학 기반 환경인 Humanoid U-Maze 과제에서 대조적 RL(Contrastive RL) 에이전트의 깊이 확장에 따른 질적 행동 변화와 전반적 성능 상승 추세를 검증했습니다.</p>
+<h6 id="1-humanoid-u-maze-과제에서의-정성적-행동-진화">1) Humanoid U-Maze 과제에서의 정성적 행동 진화</h6>
+<ul>
+<li><strong><code>4층</code></strong>: 직립 자세를 유지하지 못하고 곧바로 넘어지거나 목표물을 향해 몸을 던지는 단편적 행동만 보임.</li>
+<li><strong><code>16층</code></strong>: 안정적인 직립 보행 제어 능력을 확보함.</li>
+<li><strong><code>64층</code></strong>: 미로 벽면까지 도달하는 길 찾기를 수행하나, 벽 정면에서 장애물을 극복하지 못하고 무너짐.</li>
+<li><strong><code>256층</code></strong>: 미로 벽 위로 자신의 몸을 접어 넘어가는 고차원적 정교한 목표 도달 행동을 보여줌.</li>
+</ul>
+<h6 id="2-1-024층-확장-시의-정량적-성능-추이">2) 1,024층 확장 시의 정량적 성능 추이</h6>
+<p>기존 강화학습 학계에서는 2~5층 수준의 얕은 아키텍처가 최적이라는 것이 통념이었으나, Wang et al.(2025)의 연구 및 본 재현 실험 결과 <strong>1,024층까지 깊이를 확장하는 내내 수치적 성능 지표가 정체 없이 계속 상승</strong>했습니다. 실험은 성능 한계에 도달해서가 아니라 순전히 연산 자원의 한계로 인해 1,024층에서 중단되었습니다.</p>
+<pre><code>[4층] 몸을 던짐  ──&gt;  [16층] 직립 보행  ──&gt;  [64층] 벽에 부딪힘  ──&gt;  [256층] 벽을 넘어감  ──&gt;  [1024층] 지속적 성능 상승
+</code></pre>
+<h5 id="part-b-언어-모델-llm-validation-loss-실험">Part B: 언어 모델(LLM) Validation Loss 실험</h5>
+<ul>
+<li><strong>실험 환경</strong>: 모델 폭(Width)을 1024로 고정한 상태에서 1B FineWeb 토큰(1 Epoch) 학습 진행. 8개 블록마다 Boundary Operator를 배치하여 상위 레이어를 입력 신호에 고정.</li>
+<li><strong>실험 결과</strong>: Boundary Operator가 '깊이의 저주'를 완벽히 억제함에 따라, 깊이를 4층에서 128층까지 확대할수록 검증 손실(Validation Loss)이 정체 없이 지속적으로 하락했습니다. 이는 현재 프론티어 언어 모델들이 갇혀 있는 100층 부근의 깊이 한계선을 넘어서도 깊이 스케일링의 이점이 유효함을 입증합니다.</li>
+</ul>
+<hr />
+<h4 id="7-미래-전망-10-7-층-신경망을-향하여-towards-10-7--layer-networks">7. 미래 전망: $10^7$ 층 신경망을 향하여 (Towards $10^7$-Layer Networks)</h4>
+<p>연산 깊이가 $10^7$(천만) 층에 달하는 신경망은 기존 패러다임에서는 상상할 수 없었던 혁신적인 질적 능력(Transformative Emergent Capabilities)을 창출할 잠재력을 지니고 있습니다. 그러나 이러한 극단적 깊이를 실현하기 위해서는 모델 아키텍처, 학습 알고리즘, 인프라 소프트웨어 및 추론 엔진을 포함한 <strong>전체 AI 스택(AI Stack)의 근본적인 재설계</strong>가 요구됩니다.</p>
+<p>연구진은 메모리에 상주하는 파라미터 가중치 용량을 폭발시키지 않으면서 연산 깊이를 무한히 스케일링할 수 있는 가장 유망한 기술적 해법으로 <strong>'루프 모델(Looped Models)'</strong> 기반의 테스트 타임 깊이 스케일링 연구를 차세대 핵심 과제로 제시하고 있습니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

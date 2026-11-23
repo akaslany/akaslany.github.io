@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>갑자기 은행들이 왜 그렇게 털리고 있지???</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>갑자기 은행들이 왜 그렇게 털리고 있지???</h1>
+<p class="page-meta">YouTube · 2026-10-08</p>
+<h2 id="요약">요약</h2>
+<p>최근 신한은행, KB국민은행, 하나은행, BNK부산은행 등 1금융권을 비롯하여 현대캐피탈, 예람저축은행 등 2금융권 전반에 걸쳐 대규모 연속 해킹 및 개인정보 유출 사고가 발생하였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.youtube.com/watch?v=hNxResuSx5Q">출처</a> · <a href="https://www.youtube.com/watch?v=LjsSr0okyZA">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="금융권-연속-해킹-및-개인정보-유출-사고-해설-보고서">금융권 연속 해킹 및 개인정보 유출 사고 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>최근 신한은행, KB국민은행, 하나은행, BNK부산은행 등 1금융권을 비롯하여 현대캐피탈, 예람저축은행 등 2금융권 전반에 걸쳐 대규모 연속 해킹 및 개인정보 유출 사고가 발생하였다. 이번 침해 사고는 인터넷 뱅킹과 같이 고도화된 경계 기반 방어 체계(Perimeter Defense)가 적용된 핵심 금융 거래 시스템이 아니라, 업무 편의성을 위해 운영되던 비인가 외각 서비스, 권한 통제가 미흡했던 대출 모집인 전용 웹사이트, 임직원용 AI 서비스 등 '비인가·관리 사각지대(Unmanaged Blind Spots)'를 집중 공격 표적으로 삼았다는 특징을 보인다.</p>
+<p>이러한 연쇄적 공격의 주요 배경으로는 공격자들이 대규모 언어 모델(LLM) 기반의 AI 도구를 공격 체계에 적극 도입하기 시작했다는 점이 지목된다. 실제로 오픈소스 기반 해킹 프레임워크인 'Artex' 활용 정황이 포착되었으며, 단기간 내 여러 국가의 IP를 우회하여 다수의 금융기관을 대상으로 공격 패턴을 다변화하는 지능형 기법이 적용되었다. 이는 단순한 수동 스크립트 공격을 넘어, AI가 조직 내 미관리 IT 자산과 접근 통제 허점을 신속하게 탐지하고 정밀 침투를 수행한 결과로 분석된다.</p>
+<p>이에 금융당국(금융위원회)은 긴급 점검 회의를 소집하고 전 금융권을 대상으로 보유 IT 자산의 전수 조사 및 보안 체계 재점검을 지시하였다. 이번 사태는 기업들이 그동안 방치해 두었던 IT 자산을 식별하고, 업무 편의성에 밀려 우회되거나 방치되었던 접근 통제 및 시스템 취약점을 근원적으로 메워야 하는 '필수 이행 과제(Mandatory Remediation Tasks)'를 강력하게 제시하고 있다.</p>
+<hr />
+<h4 id="2-주요-논점-및-근거-사례-분석-key-issues-detailed-analysis">2. 주요 논점 및 근거·사례 분석 (Key Issues &amp; Detailed Analysis)</h4>
+<h5 id="2-1-논점-1-주요-금융사의-보안-유출-경로-및-취약점-분석-대출-모집인-서비스-및-ai-서비스">2.1. 논점 1: 주요 금융사의 보안 유출 경로 및 취약점 분석 (대출 모집인 서비스 및 AI 서비스)</h5>
+<ul>
+<li><strong>[사실]</strong>: 신한은행의 모바일 전용 웹사이트(M) 내 대출 모집인 전용 기능에서 본인 인증 및 권한 검사 절차에 대한 우회 테스트가 진행되었고, 6개의 조회 기능에서 인가 검사가 제대로 이뤄지지 않은 취약점이 발견됨. 해커는 단일 데이터베이스(DB)를 직접 탈취한 것이 아니라, 권한 검사가 누락된 미인가 엔드포인트(대출신청결과 조회 24,308명, 고객연락처 조회 1,851명, 대출신청내역 조회 1,078명)를 개별 탐색한 후 수집된 파편화 정보를 취합·조합(Aggregation)하여 약 25,000명의 풀 패키지 개인정보(이름, 고객번호, 휴대폰 번호, 주민등록번호, CI, 대출 정보, 직장 정보 등)를 생성해 유출함. KB국민은행의 경우 임직원용 AI 서비스 접근을 통해 고객 99명 및 임직원 20명(총 119명)의 정보가 유출되었으며, 하나은행은 고객 89명, BNK부산은행은 외주 개발 직원 정보 11건이 유출됨.</li>
+<li><strong>[소스의 주장]</strong>: 인터넷 뱅킹 등 핵심 금융 거래 시스템은 1,200억 원의 보안 예산 투입과 6년 연속 S등급 평가를 받는 등 경계 방어가 견고함. 그러나 업무 편의를 위해 권한 검사를 느슨하게 적용한 비핵심·보조 기능이 보안의 비인가·관리 사각지대가 되어 침투를 허용함.</li>
+<li><strong>[작성자/화자의 해석]</strong>: 신한은행의 경우 모의해킹을 진행했음에도 전체 IT 자산 범위가 넓어 인프라 목록에서 놓쳤거나, 현장 직원들의 업무 편의성을 고려해 취약점임을 인식하고도 수정을 지연시켰을 가능성이 존재함.</li>
+<li><strong>[출처 위치]</strong>: 소스 전반부 (신한은행 침해 사고 보고서 및 타 금융사 유출 언급 구간)</li>
+</ul>
+<h5 id="2-2-논점-2-ai-도구-활용-공격-기법과-해킹-주체에-대한-검증-및-한계">2.2. 논점 2: AI 도구 활용 공격 기법과 해킹 주체에 대한 검증 및 한계</h5>
+<ul>
+<li><strong>[사실]</strong>: 공격자들은 8개국 IP를 이용해 30시간 동안 7개 금융사를 동시에 공격함. 공격 IP 추적 과정에서 오픈소스 해킹용 AI 도구인 'Artex' 관련 문자열이 발견됨(지니언스 시큐리티 센터장 문종현 발표).</li>
+<li><strong>[소스의 주장]</strong>: 인적 자원에 의한 수동 공격으로 수행하기에는 공격의 규모, 속도, 변형 형태가 광범위하여 공격자가 AI 도구를 악용했을 가능성이 매우 높음.</li>
+<li><strong>[작성자/화자의 해석]</strong>: Artex는 단순 자동화 스크립트가 아니라 원하는 LLM 모델(Claude, GPT 등)을 두뇌로 교체(Hot-swapping)하여 24시간 자동화 침투를 수행하는 AI 응용 프레임워크임. Artex 관련 서버가 단순히 경유지로 이용되었을 가능성도 배제할 수 없어 100% 물증으로 단정하긴 어려우나, 공격자들의 AI 활용은 이미 기정사실임. Artex 내에 중국어 코드가 포함되어 있어 북한이나 중국 배후설이 제기되나, 오픈소스 특성상 특정 국가나 공격 주체의 소행으로 확정할 물리적 근거는 없음.</li>
+<li><strong>[출처 위치]</strong>: 소스 중반부 (IP 분석 및 Artex 관련 언급 구간)</li>
+</ul>
+<h5 id="2-3-논점-3-금융당국의-긴급-점검-및-2금융권-확산-대응">2.3. 논점 3: 금융당국의 긴급 점검 및 2금융권 확산 대응</h5>
+<ul>
+<li><strong>[사실]</strong>: 금융위원회가 10월 2일 긴급 점검 회의를 개최하고 10월 7일까지 금융사 자체 점검 결과 제출을 요구함. 이후 현대캐피탈(주택대출 모집인 146명 유출) 및 예람저축은행(약 4만 명 유출) 사고가 연이어 발생함에 따라, 회의 일정을 10월 4일(일요일) 정부서울청사 회의로 앞당겨 개최함.</li>
+<li><strong>[소스의 주장]</strong>: 해킹 공격의 타깃이 1금융권을 넘어 2금융권 전반으로 빠르게 확산되고 있는 양상임.</li>
+<li><strong>[작성자/화자의 해석]</strong>: 공격자들이 금융권 전반의 미관리 취약점 엔드포인트를 광범위하게 수색하고 있으며, 이에 대응해 금융당국도 주말을 반납하고 조기 대응 체계로 전환함.</li>
+<li><strong>[출처 위치]</strong>: 소스 중후반부 (금융위원회 대응 및 회의 일정 변경 구간)</li>
+</ul>
+<h5 id="2-4-논점-4-근본적-해결을-위한-보안-우선과제-필수-이행-과제">2.4. 논점 4: 근본적 해결을 위한 보안 우선과제 ('필수 이행 과제')</h5>
+<ul>
+<li><strong>[사실]</strong>: 금융위원장이 전체 금융사를 대상으로 보유 IT 자산 및 서비스 전수 파악, 접근 통제, 취약점 재점검, 침해 활동 탐지 체계 재정비를 지시함.</li>
+<li><strong>[소스의 주장]</strong>:
+<ol>
+<li>IT 자산 식별: 기업이 보유한 전체 IT 자산과 서버 현황을 빠짐없이 파악하는 것이 보안 아키텍처 수립의 최우선 과제임.</li>
+<li>취약점 관리: 핵심 시스템 외에 관리가 집중되지 않은 외곽 서비스부터 메워나가는 전략이 필요함.</li>
+<li>공격 시점 전망: AI 도구의 고도화로 미관리 자산 탐지가 용이해짐에 따라, 이러한 해킹 이슈가 내년 초까지 지속적으로 급증할 것임.</li>
+<li>제도적 제언: 과도한 징벌적 벌금 부과는 기업의 사고 은폐 시도를 유발할 수 있으므로 근본적인 해결책이 될 수 없음.</li>
+</ol>
+</li>
+<li><strong>[작성자/화자의 해석]</strong>: 메인 거래 시스템(입구)에 1,200억 원 규모의 경계 보안(Perimeter Security) 조치를 집중시켰으나, 우회 경로인 보조 외각 서비스에 대한 '가장 약한 고리(Weakest Link)' 방어가 부재하여 발생한 구조적 한계임. 보안 예산의 절대 액수보다 자산 식별 및 관리 사각지대 우선 방어가 보안의 본질임.</li>
+<li><strong>[출처 위치]</strong>: 소스 후반부 (보안 숙제 및 향후 전망 구간)</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-정보-entities-speakers">3. 등장 인물 및 화자 정보 (Entities &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">이름/화자</th>
+<th style="text-align:left">역할 및 소속</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">화자</td>
+<td style="text-align:left">노멀틱</td>
+<td style="text-align:left">Normaltic Place 채널 운영자 / 보안 전문가 및 기술 설명 화자</td>
+</tr>
+<tr>
+<td style="text-align:left">정보 제공자</td>
+<td style="text-align:left">문종현</td>
+<td style="text-align:left">지니언스 시큐리티 센터장 / 공격 IP 내 Artex 문자열 발견 사실 발표</td>
+</tr>
+<tr>
+<td style="text-align:left">정책 집행자</td>
+<td style="text-align:left">금융위원장</td>
+<td style="text-align:left">금융위원회 수장 / 금융사 긴급 소집 및 IT 자산 전수 점검 지시</td>
+</tr>
+<tr>
+<td style="text-align:left">공격 주체</td>
+<td style="text-align:left">해커/공격자</td>
+<td style="text-align:left">금융권 연속 공격 주체 / 북한, 중국 등 특정 여부는 확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left">피해 기관 관계자</td>
+<td style="text-align:left">신한·국민·하나·부산·현대캐피탈·예람저축은행 관계자</td>
+<td style="text-align:left">각 금융사 보안 및 IT 시스템 담당자 / 구체적 성명은 확인 불가</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-정리-key-statistics-timeline">4. 주요 수치 및 시점 정리 (Key Statistics &amp; Timeline)</h4>
+<h5 id="타임라인-시점별-사건">타임라인 (시점별 사건)</h5>
+<ul>
+<li><strong>2026년 9월 28일 오후 6시 4분</strong>: 신한은행 M 사이트에 대한 공격자의 최초 침투 시도 개시.</li>
+<li><strong>2026년 9월 29일 오전 9시 30분</strong>: 신한은행이 이상 트래픽 감지 후 1차 엔드포인트(A) 차단 조치를 시행했으나, 공격자가 즉각 B, C 취약점 엔드포인트를 순차적으로 파고들며 데이터 조회를 이어가는 연쇄 반응 발생.</li>
+<li><strong>2026년 9월 29일 저녁 7시 3분</strong>: 신한은행이 약 25,000명의 고객 정보 유출 사실을 최종 확인하고 M 사이트 일부 서비스를 자체 종료함.</li>
+<li><strong>2026년 10월 1일</strong>: 신한은행, 대고객 공식 사과문 게시.</li>
+<li><strong>2026년 10월 2일</strong>: 금융위원회, 긴급 점검 회의 개최 (10월 7일까지 금융사 자체 점검 결과 제출 지시).</li>
+<li><strong>2026년 10월 4일 (일요일)</strong>: 현대캐피탈 및 예람저축은행의 추가 유출 사고 발생으로 금융위원회가 정부서울청사에서 회의를 조기 개최함.</li>
+</ul>
+<h5 id="피해-수치-및-통계">피해 수치 및 통계</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">수치 정보</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">신한은행 유출 규모</td>
+<td style="text-align:left">총 약 25,000명 (대출신청결과 24,308명 / 고객연락처 1,851명 / 대출신청내역 1,078명 정보 조합)</td>
+</tr>
+<tr>
+<td style="text-align:left">KB국민은행 유출 규모</td>
+<td style="text-align:left">총 119명 (일반 고객 99명, 임직원 20명)</td>
+</tr>
+<tr>
+<td style="text-align:left">하나은행 유출 규모</td>
+<td style="text-align:left">고객 89명</td>
+</tr>
+<tr>
+<td style="text-align:left">BNK부산은행 유출 규모</td>
+<td style="text-align:left">외주 개발 직원 정보 11건</td>
+</tr>
+<tr>
+<td style="text-align:left">현대캐피탈 유출 규모</td>
+<td style="text-align:left">주택 대출 모집인 146명</td>
+</tr>
+<tr>
+<td style="text-align:left">예람저축은행 유출 규모</td>
+<td style="text-align:left">약 40,000명</td>
+</tr>
+<tr>
+<td style="text-align:left">공격 규모 및 범위</td>
+<td style="text-align:left">8개국 IP 우회, 30시간 동안 7개 금융사 동시 공격</td>
+</tr>
+<tr>
+<td style="text-align:left">핵심 시스템 보안 투자 및 평가</td>
+<td style="text-align:left">보안 예산 1,200억 원 투입, 보안 평가 100점, 6년 연속 S등급 (핵심 시스템 기준)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ol>
+<li><strong>공격 배후 주체의 불확실성</strong>: 공격 IP 추적 과정에서 중국어 코드가 포함된 Artex 프레임워크가 확인되어 북한이나 중국 배후설이 제기되고 있으나, 해당 도구가 오픈소스인 특성상 특정 국가나 해킹 집단의 소행으로 확정할 근거는 없음 (<strong>확인 불가</strong>).</li>
+<li><strong>AI 도구 직접 사용의 물증 한계</strong>: 공격 IP에서 'Artex' 문자열이 포착되었으나, 공격자가 해당 서버를 단순 경유지로 악용했을 가능성도 존재하므로 AI를 통한 직접 공격이었는지에 대한 100% 물리적 물증으로 단정할 수 없음.</li>
+<li><strong>내부 관리 및 책임 소재의 불분명성</strong>: 정보보안팀의 모의해킹 지적 사항에 대한 현업 부서의 미반영인지, 업무 편의를 위한 조직적 방치인지 등 내부 내막 조사가 진행 중이므로 특정 주체에게 책임을 귀속시키기 어려움.</li>
+<li><strong>모의해킹 미탐지 원인의 비확정성</strong>: 신한은행이 사전에 모의해킹을 수행했음에도 해당 취약점을 놓친 것인지, 수많은 시스템 중 외곽 서비스라 검사 대상에서 제외되었던 것인지 여부는 확실하지 않음 (화자의 기술적 추정 영역).</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

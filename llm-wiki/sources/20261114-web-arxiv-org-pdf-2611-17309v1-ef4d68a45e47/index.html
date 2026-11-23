@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classical Energies Learn to Reason 1,000x Faster than Looped Models</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Classical Energies Learn to Reason 1,000x Faster than Looped Models</h1>
+<p class="page-meta">논문 · 2026-11-14</p>
+<h2 id="요약">요약</h2>
+<p>본 분석 보고서는 Hoover 등(2026)이 제안한 CRAM(Compact Reasoning Associative Memory) 모델을 중심으로, 고전적 에너지 기반 아키텍처를 현대적으로 재구성하여 제약 조건 추론(Constraint Reasoning) 문제에서의 성과 및 계산 효율성을 정밀 검증한 결과를 담고 있다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.17309v1">출처</a> · <a href="https://www.youtube.com/watch?v=bSLR5qWwN1Q">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="cram-기반-에너지-모델의-제약-조건-추론-성능-및-효율성-분석-보고서">CRAM 기반 에너지 모델의 제약 조건 추론 성능 및 효율성 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 분석 보고서는 Hoover 등(2026)이 제안한 <strong>CRAM(Compact Reasoning Associative Memory)</strong> 모델을 중심으로, 고전적 에너지 기반 아키텍처를 현대적으로 재구성하여 제약 조건 추론(Constraint Reasoning) 문제에서의 성과 및 계산 효율성을 정밀 검증한 결과를 담고 있다. (출처: Abstract, Section 1)</p>
+<p>최근 심층 인공지능 추론 연구 분야에서는 동일한 신경망 레이어 또는 블록을 반복 적용하는 **반복 모델(Looped models: HRM, TRM, GRAM, EqR, FRM, TRMP, EBR 등)**이 주요 패러다임으로 부상하였다. 그러나 기존의 반복 모델들은 고정점 수렴 안정성, 조기 종료(Halting head), 고전적 연상 기억 특성 등을 확보하기 위해 고전적 딥러닝 아키텍처 위에 보조 덧붙이기(Ad-hoc) 방식으로 별도의 헤드, 모듈, loss 함수를 하나씩 '덧붙이는(rebuilding)' 비효율적 구조를 취해 왔다. 이로 인해 BPTT(Backpropagation-through-time, 시간 역전파) 과정에서 극심한 훈련 지연, 과도한 파라미터 및 추론 연산량(FLOPs) 소비, 수렴 불안정성이라는 구조적 한계에 봉착하였다. (출처: Section 1, Section 2)</p>
+<p>CRAM은 1980년대 Hopfield &amp; Tank가 제시했던 고전적 연상 기억 에너지를 확장하고 현대적 Modern Hopfield Network [40, 41] 및 연속 다중 상태($C$-state) 평균장 자유 에너지(Mean-field free energy) 형태 [33, 47]의 직접 학습 가능 아키텍처로 변환함으로써 이러한 땜빵식 확장의 한계를 원천적으로 극복한다. CRAM은 명시적 에너지 함수 $E_{\theta}(p)$를 직접 정의하고, 추론 시 해당 에너지 표면상에서 미분 없이 경하향 완화(Relaxation)를 수행한다. 셀 간 상호작용 비용(Pairwise costs)과 입력 바이어스를 학습하여 제약 조건을 내재화하며, 훈련 시 완화 궤적 전체를 미분할 필요 없이 국소 학습 목표(Local Objectives)를 활용해 데이터의 에너지 수준을 낮추고 오답(Negative samples)의 에너지를 높인다. (출처: Section 1, Section 2, Section 3)</p>
+<p>단 1대의 NVIDIA H200 GPU 환경에서 진행된 실증 평가 결과, CRAM은 Sudoku-Extreme 퍼즐의 99.996%를 단 42 ms 만에, Maze-Unique 퍼즐의 100%를 132 ms 만에 학습 완료하였다. 이는 기존 최고 성능의 반복 모델 대비 <strong>훈련 속도를 1,000배 이상 단축</strong>시킨 성과이다. 또한 동등하거나 뛰어난 추론 정확도를 유지하면서 기존 반복 모델 대비 <strong>추론 연산량(FLOPs)을 최소 282배(EBR 대비)에서 최대 128,000배(EqR 대비) 절감</strong>하였다. (출처: Abstract, Section 4.1, Table 2)</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-논점-1-cram-모델의-메커니즘과-에너지-최소화-추론">2.1 논점 1: CRAM 모델의 메커니즘과 에너지 최소화 추론</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>CRAM은 $M$개 셀과 각 셀당 최대 $C$개 후보값을 갖는 추론 문제를 $M \times C$ 연속 확률 배열 $\mathbf{p}$로 표현하며, 연속 다중 상태($C$-state) 평균장 자유 에너지(Mean-field free energy) 수식을 따른다. (Section 3, Eq. 1)
+$$E_{\theta}(\mathbf{p}) = \beta^{-1} \sum_i \mathbf{p}_i^\top \log \mathbf{p}<em>i + \frac{1}{2} \sum</em>{i \neq j} \mathbf{p}<em>i^\top \mathbf{K}</em>{ij} \mathbf{p}_j + \sum_i \mathbf{B}_i^\top \mathbf{p}_i$$</li>
+<li>여기서 $\mathbf{K}_{ij} \in \mathbb{R}^{C \times C}$는 셀 간 제약 비용 행렬, $\mathbf{B}_i \in \mathbb{R}^C$는 셀별 바이어스 벡터, $\beta &gt; 0$는 역온도(Inverse temperature) 파라미터이다.</li>
+<li>추론(Relaxation)은 연속 시간 미분 방정식 $\tau_i \frac{d\mathbf{v}<em>i}{dt} = -\mathbf{v}<em>i - \sum_j \mathbf{W}</em>{ij} \mathbf{p}<em>j - \mathbf{B}<em>i \simeq -\nabla</em>{\mathbf{p}<em>i} E</em>{\theta}(\mathbf{p})$에 기반한 오일러 단계(Euler step)로 수행된다. 이때 $\mathbf{W}</em>{ij} = (\mathbf{K}</em>{ij} + \mathbf{K}<em>{ji}^\top)/2$ (단, $i \neq j$)이며, 자기 상호작용을 배제하므로 **$\mathbf{W}</em>{ii} = \mathbf{0}$**으로 고정된다. (Section 3, Eq. 2-3)</li>
+<li>$\mathbf{L}(\mathbf{v}<em>i) = \beta^{-1} \log \sum_a \exp(\beta v</em>{ia})$의 헤시안(Hessian) 행렬 $\mathbf{H}_i = \beta [\text{diag}(\mathbf{p}_i) - \mathbf{p}_i \mathbf{p}<em>i^\top] \succeq 0$이 양의 준정부호(Positive semi-definite)이므로, 연속 시간 dynamic 상에서 에너지의 시간 미분값은 아래 수식과 같이 항상 0 이하임이 증명된다. (Appendix E, Eq. 9-10)
+$$\frac{dE}{dt} = -\sum</em>{i \in F} \tau_i \dot{\mathbf{v}}_i^\top \mathbf{H}_i \dot{\mathbf{v}}_i \le 0$$</li>
+<li>지역적 극솟값 탈출을 위해 집중 깁스 탐색(Focused Gibbs search)을 적용한다. 이 기법은 국소 에너지가 훈련 솔루션 평균 대비 $0.45\bar{h}$ 이상 높은 제약 위반 셀(Free cell)을 우선 선택해 업데이트하며, 온도 $T$를 $0.40\bar{h} \rightarrow 0.31\bar{h}$로 기하학적으로 낮추는 결정론적/확률적 탐색 방식이다. (Section 3, Appendix C.3)</li>
+</ul>
+</li>
+<li><strong>[주장 (Claim)]</strong>
+<ul>
+<li>CRAM의 에너지 최소화 dynamic은 연속 시간상에서 에너지가 단조 감소($dE/dt \le 0$)함을 수학적으로 보장하므로, 별도의 고정점 네트워크 훈련 없이도 구조적 수렴 안정성이 완전하게 담보된다. (Section 3, Appendix E)</li>
+</ul>
+</li>
+<li><strong>[해석 (Interpretation)]</strong>
+<ul>
+<li>수백만 개의 파라미터를 가진 블랙박스 딥러닝 아키텍처 없이 고전적 홉필드 네트워크의 평균장 확장 형태만으로도 논리 퍼즐의 쌍(Pairwise) 제약 관계를 엄밀히 캡처할 수 있음을 입증한다. 이는 딥러닝 스케일링 일변도 추론 패러다임에 대한 강력한 반증이며, 제약 만족 문제(CSP)에서 Neuro-Symbolic 접근의 극한적 효율성을 보여준다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-논점-2-기존-반복-모델-대비-훈련-및-추론-효율성-비교">2.2 논점 2: 기존 반복 모델 대비 훈련 및 추론 효율성 비교</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>Sudoku-Extreme 및 Maze-Unique 벤치마크에서 CRAM과 기존 7개 반복 모델(HRM, TRM, GRAM, EqR, FRM, TRMP, EBR)을 동일 하드웨어(단일 H200 GPU) 및 동일 테스트 세트 조건에서 평가한 결과는 아래 마크다운 표들과 같다. (Section 4.1, Table 2, Figure 2a)</li>
+<li><em>측정 조건 미세 구분:</em> CRAM의 Fit time(42 ms, 132 ms)은 커널 로딩 및 compilation 등 일회성 스타트업 비용(0.2~0.9초)을 제외한 **Warm Fit Time (7회 측정 중 median)**인 반면, 베이스라인 모델들은 단일 실행 <strong>Cold Fit Time</strong>으로 측정되었다. (Section 5, Appendix C.2)</li>
+</ul>
+</li>
+</ul>
+<h6 id="벤치마크-1-sudoku-extreme-성능-비교">벤치마크 1: Sudoku-Extreme 성능 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:center">해결률 (%)</th>
+<th style="text-align:center">파라미터 수 (Params)</th>
+<th style="text-align:center">훈련 시간 (Fit time)</th>
+<th style="text-align:center">추론 연산량 (FLOPs/puzzle)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>HRM</strong> [62]</td>
+<td style="text-align:center">54.62 ± 4.18</td>
+<td style="text-align:center">27.0M</td>
+<td style="text-align:center">1.2 시간 (Cold)</td>
+<td style="text-align:center">$2.20 \times 10^{11}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TRM</strong> [38]</td>
+<td style="text-align:center">85.73 ± 0.74</td>
+<td style="text-align:center">5.0M</td>
+<td style="text-align:center">2.5 시간 (Cold)</td>
+<td style="text-align:center">$4.11 \times 10^{11}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GRAM</strong> [3]</td>
+<td style="text-align:center">96.10 †</td>
+<td style="text-align:center">9.1M</td>
+<td style="text-align:center">3.2 시간 (Cold)</td>
+<td style="text-align:center">$8.51 \times 10^{12}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EqR</strong> [36]</td>
+<td style="text-align:center">99.49 ± 0.14</td>
+<td style="text-align:center">5.0M</td>
+<td style="text-align:center">2.0 시간 (Cold)</td>
+<td style="text-align:center">$2.11 \times 10^{14}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FRM</strong> [29]</td>
+<td style="text-align:center">99.13 ± 0.29</td>
+<td style="text-align:center">7.0M</td>
+<td style="text-align:center">2.9 시간 (Cold)</td>
+<td style="text-align:center">$3.91 \times 10^{12}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TRMP</strong> [52]</td>
+<td style="text-align:center">99.87 ± 0.08</td>
+<td style="text-align:center">32.8K</td>
+<td style="text-align:center">9.0 시간 (Cold)</td>
+<td style="text-align:center">$4.57 \times 10^{12}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EBR</strong> [11]</td>
+<td style="text-align:center">99.85 ± 0.05</td>
+<td style="text-align:center">1.8M</td>
+<td style="text-align:center">2.8 시간 (Cold)</td>
+<td style="text-align:center">$3.37 \times 10^{11}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CRAM (학습)</strong></td>
+<td style="text-align:center"><strong>100.00 ± 0.00</strong></td>
+<td style="text-align:center"><strong>7.7K</strong></td>
+<td style="text-align:center"><strong>0.04 초 (42 ms, Warm)</strong></td>
+<td style="text-align:center"><strong>$2.02 \times 10^9$</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CRAM (수동 설정)</strong> ‡</td>
+<td style="text-align:center"><strong>100.00 ± 0.00</strong></td>
+<td style="text-align:center"><strong>1</strong></td>
+<td style="text-align:center"><strong>없음 (0 초)</strong></td>
+<td style="text-align:center"><strong>$1.08 \times 10^8$</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="벤치마크-2-maze-unique-성능-비교">벤치마크 2: Maze-Unique 성능 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델명</th>
+<th style="text-align:center">해결률 (%)</th>
+<th style="text-align:center">파라미터 수 (Params)</th>
+<th style="text-align:center">훈련 시간 (Fit time)</th>
+<th style="text-align:center">추론 연산량 (FLOPs/puzzle)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>HRM</strong> [62]</td>
+<td style="text-align:center">39.97 ± 33.90</td>
+<td style="text-align:center">27.0M</td>
+<td style="text-align:center">7.1 시간 (Cold)</td>
+<td style="text-align:center">$3.01 \times 10^{12}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TRM</strong> [38]</td>
+<td style="text-align:center">92.23 ± 13.37</td>
+<td style="text-align:center">6.8M</td>
+<td style="text-align:center">15.6 시간 (Cold)</td>
+<td style="text-align:center">$3.84 \times 10^{12}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GRAM</strong> [3]</td>
+<td style="text-align:center">98.63 ± 1.31</td>
+<td style="text-align:center">10.9M</td>
+<td style="text-align:center">23.2 시간 (Cold)</td>
+<td style="text-align:center">$8.00 \times 10^{13}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EqR</strong> [36]</td>
+<td style="text-align:center">93.00 †</td>
+<td style="text-align:center">263.8K</td>
+<td style="text-align:center">7.2 시간 (Cold)</td>
+<td style="text-align:center">$1.16 \times 10^{14}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FRM</strong> [29]</td>
+<td style="text-align:center">97.27 ± 2.80</td>
+<td style="text-align:center">8.0M</td>
+<td style="text-align:center">9.7 시간 (Cold)</td>
+<td style="text-align:center">$4.70 \times 10^{12}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TRMP</strong> [52]</td>
+<td style="text-align:center">99.23 ± 0.31</td>
+<td style="text-align:center">60.7K</td>
+<td style="text-align:center">7.6 시간 (Cold)</td>
+<td style="text-align:center">$1.80 \times 10^{13}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EBR</strong> [11]</td>
+<td style="text-align:center">89.80 ± 6.35</td>
+<td style="text-align:center">1.8M</td>
+<td style="text-align:center">2.0 시간 (Cold)</td>
+<td style="text-align:center">$1.93 \times 10^{13}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CRAM (학습)</strong></td>
+<td style="text-align:center"><strong>100.00 ± 0.00</strong></td>
+<td style="text-align:center"><strong>18</strong></td>
+<td style="text-align:center"><strong>0.13 초 (132 ms, Warm)</strong></td>
+<td style="text-align:center"><strong>$8.37 \times 10^5$</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CRAM (수동 설정)</strong> ‡</td>
+<td style="text-align:center"><strong>100.00 ± 0.00</strong></td>
+<td style="text-align:center"><strong>3</strong></td>
+<td style="text-align:center"><strong>없음 (0 초)</strong></td>
+<td style="text-align:center"><strong>$8.37 \times 10^5$</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>(†: 저자 출판 정확도 표기, ‡: 수동 설정 CRAM은 유일한 가중치 수 값 표기)</em></p>
+<ul>
+<li><strong>[주장 (Claim)]</strong>
+<ul>
+<li>CRAM은 최신 심층 반복 모델 대비 정확도 손실 없이 훈련 시간은 1,000배 이상 단축하고, 추론 FLOPs는 최소 282배(EBR 대비)에서 최대 128,000배(EqR 대비) 절감한다. (Section 4.1)</li>
+</ul>
+</li>
+<li><strong>[해석 (Interpretation)]</strong>
+<ul>
+<li>기존 수백만~수천만 개 파라미터 기반 딥러닝 반복 모델들이 정형화된 제약 만족 문제를 해결하는 방식은 연산 자원 측면에서 비효율적이다. CRAM은 문제가 요구하는 최소한의 제약 표현형으로 직접 수렴함으로써 성능과 계산 효율성 모두를 압도적으로 쇄신하였다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-논점-3-문제-난이도에-적응하는-조기-종료-early-stopping-메커니즘">2.3 논점 3: 문제 난이도에 적응하는 조기 종료(Early Stopping) 메커니즘</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>CRAM은 훈련 솔루션들의 최고 에너지 수준에 미세 공차를 더한 문턱값($\tau = \text{max } E_{\text{train}} + 10^{-3}$) 이하로 보드의 에너지가 떨어지면 탐색을 즉시 중단하는 명시적 에너지 종료 규칙을 사용한다. (Section 3, Appendix C.3)</li>
+<li>난이도 구간별 평가 시 CRAM의 중앙값 연산량은 가장 쉬운 난이도 구간에서 가장 어려운 난이도 구간으로 갈수록 22배 증가하며 적응적 연산 할당 특성을 보였다. (Section 4.2, Figure 3a)</li>
+<li>기존 반복 모델의 종료 규칙(Halting head, Gradient norm stop)은 오답 상태에서 정지하는 오류 비율(Wrong halts)이 0.05%~3.54%에 달한 반면, CRAM은 **오답 조기 종료율 0.00%**를 기록했다. (Section 4.2, Table 4)</li>
+</ul>
+</li>
+<li><strong>[주장 (Claim)]</strong>
+<ul>
+<li>CRAM의 명시적 에너지 문턱값 기반 조기 종료 메커니즘은 오답 조기 종료 위험성을 제거하는 정합성을 제공한다. (Section 4.2)</li>
+</ul>
+</li>
+<li><strong>[해석 (Interpretation)]</strong>
+<ul>
+<li>별도의 신경망 레이어(Halting network)를 학습시키는 방식은 오답에서 정지하는 오작동 위험을 내재하고 있다. 반면 명시적 에너지 표면상의 경계값을 활용하면 문제 난이도에 따른 동적 연산 할당과 솔루션의 엄밀성을 동시에 확보할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-4-논점-4-국소-학습-목표-local-objectives-의-우수성-및-bptt와의-비교">2.4 논점 4: 국소 학습 목표(Local Objectives)의 우수성 및 BPTT와의 비교</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>CRAM은 이완 경로 전체를 미분하지 않는 국소 학습 목표인 의사우도(Pseudolikelihood - PL) 및 최소 확률 흐름(Min Probability Flow - MPF) 기법을 활용한다. (Section 3, Section 4.3, Eq. 5)
+$$J_{\text{PL}}(\theta; \mathbf{x}) = E_{\theta}(\mathbf{x}) + \frac{1}{|F|} \sum_{i \in F} \log \sum_a \exp[-E_{\theta}(\mathbf{x}_{i \leftarrow a})]$$</li>
+<li>Sudoku-Extreme에서 12가지 학습 목표(Local vs Sampling vs Differentiating)를 종합 비교한 결과(Table 7), PL과 MPF가 최단 훈련 시간을 기록하였다.
+<ul>
+<li><strong>PL (Pseudolikelihood)</strong>: T99 = 50 ms ($3.42 \times 10^{10}$ FLOPs)</li>
+<li><strong>MPF (Min Probability Flow)</strong>: T99 = 225 ms ($1.95 \times 10^{11}$ FLOPs)</li>
+<li><strong>Contrastive Hebbian</strong>: T99 = 348 ms ($1.92 \times 10^{12}$ FLOPs)</li>
+<li><strong>1단계 Truncated BPTT ($t=1$)</strong>: T99 = 4.6 s ($2.35 \times 10^{13}$ FLOPs)</li>
+<li><strong>Contrastive Divergence (CD)</strong>: T99 = 33.7 s ($1.26 \times 10^{14}$ FLOPs)</li>
+<li><strong>Full BPTT ($T=10$)</strong>: 3,840,000회 업데이트(약 5시간 학습) 후에도 개발 해결률 48.82%에 그침. (Section 4.3, Figure 4, Table 7, Appendix D)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>[주장 (Claim)]</strong>
+<ul>
+<li>반복 궤적을 직접 미분하는 BPTT 방식은 기울기 소실/폭발 및 과도한 컴퓨팅 요구로 인해 에너지 기반 제약 문제 학습에 비효율적이며, 국소적 우도 근사 방식이 수천 배 빠른 학습을 가능하게 한다. (Section 4.3)</li>
+</ul>
+</li>
+<li><strong>[해석 (Interpretation)]</strong>
+<ul>
+<li>딥러닝의 관성적인 BPTT 종속성에서 벗어나 에너지 표면의 국소적 기울기만 제어하는 통계물리학적 학습 목표(PL, MPF)를 채택하는 것이 제약 조건 모델링의 핵심 전략임을 입증한다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-5-논점-5-데이터-효율성과-수동-설정-hand-set-에너지-모델의-성능">2.5 논점 5: 데이터 효율성과 수동 설정(Hand-set) 에너지 모델의 성능</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>Sudoku-Extreme에서 98% 정확도 도달에 필요한 고유 훈련 퍼즐 수는 CRAM이 단 <strong>30개</strong>, EBR은 <strong>700개</strong>였다. (Section 4.3, Figure 3b)</li>
+<li>규칙을 가중치에 직접 대입한 수동 설정(Hand-set) CRAM 모델은 단 1개~3개의 고유 가중치값만으로 모든 벤치마크(Sudoku, Maze, N-Queens, Graph Coloring)의 테스트 퍼즐을 100% 성취했다. (Section 4.3, Table 2, Table 3, Figure 5)</li>
+</ul>
+</li>
+<li><strong>[주장 (Claim)]</strong>
+<ul>
+<li>CRAM은 높은 데이터 효율성을 보여주며, 단 몇 개의 규칙 가중치만으로 풀리는 단순 퍼즐 벤치마크들이 심층 반복 모델의 스케일링 성능을 평가하기에는 적절치 않은 검증 수단임을 시사한다. (Section 4.3, Section 5)</li>
+</ul>
+</li>
+<li><strong>[해석 (Interpretation)]</strong>
+<ul>
+<li>Sudoku 및 Maze-Unique 등 기존 벤치마크에서의 성과가 범용 인공지능 추론 능력의 향상을 직접 담보하지 않는다. 해당 퍼즐들은 국소적 제약 규칙(Pairwise constraints)의 획득만으로도 완벽하게 풀릴 수 있으므로, 학계는 ARC-AGI와 같은 고난도 복합 추론 벤치마크로 평가 프레임워크를 전환해야 한다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-6-논점-6-잠재-변수를-통한-난제-확장성-cram-z-및-maze-hard">2.6 논점 6: 잠재 변수를 통한 난제 확장성 (CRAM+z 및 Maze-Hard)</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>단순 페어와이즈 에너지는 루프(Loop) 구조 및 목표 지점과의 거리 계산이 요구되는 복잡한 미로(Maze-Hard)를 해결하지 못한다. (Appendix F)</li>
+<li>이를 극복하기 위해 잠재 거리 표면을 형성하는 잠재 변수 층($z$)을 결합한 <strong>CRAM+z</strong> 아키텍처를 도입했다. (Appendix F, Eq. 11-15)
+<ol>
+<li><strong>1단계 (Hidden Layer Settling):</strong> 잠재 에너지 $E(\mathbf{z}) = \frac{m}{2} \sum z_i^2 - \frac{1}{2} \sum_{j \in N(i)} z_i z_j - z_G$의 완화 방정식(Eq. 13)을 통해 엄밀한 유일 고정점 $\mathbf{z}^\star$ 도출.</li>
+<li><strong>2단계 (Answer Flow):</strong> 어텐션 가중치 $\alpha_{ij}(\mathbf{z})$ 기반의 연결 링크 $L_{ij}(\mathbf{z})$를 가시 계층 에너지에 통합(Eq. 14, 15)하여 최종 경로 플로우 유도.</li>
+</ol>
+</li>
+<li>CRAM+z는 단 <strong>29개 파라미터</strong>(기존 Maze-Unique 18개 + 방향성 $\kappa$ 5개 + $\beta$ 5개 + 질량 $m$ 1개)만으로 Maze-Hard 테스트 퍼즐 1,000개 중 99.9% (999개)를 해결했다. (Appendix F, Table 8, Figure 6)</li>
+</ul>
+</li>
+<li><strong>[주장 (Claim)]</strong>
+<ul>
+<li>단순 명시적 에너지 모델에 최소한의 잠재 변수(Latent variable) 층을 결합함으로써 복잡한 거리 기반 논리 추론 문제로 아키텍처를 확장할 수 있다. (Appendix F)</li>
+</ul>
+</li>
+<li><strong>[해석 (Interpretation)]</strong>
+<ul>
+<li>CRAM의 에너지 최소화 구조를 유지하면서 잠재 표현(Latent representation)을 명시적으로 도입하는 아키텍처 확장은 단순 제약 만족을 넘어 구조적 묘사가 필요한 과제들을 해결하기 위한 유용한 접근 경로를 제시한다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-분석-persons-speakers">3. 등장 인물 및 화자 분석 (Persons &amp; Speakers)</h4>
+<p>소스 문서에 기록된 저자 및 연구 관계자의 상세 정보는 다음과 같다. (출처: Title page, Acknowledgments)</p>
+<ul>
+<li><strong>Benjamin Hoover</strong>:
+<ul>
+<li>소속: Prefrontal (London, United Kingdom)</li>
+<li>역할: 제1 저자 (Author 1) 및 공동 교신 저자 (<code>ben@prefrontal.ai</code>)</li>
+<li>연구 주도 세부 역할 분담: 소스 내 개별 저자별 구체적 역할 미기술로 <strong>[확인 불가]</strong></li>
+</ul>
+</li>
+<li><strong>Hugh Blayney</strong>:
+<ul>
+<li>소속: Prefrontal (London, United Kingdom)</li>
+<li>역할: 제2 저자 (Author 2)</li>
+<li>연구 주도 세부 역할 분담: 소스 내 개별 저자별 구체적 역할 미기술로 <strong>[확인 불가]</strong></li>
+</ul>
+</li>
+<li><strong>James C. R. Whittington</strong>:
+<ul>
+<li>소속: Prefrontal (London, United Kingdom)</li>
+<li>역할: 제3 저자 (Author 3) 및 공동 교신 저자 (<code>james@prefrontal.ai</code>)</li>
+<li>연구 주도 세부 역할 분담: 소스 내 개별 저자별 구체적 역할 미기술로 <strong>[확인 불가]</strong></li>
+</ul>
+</li>
+<li><strong>감사를 표한 연구자 명단 (9명)</strong>:
+<ul>
+<li>Ales Kubicek, Kai Sandbrink, Andrea Caciolai, Fraser Greenlee, Liangzu Peng, Zihan Yan, Sukrit Sumant, Alec Helbling, Adrian Rodriguez (논문 피드백 및 통찰 제공)</li>
+</ul>
+</li>
+<li><strong>연구 소속 기관</strong>: Prefrontal (영국 런던 소재 인공지능 연구소)</li>
+</ul>
+<hr />
+<h4 id="4-주요-수치-및-시점-환경-key-metrics-environment-context">4. 주요 수치 및 시점/환경 (Key Metrics &amp; Environment Context)</h4>
+<h5 id="4-1-하드웨어-및-실행-환경-context">4.1 하드웨어 및 실행 환경 Context</h5>
+<ul>
+<li><strong>GPU 환경</strong>: 단일 NVIDIA H200 GPU 1대 (공유 클러스터 비예약 노드 환경) (Section 1, Appendix B)</li>
+<li><strong>CPU 환경</strong>: Intel Xeon Platinum 8468 CPU 1스레드 (Appendix B)</li>
+<li><strong>커널 및 코드 구현</strong>: Triton GPU 커널 구현 (GPU 워프당 1개 탐색 체인 할당, 메모리 내 국소 필드 유지 및 변경 셀의 국소 상호작용만 업데이트) (Appendix B)</li>
+<li><strong>시간 측정 방식</strong>:
+<ul>
+<li><strong>Warm Fit Time (CRAM)</strong>: 1회차 스타트업 비용(0.2~0.9s, 커널 로딩 및 compilation)을 제외하고 동일 프로세스 내 연속 7회 중 median 값 수집.</li>
+<li><strong>Cold Fit Time (Baselines)</strong>: 컴파일 캐시가 비어있는 상태의 프로세스 단일 실행 시간 (초기화 및 compilation 포함).</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-2-벤치마크-데이터셋-규격-및-세부-정량-결과-table-2-table-3-참조">4.2 벤치마크 데이터셋 규격 및 세부 정량 결과 (Table 2, Table 3 참조)</h5>
+<ul>
+<li><strong>Sudoku-Extreme</strong>: $9 \times 9$ 격자 ($81 \times 9$ 셀), 테스트 세트 412,786개 (개발 세트 10,000개 서브셋 사용)
+<ul>
+<li>CRAM (학습): 해결률 <strong>100.00%</strong>, Params <strong>7.7K</strong>, Fit time <strong>0.04 s (42 ms)</strong>, FLOPs/puzl <strong>$2.02 \times 10^9$</strong></li>
+</ul>
+</li>
+<li><strong>Maze-Unique</strong>: $30 \times 30$ 미로 ($900 \times 2$ 셀), 테스트 세트 1,000개
+<ul>
+<li>CRAM (학습): 해결률 <strong>100.00%</strong>, Params <strong>18</strong>, Fit time <strong>0.13 s (132 ms)</strong>, FLOPs/puzl <strong>$8.37 \times 10^5$</strong></li>
+</ul>
+</li>
+<li><strong>N-Queens 8x8</strong>: 테스트 세트 1,240개
+<ul>
+<li>Accuracy ($N=1 / N=20$): CRAM <strong>99.95% / 100.00%</strong> (EBR 100.00%/99.95%, GRAM 99.44%/100.00%)</li>
+<li>Cov@20 (다양성): CRAM <strong>97.9%</strong> (EBR 98.1%, GRAM 97.9%)</li>
+<li>Params / Fit time: CRAM <strong>113 개 / 2.9 초</strong> (EBR 7.1M / 3.2시간)</li>
+</ul>
+</li>
+<li><strong>N-Queens 10x10</strong>: 테스트 세트 18,466개
+<ul>
+<li>Accuracy ($N=1 / N=20$): CRAM <strong>99.45% / 99.99%</strong> (EBR 99.31%/99.99%)</li>
+<li>Cov@20 (다양성): CRAM <strong>93.6%</strong> (EBR 92.5%, GRAM 92.9%)</li>
+<li>Params / Fit time: CRAM <strong>181 개 / 6.8 초</strong> (EBR 7.1M / 7.6시간)</li>
+</ul>
+</li>
+<li><strong>Graph Coloring 8 vertices</strong>: 테스트 세트 255개 그래프
+<ul>
+<li>Conflict ($N=1 / N=20$): CRAM <strong>0.0 / 0.0</strong> (EBR 0.0/2.7, GRAM 3.3/3.3)</li>
+<li>Cov@20: CRAM <strong>88.9%</strong> (EBR 88.9%, GRAM 87.9%)</li>
+<li>Params / Fit time: CRAM <strong>869 개 (학습 유효) / 1.3 초</strong> (EBR 7.1M / 4.5시간)</li>
+</ul>
+</li>
+<li><strong>Graph Coloring 10 vertices</strong>: 테스트 세트 192개 그래프
+<ul>
+<li>Conflict ($N=1 / N=20$): CRAM <strong>0.3 / 0.0</strong> (EBR 0.3/0.7, GRAM 52.7/52.7)</li>
+<li>Cov@20: CRAM <strong>52.6%</strong> (EBR 54.8%, GRAM 37.8%)</li>
+<li>Params / Fit time: CRAM <strong>475 개 (학습 유효) / 0.3 초</strong> (EBR 7.1M / 7.6시간)</li>
+</ul>
+</li>
+<li><strong>Maze-Hard</strong>: $30 \times 30$ 미로, 테스트 세트 1,000개
+<ul>
+<li>CRAM+z: 해결률 <strong>99.90%</strong>, Params <strong>29</strong>, FLOPs/puzl <strong>$1.41 \times 10^7$</strong> (Fit time &lt; 30초)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<h5 id="5-1-복잡한-일반-추론-문제로의-확장성-한계-불확실성-수준-높음">5.1 복잡한 일반 추론 문제로의 확장성 한계 (불확실성 수준: 높음)</h5>
+<ul>
+<li>CRAM의 기본 메커니즘은 단순 페어와이즈(Pairwise) 에너지 구조이므로 ARC-AGI와 같이 보이지 않는 관념적 규칙 계산이나 복합적인 추론이 요구되는 범용 추론 과제로 직접 확장하기 어렵다.</li>
+<li>CRAM+z를 통해 Maze-Hard 문제를 일부 해결하였으나, 사전 설계 지식 없이 일반적인 잠재 표현(Latent representation)을 스스로 학습하는 기법은 해결해야 할 과제로 남아있다. (Section 1, Section 5, Appendix F)</li>
+</ul>
+<h5 id="5-2-극소량-데이터-환경에서의-오답-수렴-불확실성-수준-중간">5.2 극소량 데이터 환경에서의 오답 수렴 (불확실성 수준: 중간)</h5>
+<ul>
+<li>훈련 퍼즐 수가 10개 미만인 극단적 데이터 제한 환경에서는 훈련 중 잘못된 좁은 국소 극솟값(Incorrect solutions)으로 수렴하는 현상이 관찰되었다. (Section 4.3, Figure 3b)</li>
+</ul>
+<h5 id="5-3-공유-클러스터-측정-환경의-변동성-불확실성-수준-낮음">5.3 공유 클러스터 측정 환경의 변동성 (불확실성 수준: 낮음)</h5>
+<ul>
+<li>훈련 시간(Fit time) 수치가 비예약 노드의 공유 클러스터 하드웨어 상에서 측정되었으므로 타 작업의 CPU/GPU 자원 점유 상황에 따른 변동성이 존재할 수 있음이 명시되었다. (Section 5, Appendix B)</li>
+</ul>
+<h5 id="5-4-외부-전용-솔버와의-성능-비교-미실시-확인-불가-미평가">5.4 외부 전용 솔버와의 성능 비교 미실시 [확인 불가 / 미평가]</h5>
+<ul>
+<li>학습된 제약 비용을 외부 전용 솔버(External exact solver, 예: toulbar2)로 전달하여 해결하는 유구한 전통적 기법과의 직접적 추론 시간 및 성능 비교는 본 연구의 범위를 벗어난 것(&quot;outside the scope of this work&quot;)으로 규정되어 평가되지 않았다. (Section 2, Section 4)</li>
+</ul>
+<h5 id="5-5-연산-예산-초과로-인한-탐색-미완료-발생-불확실성-수준-매우-낮음">5.5 연산 예산 초과로 인한 탐색 미완료 발생 (불확실성 수준: 매우 낮음)</h5>
+<ul>
+<li>Sudoku-Extreme 테스트 세트 평가 시 CRAM이 오답을 출력한 사례는 0건(오답률 0.00%)이었으나, 4개 체인으로 수행된 전체 $1,238,358$회의 탐색 중 총 51건(0.004%)이 연산 예산 제한(Budget limit)에 도달할 때까지 정답 문턱값을 통과하지 못해 탐색 미완료로 처리되었다. (Section 4.1, Appendix C.3)</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

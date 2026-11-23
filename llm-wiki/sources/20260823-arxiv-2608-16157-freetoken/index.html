@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution</h1>
+<p class="page-meta">웹 · 2026-08-23</p>
+<h2 id="요약">요약</h2>
+<p>FreeToken 저자들은 단일 GPU와 512GiB 호스트 메모리로 753B MoE 모델을 초당 14.9토큰으로 구동했다고 보고했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=Fhu1k0S22p4">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="freetoken-gpu-한-장으로-753b를-돌리는-로컬-moe의-조건">FreeToken: GPU 한 장으로 753B를 돌리는 로컬 MoE의 조건</h3>
+<h4 id="1-개요-executive-summary">1. 개요 (Executive Summary)</h4>
+<p><strong>FreeToken</strong>은 로컬 환경에서 프론티어 급 Mixture-of-Experts(MoE) 모델을 효율적으로 실행하기 위해 설계된 <strong>엣지 네이티브(Edge-native) 서빙 시스템</strong>이다. 이 시스템은 개인용 컴퓨터를 단순히 '작은 GPU가 달린 장치'가 아니라 GPU, CPU, 호스트 DRAM, 그리고 PCIe 인터커넥트가 통합된 <strong>신축성 있는 추론 플랫폼</strong>으로 취급한다.</p>
+<p>FreeToken의 핵심은 대규모 MoE 모델의 활성 파라미터(Active Parameters)는 GPU VRAM에 배치하고, 전체 전문가 풀(Expert Pool)은 호스트 메모리에 유지하면서 하드웨어 자원을 동적으로 조율하는 것이다. 이를 통해 8GB VRAM의 노트북에서 35B 모델을, 게임용 데스크톱에서 284B 모델을, 그리고 단일 워크스테이션 GPU에서 753B 모델을 인터랙티브한 속도로 구동할 수 있음을 입증했다.</p>
+<h4 id="2-moe-모델의-로컬-서빙-과제와-병목-현상">2. MoE 모델의 로컬 서빙 과제와 병목 현상</h4>
+<h5 id="2-1-오픈-웨이트-open-weight-와-실제-서빙-가능성의-괴리">2.1 오픈 웨이트(Open-weight)와 실제 서빙 가능성의 괴리</h5>
+<p>프론티어 급 오픈 웨이트 모델(Kimi-K3, GLM-5.2, DeepSeek-V4-Flash 등)이 공개되면서 누구나 모델을 얻을 수 있게 되었으나, 이를 실제로 실행하는 비용은 여전히 높다. 수백 기가바이트에 달하는 가중치를 로컬 GPU VRAM에 모두 담는 것은 불가능에 가깝기 때문이다.</p>
+<h5 id="2-2-moe-희소-활성화의-역설">2.2 MoE 희소 활성화의 역설</h5>
+<p>MoE 아키텍처는 매 토큰 생성 시 전체 전문가 중 일부만 활성화하여 연산량은 줄이지만, <strong>전체 전문가 가중치(Memory Footprint)는 줄이지 않는다.</strong> 따라서 비활성 전문가는 호스트 메모리에 상주해야 하며, 실행 경로에 따라 이를 동적으로 불러와야 하는 시스템적 과제가 발생한다.</p>
+<h5 id="2-3-엣지-하드웨어의-다층적-병목">2.3 엣지 하드웨어의 다층적 병목</h5>
+<p>로컬 추론 환경은 다음과 같은 복합적인 병목 현상을 마주한다.</p>
+<ul>
+<li><strong>GPU VRAM:</strong> 용량이 제한적이며 시스템 컴포지터, 브라우저 등과 공유됨.</li>
+<li><strong>호스트 DRAM:</strong> GPU 메모리보다 크지만 대역폭(50~90 GB/s)이 VRAM(1~1.8 TB/s)에 비해 현저히 낮음.</li>
+<li><strong>PCIe 대역폭:</strong> CPU와 GPU 간 데이터 전송 속도를 결정하며, 노트북(x8 링크)이나 구형 사양에서 주요 병목이 됨.</li>
+<li><strong>CPU:</strong> 연산 능력과 메모리 대역폭이 GPU에 비해 낮아 단독 추론 시 속도가 크게 저하됨.</li>
+</ul>
+<h5 id="2-4-에이전트-워크로드의-특수성">2.4 에이전트 워크로드의 특수성</h5>
+<p>에이전트가 도구를 호출하거나 문맥을 편집(thinking block 삭제 등)할 때마다 **반복적인 프리필(Repeated Prefill)**이 발생한다. 이는 초기 응답 시간(TTFT)을 급격히 증가시키고 전체 시스템의 가용성을 떨어뜨린다.</p>
+<h4 id="3-freetoken의-핵심-기술-분석">3. FreeToken의 핵심 기술 분석</h4>
+<p>FreeToken은 세 가지 주요 메커니즘을 통해 위 병목을 해결한다.</p>
+<h5 id="3-1-대역폭-적응형-실행-bandwidth-adaptive-execution">3.1 대역폭 적응형 실행 (Bandwidth-Adaptive Execution)</h5>
+<p>하드웨어의 실측 대역폭에 맞춰 연산과 전송을 최적화한다.</p>
+<ul>
+<li><strong>Prefill Double Buffering:</strong> 현재 레이어($l$)의 GPU 연산이 진행되는 동안, 다음 레이어($l+1$)의 전문가를 PCIe를 통해 미리 스트리밍하여 전송 시간을 연산 시간 뒤로 숨긴다.</li>
+<li><strong>$q^*$ 대역폭 정책:</strong> 디코드 단계에서 발생하는 캐시 미스를 처리할 때, 실측된 PCIe 대역폭($B_P$)과 호스트 가공 대역폭($B_H$)의 비율에 따라 <strong>GPU 캐시 채우기</strong>와 <strong>CPU 현장 실행</strong> 비중을 동적으로 나눈다.</li>
+</ul>
+<h5 id="3-2-시맨틱-인식-캐싱-semantic-aware-caching">3.2 시맨틱 인식 캐싱 (Semantic-Aware Caching)</h5>
+<p>문맥의 의미적 구조를 파악하여 메모리 효율을 극대화한다.</p>
+<ul>
+<li><strong>Semantic Anchors:</strong> <code>&lt;think&gt;</code>, <code>&lt;tool_call&gt;</code>, <code>&lt;tool_output&gt;</code> 등 대화 경계(Boundary)에 반복 상태 체크포인트(Recurrent-state checkpoint)를 보존한다. 문맥 편집 시 전체를 다시 계산하는 대신, 가장 가까운 앵커에서부터 새 접미사(Suffix)만 프리필한다.</li>
+<li><strong>Global LRU Expert Cache:</strong> 토큰 간의 전문가 라우팅 지역성(Locality)을 이용하여, 자주 사용되는 전문가를 GPU VRAM에 전역 LRU 방식으로 캐싱한다.</li>
+</ul>
+<h5 id="3-3-신축적-메모리-관리-elastic-memory-management">3.3 신축적 메모리 관리 (Elastic Memory Management)</h5>
+<p>로컬 환경의 가변적인 자원 상태에 대응한다.</p>
+<ul>
+<li><strong>Elastic VRAM Management:</strong> 실행 중 다른 애플리케이션의 VRAM 사용량 변화에 맞춰 전문가 캐시와 KV 캐시의 비중을 재배분한다. 엔진 재시작이나 모델 재로드 없이 캐시 구조를 동적으로 재구축한다.</li>
+<li><strong>고속 부트스트랩:</strong> 전문가 풀을 디스크에서 읽어올 때 최종 호스트 레이아웃으로 직접 로드하여 초기 구동 속도를 높인다.</li>
+</ul>
+<h4 id="4-실험-결과-및-성능-보고">4. 실험 결과 및 성능 보고</h4>
+<p>논문 저자들은 다양한 하드웨어와 모델을 대상으로 성능을 측정하여 보고했다. 모든 결과는 <strong>저자들에 의해 보고된 수치</strong>이며, 독립적인 재현 결과가 아님에 유의해야 한다.</p>
+<h5 id="4-1-하드웨어-및-모델-조건">4.1 하드웨어 및 모델 조건</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">하드웨어 구분</th>
+<th style="text-align:left">주요 사양 (VRAM / Host DRAM)</th>
+<th style="text-align:left">대상 모델</th>
+<th style="text-align:left">성능 (저자 보고)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>RTX 4060 Laptop</strong></td>
+<td style="text-align:left">8GB VRAM / 32GiB DRAM</td>
+<td style="text-align:left">Qwen3.6-35B (NVFP4)</td>
+<td style="text-align:left"><strong>39.3 tok/s</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RTX 5090 Desktop</strong></td>
+<td style="text-align:left">32GB VRAM / 192GiB DRAM</td>
+<td style="text-align:left">DSV4-Flash 284B</td>
+<td style="text-align:left"><strong>22~25 tok/s</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RTX PRO 6000</strong></td>
+<td style="text-align:left">96GB VRAM / 512GiB DRAM</td>
+<td style="text-align:left">GLM-5.2 753B</td>
+<td style="text-align:left"><strong>14.9 tok/s</strong></td>
+</tr>
+</tbody>
+</table>
+<h5 id="4-2-주요-벤치마크-지표">4.2 주요 벤치마크 지표</h5>
+<ul>
+<li><strong>RTX 5090 성능:</strong> Qwen3.6-35B에서 77~83 tok/s를 기록했으며, 이는 기존의 강력한 베이스라인 대비 <strong>1.5~2.3배</strong> 높은 수치다.</li>
+<li><strong>응답성(TTFT):</strong> 에이전트 워크로드에서 FreeToken의 최악의 경우(Worst-turn) TTFT는 <strong>44초 미만</strong>인 반면, 베이스라인 시스템(llama.cpp, Ollama 등)은 일부 사례에서 <strong>150초 이상</strong>(최대 946초) 소요되어 시간 초과를 유발했다.</li>
+<li><strong>캐시 효율성:</strong> RTX 5090 환경에서 FreeToken의 전문가 캐시 미스율은 Qwen 16%, DSV4 39%로, llama.cpp(62%, 89%) 대비 현저히 낮았다.</li>
+</ul>
+<h4 id="5-소스-정보-및-한계점">5. 소스 정보 및 한계점</h4>
+<h5 id="5-1-문서의-권위와-라이선스">5.1 문서의 권위와 라이선스</h5>
+<ul>
+<li><strong>논문 상태:</strong> 본 보고서의 기초가 된 논문은 <strong>arXiv v1</strong> 상태(2608.16157v1)이며, 동료 심사(Peer-reviewed)를 거치지 않았다.</li>
+<li><strong>라이선스 구분:</strong> 논문 라이선스는 'arXiv non-exclusive distribution license 1.0'이며, 코드 저장소는 'Apache 2.0' 라이선스로 배포된다. 두 라이선스를 혼동해서는 안 된다.</li>
+</ul>
+<h5 id="5-2-기술적-한계-및-주의사항">5.2 기술적 한계 및 주의사항</h5>
+<ul>
+<li><strong>단일 GPU의 의미:</strong> 'Single GPU' 구동이 가능하지만, 이는 GPU 메모리만으로 구동된다는 의미가 아니다. 보고된 성능을 내기 위해서는 충분한 <strong>Host DRAM(최대 512GiB), 고성능 CPU, PCIe 대역폭</strong>이 반드시 동반되어야 한다.</li>
+<li><strong>품질 및 품질 보증의 부재:</strong> 파라미터 수(35B/284B/753B)가 모델의 품질을 직접 보장하지 않는다. 또한, Codex의 33 tok/s와 비교된 수치가 동등한 사용자 경험이나 서비스 품질을 입증하는 것은 아니다.</li>
+<li><strong>비대칭 비교:</strong> 베이스라인 엔진마다 지원하는 모델과 서버 구성이 달라 실험의 모든 조건이 완전히 대칭적이지 않을 수 있다. 또한 에너지 소비, 장기적 안정성, 보안 등에 대한 포괄적인 평가는 포함되지 않았다.</li>
+</ul>
+<h4 id="6-결론">6. 결론</h4>
+<p>FreeToken 연구는 로컬 프론티어 AI의 경계가 단순히 GPU VRAM의 용량에 의해 결정되는 것이 아니라, <strong>서빙 소프트웨어와 호스트 자원의 오케스트레이션 능력</strong>에 의해 확장될 수 있음을 시연했다. 희소 MoE 모델의 특성을 하드웨어 대역폭 및 에이전트의 시맨틱 구조와 결합함으로써, 사용자가 이미 소유한 개인용 장비를 프론티어 급 지능을 위한 실용적인 플랫폼으로 전환할 수 있는 가능성을 제시한다.</p>
+<hr />
+<h4 id="공개-전-편집-검증-메모">공개 전 편집 검증 메모</h4>
+<ul>
+<li><strong>권위 경계:</strong> arXiv 2608.16157v1의 저자 보고이며 동료심사·독립 재현 결과로 표현하지 않는다.</li>
+<li><strong>하드웨어 경계:</strong> <code>single GPU</code>를 <code>GPU만</code>으로 바꾸지 않는다. 284B는 192GiB, 753B는 512GiB host DRAM 조건을 함께 밝힌다.</li>
+<li><strong>지표 경계:</strong> parameter count와 decode tok/s는 model quality, 전체 agent 성공률, total cost, energy 효율의 직접 지표가 아니다.</li>
+<li><strong>비교 경계:</strong> baseline의 모델·workload 지원은 비대칭이고 agent trajectory가 달라 cross-engine 전체 wall-clock은 비교하지 않았다.</li>
+<li><strong>라이선스 경계:</strong> paper는 arXiv non-exclusive distribution license, code는 Apache 2.0으로 구분한다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

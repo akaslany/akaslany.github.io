@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaling up Test-Time Compute with Latent Reasoning: 기술 감사 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Scaling up Test-Time Compute with Latent Reasoning: 기술 감사 보고서</h1>
+<p class="page-meta">논문 · 2026-09-02</p>
+<h2 id="요약">요약</h2>
+<p>이 arXiv v2 프리프린트는 “출력 토큰을 길게 늘리지 않고, 같은 네 개의 Transformer 층을 잠재공간에서 반복해 테스트 시 계산량을 조절할 수 있다”는 것을 3.5B급 단일 모델로 보여 준다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://www.youtube.com/watch?v=XO2cr1CAVW8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="scaling-up-test-time-compute-with-latent-reasoning-기술-감사-보고서">Scaling up Test-Time Compute with Latent Reasoning: 기술 감사 보고서</h3>
+<h4 id="집행-판단">집행 판단</h4>
+<p>이 arXiv v2 프리프린트는 “출력 토큰을 길게 늘리지 않고, 같은 네 개의 Transformer 층을 잠재공간에서 반복해 테스트 시 계산량을 조절할 수 있다”는 것을 3.5B급 단일 모델로 보여 준다. 가장 강한 근거는 같은 가중치에서 반복 횟수 r을 늘렸을 때 여러 추론 벤치마크가 개선되고, 공개 코드·체크포인트가 실제로 <code>num_steps</code>를 노출한다는 점이다. 그러나 이것은 50B 파라미터 모델이 아니고, 모든 과제에서 단조 개선하지도 않으며, 독립 재현·오염 감사·실서비스 지연/에너지 비교도 없다. 따라서 “잠재 반복 깊이는 유망한 테스트 시 계산 축”까지는 입증됐지만, “말 없이 생각하는 범용 추론”이나 “50B 모델 성능을 3.5B로 얻는다”는 결론은 근거를 넘는다.</p>
+<h4 id="1-테스트-시-계산을-어디에-쓰는가">1. 테스트 시 계산을 어디에 쓰는가</h4>
+<p>일반적인 chain-of-thought(CoT)는 다음 토큰을 계속 생성해 가시적 문자열과 KV-cache를 늘린다. 이 논문의 모델은 한 토큰의 출력 확률을 만들기 전에 동일한 내부 블록을 여러 번 적용한다. 계산은 늘지만 반복 중간 상태는 어휘 토큰으로 투사되지 않는다. 그러므로 두 방식은 상보적일 수 있지만 동일하지 않다. CoT는 사람이 읽고 감시할 수 있는 흔적을 주는 대신 토큰·컨텍스트 비용을 낸다. 잠재 반복은 중간 문자열을 만들지 않지만 직렬 행렬연산과 숨은 상태의 감시 어려움을 남긴다.</p>
+<h4 id="2-수학과-구조">2. 수학과 구조</h4>
+<p>입력 토큰열 x에 대해 논문의 계산은 다음 네 줄로 요약된다.</p>
+<ul>
+<li>e = P(x)</li>
+<li>s0 ~ N(0, sigma^2 I)</li>
+<li>si = R(e, s(i-1)), i=1,...,r</li>
+<li>p = C(sr)</li>
+</ul>
+<p>P는 입력을 잠재공간으로 보내는 prelude, R은 가중치를 공유하는 recurrent block, C는 최종 상태를 어휘 확률로 바꾸는 coda다. 입력 표현 e는 매 반복에 다시 주입된다. 이는 시퀀스 시간축 RNN이라기보다 깊이축 반복이다.</p>
+<p>공개 모델의 구조는 (2,4,2), hidden size 5,280, attention/KV heads 55개, head dimension 96, MLP 17,920, vocabulary와 context가 각각 65,536과 4,096다. 실제 서로 다른 층은 8개지만 r=32에서는 2+4×32+2=132회의 유효 층 적용이 생긴다. 이 깊이는 계산 그래프의 길이이지 132개의 독립 파라미터 층이 아니다.</p>
+<h4 id="3-파라미터-flops-토큰-비용을-분리해야-한다">3. 파라미터, FLOPs, 토큰, 비용을 분리해야 한다</h4>
+<p>논문과 저장소는 논리적 파라미터를 약 3.5B로 보고한다. 고정된 반복 블록을 재사용하므로 r을 늘려도 학습된 파라미터 수는 늘지 않는다. HF 카드의 지침 <code>1.5B×r+2B</code>는 r=32에서 50B, r=64에서 98B의 “materialized parameter” 계산량을 준다. 저장소 주석은 더 정확한 근사로 r=32 52.535B, r=64 103.144B를 쓴다. 모두 반복된 블록 적용의 계산 비유다. Huginn이 실제 50B 파라미터 모델이 됐다는 뜻이 아니며, 50B dense Transformer와 메모리·대역폭·지연·품질이 같다는 뜻도 아니다.</p>
+<p>학습은 795B scheduled tokens로 적고 다른 곳에서는 800B로 반올림한다. 47,000 steps와 “16M tokens/step”을 곱하면 752B이고, 795B/47,000은 약 16.915M이다. 세 수치는 반올림/보고 단위가 정확히 맞지 않는다. 본 감사는 어느 하나를 임의로 고치지 않는다.</p>
+<p>4096 GPUs에서 52–64 TFLOP/s/GPU라는 수치를 곱하면 aggregate 212.992–262.144 PFLOP/s다. Appendix의 212–262 “exaFLOP/s” 문구는 자체 단위와 맞지 않는다. 이것도 실측 전력이나 joules/token을 뜻하지 않는다.</p>
+<h4 id="4-어떻게-학습했는가">4. 어떻게 학습했는가</h4>
+<p>반복 횟수 r은 log-normal Poisson 분포에서 sequence 단위로 샘플링한다. 목표 평균은 32이고 sigma=1/2이며, heavy tail로 더 깊은 예도 본다. 메모리와 backward 계산을 제한하기 위해 마지막 k=8 반복만 역전파한다. 큰 배치의 동기화를 위해 micro-batch 전체가 같은 r을 쓰는 locked-step sampling을 적용한다. 이 설계는 다양한 깊이에서 동작하도록 압력을 주지만, “임의의 무한 깊이까지 안정적”이라는 보장은 아니다.</p>
+<p>대형 모델은 SandwichBlock, 매 반복의 입력 재주입, linear adapter, Takase 계열 초기화, RMSNorm을 쓴다. 두 차례의 3.5B 훈련 실패에서는 hidden-state collapse나 recurrence 무시가 나타났고, 최종 구성은 peak LR 4e-5로 안정됐다. 이는 초기화·정규화의 중요성을 보여 주지만 동일 조건의 완전한 대형 ablation grid는 아니다. 데이터 혼합은 code/math/instruction 쪽으로 의도적으로 치우쳤고 저자도 mixture를 ablate하지 못했다고 쓴다. constant learning rate와 no cooldown도 제한이다.</p>
+<h4 id="5-벤치마크별-결과">5. 벤치마크별 결과</h4>
+<p>Table 1의 같은 Huginn 체크포인트에서 r=4→32 변화는 ARC-E +20.84, ARC-C +10.24, HellaSwag +21.75, MMLU +7.99, OBQA +10.60, PiQA +11.26, SciQ +13.50, WinoGrande +4.19 percentage points다. 그러나 r=16→32는 각각 +0.42, +0.52, +0.54, +0.13, +1.20, +0.43, −0.40, +1.66이다. SciQ는 93.90에서 93.50으로 하락하고 여러 과제가 평탄해진다. “깊이는 항상 좋다”는 요약은 틀리다.</p>
+<p>Table 2에서 r=32, system prompt 사용 시 GSM8K 24.87/38.13, GSM8K-CoT 34.80/42.08, Minerva MATH 11.24, MathQA 27.97이다. slash는 flexible/strict extraction처럼 서로 다른 채점이다. system prompt가 없을 때 값이 달라지므로 prompt contract를 떼어 말할 수 없다. 코드 표에서 MBPP 24.80, HumanEval 23.17이다. StarCoder2와 OLMo 계열은 모델 크기·토큰·데이터가 달라 순수 architecture ablation이 아니다.</p>
+<p>Table 3의 180B 비교에서 r=32 recurrent model은 fixed-depth baseline보다 ARC-E +7.20, ARC-C +2.22, HellaSwag +11.46, MMLU +1.43, OBQA +1.80, PiQA +4.41, SciQ +7.40, WinoGrande +1.10 points 높다. GSM8K-CoT도 1.82/2.20 대 9.02/10.24다. 다만 recurrent run은 반복 연산을 더 하므로 같은 토큰 수가 같은 총 training FLOPs나 wall-clock을 뜻하지 않는다.</p>
+<p>OpenBookQA에서 relevant fact를 제공하면 Huginn r=32는 38.2→49.2(+11.0)다. 이것은 “문맥을 주면 더 오래 반복해 활용한다”는 해석과 맞지만, 모든 지식 부족이 reasoning으로 대체된다는 증거는 아니다. EMA checkpoint의 GSM8K 47.23 flexible/38.59 strict at r=64도 별도 weight averaging과 depth 조건에 묶인다.</p>
+<p>깊이 곡선은 context와 과제에 따라 plateau가 다르다. zero-shot ARC-C는 약 8–12, one-shot은 약 20, 25–50 shots는 약 32에 포화한다고 저자는 설명한다. 본문과 표는 r=32를 주로 보고하고 일부 r=64 결과를 추가한다. 모든 benchmark에서 validation-only로 깊이를 선택한 preregistered test-blind protocol은 제시되지 않는다. 따라서 curve를 본 뒤 좋은 깊이를 강조했을 selection effect 가능성을 남겨야 한다.</p>
+<h4 id="6-고정-반복과-적응형-종료">6. 고정 반복과 적응형 종료</h4>
+<p>고정 반복은 모든 토큰에 같은 r을 쓴다. 적응형 방식은 연속 반복의 출력 분포 KL divergence가 5e-4 아래로 내려가면 토큰별로 멈춘다. 이 halting rule은 별도로 학습되지 않은 zero-shot proof of concept다. MT-Bench 1-turn에서 fixed r=32는 5.662±0.388, fixed r=64는 5.693±0.386, KL exit는 5.562±0.389다. 표 caption은 baseline과의 차이가 statistically significant하지 않다고 명시한다. 따라서 “같은 품질로 계산을 줄였다”는 확정 결론은 이 표만으로 못 낸다.</p>
+<p>KV-cache는 반복 깊이별 상태가 필요해 메모리 비용이 생긴다. 논문은 cache budget s를 두고 modulo overwrite하는 공유 방식을 제시하고, HF 구현은 전용 <code>HuginnDynamicCache</code>와 lookup strategy를 요구한다. 캐시 s=4의 MT-Bench 5.856±0.395가 가장 높지만 차이는 유의하지 않다. 메모리 감소와 정보 손실, 구현 호환성, batch throughput을 함께 측정해야 한다.</p>
+<h4 id="7-기존-계보와-정확한-차이">7. 기존 계보와 정확한 차이</h4>
+<p>Universal Transformer와 looped/recurrent Transformer도 층 가중치를 반복해 깊이를 조절한다. 이 논문의 차별점은 recurrence-depth pretraining을 3.5B/약 0.8T 규모로 확장하고, random unrolling·input reinjection·truncated backprop·대형 초기화·공개 모델을 함께 제시했다는 데 있다. ALBERT형 고정 반복, deep equilibrium의 fixed-point solving, diffusion의 surrogate objective, 기존 모델을 latent-state 입력에 맞게 finetune하는 continuous-thought 계열과 완전히 같은 것은 아니다. 반대로 이 분야 전체를 처음 발명한 것도 아니다.</p>
+<h4 id="8-말로-표현하기-어려운-추론-은-어디까지인가">8. “말로 표현하기 어려운 추론”은 어디까지인가</h4>
+<p>저자들은 selected tokens의 PCA trajectory에서 convergence, orbit, directional drift를 관찰한다. 이는 잠재 상태가 단순히 한 점으로 단조 수렴하지 않고 구조적 동역학을 가질 수 있다는 관찰이다. 하지만 PCA 그림은 state가 정답을 인과적으로 계산했다는 증거가 아니고, contraction proof도 아니며, 숨은 생각을 충실히 읽어 낸 것도 아니다. “공간적·비언어적 사고”는 동기와 해석에 가깝다. 오히려 사람에게 읽히는 CoT가 사라질 때 monitorability가 악화될 수 있다는 appendix의 우려를 함께 보아야 한다.</p>
+<h4 id="9-재현성과-실서비스-경계">9. 재현성과 실서비스 경계</h4>
+<p>공식 GitHub 저장소(고정 commit 1ea7220...)에는 훈련·토크나이저·데이터 전처리·lm-eval/BigCode recipe가 있고, HF model revision bb6621...에는 Apache-2.0 checkpoint와 custom code가 있다. 이는 inspection 가능성을 높인다. 그러나 저자 README는 데이터 다운로드가 느리고 변동으로 깨질 수 있다고 경고하며, 4096 MI250X 환경도 쉽게 복제할 수 없다. 본 감사에서 full training이나 benchmark를 독립 재현하지 않았다.</p>
+<p>HF API의 stored F32 count 3,911,400,096은 logical 3.5B보다 크다. model card가 tied embedding이 두 번 저장된 upload issue를 공개하므로 저장 용량과 논리적 파라미터를 구분해야 한다. 또한 4,096-token context, custom cache, 반복 직렬성, CUDA/ROCm graph, tail latency, memory bandwidth, batching이 실제 serving cost를 결정한다. 파라미터 재사용은 interconnect·model-state memory 장점이 있지만 에너지나 응답시간 절감을 자동 보장하지 않는다.</p>
+<h4 id="10-반증-기준과-결론">10. 반증 기준과 결론</h4>
+<p>이 접근을 강하게 지지하려면 frozen benchmark와 contamination-resistant new tasks에서 r-depth curve를 item-level로 재현하고, validation-only depth selection과 confidence interval을 써야 한다. fixed-depth와 recurrent를 data/token뿐 아니라 총 FLOPs·seed·schedule까지 맞춰야 한다. quality-matched prefill/decode latency, throughput, KV bytes/token, peak memory, joules/token도 필요하다. 초기 latent state를 교란했을 때 최종 분포가 안정적인지, trained-depth 밖에서 발산하지 않는지도 검사해야 한다.</p>
+<p>Demonstrated: 3.5B급 공개 모델에서 같은 recurrent weights를 더 반복하면 여러 선택된 추론 벤치마크가 개선되고, 테스트 시 depth를 조절할 수 있다.</p>
+<p>Suggested: 잠재공간 반복이 verbal CoT와 다른 유용한 계산 축이 될 수 있고, adaptive halting·cache sharing·warm start와 결합될 가능성이 있다.</p>
+<p>Unknown: broad language capability, benchmark contamination, matched-compute superiority, frontier-scale scaling, hidden-state faithfulness, production latency/energy economics, independent reproducibility.</p>
+<p>안전하게 말할 수 있음: “저자들은 선택된 공개 벤치마크에서 recurrent depth 증가에 따른 성능 개선과 일부 plateau/회귀를 함께 보고했다.”</p>
+<p>말하면 안 됨: “3.5B 모델이 50B 모델과 같다”, “말 없이 인간처럼 생각한다”, “깊이를 늘리면 항상 좋아진다”, “독립적으로 재현됐다”, “더 적은 파라미터이므로 실제 서빙이 반드시 싸고 빠르다.”</p>
+<p>유효기간은 2026-12-01까지이며, arXiv 새 버전, erratum, repository/model revision, 독립 재현 또는 반박이 나오면 갱신해야 한다.</p>
+<h4 id="출처">출처</h4>
+<ul>
+<li>Geiping et al., arXiv:2502.05171v2 — https://arxiv.org/abs/2502.05171v2</li>
+<li>Official code, pinned commit — https://github.com/seal-rg/recurrent-pretraining/tree/1ea7220ec7eb42d13e89db0663df254d0bcdc28e</li>
+<li>Released Huginn-0125 model, pinned revision — https://huggingface.co/tomg-group-umd/huginn-0125/tree/bb6621b65e90b6a4b9b29ef88dc83866d450470c</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

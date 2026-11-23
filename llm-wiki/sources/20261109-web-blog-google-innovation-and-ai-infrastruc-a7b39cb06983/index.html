@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing TPU 8tx and TPU 8i Max</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing TPU 8tx and TPU 8i Max</h1>
+<p class="page-meta">웹 · 2026-11-09</p>
+<h2 id="요약">요약</h2>
+<p>구글은 10년 이상 전 음성 인식 및 언어 번역 등 내부 서비스 요구사항을 처리할 목적으로 자체 텐서 처리 장치(TPU) 개발을 시작한 이래 지속적인 AI 인프라 혁신을 이끌어 왔다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx">출처</a> · <a href="https://www.youtube.com/watch?v=TzCOY2jYS4k">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="구글-8세대-tpu-포트폴리오-확장-tpu-8tx-및-tpu-8i-max-해설-보고서">구글 8세대 TPU 포트폴리오 확장(TPU 8tx 및 TPU 8i Max) 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>구글은 10년 이상 전 음성 인식 및 언어 번역 등 내부 서비스 요구사항을 처리할 목적으로 자체 텐서 처리 장치(TPU) 개발을 시작한 이래 지속적인 AI 인프라 혁신을 이끌어 왔다. 8세대에 이른 현재 TPU의 활용 영역은 자체 제미나이(Gemini) 모델의 학습 및 서빙, 에이전트(Agentic) 워크로드 처리, 구글 클라우드 고객 대상 서비스 제공, 그리고 고객 데이터센터 직접 배포 영역까지 대폭 확장되었다. TPU 기반 인프라 비즈니스는 프론티어 AI 연구소, 금융 거래 기업, 유통업체, 대학 등 약 100여 개 고객사를 확보하며 가속 성장하고 있다.</p>
+<p>구글은 단일 연도 내에 8세대 TPU 제품군으로 총 4개의 시스템을 선보이는 전례 없는 포트폴리오 확장을 단행했다. 2026년 4월 '구글 클라우드 넥스트(Google Cloud Next)'에서 대규모 모델 학습용 'TPU 8t'와 실시간 추론용 'TPU 8i'를 발표한 데 이어, 보안 강화 추론 및 소규모 학습용 'TPU 8tx'와 대용량 컨텍스트 처리용 'TPU 8i Max'를 추가로 공개했다. 이는 AI 컴퓨팅 환경이 인간 수준에서 에이전트 규모로 전환됨에 따라 다양해진 엔터프라이즈의 고도화된 요구사항을 충족하기 위한 핵심 전략이다.</p>
+<p>이러한 포트폴리오 확장의 핵심은 단순한 반도체 칩(Chip) 설계를 넘어 연산, 네트워크, 스토리지, 패키징 기술을 통합하는 '시스템(System)' 중심 개발 모델로의 전환에 있다. 구글은 AI 하이퍼컴퓨터(AI Hypercomputer)라는 모듈식 아키텍처를 기반으로 하드웨어와 개방형 소프트웨어 생태계를 유기적으로 결합하여, 개발자들이 일반 목적 하드웨어 수준으로 TPU를 용이하게 활용할 수 있는 환경을 조성하고 있다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-details">2. 주요 논점 (Key Arguments &amp; Details)</h4>
+<h5 id="2-1-8세대-tpu-포트폴리오의-완성-및-칩과-시스템의-차이">2.1. 8세대 TPU 포트폴리오의 완성 및 칩과 시스템의 차이</h5>
+<h6 id="2-1-1-시스템-아키텍처-중심-전환의-핵심-주장">2.1.1. 시스템 아키텍처 중심 전환의 핵심 주장</h6>
+<p>구글은 반도체 칩 제조 주기와 AI 소프트웨어의 급격한 발전 속도 간의 격차를 극복하기 위해 물리적 칩 설계와 시스템 구축을 명확히 구분하고, 시스템 아키텍처 중심의 접근법을 채택하고 있다.</p>
+<h6 id="2-1-2-기술적-근거-및-8세대-라인업의-역할-분담">2.1.2. 기술적 근거 및 8세대 라인업의 역할 분담</h6>
+<ul>
+<li><strong>칩 설계와 시스템 구축의 차이점:</strong> 칩 설계는 물리적 실리콘 웨이퍼 위에 수십억 개의 트랜지스터를 배치하는 다년간의 공정으로 물리학적 한계와 오랜 제조 라이프사이클의 제약을 받는다. 반면 시스템 구축은 칩 주위에 연산(Compute), 네트워크(Networking), 스토리지(Storage)를 고속 메모리 및 광학 네트워크 등과 통합·패키징하는 아키텍처 작업으로, 고객의 요구사항과 연구 워크로드 변화에 몇 달 단위로 신속하게 대응할 수 있게 한다.</li>
+<li><strong>AI 하이퍼컴퓨터 기반 모듈식 구조:</strong> 구글은 TPU를 AI 하이퍼컴퓨터의 모듈형 구성요소(Building block)로 설계하여 패키징, 고속 메모리, 광학 네트워크, 보안 레이어를 유기적으로 조정할 수 있도록 균형을 맞추었다.</li>
+<li><strong>8세대 라인업 4종의 세부 역할 분담:</strong>
+<ol>
+<li><strong>TPU 8t:</strong> 대규모 파운데이션 모델 학습에 최적화된 시스템으로 사용 전력당 유용한 지능(Goodput)을 극대화함 (이전 세대 대비 학습 성능 최대 2.7배 향상).</li>
+<li><strong>TPU 8i:</strong> 칩 간 통신(Inter-chip communication) 지연 시간을 기존 대비 최대 50% 단축하여 실시간 추론 및 추론 비용 효율성을 최적화함 (이전 세대 대비 추론 가성비 80% 향상).</li>
+<li><strong>TPU 8tx:</strong> 기밀 컴퓨팅 기반의 보안 추론 및 소규모 학습(small-scale training) 특화 시스템.</li>
+<li><strong>TPU 8i Max:</strong> 초대형 컨텍스트 윈도우 및 랙당 최고 연산 밀도를 제공하는 듀얼 칩 시스템.</li>
+</ol>
+</li>
+</ul>
+<h6 id="2-1-3-사실-주장-분석의-구조적-구분">2.1.3. 사실·주장·분석의 구조적 구분</h6>
+<ul>
+<li><strong>명시적 사실:</strong> 2026년 4월 구글 클라우드 넥스트에서 TPU 8t와 8i가 공개되었으며, 이어 TPU 8tx와 8i Max가 발표되어 단일 연도 내 4개 TPU 시스템이 출시되었다.</li>
+<li><strong>작성자(Amin Vahdat)의 주장:</strong> 소프트웨어 발전 속도를 실리콘 제조가 따라잡을 수 없으므로 시스템 균형과 모듈성에 대한 근본적인 투자가 수년 단위가 아닌 수개월 단위의 슈퍼컴퓨터 제공을 가능하게 만들었다.</li>
+<li><strong>분석적 해석:</strong> 하드웨어 제조 주기의 물리적 한계를 유연한 시스템 아키텍처 및 모듈식 패키징으로 보완함으로써 AI 기술 변혁기에 시장 요구에 즉각 대응하는 구글만의 인프라 공급 체계가 확립되었다.</li>
+</ul>
+<hr />
+<h5 id="2-2-tpu-8tx-하드웨어-수준-기밀-컴퓨팅과-보안-추론-및-소규모-학습">2.2. TPU 8tx: 하드웨어 수준 기밀 컴퓨팅과 보안 추론 및 소규모 학습</h5>
+<h6 id="2-2-1-보안-특화-시스템의-핵심-개요">2.2.1. 보안 특화 시스템의 핵심 개요</h6>
+<p>TPU 8tx는 규제 대상 기업 및 정부 기관 등 엄격한 보안 요구사항을 가진 고객을 위해 데이터 활성화 상태에서도 하드웨어 수준의 기밀성을 보장하도록 설계된 보안 특화 시스템으로, 보안 추론뿐만 아니라 소규모 학습(small-scale training)에도 뛰어난 성능을 발휘한다.</p>
+<h6 id="2-2-2-하드웨어-격리-및-다중-워크로드-기술-세부-내용">2.2.2. 하드웨어 격리 및 다중 워크로드 기술 세부 내용</h6>
+<ul>
+<li><strong>하드웨어 격리 및 메모리 암호화:</strong> 기존 시스템은 데이터가 메모리 내에서 처리될 때 암호화가 해제되는 허점이 존재했다. TPU 8tx는 TPU 8t와 동일한 실리콘을 기반으로 5세대 AMD EPYC CPU 호스트와 결합하여 데이터 및 모델 가중치가 처리(active use)되는 동안에도 하드웨어 레이어에서 직접 보안 암호화 및 격리 상태를 유지한다.</li>
+<li><strong>보드플라이(Boardfly) 네트워크 적용:</strong> 실시간 추론용으로 개발된 로우 레이턴시 보드플라이 네트워크를 채택하여 성능 저하(near-zero penalty) 없이 TPU 8t 대비 지연 시간을 최대 2배(2x) 단축했다.</li>
+<li><strong>단일 시스템 내 다중 워크로드 수행:</strong> 고성능 연산력과 저지연 네트워크의 결합을 통해 고객은 민감 데이터를 외부 클러스터로 이동시키지 않고 단일 시스템 내에서 <strong>파인 튜닝(Fine-tuning)</strong>, <strong>모델 증류(Distillation)</strong>, <strong>강화 학습(RL)</strong>, <strong>소규모 학습</strong> 및 에이전트 실행을 동시에 안전하게 수행할 수 있다.</li>
+</ul>
+<h6 id="2-2-3-사실-주장-분석의-구조적-구분">2.2.3. 사실·주장·분석의 구조적 구분</h6>
+<ul>
+<li><strong>명시적 사실:</strong> TPU 8tx는 TPU 8t 실리콘 기반으로 5세대 AMD EPYC CPU와 조합되어 하드웨어 기밀 컴퓨팅을 구현하며, Boardfly 네트워크를 채택하여 TPU 8t 대비 최대 2배 낮은 지연 시간을 제공한다.</li>
+<li><strong>작성자의 주장:</strong> TPU 8tx를 활용하면 민감한 데이터의 클러스터 간 이동 없이 단일 시스템에서 모델 맞춤화와 에이전트 강화를 안전하게 수행할 수 있다.</li>
+<li><strong>분석적 해석:</strong> 금융, 의료, 정부 등 엄격한 규제를 받는 산업군에서 엔터프라이즈 프라이버시 침해 우려 없이 고성능 AI 에이전트 도입과 모델 파인튜닝을 가속화할 수 있는 보안 인프라 기반이 마련되었다.</li>
+</ul>
+<hr />
+<h5 id="2-3-tpu-8i-max-메모리-벽-극복-및-대규모-컨텍스트-처리">2.3. TPU 8i Max: 메모리 벽 극복 및 대규모 컨텍스트 처리</h5>
+<h6 id="2-3-1-대용량-컨텍스트-처리의-핵심-개요">2.3.1. 대용량 컨텍스트 처리의 핵심 개요</h6>
+<p>TPU 8i Max는 복잡한 멀티 에이전트 워크로드 및 초대형 컨텍스트 처리 시 발생하는 메모리 대역폭 병목 현상(Memory Wall)을 극복하기 위해 설계된 고밀도 듀얼 칩 시스템이다.</p>
+<h6 id="2-3-2-단일-패키지-통합-및-데이터센터-효율성-세부-내용">2.3.2. 단일 패키지 통합 및 데이터센터 효율성 세부 내용</h6>
+<ul>
+<li><strong>단일 패키지 듀얼 칩 구조:</strong> 저지연 TPU 8i 칩 2개를 단일 패키지 상에 통합 구성하였다.</li>
+<li><strong>스펙 확장:</strong> TPU 8i 대비 연산 능력(Compute), SRAM 용량, HBM(고대역폭 메모리) 대역폭을 각각 **2배(2x)**로 확대하여 프로세서의 데이터 고갈 및 대규모 워크로드 지연 현상을 방지한다.</li>
+<li><strong>공간 및 에너지 효율성:</strong> 기존 랙 공간(Rack footprint) 내에 2배의 실리콘을 탑재함으로써 데이터센터의 단위 면적(Square foot) 및 단위 전력(Watt)당 연산 밀도를 극대화했다.</li>
+</ul>
+<h6 id="2-3-3-사실-주장-분석의-구조적-구분">2.3.3. 사실·주장·분석의 구조적 구분</h6>
+<ul>
+<li><strong>명시적 사실:</strong> TPU 8i Max는 2개의 TPU 8i 칩을 단일 패키지로 결합하여 SRAM, HBM 대역폭, 연산력을 TPU 8i 대비 2배 증대시킨 시스템이다.</li>
+<li><strong>작성자의 주장:</strong> TPU 8i Max는 데이터센터 면적 및 전력당 컴퓨팅 파워를 크게 향상시켜 대규모 컨텍스트 및 에이전트 워크로드의 병목을 해결한다.</li>
+<li><strong>분석적 해석:</strong> 물리적인 데이터센터 확장이 제한된 상황에서 패키징 혁신을 통해 랙 단위 밀도를 높임으로써 비용 효율적인 초대형 AI 모델 가동 환경을 구축했다.</li>
+</ul>
+<hr />
+<h5 id="2-4-개방형-소프트웨어-생태계-및-개발자-접근성-확대">2.4. 개방형 소프트웨어 생태계 및 개발자 접근성 확대</h5>
+<p>구글은 TPU 하드웨어의 뛰어난 성능을 모든 개발자가 별도의 전용 코드 재작성 없이 손쉽게 활용할 수 있도록 관련 소프트웨어 도구 및 오픈소스 프레임워크 생태계를 대대적으로 확장하고 있다.</p>
+<ul>
+<li><strong>파이토치 및 TorchTPU 오픈소스화 (PyTorch &amp; TorchTPU Open-Sourcing):</strong> 2026년 10월 TorchTPU를 오픈소스화함으로써 기존 PyTorch 코드와 Hugging Face 모델이 코드 수정 없이 TPU에서 네이티브로 실행된다. vLLM 및 SGLang과 같은 주요 오픈소스 추론 엔진의 TPU 백엔드도 즉시 지원한다.</li>
+<li><strong>TPU 에이전트 수트 (TPU Agent Suite):</strong> 현재 프리뷰 상태인 오픈소스 도구로, Claude Code, Cursor, Google Antigravity 등 코딩 도구와 직접 연동된다. 자연어 명령을 통해 몇 분 만에 TPU 온보딩, 병목 현상 진단, 커널 오토튜닝(Autotuning)을 자동화한다.</li>
+<li><strong>XLA 서빙 엔진 (XLA Serving Engine):</strong> Python 환경에서 모델을 학습한 후, TPU, GPU, CPU를 아우르는 저지연 C++ 런타임 환경에서 즉시 서빙할 수 있도록 지원하는 오픈소스 엔진이다.</li>
+<li><strong>프로덕션 벤치마크 성과 (InferenceX &amp; AgentX Benchmarks):</strong> 실제 에이전트 코딩 및 대용량 컨텍스트 작업 성능을 평가하는 표준 벤치마크인 InferenceX 및 AgentX에서 native vLLM-TorchTPU 소프트웨어 스택 기반 TPU가 최고 수준의 가격 대비 성능(Price-performance)을 기록했다. 이러한 우수성은 프론티어 오픈 모델 및 오픈소스 서빙 스택 전반에 걸쳐 높은 모델 정확도(high model accuracy)를 유지하며 확장되며, 동일 하드웨어 상의 향후 소프트웨어 최적화를 통해 성능이 추가 향상될 예정이다.</li>
+<li><strong>에이전트 컴퓨팅 엔진 (Agent Compute Engine):</strong> 에이전트가 외부 툴이나 인간의 피드백을 기다리며 대기(Idle)하는 동안 세션을 자동으로 일시 중단하고 워킹 메모리를 칩 외부로 밀리초 단위로 오프로드(Offload)하여 인프라 운영 비용을 절감한다.</li>
+<li><strong>TPU 싱크 (TPU Sync):</strong> TPU 클러스터용 모델 상태 레이어 오픈소스 기술이다. 칩 HBM, 호스트 DRAM, 공유 스토리지, 네트워크를 하나의 통합 메모리 계층 구조로 묶어 KV 캐시 오프로드, 분리된 프리필(prefill) 및 디코드(decode) 노드 간의 컨텍스트 실시간 스트리밍, 리인포스먼트 러닝(RL) 가중치 동기화를 수행하며, KV 전달 지연 시간 및 최초 토큰 생성 시간(TTFT)을 <strong>90% 이상</strong> 단축시킨다.</li>
+<li><strong>클라우드 패스웨이 (Cloud Pathways):</strong> 구글 딥마인드의 제미나이 런타임을 구글 쿠버네티스 엔진(GKE) 상에서 일반 제공(GA)한다. 단일 컨트롤러 아키텍처와 <code>pathwaysutils</code>를 통해 여러 슬라이스에 걸친 대규모 TPU 시스템을 단일 로컬 장비처럼 오케스트레이션할 수 있으며, 동일 위치 Python 사이드카(colocated Python sidecars), 1분 미만 슬라이스 핫 스와핑(sub-minute slice hot-swapping), 탄력적 리샤딩(elastic resharding)을 통해 하드웨어 장애 발생 시에도 장시간 작업을 지속하게 해준다.</li>
+<li><strong>GKE 다이내믹 슬라이싱 (GKE Dynamic Slicing):</strong> 광 회로 스위칭(OCS) 기술을 활용해 하드웨어 물리적 할당과 논리적 슬라이스 형성을 분리한다. TPU 큐브를 동적으로 수퍼 슬라이싱(Super-slicing)하거나 서브 슬라이싱(Sub-slicing)하여 작업 시작 시간을 <strong>최대 5배(5x)</strong> 단축하고 장애 복구 속도를 <strong>최대 4.5배(4.5x)</strong> 향상시킨다.</li>
+</ul>
+<hr />
+<h5 id="2-5-하드웨어-소프트웨어-공동-설계-co-design-및-ai-기반-개발">2.5. 하드웨어-소프트웨어 공동 설계(Co-design) 및 AI 기반 개발</h5>
+<h6 id="2-5-1-수평적-협력-구조의-핵심-개요">2.5.1. 수평적 협력 구조의 핵심 개요</h6>
+<p>구글은 지난 10년간 축적된 조직 간 수평적 협력 구조와 AI 자체를 활용한 반도체 설계 방식을 통해 하드웨어 및 소프트웨어의 혁신 속도를 극대화하고 있다.</p>
+<h6 id="2-5-2-기술적-근거-및-세부-사례">2.5.2. 기술적 근거 및 세부 사례</h6>
+<ul>
+<li><strong>다학제적 협력 체계:</strong> 실리콘 아키텍트, 네트워크 엔지니어, 컴파일러 개발 팀, 구글 딥마인드(Google DeepMind) 연구진이 제품 개발 초기 단계부터 밀접하게 협력하는 고유의 공동 설계(Co-design) 문화를 보유하고 있다.</li>
+<li><strong>AI 기반 하드웨어 설계 차별화:</strong> 구글 딥마인드의 강화 학습 시스템인 **알파칩(AlphaChip)**과 제미나이(Gemini) 모델을 칩 레이아웃 설계에 적용하여, 과거 수 주(weeks)가 소요되던 칩 레이아웃 작업을 단 수 시간(hours) 만에 완료하는 등 개발 주기를 획기적으로 단축하고 있다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-people-speakers">3. 등장 인물 및 화자 (People &amp; Speakers)</h4>
+<p>본 보고서의 소스 텍스트에서 확인 가능한 인물 및 각 인물의 역할은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물명</th>
+<th style="text-align:left">직책 및 소속</th>
+<th style="text-align:left">본문 내 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>아민 바흐다트 (Amin Vahdat)</strong></td>
+<td style="text-align:left">AI 및 인프라 부문 수석 부사장 겸 수석 기술자&lt;br&gt;(SVP and Chief Technologist, AI and Infrastructure)</td>
+<td style="text-align:left"><strong>본문의 작성자 및 공식 화자.</strong> 8세대 TPU 포트폴리오 확장과 기술 아키텍처를 직접 설명함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Steve Walter</strong></td>
+<td style="text-align:left">확인 불가 (구글 블로그 작성자)</td>
+<td style="text-align:left">관련 기사(&quot;Investing in Wyoming's infrastructure...&quot;) 저자 (본문 화자 아님).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>John Tribbia</strong></td>
+<td style="text-align:left">확인 불가 (구글 블로그 작성자)</td>
+<td style="text-align:left">관련 기사(&quot;Colorado students joined a Google hackathon...&quot;) 저자 (본문 화자 아님).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ben Townsend</strong></td>
+<td style="text-align:left">확인 불가 (구글 블로그 작성자)</td>
+<td style="text-align:left">관련 기사(&quot;Helping bring the world's first large-scale...&quot;) 공동 저자 (본문 화자 아님).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Jenna Stauffer</strong></td>
+<td style="text-align:left">확인 불가 (구글 블로그 작성자)</td>
+<td style="text-align:left">관련 기사(&quot;Helping bring the world's first large-scale...&quot;) 공동 저자 (본문 화자 아님).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-metrics-timelines">4. 수치 및 시점 (Metrics &amp; Timelines)</h4>
+<h5 id="4-1-주요-타임라인-및-시점">4.1. 주요 타임라인 및 시점</h5>
+<ul>
+<li><strong>2026년 4월 (Google Cloud Next):</strong> 8세대 TPU의 기본 모델인 TPU 8t 및 TPU 8i 최초 발표.</li>
+<li><strong>2026년 10월:</strong> TorchTPU 오픈소스화 발표 시점.</li>
+<li><strong>2026년 11월 9일 (Nov 09, 2026):</strong> 본 보고서의 대상이 되는 TPU 8tx 및 TPU 8i Max 발표 글 게시일.</li>
+<li><strong>2026년 11월 9일 오전 9시 (PT):</strong> 신규 TPU 시스템 관련 라이브 브로드캐스트 진행 시점.</li>
+</ul>
+<h5 id="4-2-주요-수치-및-성능-지표">4.2. 주요 수치 및 성능 지표</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">대상 항목</th>
+<th style="text-align:left">측정 지표 및 성능 성과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>라인업 규모</strong></td>
+<td style="text-align:left">단일 연도 출시 TPU</td>
+<td style="text-align:left">총 <strong>4개</strong> 시스템 (8t, 8i, 8tx, 8i Max)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>고객 기반</strong></td>
+<td style="text-align:left">TPU 인프라 활용 기업</td>
+<td style="text-align:left">약 <strong>100여 개</strong> 고객사 (프론티어 랩, 금융, 유통, 대학 등)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>세대 간 성능비</strong></td>
+<td style="text-align:left"><strong>TPU 8t</strong></td>
+<td style="text-align:left">이전 세대 대비 학습 성능 <strong>최대 2.7배</strong> 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>TPU 8i</strong></td>
+<td style="text-align:left">이전 세대 대비 추론 가성비 <strong>80%</strong> 향상 / 칩 간 통신 지연 <strong>최대 50%</strong> 단축</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>신규 하드웨어</strong></td>
+<td style="text-align:left"><strong>TPU 8tx</strong></td>
+<td style="text-align:left">TPU 8t 대비 지연 시간(Latency) <strong>최대 2배(2x)</strong> 감소</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>TPU 8i Max</strong></td>
+<td style="text-align:left">TPU 8i 대비 연산력, SRAM, HBM 대역폭 각 <strong>2배(2x)</strong> 증가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소프트웨어 최적화</strong></td>
+<td style="text-align:left"><strong>TPU Sync</strong></td>
+<td style="text-align:left">KV 전달 지연 시간 및 최초 토큰 생성 시간(TTFT) <strong>90% 이상</strong> 감축</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>GKE Dynamic Slicing</strong></td>
+<td style="text-align:left">작업 시작 시간 <strong>최대 5배(5x)</strong> 단축 / 장애 복구 속도 <strong>최대 4.5배(4.5x)</strong> 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AI 설계 효율</strong></td>
+<td style="text-align:left"><strong>AlphaChip / Gemini</strong></td>
+<td style="text-align:left">칩 레이아웃 설계 시간 단축: 수 주(weeks) $\rightarrow$ <strong>수 시간(hours)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 보고서의 기반이 된 소스 텍스트는 제품 발표 및 개요 성격의 자료로, 다음과 같은 명확한 정보적 한계와 미확정 요소를 포함하고 있다.</p>
+<ol>
+<li><strong>시각/미디어 요소 렌더링 한계:</strong>
+<ul>
+<li>소스 텍스트 내에 포함된 미디어 파일(<code>A4_Confidential_Compute_Box_withtext_1920x1080_25fps.mp4</code> 및 <code>A5_8i_Max_Build_withtext_1920x1080_25fps.mp4</code>)의 구체적 동영상 시각 정보는 텍스트 형태로 수집 및 분석이 불가능하다.</li>
+</ul>
+</li>
+<li><strong>절대적 하드웨어 사양 및 가격 정보 부재:</strong>
+<ul>
+<li>TPU 8tx 및 TPU 8i Max의 구체적인 절대 전력 소비량(Wattage) 수치가 제시되지 않고 '사용 전력당 유용한 지능' 등 상대적 지표만 언급되었다.</li>
+<li>각 TPU 시스템별 개별 도입 비용이나 클라우드 서비스 이용 가격 산정 기준이 명시되지 않았다.</li>
+</ul>
+</li>
+<li><strong>벤치마크 데이터 및 향후 일정의 불확실성:</strong>
+<ul>
+<li>InferenceX 및 AgentX 벤치마크 결과에 대해 최상위 가성비를 기록했다고 언급하나, 상세 수치 표나 대조군 세부 지표는 외부 링크로 처리되어 본문 텍스트 내에서 직접 확인할 수 없다.</li>
+<li>&quot;향후 소프트웨어 최적화(Upcoming software optimizations)&quot;가 추가적인 성능 향상을 이끌어낼 것이라고 언급되었으나, 구체적인 기능 업데이트 타임라인이나 일정이 명시되지 않았다.</li>
+</ul>
+</li>
+<li><strong>타사 경쟁 제품과의 직접 비교 부재:</strong>
+<ul>
+<li>제시된 모든 비교 수치는 구글의 '이전 세대 TPU' 또는 8세대 라인업 내 '타 모델(8t, 8i)'과의 상대 비교일 뿐, 타사 경쟁 하드웨어(예: 동시대 타사 GPU 제품군)와의 직접적인 1:1 비교 데이터는 포함되어 있지 않다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HIL: Hybrid Imitation Learning for Dynamic Athletic Control</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>HIL: Hybrid Imitation Learning for Dynamic Athletic Control</h1>
+<p class="page-meta">웹 · 2026-08-06</p>
+<h2 id="요약">요약</h2>
+<p>모션 트래킹과 적대적 모방학습을 결합한 HIL은 파쿠르 동작 정확도를 높였지만 과제 완료율은 낮았다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=G01YlZo0tdY">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="hil-hybrid-imitation-learning-for-dynamic-athletic-control">HIL: Hybrid Imitation Learning for Dynamic Athletic Control</h3>
+<h5 id="1-서론-및-배경-기존-기술의-한계-분석">1. 서론 및 배경: 기존 기술의 한계 분석</h5>
+<p>물리 기반 캐릭터 애니메이션 연구에서 고도의 운동 능력을 재현하는 것은 정밀한 제어와 환경 적응이라는 두 마리 토끼를 잡아야 하는 과제입니다. 기존의 <strong>모션 트래킹(Motion Tracking)</strong> 방식은 참조 동작(Reference Motion)을 프레임 단위로 재현하여 높은 모션 충실도(Motion Fidelity)를 보장하지만, 참조 궤적에서 벗어난 새로운 장애물이나 기술 간의 유연한 전환이 필요한 상황에서는 동작이 경직되는 한계를 보입니다.</p>
+<p>반면, **적대적 모방학습(Adversarial Imitation Learning, AIL)**은 동작 분포를 스타일 보상으로 활용하여 적응성을 높이지만, 특정 기술에만 고착되는 <strong>모드 붕괴(Mode Collapse)</strong> 위험이 크며 이는 결과적으로 행동 다양성의 저하로 이어집니다. **HIL(Hybrid Imitation Learning)**은 동적이고 민첩한 파쿠르 기술 구현을 위해 트래킹의 정밀도와 AIL의 유연성을 병렬 멀티태스크 학습 환경에서 통합함으로써, 복잡한 지형에서도 자연스러운 운동 능력을 유지하는 통합 제어기를 제안합니다.</p>
+<h5 id="2-hil-hybrid-imitation-learning-아키텍처-및-핵심-원리">2. HIL(Hybrid Imitation Learning) 아키텍처 및 핵심 원리</h5>
+<p>HIL은 다중 모드 관측 정보를 효율적으로 처리하고 지식을 공유하기 위해 고도로 설계된 신경망 아키텍처를 채택하고 있습니다.</p>
+<ul>
+<li><strong>트랜스포머 기반 정책 네트워크:</strong> 본 시스템은 <strong>Transformer-based architecture</strong>를 정책 네트워크의 핵심으로 사용합니다. 캐릭터 상태를 인코딩한 MLP 토큰과 장면 내 장애물 표면에서 샘플링된 60개의 포인트(객체당 15개)를 <strong>PointNet</strong>으로 처리한 피처 토큰을 결합하여 멀티모달 관측 정보를 통합적으로 처리합니다.</li>
+<li><strong>병렬 멀티태스크 학습 및 정규화:</strong> 모션 트래킹 모드와 AIL 모드가 병렬적으로 구성된 환경에서 공동 학습됩니다. 여기서 트래킹 목적 함수는 일반 과제 수행 학습 시 **정규화 신호(Regularization signal)**로 작용하여, 순수 과제 보상 기반 학습에서 나타나는 물리적 기교(Artifacts)나 저하된 모션 충실도를 방지합니다.</li>
+<li><strong>태스크 지표($k$)를 포함한 크리틱(Critic):</strong> 서로 다른 보상 구조를 가진 두 모드를 안정적으로 학습시키기 위해 크리틱에 이진 태스크 지표 $k$를 입력합니다. 소스 데이터에 따르면 이 지표가 없을 경우 크리틱 손실(Critic loss)이 5배 이상 증가하는 것으로 나타나며, 이는 지식 공유와 가치 추정의 정확도 사이의 균형을 맞추는 핵심 요소입니다.</li>
+<li><strong>교란 상태 초기화 (Perturbed State Initialization, PSI):</strong> 참조 시작 상태에 가우시안 노이즈를 추가하여 초기화함으로써 제어기가 참조 궤적 외의 상태에서도 안정적으로 기술을 수행하게 합니다. 이는 기술 간 전환을 용이하게 하여 제어기가 특정 &quot;안전한&quot; 기술에만 의존하는 모드 붕괴를 억제하고 행동 다양성을 극대화합니다.</li>
+</ul>
+<h5 id="3-데이터셋-및-훈련-사양">3. 데이터셋 및 훈련 사양</h5>
+<p>본 연구는 파쿠르와 헤딩(Heading)이라는 서로 다른 특성의 과제를 통해 범용성을 검증했습니다.</p>
+<ul>
+<li><strong>데이터 구성:</strong>
+<ul>
+<li><strong>파쿠르:</strong> 온라인 영상에서 추출한 15개 기술, 19개 클립(총 30초 분량)을 물리 기반 모션 트래커로 정제하여 사용.</li>
+<li><strong>헤딩 과제:</strong> 약 7분 분량의 대규모 Sword-and-shield 모션 캡처 데이터 활용.</li>
+</ul>
+</li>
+<li><strong>학습 및 시뮬레이션 환경:</strong>
+<ul>
+<li><strong>하드웨어:</strong> NVIDIA V100 GPU 4장.</li>
+<li><strong>샘플 수:</strong> 트래킹 선행학습(Pre-training) 40억 샘플 + 하이브리드 병렬 학습 20억 샘플.</li>
+<li><strong>주기:</strong> 물리 시뮬레이션 120Hz, 정책(Policy) 업데이트 30Hz.</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-성능-평가-및-비교-분석">4. 성능 평가 및 비교 분석</h5>
+<p>HIL은 동작의 질적 수준과 과제 수행 능력 사이에서 최적의 기술적 트레이드오프(Trade-off)를 달성했습니다.</p>
+<h6 id="table-1-파쿠르-성능-분석-noisy-unseen-scene">[Table 1] 파쿠르 성능 분석 (Noisy/Unseen Scene)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:center">Skill Accuracy (↑)</th>
+<th style="text-align:center">Tracking Error (↓)</th>
+<th style="text-align:center">Task Completion (↑)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Task Reward w/ ws*</td>
+<td style="text-align:center">0.15</td>
+<td style="text-align:center">0.54</td>
+<td style="text-align:center"><strong>0.86</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">AMP w/ ws*</td>
+<td style="text-align:center">0.54</td>
+<td style="text-align:center">0.37</td>
+<td style="text-align:center">0.85</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HIL (Ours)</strong></td>
+<td style="text-align:center"><strong>0.66</strong></td>
+<td style="text-align:center"><strong>0.31</strong></td>
+<td style="text-align:center">0.74</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>*w/ ws: with warm start (선행 학습된 트래킹 정책으로부터 초기화됨을 의미)</em></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>지표 분석:</strong> HIL은 기술 정확도(<strong>0.66</strong>)와 트래킹 오차(<strong>0.31</strong>)에서 최고치를 기록하며 높은 모션 충실도를 입증했습니다.</li>
+<li><strong>성능 트레이드오프:</strong> 과제 완료율(<strong>0.74</strong>)은 Task Reward(0.86)나 AMP(0.85)보다 낮으나, 이는 의도적인 설계 결과입니다. Task Reward 방식은 과제 달성을 위해 지면을 기어가는 등 생물학적으로 불가능하고 부자연스러운 전략을 취하는 반면, HIL은 높은 기술적 다양성과 시간적 일관성을 유지하기 위해 과제 성공률의 일부를 동작 품질과 교환했습니다.</li>
+</ul>
+<h6 id="heading-제어-결과-비교">Heading 제어 결과 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:center">Direction Score (↑)</th>
+<th style="text-align:center">Facing Score (↑)</th>
+<th style="text-align:center">Avg Evaluation Return (↑)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">AMP</td>
+<td style="text-align:center"><strong>0.95</strong></td>
+<td style="text-align:center">0.94</td>
+<td style="text-align:center"><strong>266</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HIL (Ours)</strong></td>
+<td style="text-align:center">0.94</td>
+<td style="text-align:center"><strong>0.97</strong></td>
+<td style="text-align:center">227</td>
+</tr>
+</tbody>
+</table>
+<p>헤딩 과제에서 <strong>HIL이 모든 지표에서 최고치를 기록한 것은 아닙니다.</strong> 방향 점수와 평균 리턴의 최고치는 <strong>AMP</strong>가 차지했습니다. 그러나 HIL은 캐릭터가 목표를 바라보는 정확도(<strong>Facing Score 0.97</strong>)에서 우위를 점하는데, 이는 하이브리드 목적 함수가 고품질 MoCap 데이터의 오리엔테이션 매니폴드(Orientation manifold)를 단순 분포 매칭 방식인 AMP보다 더 정밀하게 보존하기 때문입니다.</p>
+<h5 id="5-기술적-한계-및-향후-과제">5. 기술적 한계 및 향후 과제</h5>
+<p>본 연구에서 제안된 시스템은 다음과 같은 5가지 주요 기술적 한계를 가집니다.</p>
+<ol>
+<li><strong>검증 환경의 국한:</strong> 모든 결과는 물리 시뮬레이션 내의 수치이며, 실제 사람이나 로봇 하드웨어에 대한 안전성 및 제어 성능 검증이 부재합니다.</li>
+<li><strong>환경 시나리오의 단순성:</strong> 실험이 단순한 박스 형태의 장애물과 순차적인 배치 환경에 국한되어 있어, 복잡한 비선형 환경으로의 일반화 여부는 제한적입니다.</li>
+<li><strong>데이터 의존성:</strong> 수작업을 통한 장면 주석(Annotation)과 비교적 짧은 영상 데이터에 대한 의존도가 높으며, 이는 대규모 확장에 걸림돌이 됩니다.</li>
+<li><strong>물리적 단순화 및 액추에이션:</strong> SMPL 모델의 물리적 단순화와 함께, PD 제어기가 시뮬레이션상의 허용 오차를 이용해 인간의 생물학적 한계를 넘어서는 비현실적으로 강한 액추에이션(Actuation)을 사용할 가능성이 존재합니다.</li>
+<li><strong>회복 동작의 불안정성:</strong> 캐릭터가 완전히 넘어졌을 때 발생하는 복구 동작에서 여전히 부자연스러운 물리적 아티팩트(Recovery artifacts)가 관찰됩니다.</li>
+</ol>
+<h5 id="6-참고-사항-metadata-disclaimer">6. 참고 사항 (Metadata Disclaimer)</h5>
+<p>본 문서에 포함된 서지 정보 중 DOI(10.1145/nnnnnnn.nnnnnnn)와 권/호(Vol. 1, No. 1)는 논문 작성 및 편집을 위한 플레이스홀더(Placeholder)입니다. 따라서 해당 정보를 최종 출판된 공식 메타데이터로 인용하거나 서지 정보의 근거로 활용하지 마십시오.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

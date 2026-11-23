@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Gemini 3.8 Flash and 3.8 Flash Cyber</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing Gemini 3.8 Flash and 3.8 Flash Cyber</h1>
+<p class="page-meta">웹 · 2026-09-03</p>
+<h2 id="요약">요약</h2>
+<p>이 글은 Google이 2026년 9월 2일 발표한 「Introducing Gemini 3.8 Flash and 3.8 Flash Cyber」를 원문의 순서와 구분에 맞춰 설명한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/">출처</a> · <a href="https://www.youtube.com/watch?v=8WXpai8j1_g">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="gemini-3-8-flash-cyber-공개-코딩-보안-모델의-실제-경계">Gemini 3.8 Flash·Cyber 공개: 코딩·보안 모델의 실제 경계</h3>
+<p>이 글은 Google이 2026년 9월 2일 발표한 「Introducing Gemini 3.8 Flash and 3.8 Flash Cyber」를 원문의 순서와 구분에 맞춰 설명한다. 출시 글과 Google의 평가 방법론, 공식 개발자 문서, 벤치마크 운영자 페이지를 대조했지만, 아래 수치를 출시 글 전체의 독립 재현으로 보아서는 안 된다. 제품·성능·비용·내부 사용·안전성 주장은 각각 Google, 명시된 평가기관, 또는 파트너가 공개한 조건 안에서만 읽어야 한다.</p>
+<h4 id="1-출시의-맥락">1. 출시의 맥락</h4>
+<p>Google은 이번 발표를 6주 동안 세 번째로 내놓은 Flash 릴리스라고 소개했다. 직전 Gemini 3.7 Flash 발표와는 3주 간격이다. Google의 설명에 따르면 두 모델은 같은 기반 지능에서 출발했고, 장시간 실행되는 에이전트 루프를 통해 모델을 반복 평가하고 개선했다. 사이버보안처럼 난도가 높은 영역의 훈련이 공통 코딩·추론 능력 향상에도 기여했다는 것이 회사 측 개발 서사다. 외부에서 내부 학습 과정을 독립적으로 확인했다는 뜻은 아니다.</p>
+<p>이번 릴리스는 두 갈래다. Gemini 3.8 Flash는 소프트웨어 엔지니어링, 에이전트 작업, 전문 영역의 다단계 추론을 겨냥한 범용 Flash 모델이다. 반면 Gemini 3.8 Flash Cyber는 취약점 탐지와 자동 패치에 초점을 둔 보안 특화 모델이며, Fairwind Program을 통해 신뢰된 방어자에게만 제한적으로 제공된다. 일반 Flash의 광범위한 제공 경로와 Cyber의 제한적 접근 정책은 섞어 설명하면 안 된다.</p>
+<h4 id="2-gemini-3-8-flash-장기-코딩과-자율-에이전트">2. Gemini 3.8 Flash: 장기 코딩과 자율 에이전트</h4>
+<p>Google은 3.8 Flash가 3.7 Flash보다 크게 개선됐고, 일부 평가에서는 가격이 더 높은 프런티어 모델에 근접한다고 주장한다. 이 문장은 여러 벤치마크에서 회사가 선택해 제시한 결과를 가리키며, 모든 작업에서 객관적으로 최고라는 뜻은 아니다.</p>
+<p>장기 소프트웨어 엔지니어링 평가인 DeepSWE v1.1에서 출시 표는 3.8 Flash 73.7%, 3.7 Flash 65.3%를 제시한다. Google 방법론은 3.8 Flash 결과를 mini-swe-agent와 high thinking 설정으로 자체 계산했다고 밝힌다. 현재 Datacurve 운영자 페이지는 113개 작업에서 3.8 Flash[high]를 약 74%±1%, 평균 작업 비용 2.36달러, 출력 토큰 14만3천 개, 166단계로 표시한다. 출시 글의 73.7%와 운영자 페이지의 74%는 표시 정밀도 차이로 읽을 수 있다. 다만 비교 모델은 각자 높은 effort 설정을 사용하고 비용·단계·출력 토큰이 다르므로, 이 한 그래프만으로 모든 코딩 환경에서의 자율 완수 능력을 일반화할 수 없다.</p>
+<p>전문 지식 업무에서는 Vals Finance Agent v2 61.4%, Harvey’s Legal Agent Benchmark의 all-pass 또는 task-resolution 비율 10.0%, HLE-Verified 54.9%가 제시됐다. Finance와 Harvey 수치는 Google이 Vals.AI 결과를 인용한 것이다. Harvey 평가는 작업의 모든 기준을 통과해야 해결로 인정하고, 현재 운영자 설명상 비공개 테스트 세트와 두 LLM 심판을 사용한다. 10.0%는 개별 기준 충족률과 다른 엄격한 작업 완수 지표다. HLE-Verified 54.9%는 Google이 자체 계산한 값이며, 방법론상 검증된 1,811개 문항—기존 HLE에서 확인된 668개와 수정된 1,143개—을 포함하고 불확실하다고 분류된 기존 문항 689개는 제외한다.</p>
+<p>Google은 성능 상승의 대가도 명시한다. 3.8 Flash는 어려운 작업에서 더 작은 추론 단계를 밟고, 도구를 반복 호출하며, 검증을 더 많이 수행할 수 있다. 높은 effort에서는 토큰 사용도 늘 수 있다. 따라서 API 표준 요금인 입력 100만 토큰당 0.75달러, 출력 100만 토큰당 3.75달러는 토큰 단가이지 작업당 총비용이 아니다. 이 도입 가격은 2026년 12월 31일까지이고, 2027년 1월 1일부터는 각각 1.50달러와 7.50달러가 적용된다고 공식 문서가 밝힌다. 효율이 우선이면 낮은 thinking effort를 쓰거나 계속 지원되는 3.7 Flash를 선택할 수 있다.</p>
+<h4 id="3-예시와-데모">3. 예시와 데모</h4>
+<p>출시 글은 네 가지 제작 사례를 보여준다. 첫째, Google Antigravity의 반복 지시로 만든 성 탐험 게임이다. 퍼즐, 환경 서사, Nano Banana로 생성한 텍스처를 사용했다. 둘째, 장소·길찾기·Street View를 포함한다는 DOS 스타일 Google Maps 데모다. 셋째, 미국 지질조사국의 실제 데이터로 유명 지형의 실시간 단면, 2D 투영, 과학 설명을 보여주는 지형도다. 넷째, Google AI Studio에서 물리적 비율을 반영한 하드웨어 분해 장면을 Three.js로 만드는 Hardware Anatomy다.</p>
+<p>이 사례들은 Google이 선별해 제시한 데모다. 완전한 프롬프트, 실패율, 반복 횟수, 비용, 평가 기준이 함께 공개된 재현 벤치마크가 아니므로 성능의 독립 증명으로 쓰지 않는다.</p>
+<h4 id="4-gemini-3-8-flash-cyber-전문-보안-성능">4. Gemini 3.8 Flash Cyber: 전문 보안 성능</h4>
+<p>Gemini 3.8 Flash Cyber는 Fairwind Program의 신뢰된 방어자에게 제공된다. 일반 소비자나 모든 개발자가 즉시 쓸 수 있는 범용 Flash와 접근 조건이 다르다.</p>
+<p>취약점 발견 평가 CyberGym의 출시 차트는 C/C++ 범위에서 3.8 Flash Cyber 86.2% pass@1을 제시한다. 3.5 Flash Cyber 77.5%, GPT-5.6 83.6%, Mythos 5 Sol 83.8%, GPT-5.5-Cyber 85.6%와 비교된다. Google 방법론에 따르면 자사 모델은 사이버에 특화하지 않은 내부 Antigravity harness와 공식 Final-submission 설정으로 자체 평가했고, 다른 모델 수치는 모델 카드와 공개 리더보드에서 가져왔다. 비교 모델 소유자는 각자의 전용 harness를 사용했다. 따라서 같은 이름의 지표라도 전체 실행 환경이 완전히 통일된 비교는 아니다.</p>
+<p>C/C++에 국한되지 않은 현실적 방어 수요를 반영한다며 Google은 20개 프로그래밍 언어의 내부 취약점 발견 평가도 제시했다. 차트상 3.8 Flash Cyber는 71.0%, 3.7 Flash는 58.9%, 3.5 Flash Cyber는 46.6%다. 방법론은 최근 확인된 과거 취약점 1,200개를 사용했다고 설명한다. 하지만 데이터셋과 세부 과제는 비공개 내부 평가이므로 외부에서 독립 재현할 수 없다.</p>
+<p>자동 패치에서는 Collinear의 CWE-Bench가 핵심이다. 현재 운영자 페이지는 high reasoning 조건, 100개의 비공개 방어적 감사·패치 과제, 54개 CWE, 결정론적 검증기를 설명한다. Gemini 3.8 Flash Cyber는 Antigravity harness에서 pass@1 47.2%, 평균 청구 API 비용은 rollout당 3.64달러다. 선두 Claude Fable 5는 Claude Code harness에서 47.8%, 10.27달러다. Google이 말하는 Pareto 전선과 낮은 비용은 이 리더보드의 pass@1과 평균 rollout 비용 조합에 한정된다. 0.6%포인트 차이, 서로 다른 harness, 100개 비공개 과제라는 분모를 유지해야 한다. API 토큰 단가와 rollout당 총비용도 같은 개념이 아니다.</p>
+<p>이 평가는 방어 코드를 찾고 고치는 능력을 측정한다. 높은 점수만으로 자율적인 종단간 공격 수행 능력이나 실제 피해를 추론할 수 없다.</p>
+<h4 id="5-보고된-실제-방어-효과">5. 보고된 실제 방어 효과</h4>
+<p>Google은 내부와 파트너 현장에서 세 가지 결과를 보고했다.</p>
+<ul>
+<li>Chrome Security 팀은 더 큰 상용 모델보다 올바른 패치를 2.6배 많이 만들었다고 밝혔다.</li>
+<li>Wiz는 자사 내부 침투 테스트 벤치마크에서 다른 선도 프런티어 모델보다 recall이 7.5~9.7% 높고 비용은 2.3~5.2배 낮았다고 보고했다.</li>
+<li>Google Cloud Vulnerability Research 팀은 통상 연구와 발견에 수개월이 걸린다고 설명한 중대한 기반 취약점을 2시간 이내에 찾았다고 밝혔다.</li>
+</ul>
+<p>각 사례는 Google 또는 파트너가 보고한 증거다. 비교 과제, 표본, 실패 사례, 비용 분모가 모두 공개된 독립 재현은 아니다. 여기서는 취약점이나 공격 방법의 세부를 다루지 않는다.</p>
+<h4 id="6-fairwind-파트너-발언">6. Fairwind 파트너 발언</h4>
+<p>출시 글의 파트너 발언은 이미지 카드에 들어 있어 고해상도 원본을 로컬에서 OCR로 확인했다. 공개 영상에는 카드나 로고를 재사용하지 않는다.</p>
+<p>Armadin의 창업자 겸 수석 아키텍트 David Slater는 자사 평가에서 3.8 Flash Cyber가 더 큰 프런티어 모델과 맞먹으면서 가격은 낮고 지연시간도 좋았다고 평가했다. Palo Alto Networks CTO실의 Charlie Sestito는 초기 시험에서 속도가 매우 빨랐고 취약점 탐색을 포함한 여러 보안 작업에서 모델 등급 이상의 성능을 보였다고 말했다. Snowflake CSTO Mayank Upadhyay는 공개 저장소를 대상으로 한 이틀간의 시험에서 더 큰 엔진과 경쟁했고, 중대·높은 심각도 발견과 triage noise 감소, 지속 실행이 가능한 비용을 언급했다. Wiz의 Head of Threat Exposure Gal Nagli는 웹 악용, 침투 테스트, 버그바운티를 겨냥한 자사 평가에서 이전 세대보다 큰 개선과 가격·지연시간 이점을 보고했다.</p>
+<p>이 내용은 해당 회사 인사의 증언이며, 제3자가 같은 조건에서 재현한 결론으로 바꾸지 않는다.</p>
+<h4 id="7-안전성">7. 안전성</h4>
+<p>Google은 일반 3.8 Flash가 Frontier Safety Framework에 따라 화학·생물학·방사선·핵(CBRN)과 사이버 공격 오용을 막기 위한 보호장치를 갖췄다고 설명한다. 반면 3.8 Flash Cyber는 사이버보안에 더 허용적인 mitigation 세트를 사용하기 때문에 포괄적 보안 역량이 필요한 신뢰된 방어자에게만 제공된다고 밝힌다. 능력을 높였다는 주장과 접근 제한은 하나의 안전성 경계로 함께 읽어야 한다.</p>
+<p>프롬프트 인젝션에서는 Gray Swan IPI benchmark 결과가 제시됐다. Google 방법론은 combined attack set, transfer only, no computer use 조건이며, Google이 checkpoint를 제공하고 Gray Swan이 독립적으로 실험을 구성·평가했다고 설명한다. 차트에서 Flash Cyber의 막대 위에 인쇄된 값은 6.0%이고 낮을수록 좋다. ASR@1, ASR@10, ASR@15의 개별 누적 값은 그림에 숫자로 인쇄되지 않아 추정하지 않았다. 이는 특정 평가 조건의 견고성 결과이지 모든 프롬프트 인젝션을 막는다는 보장은 아니다.</p>
+<h4 id="8-제공-범위와-접근">8. 제공 범위와 접근</h4>
+<p>개발자는 Google Antigravity, Gemini API와 Google AI Studio, Android Studio, Stitch에서 3.8 Flash를 사용할 수 있다. 기업은 Gemini Enterprise에서 접근한다. 소비자는 Google AI Pro 또는 Ultra 구독을 통해 Gemini 앱, 검색의 AI Mode, Google Sheets에서 이용할 수 있다고 출시 글이 밝힌다.</p>
+<p>3.8 Flash Cyber는 다르다. Fairwind Program을 통해 신뢰된 정부 기관, 중요 인프라 운영자, 소프트웨어 유지관리자에게 우선 접근을 제공한다. Fairwind의 별도 안내는 참여 조직이 내부 사이버보안·사고대응·침투 테스트 인력으로 접근을 제한하고 다중요소 인증 같은 운영 통제를 적용한다고 설명한다.</p>
+<h4 id="9-증거의-경계">9. 증거의 경계</h4>
+<p>이번 발표에서 확인할 수 있는 것은 서로 다른 층위로 나뉜다.</p>
+<ul>
+<li>공식 제공 범위와 토큰 정가: Google 개발자 문서로 확인 가능하다.</li>
+<li>벤치마크 수치: Google 자체 계산, 외부 운영자 결과, 경쟁사 자기보고가 섞여 있으므로 평가별 출처와 harness를 따로 봐야 한다.</li>
+<li>DeepSWE, Vals/Harvey, CWE-Bench: 외부 운영자가 존재하지만 이번 제품의 모든 결론을 독립 재현한 것은 아니다.</li>
+<li>Google 20개 언어 평가, Chrome, Google Cloud Vulnerability Research: 비공개 내부 증거다.</li>
+<li>Wiz 결과와 네 파트너 발언: 파트너 내부 평가 또는 증언이다.</li>
+<li>네 가지 제작 사례: Google이 제시한 데모다.</li>
+<li>출시 글 전체를 독립적으로 재현한 공개 증거: 확인되지 않았다.</li>
+</ul>
+<p>따라서 높은 점수는 특정 테스트 프로토콜에서의 능력을 보여준다. 그것을 범용적인 자율 공격 능력, 자동 종단간 피해, 또는 모든 조직에서의 비용 우위로 확대하면 안 된다. 향후 판단을 강화하려면 동일한 과제·harness·effort·토큰 예산·가격 시점에서의 재평가, 공개 분모와 실패율, 독립 재현, 운영 중 오탐과 안전 통제 자료가 필요하다. 반대로 이러한 조건에서 결과가 유지되지 않거나 Fairwind의 접근·mitigation 조건이 달라지면 현재의 성능·안전성 해석을 낮춰야 한다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

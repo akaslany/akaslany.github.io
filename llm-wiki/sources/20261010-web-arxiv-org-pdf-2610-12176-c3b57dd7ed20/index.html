@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다중 에이전트 자가 감독을 통한 재귀적 자가 개선(MASS) 해설 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>다중 에이전트 자가 감독을 통한 재귀적 자가 개선(MASS) 해설 보고서</h1>
+<p class="page-meta">논문 · 2026-10-10</p>
+<h2 id="요약">요약</h2>
+<p>프론티어 인공지능(AI) 시스템이 과학적 연구 및 정밀 프로그래밍 과제에서 성과를 내기 시작함에 따라, 모델의 능력을 지속적으로 확장하기 위한 핵심 방법론으로 재귀적 자가 개선(Recursive Self-Improvement, RSI)에 대한 연구가 활발히 진행되고 있습니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.12176">출처</a> · <a href="https://www.youtube.com/watch?v=Ne3U4BmGq9Y">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="다중-에이전트-자가-감독을-통한-재귀적-자가-개선-mass-해설-보고서">다중 에이전트 자가 감독을 통한 재귀적 자가 개선(MASS) 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>프론티어 인공지능(AI) 시스템이 과학적 연구 및 정밀 프로그래밍 과제에서 성과를 내기 시작함에 따라, 모델의 능력을 지속적으로 확장하기 위한 핵심 방법론으로 재귀적 자가 개선(Recursive Self-Improvement, RSI)에 대한 연구가 활발히 진행되고 있습니다. 그러나 오픈엔드(Open-ended) 연구 과제와 같이 정답을 수식이나 단일 정답 코드로 검증하기 어려운 비검증성 과제(Non-verifiable tasks)에서는 자가 개선의 심각한 '감독 병목(Supervision Bottleneck)' 현상이 발생합니다. 모델의 출력물이 인간 전문가조차 신뢰성 있게 평가할 수 있는 수준을 넘어서거나 피드백 수집에 과도한 비용이 소요되는 경우, 모델 스스로(Optimizee)가 최선의 최적화자(Optimizer)이자 평가자(Evaluator)로 기능해야 하는 상황에 직면합니다 (§1 INTRODUCTION).</p>
+<p>이와 같이 단일 언어 모델 인스턴스가 수행자, 최적화자, 평가자 역할을 모두 맡는 동종(Homogeneous) 루프 환경에서는 모델이 동일한 학습된 사전 지식(Learned prior)을 공유하게 됩니다. 이로 인해 자가 피드백 과정에서 스스로의 오류를 수정하기보다는 편향을 강화하는 문제가 발생합니다. 소스 문맥은 이러한 한계를 극복하기 위해 Minsky의 '마음의 사회(Society of Mind)' 개념에서 영감을 얻어, 동일한 언어 모델의 복제본 다수를 조직화하고 협업하게 함으로써 단일 인스턴스에서는 나타나지 않는 집단적 능력을 끌어내는 접근 방식을 제안합니다 (§1 INTRODUCTION).</p>
+<p>본 보고서가 다루는 핵심 기술인 **MASS(Multi-Agent Self-Supervision, 다중 에이전트 자가 감독)**는 이와 같은 다중 에이전트 협업 구조를 자가 개선 프레임워크로 정립한 기술입니다. MASS는 크게 내부 루프(Inner loop)와 외부 루프(Outer loop)의 교대 구조로 작동합니다. 내부 루프에서는 모델이 최적화자 및 평가자 역할을 수행하며 텍스트 기반의 다중 에이전트 워크플로 프롬프트를 진화론적 탐색(Evolutionary search) 방식으로 최적화합니다. 외부 루프에서는 최적화된 워크플로하에서 생성된 실행 궤적(Trajectories)을 바탕으로 지도 미세조정(Supervised Fine-Tuning, SFT)을 수행하여 에이전트 조정(Orchestration) 및 실행 능력을 모델의 가중치로 내재화합니다 (§1 INTRODUCTION, §3 METHOD, Figure 1).</p>
+<p>결과적으로 MASS는 모델이 한 번의 개선 주기(Cycle)를 거친 후 더 우수한 수행자이자 동시에 더 뛰어난 최적화자 및 평가자로 진화하도록 만듭니다. 이를 통해 모델은 외부의 고성능 감독 신호나 인간의 세밀한 워크플로 개입 없이도 재귀적 부트스트래핑(Recursive bootstrapping)을 연속적으로 달성할 수 있게 됩니다 (§1 INTRODUCTION, §3 METHOD).</p>
+<hr />
+<h4 id="2-주요-논점-및-근거-사례-분석-key-arguments-evidence-and-examples">2. 주요 논점 및 근거·사례 분석 (Key Arguments, Evidence, and Examples)</h4>
+<h5 id="2-1-동종-homogeneous-rsi-루프의-한계와-mass-메커니즘">2.1. 동종(Homogeneous) RSI 루프의 한계와 MASS 메커니즘</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>동일한 언어 모델이 수행자($L_{agent}$), 평가자($L_{eval}$), 최적화자($L_{opt}$) 역할을 모두 수행하는 동종 루프에서는 생성, 평가, 수정 작업이 동일한 사전 지식을 공유하므로 자가 피드백이 오류를 교정하지 못하고 강화하는 편향이 발생함 (§1 INTRODUCTION).</li>
+<li>MASS 프레임워크는 내부 루프의 워크플로 탐색과 외부 루프의 모델 미세조정으로 구성된 순환 알고리즘을 따름 (§3 METHOD, Algorithm 1, 2, 3).</li>
+</ul>
+</li>
+<li><strong>[소스의 주장 (Source Claim)]</strong>
+<ul>
+<li>단일 언어 모델 인스턴스에 의존하는 대신 다중 에이전트 토폴로지(Multi-agent topology)로 통신 구조를 재조직함으로써 자가 감독 신호의 질을 높이고 동종 루프의 편향 한계를 극복할 수 있음 (§1 INTRODUCTION).</li>
+</ul>
+</li>
+<li><strong>[작성자 해석 (Interpretation)]</strong>
+<ul>
+<li>단일 프롬프트 형태의 긴 추론 체인보다 다중 에이전트 간 역할 분담과 통신 구조 명시가 모델 내부의 잠재된 다각적 검증 능력을 이끌어내는 데 유효함을 의미함.</li>
+</ul>
+</li>
+</ul>
+<h6 id="mass의-작동-메커니즘-단계">MASS의 작동 메커니즘 단계</h6>
+<ol>
+<li><strong>내부 루프 (진화적 워크플로 최적화, Algorithm 2)</strong>:
+<ul>
+<li>수행 에이전트는 현재의 워크플로 프롬프트($w_t$)하에서 과제를 수행하여 결과물(Workspace $y_t$)을 생성함.</li>
+<li>자가 평가자($L_{eval}$)는 현재 결과물과 기존 최선 결과물($y^*<em>t$)을 쌍대 비교(Pairwise comparison)하여 피드백($d</em>{t,i}$)을 생성함.</li>
+<li>자가 최적화자($L_{opt}$)는 평가 피드백 이력을 바탕으로 에이전트 간 통신 구조(호출 순서 $h_t$, 출력 계약 $c_{t,j}$)를 중심으로 워크플로 프롬프트($w_{t}^{(i+1)}$)를 수정 및 제안함 (§3 METHOD).</li>
+</ul>
+</li>
+<li><strong>외부 루프 (워크플로 내재화 및 SFT, Algorithm 3)</strong>:
+<ul>
+<li>최적화된 워크플로 $w^*_t$를 적용하여 다수의 실행 궤적(Rollouts)을 수집함.</li>
+<li>자가 평가자가 궤적들의 결과물을 브래들리-테리(Bradley-Terry) 모델 기반으로 점수화하여 상위 $K-1$개 궤적을 SFT 데이터셋($D_{train}$)으로 선정함.</li>
+<li>오케스트레이터 및 하위 에이전트 대화 궤적에서 워크플로 프롬프트를 제거(Bare prompt 변환)한 후 공유 모델 $L_\theta$를 지도 미세조정함 (§3 METHOD).</li>
+</ul>
+</li>
+<li><strong>재귀적 반복</strong>:
+<ul>
+<li>미세조정된 모델 $L^{(g+1)}$이 다음 세대의 수행자, 최적화자, 평가자 역할을 다시 맡아 알고리즘을 재귀적으로 수행함 (§3 METHOD, Algorithm 1).</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h5 id="2-2-가설-1-정보-흐름-information-flow-최적화를-통한-자가-감독">2.2. [가설 1] 정보 흐름(Information Flow) 최적화를 통한 자가 감독</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>워크플로 최적화가 진행됨에 따라(iteration $i = 3 \rightarrow 11$), 에이전트의 역할(Role) 및 지침(Instruction) 텍스트의 과제 특화 정보량(Mutual Information $\hat{I}_i$)은 감소하는 반면, 계약(Contract) 및 홉(Hop, 호출 순서) 구조의 과제 특화 정보량은 증가했음 (Figure 4, Table 12, §4.3).</li>
+<li>워크플로 구성요소 간의 전체적 정보 중복도(Total Correlation $\hat{TC}$) 및 과제 중심 중복도($\hat{TC}(Z|T)$)는 최적화가 진행됨에 따라 전반적으로 감소했음 (Figure 5, Table 13, §4.3).</li>
+</ul>
+</li>
+<li><strong>[소스의 주장 (Source Claim)]</strong>
+<ul>
+<li>에이전트 개수를 무작정 늘리는 것보다 &quot;무엇을, 누구에게, 언제 전달할 것인가&quot;라는 통신 구도 및 정보 흐름을 최적화하는 것이 자가 감독 신호의 질을 결정짓는 핵심 요인임 (Claim 1, §1 INTRODUCTION, §4.3).</li>
+</ul>
+</li>
+<li><strong>[작성자 해석 (Interpretation)]</strong>
+<ul>
+<li>초기 워크플로는 모든 에이전트가 과제 전반의 중복된 지침을 보유하여 비효율적이었으나, 진화적 탐색을 거치며 각 에이전트가 수행할 정밀한 입력/출력 규격(Contract)과 명확한 단계별 전달 체계(Hop) 중심으로 특화되었음을 보여줌.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-가설-2-다중-에이전트-궤적의-높은-학습-효율성">2.3. [가설 2] 다중 에이전트 궤적의 높은 학습 효율성</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>동일한 베이스 모델(Qwen3.6-27B) 및 동일한 SFT 환경에서 단일 에이전트 궤적 데이터셋($S, S+, S++$)과 다중 에이전트 궤적 데이터셋($M, M+$)을 비교 실험함 (§4.4, Table 8).</li>
+<li>지도 학습 데이터셋의 저장 규모(Stored Tokens, 1,722만 토큰)와 복원 추출 및 서브에이전트/오케스트레이터 $2:1$ 리샘플링 기반의 1,624 스텝 후 실제 손실 계산에 소모된 처리 규모(Processed Tokens, 2,882만 토큰) 간에는 차이가 존재함 (Appendix B.2, D.2).</li>
+<li>다중 에이전트 데이터셋으로 학습한 학생 모델 $M+$는 2,882만 개의 처리된 지도 학습 토큰으로 68.3%의 승률을 기록하여, 약 1.4배 더 많은 4,200만 개의 토큰을 소모한 단일 에이전트 모델 $S++$(승률 64.0%)보다 4.3%p 높은 성과를 달성함 (Figure 6, Table 8).</li>
+</ul>
+</li>
+</ul>
+<h6 id="데이터셋별-처리-토큰-수-및-베이스-모델-대비-승률-비교">데이터셋별 처리 토큰 수 및 베이스 모델 대비 승률 비교</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">데이터셋 및 설정 (처리된 지도 학습 토큰 수, Processed Supervised Tokens)</th>
+<th style="text-align:left">베이스 모델 대비 승률 (%) (Win Rate vs Base Model)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>S</strong> (단일 에이전트, 17개 에피소드 / 1.82M 토큰)</td>
+<td style="text-align:left">44.0%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>M</strong> (다중 에이전트, 17개 에피소드 / 3.64M 토큰)</td>
+<td style="text-align:left">56.0%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>X</strong> (S + M 결합, 34개 에피소드 / 8.85M 토큰)</td>
+<td style="text-align:left">58.8%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>S+</strong> (단일 에이전트, 78개 에피소드 / 9.11M 토큰)</td>
+<td style="text-align:left">59.0%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>M+</strong> (다중 에이전트 MASS 1주기, 119개 에피소드 / 28.82M 토큰)</td>
+<td style="text-align:left">68.3%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>S++</strong> (단일 에이전트 대용량, 290개 에피소드 / 42.00M 토큰)</td>
+<td style="text-align:left">64.0%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[소스의 주장 (Source Claim)]</strong>
+<ul>
+<li>상위 조정자(Orchestrator)의 위임·검증 행위와 하위 에이전트(Subagent)의 국소적 실행 행위가 분리된 다중 에이전트 궤적을 함께 학습하는 것이, 하나의 긴 단일 에이전트 궤적을 통째로 학습하는 것보다 토큰당 학습 효율성이 뛰어남 (Claim 2, §1 INTRODUCTION, §4.4).</li>
+</ul>
+</li>
+<li><strong>[작성자 해석 (Interpretation)]</strong>
+<ul>
+<li>계층적 모방 학습(Hierarchical imitation learning) 원리와 마찬가지로, 높은 추론 추상화 수준(조정)과 낮은 수준의 실행(구현)을 분리하여 손실(Loss)을 계산함으로써 모델 가중치에 효율적인 학습 신호를 제공함.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-모델-역할-전반의-동시-향상-및-협업-행위-내재화-internalization">2.4. 모델 역할 전반의 동시 향상 및 협업 행위 내재화(Internalization)</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>MASS 학습 과정에서는 과제 수행 궤적(Task-solving traces)으로만 지도 미세조정(SFT)을 진행했으나, 모델의 3가지 역할인 수행자($L_{agent}$), 워크플로 최적화자($L_{opt}$), 자가 평가자($L_{eval}$) 성능이 모두 동시에 향상됨 (§4.2, Figure 3).</li>
+<li>자가 평가자 정확도(외부 평가자와의 일치율)는 $L(0)$ 73% $\rightarrow$ $L(1)$ 91% $\rightarrow$ $L(2)$ 93%로 크게 상승함 (Figure 3c).</li>
+<li>추론 시 워크플로 프롬프트를 전혀 제공하지 않은 상태(Bare task prompt)에서도 모델은 하위 에이전트 위임(Delegation) 및 코드 파일 전달(Code handoff) 행위를 자발적으로 수행함 (Table 2a, §5.2).</li>
+</ul>
+</li>
+</ul>
+<h6 id="워크플로-프롬프트-미제공-시-협업-행위-내재화-측정-결과-110개-궤적-기준">워크플로 프롬프트 미제공 시 협업 행위 내재화 측정 결과 (110개 궤적 기준)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 세대 (Model Generation)</th>
+<th style="text-align:left">위임 행위 발생 (Delegation, D)</th>
+<th style="text-align:left">코드 전달 발생 (Code Handoff, H)</th>
+<th style="text-align:left">하위 에이전트 수정 (Subagent Revision)</th>
+<th style="text-align:left">메인 오케스트레이터 수정 (Main Edit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>$L(0)$ (베이스 모델)</strong></td>
+<td style="text-align:left">1 / 110</td>
+<td style="text-align:left">1 / 110</td>
+<td style="text-align:left">0 / 110</td>
+<td style="text-align:left">1 / 110</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$L(1)$ (MASS 1주기)</strong></td>
+<td style="text-align:left">48 / 110</td>
+<td style="text-align:left">42 / 110</td>
+<td style="text-align:left">10 / 110</td>
+<td style="text-align:left">14 / 110</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$L(2)$ (MASS 2주기)</strong></td>
+<td style="text-align:left">87 / 110</td>
+<td style="text-align:left">83 / 110</td>
+<td style="text-align:left">39 / 110</td>
+<td style="text-align:left">12 / 110</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[소스의 주장 (Source Claim)]</strong>
+<ul>
+<li>다중 에이전트 궤적을 통한 학습은 단순한 솔루션 생성을 넘어, 고차원적 문제 해결 구조와 검증·위임 패턴 자체를 모델에 내재화시킴 (§5.2).</li>
+</ul>
+</li>
+<li><strong>[작성자 해석 (Interpretation)]</strong>
+<ul>
+<li>별도의 평가/최적화 전용 데이터 없이 수행 데이터만으로 다중 역할 성능이 동시 이전(Transfer)됨을 증명하였으며, 명시적 지침 없이도 복잡한 문제 해결 시 에이전트 분할 전략을 스스로 채택함을 보여줌.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-5-워크플로-탐색의-주요-병목-요인-분석">2.5. 워크플로 탐색의 주요 병목 요인 분석</h5>
+<ul>
+<li><strong>[사실 (Fact)]</strong>
+<ul>
+<li>동종 루프에서 평가자($L_{eval}$)만을 GPT-5.5로 교체했을 때보다, 평가자와 최적화자($L_{opt}$) 모두를 GPT-5.5로 교체했을 때 유의미하게 더 빠르게 고성능 워크플로를 발견함 (§5.1, Figure 7a).</li>
+<li>모든 역할을 $L(0)$로 유지한 동종 루프도 탐색 횟수를 늘리면 12개 과제 중 11개에서 최종적으로 우수한 워크플로를 찾아냈음 (Figure 7a).</li>
+</ul>
+</li>
+<li><strong>[소스의 주장 (Source Claim)]</strong>
+<ul>
+<li>동종 RSI 루프에서 개선 속도를 저해하는 주된 병목 요인은 자가 평가자의 평가 능력이 아니라 자가 최적화자의 탐색 및 워크플로 제안 능력임 (§5.1).</li>
+</ul>
+</li>
+<li><strong>[작성자 해석 (Interpretation)]</strong>
+<ul>
+<li>약한 모델이라도 시간을 충분히 부여하면 우수한 워크플로에 도달할 수 있으나, 탐색 효율성과 개선 속도를 올리기 위해서는 최적화 제안 능력을 강화하는 것이 핵심 과제임.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-authors">3. 등장 인물 및 화자 (Key Figures &amp; Authors)</h4>
+<p>본 보고서의 소스 논문(&quot;Recursive Self-Improvement through Multi-Agent Self-Supervision&quot;) 저자진 및 소속 기관 정보는 다음과 같음 (§1 첫 페이지).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Author Name)</th>
+<th style="text-align:left">소속 및 역할 (Affiliation / Role)</th>
+<th style="text-align:left">소스 확인 가능 여부</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>현인 이 (Hyunin Lee)</strong></td>
+<td style="text-align:left">UC Berkeley (Sakana AI 인턴십 수행, 교신저자: hyunin@berkeley.edu)</td>
+<td style="text-align:left">확인 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>징류 쉬 (Jinglue Xu)</strong></td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">확인 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>제프리 실리 (Jeffrey Seely)</strong></td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">확인 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>동현 이 (Donghyun Lee)</strong></td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">확인 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소마예 소주디 (Somayeh Sojoudi)</strong></td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">확인 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>마테이 자하리아 (Matei Zaharia)</strong></td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">확인 가능</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유진 탕 (Yujin Tang)</strong></td>
+<td style="text-align:left">Sakana AI</td>
+<td style="text-align:left">확인 가능</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-timestamps">4. 주요 수치 및 시점 (Key Metrics &amp; Timestamps)</h4>
+<p>소스 문맥에서 명백히 확인되는 정량적 지표 및 실험 환경 수치는 다음과 같음.</p>
+<h5 id="기본-모델-및-학습-설정">기본 모델 및 학습 설정</h5>
+<ul>
+<li><strong>베이스 모델</strong>: Qwen3.6-27B-FP8 (§4.1)</li>
+<li><strong>코딩 에이전트 프레임워크</strong>: qwen-code 0.20.0 (vLLM 파이프라인 활용) (§4.1, Appendix B.1)</li>
+<li><strong>LoRA 아키텍처 설정</strong>: Rank 64, Scaling factor ($\alpha$) 128, Dropout 0.05 (§4.1, Appendix B.2)</li>
+<li><strong>최대 토큰 및 컨텍스트 한도</strong>: 최대 윈도우 길이 $L_{max} = 49,152$ 토큰, 선행 컨텍스트 마스킹 최대 8,192 토큰 (§4.1, Appendix B.2)</li>
+<li><strong>최적화 알고리즘 및 하이퍼파라미터</strong>: AdamW ($\beta_1 = 0.9, \beta_2 = 0.95$), 피크 학습률 $3 \times 10^{-5}$, 웜업 5 스텝, 코사인 감쇄(10% 수준까지), 총 1,624 최적화 스텝 (스텝당 3개 윈도우) (Appendix B.2)</li>
+<li><strong>학습 데이터 규모 및 세부 구성 (M+)</strong>: 8개 학습 과제에서 추출한 119개 궤적 기반 총 2,435개 윈도우 구성(오케스트레이터 282개, 서브에이전트 2,054개, 보조 99개). 저장된 데이터셋 토큰 수(Stored Tokens)는 1,722만($17,221,055$) 토큰이며, 서브에이전트 대 오케스트레이터 $2:1$ 리샘플링 및 복원 추출 기반으로 1,624 스텝 동안 실제 손실 계산에 소모된 처리 토큰 수(Processed Tokens)는 2,882만($28,818,370$) 토큰임 (Appendix B.2, D.2)</li>
+</ul>
+<h5 id="주요-실증-성과-지표">주요 실증 성과 지표</h5>
+<ul>
+<li><strong>공개 연구 벤치마크 (Score per Output Token 성능 향상 폭: 1.2~1.6배)</strong> (Figure 2, Figure 3b, Table 7):
+<ul>
+<li><strong>MLR-Bench</strong>: $L(0)$ 1.58 점 $\rightarrow$ $L(1)$ 1.80 점 $\rightarrow$ $L(2)$ 2.40 점 (최종 점수/토큰 비율 <strong>1.60배</strong> 증가)</li>
+<li><strong>ScienceAgentBench</strong>: $L(0)$ 28.8% $\rightarrow$ $L(1)$ 30.4% $\rightarrow$ $L(2)$ 31.7% (최종 점수/토큰 비율 <strong>1.20배</strong> 증가)</li>
+<li><strong>DSBench</strong>: $L(0)$ 0.473 $\rightarrow$ $L(1)$ 0.465 $\rightarrow$ $L(2)$ 0.482 (최종 점수/토큰 비율 <strong>1.35배</strong> 증가)</li>
+<li><strong>AstaBench (E2E-Hard)</strong>: $L(0)$ 0.053 $\rightarrow$ $L(1)$ 0.055 $\rightarrow$ $L(2)$ 0.067 (최종 점수/토큰 비율 <strong>1.28배</strong> 증가)</li>
+<li><strong>SWE-bench Verified</strong>: $L(0)$ 62.6% $\rightarrow$ $L(1)$ 61.8% $\rightarrow$ $L(2)$ 61.1%</li>
+<li><strong>Terminal-Bench 2.0</strong>: $L(0)$ 37.5% $\rightarrow$ $L(1)$ 35.3% $\rightarrow$ $L(2)$ 35.2%</li>
+</ul>
+</li>
+<li><strong>자가 평가자 일치율 (Evaluator Accuracy)</strong>: 외부 강력한 평가 모델(GPT-5.5 &amp; Claude Opus 4.8)과의 판정 일치율 $L(0)$ 73% $\rightarrow$ $L(1)$ 91% $\rightarrow$ $L(2)$ 93% (Figure 3c, §4.2)</li>
+<li><strong>합성 테스트 과제 승률 (Synthetic Test Tasks Win Rate)</strong>: 베이스 모델 $L(0)$ 대비 승률 $L(1)$ 53.9% $\rightarrow$ $L(2)$ 69.9%로 상승 (Figure 3b, §4.2)</li>
+<li><strong>외부 평가 설정</strong>: OpenAI GPT-5.5 및 Claude Opus 4.8 (최대 추론 노력 설정, 독립 시드 3개 사용으로 과제 쌍당 총 6회 판정) (§4.1, Appendix C.1)</li>
+</ul>
+<hr />
+<h4 id="5-한계점-및-불확실성-limitations-uncertainties">5. 한계점 및 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 연구 및 소스 문맥에서 명시된 한계점 및 불확실성 요인은 다음과 같음.</p>
+<ul>
+<li><strong>수학적/수식적 성능 증명의 부재</strong>: Gödel machine과 같이 수식이나 정형 검증(Formal proof)에 기반하여 자가 개선을 수학적으로 보증하는 체계와 달리, MASS는 경험적(Empirical) 진화 탐색 및 지도 미세조정에 의존하므로 모든 주기에 대한 이론적 개선 보장이 제공되지 않음 (§6 RELATED WORKS, §7 CONCLUSION).</li>
+<li><strong>텍스트 편집 크기와 실제 성능 변화 간의 낮은 상관관계</strong>: 워크플로 프롬프트의 텍스트 수정 크기(Edit size)와 실제 외부 평가 결과 변화 간의 스피어만 상관계수가 매우 낮게 나타남 ($|\rho_{edit}| \le 0.12$). 즉, 프롬프트 문장을 크게 수정하더라도 성능 향상으로 직결되지 않으며, 반대로 매우 미세한 편집만으로도 급격한 성능 저하(Regression)가 발생할 수 있음 (§5.1, Table 10).</li>
+<li><strong>실행 가변성(Execution Variability)</strong>: 워크플로 및 프롬프트 설정이 동일하더라도, 에이전트의 런타임 수용 능력이나 도구 호출 중단(Loop halt) 등에 의해 결과물이 크게 변동할 수 있는 불확실성이 존재함 (§5.3, Table 11).</li>
+<li><strong>벤치마크 간 성과 불균형 및 과제 특성별 한계</strong>: 오픈엔드 연구 과제(MLR-Bench, ScienceAgentBench 등)에서는 명확한 점수/토큰 효율성 및 성과 향상을 보였으나, 단일 에이전트 중심의 국소적 코드 수정 및 터미널 과제(SWE-bench Verified, Terminal-Bench 2.0)에서는 성과 향상이 관찰되지 않거나 소폭 감소함. 이는 MASS가 다단계 오케스트레이션 및 계층적 위임 구조 최적화에는 탁월하지만, 단일 모듈에 국한된 정밀 수정 과제에서는 다중 에이전트 오버헤드로 작용할 수 있음을 나타냄 (Figure 2, Table 7, §5.2).</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

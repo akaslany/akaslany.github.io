@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1인 AI 헤지펀드, Grok Bot으로 정말 가능한가: 기술 및 규제 감사 보고서</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>1인 AI 헤지펀드, Grok Bot으로 정말 가능한가: 기술 및 규제 감사 보고서</h1>
+<p class="page-meta">소셜 · 2026-08-24</p>
+<h2 id="요약">요약</h2>
+<p>보고서는 Grok Bot의 협업 기능을 확인했으나 1인 AI 헤지펀드의 실거래 안전성은 미입증으로 판정했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/social/">소셜</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=kZASpcTrC-s">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/capital-markets/">자본시장</a></li>
+<li><a href="../../topics/policy-regulation/">정책·규제</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="독립감사-안내와-적용-경계">독립감사 안내와 적용 경계</h3>
+<p>이 보고서는 2026-08-24 기준 Roan(@RohOnChain)의 X Article을 검증 대상으로 삼은 교육용 분석이다. 원문은 개인 저자의 설계 제안이며 xAI·Whop·Interactive Brokers·Alpaca·TradeStation·SEC·FINRA의 보증이 아니다.</p>
+<ul>
+<li><strong>서로 다른 운영모델:</strong> 자기자금 paper/live trading, 유료 리서치·signal subscription, copy trading, 타인 자금 운용, 실제 hedge fund는 법적·운영상 별개다. LLC와 EIN은 법인·세무 식별의 시작일 뿐 투자자문업·broker-dealer·펀드 운용 허가가 아니다. 관할과 활동 형태에 따라 별도 등록·공시·광고·기록보존·AML/KYC·custody 검토가 필요하다.</li>
+<li><strong>제품 경계:</strong> Grok Bot의 early-beta cloud computer, browser·terminal, 다중 Bot, routine 기능은 공식 확인된다. 그러나 외부 plugin이 접근할 수 있는 기능, 웹 computer-use로 가능한 동작, named broker의 공식 MCP connector, 실제 계정의 주문 권한과 production safety는 각각 별도 검증 대상이다. Grok Bot 자체가 거래소 주문을 직접 체결하는 것이 아니라 broker가 실행한다.</li>
+<li><strong>통제 경계:</strong> LLM은 research와 proposal에 사용하되 risk hard limit은 prompt가 아니라 broker-side deterministic rule로 고정해야 한다. human approval, least privilege, credential vault, immutable audit log, circuit breaker, fill reconciliation, rollback과 incident response가 필요하다.</li>
+<li><strong>성과 경계:</strong> 논문의 과거 alpha와 검색량·insider·filing 연구는 특정 표본·기간·방법의 결과다. X mention, LLM-generated signal 또는 미래 live net return으로 자동 일반화되지 않는다. look-ahead, survivorship, multiple testing, t-statistic 선택편향, regime shift, slippage와 market impact를 out-of-sample·paper trading으로 검증해야 한다.</li>
+<li><strong>비용 경계:</strong> ‘30명을 8 bots로 대체’, 연 $3.8M 대 약 $3,000, 1,266배 절감은 저자의 illustrative arithmetic이며 산업 benchmark가 아니다. data license, engineering, model/API, legal, tax, compliance, cyber security, insurance, broker, audit, custody, fund administration과 incident 비용이 빠져 있다.</li>
+<li><strong>배포 기준:</strong> 최소 30일 paper trading, fail-closed broker-side limits, 의도적 장애·kill-switch 시험, 독립 out-of-sample 성과, human approval과 reconciliation, 법률·세무·compliance sign-off를 통과하기 전 unattended live execution으로 전환하지 않는다.</li>
+</ul>
+<h3 id="1인-ai-헤지펀드-grok-bot으로-정말-가능한가-기술-및-규제-감사-보고서">1인 AI 헤지펀드, Grok Bot으로 정말 가능한가: 기술 및 규제 감사 보고서</h3>
+<p><strong>작성일:</strong> 2026-08-24
+<strong>수신:</strong> 시스템 아키텍트, 기술 투자 심사역 및 규제 준수 책임자
+<strong>발신:</strong> 금융 공학 시스템 감사관 및 기술 규제 전략가</p>
+<hr />
+<h5 id="1-10줄-핵심-결론-executive-summary">1. 10줄 핵심 결론 (Executive Summary)</h5>
+<ul>
+<li><strong>[확인됨]</strong> Grok Bot은 단일 가상 머신(VM) 환경 내에서 파일 시스템 및 브라우저 세션을 공유하는 멀티 에이전트 오케스트레이션 기능을 제공한다.</li>
+<li><strong>[확인됨]</strong> Whop API(<code>form_company</code>)는 법인 설립을 위한 결제 세션 생성을 지원하나, 이는 행정 절차의 완료가 아닌 프로세스의 '시작'을 의미한다.</li>
+<li><strong>[조건부]</strong> Alpaca는 공식 MCP(Model Context Protocol)를 지원하나, IBKR 및 TradeStation의 공식 MCP 지원은 확인되지 않았으며 기술적 안정성이 미검증 상태다.</li>
+<li><strong>[조건부]</strong> 자기자금 거래(Prop Trading) 모델은 규제 장벽이 낮으나, 타인 자금 운용 시 Investment Adviser 등록 등 고도의 법적 의무가 발생한다.</li>
+<li><strong>[미확립]</strong> 15분 내 LLC/EIN 발급 완료 주장은 공식 자료로 확인되지 않았으며, 주정부 filing과 IRS 절차를 결합한 15분 완료 보장은 성립하지 않는다.</li>
+<li><strong>[미확립]</strong> 8~10개의 에이전트가 기관급 인력을 대체한다는 주장은 저자 내부 자료에서도 인원 수치가 불일치(30명 vs 21명)하는 등 신뢰도가 낮다.</li>
+<li><strong>[주의]</strong> 저자가 주장하는 1,266배 비용 절감($3.8M → $3k)은 기관급 데이터 피드(Bloomberg 등), 컴플라이언스 및 사이버 보안 비용을 누락한 비교 범위와 누락 비용 때문에 <strong>검증된 총비용 수치가 아니다</strong>.</li>
+<li><strong>[주의]</strong> 인용된 학술 논문의 알파(Alpha) 수치는 자의적으로 해석되었으며, 특히 '5.3% 연간 알파' 클레임은 원논문의 핵심 결과로 확인되지 않는 <strong>부정확한 인용 수치</strong>다.</li>
+<li><strong>[리스크]</strong> 비결정론적(Probabilistic) 특성을 가진 LLM 프롬프트 기반의 리스크 제어는 시스템 장애 시 확정적 제어(Deterministic Control)를 대체할 수 없다.</li>
+<li><strong>최종 판정:</strong> Grok Bot은 강력한 워크플로우 자동화 도구이나, 현재의 설계는 운영·규제·실거래 안전성이 아직 입증되지 않은 고위험 설계 제안 단계다.</li>
+</ul>
+<hr />
+<h5 id="2-원문-제안-6개-층-layer-구조-분석">2. 원문 제안 6개 층(Layer) 구조 분석</h5>
+<p>저자 Roan(@RohOnChain)이 제시한 아키텍처는 헤지펀드 운영의 핵심 기능을 6개의 층으로 분절하여 에이전트에 할당하는 방식을 취한다.</p>
+<ol>
+<li><strong>Research (리서치):</strong> SEC 공시, 실적 발표 트랜스크립트, 내부자 거래(Form 4) 등 공개 데이터를 수집 및 요약하여 모닝 브리프를 생성하는 단계.</li>
+<li><strong>Signals (신호):</strong> 다요인 모델(Multi-factor model)과 잔여 알파 계산을 통해 거래 대상 종목의 순위를 결정하는 전략 도출 단계.</li>
+<li><strong>Execution (집행):</strong> MCP를 통해 브로커에 주문을 전송하고, 체결(Fill) 및 부분 체결 상태를 실시간으로 관리하는 단계.</li>
+<li><strong>Risk (리스크):</strong> 포지션 규모, 드로다운, 섹터 노출도를 분 단위로 감시하며 임계치 초과 시 즉각적인 청산(Kill switch)을 수행하는 단계.</li>
+<li><strong>Business Operations (비즈니스 운영):</strong> Whop 플러그인을 사용하여 법인 설립(LLC), 세금 번호(EIN) 신청, 결제 처리 및 앱 호스팅을 자동화하는 단계.</li>
+<li><strong>Growth (성장):</strong> 구독 수익을 광고비로 자동 재투자하여 운용 자본 및 고객 기반을 확장하는 자기 완결적 루프(Self-funding loop).</li>
+</ol>
+<p>이 모든 층은 <strong>'공유 클라우드 컴퓨터(Shared Cloud Computer)'</strong> 아키텍처를 기반으로 한다. 에이전트들이 동일한 VM 내 파일 시스템과 쿠키를 공유하므로, API 연동 없이도 데이터를 주고받는 유기적 협업이 가능하다는 점이 기술적 핵심이다.</p>
+<hr />
+<h5 id="3-grok-bot-및-whop-기능-검증-공식-확인-vs-저자-추론">3. Grok Bot 및 Whop 기능 검증: 공식 확인 vs 저자 추론</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기능 분류</th>
+<th style="text-align:left">공식 확인된 범위 (Grok Bot Beta / Whop API)</th>
+<th style="text-align:left">저자의 추론 / 과장 / 미확인 사항</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>멀티 에이전트 협업</strong></td>
+<td style="text-align:left">단일 VM 내 파일 시스템, CLI 자격 증명 공유 가능</td>
+<td style="text-align:left">10개 에이전트가 21~30명의 전문가 인력을 동등하게 대체할 수 있다는 미검증 주장</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>법인 설립 프로세스</strong></td>
+<td style="text-align:left"><code>form_company</code> 엔드포인트가 <strong>체크아웃 세션</strong> 생성</td>
+<td style="text-align:left"><strong>15분 내 LLC·EIN 완료</strong>라는 공식 근거가 없는 주장</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>브로커 API 연결</strong></td>
+<td style="text-align:left">Alpaca MCP 공식 제공</td>
+<td style="text-align:left">IBKR/TradeStation의 <strong>공식 MCP 지원</strong> 및 무인 집행의 안정성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>운영 비용</strong></td>
+<td style="text-align:left">Cursor Ultra 가격이 $200/month임</td>
+<td style="text-align:left">SuperGrok Heavy 가격이 <strong>고정 $200/month</strong>라는 주장</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LLC 설립 및 권한</strong></td>
+<td style="text-align:left">LLC는 세무/법적 구조일 뿐임</td>
+<td style="text-align:left">LLC/EIN 보유가 <strong>투자자문업 허가와 동일</strong>하다는 오도된 암시</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>데이터 연동</strong></td>
+<td style="text-align:left">Grok 내 Native X 통합 제공</td>
+<td style="text-align:left">Sentiment Bot이 <strong>별도 API 키 없이</strong> 모든 기능을 즉시 사용</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-운영-모델의-법적-운영적-경계-구분">4. 운영 모델의 법적·운영적 경계 구분</h5>
+<p>본 보고서는 운영 모델을 5가지로 분류하여 규제 리스크를 분석한다. 특히 <strong>'개인화(Personalization)'</strong> 여부가 규제 대상 여부를 결정하는 핵심 트리거임을 강조한다.</p>
+<ol>
+<li><strong>자기자금 거래 (Personal/Prop Trading):</strong> 타인 자금 유입 없이 본인 계좌로만 운영. 규제 리스크는 낮으나 브로커 이용 약관 및 시장 교란 금지 규정 준수가 요구됨.</li>
+<li><strong>일반 교육 및 정기 리서치 (Publisher Exclusion):</strong> 불특정 다수에게 정기적으로 정보를 제공하는 발행인 제외 조항 적용 가능. 그러나 특정 종목에 대한 실시간 매수/매도 타이밍 제공 시 경계가 모호해짐.</li>
+<li><strong>유료 신호 및 개인화된 알림 서비스:</strong> 보수를 받고 개인의 포트폴리오 상황에 맞춘 조언을 제공할 경우, <strong>미국 SEC 또는 주 정부 투자자문업(Investment Adviser) 등록</strong>이 필수적임.</li>
+<li><strong>카피 트레이딩 및 타인 계좌 집행:</strong> 타인 계좌에 주문을 복제하는 행위는 수탁(Custody) 및 브로커-딜러 이슈를 유발하며, FINRA 및 SEC의 엄격한 감독 대상임.</li>
+<li><strong>외부 자금 운용 실제 헤지펀드:</strong> 사모펀드 면제 조항(3(c)(1) 등) 및 ERA(Exempt Reporting Adviser) 경로를 검토해야 하며, 단순 LLC 설립만으로 합법적 운용 요건이 충족되는 것은 아님.</li>
+</ol>
+<hr />
+<h5 id="5-whop-plugin-및-법인-설립-자동화의-한계">5. Whop Plugin 및 법인 설립 자동화의 한계</h5>
+<p>Whop API의 <code>form_company</code> 엔드포인트에 대한 기술적 감사 결과, 저자의 주장은 심각하게 왜곡되어 있다. 해당 API가 반환하는 응답은 법인 설립 완료 통보가 아닌 **'결제 페이지(Checkout Session) URL'**이다.</p>
+<ul>
+<li><strong>15분 LLC·EIN 완료 주장의 한계:</strong> 델라웨어주 등 주요 주의 급행 서비스(Expedited Filing)도 1시간 이상 소요되며, 주말이나 야간에는 처리가 불가능하다. IRS의 EIN 발급 역시 신청자의 자격(SSN/ITIN)에 따라 처리 시간이 상이하며, 15분 내 모든 절차의 완료를 공식 자료로 보장할 수 없다.</li>
+<li><strong>성장 루프의 결제 지연:</strong> 수익금이 광고비로 즉시 재투자된다는 '성장 루프'는 금융 실무를 간과한 것이다. Whop 또는 카드 프로세서의 <strong>지급 유보(Reserve)</strong>, 정산 지연(Settlement delay), 그리고 차지백(Chargeback) 리스크로 인해 실시간 현금 흐름은 reserve·settlement 조건에 따라 제약될 수 있다.</li>
+<li><strong>회계적 오류:</strong> 해당 루프는 매출 총이익(Gross Margin)과 세금(Tax)을 고려하지 않았다. 수익의 100%를 광고에 재투자할 경우 거래 자본(Trading Capital)은 0이 된다.</li>
+</ul>
+<hr />
+<h5 id="6-브로커-api-연결과-자율-집행-autonomous-execution-의-안전성">6. 브로커 API 연결과 자율 집행(Autonomous Execution)의 안전성</h5>
+<p>무인 자율 집행(Unattended Execution) 환경에서 발생할 수 있는 기술적 재앙은 다음과 같다.</p>
+<ul>
+<li><strong>비결정론적 통제의 한계:</strong> LLM에게 &quot;드로다운 5% 제한&quot;이라고 프롬프트를 입력하는 것은 권장 사항일 뿐이다. 네트워크 오류나 프롬프트 인젝션 발생 시 에이전트는 이 규칙을 무시할 수 있다.</li>
+<li><strong>기술적 위험 요소:</strong>
+<ul>
+<li><strong>Race Condition:</strong> 주문 전송 후 응답 지연 시 에이전트가 중복 주문을 전송하는 문제.</li>
+<li><strong>Idempotency missing:</strong> 주문 식별자(Idempotency Key) 부재 시 중복 체결 위험.</li>
+<li><strong>Stale Data:</strong> 로컬 <code>fills.json</code> 파일이 브로커의 실제 잔고와 동기화되지 않을 때 발생하는 오판.</li>
+</ul>
+</li>
+<li><strong>필요 조치:</strong> 브로커 API 수준에서의 <strong>확정적 하드 리미트(Deterministic Hard Limits)</strong> 설정이 필수적이며, LLM은 집행자가 아닌 '감시자' 역할에 머물러야 한다.</li>
+</ul>
+<hr />
+<h5 id="7-학술적-알파-alpha-클레임의-데이터-검토">7. 학술적 알파(Alpha) 클레임의 데이터 검토</h5>
+<p>저자가 인용한 학술적 근거들은 중대한 일반화 오류와 인용·정의 불일치가 확인된다.</p>
+<ul>
+<li><strong>Cohen-Malloy-Pomorski (2012):</strong> 원논문은 내부자 거래 중 기회주의적 매수가 연 약 9.8%(월 82bp)의 초과 수익을 냈다고 보고한다. 저자가 주장한 **'클러스터 매수 연 5.3% 알파'**는 원문의 핵심 수치와 상충하며 출처가 불분명하다.</li>
+<li><strong>Griffin &amp; Tang:</strong> 해당 논문은 학술 데이터베이스에서 식별되지 않으며, 모든 8-K 공시가 5일간의 알파를 제공한다는 주장은 통계적으로 검증되지 않은 일반화다.</li>
+<li><strong>Loughran-McDonald (2011):</strong> 금융 사전 구축을 다룬 논문일 뿐, LLM의 우월성이나 실시간 트레이딩 알파를 증명한 연구가 아니다.</li>
+<li><strong>통계적 유의성(t-stat &gt; 2):</strong> 이는 단순 가설 검증 기준일 뿐이다. 'Factor Zoo'라고 불리는 무분별한 팩터 탐색 과정에서의 데이터 스누핑(Data Snooping) 가능성을 고려할 때, 실거래에서의 재현성은 담보되지 않는다.</li>
+</ul>
+<hr />
+<h5 id="8-백테스트-오염-backtest-contamination-및-재현성-게이트">8. 백테스트 오염(Backtest Contamination) 및 재현성 게이트</h5>
+<p>1인 개발자가 간과하기 쉬운 8가지 치명적 함정은 다음과 같다.</p>
+<ol>
+<li><strong>Look-ahead Bias:</strong> 모델 훈련 시 미래 데이터를 참조하여 성과를 부풀리는 현상.</li>
+<li><strong>Survivorship Bias:</strong> 상장 폐지된 종목을 제외하고 현재 생존한 우량주로만 테스트하는 오류.</li>
+<li><strong>Slippage &amp; Impact:</strong> 실제 시장에서의 체결 오차와 대량 주문이 가격에 미치는 영향을 무시함.</li>
+<li><strong>Point-in-time Failure:</strong> 공시 데이터의 실제 노출 시점과 모델의 입력 시점 간의 시차를 반영하지 못함.</li>
+<li><strong>Multiple Testing:</strong> 수천 번의 테스트 중 우연히 발생한 수익 모델을 '발견'으로 착각함.</li>
+<li><strong>Data Leakage:</strong> 훈련 데이터와 검증 데이터가 중첩되어 과적합(Overfitting) 발생.</li>
+<li><strong>Delisting Returns:</strong> 상장 폐지 시의 손실액을 정확히 계산하지 않아 수익률이 왜곡됨.</li>
+<li><strong>Execution Latency:</strong> LLM 추론 시간에 따른 주문 실행 지연이 수익성에 미치는 영향 누락.</li>
+</ol>
+<hr />
+<h5 id="9-비용-절감-계산의-비교-한계와-누락된-비용">9. 비용 절감 계산의 비교 한계와 누락된 비용</h5>
+<p>저자는 연간 $3,000의 운영비를 주장하나, 이는 '환상'에 가깝다. 특히 저자 본인도 인력 대체 규모를 본문(30명)과 비용 표(21명)에서 다르게 기재하는 등 내부 논리적 일관성이 결여되어 있다.</p>
+<p><strong>누락된 실질 비용 목록:</strong></p>
+<ul>
+<li><strong>마켓 데이터 피드:</strong> Bloomberg($27k/년) 또는 정교한 데이터 API(Polygon 등) 비용.</li>
+<li><strong>컴플라이언스 및 법률:</strong> 지속적인 규제 모니터링 및 세무 신고 대행 비용.</li>
+<li><strong>사이버 보안:</strong> 에이전트 권한 탈취 방지를 위한 보안 인프라 및 보험료.</li>
+<li><strong>인프라 운영:</strong> 무중단 운영을 위한 VM 확장 및 관측성(Observability) 도구 비용.</li>
+<li><strong>거래 비용:</strong> 대차 비용(Borrow cost), 세금, 거래 수수료 및 슬리피지.</li>
+</ul>
+<hr />
+<h5 id="10-최소-안전-아키텍처-proposed-safety-architecture">10. 최소 안전 아키텍처 (Proposed Safety Architecture)</h5>
+<p>안전한 운영을 위해 본 보고서는 다음의 기술 사양을 강제할 것을 권고한다.</p>
+<ul>
+<li><strong>Read-only Research Zone:</strong> 리서치 에이전트는 브로커 API에 대한 쓰기 권한이 완전히 차단되어야 함.</li>
+<li><strong>Immutable Risk Engine:</strong> 리스크 관리 로직은 LLM 프롬프트가 아닌, 별도의 격리된 환경에서 확정적 코드(Code-based)로 실행되어야 함.</li>
+<li><strong>Human-in-the-loop:</strong> 주문 집행 전 최종 승인 단계(Final Approval)를 반드시 포함하여 '환각(Hallucination)'에 의한 오주문 방지.</li>
+<li><strong>Broker-side Hard Limits:</strong> 브로커 대시보드 수준에서 최대 주문 규모, 일일 손실 한도, 거래 가능 종목을 물리적으로 제한.</li>
+<li><strong>Idempotent Ledger:</strong> 모든 주문에 고유 ID를 부여하고, 중복 실행을 원천 차단하는 이벤트 소싱 기반의 원장 관리.</li>
+</ul>
+<hr />
+<h5 id="11-30일-paper-trading-파일럿-및-운영-게이트">11. 30일 Paper-Trading 파일럿 및 운영 게이트</h5>
+<p>실거래 전환 전 반드시 통과해야 하는 3단계 프로토콜이다.</p>
+<ul>
+<li><strong>Day 1-7 (Read-only Phase):</strong> 데이터 출처의 정확성 및 프롬프트 인젝션 방어력 테스트. 브로커 API 키 연결 금지.</li>
+<li><strong>Day 8-21 (Paper-Trading Phase):</strong> 모의 계좌를 통한 자율 운영. 네트워크 단절, 중복 주문 발생 시 시스템의 복구 및 재결합(Reconciliation) 능력 검증.</li>
+<li><strong>Day 22-30 (Frozen Strategy Phase):</strong> 전략 수정 없이 고정된 환경에서 운영 지표 및 인간의 개입 빈도 측정. 킬 스위치 작동 훈련 필수.</li>
+</ul>
+<hr />
+<h5 id="12-최종-판정-및-반증-철회-조건">12. 최종 판정 및 반증/철회 조건</h5>
+<ul>
+<li><strong>[가능]:</strong> Grok Bot을 리서치 및 보고서 작성 보조 도구로 활용하며, 인간의 통제 하에 소규모 자기자금을 운용하는 형태.</li>
+<li><strong>[조건부]:</strong> Whop API를 통한 결제 및 사용자 관리 자동화. 단, 주 정부 및 규제 기관의 최종 승인 서류 확인이 전제되어야 함.</li>
+<li><strong>[미확립]:</strong> 무인 자율 에이전트가 기관 수준의 리스크 관리와 펀드 운영을 안전하게 수행할 수 있다는 주장.</li>
+<li><strong>[금지]:</strong> LLC 설립만으로 타인 자금을 합법적으로 운용할 수 있다고 광고하거나, 1,266배의 비용 절감 및 알파 수익을 보장하는 행위.</li>
+</ul>
+<p><strong>판정 철회 조건:</strong> 30일간의 실시간 거래 로그(Live Order/Risk Log)를 포함한 독립적 제3자 감사 결과 보고서가 제출되거나, xAI 및 주요 브로커가 무인 자율 집행에 대한 공식적인 안정성 SLA를 발표할 경우 본 판정을 재검토할 수 있다.</p>
+<hr />
+<p><strong>면책 문구 (Disclaimer):</strong> 본 보고서는 정보 제공만을 목적으로 하며, 투자, 법률 또는 세무 자문을 구성하지 않습니다. 모든 금융 거래에는 자본 손실의 위험이 따르며, 시스템 오류로 인한 결과의 책임은 전적으로 운영자에게 있습니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/social/">소셜</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/capital-markets/">자본시장</a></li>
+<li><a href="../../topics/policy-regulation/">정책·규제</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Frostbite: A new CPU architecture discovered, designed, and verified end-to-end by AI | Architect Labs</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing Frostbite: A new CPU architecture discovered, designed, and verified end-to-end by AI | Architect Labs</h1>
+<p class="page-meta">웹 · 2026-11-22</p>
+<h2 id="요약">요약</h2>
+<p>AI 에이전트가 설계한 상호작용 망 기반 CPU 프로스트바이트의 구조와 제조 전 성능 평가를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://architectlabs.com/blog/frostbite">출처</a> · <a href="https://www.youtube.com/watch?v=_SGGvJTNcxI">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="ai-기반-cpu-아키텍처-프로스트바이트-frostbite-기술-분석-보고서">AI 기반 CPU 아키텍처 '프로스트바이트(Frostbite)' 기술 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>현대 상용 프로그래밍 언어와 이를 실행하는 전통적인 CPU 아키텍처는 코드 내 간 요소의 의존성을 공유 가변 상태(Shared Mutable State) 뒤로 숨기는 구조적 한계를 지니고 있습니다. 이로 인해 CPU 하드웨어는 런타임 시점에 명령어 간 의존성을 직접 재발굴해야 하는 중대한 오버헤드를 안고 있습니다. 또한, 2000년대 초반 이후 단일 코어 CPU의 성능 발전이 정체됨에 따라 산업계는 대규모 멀티코어 CPU 구조(예: 인텔 제온, AMD 젠, 엔비디아 베라 등)로 전환하였습니다. 그러나 모든 코어가 동일한 메모리를 참조하는 환상을 유지하기 위해 깊은 캐시 계층 구조와 복잡한 메모리 일관성(Coherence) 프로토콜이 필수적으로 요구되며, 이는 막대한 면적과 전력을 소모하고 확장성을 저해하는 치명적인 원인으로 작용하고 있습니다.</p>
+<p>이러한 한계를 근본적으로 극복하기 위해 아키텍처 랩스(Architect Labs)는 AI 시스템을 활용하여 상호작용 망(Interaction Nets) 이론에 기반한 신규 범용 CPU 아키텍처 '프로스트바이트(Frostbite)'를 최초로 제안하고 성공적으로 검증하였습니다. 상호작용 망은 모든 연산 단계가 국소적(Local)이고 의존성이 명시적이며, 모든 값이 정확히 단 하나의 소유자(Single Owner)를 갖는 특성을 지닙니다. 프로스트바이트는 이러한 특성을 하드웨어 레벨에서 직접 활용함으로써 오랜 기간 정체되었던 CPU 성능과 전력 효율에서 획기적인 비약(Step-function gain)을 이루어냈습니다.</p>
+<p>프로스트바이트의 개발 과정에서는 인간 설계자의 사전 하드웨어 지식 입력이나 고정관념 없이, AI 에이전트 스웜(Swarm)이 소프트웨어 컴파일러, 전용 명령어 집합(ISA), 사내 명세 언어인 ASL(Architect Specification Language) 기반 모델링, 형식 검증, RTL 설계 및 최종 GDS 레이아웃 도출에 이르는 전 과정을 자율적으로 수행하였습니다. AI 시스템은 총 25개의 주요 워크로드를 대상으로 소프트웨어와 하드웨어를 교차 최적화하였으며, 현대적인 실리콘 검증 슈퍼스칼라 CPU 코어 대비 탁월한 전력 대 성능비 및 면적 대 성능비를 달성하였습니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-analysis">2. 주요 논점 (Key Arguments &amp; Analysis)</h4>
+<h5 id="2-1-기존-cpu의-한계와-상호작용-망-interaction-nets-패러다임-전환">2.1. 기존 CPU의 한계와 상호작용 망(Interaction Nets) 패러다임 전환</h5>
+<ul>
+<li><strong>표준 프로그래밍 언어 및 단일 코어 성능의 정체 [사실]:</strong>
+2000년대 초반 이후 단일 코어 CPU의 성능 발전은 사실상 정체되었습니다. C++ 등 전통적 프로그래밍 언어는 메모리 공유 가변 상태를 통해 프로그램 구성 요소 간 의존성을 숨기므로, 기존 CPU 하드웨어는 실행 시점에 명령어 간 순제어 및 데이터 의존성을 동적으로 재발굴해야 하는 구조적 비효율성을 안고 있습니다.</li>
+<li><strong>메모리 공유 및 일관성 유지에 따른 전력/면적 손실 [소스의 주장]:</strong>
+다중 코어 시스템에서 각 코어가 동일한 메모리를 참조하도록 일관성을 유지하기 위해서는 깊은 캐시 계층 구조와 고비용의 일관성 유지 프로토콜이 필수적입니다. 이는 칩 전체 면적과 전력의 상당 부분을 소모시키며 코어 수 증가에 따른 선형적 성능 확장을 방해합니다.</li>
+<li><strong>상호작용 망(Interaction Nets) 패러다임의 특징 및 병렬성 대조 [사실/사례]:</strong>
+<ul>
+<li><strong>국소적 리라이팅(Local Rewriting):</strong> 연산은 포트(Port)를 통해 연결된 노드 쌍을 다시 쓰는 방식으로 진행되며, 각 리라이팅은 그래프의 작은 국소 영역에만 영향을 미칩니다.</li>
+<li><strong>단일 소유권 및 선형성(Linearity):</strong> 모든 값은 정확히 한 번만 사용되며 공유 가변 상태가 존재하지 않아, 동시성 충돌이나 레이스 조건(Race condition)을 방지하기 위한 하드웨어 잠금(Lock) 및 가스킹 메커니즘이 불필요합니다.</li>
+<li><strong>자유로운 공간적 병렬성:</strong> 각 노드가 하나의 주 포트(Principal Port)를 가지므로 활성 노드 쌍이 서로 겹치지 않습니다. 따라서 리라이팅 순서와 관계없이 항상 동일한 결과를 도출하며, 임의의 순서 또는 동시 실행이 완벽히 보장됩니다.</li>
+<li><strong>체스 퀸 배치(Five Queens) 문제의 수치적 대조 사례:</strong> 5x5 체스판 퀸 배치 문제 수행 시, 순차적 C++ 프로그램은 탐색 트리를 한 번에 한 단계씩 순차 방문(visit one candidate at a time)합니다. 반면 상호작용 망으로 구현된 프로그램은 숨겨진 의존성을 없앰으로써 총 3,183회의 상호작용을 단 262단계의 임계 경로(Critical Path) 내에서 수행하며, 매 단계마다 평균 12개의 연산을 동시 실행하는 높은 가시적 병렬성을 보여줍니다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-ai-자율-아키텍처-탐색-및-asl-기반-정밀-검증-체계">2.2. AI 자율 아키텍처 탐색 및 ASL 기반 정밀 검증 체계</h5>
+<p><code>[사실]</code> AI 시스템은 단순 탐색을 넘어 자체 개발한 형식 명세 언어 ASL 및 Lean 4 정리 증명기를 활용하여 설계의 정밀도를 극대화했습니다. 아키텍처 탐색에는 총 25개 워크로드(탐색 세트 10개, 보유 평가 세트 15개)가 활용되었습니다. 특히 보유 평가 세트에는 후반부에 추가된 5개의 실용 워크로드(칼만 필터, PCA, 유한요소분석, LU solve, LZ4 압축해제)가 포함되었으며, 탐색 효율성을 위해 FFT, Radixsort, LU 커널은 SPLASH-2 벤치마크 구현체를 64배 축소 적용하였습니다.</p>
+<p>AI 에이전트 스웜이 프로스트바이트를 설계 및 검증한 4단계 공정은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">단계 (Stage)</th>
+<th style="text-align:left">주요 수행 작업 및 도구</th>
+<th style="text-align:left">정밀도 및 성과 [사실/소스의 주장]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>1. 아키텍처 탐색 및 워크로드 선별</strong></td>
+<td style="text-align:left">• 병렬성 패턴 및 분기 특성에 따른 25개 워크로드 선정 (검색 세트 10개, 보유 평가 세트 15개)&lt;br&gt;• 파이썬(Python) 모델 기반 아키텍처 탐색 및 141페이지 아키텍처 PDF 제안서 생성&lt;br&gt;• 1차 RTL 생성 후 초기 추정치들이 물리적으로 실현 가능한 범주와 큰 오차를 보여 PDF 및 파이썬 초기 모델을 완전 파기하고 ASL 형식 계약 체계로 전환</td>
+<td style="text-align:left">아키텍처 공간의 고수준 트레이드오프 분석 완료 및 자율 탐색 기반 마련</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2. 형식 계약 및 시스템 모델링</strong></td>
+<td style="text-align:left">• 사내 명세 언어 ASL 개발 및 시스템 모델 'Arcmodel' 작성&lt;br&gt;• Lean 4 기반 형식 검증 연동 (RTL, UVM, C, SVA 간 계약 검증 수행)&lt;br&gt;• 자연어 명세서의 모호함 및 AI 환각(Hallucination) 차단</td>
+<td style="text-align:left">• 전력/성능 추정 오차 1~5% 이내 수렴&lt;br&gt;• RTL 시뮬레이션 대비 200배 빠른 실행 속도&lt;br&gt;• 최종 ASL 코드는 800,000 라인 이상의 Lean 코드로 변환</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3. RTL 실시간 재정렬</strong></td>
+<td style="text-align:left">• Arcmodel과 타이밍 수렴된 RTL 간 전력 hotspot 자동 추적 및 재조정 (SRAM 읽기/쓰기, 연산 횟수, 플릿 송수신, 정지 레코드 미스 등 추적)&lt;br&gt;• Non-gradient 학습 방식을 통해 파이썬 스칼라 전력 예측 함수 보정</td>
+<td style="text-align:left">초기 최대 250%에 달했던 Arcmodel과 RTL 간 전력 예측 오차율을 1~5% 범주 내로 최종 수렴</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>4. 에이전트 스웜 기반 반복 탐색</strong></td>
+<td style="text-align:left">• 에이전트 스웜이 병렬 워크트리에서 아키텍처 및 ISA 수정안 제안&lt;br&gt;• ASL 계약 검증, Arcmodel 660배 고속 측정, RTL 구현, 전력 측정을 연동한 자율 탐색</td>
+<td style="text-align:left">총 58개 아키텍처 아이디어 중 미세 클록 게이팅, L3 테이블 축소, 공유 확장기 등 37개 최종 채택</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-3-하드웨어-혁신성-동적-작업-훔치기-work-stealing-및-타일-구조">2.3. 하드웨어 혁신성: 동적 작업 훔치기(Work-Stealing) 및 타일 구조</h5>
+<p><code>[사실]</code> 프로스트바이트의 소프트웨어 및 하드웨어 연동 스택은 다음과 같은 흐름으로 구동됩니다.
+프로그램은 Rust와 유사한 구문을 갖춘 <strong>Vine</strong> 언어로 작성되며, 컴파일러를 통해 상호작용 망 구조를 인코딩한 <strong>Ivy</strong> 중간 표현(IR)을 거쳐 최종 <strong>Ivy Net</strong>으로 변환됩니다. Ivy Net은 데이터 노드, 연산 노드, 제어 노드의 3가지 프라이머티브로 구성됩니다. 일반적인 연산 그래프와 달리 Ivy Net은 실행 시점에 프로그램 상태(State)로부터 병렬성이 공간적(Spatially)으로 발현되는 극도로 동적인 특성을 지닙니다. 이에 맞춰 생성된 명령어 집합(ISA)은 와이드 번들, 하드웨어 루프 카운터, 스트림뿐만 아니라 병렬 실행 중인 타일 간 데이터를 직접 가져오고(Take), 훔쳐보고(Peek), 복사(Copy)하는 동적 파이프라인 명령을 지원합니다.</p>
+<p>상호작용 망의 특성상 병렬성이 칩 전체 공간에 분산되므로 중앙 스케줄러를 둘 수 없습니다. 이에 AI 시스템은 자율적으로 동적 작업 훔치기(Work-Stealing) 메커니즘과 공간 타일(Tile) 구조를 발굴하여 적용하였습니다.</p>
+<p>타일 내부 구성요소의 역할과 작동 순서는 다음과 같습니다:</p>
+<ol>
+<li><strong>Engine (엔진):</strong> 컴파일러에 의해 분할된 단기 코드 섹션을 입력받아 직접 실행하는 핵심 연산 장치입니다.</li>
+<li><strong>Front End (프론트엔드):</strong> 엔진으로 입력되는 연산 작업의 흐름 및 명령 수집을 관리합니다.</li>
+<li><strong>Frame Manager (프레임 매니저):</strong> 루프나 분기 조건에 의해 실행 크기를 미리 알 수 없는 병렬 작업이 발생할 때, 후속 코드를 로컬 메모리의 정지 레코드(Parked Record)에 보관하고 카운터를 관리합니다.</li>
+<li><strong>Work Queue (하드웨어 작업 큐):</strong> 분기된 새로운 작업들을 작업 큐에 투입합니다. 해당 타일은 자신 작업 큐의 가장 최신 작업을 직접 꺼내어 실행합니다. 유휴(Idle) 상태인 인접 타일은 네트워크를 통해 이 작업 큐에서 남은 작업을 끌어와(Steal) 대신 실행합니다.</li>
+<li><strong>Return Packet (반환 패킷) 및 깨우기 메커니즘:</strong> 칩 내부 어디서든 작업이 임의의 순서로 완료될 때 발생하는 반환 패킷(Return Packet)이 프레임 매니저 내 정지 레코드(Parked Record)의 카운터를 감쇠(tick down)시키며, 마지막 조각이 도착하는 즉시 다음 코드 섹션을 자동적으로 깨워(wake) 연산을 연속시킵니다. 작업이나 남은 인접 작업이 없으면 타일은 비활성화되어 전력을 절감합니다.</li>
+</ol>
+<ul>
+<li><strong>[작성자의 해석]:</strong> 이와 같은 공간적 작업 훔치기 메커니즘, 프레임 매니저 기반의 반환 패킷 처리, 타일 분산 구조는 인간 설계자가 사전에 명시적으로 지정한 것이 아닙니다. 이는 AI 에이전트가 성능 지표 및 회귀 테스트를 수행하면서 스스로 성능을 향상시키는 과정에서 발현된(Emergent) 고도의 아키텍처 구조입니다.</li>
+</ul>
+<h5 id="2-4-벤치마크-평가-및-전력-면적-효율성-분석">2.4. 벤치마크 평가 및 전력·면적 효율성 분석</h5>
+<p><code>[사실]</code> 7nm 공정 조건에서 프로스트바이트(Frostbite Quad: 2x2 타일 + 4개 L3 노드)와 동일 공정의 현대적 실리콘 검증 대조군 CPU인 **TCPU(Dual-issue, In-order 기반 슈퍼스칼라 CPU 코어)**를 비교 평가한 종합 데이터는 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목</th>
+<th style="text-align:left">프로스트바이트 (Frostbite Quad)</th>
+<th style="text-align:left">대조군 CPU (TCPU; Dual-issue In-order)</th>
+<th style="text-align:left">비교 우위 수치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>공정 및 동작 주파수</strong></td>
+<td style="text-align:left">7nm (합성 800 MHz / GDS 500 MHz)</td>
+<td style="text-align:left">7nm</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>클러스터 물리 면적</strong></td>
+<td style="text-align:left">0.792 mm²</td>
+<td style="text-align:left">0.895 mm²</td>
+<td style="text-align:left">약 11.5% 면적 절감</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>면적 대비 성능 (perf/area)</strong></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">기준점 (1.0x)</td>
+<td style="text-align:left"><strong>8.77배 우수</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전력 대비 성능 (perf/watt)</strong></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">기준점 (1.0x)</td>
+<td style="text-align:left"><strong>기하평균 4.59배 우수</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">- <em>검색 워크로드 (10개)</em></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left"><strong>6.02배 우수</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">- <em>보유 평가 워크로드 (15개)</em></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left"><strong>3.83배 우수</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="전력-소비-비중-변화-분석-사실">전력 소비 비중 변화 분석 [사실]</h6>
+<ul>
+<li>
+<p><strong>클록 분배 전력 비중:</strong> 칩 전체 소비 전력 중 클록 분배가 차지하는 비중은 TCPU가 <strong>49%</strong>, 프로스트바이트 쿼드가 **41%**입니다.</p>
+</li>
+<li>
+<p><strong>기능별 전력 소비 비중 (클록 분배 전력 제외 시):</strong></p>
+<ul>
+<li><strong>전통 CPU (TCPU):</strong> 메모리 계층 구조에 <strong>57%</strong>, 인스트럭션 페치/디코드/발행에 **27%**의 전력을 소비합니다.</li>
+<li><strong>프로스트바이트 (Frostbite Quad):</strong> 메모리 계층 소모 전력을 **38%**로 크게 낮추고, 페치/디코드/발행 소모 전력을 단 <strong>6%</strong> 수준으로 격감시켰습니다. 절감된 전력은 타일 간 메시지 전달 및 작업 공유를 위한 온칩 네트워크 및 스케줄러(<strong>26%</strong>)에 재배분되었습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>다중 코어 확장성 특성 [소스의 주장]:</strong>
+프로스트바이트를 4x4 타일 배열(4개 Quad, 16개 타일)로 확장할 경우에도 전력 소비 비중 구조는 유사하게 유지됩니다. 코어 수가 증가함에 따라 대규모 캐시 일관성 유지 메커니즘과 거대한 캐시 메모리를 추가해야 하는 일반 멀티코어 CPU와 달리, 상호작용 망 기반의 프로스트바이트는 동일한 데이터 국소성 규칙이 유지되므로 시스템 복잡도 증가 없이 뛰어난 확장성을 제공합니다.</p>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-people-speakers">3. 등장 인물 및 화자 (People &amp; Speakers)</h4>
+<ul>
+<li><strong>발표 기관 및 기업 [사실]:</strong>
+<ul>
+<li>아키텍트 랩스 (Architect Labs / Architect Silicon Inc.)</li>
+</ul>
+</li>
+<li><strong>개인 연구자 및 원저자 [사실]:</strong>
+<ul>
+<li>Yves Lafont (1990년 상호작용 망 이론 제안 논문 저자)</li>
+<li>Leonardo de Moura &amp; Sebastian Ullrich (2021년 Lean 4 정리 증명기 저자)</li>
+<li>Tendrils (2026년 &quot;On Interaction Nets&quot; 기술 논고 작성 출처)</li>
+</ul>
+</li>
+<li><strong>개별 보고서 작성자 및 에이전트 연구원 성명 [확인 불가]:</strong>
+<ul>
+<li>소스 문맥 상 아키텍트 랩스의 개별 인간 연구원 성명이나 보고서를 작성한 AI 에이전트의 구체적 명칭은 명시되지 않음.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-data-metrics-timestamps">4. 수치 및 시점 (Data Metrics &amp; Timestamps)</h4>
+<h5 id="시점-정보-사실">시점 정보 [사실]</h5>
+<ul>
+<li><strong>연구 보고서 발표 시점:</strong> 2026년 11월 18일</li>
+<li><strong>참조 문헌 및 출처 시점:</strong> 1990년 (Lafont 논문), 2021년 (Lean 4 논문), 2026년 4월 26일 (Tendrils 블로그 글)</li>
+</ul>
+<h5 id="물리-및-하드웨어-수치-사실">물리 및 하드웨어 수치 [사실]</h5>
+<ul>
+<li><strong>제조 공정:</strong> 7nm 공정</li>
+<li><strong>동작 주파수:</strong> RTL 합성 단계 800 MHz, 최종 GDS 레이아웃 단계 500 MHz</li>
+<li><strong>점유 면적:</strong> 프로스트바이트 쿼드(Quad+L3) 0.792 mm², TCPU 단일 코어 0.895 mm²</li>
+<li><strong>타일 구성:</strong> 2x2 타일 쿼드(Quad) 기본 단위, 4x4 타일(16개 타일) 확장 실증</li>
+</ul>
+<h5 id="성능-및-검증-수치-사실">성능 및 검증 수치 [사실]</h5>
+<ul>
+<li><strong>전력 대 성능비 (perf/watt):</strong> 전체 25개 워크로드 기하평균 4.59배 (검색 세트 10개 기준 6.02배, 미조율 보유 평가 세트 15개 기준 3.83배)</li>
+<li><strong>면적 대 성능비 (perf/area):</strong> TCPU 대비 8.77배</li>
+<li><strong>시뮬레이션 및 검증 속도:</strong> Arcmodel의 RTL 시뮬레이션 대비 실행 속도 200배~660배 우수, Arcmodel과 RTL 간 전력 예측 오차 1~5% 수렴</li>
+<li><strong>코드 규모 및 탐색 수치:</strong> ASL 기반 변환 Lean 코드 800,000 라인 이상, 에이전트 스웜 아이디어 제안 58건 중 37건 채택</li>
+<li><strong>워크로드 구성:</strong> 총 25개 (검색 세트 10개 + 보유 평가 세트 15개; 보유 세트에는 칼만 필터, PCA, 유한요소분석, LU solve, LZ4 압축해제 포함; FFT, Radixsort, LU 커널은 SPLASH-2 기준 64배 축소 적용)</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>비교 대상 대조군 CPU의 정확한 제품명 미공개 [사실/한계]:</strong>
+벤치마크 대조군으로 사용된 CPU의 마이크로아키텍처 명세(Dual-issue, In-order 기반 슈퍼스칼라 코어)는 규정되었으나, 법적 이유로 인해 정확한 상용 제품명 및 제조사는 공개되지 않고 'TCPU'로만 표기되어 있습니다.</li>
+<li><strong>실리콘 제조 전(Pre-silicon) 추정 데이터의 한계 [사실/한계]:</strong>
+제시된 모든 전력 및 성능 수치는 실리콘 제조 전(Pre-silicon) 시뮬레이션 및 타이밍 수렴 RTL에 기반한 추정치이며, 향후 실제 칩 제작 후(Post-silicon) 실측 데이터와의 보정 작업이 필요합니다.</li>
+<li><strong>대규모 멀티코어 및 업계 표준 벤치마크 검증 미완 [사실/한계]:</strong>
+대형 Out-of-Order CPU 및 대규모 멀티코어 TCPU와의 직접 비교, 그리고 SPEC, PARSEC 등 업계 표준 벤치마크를 활용한 메시(Mesh) 구조 평가 작업은 향후 연구 과제로 남겨져 있습니다.</li>
+<li><strong>구체적 연구진 및 에이전트 정보의 부재 [확인 불가]:</strong>
+프로젝트를 수행한 개별 연구원 성명이나 설계/검증 에이전트 스웜의 세부 구성 정보는 소스 문맥을 통해 확인할 수 없습니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

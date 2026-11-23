@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLMs are making formal software verification feasible at a much larger scale \ Anthropic</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>LLMs are making formal software verification feasible at a much larger scale \ Anthropic</h1>
+<p class="page-meta">웹 · 2026-10-23</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 앤트로픽(Anthropic)의 프론티어 레드팀(Frontier Red Team)과 시어럼(Theorem) 연구진의 협업을 통해 추진된 대규모 언어 모델(LLM) 기반의 정식 소프트웨어 검증(Formal Verification) 연구 결과를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.anthropic.com/research/formal-verification">출처</a> · <a href="https://www.youtube.com/watch?v=vrLgjGjl9F8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="대규모-언어-모델을-활용한-정식-소프트웨어-검증-formal-verification-보고서">대규모 언어 모델을 활용한 정식 소프트웨어 검증(Formal Verification) 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 앤트로픽(Anthropic)의 프론티어 레드팀(Frontier Red Team)과 시어럼(Theorem) 연구진의 협업을 통해 추진된 대규모 언어 모델(LLM) 기반의 정식 소프트웨어 검증(Formal Verification) 연구 결과를 분석한다. 2026년 10월 22일 발표된 본 연구는 그동안 막대한 시간과 고숙련 전문가 인력이 요구되어 극히 일부의 국가적·기업적 임무 수행 필수(Mission-critical) 시스템에만 한정 적용되던 정식 검증 기법을 대규모 언어 모델인 클로드(Claude)를 활용해 양산형 오픈소스 소프트웨어 생태계 전체로 확대할 수 있음을 실증하였다.</p>
+<p>연구팀은 실제 널리 사용되는 123개의 C/C++ 오픈소스 라이브러리에 존재하는 239개의 퍼즈(Fuzz) 테스트 엔트리 포인트를 RISC-V 기계어 수준의 수학적 명세(Specification)로 변환하고, 이를 로크(Rocq) 커널을 통해 검증할 수 있는 정식 증명 코드를 자율적으로 생성해냈다. 특히 이 과정에서 수조 회의 퍼즈 테스트 실행으로도 발견하지 못했던 고난도 메모리 안전성 및 논리 버그를 다수 발견하였으며, 사람이 개입하지 않고도 클로드가 자율적으로 소스 코드를 패치(Patch)하고 명세를 재구성하여 증명을 완성하는 완전 자동화 워크플로우를 구현하였다.</p>
+<p>소스 문서에 근거한 사실 관계(Fact), 소스 측의 주장(Claim), 그리고 보안 분석가의 해석(Interpretation)을 체계적으로 구분하면 다음과 같다.</p>
+<ul>
+<li><strong>사실 관계 (Fact):</strong> 연구팀은 123개 오픈소스 라이브러리의 239개 퍼즈 엔트리 포인트에 대해 약 1억 8,000만 줄의 로크(Rocq) 정식 증명 코드를 작성하여 무크래시(No-crash) 증명을 완료했다. 기존 운영체제 커널인 seL4의 정식 검증에는 20인년(Person-years)의 인력이 투입된 반면, 이번 연구에서는 LLM이 컴파일된 기계어(RISC-V) 수준에서 자율적으로 정식 증명을 완성했다.</li>
+<li><strong>소프트웨어 및 소스 측 주장 (Claim):</strong> 프론티어 LLM의 추론 능력이 급속히 향상됨에 따라, 정식 소프트웨어 검증은 동적 퍼즈 테스트를 대체하고 안전한 소프트웨어 개발 수명주기(SDLC)의 필수적 근간으로 자리 잡을 것이다.</li>
+<li><strong>기술 분석가의 해석 (Interpretation):</strong> 본 연구는 AI가 보안 취약점을 탐지·공격하는 시대에 대응하여, 소프트웨어 공급망 전체의 보안 보증(Security Guarantees) 패러다임을 '단순 테스트'에서 '수학적 증명'으로 근본적으로 전환할 수 있는 경제적·기술적 전환점을 마련한 것으로 평가된다.</li>
+</ul>
+<hr />
+<h4 id="2-주요-논점-key-arguments-claims">2. 주요 논점 (Key Arguments &amp; Claims)</h4>
+<h5 id="2-1-기존-정식-검증의-한계와-llm을-통한-패러다임-전환">2.1. 기존 정식 검증의 한계와 LLM을 통한 패러다임 전환</h5>
+<p>기존의 정식 검증은 프로그램의 모든 가능 실행 경로에 대해 보안 규칙 위반이 없음을 수학적으로 증명하는 가장 명확한 보안 기법이다. 그러나 증명 코드가 원본 코드보다 수십 배 이상 커지고, 정식 검증 언어를 다룰 수 있는 전문 인력이 극히 드물어 경제적 타당성을 확보하기 어려웠다.</p>
+<blockquote>
+<p><strong>[사실(Fact) 기반 비교 및 한계]</strong></p>
+<ul>
+<li><strong>seL4 커널 사례:</strong> 마이크로커널 개발에는 **2인년(Person-years)**의 인력이 투입된 반면, 이를 정식 검증하는 데에는 10배에 달하는 <strong>20인년</strong>의 고숙련 전문가 공수가 소요되었다.</li>
+<li><strong>적용 분야의 한계:</strong> 비용적 장벽으로 인해 정식 검증은 에어버스(Airbus)의 항공 전자 공학 소프트웨어와 같이 실패가 인명/재산상 치명적 결과를 초래하는 극히 일부 영역에만 제한적으로 적용되어 왔다.</li>
+</ul>
+</blockquote>
+<p>클로드와 같은 프론티어 LLM은 수억 줄의 코드 맥락을 분석하고 명확한 목표 지향적 증명 코드를 연속적으로 작성할 수 있어 이러한 인적·비용적 한계를 극복하는 패러다임 전환을 이끌어냈다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 구분</th>
+<th style="text-align:left">기존 정식 검증 방식</th>
+<th style="text-align:left">LLM 기반 정식 검증 방식 (본 연구)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>소요 공수 및 비용</strong></td>
+<td style="text-align:left">수년 이상의 고숙련 수동 작업 필요 (예: seL4에 20인년 투입)</td>
+<td style="text-align:left">LLM 에이전트의 자율적 작성으로 대규모 자동화 실현</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>적용 대상</strong></td>
+<td style="text-align:left">항공, 우주, 국방 등 극소수 임무 수행 필수 시스템</td>
+<td style="text-align:left">120개 이상의 양산형 범용 오픈소스 라이브러리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>검증 분석 수준</strong></td>
+<td style="text-align:left">고상위 소스 코드 수준의 수동 명세 수립</td>
+<td style="text-align:left">컴파일된 바이너리/기계어(RISC-V, x86) 수준의 자동 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>유지보수 및 재사용성</strong></td>
+<td style="text-align:left">코드 수정 시 막대한 추가 검증 비용 발생</td>
+<td style="text-align:left">에이전트 간 증명 재사용 및 코드 수정 시 자동 재증명</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-2-퍼즈-테스트의-수학적-증명-spec-전환-및-검증-메커니즘">2.2. 퍼즈 테스트의 수학적 증명(Spec) 전환 및 검증 메커니즘</h5>
+<p>퍼즈 테스트(Fuzz Testing)는 프로그램의 엔트리 포인트에 무작위 또는 변형된 무작위 입력값을 주입하여 비정상 종료(Crash)를 유발하는 방식이다. 그러나 퍼즈 테스트는 입력 데이터의 무한한 가능성으로 인해 프로그램의 모든 실행 경로를 탐색할 수 없다는 근본적 한계를 지닌다.</p>
+<p>연구팀은 구글의 OSS-퍼즈(OSS-Fuzz) 프로젝트에 수록된 C/C++ 라이브러리의 퍼즈 테스트 코드를 RISC-V 기계어 수준의 정식 명세(Specification)로 정밀하게 변환하였다. C/C++ 프로그램은 컴파일 시 주소 위생 처리기(AddressSanitizer, ASan)가 삽입되어 버퍼 오버플로우나 메모리 해제 후 재사용(Use-after-free) 등 메모리 오염 발생 시 즉시 크래시를 일으킨다. 연구팀은 이를 활용하여 &quot;64MB 미만의 모든 입력값과 모델링된 리눅스 OS 응답 조건하에서, 본 프로그램은 메모리 오염이나 단증 실패(Assertion failure) 없이 항상 정상 종료한다&quot;는 정밀 명세를 구축했다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">동적 퍼즈 테스트 (Fuzz Testing)</th>
+<th style="text-align:left">LLM 기반 정식 검증 (Formal Verification)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>검증 원리</strong></td>
+<td style="text-align:left">변형 입력값을 무작위로 투입하여 크래시 탐색</td>
+<td style="text-align:left">명세 범위 내 모든 입력 경로에 대해 크래시 부재를 수학적 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>입력 데이터 범위</strong></td>
+<td style="text-align:left">보통 1MB 이하의 입력값 탐색에 국한됨</td>
+<td style="text-align:left"><strong>64MB 미만</strong>의 모든 입력 데이터 공간을 완전 포함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>보증의 수준</strong></td>
+<td style="text-align:left">탐색하지 못한 경로에 버그가 존재할 위험 상존</td>
+<td style="text-align:left">명세 조건 내 모든 실행 경로에 대해 <strong>100% 완전 검증</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최종 산출물</strong></td>
+<td style="text-align:left">크래시를 유발하는 개별 무작위 입력 샘플 발견</td>
+<td style="text-align:left">로크(Rocq) 커널로 기계적 검증이 가능한 수학적 증명 코드</td>
+</tr>
+</tbody>
+</table>
+<p>클로드가 작성한 증명 코드는 로크 증명 검증기(Rocq Proof Checker)를 통해 엄격하게 검증된다. 따라서 개발자는 LLM이 생성한 수억 줄의 증명 코드를 수동 검토할 필요 없이, 정식 모델(RISC-V 및 리눅스 프로세스 의미론), 증명 정리 명제, 로크 검증기 자체만 신뢰하면 된다.</p>
+<h5 id="2-3-버그-발견-및-자동-수정-finding-and-fixing-bugs">2.3. 버그 발견 및 자동 수정 (Finding and Fixing Bugs)</h5>
+<p>본 보고서의 제3장(Chapter 03) 내용에 따르면, 클로드가 증명 작성을 시도하는 과정에서 기존의 수조 회 퍼즈 테스트로도 발견하지 못했던 심각한 고난도 버그들이 다수 드러났다. 연구팀은 버그 탐지 시 사람의 개입 없이 클로드가 소스 코드를 자율적으로 수정(Patch)하고, 수정된 코드로부터 명세를 재생성한 뒤 증명을 다시 완성하는 완전 자동화 워크플로우를 구현하였다.</p>
+<p>클로드가 정식 증명 과정에서 실제 발견하고 수정한 대표적인 버그 사례는 다음과 같다.</p>
+<ol>
+<li><strong>희귀 레이아웃 기반 카운터 언더플로우:</strong> 압축 해제기 모듈에서 일반적인 퍼저가 탐색하기 어려운 약 20MB 크기의 특정 레이아웃 입력값에서 발생하는 카운터 언더플로우(Counter Underflow) 및 경계 외 쓰기(Out-of-bounds Write) 발견.</li>
+<li><strong>대용량 입력 조건의 경계 외 읽기:</strong> 이미지 디코더 라이브러리에서 64MB 크기의 입력값과 2GB 이상의 메모리 할당이 동시 요구될 때 발생하는 경계 외 읽기(Out-of-bounds Read) 발견.</li>
+<li><strong>복수 핸들 호출 시퀀스 버그:</strong> 동일한 파일에 대한 두 개의 핸들 사이에서 특정 순서로 함수가 호출될 때 유발되는 경계 외 읽기 버그 발견.</li>
+<li><strong>CVE-2026-56132 재발견:</strong> <code>libexpat</code> 라이브러리에서 매우 깊게 중첩된(Deeply nested) 입력 조건에서 발생하는 기존 알려진 취약점 재발견.</li>
+<li><strong>비충돌 보안 논리 버그 (Logic Bugs):</strong> 크래시를 일으키지 않아 퍼즈 테스트로 탐지가 불가능한 버그 탐지. 애플리케이션의 파일 로딩 제한 보안 기능이 특정 조건에서 무력화되는 문제 정식 검증 중 발견.</li>
+<li><strong>고상위 속성 검증 (LZO 압축 알고리즘):</strong> 단순 메모리 안전성을 넘어 <code>LZO</code> 압축 알고리즘의 압축 후 해제 시 원본과 동일함(Encode-decode roundtripping)을 검증하는 동등성 성질 증명.</li>
+<li><strong>기계어 수준 심층 기하 증명 (<code>cpp-httplib</code>):</strong> <code>cpp-httplib</code> 라이브러리의 스택 오버플로우 방지를 증명하기 위해, <code>libc++</code> 내 <code>std::set</code> 소멸자 호출 시 재귀 깊이가 제한됨을 machine-code 수준에서 분석하여 표준 라이브러리의 레드-블랙 트리(Red-Black Tree) 재평형 알고리즘이 트리의 깊이를 로그 수치 범위 내로 유지함을 정식 증명.</li>
+</ol>
+<p>자동 수정 프로세스 중 발생할 수 있는 보상 해킹(Reward Hacking—LLM이 증명 과제를 쉽게 통과하기 위해 원본 프로그램을 아무 일도 하지 않고 즉시 종료되는 더미 프로그램으로 바꾸는 편법)을 방지하기 위해, 패치 적용 시 점수를 감점하고 변경되는 입력 변환 영역을 최소화하도록 유도하는 감점 체계와 패치 감사(Patch Auditing) 시스템을 적용했다.</p>
+<h5 id="2-4-토큰-효율성-및-증명-재사용성-token-efficiency-proof-reuse">2.4. 토큰 효율성 및 증명 재사용성 (Token Efficiency &amp; Proof Reuse)</h5>
+<p>대규모 정식 검증의 경제성을 확보하기 위해 토큰 소모를 줄이는 모델 성능 개선 및 증명 코드 재사용 기법이 적극적으로 도입되었다.</p>
+<ol>
+<li><strong>차세대 모델을 통한 토큰 절감 효과:</strong> 실제 OSS-Fuzz 코드에서 추출한 36개 소형 검증 과제에 대해 과제당 3회의 독립적 시도와 <strong>500만 토큰(5M tokens) 예산</strong>을 부여해 평가한 결과, <strong>오퍼스 5.5(Opus 5.5)는 오퍼스 5(Opus 5) 대비 약 40% 적은 토큰 소모량</strong>만으로 동일 과제의 절반을 증명해 냈다.</li>
+<li><strong>공용 작업 공간(Shared Workspace)을 통한 효율 향상:</strong> 에이전트들이 작성된 증명 코드를 공유하고 복사할 수 있는 환경을 제공한 결과, <strong>단독 작업 대비 평균 17%의 토큰을 절감</strong>했다. 완수된 34개 과제 중 30개 과제에서 공용 작업 공간을 활용한 에이전트의 토큰 비용이 단독 에이전트의 평균 비용보다 낮았으며, 단독 작업 시 실패했던 2개 과제를 추가 완수했다.</li>
+<li><strong>공통 기반 코드 증명의 재사용 메커니즘:</strong> 모든 바이너리가 공통으로 포함하는 C 런타임 초기화(<code>crt0</code>) 및 주소 위생 처리기(ASan) 런타임 설정 코드는 공통 증명 블록으로 작동한다. 에이전트 팀이 이 공통 블록을 복사 및 경미한 수정으로 재구조화함으로써, 마치 수학 정리 라이브러리(Lean의 Mathlib)처럼 레이어화된 추상화를 구축해 전체 증명 비용을 크게 낮추었다.</li>
+</ol>
+<h5 id="2-5-기타-정식-검증-사례-연구-case-studies">2.5. 기타 정식 검증 사례 연구 (Case Studies)</h5>
+<p>연구팀은 퍼즈 테스트 기반 명세 검증 외에도 다각도의 정식 검증 응용 연구를 수행했다.</p>
+<ul>
+<li><strong>리눅스 커널 zlib 규격 및 ISA 의미론 자율 생성:</strong> RFC 1950 zlib 포맷 명세를 작성하고 리눅스 커널 내 zlib 구현체가 이를 준수함을 x86 바이너리 수준에서 증명했다. 특히 클로드는 x86 및 RISC-V ISA 정식 의미론을 자율 생성하는 성과를 올렸는데, 이 의미론을 통해 단일 스텝 명령어를 실행하여 <strong>리눅스 커널 상에서 우분투(Ubuntu) 사용자 공간을 정상 부팅</strong>시키는 데 성공했다. 또한 이 의미론 생성 과정에서 <strong>공식 참조 문서 내 수백 개의 오류</strong>와 <strong>하드웨어 자체의 버그</strong>를 찾아내는 독보적 성과를 거두었다.</li>
+<li><strong>Rust 기반 파이썬 해석기의 CPython 동작 동일성 검증:</strong> Verus 도구를 활용하여 Rust로 구현된 파이썬 해석기가 CPython의 학술적 명세와 일치함을 증명했다. 170만 개 이상의 무작위 파이썬 프로그램을 실행한 실증 테스트에서 <strong>99.95%의 테스트가 CPython과 완전히 동일하게 동작</strong>함을 입증했다.</li>
+<li><strong>PDF 리더 및 방치된 상주 버그 발견:</strong> 널리 쓰이는 PDF 리더의 정식 검증을 단 1주일간 시도한 끝에 <strong>일반적으로 1년 동안 보고되는 수에 맞먹는 보안 버그를 발견</strong>했으며, 10년 이상 방치되어 있던 시스템 로직 버그를 발굴했다.</li>
+<li><strong>Nix 생태계 검증 로드맵 확장:</strong> 의존성 파워 로(Power Law) 법칙에 따라 시어럼(Theorem)은 foundational 라이브러리인 <code>glibc</code>, <code>OpenSSL</code>, <code>cURL</code> 등을 포함한 <strong>전체 Nix 생태계 소프트웨어 스택</strong>으로 정식 검증 파이프라인을 확장하는 대규모 로드맵을 제시했다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-figures-speakers">3. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h4>
+<p>소스 문서에서 확인된 연구 저자 및 관련 인물의 정보는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (한글 표기 및 로마자 병기)</th>
+<th style="text-align:left">소속 및 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">키언 루카스 (Keane Lucas)</td>
+<td style="text-align:left">앤트로픽 프론티어 레드팀 (Frontier Red Team) 저자 / 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left">앵거스 링크 (Aengus Lynch)</td>
+<td style="text-align:left">앤트로픽 프론티어 레드팀 (Frontier Red Team) 저자 / 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left">루나 통 (Luna Tong)</td>
+<td style="text-align:left">앤트로픽 프론티어 레드팀 (Frontier Red Team) 저자 / 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left">루크 챔핀 (Luke Champine)</td>
+<td style="text-align:left">앤트로픽 프론티어 레드팀 (Frontier Red Team) 저자 / 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left">지기 스트라즈닉카스 (Zygi Straznickas)</td>
+<td style="text-align:left">앤트로픽 프론티어 레드팀 (Frontier Red Team) 저자 / 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left">디노 디스테파노 (Dino Distefano)</td>
+<td style="text-align:left">앤트로픽 프론티어 레드팀 (Frontier Red Team) 저자 / 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left">하르시카 아그라왈 (Harshikaa Agrawal)</td>
+<td style="text-align:left">앤트로픽 프론티어 레드팀 (Frontier Red Team) 저자 / 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left">에비아타르 벤 아셔 (Evyatar Ben Asher)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">에이바 하우엘 (Ava Howell)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">사미 자우하르 (Sami Jawhar)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">크리스 로롤프 (Chris Rohlf)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">니콜라이 젤도비치 (Nickolai Zeldovich)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">니콜라스 카를리니 (Nicholas Carlini)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">라자시리 아그라왈 (Rajashree Agrawal)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">제이슨 그로스 (Jason Gross)</td>
+<td style="text-align:left">앤트로픽 연구팀 저자 / 연구원 (<strong>세부 역할 확인 불가</strong>)</td>
+</tr>
+<tr>
+<td style="text-align:left">시어럼 연구팀 (Theorem)</td>
+<td style="text-align:left">협업 연구 기관 (<strong>개별 인명 및 세부 역할 확인 불가</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-timeline">4. 주요 수치 및 시점 (Key Metrics &amp; Timeline)</h4>
+<p>소스 문서에 기록된 모든 정량적 수치 및 시점 정보는 아래와 같다.</p>
+<ul>
+<li><strong>2026년 10월 22일</strong> - 게시 시점 - 본 대규모 정식 검증 연구 보고서가 인터넷에 공개된 날짜.</li>
+<li><strong>123개</strong> - 라이브러리 수 - 클로드가 정식 검증을 완수한 오픈소스 라이브러리의 총개수.</li>
+<li><strong>239개</strong> - 퍼즈 엔트리 포인트 수 - 클로드가 무크래시 정식 증명에 성공한 구글 OSS-퍼즈 내 엔트리 포인트 수.</li>
+<li><strong>약 1억 8,000만 줄</strong> - Rocq 코드 수 - 클로드가 자동 생성한 전체 로크(Rocq) 정식 증명 코드의 총 줄 수.</li>
+<li><strong>약 600,000줄</strong> - Rocq 코드 수 - 중앙값 크기의 단일 바이너리를 정식 검증하는 데 생성된 전형적인 증명 코드 줄 수.</li>
+<li><strong>18,000개</strong> - RISC-V 명령어 수 - 정식 검증 대상이 된 바이너리 프로그램의 중앙값(Median) 길이를 나타내는 명령어 수.</li>
+<li><strong>64 MB 미만</strong> - 입력 데이터 크기 제한 - 본 정식 증명이 무크래시 상태를 보장하는 입력 데이터의 크기 상한선.</li>
+<li><strong>1 MB</strong> - 퍼저 입력 제한 - AFL++ 등 일반적인 퍼징 도구가 변형 입력 생성 시 다루는 표준 한계 크기.</li>
+<li><strong>20 MB 및 64 MB</strong> - 버그 발굴 입력 조건 - 클로드가 발견한 카운터 언더플로우 버그(20MB) 및 경계 외 읽기 버그(64MB 입력 및 2GB 이상 메모리 요구)의 입력 조건.</li>
+<li><strong>2인년 대 20인년</strong> - 개발 및 검증 공수 비교 - seL4 운영체제 커널의 구현 공수(2인년) 대비 정식 검증 완수 소요 공수(20인년) 수치.</li>
+<li><strong>1,000개 이상</strong> - 최근 공개 취약점 수 - 단일 소프트웨어인 리눅스 커널에서 최근 공개된 보안 취약점 수.</li>
+<li><strong>36개</strong> - 평가 과제 수 - 모델 간 토큰 효율성 비교를 위해 OSS-Fuzz 코드로 구축한 소형 정식 검증 과제 수.</li>
+<li><strong>500만 토큰 (5M tokens)</strong> - 시도당 토큰 예산 - 36개 소형 검증 과제 평가 시 각 단일 에이전트 시도에 부여된 토큰 한도.</li>
+<li><strong>약 40%</strong> - 토큰 절감 비율 - 오퍼스 5.5가 오퍼스 5 대비 동일 과제 증명 시 절감한 토큰 소모량 비율.</li>
+<li><strong>17%</strong> - 토큰 절감 비율 - 에이전트 간 공용 작업 공간을 통해 증명 코드를 재사용했을 때 절감된 평균 토큰 비율.</li>
+<li><strong>30 / 34개</strong> - 효율 개선 과제 비율 - 공용 작업 공간으로 완수된 34개 과제 중 단독 작업 평균 비용 대비 토큰 소모를 낮춘 과제의 비율.</li>
+<li><strong>170만 개 이상</strong> - 무작위 프로그램 수 - Rust 기반 파이썬 해석기의 CPython 동등성 검증 시 투입된 무작위 파이썬 프로그램 수.</li>
+<li><strong>99.95%</strong> - 동작 일치율 - Rust 파이썬 해석기가 CPython 표준 동작과 완전 일치함을 입증한 비율.</li>
+<li><strong>수백 개</strong> - 공식 문서 오류 및 버그 수 - 클로드가 ISA 정식 의미론을 자율 생성하는 과정에서 공식 참조 문서 및 하드웨어에서 발견한 오류 수.</li>
+<li><strong>10년 이상</strong> - 버그 잠복 기간 - 정식 검증 과정에서 크리티컬 애플리케이션 내 찾아낸 상주 로직 버그의 잠복 기간.</li>
+<li><strong>1주일</strong> - 버그 발견 소요 기간 - PDF 리더 소프트웨어 정식 검증 시도 중 연간 보고 수량에 맞먹는 보안 버그를 발견하는 데 걸린 시간.</li>
+<li><strong>약 300,000개</strong> - 수학 정리 수 - Lean 언어 수학 라이브러리인 Mathlib에 700명 이상의 기여자가 구축한 수학 정리 수.</li>
+<li><strong>Nix 생태계 (glibc, OpenSSL, cURL)</strong> - 미래 검증 대상 - 시어럼(Theorem)이 제시한 의존성 그래프 기반 전체 패키지 정식 검증 확장 로드맵 대상.</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 연구의 비약적 성과에도 불구하고, 소스 문서에서는 정식 검증 기술이 지닌 근본적인 한계와 불확실성을 다음과 같이 명시하고 있다.</p>
+<ol>
+<li>
+<p><strong>&quot;정식 검증됨(Formally Verified)&quot;과 &quot;버그 없음(Bug-free)&quot;의 차이:</strong></p>
+<ul>
+<li>정식 검증은 프로그램이 <strong>명세(Spec)를 준수함</strong>을 증명할 뿐, 명세 자체가 <strong>현실 세계의 물리적 시스템과 완벽히 일치함</strong>을 보장하지 않는다.</li>
+<li>버그는 실제 배포 환경의 동작이 수학적으로 모델링된 명세 범위를 벗어날 때 언제든 발생할 수 있다.</li>
+</ul>
+</li>
+<li>
+<p><strong>실험 모델 환경과 실제 배포 환경 간의 격차 (Model vs. Reality Gap):</strong></p>
+<ul>
+<li><strong>실험 모델 환경:</strong> 본 연구의 정식 증명은 <code>musl libc</code>와 정적으로 링크(Static linking)된 단일 스레드(Single-threaded) RISC-V 바이너리 및 모델링된 리눅스 OS 환경을 전제로 수행되었다.</li>
+<li><strong>실제 배포 환경:</strong> 대부분의 실제 소프트웨어는 x86 또는 ARM 아키텍처 기반에서 <code>glibc</code>와 동적 링크(Dynamic linking)되어 다중 스레드(Multi-threaded)로 동작하므로 실제 배포 환경과의 격차가 존재한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>신뢰 기반 요소(Trusted Components)의 불확실성:</strong></p>
+<ul>
+<li>증명의 정당성을 보장하기 위해 오류가 없다고 신뢰해야 하는 핵심 구성 요소를 &quot;신뢰 기반 요소&quot;라 한다.</li>
+<li>본 연구의 신뢰 기반 요소는 ① RISC-V 및 리눅스 프로세스 정식 의미론 모델, ② 작성된 증명 정리 명제 문구, ③ 로크(Rocq) 증명 검증기 자체이다.</li>
+<li>나아가 로크 검증기가 실행되는 하드웨어(CPU), OS, OCaml 컴파일러 등의 신뢰성에도 의존하므로 이들 하위 레이어의 잠재적 오류 불확실성이 존재한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>명세 미미 영역 및 외부 호출자 메모리 오염:</strong></p>
+<ul>
+<li><strong>ASan 탐지 한계:</strong> 주소 위생 처리기(ASan)가 모든 유형의 메모리 오염이나 논리적 오류를 탐지할 수 있는 것은 아니다.</li>
+<li><strong>미검증 코드 영역:</strong> OSS-Fuzz의 특정 엔트리 포인트만 증명되었으므로, 라이브러리 내부의 미실행 코드(Dead code)나 미검증 엔트리 포인트의 안전성은 담보되지 않는다.</li>
+<li><strong>호출자 코드(Caller Code)의 메모리 오염:</strong> 라이브러리 자체의 무결성이 증명되었더라도, 해당 라이브러리를 호출하는 외부 애플리케이션이 API 사전 조건(Preconditions)을 위배하여 잘못 사용할 경우 호출자 영역에서 메모리 오염이 유발될 수 있다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEPTHBENCH: Measuring How Residual Connections Enable More Computational Depth</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>DEPTHBENCH: Measuring How Residual Connections Enable More Computational Depth</h1>
+<p class="page-meta">논문 · 2026-09-30</p>
+<h2 id="요약">요약</h2>
+<p>트랜스포머(Transformer) 아키텍처에서 레이어 수($n_{\text{layer}}$)를 늘리는 깊이 스케일링(Depth Scaling)은 모델의 계산 용량을 확장하는 가장 직관적인 방법이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.32534">출처</a> · <a href="https://www.youtube.com/watch?v=dUnzDmieY_Y">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="depthbench-논문-기반-심층-기술-보고서-잔차-연결-설계와-유효-계산-깊이의-실증적-분석">DepthBench 논문 기반 심층 기술 보고서: 잔차 연결 설계와 유효 계산 깊이의 실증적 분석</h3>
+<hr />
+<h5 id="1-문제-제기-구조적-깊이와-유효-계산-깊이의-괴리">1. 문제 제기: 구조적 깊이와 유효 계산 깊이의 괴리</h5>
+<p>트랜스포머(Transformer) 아키텍처에서 레이어 수($n_{\text{layer}}$)를 늘리는 깊이 스케일링(Depth Scaling)은 모델의 계산 용량을 확장하는 가장 직관적인 방법이다. 그러나 거대 언어 모델(LLM) 연구에서는 레이어 수를 물리적으로 배치하는 **'구조적 깊이(Architectural Depth)'**와 모델이 순차적 미분 불가능/비선형 변환을 통해 실질적으로 유용하게 활용하는 <strong>'유효 계산 깊이(Effective Computational Depth)'</strong> 사이에 심각한 격차가 존재함이 확인되고 있다.</p>
+<p>기존 Pre-LN 트랜스포머 아키텍처는 경사 소실(Gradient Vanishing) 문제를 완화하여 심층 네트워크의 학습 안정성은 확보했으나, 깊이가 깊어질수록 후반부 레이어의 기여도가 급격히 약화되는 <strong>'깊이의 저주(Curse of Depth)'</strong> 및 <strong>'Pre-LN 희석(Pre-LN Dilution)'</strong> 현상에 직면한다.</p>
+<p>수학적으로 Pre-LN 희석 현상은 잔차 스트림(Residual Stream)의 분산 누적 메커니즘에서 비롯된다. Pre-LN 아키텍처에서 $\ell$번째 레이어의 입력 $h_{\ell-1}$은 이전 모든 서브레이어 변환의 가산적 누적합($h_{\ell-1} = x_0 + \sum_{i=1}^{\ell-1} F_i(\text{LN}(h_{i-1}))$)이다. 레이어 수 $L$이 증가함에 따라 잔차 스트림 전체의 스케일 및 분산은 깊이에 비례하여 $O(L)$ 수준으로 선형적으로 증가한다. 반면, 개별 서브레이어 변환 $F_\ell(\text{LN}(h_{\ell-1}))$의 출력 스케일은 일정하게 유지되므로, 잔차 스트림 전체 크기 대비 개별 레이어 변환의 상대적 스케일 비율인 $\frac{|F_\ell(\text{LN}(h_{\ell-1}))|<em>2}{|h</em>{\ell-1}|_2}$은 $O(1/\sqrt{\ell})$로 정비례하여 감쇄(Dilution)한다.</p>
+<p>결과적으로 심층부 레이어로 갈수록 서브레이어가 잔차 스트림에 미치는 영향력이 극도로 약화되며, 단순한 구조적 레이어 추가가 명목상의 깊이만 확장할 뿐 실질적 계산 능력 향상으로 이어지지 못하는 원인이 된다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구조적 깊이 (Architectural Depth)</th>
+<th style="text-align:left">유효 계산 깊이 (Effective Computational Depth)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>물리적 레이어 수의 수평적 확장:</strong> 모델에 물리적으로배치된 총 레이어 수($n_{\text{layer}}$) 및 파라미터 재배치 비율.</td>
+<td style="text-align:left"><strong>순차적 연산 단계의 실질적 활용:</strong> 모델이 순차적 비선형 변환을 통해 실제 연산에 유용하게 활용하는 유효 계산 단계의 깊이.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>무제한적 구조 확장 가능:</strong> 동일 파라미터 예산 하에서도 너비($d_{\text{model}}$)를 줄이고 레이어를 늘려 물리적 깊이를 극단적으로 증가시킬 수 있음.</td>
+<td style="text-align:left"><strong>상한선 존재 및 신호 감쇄:</strong> Pre-LN 구조에서는 잔차 스트림 분산 누적($O(L)$) 및 표현 유착으로 인해 유효 계산 깊이가 특정 상한선에서 정체됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>측정 방식:</strong> 단순 명목 레이어 개수 및 파라미터 수 계산.</td>
+<td style="text-align:left"><strong>측정 방식:</strong> 통제된 연산 예산 하 추가 레이어/반복이 제공하는 실질적 사전학습 손실 하락, 층별 인과적 의존성 및 표현 다양성 지표.</td>
+</tr>
+</tbody>
+</table>
+<h6 id="문제-발생의-3가지-핵심-원인">문제 발생의 3가지 핵심 원인</h6>
+<ol>
+<li><strong>Pre-LN 잔차 스트림의 $O(L)$ 분산 누적 및 신호 희석:</strong> 깊이가 깊어질수록 잔차 스트림의 크기가 지속적으로 누적되어, 후반부 레이어가 생성하는 서브레이어 변환($F_\ell$)의 상대적 기여도가 잔차 스트림 전체 스케일 대비 $O(1/\sqrt{\ell})$ 수준으로 약화된다.</li>
+<li><strong>표현의 동질화 및 유착(Representation Collapse):</strong> 심층부 레이어로 갈수록 인접한 레이어 간 출력 벡터의 각도 거리(Angular Distance)가 감소하며, 추가되는 레이어들이 독립적인 비선형 변환을 수행하지 못하고 이전 레이어의 표현을 단순 미세 정밀화(Refinement)하는 중복 연산을 반복한다.</li>
+<li><strong>인과적 의존성 및 순서 민감도 상실:</strong> 잔차 연결의 단순 가산(Additive) 구조로 인해 후반부 레이어들이 이전 깊이의 정보를 선택적으로 재조합하지 못하며, 후속 연산에 대한 개별 레이어의 인과적 영향력(Causal Influence) 및 순서 교체 민감도(Permutation Sensitivity)가 상실된다.</li>
+</ol>
+<hr />
+<h5 id="2-통제된-실험-설계-depthbench-벤치마크-구조-및-조건">2. 통제된 실험 설계: DepthBench 벤치마크 구조 및 조건</h5>
+<p>DepthBench는 파라미터 수, 사전학습 레시피, 하드웨어 및 최적화 조건 등 외생 변수를 철저히 통제한 상태에서, 다양한 잔차 연결(Residual Connection) 아키텍처가 구조적 깊이를 유효 계산 깊이로 전환할 수 있는지 실증적으로 검증하는 통제 벤치마크다.</p>
+<h6 id="너비-깊이-종횡비-aspect-ratio-d_-text-model-n_-text-layer">너비-깊이 종횡비 (Aspect Ratio, $d_{\text{model}}/n_{\text{layer}}$)</h6>
+<p>DepthBench는 파라미터 예산을 엄격히 고정한 상태에서 너비($d_{\text{model}}$)와 깊이($n_{\text{layer}}$) 간의 파라미터 재배치를 측정한다. 종횡비가 클수록 '얕고 넓은 형태(Shallow-Wide)', 작을수록 '깊고 좁은 형태(Deep-Narrow)'를 의미한다.</p>
+<h6 id="평가-대상-10가지-아키텍처-분류">평가 대상 10가지 아키텍처 분류</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">분류 (Category)</th>
+<th style="text-align:left">아키텍처 (Method)</th>
+<th style="text-align:left">업데이트 규칙 (Update Rule)</th>
+<th style="text-align:left">가중치 특성 (Weight)</th>
+<th style="text-align:left">정보 출처 (Source)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Baseline</strong></td>
+<td style="text-align:left">Pre-LN</td>
+<td style="text-align:left">$h_\ell = h_{\ell-1} + F_\ell(\text{LN}(h_{\ell-1}))$</td>
+<td style="text-align:left">고정 (Fixed)</td>
+<td style="text-align:left">$h_{\ell-1}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Normalization Variants</strong></td>
+<td style="text-align:left">Sandwich-LN</td>
+<td style="text-align:left">$h_\ell = h_{\ell-1} + \text{LN}<em>{\text{out}}(F</em>\ell(\text{LN}<em>{\text{in}}(h</em>{\ell-1})))$</td>
+<td style="text-align:left">고정 (Fixed)</td>
+<td style="text-align:left">$h_{\ell-1}$</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">LNS</td>
+<td style="text-align:left">$h_\ell = h_{\ell-1} + F_\ell\left(\frac{1}{\sqrt{\ell}}\text{LN}(h_{\ell-1})\right)$</td>
+<td style="text-align:left">고정 (Fixed)</td>
+<td style="text-align:left">$h_{\ell-1}$</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DeepNorm</td>
+<td style="text-align:left">$h_\ell = \text{LN}(\alpha h_{\ell-1} + F_\ell(h_{\ell-1}))$</td>
+<td style="text-align:left">고정 (Fixed)</td>
+<td style="text-align:left">$h_{\ell-1}$</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">KEEL</td>
+<td style="text-align:left">$h_\ell = \text{LN}(\alpha h_{\ell-1} + F_\ell(\text{LN}(h_{\ell-1})))$</td>
+<td style="text-align:left">고정 (Fixed)</td>
+<td style="text-align:left">$h_{\ell-1}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Multi-stream Residuals</strong></td>
+<td style="text-align:left">HC</td>
+<td style="text-align:left">$H_\ell = H_{\ell-1}A_\ell + F_\ell(\text{LN}(H_{\ell-1}\alpha_\ell))\beta_\ell^\top$</td>
+<td style="text-align:left">동적 (Dynamic)</td>
+<td style="text-align:left">$m$개 잔차 스트림</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">mHC</td>
+<td style="text-align:left">$H_\ell = H_{\ell-1}\text{Sinkhorn}(\tilde{A}<em>\ell) + F</em>\ell(\text{LN}(H_{\ell-1}\sigma(\tilde{\alpha}<em>\ell)))2\sigma(\tilde{\beta}</em>\ell^\top)$</td>
+<td style="text-align:left">동적 (Dynamic)</td>
+<td style="text-align:left">$m$개 잔차 스트림</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Cross-layer Access</strong></td>
+<td style="text-align:left">Full AttnRes</td>
+<td style="text-align:left">$h_\ell \propto \sum_{i=0}^{\ell-1} \phi(w_\ell, v_i)v_i$</td>
+<td style="text-align:left">동적 (Dynamic)</td>
+<td style="text-align:left">$[h_1, \dots, h_{\ell-1}]$</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Block AttnRes</td>
+<td style="text-align:left">$h_\ell \propto \sum_{i=0}^{n-1} \phi(w_\ell, v_i)v_i + \phi(w_\ell, v_j^n)v_j^n$</td>
+<td style="text-align:left">동적 (Dynamic)</td>
+<td style="text-align:left">$[v_0, \dots, v_{n-1}, v_j^n]$</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">MoDA (Pre-LN)</td>
+<td style="text-align:left">$h_\ell = h_{\ell-1} + \text{MoDA}<em>\ell(\text{LN}(h</em>{\ell-1}); C_{&lt;\ell})$</td>
+<td style="text-align:left">동적 (Dynamic)</td>
+<td style="text-align:left">$[h_{\ell-1,\le t}; h_{0,t}, \dots, h_{\ell-2,t}]$</td>
+</tr>
+</tbody>
+</table>
+<h6 id="실험-스위트-suite-구성-및-통제-조건">실험 스위트(Suite) 구성 및 통제 조건</h6>
+<ul>
+<li><strong>400M 메인 벤치마크 (Main Benchmark):</strong> 총 파라미터 약 400M 고정, 10개 아키텍처 대상, 7개 모델 형상 통제. 종횡비 범위 $9.14 \sim 76.00$ ($L=16, d=1216$부터 $L=70, d=640$까지).</li>
+<li><strong>300M 백본 고정 실험 (Iso-backbone Control):</strong> 임베딩 및 LM Head를 제외한 순수 백본 파라미터를 300M으로 고정, 6개 모델 형상 평가(종횡비 $6.48 \sim 78.00$). 좁은 모델이 임베딩 파라미터 감소로 인해 백본 예산을 더 많이 할당받는 변수를 통제.</li>
+<li><strong>멀티스케일 스위트 (Multi-scale Suite):</strong> 200M, 300M, 400M, 500M 파라미터 규모에서 대표 종횡비 3종($\approx 28, \approx 43, \approx 76$)을 평가하여 스케일 간 일관성 검증.</li>
+<li><strong>1.6B 스케일 검증 (Validation at Scale):</strong> Qwen3-1.7B GQA 구조 기반 1.6B 파라미터 스케일에서 3가지 형상(종횡비 $27.85, 43.20, 73.14$)을 검증하여 대형 모델로의 확장성 검증.</li>
+<li><strong>사전학습 환경 및 최적 학습률(LR) 설정:</strong> FineWeb-Edu 데이터셋 기반 Chinchilla 스케일링 법칙(파라미터당 20 토큰) 준수 pre-training (400M 모델 8B 토큰, 1.6B 모델 32B 토큰). 시퀀스 길이 2048, 글로벌 배치 크기 약 1M 토큰, AdamW 최적화기 사용.</li>
+<li><strong>아키텍처별 최적 학습률 스위프:</strong> 학습률 민감도를 통제하기 위해 아키텍처별 LR 스위프를 수행함. Pre-LN, Sandwich-LN, KEEL, MoDA, Full/Block AttnRes, HC, mHC는 $2 \times 10^{-3}$이 최적 LR로 설정됨. 반면 <strong>LNS</strong>는 스케일 감쇄 보정을 위해 $5\times$ 높은 $1 \times 10^{-2}$에서 최적 성능을 보였으며, <strong>DeepNorm</strong>은 초기가중치 스케일링 계수 $\beta = (8L)^{-1/4}$ (예: $L=24$에서 $\beta \approx 0.0054$) 적용에 따라 $1 \times 10^{-3}$의 보수적인 최적 LR을 가짐.</li>
+</ul>
+<hr />
+<h5 id="3-핵심-실험-결과-아키텍처별-너비-깊이-스케일링-및-도메인-성과">3. 핵심 실험 결과: 아키텍처별 너비-깊이 스케일링 및 도메인 성과</h5>
+<p>400M 메인 벤치마크 및 멀티스케일 실험 분석 결과, 잔차 연결 아키텍처의 구조적 설계에 따라 너비-깊이 스케일링 양상이 극명하게 갈림이 확인되었다.</p>
+<h6 id="주요-아키텍처-그룹별-검증-손실-validation-loss-트렌드">주요 아키텍처 그룹별 검증 손실(Validation Loss) 트렌드</h6>
+<ol>
+<li><strong>Pre-LN 및 정규화 변형 아키텍처:</strong> 모델이 깊고 좁아질수록 검증 손실이 정체되거나 오히려 악화됨. Pre-LN의 경우 $L=16$ (종횡비 76.0)에서 검증 손실 2.759를 기록했으나, $L=32$ (종횡비 28.0)에서는 2.782로 성능이 전반적으로 퇴보함. Sandwich-LN, LNS, DeepNorm, KEEL, MoDA 역시 최적의 스위트존(Sweet zone)이 종횡비 $42.7 \sim 76.0$ 범위에 형성되어, 깊이 확장의 이점을 계산 능력으로 전환하지 못함.</li>
+<li><strong>HC (Hyper-Connections) 및 Full AttnRes:</strong> 극단적으로 깊고 좁은 모델 형상에서도 검증 손실이 지속적으로 하락하는 명확한 깊이 스케일링 이점을 입증함. Full AttnRes는 $L=16$ (2.751)에서 $L=32$ (2.718)로 성능이 지속 하락하였으며, HC는 $L=16$ (2.729)에서 $L=32$ (2.699)로 향상됨. 종횡비 9.14 ($L=70, d=640$) 수준의 극단적 깊이에서도 검증 손실 하락세가 지속됨. 백본 고정(Iso-backbone 300M) 실험에서도 임베딩 및 LM Head 감소로 총 파라미터가 줄어듦에도 불과하고 깊이가 깊어질수록 성능이 향상됨.</li>
+<li><strong>파생 아키텍처 (Block AttnRes, mHC)의 결과:</strong> 원본 아키텍처와 달리 일관된 깊이 스케일링을 유지하지 못함. Block AttnRes는 중간 형태인 $L=20$ (종횡비 56.0)에서 최적 성능(2.715)을 달성한 후 $L=32$ (2.730)로 성능이 퇴보함. mHC 역시 $L=24$에서 최고 성적을 거두었으나 극단적 심층 구조에서는 성능 향상이 정체됨.</li>
+</ol>
+<blockquote>
+<h6 id="도메인별-일반화-성과-negative-log-likelihood-nll">도메인별 일반화 성과 (Negative Log-Likelihood, NLL)</h6>
+<p>사전학습 손실에서 관찰된 HC 및 Full AttnRes의 깊이 스케일링 이점은 다운스트림 도메인 평가(NLL)로도 일관되게 전이됨을 확인 함.</p>
+<ul>
+<li><strong>코딩 (MBPP, HumanEval):</strong> Pre-LN 대비 HC 및 Full AttnRes가 깊이가 깊어질수록 더 낮은 NLL을 기록하며 우수한 코드 생성 정밀도를 나타냄.</li>
+<li><strong>STEM (SciQ, GPQA):</strong> 깊이 확장에 따른 NLL 감소 폭이 가장 명확하게 나타난 분야로, Full AttnRes와 HC가 심층 레이어를 통한 지식 추론 능력 향상을 입증함.</li>
+<li><strong>수학 (GSM8K, MATH-500):</strong> 깊고 좁은 아키텍처 구성 시 HC 및 Full AttnRes의 NLL이 지속적으로 하락하며, 복잡한 다단계 연산 및 논리 추론 성과가 유효하게 향상됨을 보여줌.</li>
+</ul>
+</blockquote>
+<hr />
+<h5 id="4-심층-작동-원리-분석-층별-기여도-및-표현-다양성">4. 심층 작동 원리 분석: 층별 기여도 및 표현 다양성</h5>
+<p>연구진은 레이어 수준 진단(Layer-level Diagnostics)을 수행하여 HC와 Full AttnRes가 추가된 구조적 레이어를 유효 계산으로 전환하는 내적 작동 메커니즘을 분석했다.</p>
+<h6 id="층별-진단-지표-정의-및-측정-의미">층별 진단 지표 정의 및 측정 의미</h6>
+<ul>
+<li><strong>표현 다양성 (Angular Distance):</strong> 레이어 $\ell$과 $\ell+n$의 출력 표현 간 각도 거리를 측정.
+$$d(h_\ell, h_{\ell+n}) = \frac{1}{\pi} \arccos\left(\frac{h_\ell \cdot h_{\ell+n}}{|h_\ell|<em>2 |h</em>{\ell+n}|_2}\right)$$
+0에 가까울수록 표현이 유착(Collapse)되었음을 의미하며, 높고 비동질적인 값을 가질수록 레이어별로 특화된 비선형 변환이 수행됨을 의미.</li>
+<li><strong>인과 점수 (Causal Score):</strong> 특정 레이어 $s$를 건너뛰었을 때(Skipping) 후속 레이어 $\ell$의 업데이트 변화량을 측정.
+$$C(s, \ell) = \frac{|(h_{\ell+1} - h_\ell) - (\bar{h}<em>{\ell+1} - \bar{h}</em>\ell)|<em>2}{|h</em>{\ell+1} - h_\ell|<em>2}$$
+네트워크 후반 3/4 지점($S</em>{\text{late}} = {(s, \ell) : s \ge \lceil L/4 \rceil, \ell &gt; s}$)에서 $C(s, \ell) &gt; 0.45$를 만족하는 비율($R_{\text{causal}}$)을 집계하여 심층 레이어의 유효 인과 의존성을 평가.</li>
+<li><strong>치환 점수 (Permutation Score):</strong> 두 레이어 $\ell_1, \ell_2$의 순서를 교체했을 때 발생하는 언어 모델링 손실의 변화율을 측정.
+$$P(\ell_1, \ell_2) = \frac{|L(M) - L(M_{\text{swap}(\ell_1, \ell_2)})|}{L(M)}$$
+네트워크 후반 3/4 지점($P_{\text{late}} = {(\ell_1, \ell_2) : \ell_1 \ge \lceil L/4 \rceil, \ell_2 &gt; \ell_1}$)에서 $P(\ell_1, \ell_2) &gt; 0.15$를 만족하는 비율($R_{\text{perm}}$)을 집계하여 레이어 간 연산의 독자성 및 순서 민감도를 평가.</li>
+</ul>
+<pre><code>[Pre-LN / Norm Variants]
+Input ──&gt; Layer 1 ──&gt; Layer 2 ──&gt; ... ──&gt; Layer L (표현 유착: 단조적 미세 정밀화) ──&gt; Output
+
+[Full AttnRes]
+Input ──┬──────────┬──────────┬──────────┐  (모든 이전 층의 히든 스테이트 저장 및
+        ├──&gt; Layer 1 ──┤          │          │   동적 어텐션 쿼리로 직접 Retrieve)
+        ├─────────────┼──&gt; Layer 2 ──┤          │  * 메모리 오버헤드: O(L) 상태 보존 필요
+        └─────────────┴─────────────┴──&gt; Layer L ──&gt; Output
+
+[HC (Multi-stream)]
+Input ──&gt; [Stream 1] ─── (동적 상호작용 행렬 A_k) ──┐  (m=4 고정 스트림을 전파하며
+      ──&gt; [Stream 2] ─── (경로 조합 w_{i-&gt;l})   ──┼──&gt; Sum/Mix ──&gt; Output
+      ──&gt; [Stream 3] ───────────────────────────┤   * 메모리 오버헤드: m개 스트림 상태 고정
+      ──&gt; [Stream 4] ───────────────────────────┘
+</code></pre>
+<h6 id="full-attnres와-hc의-잔차-경로-구현-메커니즘-및-상태-추적-비교">Full AttnRes와 HC의 잔차 경로 구현 메커니즘 및 상태 추적 비교</h6>
+<ul>
+<li><strong>Full AttnRes (Direct Retrieval):</strong> 단일 잔차 스트림 누적 방식을 폐기하고, 각 레이어가 동적 어텐션 메커니즘을 통해 임베딩 및 이전 모든 레이어의 독립적 출력 소스($[h_1, \dots, h_{\ell-1}]$)를 직접 검색(Retrieve)하고 선택적으로 재통합한다.
+<ul>
+<li><strong>메모리 및 상태 추적:</strong> 이전 모든 깊이의 숨겨진 상태(Hidden States)를 메모리에 저장하고 유지해야 하므로, 깊이 $L$이 깊어짐에 따라 활성화 메모리(Activation Memory) 점유량이 $O(L)$로 증가한다.</li>
+</ul>
+</li>
+<li><strong>HC (Multi-stream Routing):</strong> 단일 잔차 스트림을 $m$개(실험에서는 $m=4$)의 다중 스트림으로 확장하고, 동적 읽기($\alpha_\ell$), 쓰기($\beta_i$), 스트림 전파 행렬($A_k$)을 통해 스트림 간 재귀적 상호작용 및 경로 조합을 수행한다.
+<ul>
+<li><strong>경로 합성 수식:</strong> 서브레이어 $i$의 출력이 후속 서브레이어 $\ell$에 전달되는 잔차 경로 가중치는 다음과 같이 정밀하게 표현된다.
+$$w_{i \to \ell} = \beta_i^\top A_{i+1} \dots A_{\ell-1} \alpha_\ell$$</li>
+<li><strong>메모리 및 상태 추적:</strong> 이전 상태 전체를 보존할 필요 없이 $m=4$개의 고정된 병렬 스트림 상태만을 전파 및 추적하므로, Full AttnRes 대비 상태 추적 공간 복잡도가 유의미하게 절감된다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="진단-결과-및-logitlens-프루닝-반응">진단 결과 및 LogitLens/프루닝 반응</h6>
+<ul>
+<li><strong>표현 다양성:</strong> Pre-LN, LNS, KEEL 등은 깊이가 깊어질수록 Angular Distance가 매끄럽게 감소하며 표현 유착 현상을 보인다. 반면 HC와 Full AttnRes는 깊이 전체에 걸쳐 크고 비동질적인(Heterogeneous) 구조를 유지한다.</li>
+<li><strong>인과 및 치환 점수 ($L=32$ 기준):</strong> 네트워크 후반 3/4 지점에서 Pre-LN의 높은 인과 점수 비율은 약 1%, 치환 점수 비율은 약 8%에 불과하여 후반부 레이어들이 서로 대체 가능하고 영향력이 미미함을 보여준다. 반면 Full AttnRes는 인과 점수 16%, 치환 점수 46%를 기록하고, HC는 인과 점수 7%, 치환 점수 35%를 기록하여 후반부 레이어가 강력한 인과적 의존성과 연산 순서 민감도를 가짐을 입증한다.</li>
+<li><strong>LogitLens 및 프루닝 반응:</strong> Pre-LN은 레이어를 지날수록 최종 예측 분포로 단조 증가(Monotonic refinement)하는 양상을 보이며 레이어 프루닝 시 첫 레이어를 제외하면 성능 저하가 적다. 반면 Full AttnRes는 중간 레이어의 예측 분포가 비단조적(Non-monotonic) 변화를 보이고, 첫 레이어와 마지막 레이어 모두 프루닝에 극도로 민감하게 반응하여 연산의 구조적 통합성이 매우 높음을 증명한다.</li>
+</ul>
+<hr />
+<h5 id="5-파생-아키텍처의-한계-및-시스템-효율성-트레이드오프">5. 파생 아키텍처의 한계 및 시스템 효율성 트레이드오프</h5>
+<p>Full AttnRes와 HC의 효율화 파생 버전인 Block AttnRes와 mHC가 깊이 스케일링에서 한계를 보인 원인과, 모델을 깊게 만들 때 발생하는 시스템 레벨의 비용 트레이드오프는 다음과 같다.</p>
+<h6 id="5-1-block-attnres의-한계-원인-데드-세그먼트-dead-segment">5.1 Block AttnRes의 한계 원인: 데드 세그먼트(Dead Segment)</h6>
+<p>Block AttnRes는 연산 오버헤드를 줄이기 위해 블록 경계(Block Boundary) 스케줄을 도입하여 블록 단위로만 참조 소스를 저장한다. 레이어 출력은 누적합 $s_\ell$에 저장되며, 블록 경계마다 동결된 소스 집합 $B_\ell$에 추가된다. 깊이 혼합 소프트맥스 입력 $\tilde{h}<em>\ell$은 다음과 같다.
+$$\tilde{h}</em>\ell \propto \alpha_\ell s_\ell + \sum_{v \in B_\ell} \beta_{\ell, v} v \quad \left(\alpha_\ell + \sum_v \beta_{\ell,v} = 1\right)$$
+그러나 첫 번째 블록 출력이 저장되기 전인 네트워크 초반부에는 소프트맥스가 임베딩만을 반복 재참조하고 현재 블록의 누적 출력을 배제하는 **'데드 세그먼트(Dead Segment)'**가 형성된다. 이 데드 세그먼트의 길이가 깊이 $L$에 비례하여 길어지므로($L=16$일 때 2개 레이어, $L=24$일 때 5개 레이어, $L=32$일 때 8개 레이어), $L=32$ 모델에서는 전체 네트워크의 1/4에 달하는 초반 레이어가 깊이 확장의 이점을 누리지 못하고 계산 자원이 무효화된다.</p>
+<h6 id="5-2-mhc의-한계-원인-유효-랭크-저하-및-공선성-collinearity">5.2 mHC의 한계 원인: 유효 랭크 저하 및 공선성(Collinearity)</h6>
+<p>mHC는 학습 안정성을 위해 Sinkhorn-Knopp 정규화를 도입하여 잔차 전파 행렬을 이중 확률(Doubly Stochastic) 행렬로 제약한다. 이 제약 조건은 고정점 $U = \frac{1}{m} \mathbf{11}^\top$을 형성하게 되며, 반복적인 혼합 연산이 진행됨에 따라 잔차 제품의 유효 랭크(Effective Rank)를 HC($2.53 \sim 2.81$) 대비 mHC($1.44 \sim 1.65$)로 대폭 저하시킨다. $L=32$ 환경에서 mHC의 다중 스트림 전파 방향은 거의 완전한 공선성(Collinear)을 띠게 되어 스트림 간 경로 다양성이 손실되고, 결과적으로 원본 HC가 가지는 깊이 스케일링의 이점을 상실한다.</p>
+<h6 id="시스템-효율성-및-연산-하드웨어-트레이드오프">시스템 효율성 및 연산/하드웨어 트레이드오프</h6>
+<p>동일 파라미터 예산 하에서 모델을 깊고 좁게 확장할 때, 파라미터 수 비례 연산($L d^2$)은 일정하게 유지되지만 $L d$ 비례 연산 및 메모리 오버헤드가 급증한다.</p>
+<p>특히 하드웨어 관점에서, 좁고 깊은 구성($d_{\text{model}}=640, L=70$)은 GPU 연산 자원의 활용도(Utilization)를 급격히 떨어뜨린다. 숨겨진 차원 $d_{\text{model}}$이 줄어들면 행렬 곱 연산의 크기가 감소하여 GPU Tensor Core를 충분히 채우지 못하고(Under-saturation), 실행 특성이 연산 제한(Compute-bound)에서 메모리 대역폭 제한(Memory-bandwidth bound)으로 전환된다. 동시에 레이어 수 $L$이 늘어남에 따라 순차적인 CUDA 커널 호출(Kernel Launch) 오버헤드 및 동기화 지연이 $L$배로 누적되어 실제 실행 시간이 대폭 증가한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 지표 (System Metric)</th>
+<th style="text-align:left">수식 / Scaling Behavior</th>
+<th style="text-align:left">종횡비 76.0 ($L=16, d=1216$)</th>
+<th style="text-align:left">종횡비 9.1 ($L=70, d=640$)</th>
+<th style="text-align:left">시스템적 영향 및 트레이드오프</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Prefill FLOPs (개별 시퀀스)</strong></td>
+<td style="text-align:left">$O(T^2 L d) + O(T L d^2)$</td>
+<td style="text-align:left">~3.0 TFLOPs</td>
+<td style="text-align:left">~4.4 TFLOPs</td>
+<td style="text-align:left">긴 문맥($T \gg d$) 환경에서 Attention 연산 비중 증가로 전체 계산량 급증</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>KV Cache 메모리</strong></td>
+<td style="text-align:left">$O(T L d)$</td>
+<td style="text-align:left">기준점 (0.35 GiB)</td>
+<td style="text-align:left">&gt; 2배 증가 (0.72 GiB)</td>
+<td style="text-align:left">아키텍처 종류와 무관하게 너비-깊이 재배치 자체에 의해 발생하는 고유 비용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Peak GPU Memory (Batch 8)</strong></td>
+<td style="text-align:left">하드웨어 메모리 점유량</td>
+<td style="text-align:left">~6.2 GiB</td>
+<td style="text-align:left">~12.5 GiB</td>
+<td style="text-align:left">Full AttnRes의 동적 소스 저장 메모리 및 서브레이어 점유 폭증</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPU-hours (1B Prefill Tokens)</strong></td>
+<td style="text-align:left">실측 실행 시간 오버헤드</td>
+<td style="text-align:left">~2.1 Hours</td>
+<td style="text-align:left">~12.2 Hours</td>
+<td style="text-align:left">작은 행렬 곱으로 인한 Tensor Core 미활용 및 커널 호출 오버헤드 급증</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="6-결론-및-연구진의-한계적-관점-nuanced-scaling-perspective">6. 결론 및 연구진의 한계적 관점 (Nuanced Scaling Perspective)</h5>
+<h6 id="결론-요약">결론 요약</h6>
+<p>DepthBench 벤치마크의 통제된 실증 분석을 통해, 잔차 연결(Residual Connection) 구조의 설계가 모델의 구조적 깊이를 실질적인 유효 계산 깊이로 전환할 수 있는지 결정하는 핵심 요인임이 입증되었다. 기존 Pre-LN 및 정규화 변형들은 깊이가 깊어질수록 $O(L)$ 분산 누적에 따른 신호 희석, 표현 유착 및 인과적 영향력 상실로 인해 스케일링 이점을 제공하지 못한다. 반면, Full AttnRes 및 HC와 같이 이전 깊이의 표현을 동적으로 검색하거나 다중 스트림으로 전달하는 아키텍처는 극단적으로 깊고 좁은 모델 형상에서도 사전학습 손실 및 도메인별 평가(NLL) 성과를 지속적으로 향상시킨다.</p>
+<blockquote>
+<p>[!WARNING]</p>
+<h6 id="실험-범위-및-일반화-한계에-관한-경고">실험 범위 및 일반화 한계에 관한 경고</h6>
+<p>본 연구의 통제된 소형/중형 모델 실험 결과(400M ~ 1.6B 스케일)를 <strong>모든 초대형 언어 모델(Massive Scale LLMs)에 무조건적으로 확정하여 일반화해서는 안 된다.</strong></p>
+<ul>
+<li><strong>최적화 민감성 및 스케일링 불안정성:</strong> HC 아키텍처의 경우 모델 스케일이 커짐에 따라(500M 및 1.6B 스케일) 최적화 하이퍼파라미터에 대한 민감도가 급격히 높아졌다. 500M 스케일의 특정 종횡비 실험에서 그래디언트 폭발(Gradient Explosion)로 학습이 이탈하는 현상이 관찰되었으며, 1.6B 스케일에서는 소형 모델만큼의 명확한 깊이 개선 이점이 나타나지 않았다. 이는 학습 안정성을 위해 하이퍼파라미터의 정밀한 재튜닝이 필요함을 시사한다.</li>
+<li><strong>시스템 Co-design의 필수성:</strong> 깊이 확장은 Prefill FLOPs, KV 캐시, Peak Memory 및 execution latency 측면에서 막대한 시스템 오버헤드를 동반한다. 따라서 실전 대규모 적용을 위해서는 아키텍처적 잔차 연결 개선뿐만 아니라 전용 트라이톤(Triton) 커널 개발, 파이프라인 스케줄링, 메모리 통신 오버랩 등 **시스템-아키텍처 공동 설계(Co-design)**가 반드시 병행되어야 한다.</li>
+</ul>
+</blockquote>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUARD: Stabilizing Recursive Self-Improvement with Regret Guidance</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>GUARD: Stabilizing Recursive Self-Improvement with Regret Guidance</h1>
+<p class="page-meta">논문 · 2026-11-20</p>
+<h2 id="요약">요약</h2>
+<p>GUARD는 모델 가중치를 동결한 채 자가 검토와 회귀 검증으로 에이전트 하네스를 개선한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.23476">출처</a> · <a href="https://www.youtube.com/watch?v=wjLDApJNIZU">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="guard-프레임워크-기반-자율-에이전트-하네스-재귀적-자기-개선-rsi-기술-해설-보고서">GUARD 프레임워크 기반 자율 에이전트 하네스 재귀적 자기 개선(RSI) 기술 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>[사실] 자율 인공지능 에이전트 시스템은 가중치가 동결된 백본 언어 모델(Frozen Base Model, 예: 제미나이 4)과 시스템 프롬프트, 재사용 가능한 스킬(SKILL.md), 메모리(MEMORY.md), 도구 인터페이스 스키마 및 제어 로직으로 구성된 수정 가능한 '하네스(Harness)'를 결합하여 구동됩니다. [소스 주장] 구글 클라우드(Google Cloud) 연구진은 에이전트 성능 향상의 상당 부분이 하네스 엔지니어링에서 기인하지만, 사람이 수동으로 하네스를 튜닝하는 방식은 확장성이 떨어지고 도구, 스키마, 사용자 워크플로 변경 시 쉽게 무력화된다고 지적합니다. 이에 따라 에이전트의 과거 실행 경험을 지속적인 텍스트 하네스 수정으로 전환하는 재귀적 자기 개선(Recursive Self-Improvement, RSI)이 핵심 대안으로 등장하였습니다.</p>
+<p>[사실] 외부 평가자(Grader)나 정답(Ground-truth)이 제공되지 않는 환경에서 에이전트 하네스를 재귀적으로 지속 업데이트할 때, 기존의 자유 형식 반추(Reflection) 및 단일 스칼라 점수 방식은 3가지 핵심 실패 모드를 야기합니다. 첫째, 최근 실패를 해결하기 위해 작성된 광범위한 규칙이 기존에 성공하던 작업을 깨뜨리는 <strong>국소 오버피팅(Local Overfitting/Over-triggering)</strong>, 둘째, 워크플로나 도메인이 전환될 때 이전 스킬을 덮어써 버리는 <strong>재앙적 망각(Catastrophic Forgetting)</strong>, 셋째, 검증되지 않은 규칙이 누적되어 프롬프트를 비대하게 만드는 **메모리 오염(Memory Pollution)**입니다. [작성자 해석] 이러한 실패 모드는 기존 스칼라 평가 방식이 '최근 수정으로 인해 새롭게 깨진 동작(What an edit newly broke)'과 '여전히 미해결 상태인 기능 갭(What remains unsolved)'을 구별하지 못하고 단일 점수로 혼재시켜 피드백을 제공하기 때문에 발생합니다.</p>
+<p>[소스 주장] 이러한 한계를 극복하기 위해 구글 클라우드 연구진은 <strong>GUARD(Grader-free UED with Adaptive Rule Distillation)</strong> 프레임워크를 제안합니다. GUARD는 비지도 환경 설계(UED)의 향수 및 후회(Regret) 개념과 집단 상대적 정책 최적화(GRPO)의 비평가 없는(Critic-free) 집단 점수 산정 방식을 텍스트 하네스 최적화에 이식한 폐루프 시스템입니다. [사실] GUARD는 작업을 실행하기 전 원자적 이분형 체크리스트를 도출하는 자가 검토 메커니즘, 이전 하네스 간의 이행도 차이를 추적하는 방향성 후회(Directional Regret) 분석, 비평가 없는 GRPO 기반 집단 상대적 후보 풀링, 그리고 유발된 후회보다 이득이 클 때만 수정을 승인하는 Soft-HURT 게이트로 구성됩니다.</p>
+<p>[작성자 해석] GUARD 프레임워크는 백본 모델의 가중치를 직접 업데이트하지 않는 비파라미터적(Non-parametric) 정책 최적화 구조를 취함으로써, 흑색상자(Black-box) API 환경에서도 안전하고 검증 가능한 재귀적 자기 개선을 실현합니다. 적응(Adaptation) 단계에서는 동적 자가 검토와 풀링을 수행하지만, 배포(Test-time) 시에는 단일 동결 하네스($W_T$)만을 사용하여 $O(1)$ 컨텍스트 비용과 $pass@1$ 1회 실행을 달성함으로써 실무 토큰 절감과 안정성을 동시에 확보하는 구조적 기틀을 제공합니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-points-detailed-arguments">2. 주요 논점 (Key Points &amp; Detailed Arguments)</h4>
+<h5 id="2-1-논점-1-실행-전-체크리스트-기반-자가-검토-및-비대칭-검증-reference-free-self-review">2.1. 논점 1: 실행 전 체크리스트 기반 자가 검토 및 비대칭 검증 (Reference-Free Self-Review)</h5>
+<ul>
+<li><code>[사실]</code> 외부 정답이나 외부 평가자 없이 에이전트 스스로 복잡한 다중 턴 도구 워크플로의 수행 여부를 검증하기 위해, GUARD는 에이전트가 첫 번째 행동을 실행하기 전(Turn-0) 오직 작업 프롬프트와 도구 스키마만을 읽고 원자적 이분형 조건(Atomic Binary Predicates)으로 구성된 체크리스트 $C(q)$를 도출하여 캐싱합니다. [소스 근거: Section 4.1]</li>
+<li><code>[소스 주장]</code> 이는 생성 과정에서 $N$개의 제약조건을 동시에 유지해야 하는 에이전트의 생성 부담과 달리, 완료된 궤적(Trace)에서 단일 조건을 검증하는 평가가 구조적으로 훨씬 용이하다는 **생성-검증 비대칭성(Generation-Verification Asymmetry)**에 기초합니다. [소스 근거: Section 4.1]</li>
+<li><code>[사실]</code> 검증 체계는 샌드박스 상태 및 의미론적 추적을 분리하여 평가하는 2계층 구조로 구동되며, 궤적 $\tau$의 연속 점수 $S(\tau)$ 및 엄격 점수 $S_{strict}(\tau)$는 아래 수식에 따라 산출됩니다. [소스 근거: Section 4.1, Eq. 2]</li>
+</ul>
+<p>$$S(\tau) = 100 \cdot \frac{1}{|C_{gr}(\tau)|} \sum_{c \in C_{gr}(\tau)} r(\tau, c)$$</p>
+<p>$$S_{strict}(\tau) = \begin{cases} 0 &amp; \text{(차단성 샌드박스 오류 발생 시)} \ 100 &amp; \text{(모든 검증 항목 통과 시)} \ S(\tau)/2 &amp; \text{(기타의 경우)} \end{cases}$$</p>
+<ul>
+<li><code>[작성자 해석]</code> 결정론적 샌드박스 오류를 1계층에서 먼저 즉시 차단하고, 2계층에서 의미론적 조건을 세부 감점 방식으로 평가하는 비대칭 체계는 환각으로 인한 생성 오버헤드를 줄이면서도 평가의 객관성을 극대화하는 안전장치로 작동합니다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">검증 계층</th>
+<th style="text-align:left">주요 검증 대상</th>
+<th style="text-align:left">수행 방식</th>
+<th style="text-align:left">불합격 처리 규칙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>1계층 (Layer 1)</strong></td>
+<td style="text-align:left">샌드박스 실행 상태, 도구 호출 오류, 인자 유효성, 상태 변경 상태</td>
+<td style="text-align:left">결정론적(Deterministic) 샌드박스 복사본 검사</td>
+<td style="text-align:left">차단성 오류 발생 시 $S_{strict}(\tau) = 0$ 즉시 부여</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2계층 (Layer 2)</strong></td>
+<td style="text-align:left">프롬프트 의미론적 제약, 서식, 안전 수칙 이행 여부</td>
+<td style="text-align:left">언어 모델 기반 궤적 및 최종 출력 평가 ($r(\tau, c) \in {0, 1}$)</td>
+<td style="text-align:left">불합격 항목 수에 비례하여 $S(\tau)$ 차등 감점</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-2-논점-2-방향성-후회-기반-분석-및-순위-지정-analyze-stage-paired-regret-ranking">2.2. 논점 2: 방향성 후회 기반 분석 및 순위 지정 (Analyze Stage &amp; Paired Regret Ranking)</h5>
+<ul>
+<li><code>[사실]</code> 최근 두 임컴번트 하네스($W_{t-2}, W_{t-1}$)의 조건 이행도(Obedience) 차이를 통해 복구 후회 $\Delta_{hurt,t}(c) = \max(0, obey(c; W_{t-2}) - obey(c; W_{t-1}))$ 및 미해결 갭 $\Delta_{gap,t}(c) = 1 - obey(c; W_{t-1})$를 계산합니다. 최종 우선순위는 식 (4)와 같이 합산됩니다. [소스 근거: Section 4.2]</li>
+</ul>
+<p>$$Priority_t(c) = \Delta_{hurt,t}(c) + \Delta_{gap,t}(c) \in [0, 2]$$</p>
+<ul>
+<li><code>[작성자 해석]</code> 이는 과거 성공 동작의 회복과 미해결 갭을 하나의 스칼라 점수로 혼재시키지 않고 분리함으로써, 수치적 환각이나 국소 오버피팅을 구조적으로 방지하는 핵심 메커니즘입니다.</li>
+<li><code>[소스 주장]</code> 진단 목록 분할에 따라 하네스 수정 지침이 명확히 구별됩니다: [소스 근거: Section 4.2]
+<ul>
+<li><strong>Regressed ($\Delta_{hurt,t} &gt; 0$):</strong> 최근 수정으로 인해 새롭게 깨진 동작입니다. 우선순위가 가장 높으며, 기존 규칙을 삭제하는 대신 반드시 <code>[iff &lt;trigger&gt;]</code> 조건절로 예외 범위를 제한(Scope-guarding)하도록 지시합니다.</li>
+<li><strong>Unsolved Gap ($\Delta_{hurt,t} = 0, \Delta_{gap,t} &gt; 0$):</strong> 미해결 기능 갭입니다. 새로운 해결 메커니즘이나 스킬을 하네스에 추가하도록 지시합니다.</li>
+<li><strong>Mastered ($Priority_t = 0$):</strong> 검증된 규칙입니다. 규칙 핀 고정(Rule Pinning)을 통해 덮어쓰거나 훼손되지 않도록 방지합니다.</li>
+</ul>
+</li>
+<li><code>[사실]</code> <strong><code>Theorem 2</code> (표적 수리 vs. 수동적 발견):</strong> 수동적 발견(Passive discovery) 방식이 미소 제약 조건 $J$개를 발견하는 데 $\mathbb{E}[T_{passive}] \ge \frac{H_J}{-\log(1-\epsilon)} \ge \frac{1-\epsilon}{\epsilon} H_J = \Omega\left(\frac{\log J}{\epsilon}\right)$의 시간 복잡도 벌금을 받는 반면, 조밀 체크리스트 평가 기반의 표적 수리(Targeted repair)는 기대 라운드 수 상한을 $\mathbb{E}[T_{target}] \le \frac{J}{\rho b_{min}} + 1 + \frac{H_{b_{min}}-1}{\rho}$로 제한하여 $1/\epsilon$ 의존성을 완전히 제거함을 이론적으로 증명합니다. [소스 근거: Section 4.5, Appendix A.2]</li>
+<li><code>[사실]</code> <strong><code>Proposition 1</code> (엄격한 회귀 우위성):</strong> 단일 실행 이분 평가($K_{gr}=1$) 환경에서 신규 회귀 조건(우선순위 2)은 어떠한 미회귀 조건(우선순위 최대 1)보다 항상 높은 우선순위를 가지며, $Priority_t(c) = 0$은 $obey(c; W_{t-1})=1$ 및 $\Delta_{hurt,t}(c)=0$일 때만 성립하여 마스터된 수칙을 정확히 핀 고정합니다. [소스 근거: Section 4.5, Appendix A.3]</li>
+</ul>
+<hr />
+<h5 id="2-3-논점-3-비평가-없는-집단-상대적-후보-풀링-및-대조적-진화-propose-stage">2.3. 논점 3: 비평가 없는 집단 상대적 후보 풀링 및 대조적 진화 (Propose Stage)</h5>
+<ul>
+<li><code>[사실]</code> 강화학습의 GRPO 메커니즘에서 영감을 받아, 백본 모델의 가중치 업데이트나 별도의 가치 비평가(Value Critic) 없이 동일한 작업 배치에서 $M \ge 2$개의 마크다운 하네스 후보군을 병렬로 평가합니다. [소스 근거: Section 4.3, Algorithm 1]</li>
+<li><code>[사실]</code> 후보 하네스 $\tilde{W}_t^{(m)}$의 적합도 $R_m$ 및 집단 표준화 적합도 $\hat{A}_m$은 다음 식 (8)로 산출됩니다: [소스 근거: Section 4.3, Appendix B]</li>
+</ul>
+<p>$$Perf_m = \bar{S}_{strict}(\tilde{W}_t^{(m)}) + \frac{1}{4}\bar{S}(\tilde{W}_t^{(m)})$$</p>
+<p>$$R_m = Perf_m - \beta |Q_m^-| + \gamma |Q_m^+| \quad (\text{단, } \beta = 3.5, \gamma = 1.5)$$</p>
+<p>$$\hat{A}<em>m = \frac{R_m - \mu_R}{\sigma_R} \quad \left(\mu_R = \frac{1}{M}\sum</em>{m=1}^M R_m, \quad \sigma_R = \sqrt{\frac{1}{M}\sum_{m=1}^M (R_m - \mu_R)^2 + 10^{-6}}\right)$$</p>
+<ul>
+<li><code>[소스 주장]</code> 최고 적합도 후보($m^+ = \arg\max_m R_m$)와 최하위 후보($m^- = \arg\min_{m \ne m^+} R_m$)의 실무 궤적을 대조 분석(ContrastEvolve)합니다. 대조 판정 시 대비 문턱값 $\delta_{con} = 10$점을 적용하며, 작업 식별자(Task ID)를 <code>&lt;TASK_ID&gt;</code>로 마스킹하여 전략 프롬프트 집합 $P_{t+1,g} = {s_{t+1}^+}<em>{\lfloor M/2 \rfloor} \cup {s</em>{t+1}^-}_{M-\lfloor M/2 \rfloor}$를 진화시킵니다. [소스 근거: Section 4.3, Eq. 9-10]</li>
+<li><code>[작성자 해석]</code> 동일 배치 내 상호 적합도 표준화($\hat{A}_m$)를 통해 별도의 비평가 네트워크 없이도 후보 간 상대적 우위를 정확히 식별함으로써, 게이트 거부율을 64% 감소시키고 효율적인 프롬프트 진화를 달성합니다.</li>
+</ul>
+<hr />
+<h5 id="2-4-논점-4-soft-hurt-승인-게이트-및-거부-대장-gate-stage-rejection-ledger">2.4. 논점 4: Soft-HURT 승인 게이트 및 거부 대장 (Gate Stage &amp; Rejection Ledger)</h5>
+<ul>
+<li><code>[사실]</code> 승인 게이트는 후보 하네스 $\tilde{W}_t$의 순 이득이 유발된 후회 패널티 $Hurt(\tilde{W}<em>t, W</em>{t-1})$를 초과할 때만 승인하며, 수식 조건은 식 (11)-(13)과 같습니다. [소스 근거: Section 4.4]</li>
+</ul>
+<p>$$Hurt(\tilde{W}<em>t, W</em>{t-1}) = \frac{1}{|Q_g|} \sum_{q \in Q^-(\tilde{W}<em>t, W</em>{t-1})} \left( S_q(W_{t-1}) - S_q(\tilde{W}_t) \right)$$</p>
+<p>$$\bar{S}(\tilde{W}<em>t) - \bar{S}(W</em>{t-1}) &gt; \max \left( Hurt(\tilde{W}<em>t, W</em>{t-1}), \mu_{min} \cdot \mathbb{I}[|Q^-| &gt; 0] \right)$$</p>
+<ul>
+<li><code>[사실]</code> 파라미터는 단일 작업 노이즈 바닥값 $\delta_{noise} = 15$점, 후회 허용 예산 $h_{max} = 1$작업, 트레이드오프 마진 $\mu_{min} = 1.5$점(전문 수트 3.0점)으로 설정됩니다. [소스 근거: Section 4.4, Appendix B]</li>
+<li><code>[소스 주장]</code> 승인 조건 미달 시 $1 \le |Q^-| \le h_{rep}$ 범위의 소수 하락 작업에 대해 라운드 내 1회 <code>[iff &lt;condition&gt;]</code> 조건부 수리를 시도합니다. 최종 거부된 후보는 거부 사유와 수칙 문구를 중복 제거하여 거부 대장($L_g$, 읽기 창 $L_{max} \in {12, 40}$)에 기록함으로써 차기 라운드의 중복 실패를 방지합니다. [소스 근거: Section 4.4]</li>
+<li><code>[사실]</code> <strong><code>Theorem 1</code> (비하락 게이팅 및 수렴성):</strong> Soft-HURT 게이트 하에서 게이트 점수는 단조 비감소($\sum_{t=1}^T \Delta_t \ge 0$)하며, 유발된 후회는 항상 성과 이득에 의해 보상되고($\sum_{q \in Q_t^-} (S_q(W_{t-1}) - S_q(W_t)) &lt; |Q_g| \Delta_t$), sub-Gaussian 환경에서 최소 $1-\alpha$의 확률로 획득 점수가 수렴함을 보장합니다. [소스 근거: Section 4.5, Appendix A.1]</li>
+</ul>
+<hr />
+<h5 id="2-5-논점-5-실증적-벤치마크-평가-및-성과-검증-empirical-benchmarks-ablation">2.5. 논점 5: 실증적 벤치마크 평가 및 성과 검증 (Empirical Benchmarks &amp; Ablation)</h5>
+<ul>
+<li><code>[사실]</code> GUARD 프레임워크의 성과 검증은 EvoHarnessBench, Drift Gauntlet, PAST-Bench 등 주요 공개 벤치마크에서 단일 모델 제미나이 4 백본 환경 및 교사-학생 증류 환경을 통해 수행되었습니다. [소스 근거: Section 5, 6]</li>
+</ul>
+<h6 id="표-1-evoharnessbench-호스팅-sdk-성과-및-효율성-비교-단일-모델-제미나이-4-백본">표 1: EvoHarnessBench 호스팅 SDK 성과 및 효율성 비교 (단일 모델 제미나이 4 백본)</h6>
+<p>[소스 근거: Section 6.2, Table 2]</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 대상 프레임워크</th>
+<th style="text-align:left">최종 정확도 (ACC)</th>
+<th style="text-align:left">완수율 (Solved)</th>
+<th style="text-align:left">코호트 v1 / v2 / v3 ACC</th>
+<th style="text-align:left">BWT Score</th>
+<th style="text-align:left">FWT Score</th>
+<th style="text-align:left">작업당 토큰 수</th>
+<th style="text-align:left">도구 호출 수</th>
+<th style="text-align:left">지연 시간</th>
+<th style="text-align:left">예산 초과 미완료 수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>No-Evolve ($W_0$)</strong></td>
+<td style="text-align:left">71.91%</td>
+<td style="text-align:left">48.84%</td>
+<td style="text-align:left">70.46% / 79.17% / 64.29%</td>
+<td style="text-align:left">-6.00pp</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">131,032개</td>
+<td style="text-align:left">14.47회</td>
+<td style="text-align:left">221.6s</td>
+<td style="text-align:left">7/43</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MemToolAgent</strong></td>
+<td style="text-align:left">68.00%</td>
+<td style="text-align:left">51.16%</td>
+<td style="text-align:left">61.95% / 84.17% / 71.43%</td>
+<td style="text-align:left">-4.02pp</td>
+<td style="text-align:left">-4.98pp</td>
+<td style="text-align:left">82,426개</td>
+<td style="text-align:left">15.84회</td>
+<td style="text-align:left">239.2s</td>
+<td style="text-align:left">6/43</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RRSI</strong></td>
+<td style="text-align:left">74.28%</td>
+<td style="text-align:left">51.16%</td>
+<td style="text-align:left">75.06% / 73.17% / 71.43%</td>
+<td style="text-align:left">-0.45pp</td>
+<td style="text-align:left">+1.79pp</td>
+<td style="text-align:left">84,519개</td>
+<td style="text-align:left">13.19회</td>
+<td style="text-align:left">613.1s</td>
+<td style="text-align:left">6~10/43</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GEPA</strong></td>
+<td style="text-align:left">70.69%</td>
+<td style="text-align:left">48.84%</td>
+<td style="text-align:left">68.45% / 71.17% / 85.71%</td>
+<td style="text-align:left">-3.97pp</td>
+<td style="text-align:left">+13.61pp</td>
+<td style="text-align:left">85,156개</td>
+<td style="text-align:left">17.05회</td>
+<td style="text-align:left">159.1s</td>
+<td style="text-align:left">6~10/43</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Meta-Harness</strong></td>
+<td style="text-align:left">74.52%</td>
+<td style="text-align:left">51.16%</td>
+<td style="text-align:left">73.42% / 81.83% / 64.29%</td>
+<td style="text-align:left">+5.83pp</td>
+<td style="text-align:left">-13.21pp</td>
+<td style="text-align:left">78,705개</td>
+<td style="text-align:left">14.19회</td>
+<td style="text-align:left">220.0s</td>
+<td style="text-align:left">6~10/43</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GUARD (본 보고서)</strong></td>
+<td style="text-align:left"><strong>80.80%</strong></td>
+<td style="text-align:left"><strong>58.14%</strong></td>
+<td style="text-align:left"><strong>78.47% / 84.17% / 89.29%</strong></td>
+<td style="text-align:left"><strong>+0.85pp</strong></td>
+<td style="text-align:left"><strong>0.00pp</strong></td>
+<td style="text-align:left"><strong>59,651개 (-54.5%)</strong></td>
+<td style="text-align:left"><strong>11.21회 (-22.5%)</strong></td>
+<td style="text-align:left"><strong>233.8s</strong></td>
+<td style="text-align:left"><strong>0/43</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="표-2-drift-gauntlet-연속-은닉-드리프트-대응력-비교-단일-모델-제미나이-4-4개-스트림-12개-블록">표 2: Drift Gauntlet 연속 은닉 드리프트 대응력 비교 (단일 모델 제미나이 4, 4개 스트림 / 12개 블록)</h6>
+<p>[소스 근거: Section 6.3, Table 3]</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 대상 프레임워크</th>
+<th style="text-align:left">최종 평균 정확도 ($\bar{A}_K$)</th>
+<th style="text-align:left">최종 이득 ($\Delta_K$)</th>
+<th style="text-align:left">평균 이득 ($\bar{\Delta}$)</th>
+<th style="text-align:left">가용성 ($P$)</th>
+<th style="text-align:left">사후 망각률 ($F$)</th>
+<th style="text-align:left">안정성 ($S$)</th>
+<th style="text-align:left">연속 블록 하락 횟수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>No-Evolve ($W_0$)</strong></td>
+<td style="text-align:left">69.92%</td>
+<td style="text-align:left">0.00pp</td>
+<td style="text-align:left">0.00pp</td>
+<td style="text-align:left">0.00pp</td>
+<td style="text-align:left">0.00pp</td>
+<td style="text-align:left">0.00pp</td>
+<td style="text-align:left">0 / 12</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hermes+</strong></td>
+<td style="text-align:left">70.31%</td>
+<td style="text-align:left">+0.40pp</td>
+<td style="text-align:left">+1.09pp</td>
+<td style="text-align:left">+2.67pp</td>
+<td style="text-align:left">-2.66pp</td>
+<td style="text-align:left">-5.59pp</td>
+<td style="text-align:left">5 / 12</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RRSI</strong></td>
+<td style="text-align:left">67.92%</td>
+<td style="text-align:left">-2.00pp</td>
+<td style="text-align:left">-0.47pp</td>
+<td style="text-align:left">+4.49pp</td>
+<td style="text-align:left">-6.02pp</td>
+<td style="text-align:left">-8.11pp</td>
+<td style="text-align:left">8 / 12</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GEPA</strong></td>
+<td style="text-align:left">72.40%</td>
+<td style="text-align:left">+2.48pp</td>
+<td style="text-align:left">+2.18pp</td>
+<td style="text-align:left">+2.80pp</td>
+<td style="text-align:left">-0.35pp</td>
+<td style="text-align:left">-1.09pp</td>
+<td style="text-align:left">3 / 12</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Meta-Harness</strong></td>
+<td style="text-align:left">71.21%</td>
+<td style="text-align:left">+1.30pp</td>
+<td style="text-align:left">+0.15pp</td>
+<td style="text-align:left">+3.28pp</td>
+<td style="text-align:left">-2.51pp</td>
+<td style="text-align:left">-0.07pp</td>
+<td style="text-align:left">4 / 12</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GUARD (본 보고서)</strong></td>
+<td style="text-align:left"><strong>73.22%</strong></td>
+<td style="text-align:left"><strong>+3.30pp</strong></td>
+<td style="text-align:left"><strong>+2.71pp</strong></td>
+<td style="text-align:left"><strong>+4.55pp</strong></td>
+<td style="text-align:left"><strong>0.00pp</strong></td>
+<td style="text-align:left"><strong>-0.93pp</strong></td>
+<td style="text-align:left"><strong>0 / 12</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="표-3-past-bench-메모리-오염-및-절차-이행-성과-비교-12개-패밀리-종합">표 3: PAST-Bench 메모리 오염 및 절차 이행 성과 비교 (12개 패밀리 종합)</h6>
+<p>[소스 근거: Section 6.1, Table 1]</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 대상 프레임워크</th>
+<th style="text-align:left">전체 Task 점수</th>
+<th style="text-align:left">절차적 SOP Task</th>
+<th style="text-align:left">절차적 SOP Mech</th>
+<th style="text-align:left">업데이트 정확도 (Upd.)</th>
+<th style="text-align:left">쓰기 정밀도 (W.Prec.)</th>
+<th style="text-align:left">재현율 (Recall)</th>
+<th style="text-align:left">보존율 (Ret.)</th>
+<th style="text-align:left">메모리 오염도 (Poll.)↓</th>
+<th style="text-align:left">진화 점수 (Evolve)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>No-Evolve ($W_0$)</strong></td>
+<td style="text-align:left">0.372</td>
+<td style="text-align:left">0.427</td>
+<td style="text-align:left">0.454</td>
+<td style="text-align:left">0.278</td>
+<td style="text-align:left">0.000</td>
+<td style="text-align:left">0.000</td>
+<td style="text-align:left">0.990</td>
+<td style="text-align:left">0.000</td>
+<td style="text-align:left">0.000</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hermes+</strong></td>
+<td style="text-align:left">0.852</td>
+<td style="text-align:left">0.808</td>
+<td style="text-align:left">0.840</td>
+<td style="text-align:left">0.791</td>
+<td style="text-align:left">0.724</td>
+<td style="text-align:left">0.854</td>
+<td style="text-align:left"><strong>1.000</strong></td>
+<td style="text-align:left"><strong>0.167</strong></td>
+<td style="text-align:left">0.421</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>RRSI</strong></td>
+<td style="text-align:left">0.809</td>
+<td style="text-align:left">0.714</td>
+<td style="text-align:left">0.725</td>
+<td style="text-align:left">0.901</td>
+<td style="text-align:left">0.438</td>
+<td style="text-align:left">0.811</td>
+<td style="text-align:left">0.974</td>
+<td style="text-align:left">0.500</td>
+<td style="text-align:left">0.350</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GEPA</strong></td>
+<td style="text-align:left"><strong>0.858</strong></td>
+<td style="text-align:left">0.815</td>
+<td style="text-align:left">0.837</td>
+<td style="text-align:left">0.777</td>
+<td style="text-align:left">0.719</td>
+<td style="text-align:left"><strong>0.858</strong></td>
+<td style="text-align:left">0.996</td>
+<td style="text-align:left"><strong>0.167</strong></td>
+<td style="text-align:left">0.424</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Meta-Harness</strong></td>
+<td style="text-align:left">0.812</td>
+<td style="text-align:left">0.677</td>
+<td style="text-align:left">0.739</td>
+<td style="text-align:left">0.903</td>
+<td style="text-align:left">0.479</td>
+<td style="text-align:left">0.814</td>
+<td style="text-align:left">0.998</td>
+<td style="text-align:left">0.500</td>
+<td style="text-align:left">0.360</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GUARD (본 보고서)</strong></td>
+<td style="text-align:left">0.854</td>
+<td style="text-align:left"><strong>0.830</strong></td>
+<td style="text-align:left"><strong>0.878</strong></td>
+<td style="text-align:left"><strong>0.924</strong></td>
+<td style="text-align:left"><strong>0.776</strong></td>
+<td style="text-align:left">0.856</td>
+<td style="text-align:left">0.999</td>
+<td style="text-align:left"><strong>0.167</strong></td>
+<td style="text-align:left"><strong>0.436</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>[작성자 해석]</code> 실증적 벤치마크 결과는 GUARD가 기존 프레임워크들의 단점을 완벽히 극복했음을 입증합니다. EvoHarnessBench에서 토큰 소비량을 54.5% 절감하면서 정확도 80.80%를 달성한 점, Drift Gauntlet의 12개 연속 은닉 블록 동안 성능 하락(0/12) 및 사후 망각(0.00pp)이 전혀 발생하지 않은 점, PAST-Bench에서 최저 메모리 오염도(0.167)를 유지하며 SOP 이행률 83.0%를 기록한 점은 Soft-HURT 게이트와 방향성 후회 분석의 구조적 타당성을 정량적으로 보여줍니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-speakers">3. 등장 인물 및 화자 (Figures &amp; Speakers)</h4>
+<p>[사실] 소스 논문에서 명확히 확인되는 구글 클라우드 저자진 및 실험에 투입된 주요 언어 모델의 역학 체계는 다음과 같습니다. 소스에서 구체적으로 명시하지 않은 외부 화자나 진행자 정보는 &quot;확인 불가&quot;로 분류합니다.</p>
+<h5 id="3-1-구글-클라우드-연구-저자진-google-cloud-research-team">3.1. 구글 클라우드 연구 저자진 (Google Cloud Research Team)</h5>
+<ul>
+<li><code>[사실]</code> <strong>명하 장 (Minghe Zhang):</strong> 공동 제1저자 및 교신저자 (Google Cloud).</li>
+<li><code>[사실]</code> <strong>학타오 강 (Xuetao Kang):</strong> 공동 제1저자 및 교신저자 (Google Cloud).</li>
+<li><code>[사실]</code> <strong>이페이 명 (Yifei Ming):</strong> 공동 저자 (Google Cloud).</li>
+<li><code>[사실]</code> <strong>연페이 천 (Yanfei Chen):</strong> 공동 저자 (Google Cloud).</li>
+<li><code>[사실]</code> <strong>한 유 (Han Yu):</strong> 공동 저자 (Google Cloud).</li>
+<li><code>[사실]</code> <strong>유판 좡 (Yufan Zhuang):</strong> 공동 저자 (Google Cloud).</li>
+<li><code>[사실]</code> <strong>천유 리 (Chen-Yu Lee):</strong> 공동 저자 (Google Cloud).</li>
+</ul>
+<h5 id="3-2-실험용-백본-및-앙상블-모델-역할-model-roles-in-experiments">3.2. 실험용 백본 및 앙상블 모델 역할 (Model Roles in Experiments)</h5>
+<ul>
+<li><code>[사실]</code> <strong>제미나이 4 (Gemini 4):</strong> 단일 모델 재귀적 자기 개선(RSI) 메커니즘의 핵심 주력 백본 모델. 외부 교사 모델의 개입 없이 솔버(Solver), 자가 검토자(Self-reviewer), 증류자(Distiller), 및 진화자(Evolver) 역할을 단독으로 수행함.</li>
+<li><code>[사실]</code> <strong>제미나이 3.8 플래시 (Gemini 3.8 Flash):</strong> 교사-학생 증류(Teacher-Student Distillation) 실험 구조 내에서 하네스 지침을 수행하는 학생 솔버(Student Solver) 모델.</li>
+<li><code>[사실]</code> <strong>클로드 오퍼스 5.5 (Claude Opus 5.5):</strong> 교사-학생 증류 구조 내에서 학생 모델의 궤적을 평가하고 고급 스킬 및 메모리를 증류하는 교사 비평가 및 증류(Teacher Critic &amp; Distiller) 모델.</li>
+</ul>
+<h5 id="3-3-기타-화자-및-진행자">3.3. 기타 화자 및 진행자</h5>
+<ul>
+<li><code>[사실]</code> 기타 구체적 발표자, 토론 진행자, 외부 비평가 정보: 소스 미언급 / 확인 불가.</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-figures-metrics-and-timeline">4. 수치 및 시점 (Figures, Metrics, and Timeline)</h4>
+<h5 id="4-1-주요-시점-및-시간적-조건">4.1. 주요 시점 및 시간적 조건</h5>
+<ul>
+<li><code>[사실]</code> <strong>논문 공개 일자:</strong> 2026년 11월 19일 (2026-11-19).</li>
+<li><code>[사실]</code> <strong>테스트 시점 하네스 상태 (Test-Time Deployment):</strong> 실제 배포 및 평가 단계에서는 적응 단계의 자가 검토, 후보 풀링, 게이팅 메커니즘이 모두 비활성화(OFF)됩니다. 에이전트는 적응을 통해 동결된 단일 하네스($W_T$)와 동결 백본 모델만을 조합하여 1회 실행($pass@1$)으로 평가를 수행하며, 이 때 컨텍스트 오버헤드는 $O(1)$로 유지됩니다. [소스 근거: Figure 2, Section 4.3]</li>
+</ul>
+<h5 id="4-2-주요-정량-지표-및-핵심-파라미터">4.2. 주요 정량 지표 및 핵심 파라미터</h5>
+<ul>
+<li><code>[사실]</code> GUARD 프레임워크 구동 및 성과 검증에 사용된 정량적 파라미터 및 주요 지표는 아래 마크다운 표와 같습니다. [소스 근거: Section 4, 6, Appendix B]</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">파라미터 및 지표명</th>
+<th style="text-align:left">수치 및 적용 조건</th>
+<th style="text-align:left">기술적 의미 및 영향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>단일 작업 노이즈 바닥값 ($\delta_{noise}$)</strong></td>
+<td style="text-align:left">15점 (100점 만점 기준)</td>
+<td style="text-align:left">단일 작업 평가 시 유발되는 임의의 점수 변동을 흡수하는 차단 바닥값</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Soft-HURT 트레이드오프 마진 ($\mu_{min}$)</strong></td>
+<td style="text-align:left">기본 1.5점 (전문 수트 3.0점)</td>
+<td style="text-align:left">후보 하네스 승인 시 순 성능 향상이 유발된 후회 감점을 초과해야 하는 최소 마진</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>후보 풀 크기 ($M$)</strong></td>
+<td style="text-align:left">기본 2개 (일부 전문 수트 4개)</td>
+<td style="text-align:left">동일 작업 배치에서 병렬로 생성 및 평가되는 마크다운 하네스 후보 개수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>거부 대장 읽기 창 크기 ($L_{max}$)</strong></td>
+<td style="text-align:left">12개 ~ 40개</td>
+<td style="text-align:left">다음 진화 단계로 전달되는 이전에 거부된 하네스 수칙의 최대 중복 제거 읽기 항목 수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>대비 문턱값 ($\delta_{con}$)</strong></td>
+<td style="text-align:left">10점</td>
+<td style="text-align:left">ContrastEvolve에서 상위 및 하위 궤적을 비교 추출하는 최소 점수 차이</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GRPO 적합도 가중치 ($\beta, \gamma$)</strong></td>
+<td style="text-align:left">$\beta = 3.5, \gamma = 1.5$</td>
+<td style="text-align:left">적합도 계산 시 도움 작업($Q^+$) 대비 후회 작업($Q^-$)에 부여되는 페널티 가중치</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EvoHarnessBench 토큰 효율성</strong></td>
+<td style="text-align:left">작업당 59,651 토큰 ($W_0$ 대비 54.5% 감소)</td>
+<td style="text-align:left">불필요한 추론 턴과 예산 초과 오류를 줄여 달성한 토큰 절감률</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>실행 게이트 승인 안전성</strong></td>
+<td style="text-align:left">19회 승인 중 19회 모두 $\Delta_{test} \ge 0$ 달성</td>
+<td style="text-align:left">Soft-HURT 게이트를 통과한 하네스가 실제 평가 환경에서 성능 비하락을 달성한 비율</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><code>[사실]</code> <strong>자가 검토 체크리스트 파싱 한계:</strong> 턴-0 자가 검토 구동 시 언어 모델의 평결(Verdict) 결과가 파싱 불가능하거나 오류가 발생할 경우, 자가 검토 시스템은 해당 검증 항목을 불합격으로 처리하거나 결정론적 샌드박스 추적 검증(Deterministic Sandbox Trace Checks)으로 강제 대체되는 한계를 갖습니다. [소스 근거: Section 4.1]</li>
+<li><code>[사실]</code> <strong>비파라미터적(Non-parametric) 개선의 본질적 한계:</strong> GUARD 프레임워크는 백본 언어 모델의 가중치(Weight)를 직접 수정하지 않고 텍스트 형태의 하네스(프롬프트, 스킬, 규칙, 메모리)만을 진화시킵니다. 따라서 백본 모델 자체가 근본적으로 지니고 있는 절대적 추론 능력이나 지식 한계를 넘어서는 가중치 학습은 불가능합니다. [소스 근거: Section 1, 2]</li>
+<li><code>[작성자 해석]</code> 본 프레임워크는 하네스 오버피팅과 재앙적 망각을 해결하지만, 백본 모델의 근본적인 추론 오류까지 교정할 수는 없으므로 모델 자체의 발전과 하네스 최적화가 병행되어야 합니다.</li>
+<li><code>[사실]</code> <strong>소스 미언급 / 불확실 영역:</strong> 인간과의 실시간 상호작용 피드백 환경에서의 연속 RSI 적용 여부, 동적 환경에서의 대규모 분산 에이전트 간 하네스 동기화 메커니즘 등 소스 텍스트에서 구체적으로 다루지 않거나 실험하지 않은 항목은 &quot;소스 미언급 / 확인 불가&quot;로 기재합니다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harness-of-Harness: Multi-Day Autonomous Software Development with Continual Improvement</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Harness-of-Harness: Multi-Day Autonomous Software Development with Continual Improvement</h1>
+<p class="page-meta">논문 · 2026-09-04</p>
+<h2 id="요약">요약</h2>
+<p>Harness-of-Harness: 장기 코딩 에이전트 개발을 반복 가능한 루프로 만드는 법</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/pdf/2609.01481">출처</a> · <a href="https://www.youtube.com/watch?v=FUvmi_XAACE">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<p>Harness-of-Harness: 장기 코딩 에이전트 개발을 반복 가능한 루프로 만드는 법</p>
+<p>이 문서는 arXiv:2609.01481v1 논문을 원문 순서대로 설명한다. Harness-of-Harness(HoH)는 새 파운데이션 모델이 아니다. 이미 존재하는 코딩 에이전트 하네스 위에서 고정된 하네스–모델 구성을 반복 호출하고, 계획·개발·독립 테스트를 하나의 장기 개발 루프로 조직하는 프레임워크다. 아래 수치와 평가는 모두 Haoyang Yan, Min-le Su, Hangfan Zhang, Zhanhao Li, Chen Zhang, Shao Zhang, Yang Chen, Lei Bai, Shuyue Hu가 보고한 해당 논문의 실험과 사례에 한정된다.</p>
+<p>문제 정의와 동기</p>
+<p>논문이 겨냥하는 문제는 단순히 한 번의 코딩 실행을 길게 만드는 것이 아니다. 긴 개발 궤적에서는 이전 요구사항과 설계 결정이 잊히고, 국소 수정이 다른 제약을 깨뜨리며, 실패와 이미 검증한 작업을 다시 반복하고, 아직 빠진 기능이 있는데도 완료를 선언할 수 있다. 따라서 핵심은 시간이 지나도 일관되고 효과적인 진전을 유지하는 것이다.</p>
+<p>HoH 설계</p>
+<p>HoH의 기본 루프에는 Project Planner, Developer, QA Tester라는 세 역할이 있다. 세 역할은 서로 다른 모델이 아니라 같은 고정 하네스–모델 구성을 역할별로 독립 호출한 것이다. Planner는 요구사항과 이전 실행 근거를 합쳐 다음의 작고 관찰 가능한 증분을 정한다. Developer는 기존 산출물에서 시작해 그 증분을 구현하고 변경 가까이에서 자체 테스트한다. QA Tester는 고정된 읽기 전용 후보를 독립적으로 검사해 검증된 동작, 근거 부족, 실패, 회귀를 다음 루프의 증거로 남긴다.</p>
+<p>루프 사이에는 두 상태가 함께 이동한다. 산출물 상태는 코드·설정·리소스라는 현재 구현을 보존하고, 증거 상태는 무엇이 검증됐고 무엇이 아직 실패했는지를 보존한다. 그래서 다음 계획은 코드만 보고 과거를 재구성하지 않고, 이전 실패와 보존해야 할 동작을 직접 참조한다. 한 루프는 관련된 작업을 작은 검증 가능 단위로 묶되, 그 기능이 실제로 작동하는 데 필요한 변경은 함께 포함한다. 결과를 제약하지만 내부 추론 순서나 도구 사용 절차를 경직되게 처방하지 않는 것도 핵심이다.</p>
+<p>Developer의 구현 중 테스트와 QA의 독립 평가는 다른 목적을 갖는다. 전자는 변경 직후 결함을 찾고 후보를 준비하는 과정이고, 후자는 구현자의 완료 주장과 분리해 실제 요구 동작을 받아들일지 판단하는 과정이다. Runtime은 역할별 입력과 권한, 출력 스키마를 고정하고, 테스트 근거를 특정 후보 버전에 묶는다. 파일 시스템에는 계획·보고서·이력·산출물을 저장하되 처음에는 짧은 분류 색인만 노출하고 필요할 때 상세 내용을 꺼내는 progressive disclosure를 사용한다. 도구와 스킬도 역할별로 노출하며, 표준 기능을 다시 만들기보다 재사용하고, 회귀 시 이전 검증 상태로 돌아갈 수 있도록 역할·반복 수준의 버전 이력을 유지한다.</p>
+<p>실험 설정과 기준선</p>
+<p>주 실험은 HoH를 적용하지 않은 같은 하네스–모델의 한 번짜리 개발 패스인 Vanilla와, 계획–코딩–테스트를 세 번 반복하는 HoH@3을 비교한다. 각 task–condition 점수는 유효한 한 번의 실행에서 나오며, 인프라 또는 모델 제공자 전송 오류는 추가 반복으로 평균내지 않고 실패 실행을 대체한다. 중간 및 최종 산출물은 전체 실행 뒤에 평가하고, 평가기 점수·비공개 테스트·평가 근거는 개발 루프에 돌려주지 않는다.</p>
+<p>세 구성은 Codex CLI+GPT-5.5(high), OpenCode+DeepSeek-V4-Pro, Pi Coding Agent+MiniMax-M3이다. 서로 다른 하네스와 제공자의 토큰 계수는 직접 비용 비교에 쓰지 않는다.</p>
+<p>GameCraft-Bench는 전체 백사십 개 과제와 열다섯 개 게임 계열 가운데 고정 시드로 계열당 세 개씩, 총 마흔다섯 개를 뽑는다. 실행·컴파일 실패는 Overall 영 점이고, 실행 가능한 게임은 Core Mechanics, Content Depth, Functional Visuals, Art and Presentation을 벤치마크 가중치로 합친 영점부터 백점 척도다.</p>
+<p>FrontierSWE는 열일곱 개 가운데 계산 환경 제약으로 열다섯 개를 평가한다. 구성은 Implementation 네 개, Performance 아홉 개, Research 두 개다. 논문은 task별 공식 reward의 평균과 dominance를 구분한다. 주 표의 dominance는 열두 개 하네스–조건 구성 가운데 자기 자신을 제외한 열한 개 상대와 같은 과제에서 비교한 점수를 세 도메인에 동일 가중해 평균한 값이다.</p>
+<p>ProgramBench는 실행 파일과 문서만 받은 에이전트가 참조 프로그램의 동작을 재구축하는 cleanroom 과제다. 공개 지표는 과제별 비공개 행동 테스트 통과 비율의 평균인 Avg. Test Pass Rate다. 이 논문 PDF는 본문에서 ProgramBench의 평가 과제 수를 제시하지 않으므로 임의로 보충하지 않는다.</p>
+<p>세 번 반복한 주 결과</p>
+<p>Table 1의 집계 지표에서 Codex+GPT-5.5는 GameCraft Overall이 49.58에서 71.52, FrontierSWE dominance가 44%에서 71%, ProgramBench 통과율이 60.41에서 66.50으로 변했다. OpenCode+DeepSeek-V4-Pro는 각각 26.90에서 48.98, 25%에서 44%, 45.27에서 57.56이었다. Pi+MiniMax-M3는 각각 42.16에서 58.78, 35%에서 64%, 35.83에서 52.68이었다.</p>
+<p>논문의 평균 상대 향상 52.25%는 이 아홉 개 조합 각각에 대해 (HoH@3−Vanilla)/Vanilla를 계산한 뒤 평균한 값이다. 최대 상대 향상 82.86%는 Pi+MiniMax-M3의 FrontierSWE dominance가 35%에서 64%로 바뀐 경우이며, (64−35)/35로 계산한다. 이는 benchmark score와 dominance, hidden-test pass rate라는 서로 다른 집계 지표의 상대 변화 평균이지, 개발 속도나 비용의 52.25% 개선을 뜻하지 않는다.</p>
+<p>추가 반복과 동일 패스 비교</p>
+<p>FrontierSWE에서 Codex+GPT-5.5를 열 번까지 연장한 별도 분석은 열한 개 checkpoint 비교 풀을 사용한다. 이 정의에서 Vanilla는 27.33%, HoH@3은 39.33%, HoH@9는 최고 76.00%, HoH@10은 72.67%였다. 주 표의 열두 구성 비교 풀에서 나온 44%와 71%를 이 값들과 섞어서는 안 된다.</p>
+<p>GameCraft-Bench의 같은 개발 패스 수 비교에서 세 패스 Vanilla Continuation은 6.33M tokens로 58.24점을 얻었고, 두 패스 HoH는 5.67M tokens로 64.84점을 얻었다. 이 결과는 단순 반복 패스만으로 주 결과를 설명하기 어렵다는 논문의 근거지만, 토큰 수는 제공자 보고치이고 평가 계산은 제외되며 cached context가 포함될 수 있다.</p>
+<p>절제 실험과 분석</p>
+<p>Codex+GPT-5.5, GameCraft-Bench, 세 번 반복에서 Full HoH@3은 71.52점과 과제당 평균 8.41M tokens였다. 첫 계획을 계속 고정하면 63.39점, 이전 QA 증거를 다음 계획에서 빼면 65.23점, 매 반복을 빈 workspace에서 다시 만들면 63.67점이었다. warm-start 제거는 재구축 때문에 11.12M tokens로 늘었다. 이 절제는 계획 갱신, 증거 피드백, 산출물 재사용이 각각 결과에 기여함을 지지하지만, 한 구성과 한 벤치마크에서의 관찰이다.</p>
+<p>GameCraft-Bench의 세부 분석은 mechanics, content, functional visuals, art/presentation을 따로 보여준다. 논문은 모든 하네스–모델 구성에서 네 범주가 함께 개선됐다고 보고하지만, benchmark score 증가를 실제 기능 성장, 회귀 수리, 시각적 polish, playability와 같은 개념으로 뭉뚱그리지 않는다. 정성 비교 역시 선택된 게임 화면의 관찰이며 독립적인 생산 품질 보증이 아니다.</p>
+<p>다일간 FPS 사례</p>
+<p>Fusepoint 사례는 빈 workspace와 사용자 제공 PRD에서 시작한 single-player narrative FPS다. 논문 초록은 “more than 70 iterations”라고 요약하지만, 본문의 분석 마감 시점은 정확히 70 development loops라고 쓴다. 따라서 이 사례는 장기 반복을 보여주는 하나의 조건부 사례이지 무제한 자율 소프트웨어 공학의 증명이 아니다.</p>
+<p>PRD는 약 오 분짜리 폭탄 해체 임무, 순서대로 점령하는 두 control points, 최종 목표의 세 단계 해체, 세 전투 구역에 3·5·10명으로 나뉜 총 열여덟 명의 적, 성공과 폭발 분기를 요구했다. 사례 구성은 벤치마크 세 쌍과 달리 Codex CLI+GPT-5.6-Sol(high)을 사용했고, Godot 4.7과 Godot MCP, 에셋·UI/UX·테스트 스킬을 추가했다. 인간 개입은 네트워크 또는 API 가용성 복구로 제한됐다는 것이 저자들의 기술이며, 계획·구현·디버깅·테스트·acceptance에는 개입하지 않았다고 한다.</p>
+<p>관찰된 개발은 초기 구축 loops 1–27, capability expansion loops 28–49, 이후 안정화의 세 국면으로 설명된다. Loop 70까지 기록된 이슈 81개 가운데 65개가 닫히고 16개가 남았으며, 한때 닫혔다가 후속 변경으로 17개가 다시 열렸다. 이는 기능 성장과 수리가 번갈아 일어나고, 시각적 polish와 playability를 포함한 최종 산출물 서술만으로 비단조적인 실패 이력을 지워서는 안 된다는 점을 보여준다.</p>
+<p>주관적 player-experience 평가는 source-blinded PXI 방식을 사용한다. 보충자료는 열 개 구성개념을 각각 세 문항, -3부터 +3까지의 칠 점 척도로 평가하고 Enjoyment 세 문항을 별도 결과로 둔다. 저자들은 이 값을 하나의 전역 PXI 총점으로 합치지 않으며, construct별 기술 통계와 다섯 개 functional·다섯 개 psychosocial 구성의 서술적 평균만 구분해 해석한다.</p>
+<p>한계와 결론</p>
+<p>이 실험을 일반화할 때는 다음 경계를 지켜야 한다. task–condition마다 유효 실행은 한 번뿐이고 공통 재현 가능한 생성 seed가 없다. GameCraft-Bench 표본과 bootstrap에는 고정 seed가 있지만 이는 과제 추출과 통계 재표본화를 위한 것이지 모델 생성을 고정하지 않는다. FrontierSWE 두 과제는 결과가 아니라 실행 환경 요구 때문에 제외됐다. 토큰은 평가를 제외한 provider-reported input/output이며 캐시 계수 차이 때문에 provider 간 비용 비교가 안 된다. 익명 코드 패키지는 핵심 HoH 구현과 역할 prompt, adapter, wrapper를 포함하지만 benchmark 저장소, task data, raw run artifacts, 분석 기록, environment files, private credentials, provider secrets, hidden evaluator contents는 포함하지 않는다.</p>
+<p>따라서 논문이 직접 뒷받침하는 결론은 고정된 기존 코딩 에이전트 하네스를 planning–coding–testing loop로 편성하고 산출물과 실행 근거를 반복 사이에 넘겼을 때, 세 벤치마크와 지정된 하네스–모델 조건에서 저자 보고 점수가 개선됐고, Fusepoint 사례에서는 장기 진화의 추적 가능한 기록이 남았다는 것이다. 이 결과만으로 production readiness, security, maintainability, 사람의 초기 환경 설정 부재, 다른 모델·하네스·소프트웨어 영역으로의 일반화를 추론할 수는 없다.</p>
+<h4 id="출처">출처</h4>
+<p>https://arxiv.org/abs/2609.01481v1</p>
+<p>라이선스: CC BY 4.0. 저자: Haoyang Yan, Min-le Su, Hangfan Zhang, Zhanhao Li, Chen Zhang, Shao Zhang, Yang Chen, Lei Bai, Shuyue Hu.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SU(2)-Equivariant Spinor Message Passing for Molecular Magnetism</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>SU(2)-Equivariant Spinor Message Passing for Molecular Magnetism</h1>
+<p class="page-meta">논문 · 2026-10-31</p>
+<h2 id="요약">요약</h2>
+<p>전자 스핀-궤도 결합(Spin-Orbit Coupling, SOC) 효과가 우세하게 작용하는 분자 자성 시스템, 예컨대 단일 분자 자성체(Single-Molecule Magnets, SMMs)나 상자성 이동(PARASHIFT) 자기공명영상(MRI) 프로브 등의 자성 물성 예측은 양자 화학 영역에서 매우 높은 계산…</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.29111">출처</a> · <a href="https://www.youtube.com/watch?v=l9fJDqR-io8">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="su-2-동변-스피너-메시지-패싱-기반-분자-자성-예측-기술-espinor-종합-분석-보고서">SU(2) 동변 스피너 메시지 패싱 기반 분자 자성 예측 기술(eSpinor) 종합 분석 보고서</h3>
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>전자 스핀-궤도 결합(Spin-Orbit Coupling, SOC) 효과가 우세하게 작용하는 분자 자성 시스템, 예컨대 단일 분자 자성체(Single-Molecule Magnets, SMMs)나 상자성 이동(PARASHIFT) 자기공명영상(MRI) 프로브 등의 자성 물성 예측은 양자 화학 영역에서 매우 높은 계산 비용을 요구한다. 기존의 완전 능동 공간 자가 일관장 스핀-궤도 결합(CASSCF-SO) 계산 기법은 다중 참조(Multireference) 전자 구조와 SOC 효과를 양자역학적으로 정밀하게 반영할 수 있으나, 활성 공간(Active Space) 내 전자 배치 수가 조합론적으로 폭발 증가함에 따라 단일 기하구조의 참값 계산에만 수 시간이 소요되는 극심한 계산 비용적 한계를 갖는다. 이를 대체하고자 개발된 3차원 공간 회전 동변(Equivariant) 그래프 신경망 모델들은 SO(3) 특수 직교군 대칭성을 준수하도록 설계되었으나, 내부 특성 전파 시 오직 정수 계급(Integer-rank) 텐서만을 활용하므로 SOC가 개입된 전자 상태 본연의 반정수(Half-integer) 스피너(Spinor) 자유도를 직접 다루지 못하는 구조적 한계점이 존재했다.</p>
+<p>본 보고서에서 다루는 eSpinor 기술은 전자 스핀-궤도 결합 상태의 스피너적 본질에 착안하여 개발된 SU(2) 동변 스피너 그래프 신경망 아키텍처이다. eSpinor는 기존의 정수 계급 텐서 특성과 함께 반정수 계급의 스피너 특성을 동시 전파(Propagate)하는 메시지 패싱 구조를 채택한다. SOC 및 리간드장이 반영된 근사 단일 전자 해밀토니안의 고유벡터로부터 스피너를 초기화하고, 정수 계급 텐서와의 실시간 쌍선형 결합 및 클렙슈-고르단(Clebsch-Gordan) 텐서 곱 연산을 통해 회전 동변성을 엄격히 보존한다. 특히 고유기저 선택의 자율성(Eigenbasis Gauge Freedom)에 의존하지 않는 게이지 불변(Gauge-invariant) 텐서 읽기(Readout) 메커니즘을 수학적으로 완비하였다.</p>
+<p>코발트(Co(II)) 착물 및 디스프로슘(Dy(III)) 착물 데이터셋 평가 결과, eSpinor는 분포 내(In-distribution) 데이터뿐만 아니라 학습 시 관찰되지 않은 미확인 리간드(Unseen ligands) 조건에서도 기존 SO(3) 텐서 모델(NequIP, NequIP+H 등) 대비 우수한 일반화 성능을 입증했다. 또한, 정적 결정장 계수의 오차가 신경망 모델 간 유사하더라도 스핀 동역학에 의한 동적 물리 관측량(전자 스핀 상관관계 및 핵 이완율) 오차에서는 뚜렷한 성능 격차가 발생함을 규명하였으며, 이는 양자 화학 머신러닝 모델의 귀납적 편향(Inductive Bias) 성능 평가가 단순 정적 텐서 오차가 아닌 실제 타깃 물리 관측량의 정확도에 기반하여 이루어져야 함을 시사한다.</p>
+<hr />
+<h5 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h5>
+<h6 id="2-1-su-2-동변-스피너-메시지-패싱의-이론적-아키텍처-및-특징">2.1. SU(2) 동변 스피너 메시지 패싱의 이론적 아키텍처 및 특징</h6>
+<ul>
+<li>
+<p><strong>스피너 초기화 및 해밀토니안 (Hamiltonian Initialization):</strong><br />
+eSpinor는 금속 원자 자리에 전자 스핀-궤도 결합을 반영하기 위해 단일 전자 스핀-궤도 공간 기반의 근사 해밀토니안 $H_{\text{init,a}}$를 다음과 같이 구성한다:
+$$H_{\text{init,a}}(G) = H_{\text{CF,a}}(G) \otimes I_2 + \xi_a \mathbf{L} \cdot \mathbf{S}$$
+여기서 $H_{\text{CF,a}}$는 궤도 상태에 작용하는 리간드장 해밀토니안이며, $I_2$는 2차원 스핀 단위 행렬, $\xi_a$는 스핀-궤도 결합 강도, $\mathbf{L}$과 $\mathbf{S}$는 각각 궤도 및 스핀 각운동량 연산자이다. Dy(III) 착물과 같이 차폐된 $4f$ 껍질 시스템에는 리간드 위치와 유효 전하에 기반한 점전하 모델(Point-Charge, pc)을 사용하며, Co(II) 착물과 같이 금속-리간드 공유결합성이 중요한 시스템에는 학습 가능한 각중첩 모델(Angular-Overlap Model, AOM)을 적용한다. 해밀토니안 대각화를 통해 얻은 $k = 2(2\ell_{\text{sh}} + 1)$개의 고유치 $\epsilon_{a,u}$와 고유벡터 $\Psi_a$ 중, 고유치는 불변 스칼라 특성을 제공하고 고유벡터는 스피너 특성 $h_a$를 초기화한다. 이때 크라머스 쌍 내 평균 에너지를 기반으로 볼츠만 가중치 $w_u \propto e^{-\epsilon_u / T_B}$ ($T_B$는 학습 가능한 에너지 스케일 파라미터)를 적용하여 저에너지 전자 상태의 정보가 텐서 결합 시 효과적으로 반영되도록 설계했다.</p>
+</li>
+<li>
+<p><strong>고유기저 게이지 자유도 (Eigenbasis Gauge Freedom):</strong><br />
+외부 자기장이 없는 상태에서 시간 역전 대칭성(Time-reversal symmetry)으로 인해 각 크라머스 쌍(Kramers pair) $p$는 $U(2)$ 게이지 변환 자유도($Q_{a,p} \in U(2)$)를 갖는다. 분자 회전 $g \in \text{SO}(3)$ 및 이의 SU(2) 리프트 $\tilde{g}$에 대해 고유벡터 행렬은 다음과 같은 변환 법칙을 따른다:
+$$\Psi_a(g \cdot G) = U_{\text{sh}}(\tilde{g})\Psi_a(G)Q_a, \quad Q_a = \text{diag}(Q_{a,1}, \dots, Q_{a,k/2})$$
+eSpinor는 스피너 특성 $h_a$의 게이지 변환 공변성(Covariance)을 레이어 간 유지하면서, 읽기 단계 및 텐서 생성 시 켤레 스피너 축약($h_a \bar{h}_a$ 또는 $h_a h_a^\dagger$) 연산을 적용한다. 이 축약 과정에서 유니터리 게이지 행렬의 곱 $Q_a Q_a^\dagger = I$가 상쇄되므로, 최종 예측값은 특정 고유기저 선택에 의존하지 않고 SO(3) 회전 동변성을 엄격하게 만족한다.</p>
+</li>
+<li>
+<p><strong>3가지 앙상블 상호작용 상호결합 유형:</strong><br />
+eSpinor의 메시지 패싱 레이어 내 실수-쌍선형(Real-bilinear) 결합 구조는 다음 3가지 허용된 상호작용 유형으로 수학적으로 분류된다:
+$$V \otimes V \rightarrow V, \quad h \otimes V \rightarrow h, \quad h \otimes \bar{h} \sum_u \rightarrow V$$</p>
+<ol>
+<li>$V \otimes V \rightarrow V$: 정수 계급 텐서 간 결합으로 새로운 정수 계급 텐서를 생성.</li>
+<li>$h \otimes V \rightarrow h$: 스피너와 정수 텐서의 혼합 결합으로, 게이지 인덱스 $u$를 유지하면서 스피너 특성을 업데이트.</li>
+<li>$h \otimes \bar{h} \sum_u \rightarrow V$: 스피너 특성 $h$와 그 복소켤레 $\bar{h}$ (또는 $h^\dagger$)를 결합한 후 게이지 인덱스 $u$에 대해 축약을 수행. 복소켤레와의 축약을 통해 게이지 변환 위자 $Q_a Q_a^\dagger = I$가 소멸되며, 기하학적 각운동량 정보를 담은 게이지 불변 정수 계급 텐서가 완성됨.</li>
+</ol>
+</li>
+<li>
+<p><strong>텐서 읽기(Readouts) 및 베이스라인 아키텍처와의 차별성:</strong><br />
+금속 자리의 최종 읽기 함수는 정수 텐서 특성 $V_a$의 선형 맵과 켤레 스피너 축약 텐서 $R_{\text{out}}^{(\ell)}(h_a, V_a)$의 결합으로 구성된다:
+$$\hat{y}<em>a^{(\ell)} = W</em>{\text{out}}^{(\ell)} V_a^{(\ell)} + R_{\text{out}}^{(\ell)}(h_a, V_a)$$
+비교 베이스라인 아키텍처들의 구조적 특징은 다음과 같다:</p>
+<ul>
+<li><code>eqSNAP</code>: 구면 이웃 밀도 이중스펙트럼(Bispectrum) 기술자에 기반하여 텐서 물성을 선형 회귀로 예측하는 SO(3) 동변 기술자 모델.</li>
+<li><code>GM-NN</code>: 기하학적 텐서 특성에 학습 가능한 불변 계수를 적용하는 가우시안 모멘트 신경망.</li>
+<li><code>NequIP</code>: 원자 종 및 기하구조로부터 정수 계급 텐서만을 생성 및 전파하는 대표적 SO(3) 동변 그래프 신경망.</li>
+<li><code>NequIP+H</code> (아블레이션 모델): 해밀토니안 고유벡터의 게이지 불변 축약 결과를 매 레이어의 정수 특성에 주입하지만, 레이어 간 특성 전파는 정수 텐서로만 수행.</li>
+<li><code>eSpinor</code>: 반정수 SU(2) 회전 법칙을 따르는 스피너 특성을 레이어 간 직접 업데이트 및 전파한 후 축약함. 스피너 곱 $h \bar{h}$ 연산을 통해 동일한 텐서 업데이트 계수가 두 인자에 공통 적용되는 계수 공유(Coefficient Sharing) 메커니즘을 아키텍처 내부적으로 자연스럽게 구현함.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-코발트-co-ii-착물의-0장-분할-zfs-및-미확인-리간드-일반화-성능">2.2. 코발트(Co(II)) 착물의 0장 분할(ZFS) 및 미확인 리간드 일반화 성능</h6>
+<p>COMPASS 데이터셋의 4좌 코발트(Co(II)) 착물을 대상으로 0장 분할(Zero-Field Splitting, ZFS) 스핀 해밀토니안 텐서 $\mathbf{D}$ 및 축방향 비등방성 파라미터 $D$, 사각성 비등방성 파라미터 $|E|$의 예측 성능을 비교 분석하였다.</p>
+<ul>
+<li><strong>성능 비교 표 (COMPASS 데이터셋 기반, 단위: cm$^{-1}$):</strong></li>
+</ul>
+<p>| 모델 (Model) | 파라미터 수 | 분포 내 $\mathbf{D}$ 텐서 MAE | 분포 내 $D$ MAE | 분포 내 $|E|$ MAE | 미확인 리간드 $\mathbf{D}$ 텐서 MAE | 미확인 리간드 $D$ MAE | 미확인 리간드 $|E|$ MAE |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| <strong>eqSNAP</strong> | 1,870 | 3.674 | 16.832 | 1.729 | 2.989 | 12.870 | 1.670 |
+| <strong>GM-NN</strong> | 943,874 | 2.380 | 12.090 | 1.417 | 2.988 | 14.710 | 1.666 |
+| <strong>NequIP</strong> | 122,120 | 1.193 | 6.645 | 0.835 | 1.651 | 7.611 | 1.134 |
+| <strong>NequIP+H</strong> | 144,923 | 1.085 | 5.925 | 0.825 | 1.626 | 8.619 | 1.211 |
+| <strong>eSpinor (pc)</strong> | 149,332 | 1.004 | 5.505 | 0.709 | 1.370 | 6.893 | 1.061 |
+| <strong>eSpinor (AOM)</strong> | 150,679 | <strong>0.849</strong> | <strong>4.838</strong> | <strong>0.641</strong> | <strong>1.264</strong> | <strong>6.365</strong> | <strong>0.875</strong> |</p>
+<ul>
+<li>
+<p><strong>성능 분석 및 테일 오차 서술:</strong><br />
+eSpinor(AOM) 모델은 검증된 모든 영역에서 가장 낮은 오차를 기록했다. NequIP 대비 $\mathbf{D}$ 텐서 MAE를 분포 내(In-distribution) 조건에서 29%, 미확인 리간드(Unseen ligands, OOD) 조건에서 23% 감소시켰다. NequIP+H 대비로는 두 조건 모두에서 약 22%의 오차 감소를 달성했다. 미확인 리간드 조건에서 $D$ 파라미터 기준 순위 정렬의 스피어만 순위 상관계수(Spearman rank correlation)는 NequIP(0.757), NequIP+H(0.675) 대비 eSpinor(AOM)가 0.787로 크게 향상되었다. 특히 꼬리 부분의 극단적 오차 제어 능력을 보여주는 착물별 상위 95 백분위수(95th percentile) 텐서 MAE 평가에서 NequIP가 $4.73\text{ cm}^{-1}$, NequIP+H가 $5.88\text{ cm}^{-1}$의 높은 오차를 보인 반면, eSpinor(AOM)는 $3.41\text{ cm}^{-1}$로 가장 낮은 수치를 기록하여 뛰어난 테일 오차 억제력을 입증했다.</p>
+</li>
+<li>
+<p><strong>초기화 모델(AOM vs pc) 영향:</strong><br />
+eSpinor 아키텍처 내에서 AOM(각중첩 모델) 초기화는 점전하(pc) 초기화 대비 향상된 성능을 보였는데, 이는 금속-리간드 궤도 간 방향성 공유결합성을 반영하여 리간드장 분할과 SOC에 의한 자기 비등방성을 정교하게 묘사하기 때문이다. 다만, 점전하 초기화를 적용한 eSpinor(pc) 역시 AOM을 적용한 NequIP+H보다 전 지표에서 우수한 성능을 기록하여, eSpinor의 성능 우위가 단순 초기화 모델의 차이가 아닌 SU(2) 스피너 메시지 패싱 아키텍처 자체의 물리적 귀납적 편향에 기인함을 증명한다.</p>
+</li>
+</ul>
+<h6 id="2-3-디스프로슘-dy-iii-착물의-자기-여기-스펙트럼-및-스칼라-타겟-예측">2.3. 디스프로슘(Dy(III)) 착물의 자기 여기 스펙트럼 및 스칼라 타겟 예측</h6>
+<p>Dy25k 데이터셋(7좌 Dy(III) 착물)을 활용하여 주 다중항($J=15/2$) 분할에 따른 7개의 자기 여기 에너지($\Delta E_{01} \sim \Delta E_{07}$) 예측 성능을 평가했다.</p>
+<ul>
+<li><strong>스펙트럼 예측 오차 비교 표 (Dy25k 데이터셋, 8k 학습 / 2,251 미확인 리간드 테스트, 단위: cm$^{-1}$):</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 (Model)</th>
+<th style="text-align:left">파라미터 수</th>
+<th style="text-align:left">전체 스펙트럼 평균 MAE</th>
+<th style="text-align:left">첫 여기 에너지 $\Delta E_{01}$ MAE</th>
+<th style="text-align:left">총 분할 $\Delta E_{07}$ MAE</th>
+<th style="text-align:left">후보군 검색 성공 수 (Recovered, /11)</th>
+<th style="text-align:left">위양성 수 (False positives)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>eqSNAP</strong></td>
+<td style="text-align:left">2,317</td>
+<td style="text-align:left">69.19</td>
+<td style="text-align:left">41.41</td>
+<td style="text-align:left">78.45</td>
+<td style="text-align:left">5 / 11</td>
+<td style="text-align:left">8</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GM-NN</strong></td>
+<td style="text-align:left">946,728</td>
+<td style="text-align:left">27.11</td>
+<td style="text-align:left">21.94</td>
+<td style="text-align:left">33.25</td>
+<td style="text-align:left"><strong>11 / 11</strong></td>
+<td style="text-align:left">3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NequIP</strong></td>
+<td style="text-align:left">127,263</td>
+<td style="text-align:left">28.18</td>
+<td style="text-align:left">19.74</td>
+<td style="text-align:left">40.37</td>
+<td style="text-align:left">9 / 11</td>
+<td style="text-align:left">2</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NequIP+H</strong></td>
+<td style="text-align:left">165,826</td>
+<td style="text-align:left">21.87</td>
+<td style="text-align:left">15.26</td>
+<td style="text-align:left">26.36</td>
+<td style="text-align:left">10 / 11</td>
+<td style="text-align:left">3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>eSpinor</strong></td>
+<td style="text-align:left">166,086</td>
+<td style="text-align:left"><strong>17.74</strong></td>
+<td style="text-align:left"><strong>12.49</strong></td>
+<td style="text-align:left"><strong>21.47</strong></td>
+<td style="text-align:left"><strong>11 / 11</strong></td>
+<td style="text-align:left"><strong>1</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>회전 불변 스칼라 타겟 성능 서술:</strong><br />
+여기 에너지 스펙트럼은 분자 회전에 대해 불변인 스칼라(Rotationally invariant scalar) 타겟이다. 그럼에도 불구하고 eSpinor는 파라미터 수가 거의 동일한 NequIP+H 대비 전체 스펙트럼 MAE를 19% 낮추었으며($21.87 \rightarrow 17.74\text{ cm}^{-1}$), GM-NN 및 NequIP 대비 각각 35%, 37%의 오차 절감을 달성했다. 이는 네트워크의 최종 출력값이 스칼라일지라도, 내부 메시지 패싱 과정에서 SU(2) 스피너 귀납적 편향을 유지하는 것이 리간드 기하구조 변화에 따른 SOC 에너지 수준 변동을 학습하는 데 유용한 표현력을 제공함을 보여준다.</p>
+</li>
+<li>
+<p><strong>후보군 스크리닝(Screening) 결과:</strong><br />
+고성능 분자 자성체 선별 기준인 $\Delta E_{01} &gt; 550\text{ cm}^{-1}$ 및 $\Delta E_{07} &gt; 1500\text{ cm}^{-1}$ 조건을 적용했을 때, 참값 기준 11개의 후보 착물 중 eSpinor와 GM-NN은 11개를 모두 성공적으로 복원(11/11)했다. 그러나 eSpinor는 위양성(False positive)을 단 1개만 발생시켜 GM-NN(3개) 및 NequIP+H(3개) 대비 가장 높은 정밀도의 후보 스크리닝 성능을 입증했다.</p>
+</li>
+</ul>
+<h6 id="2-4-dyl1-상자성-이동-parashift-mri-프로브의-결정장-계수-스핀-동역학-및-핵-이완율-예측">2.4. [DyL1] 상자성 이동(PARASHIFT) MRI 프로브의 결정장 계수, 스핀 동역학 및 핵 이완율 예측</h6>
+<p>상자성 이동(PARASHIFT) MRI 프로브는 기존의 $T_1/T_2$ 대조도 증강 방식과 달리, 상자성 금속 이온에 의한 화학적 이동(Chemical Shift) 변화를 이용해 배경 물/지방 신호 영역 외곽으로 리간드 양성자의 공명 주파수를 이동시켜 신호를 분리 검출하는 시스템이다. PARASHIFT 데이터셋 기반의 [DyL1] 착물 분자 동역학 궤적(수중 및 메탄올 용매)을 활용해 스핀 동역학 예측 성능을 평가했다.</p>
+<ul>
+<li>
+<p><strong>정적 결정장 계수 대 동적 관측량 오차의 괴리 원인:</strong><br />
+8k 학습 데이터 조건에서 정적 결정장 계수($B^{(2)}, B^{(4)}, B^{(6)}$)의 MAE 오차는 NequIP, NequIP+H, eSpinor 모델 간에 유의미한 차이가 없었다. 그러나 시간에 따른 스핀 동역학 궤적을 전파하여 평가한 전자 스핀 상관관계($\text{Re } g_{zz}$)와 핵 스핀 이완율($R_{1N}, R_{2N}$)에서는 성능 격차가 크게 발생했다. 이는 정적 텐서 계수의 오차가 궤적을 따라 누적·합성되는 방식과 결정장 텐서 컴포넌트 간 시간적 결합 구조에 따라 동적 관측량 오차가 현저히 달라짐을 입증한다.</p>
+</li>
+<li>
+<p><strong>저자기장(1–3 T) 대 고자기장(20 T) 이완 기작의 이윤성(Divergence) 분석:</strong><br />
+저자기장($1\text{--}3\text{ T}$) 영역에서는 전자 스핀 직교 상관관계($g_{zz}$) 및 국소 Dy-양성자 거리 변동($G_h$)에 직접 지배받는 <strong>쌍극자 이완(Dipolar relaxation)</strong> 기작이 우세하다. eSpinor는 쌍극자 동역학을 정교하게 묘사하여 저자기장 $R_{1N}$ (0.809%), $R_{2N}$ (0.774%) 오차에서 독보적인 성능을 보였다. 반면, $20\text{ T}$ 고자기장 영역에서는 분자의 난류 회전(Molecular tumbling)과 체적 자기화율($\chi_{\text{SI}}$)의 제곱에 비례하는 <strong>Curie 이완(Curie relaxation)</strong> 기작이 전체 $R_{2N}$ 이완율의 약 93%를 차지한다. Curie 이완은 국소 스핀-스핀 상관 감쇠보다는 거시적 자기화율 응답에 지배받으므로, 해당 고자기장 영역에서는 정수 계급 텐서 모델(NequIP)이 전체 이완율 오차 측면에서 더 낮은 수치를 기록하는 역전 현상이 관찰된다.</p>
+</li>
+<li>
+<p><strong>수중(Water) 환경 평가 결과 표 (8k 학습 / 39k 테스트 프레임 기준):</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 (Model)</th>
+<th style="text-align:left">파라미터 수</th>
+<th style="text-align:left">$\text{Re } g_{zz}$ 상대 $L_2$ 오차 (1–20 T, %)</th>
+<th style="text-align:left">복소 프로톤 $G_h$ 상대 $L_2$ 오차 (1–20 T, %)</th>
+<th style="text-align:left">$R_{1N}$ 상대 오차 (1–3 T, %)</th>
+<th style="text-align:left">$R_{2N}$ 상대 오차 (1–3 T, %)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>eqSNAP</strong></td>
+<td style="text-align:left">1,650</td>
+<td style="text-align:left">10.935</td>
+<td style="text-align:left">11.735</td>
+<td style="text-align:left">22.687</td>
+<td style="text-align:left">22.386</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NequIP</strong></td>
+<td style="text-align:left">122,080</td>
+<td style="text-align:left">1.882</td>
+<td style="text-align:left">2.121</td>
+<td style="text-align:left">3.448</td>
+<td style="text-align:left">3.361</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NequIP+H</strong></td>
+<td style="text-align:left">159,116</td>
+<td style="text-align:left">1.140</td>
+<td style="text-align:left">1.246</td>
+<td style="text-align:left">2.294</td>
+<td style="text-align:left">2.220</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>eSpinor</strong></td>
+<td style="text-align:left">134,459</td>
+<td style="text-align:left"><strong>0.553</strong></td>
+<td style="text-align:left"><strong>0.748</strong></td>
+<td style="text-align:left"><strong>0.809</strong></td>
+<td style="text-align:left"><strong>0.774</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>용매 전이 성능 (Water to Methanol Transfer):</strong><br />
+수중(Water) 궤적으로 학습된 8k 모델을 재학습 없이 메탄올(MeOH) 용매 궤적에 그대로 적용한 결과(TABLE IV), 신경망 모델 간 몰 자기화율 오차($\chi_T$)는 약 5.2% 수준으로 거의 대등했으나, 동적 이완율 transfer 오차에서는 eSpinor가 압도적인 일반화 유지 능력을 보였다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 (Model)</th>
+<th style="text-align:left">$\text{Re } g_{zz}$ 상대 $L_2$ 오차 (1–20 T, %)</th>
+<th style="text-align:left">복소 프로톤 $G_h$ 상대 $L_2$ 오차 (1–20 T, %)</th>
+<th style="text-align:left">$R_{1N}$ 상대 오차 (1–3 T, %)</th>
+<th style="text-align:left">$R_{2N}$ 상대 오차 (1–3 T, %)</th>
+<th style="text-align:left">몰 자기화율 $\chi_T$ 오차 (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>eqSNAP</strong></td>
+<td style="text-align:left">9.289</td>
+<td style="text-align:left">8.402</td>
+<td style="text-align:left">11.304</td>
+<td style="text-align:left">11.219</td>
+<td style="text-align:left">19.851</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NequIP</strong></td>
+<td style="text-align:left">2.427</td>
+<td style="text-align:left">2.427</td>
+<td style="text-align:left">3.209</td>
+<td style="text-align:left">3.186</td>
+<td style="text-align:left">5.423</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NequIP+H</strong></td>
+<td style="text-align:left">2.110</td>
+<td style="text-align:left">1.982</td>
+<td style="text-align:left">2.296</td>
+<td style="text-align:left">2.281</td>
+<td style="text-align:left"><strong>5.221</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>eSpinor</strong></td>
+<td style="text-align:left"><strong>1.240</strong></td>
+<td style="text-align:left"><strong>0.979</strong></td>
+<td style="text-align:left"><strong>0.959</strong></td>
+<td style="text-align:left"><strong>0.954</strong></td>
+<td style="text-align:left">5.263</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>계산 효율성 증명:</strong><br />
+NVIDIA H200 GPU 1대 기준 eSpinor의 39,000개 기하구조 추론 시간은 총 12분이 소요되어 기하구조당 약 <strong>18 ms</strong>의 처리 속도를 달성했다. 이는 DeltaAI 시스템의 72코어 NVIDIA Grace CPU 기반 CASSCF-SO 참값 계산 소요 시간(기하구조당 <strong>1.4 ~ 2.3시간</strong>)과 대조적이며, 장기 동역학 및 스핀 이완 시뮬레이션의 계산 비용을 획기적으로 절감할 수 있음을 증명한다.</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-화자-persons-and-authors">3. 등장 인물·화자 (Persons and Authors)</h5>
+<p>소스 문서에 기재된 연구진 및 관련 학자의 정보는 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>연구진 (주저자 및 교신저자):</strong></p>
+<ul>
+<li><strong>어웨이 솅 (Erh-Wei Sheng):</strong> 제1저자 및 교신저자. (소속: 캘리포니아 공과대학교 공학·응용과학부 / 국립청화대학교 화학공학과; 이메일: ewinnie@gapp.nthu.edu.tw)</li>
+<li><strong>아니마 아난드쿠마르 (Anima Anandkumar):</strong> 교신저자. (소속: 캘리포니아 공과대학교 공학·응용과학부; 이메일: anima@caltech.edu)</li>
+<li><strong>범석 강 (Beom Seok Kang):</strong> 공동 저자. (소속: 캘리포니아 공과대학교 화학·화학공학과)</li>
+<li><strong>위차오 린 (Yuchao Lin):</strong> 공동 저자. (소속: 캘리포니아 공과대학교 공학·응용과학부)</li>
+<li><strong>다니시 칸 (Danish Khan):</strong> 공동 저자. (소속: 캘리포니아 공과대학교 공학·응용과학부)</li>
+</ul>
+</li>
+<li>
+<p><strong>문헌 인용 물리 법칙/기법 관련 인물:</strong></p>
+<ul>
+<li><strong>Kramers (크라머스):</strong> 시간 역전 대칭성에 따른 크라머스 쌍(Kramers pairs) 축퇴 정리 관련 (역할 세부사항 확인 불가).</li>
+<li><strong>Stevens (스티븐스):</strong> 등가 연산자 및 스티븐스 결정장 계수 $B_q^{(l)}$ 표준 체계 관련 (역할 세부사항 확인 불가).</li>
+<li><strong>Van Vleck (반 플렉):</strong> 자화율 예측을 위한 Van Vleck 제로 장 수식 관련 (역할 세부사항 확인 불가).</li>
+<li><strong>Condon, Shortley, Gasteiger, Schäffer, Jørgensen:</strong> 구면 조화 함수 연산자, 전하 할당 알고리즘 및 각중첩 모델(AOM) 관련 문헌 저자 (역할 세부사항 확인 불가).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="4-수치-시점-numbers-and-timepoints">4. 수치·시점 (Numbers and Timepoints)</h5>
+<p>소스 문맥에서 추출된 주요 정량적 수치와 시간 파라미터는 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>데이터셋 수치 및 분할 비율:</strong></p>
+<ul>
+<li><strong>COMPASS (Co(II)):</strong> 총 15,559개 레코드 중 필터링된 14,573개 레코드 보유. 4좌 착물 기준 학습 6,892개, 검증 862개, 분포 내 테스트 862개, 미확인 리간드(OOD) 테스트 473개.</li>
+<li><strong>Dy25k (Dy(III)):</strong> 총 22,726개 필터링 착물. 전체 80/10/10 분할 적용 (학습 가능 18,231개 중 1k, 2k, 4k, 8k 서브셋 활용, 검증 2,244개, 미확인 리간드 테스트 2,251개 [O-도너 1,560개, N-도너 691개]).</li>
+<li><strong>PARASHIFT ([DyL1]):</strong> 1 fs 시간 간격 분자 동역학 궤적. 학습 서브셋 프레임(500, 1k, 2k, 4k, 8k), 검증 1,000 프레임 (50,000~51,000), 테스트 39,000 프레임 (51,000~90,000).</li>
+</ul>
+</li>
+<li>
+<p><strong>물리 파라미터 및 측정 시점 조건:</strong></p>
+<ul>
+<li><strong>자기장 세기 ($B_0$):</strong> 1, 1.5, 2, 3, 10, 20 T 평가 (저자기장 MRI 평가 영역: 1 ~ 3 T).</li>
+<li><strong>온도 및 회전 상관시간 ($\tau_R$):</strong> 온도 300 K. 수중 환경 $\tau_R = 139\text{ ps}$, 메탄올 환경 $\tau_R = 75\text{ ps}$.</li>
+<li><strong>스크리닝 임계값:</strong> Dy(III) 후보 스크리닝 기준 $\Delta E_{01} &gt; 550\text{ cm}^{-1}$, $\Delta E_{07} &gt; 1500\text{ cm}^{-1}$.</li>
+<li><strong>추론 및 계산 소요 시간:</strong> NVIDIA H200 GPU 기준 39,000 프레임 추론 총 12분 (개당 18 ms). DeltaAI 72코어 NVIDIA Grace CPU 기준 CASSCF-SO 참조 계산 개당 1.4 ~ 2.3시간 소요.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h5>
+<p>본 연구에서 제시된 기술 및 평가의 한계점과 불확실성은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>단핵 착물(Mononuclear Complexes) 검증 한계:</strong><br />
+본 연구의 모든 벤치마크 평가는 라벨링된 다핵(Multinuclear) 데이터셋의 부재로 인해 단핵 착물에 한정되어 수행되었다. 다핵 금속 이온 간 상호작용 및 기저 변환을 위한 병행 이동(Parallel transport) 수식이 이론적으로 정립되었으나, 실제 데이터셋을 통한 정량적 검증은 수행되지 않았다.</p>
+</li>
+<li>
+<p><strong>고자기장 조건에서의 Curie 이완 기작과 성능 역전 현상:</strong><br />
+20 T 고자기장 조건에서는 Curie 이완 기작(체적 자기화율 $\chi_{\text{SI}}$ 제곱과 분자 회전에 의존)이 전체 $R_{2N}$ 이완율의 약 93%를 차지하며 우세해진다. 국소 쌍극자 스핀 상관관계 중심의 eSpinor 오차 우위 효과는 이 영역에서 축소되며, 거시적 자기화율 응답을 반영하는 NequIP 등의 정수 텐서 모델이 총 이완율 오차 면에서 더 낮은 수치를 기록하는 물리적 역전 현상이 발생한다.</p>
+</li>
+<li>
+<p><strong>실제 실험적 합성 및 응용성 검증의 불확실성:</strong><br />
+본 보고서의 모든 모델 성능은 양자 화학 계산 참값(CASSCF-SO)을 기준으로 검증되었다. 모델이 제시하는 스크리닝 및 예측 결과가 실제 합성된 SMM의 열적 이완 시간이나 실제 MRI 프로브의 실험적 음영 증강 및 신호 분리 효과로 직접 연결되는지는 추가적인 실험적 검증이 필요하다.</p>
+</li>
+<li>
+<p><strong>기타 소스 미기재 사항:</strong><br />
+기타 실험적 합성 수율, 타 금속 이온으로의 전이성 등은 소스 내 해당 내용이 없거나 확인 불가하다.</p>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

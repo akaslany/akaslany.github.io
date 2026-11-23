@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A team of Gemini 4 Argon agents beats Minecraft</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>A team of Gemini 4 Argon agents beats Minecraft</h1>
+<p class="page-meta">논문 · 2026-10-16</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 구글 딥마인드(Google DeepMind)의 연구진(Maxence Faldor, Satinder Singh, Roberta Raileanu)이 진행한 자율 인공지능 에이전트 팀의 마인크래프트(Minecraft) 정복 실험 결과를 기술 분석한 보고서입니다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.22319">출처</a> · <a href="https://www.youtube.com/watch?v=YLIzj55QRNM">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="구글-딥마인드-제미나이-4-아르곤-gemini-4-argon-에이전트-팀의-마인크래프트-완전-자율-정복-분석-보고서">구글 딥마인드 제미나이 4 아르곤(Gemini 4 Argon) 에이전트 팀의 마인크래프트 완전 자율 정복 분석 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>본 보고서는 구글 딥마인드(Google DeepMind)의 연구진(Maxence Faldor, Satinder Singh, Roberta Raileanu)이 진행한 자율 인공지능 에이전트 팀의 마인크래프트(Minecraft) 정복 실험 결과를 기술 분석한 보고서입니다. 본 실험의 핵심 목적은 사전 정의된 역할 분담, 마인크래프트 전용 계획기(Planner), 교육과정(Curriculum), 또는 인간이 작성한 전용 스킬 라이브러리 없이, 범용 코딩 에이전트인 제미나이 4 아르곤(Gemini 4 Argon) 4개 에이전트로 구성된 팀이 장기 과제인 '엔더 드래곤(Ender Dragon) 처치'를 자율적으로 완수할 수 있는지 검증하는 것입니다. [소스 주장]</p>
+<p>시스템 환경에서 각 에이전트는 오픈소스 자바스크립트(JavaScript) 라이브러리인 마인플라이어(Mineflayer) 및 경로 탐색 플러그인을 활용하여 자신의 플레이어를 제어했습니다. 에이전트는 시각적 픽셀을 보거나 키보드/마우스를 조작하는 대신, 자바스크립트 프로그램을 직접 작성 및 비동기적으로 실행하고 그 결과(위치, 체력, 인벤토리, 주변 환경, 오류 메시지 등)를 텍스트 형태로 수신하는 방식으로 작동했습니다. 프로그램의 중앙값(Median) 실행 시간은 33.5초였으며, 전체 플레이 시간의 약 40%는 프로그램 실행에, 나머지 60%는 실행 결과 해석 및 다음 코드 작성(Thinking/Planning)에 소요되는 비동기 제어 구조를 보였습니다. 에이전트들은 게임 내 채팅과 공유 메모리(Shared Memory) 노트를 활용하여 교전 정보, 좌표, 교훈을 공유하며 협업했습니다. [사실]</p>
+<p>실험 결과, 쉬움(Easy) 난이도의 무작위 생성 세계(Random Seed)에서 시작한 4개의 에이전트 팀은 시작 후 27시간 14분 만에 엔더 드래곤을 자율적으로 처치하는 데 성공했습니다. 이 과정에서 에이전트 팀은 총 2,783개의 프로그램을 작성 및 실행하였고, 63,313줄의 자바스크립트 코드를 생성했으며, 총 605회의 사망을 감수했습니다. 이는 인간이 작성한 전용 도구나 사전 탐색된 시드 없이 표준 마인플라이어 라이브러리만을 사용하여 AI 에이전트가 마인크래프트를 처음부터 끝까지 완전 자율로 완수한 최초의 사례로 기록되었습니다. [사실/소스 주장]</p>
+<hr />
+<h5 id="2-주요-논점-및-자발적-협업-행동-key-discussion-points-emergent-behaviors">2. 주요 논점 및 자발적 협업 행동 (Key Discussion Points &amp; Emergent Behaviors)</h5>
+<h6 id="2-1-역할-분담과-자발적-전문화-specialization-role-negotiation">2.1. 역할 분담과 자발적 전문화 (Specialization &amp; Role Negotiation)</h6>
+<p>실험 시작 후 초기 10분대에 외부의 개입 없이 에이전트 간 자발적인 역할 협상이 이루어졌습니다. [사실]</p>
+<ul>
+<li><strong>초기 제안 및 협상 과정 (+0h01m ~ +0h11m):</strong>
+<ul>
+<li><strong>제인식(janesick)의 제안 (+0h10m14s):</strong> 제인식은 채팅을 통해 1) 자신은 철 제련 및 도구/양동이 제작 후 던전 상자 수거, 2) 길데니아(gyldenia)는 목재/조약돌 수집, 식량/침대용 동물 사냥 및 부싯돌용 자갈 수집, 3) 아우라티안(auratian)과 불리카메(bulicame)는 철 장비 갖춤 및 다이아몬드/흑요석 탐사를 제안했습니다. [사실]</li>
+<li><strong>아우라티안(auratian)의 수정 제안 (+0h11m06s):</strong> 아우라티안은 제인식의 제안 직후 다른 안을 제시했습니다. 아우라티안 본인이 스폰/북쪽 광산 작업 및 던전 수거, 용암 포털을 담당하고, 제인식은 동쪽 광산 작업, 불리카메는 서쪽 목재/광산 작업, 길데니아는 마을/식량/침대/부싯돌 탐색을 담당하도록 수정 제안했습니다. 이때 아우라티안은 파일 공유 메모리 경로인 <code>~/memory/team/world.md</code>를 확인하라는 지시를 팀원들에게 전달했습니다. [사실]</li>
+<li><strong>수용 및 역할 확립 (+0h11m34s):</strong> 길데니아가 &quot;Copy that!&quot;이라 응답하며 아우라티안의 제안을 수용했습니다. [사실]</li>
+</ul>
+</li>
+<li><strong>최종 확정된 에이전트별 담당 업무:</strong>
+<ul>
+<li><strong>제인식 (janesick):</strong> 도구 제작, 네더 요새 발견, 요새(Stronghold) 삼각측량 및 위치 계산. [사실]</li>
+<li><strong>길데니아 (gyldenia):</strong> 식량, 침대, 부싯돌 등 물자 조달 및 엔드 차원의 수정 10개 중 6개 파괴. [사실]</li>
+<li><strong>아우라티안 (auratian):</strong> 네더 포털 생성, 엔드 수정 파괴 전략 수립(흙 타워 전략). [사실]</li>
+<li><strong>불리카메 (bulicame):</strong> 엔더맨 대피소 구축, 사망한 팀원의 자원 구조, 엔더 드래곤 최후의 일격 담당. [사실]</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-추상적-문제-해결-및-수학적-계산-mathematical-problem-solving">2.2. 추상적 문제 해결 및 수학적 계산 (Mathematical Problem Solving)</h6>
+<p>에이전트들은 마인크래프트 게임 내 기하학적 메커니즘을 수학적 코드 로직으로 구현하여 문제를 해결했습니다. [작성자 해석]</p>
+<ul>
+<li><strong>엔더의 눈 삼각측량 (Stronghold Triangulation):</strong>
+<ul>
+<li><strong>발생 시점:</strong> 실행 10시간 43분 ~ 10시간 46분 사이 (+10h43m ~ +10h46m). [사실]</li>
+<li><strong>수행 에이전트:</strong> 제인식 (janesick). [사실]</li>
+<li><strong>코드 로직 및 알고리즘:</strong> 제인식은 서로 다른 위치에서 엔더의 눈을 2회 던진 후, 엔더의 눈 이동 궤적을 50밀리초(ms) 단위로 샘플링하여 두 광선(Ray 1, Ray 2)의 교차점을 계산하는 자바스크립트 코드를 실행했습니다. [사실]</li>
+<li><strong>계산 결과 및 오차:</strong>
+<ul>
+<li>제인식이 예측한 교차점 좌표: <code>(432, -1376)</code> (마을로부터 1.3 km 거리). [사실]</li>
+<li>실제 엔드 포털 방 좌표: <code>(463, -30, -1406)</code>. [사실]</li>
+<li>예측 좌표와 실제 포털 방 사이의 오차: <strong>43m (43블록)</strong>. [사실]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>제인식이 10시간 45분에 실행한 삼각측량 소스 코드 예시는 다음과 같습니다:</p>
+<pre><code class="language-text">bot.activateItem();
+const samples = [];
+const start = Date.now();
+while (!isCancelled() &amp;&amp; Date.now() - start &lt; 4500) {
+  const ent = Object.values(bot.entities).find(e =&gt; e &amp;&amp; (e.name === 'eye_of_ender' || (e.displayName &amp;&amp; e.displayName.toLowerCase().includes('eye'))) &amp;&amp; e.position &amp;&amp; e.position.distanceTo(bot.entity.position) &lt; 30 );
+  if (ent) {
+    samples.push({
+      t: Date.now() - start,
+      x: +ent.position.x.toFixed(4),
+      y: +ent.position.y.toFixed(4),
+      z: +ent.position.z.toFixed(4)
+    });
+  } else if (samples.length &gt; 5) {
+    break;
+  }
+  await new Promise(r =&gt; setTimeout(r, 50));
+}
+// [...]
+// Intersect with Ray 1: P1=(17.5, -164.526), U1=(0.323733, -0.946149)
+const x1 = 17.5, z1 = -164.526, ux1 = 0.323733, uz1 = -0.946149;
+const det = ux1 * (-uz2) - uz1 * (-ux2);
+if (Math.abs(det) &gt; 1e-6) {
+  const rhsX = x0 - x1; const rhsZ = z0 - z1;
+  const t1 = (rhsX * (-uz2) - rhsZ * (-ux2)) / det;
+  const t2 = (ux1 * rhsZ - uz1 * rhsX) / det;
+  const ix = x1 + t1 * ux1; const iz = z1 + t1 * uz1;
+}
+</code></pre>
+<h6 id="2-3-실패-복구-및-자원-교환-failure-recovery-item-rescues">2.3. 실패 복구 및 자원 교환 (Failure Recovery &amp; Item Rescues)</h6>
+<ul>
+<li><strong>사례 1: 가스트 화염구 공격, 다리 복구 및 경로 수칙 정립 (+9h04m ~ +9h06m)</strong>
+<ul>
+<li><strong>상황:</strong> 네더에서 제인식이 사망하면서 12개의 블레이즈 가루를 유실하고, 가스트(Ghast)의 화염구 공격으로 떨어진 아이템이 파괴됨. [사실]</li>
+<li><strong>대응:</strong> 아우라티안은 즉시 채팅을 통해 개활지 지형인 <code>(41, 101, -8)</code>에서 평가를 종료하지 말고 밀폐된 터널 <code>(70, 91, 70)</code> 내부를 경유하여 한 번에 이동하라는 엄격한 안전 수칙을 팀 메모리에 정립함. 2분 후 제인식은 원인이 2블록 높이차<code>((4,105,-18)-&gt;(5,103,-18))</code>로 인한 이동 막힘임을 분석하고, 계단식 1블록 작업<code>((4,104,-18))</code>을 수행하여 복귀 경로를 수정함. 또한 가스트의 공격으로 피격되어 파괴된 네더 용암 호수 다리 구간을 현무암(Basalt)으로 보수하여 안정적인 이동 통로를 재구축함. [사실]</li>
+</ul>
+</li>
+<li><strong>사례 2: 아우라티안 익사 및 엔더의 눈 긴급 구조 (+13h10m)</strong>
+<ul>
+<li><strong>상황:</strong> 아우라티안이 엔드 포털 개설에 필요한 엔더의 눈 12개를 전부 소지한 채 불리카메로부터 불과 8m 떨어진 위치<code>(454, 62, -1407)</code>에서 익사함. [사실]</li>
+<li><strong>대응:</strong> 제인식과 아우라티안은 불리카메에게 정확한 익사 좌표와 아이템이 디스폰(Despawn)되기까지 남은 시각(5분 임계 시간, <code>01:54:40Z</code>)을 채팅 및 긴급 메세지로 알림. 불리카메는 디스폰 2분 30초를 남겨두고 해당 좌표로 이동하여 엔더의 눈 12개를 전량 회수하는 데 성공함. [사실]</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-4-엔더-드래곤-공략-전략과-자발적-지식-교안-strategy-in-the-end-knowledge-sharing">2.4. 엔더 드래곤 공략 전략과 자발적 지식 교안 (Strategy in the End &amp; Knowledge Sharing)</h6>
+<ul>
+<li><strong>엔드 차원 공략 규칙 수립 (+13h ~ +18h):</strong>
+<ul>
+<li>에이전트들은 게임 내부 메타데이터(Metadata) 및 상태 변수를 읽어 공략 수칙을 정립했습니다. 불리카메는 소환 플랫폼<code>(100, 49, 0)</code>에 60초 이상 대기하면 드래곤의 돌진 공격에 의해 공허로 떨어진다는 경고를 공유했습니다. 또한 드래곤의 메타데이터 <code>metadata[16]</code> 값이 5, 6, 7(SITTING 상태)일 때만 근접하고, <code>phase=3</code>(LANDING, 날개 밀쳐내기 활성화) 상태일 때는 절대 접근하지 말라는 규칙을 작성했습니다. [사실]</li>
+</ul>
+</li>
+<li><strong>차원 언로드를 통한 드래곤 상태 리셋 (+17h34m):</strong>
+<ul>
+<li>드래곤이 <code>phase=1</code>(STRAFE_PLAYER) 상태에 고정되어 내려오지 않자, 길데니아의 제안에 따라 17.5시간 시점에 4명의 에이전트 전원이 6분 이내에 공허로 자살하여 오버월드로 침대 복귀했습니다. 이를 통해 엔드 차원의 플레이어 수 감소(20초간 0명)로 차원을 언로드(Unload)시킴으로써 고장 난 드래곤 상태를 <code>phase=0</code>(PERCHING)으로 강제 리셋시켰습니다. [사실]</li>
+</ul>
+</li>
+<li><strong>흙 블록을 이용한 수정 파괴 전략 (+20h44m ~ +21h08m):</strong>
+<ul>
+<li>아우라티안은 드래곤 체력이 <code>200/200</code>으로 지속 유지되는 원인이 10개의 엔드 수정(End Crystals)이 초당 2 HP씩 회복시키기 때문임을 파악했습니다. [사실]</li>
+<li>아우라티안은 곡괭이나 목재 없이도 흙 블록(Dirt) 45개를 수집하여 기둥을 쌓아 올려(<code>feetY=by-3</code>) 맨손으로 수정을 파괴하고 다시 흙을 파내어 하강하는 방식(맨손 작업 시 흙 1개당 0.75초 소요, 100% 회수)을 고안했습니다. [사실]</li>
+<li>에이전트들은 이 전략을 실행하여 4시간 40분 만에 10개의 수정을 모두 파괴했습니다(길데니아 6개, 아우라티안 3개, 불리카메 1개 파괴). 수정 파괴 후 39분 만인 +27h14m12s에 불리카메가 체력 2.5 HP가 남은 상태에서 드래곤에게 최후의 일격을 가해 승리했습니다. [사실]</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-5-자체-도구-제작-오류-수정-및-정직성-self-built-tools-corrections-honesty">2.5. 자체 도구 제작, 오류 수정 및 정직성 (Self-built Tools, Corrections &amp; Honesty)</h6>
+<ul>
+<li><strong>자체 도구 제작 및 높은 코드 재사용률:</strong>
+<ul>
+<li>에이전트들은 프로그램 간 연속성을 유지하기 위해 146개의 상태 및 코드 조각을 유지시켰으며, 여기에는 42개의 보조 함수(Helper Functions)가 포함되었습니다 (수중 부유 루프, 타이머 기반 이동, 아이템 수량 측정, 타임아웃된 프로그램의 잔여 코드를 정지시키는 카운터 등). [사실]</li>
+<li>이 중 타임아웃 방지 카운터 함수는 전체 2,783개 프로그램 중 1,519개(약 54.5%)에서 참조되었습니다. 이는 멀티 에이전트 소프트웨어 공학 관점에서 단순 1회성 스크립트 생성을 넘어 고도로 모듈화된 공통 모듈 설계 및 탁월한 코드 재사용성(Code Reuse Metric)을 달성했음을 보여줍니다. [작성자 해석]</li>
+<li>실행 19분 만에 길데니아가 발견한 마인플라이어 제작(Crafting) 버그 회피 코드는 팀 전체가 공유하여 총 655개 프로그램에 적용되었습니다. [사실]</li>
+</ul>
+</li>
+<li><strong>오류 수정 및 정직성 (Honesty):</strong>
+<ul>
+<li><strong>아우라티안의 정정 (+12h02m ~ +12h04m):</strong> 아우라티안의 프로그램이 엔더의 눈 14개를 오버월드 상자에 보관했다고 잘못 발표했으나, 아우라티안은 2분 후 &quot;이전 스크립트 분기 오류(unguarded script branch)이며, 서버 재시작 후 사망하여 빈 인벤토리로 스폰되었다&quot;고 자발적으로 오류를 시정 및 정정했습니다. [사실]</li>
+<li><strong>길데니아의 모순 지적 (+4h17m):</strong> 제인식이 용암에 타 죽은 지 1초 만에 블레이즈 막대 12개를 가지고 복귀했다고 보고하자, 길데니아가 3분 이내에 해당 보고의 상충성을 지적하고 비판했습니다. [사실]</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-agents-roles">3. 등장 인물 및 화자 (Agents &amp; Roles)</h5>
+<h6 id="3-1-플레이어-에이전트-gemini-4-argon-players">3.1. 플레이어 에이전트 (Gemini 4 Argon Players)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">에이전트 이름</th>
+<th style="text-align:left">핵심 담당 역할</th>
+<th style="text-align:center">작성 프로그램 수</th>
+<th style="text-align:center">작성 메시지 수</th>
+<th style="text-align:left">주요 기여 및 성과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>제인식 (janesick)</strong></td>
+<td style="text-align:left">도구 제작, 네더 요새, 요새 삼각측량</td>
+<td style="text-align:center">646개</td>
+<td style="text-align:center">50개</td>
+<td style="text-align:left">철 도구/양동이 제작, 네더 요새 및 블레이즈 스포너 발견, 엔더의 눈 삼각측량을 통한 요새 좌표 계산(오차 43m) <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>길데니아 (gyldenia)</strong></td>
+<td style="text-align:left">보급품 탐색, 엔드 수정 파괴</td>
+<td style="text-align:center">727개</td>
+<td style="text-align:center">79개</td>
+<td style="text-align:left">식량/침대/부싯돌 탐색, 마인플라이어 제작 버그 회피 코드 공유, 엔드 수정 10개 중 6개 파괴 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아우라티안 (auratian)</strong></td>
+<td style="text-align:left">네더 포털 생성, 공략 전략 수립</td>
+<td style="text-align:center">735개</td>
+<td style="text-align:center">53개</td>
+<td style="text-align:left">네더 포털 완성, 가스트 공격 후 이동 규칙 정립, 흙 타워를 이용한 무곡괭이 엔드 수정 파괴 전략 제안 및 3개 파괴 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>불리카메 (bulicame)</strong></td>
+<td style="text-align:left">대피소 구축, 자원 구조, 최후의 일격</td>
+<td style="text-align:center">675개</td>
+<td style="text-align:center">47개</td>
+<td style="text-align:left">엔더맨 대피소 구축, 아우라티안 사망 후 엔더의 눈 12개 긴급 구조, 엔더 드래곤 최후의 일격 달성 <code>[사실]</code></td>
+</tr>
+</tbody>
+</table>
+<h6 id="3-2-관찰자-에이전트-observer-agent">3.2. 관찰자 에이전트 (Observer Agent)</h6>
+<ul>
+<li><strong>옵저버 (Observer):</strong>
+<ul>
+<li><strong>역할:</strong> 독립된 관찰자로서 규격 조작(Specification Gaming, 평가 시스템의 허점 악용), 허위 결과 보고, 안전 사고 발생 여부를 감시함. [사실]</li>
+<li><strong>제약 사항:</strong> 게임 내 플레이어로 직접 참여하지 않으며, 어떠한 프로그램도 실행하지 않음. 시스템 환경 오류(도구 고장, 쿼타 초과 등) 발생시에만 개입하도록 설정됨. [사실]</li>
+<li><strong>실행 통계 (프로그램/메시지 수):</strong> 게임 내 작성 프로그램 수 0개, 작성 메시지 수 0개 (게임 내 미참여). [사실]</li>
+<li><strong>토큰 소비 분할:</strong> 세부 토큰 소비량 및 비용에 대해 전체 세션 총합에는 옵저버의 토큰이 포함되어 있으나 옵저버 개별 토큰 소비 분할 수치는 정확히 구분할 수 없음. [확인 불가]</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="4-수치-및-타임라인-분석-quantitative-metrics-timeline">4. 수치 및 타임라인 분석 (Quantitative Metrics &amp; Timeline)</h5>
+<h6 id="4-1-정량적-성과-지표-quantitative-summary">4.1. 정량적 성과 지표 (Quantitative Summary)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">정량 수치</th>
+<th style="text-align:left">비고 / 세부 내역</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>총 소요 시간</strong></td>
+<td style="text-align:left">27시간 14분</td>
+<td style="text-align:left">게임 내 시간 기준 약 81일에 해당 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>작성된 프로그램 수</strong></td>
+<td style="text-align:left">2,783개</td>
+<td style="text-align:left">승리 달성 전 기준 (전체 세션 총합은 2,839개) <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>작성된 자바스크립트 코드 줄 수</strong></td>
+<td style="text-align:left">63,313줄</td>
+<td style="text-align:left">중복되지 않은 고유 코드 줄 수 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>팀원 간 채팅 메시지 수</strong></td>
+<td style="text-align:left">229개</td>
+<td style="text-align:left">승리 달성 전 기준 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>총 사망 횟수</strong></td>
+<td style="text-align:left">605회</td>
+<td style="text-align:left">몬스터 351, 드래곤 69, 익사 67, 추락/공허 57, 용암/불 47, 기타 14 <code>[사실]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>서버 재시작 횟수</strong></td>
+<td style="text-align:left">6회</td>
+<td style="text-align:left">총 일시 중단 시간 약 20분 <code>[사실]</code></td>
+</tr>
+</tbody>
+</table>
+<h6 id="4-2-단계별-마일스톤-타임라인-timeline-of-13-steps">4.2. 단계별 마일스톤 타임라인 (Timeline of 13 Steps)</h6>
+<ol>
+<li><strong>맨손 시작 (Bare hands):</strong> <code>+0h00m</code> / 최초 달성 에이전트: 확인 불가 <code>[확인 불가]</code></li>
+<li><strong>돌 도구 (Stone tools):</strong> <code>+0h06m</code> / 최초 달성 에이전트: 길데니아 (gyldenia) <code>[사실]</code></li>
+<li><strong>철 도구 (Iron tools):</strong> <code>+0h14m</code> / 최초 달성 에이전트: 제인식 (janesick) <code>[사실]</code></li>
+<li><strong>양동이 (Bucket):</strong> <code>+0h14m</code> / 최초 달성 에이전트: 제인식 (janesick) <code>[사실]</code></li>
+<li><strong>부싯돌과 부쇠 (Flint and steel):</strong> <code>+1h04m</code> / 최초 달성 에이전트: 아우라티안 (auratian) <code>[사실]</code></li>
+<li><strong>네더 포털 (Nether portal):</strong> <code>+1h42m</code> / 최초 달성 에이전트: 아우라티안 (auratian) <code>[사실]</code></li>
+<li><strong>네더 요새 (Nether fortress):</strong> <code>+2h57m</code> / 최초 달성 에이전트: 제인식 (janesick) <code>[사실]</code></li>
+<li><strong>엔더 구슬 (Ender pearls):</strong> <code>+3h06m</code> / 최초 달성 에이전트: 길데니아 (gyldenia) <code>[사실]</code></li>
+<li><strong>블레이즈 막대 (Blaze rods):</strong> <code>+4h17m</code> / 최초 달성 에이전트: 제인식 (janesick) <code>[사실]</code></li>
+<li><strong>엔더의 눈 (Eyes of Ender):</strong> <code>+10h43m</code> / 최초 달성 에이전트: 제인식 (janesick) <code>[사실]</code></li>
+<li><strong>요새 진입 (Stronghold):</strong> <code>+13h17m</code> / 최초 달성 에이전트: 불리카메 (bulicame) <code>[사실]</code></li>
+<li><strong>엔드 차원 진입 (The End):</strong> <code>+13h33m</code> / 최초 달성 에이전트: 불리카메 (bulicame) <code>[사실]</code></li>
+<li><strong>10개 수정 파괴 및 엔더 드래곤 처치:</strong>
+<ul>
+<li><strong>10개 수정 파괴 완료 (Ten crystals):</strong> <code>+26h34m</code> / 최초 달성 에이전트: 길데니아 (gyldenia) <code>[사실]</code></li>
+<li><strong>엔더 드래곤 처치 (Ender Dragon):</strong> <code>+27h14m</code> / 최초 달성 에이전트: 불리카메 (bulicame) <code>[사실]</code></li>
+</ul>
+</li>
+</ol>
+<h6 id="4-3-토큰-소비-및-api-비용-cost-tokens">4.3. 토큰 소비 및 API 비용 (Cost &amp; Tokens)</h6>
+<ul>
+<li><strong>토큰 소비량 (승리 시점까지):</strong>
+<ul>
+<li><strong>입력 토큰 (Input Tokens):</strong> 약 13억 5,000만 개 (이 중 91%는 컨텍스트 캐시 Context Cache에서 제공됨). [사실]</li>
+<li><strong>출력 토큰 (Output Tokens):</strong> 약 1,600만 개 (사고 토큰 Thinking Tokens 400만 개 포함). [사실]</li>
+<li><strong>모델 호출 횟수:</strong> 약 24,000회. [사실]</li>
+</ul>
+</li>
+<li><strong>비용 절감 구조 분석:</strong>
+<ul>
+<li>13억 5,000만 개에 달하는 대규모 입력 토큰 소비에도 불구하고, 전체 입력 토큰의 91%를 컨텍스트 캐싱(Context Caching) 기술로 처리함으로써 추론 비용을 획기적으로 절감할 수 있었습니다. 이는 장기 연속성 과제(Long-horizon Tasks)를 수행하는 분산 소프트웨어 에이전트 시스템에서 컨텍스트 캐싱 아키텍처가 경제적 실용성을 확보하는 데 핵심 요소임을 증명합니다. [작성자 해석]</li>
+</ul>
+</li>
+<li><strong>추정 API 비용:</strong>
+<ul>
+<li><strong>승리 시점까지 (4개 플레이어 에이전트):</strong> 공개 API 할인가(Introductory) 기준 약 $520 (표준가 기준 약 $1,040). [사실]</li>
+<li><strong>전체 세션 총비용 (옵저버 에이전트 및 승리 후 1일 추가 활동 포함):</strong> 할인가 기준 약 $810 (표준가 기준 약 $1,620). [사실]</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ul>
+<li><strong>코드 기반 인식 및 경로 탐색의 한계 (Perception via Code):</strong>
+<ul>
+<li>본 실험의 에이전트들은 시각 픽셀 입력이나 키보드/마우스 제어를 사용하지 않고 마인플라이어 API를 통해 블록 좌표, 벽 뒤의 은폐된 블록, 드래곤의 내부 상태 메타데이터(<code>metadata[9]</code>, <code>metadata[16]</code>) 등을 직접 읽었습니다. 또한 장애물 우회를 위해 자동 경로 탐색 플러그인을 사용했습니다. 이는 시각 정보로 플레이하는 인간이나 SIMA 2 모델에 비해 환경 인식 난이도가 크게 낮추어진 조건입니다. [사실/소스 주장]</li>
+</ul>
+</li>
+<li><strong>쉬움 난이도 환경 (Easy Difficulty):</strong>
+<ul>
+<li>게임 난이도가 '쉬움'으로 설정되어 몬스터의 공격력이 낮았으며, 허기(Hunger) 수치 감소로 인해 플레이어가 사망하지 않는 환경이었습니다. [사실]</li>
+</ul>
+</li>
+<li><strong>사전 지식 보유 (Prior Knowledge):</strong>
+<ul>
+<li>제미나이 4 아르곤 모델은 사전 학습 데이터 내에 마인크래프트 게임 구조 및 마인플라이어 라이브러리 API 문서를 이미 학습한 상태였습니다. 따라서 본 실험은 완전히 새로운 환경을 스스로 학습하는 능력이 아니라, 보유한 지식을 바탕으로 장시간 동안 실행 가능한 코드를 작성하고 협업하는 능력을 검증한 것입니다. [소스 주장]</li>
+</ul>
+</li>
+<li><strong>높은 실패율 및 효율성 한계 (High Failure Rate):</strong>
+<ul>
+<li>실험 도중 에이전트들은 605회의 사망을 기록했으며, 작성된 프로그램의 22%가 오류로 끝났습니다. 엔드 차원 전투에만 약 14시간이 소요되는 등 시간적/자원적 효율성 면에서 한계를 보였습니다. [사실]</li>
+</ul>
+</li>
+<li><strong>단일 실행의 한계 (Single Run):</strong>
+<ul>
+<li>연구진은 첫 번째 시도한 단 1회의 실행 세션 결과만을 보고하였으므로, 동일한 조건에서의 재현성, 성공 확률 및 통계적 성공률은 <strong>확인 불가</strong>합니다. [소스 주장/확인 불가]</li>
+</ul>
+</li>
+<li><strong>서버 재시작 영향:</strong>
+<ul>
+<li>실험 중 6회의 게임 서버 재시작이 발생하여 일시적으로 진행이 중단되었습니다. [사실]</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>

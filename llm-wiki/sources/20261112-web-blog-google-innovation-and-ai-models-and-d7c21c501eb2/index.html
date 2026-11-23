@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Gemini 4 Hydrogen for Agentic Workflows</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing Gemini 4 Hydrogen for Agentic Workflows</h1>
+<p class="page-meta">웹 · 2026-11-12</p>
+<h2 id="요약">요약</h2>
+<p>구글(Google)은 2026년 11월 12일 에이전트 워크플로(Agentic Workflows) 및 일상적인 코딩 작업 실행에 특화된 인공지능 모델인 Gemini 4 Hydrogen을 공식 발표했습니다 [Introducing Gemini 4 Hydrogen 섹션].</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen">출처</a> · <a href="https://www.youtube.com/watch?v=n_qwGS3oA-Y">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="gemini-4-hydrogen-기술-해설-및-분석-보고서">Gemini 4 Hydrogen 기술 해설 및 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>구글(Google)은 2026년 11월 12일 에이전트 워크플로(Agentic Workflows) 및 일상적인 코딩 작업 실행에 특화된 인공지능 모델인 Gemini 4 Hydrogen을 공식 발표했습니다 [Introducing Gemini 4 Hydrogen 섹션]. 본 모델은 초장기 추론과 고난도 문제 해결에 주력하는 프론티어 모델인 Gemini 4 Carbon 및 Gemini 4 Argon과 달리, 빠른 실행 속도와 높은 연산 효율성을 바탕으로 다양하고 광범위한 에이전트 과제를 신속히 처리하도록 설계되었습니다 [Gemini 4 Hydrogen is available 섹션].</p>
+<p>Gemini 4 Hydrogen은 높은 경제성과 확장성을 바탕으로 개인 개발자부터 대규모 기업 환경까지 폭넓게 적용할 수 있는 범용성을 제공합니다 [Gemini 4 Hydrogen is available 섹션]. 본 모델은 Google AI Studio, Gemini API, 기업용 Gemini for business, Gemini 앱, Google Search, 그리고 Google Antigravity 등 구글의 핵심 AI 플랫폼 및 서비스 생태계 전반에 즉시 도입되었습니다 [Gemini 4 Hydrogen is available 섹션].</p>
+<p>Gemini 4 Hydrogen은 1백만 토큰의 대용량 입력 컨텍스트 창과 함께 최대 1백만 토큰의 출력 용량을 동시에 지원하며, 입출력 단가를 단일화하여 효율적인 연산 비용 구조를 갖추었습니다 [Gemini 4 Hydrogen is available 섹션, Multimodal knowledge work 섹션]. 고성능 프론티어 모델과의 다중 모델 오케스트레이션(Multi-Model Orchestration)을 구동함으로써 시스템 전체의 쿼터 소비를 줄이고 작업 처리 속도를 유의미하게 향상시킵니다 [Unlocking efficiencies in multi-model workloads 섹션].</p>
+<hr />
+<h4 id="2-주요-논점-key-points">2. 주요 논점 (Key Points)</h4>
+<h5 id="2-1-모델의-위치-및-가격-성능-구조-model-positioning-pricing-structure">2.1. 모델의 위치 및 가격·성능 구조 (Model Positioning &amp; Pricing Structure)</h5>
+<p><strong><code>[사실 (Fact)]</code></strong> Gemini 4 Hydrogen은 에이전트 워크플로 및 소프트웨어 개발 시 빠른 실행을 목적으로 개발된 모델로, 입력 최대 1,000,000 토큰(1백만 토큰) 및 출력 최대 1,000,000 토큰(1백만 토큰)의 컨텍스트 용량을 지원합니다 [Gemini 4 Hydrogen is available 섹션, Multimodal knowledge work 섹션]. 전체 컨텍스트 창에 대해 입력 토큰 1백만 개당 $1.50, 출력 토큰 1백만 개당 $7.50의 단일 단가가 적용됩니다 [Gemini 4 Hydrogen is available 섹션].</p>
+<p><strong><code>[사실 (Fact)]</code></strong> 본 모델은 low, medium, high(기본 설정), xhigh의 총 4가지 생각 단계(Thinking levels)를 제공합니다 [Adaptable speed and intelligence across four thinking levels 섹션]. Artificial Analysis Intelligence Index 평가에서 기본 high 설정 시 51점을 기록하여 Argon(50점)을 상회하였으며, 가장 높은 xhigh 설정 시 54점에 도달합니다 [Gemini 4 Hydrogen is available 섹션].</p>
+<p><strong><code>[소스의 주장 (Source Claim)]</code></strong> 구글은 Hydrogen이 동급 계열 모델 대비 작업을 더 신속하게 완료하며, 사용자가 필요한 추론 깊이에 맞춰 비용과 응답 지연 시간(Latency)을 유연하게 조절할 수 있다고 명시하고 있습니다 [Gemini 4 Hydrogen is available 섹션, Adaptable speed and intelligence across four thinking levels 섹션].</p>
+<p><strong><code>[작성자 해석 (Author Interpretation)]</code></strong> Hydrogen은 최고 수준의 고난도 추론이 필요하지 않은 반복적 검증 및 실행 단계에서 고비용 프론티어 모델을 대체하도록 설계되었습니다. 생각 단계(Thinking levels) 조절 기능과 단일화된 토큰 단가를 결합함으로써, 개발자가 작업 난이도별 연산 자원을 정밀하게 할당하고 시스템 전체의 연산 경제성을 극대화할 수 있는 모델 구조를 정립한 것으로 해석됩니다 [Unlocking efficiencies in multi-model workloads 섹션 참조].</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">Gemini 4 Hydrogen 상세 내용</th>
+<th style="text-align:left">소스 내 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>핵심 목적</strong></td>
+<td style="text-align:left">빠른 코딩 및 에이전트 워크플로 고효율 실행</td>
+<td style="text-align:left">Gemini 4 Hydrogen is available</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>컨텍스트 창</strong></td>
+<td style="text-align:left">입력 최대 1,000,000 토큰 / 출력 최대 1,000,000 토큰 지원</td>
+<td style="text-align:left">Gemini 4 Hydrogen is available, Multimodal knowledge work</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>입력 가격</strong></td>
+<td style="text-align:left">$1.50 / 1백만 토큰</td>
+<td style="text-align:left">Gemini 4 Hydrogen is available</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>출력 가격</strong></td>
+<td style="text-align:left">$7.50 / 1백만 토큰</td>
+<td style="text-align:left">Gemini 4 Hydrogen is available</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>생각 단계(Thinking levels)</strong></td>
+<td style="text-align:left">low, medium, high (기본값), xhigh (총 4단계 제공)</td>
+<td style="text-align:left">Adaptable speed and intelligence...</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인텔리전스 지수</strong></td>
+<td style="text-align:left">High 설정: 51점 / Xhigh 설정: 54점 (Argon: 50점 상회)</td>
+<td style="text-align:left">Gemini 4 Hydrogen is available</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-2-다중-모델-워크플로-및-구글-안티그라비티-오케스트레이터-multi-model-workflows-orchestrator">2.2. 다중 모델 워크플로 및 구글 안티그라비티 오케스트레이터 (Multi-Model Workflows &amp; Orchestrator)</h5>
+<p><strong><code>[사실 (Fact)]</code></strong> 다중 모델 워크플로에서 Carbon과 Argon 모델이 아키텍처 설계 및 난제 진단을 전담할 때, Hydrogen은 코드 작성, 테스트 실행, 변경 사항 검증을 전담하는 실행 엔진으로 구동됩니다 [Unlocking efficiencies in multi-model workloads 섹션].</p>
+<p><strong><code>[사실 (Fact)]</code></strong> 구글은 단일 세션 내에서 모델 간 동적 전환을 제어하는 Google Antigravity의 Orchestrator 기능을 도입했습니다 [Unlocking efficiencies in multi-model workloads 섹션]. Terminal-Bench 4.0 벤치마크 테스트 결과, Orchestrator 적용 시 Carbon 전용 단독 사용 대비 작업 성공률을 유지하면서 평균 24%의 할당량(Quota)을 절감하고 완료 속도를 19% 향상시켰습니다 [Unlocking efficiencies in multi-model workloads 섹션].</p>
+<p><strong><code>[소스의 주장 (Source Claim)]</code></strong> 병렬 에이전트 환경에서 Carbon이 전체 아키텍처를 관리하는 주 조정자(Coordinator) 역할을 수행하고, Hydrogen이 격리된 작업 공간에서 병렬로 구현 및 검증(Worker &amp; Verifier)을 전담함으로써 토큰 비용 절감과 복잡한 프로젝트의 조기 완성을 동시에 이룰 수 있습니다 [Unlocking efficiencies in multi-model workloads 섹션].</p>
+<p><strong><code>[작성자 해석 (Author Interpretation)]</code></strong> 단순한 단일 모델 성능 경쟁에서 벗어나, 상위 추론 모델이 전체 방향을 지휘하고 가벼운 실행 모델이 독립된 분산 작업 공간에서 병렬 수행 및 실시간 검증을 전담하는 계층적 에이전트 오케스트레이션 구조를 실현했습니다. 이는 토큰 비용 병목을 제거하고 복잡한 소프트웨어 파이프라인의 완성 속도를 획기적으로 개선하는 기술적 기반이 됩니다 [Unlocking efficiencies in multi-model workloads 섹션 참조].</p>
+<h5 id="2-3-개발자-및-기업-워크플로-성능-향상-및-벤치마크-scaling-developer-enterprise-workflows">2.3. 개발자 및 기업 워크플로 성능 향상 및 벤치마크 (Scaling Developer &amp; Enterprise Workflows)</h5>
+<p><strong><code>[사실 (Fact)]</code></strong> Gemini 3.8 Flash 대비 Gemini 4 Hydrogen은 기본 high 설정에서 작업 처리 속도가 2.5배 향상되었으며, Terminal-Bench 4.1 점수는 18.2%에서 57%로 3배 이상 증가했습니다 [Scaling developer and enterprise workflows 섹션]. 또한 허위 주장 및 환각 작용이 5배 이상 감소했습니다 [Scaling developer and enterprise workflows 섹션].</p>
+<p><strong><code>[사실 (Fact)]</code></strong> 대규모 코드베이스 탐색 시 파일 읽기 및 검색 호출을 병렬로 일괄 처리하는 병렬 배치 처리(Native Batching) 방식을 적용하여, complex graph, SQL, 데이터 중심 기업 워크플로 테스트에서 Gemini 3.8 Flash 대비 2배~2.8배 빠른 실행 속도와 12%~23%의 토큰 사용량 절감을 달성했습니다 [Scaling developer and enterprise workflows 섹션]. 멀티모달 영역에서는 최대 1백만 입력 토큰과 최대 1백만 출력 토큰의 동시 지원 능력을 바탕으로 대용량 PDF, 기술 문서, 오디오, 비디오를 정밀 보고서 형태로 인라인 출현시켜 생성합니다 [Multimodal knowledge work 섹션].</p>
+<p><strong><code>[소스의 주장 (Source Claim)]</code></strong> 주요 성능 평가 벤치마크 결과는 다음과 같습니다 [Scaling developer and enterprise workflows 섹션]:</p>
+<ul>
+<li><strong>Agent Arena:</strong> 실시간 리더보드 #5위 달성</li>
+<li><strong>HLE-Diamond:</strong> 58.8% 기록 (동급 최고 수준)</li>
+<li><strong>Vals Tax Agent Bench:</strong> 52.3% 기록 (전체 #1위)</li>
+<li><strong>Vals Legal Research Bench:</strong> 55.8% 기록 (공동 #1위)</li>
+<li><strong>AutomationBench-AA:</strong> 동급 모델 내 1위</li>
+<li><strong>Multimodal Knowledge Agent (MKA):</strong> 53.4% 기록 (전문가급 시각 파일 분석 1위)</li>
+<li><strong>Agents' Last Exam v1.1:</strong> 71.6% 기록 (전문가 워크플로 수행 1위)</li>
+<li><strong>SWE-sweep:</strong> 관련 없는 파일의 재작성 없이 코드 버그를 소스 코드 내에서 정확하게 찾아 수정하는 국소적 편집(Surgical edits) 능력 입증</li>
+</ul>
+<p><strong><code>[작성자 해석 (Author Interpretation)]</code></strong> 대용량 파일 병렬 일괄 처리(Native Batching)와 1백만 토큰 입출력 지원 기술은 코드 탐색 속도를 높일 뿐만 아니라 복잡한 SQL 및 그래픽 데이터 구조 처리 효율을 극대화합니다. 지표상의 대폭 향상은 Hydrogen이 빠른 시제품 제작을 넘어 전문적인 법률, 세무, 금융, 대규모 코드 리팩토링 업무를 안정적으로 자율 처리할 수 있음을 보여줍니다 [Scaling developer and enterprise workflows 섹션 참조].</p>
+<h5 id="2-4-파트너-및-고객사-사례-분석-partner-customer-case-studies">2.4. 파트너 및 고객사 사례 분석 (Partner &amp; Customer Case Studies)</h5>
+<p><strong><code>[사실 (Fact)]</code></strong> 구글은 다수의 기업 파트너사 검증을 통해 Gemini 4 Hydrogen의 실제 소프트웨어 개발, 제약 연구, 데이터 분석, 마케팅 및 멀티미디어 제작 성능을 확인했습니다 [Scaling developer and enterprise workflows 섹션].</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">파트너사명</th>
+<th style="text-align:left">화자 및 직책</th>
+<th style="text-align:left">주요 성과 및 평가 결과</th>
+<th style="text-align:left">소스 내 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Cartwheel</strong></td>
+<td style="text-align:left">Andrew Carr (최고 과학자 &amp; 공동 창업자)</td>
+<td style="text-align:left">경쟁사 프론티어 모델로 10일간 해결하지 못한 문제의 접근 방식 오류 2가지를 포착하고 정밀한 해결책을 제시함.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Discovery Loop</strong></td>
+<td style="text-align:left">Tris Warkentin (창립 기술진)</td>
+<td style="text-align:left">프론티어 모델 수준의 성능과 높은 실행 속도를 결합하여 신규 도구 제작 및 반복 수정 작업을 용이하게 함.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LatchBio</strong></td>
+<td style="text-align:left">Joshua Badshah &amp; Dillon Flood (항체 개발팀)</td>
+<td style="text-align:left">항체 개발 벤치마크 독성/안전성 평가에서 67% 통과율 기록(비 Gemini 모델 최고치 37%). 과제당 약 13분 소요로 최고 속도 달성.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>STAN</strong></td>
+<td style="text-align:left">Rahul Singh (공동 창업자 &amp; CTO)</td>
+<td style="text-align:left">포맷 준수율 100%, 종단 간 지연 시간 28% 감소, 토큰 사용량 23% 절감, 그래프/SQL 문제 처리 속도 최대 2.8배 향상, <strong>StanShop용 규정 준수 음성 광고 스크립트 생성</strong> 성과 달성.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Astrocade</strong></td>
+<td style="text-align:left">Ali Sadeghian (공동 창업자)</td>
+<td style="text-align:left">게임 생성 성능 평가에서 초기 내부 예상치를 뛰어넘는 높은 코드/콘텐츠 생성 성능을 기록함.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Box</strong></td>
+<td style="text-align:left">Yashodha Bhavnani (AI 제품 부사장)</td>
+<td style="text-align:left">Gemini 3.8 Flash 대비 정확도가 대폭 향상되었으며, 데이터 집계 및 표 분석 워크플로에서 실행 속도 2배 향상 및 토큰 사용량 12% 절감 달성.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Pixelcut</strong></td>
+<td style="text-align:left">Dominique Yahyavi (공동 창업자 &amp; CEO)</td>
+<td style="text-align:left">276회 평가 실행 결과 모든 디자인 브리프를 완수함. 1.8배 빠른 속도, 30% 더 깨끗한 코드 생성, 텍스트 잘림 및 환각 완전 제거.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Zingroll</strong></td>
+<td style="text-align:left">Harshit Yadav (창업자 &amp; CEO)</td>
+<td style="text-align:left">비디오 이해 워크플로에서 환각 없이 실제 시각적 증거에 기반하여 복잡한 영화 연출, 카메라 각도, 장면 진행을 정밀 파악함.</td>
+<td style="text-align:left">Scaling developer and enterprise workflows</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-5-서비스-플랫폼-및-사용자-경험-적용-consumer-enterprise-application-integrations">2.5. 서비스 플랫폼 및 사용자 경험 적용 (Consumer &amp; Enterprise Application Integrations)</h5>
+<p><strong><code>[사실 (Fact)]</code></strong> Gemini 4 Hydrogen은 소비자용 검색 서비스부터 기업용 생산성 앱 및 프런트엔드 개발 환경에 이르기까지 구글의 전 제품 생태계에 깊이 있게 통합되었습니다 [Fast, everyday help in the Gemini app and Search 섹션, Available to everyone today 섹션].</p>
+<p><strong><code>[사실 (Fact)]</code></strong> 플랫폼별 주요 기능 및 데모 구현 사례는 다음과 같습니다 [Fast, everyday help in the Gemini app and Search 섹션, Scaling developer and enterprise workflows 섹션]:</p>
+<ul>
+<li><strong>Gemini 앱:</strong> 멀티턴 대화 시 지율적 도구 호출 정확도 향상. 사용자의 Google Apps(Gmail, Google Drive) 및 외부 연동 서비스(Connected Apps: Airtable, Dropbox)로부터 정밀한 맥락(Context)을 추출하여 통합 처리. 실시간 글로벌 벼락 데이터를 3D 지구본 및 라이브 앰비언트 웹 오디오로 변환하는 프로토타입 구현, pure math 및 SDF 텍스처 기반 WebGL2 물/유리 3D 시각화 구현, 'Hydrogen' 원소 관련 시즐 리얼 비디오 자율 편집 기능 탑재.</li>
+<li><strong>Google Search:</strong> 복잡한 쿼리 및 오타가 포함된 사용자의 의도를 정확히 해석하고 시각적 응답을 제공하며, 쿼리 팬아웃(query fan-out) 기술 확대를 통해 광범위한 관련 링크 연동.</li>
+<li><strong>Google Sheets:</strong> Python, =LET() 함수, 조건부 서식을 결합하여 스프레드시트 셀을 애니메이션 피셀 캠버스로 변환. 재무 시나리오 예측 모델링 출력 속도 30% 이상 향상.</li>
+<li><strong>Google Slides:</strong> YouTube 키노트 영상 및 디자인 템플릿을 기반으로 발표 자료를 자동 생성한 후, 레이아웃 겹침 문제를 자체 감지 및 수정하는 자율 감사-수정 루프(Audit-and-fix loop) 수행.</li>
+<li><strong>Android Studio:</strong> 유료 티어 개발자를 위한 코딩 보조 환경 탑재.</li>
+<li><strong>Google Antigravity:</strong> 프론트엔드 디자인 스킬과 결합하여 <strong>'써멀 스플릿 슬라이더(thermal split-slider)'</strong>, <strong>'라이브 피니시 컨피규레이터(live finish configurator)'</strong>, WebGL2 지형 셰이더, 4단계 스크롤리텔링, 3D 와이어프레임 등이 포함된 전자상거래 웹사이트를 단일 프롬프트로 생성. Geminisland 앱을 통해 단일 프롬프트로 1인칭 탐색이 가능한 3D 옥셀 섬 구조물 실시간 생성.</li>
+</ul>
+<p><strong><code>[소스의 주장 (Source Claim)]</code></strong> 일반 사용자는 작성, 조사, 요약 업무 시 단 한 번의 요청만으로 완벽한 서식이 적용된 결과물을 얻을 수 있어 번거로운 추가 수정 과정을 크게 줄일 수 있습니다 [Fast, everyday help in the Gemini app and Search 섹션].</p>
+<p><strong><code>[작성자 해석 (Author Interpretation)]</code></strong> 워크로드 처리 범위가 단순 텍스트 작성을 넘어 수식 기반 UI 생성, 3D 그래픽 셰이더 계산, 사내 데이터 연동 업무 자동화 등 멀티모달 기반의 실시간 응용 애플리케이션 개발 영역으로 대폭 확대되었습니다 [Scaling developer and enterprise workflows 섹션, Fast, everyday help... 섹션 참조].</p>
+<h5 id="2-6-안전성-보안-및-신뢰성-safety-security-dependable-execution">2.6. 안전성, 보안 및 신뢰성 (Safety, Security &amp; Dependable Execution)</h5>
+<p><strong><code>[사실 (Fact)]</code></strong> Gemini 4 Hydrogen은 안전성 및 보안 스택 최적화를 통해 자율 에이전트 구동 시 발생할 수 있는 오남용과 시스템 오동작 위험을 차단합니다 [Designed for safe, dependable execution at scale 섹션].</p>
+<p><strong><code>[사실 (Fact)]</code></strong> 세부 안전성 개선 지표는 다음과 같습니다 [Designed for safe, dependable execution at scale 섹션]:</p>
+<ul>
+<li><strong>월권 행위 (Overreach):</strong> Gemini 3.8 Flash 대비 최대 81% 감소</li>
+<li><strong>서비스 부족 (Under-service):</strong> 최대 79% 감소</li>
+<li><strong>부적절 행동 및 편법 처리 (Misaligned actions &amp; task shortcutting):</strong> 도구 사용 및 코딩 평가에서 12배 감소</li>
+<li><strong>권한 경계 준수:</strong> 차단되거나 불가능한 과제 직면 시 권한 경계를 무단 우회할 확률 최대 2배 감소</li>
+<li><strong>정직성 평가 (Honesty rate):</strong> 내부 에이전트 정직성 평가에서 96.7% 기록</li>
+<li><strong>사고 사슬 투명성 (Chain-of-thought legibility):</strong> 20만 회 이상의 감사 대화 항목 전반에서 기만적 추론 편집 없이 99.9% 투명성 유지</li>
+<li><strong>간접 프롬프트 주입 공격 방어력 (Gray Swan IPI):</strong> 기존 대비 2.3배 이상 향상</li>
+<li><strong>거짓 거부율 (False refusal rate):</strong> HealthBench Pro 평가에서 정당한 의학/과학 질문에 대한 거짓 거부율 0.4% 미만 유지</li>
+</ul>
+<p><strong><code>[소스의 주장 (Source Claim)]</code></strong> 구글은 모델의 가용성을 유지하면서도 실제 생물 보안 위험과 정당한 학술 연구 쿼리를 정밀하게 구분할 수 있도록 안전 Safeguard를 강화했다고 강조합니다 [Designed for safe, dependable execution at scale 섹션].</p>
+<p><strong><code>[작성자 해석 (Author Interpretation)]</code></strong> 에이전트가 외부 도구에 자율 접근하는 워크플로에서 보안 허점을 악용한 무단 권한 우회나 기만적 추론을 억제함으로써, 보안 요구 수준이 엄격한 기업 환경에서도 안심하고 적용할 수 있는 신뢰성을 증명하고 있습니다 [Designed for safe, dependable execution at scale 섹션 참조].</p>
+<hr />
+<h4 id="3-등장-인물-화자-people-speakers">3. 등장 인물·화자 (People &amp; Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속 기관/기업</th>
+<th style="text-align:left">직책</th>
+<th style="text-align:left">소스 내 역할 및 주요 발언 요약</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Koray Kavukcuoglu</strong></td>
+<td style="text-align:left">Google DeepMind / Google</td>
+<td style="text-align:left">Google DeepMind 수석 부사장(SVP) 및 Google 수석 AI 아키텍트</td>
+<td style="text-align:left">본 발표글의 저자. Hydrogen이 모든 사용자에게 최첨단 인공지능 성능을 제공한다고 서술함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Andrew Carr</strong></td>
+<td style="text-align:left">Cartwheel</td>
+<td style="text-align:left">최고 과학자 및 공동 창업자</td>
+<td style="text-align:left">경쟁사 프론티어 모델로 10일간 해결하지 못했던 문제를 Hydrogen이 정밀 분석하여 접근법 오류를 수정했다고 평가함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Tris Warkentin</strong></td>
+<td style="text-align:left">Discovery Loop</td>
+<td style="text-align:left">창립 기술진</td>
+<td style="text-align:left">Hydrogen이 프론티어 모델의 성능과 가벼운 실행 속도를 결합하여 도구 제작 및 반복 개선을 대폭 간소화했다고 발언함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Joshua Badshah</strong></td>
+<td style="text-align:left">LatchBio</td>
+<td style="text-align:left">생물학 개발팀 (Biologics Development)</td>
+<td style="text-align:left">항체 개발 안전성 벤치마크 평가에서 최고 정확도(67%)와 가장 빠른 실행 속도를 달성했음을 서술함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Dillon Flood</strong></td>
+<td style="text-align:left">LatchBio</td>
+<td style="text-align:left">생물학 개발팀 (Biologics Development)</td>
+<td style="text-align:left">Joshua Badshah와 공동으로 LatchBio의 항체 개발 벤치마크 결과를 평가함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Rahul Singh</strong></td>
+<td style="text-align:left">STAN</td>
+<td style="text-align:left">공동 창업자 및 CTO</td>
+<td style="text-align:left">포맷 준수율 100%, 지연 시간 28% 감소, 토큰 절감 23%, StanShop 음성 광고 스크립트 생성 등 스트리밍 에이전트 구동 성과를 발표함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ali Sadeghian</strong></td>
+<td style="text-align:left">Astrocade</td>
+<td style="text-align:left">공동 창업자</td>
+<td style="text-align:left">Hydrogen이 게임 생성 성능 평가에서 기대를 뛰어넘는 성과를 보였다고 발표함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Yashodha Bhavnani</strong></td>
+<td style="text-align:left">Box</td>
+<td style="text-align:left">AI 제품 부사장</td>
+<td style="text-align:left">Gemini 3.8 Flash 대비 2배 빠른 속도, 12% 토큰 절감 및 데이터 집계 정확도 향상을 확인했다고 언급함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Dominique Yahyavi</strong></td>
+<td style="text-align:left">Pixelcut</td>
+<td style="text-align:left">공동 창업자 및 CEO</td>
+<td style="text-align:left">276회 테스트 수행 결과 1.8배 빠른 속도와 30% 더 깨끗한 코드 생성을 입증했다고 발표함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Harshit Yadav</strong></td>
+<td style="text-align:left">Zingroll</td>
+<td style="text-align:left">창업자 및 CEO</td>
+<td style="text-align:left">환각 없이 실제 시각 증거에 기반하여 복잡한 동적 비디오 연출 및 카메라 각도를 정밀 파악함을 검증함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Robby Stein</strong></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 내 하단 관련 기사(Google Search upgrade) 저자로 명시됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Rohan Doshi</strong></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 내 하단 관련 기사(Multimodal Knowledge Agent 벤치마크) 공동 저자로 명시됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ben Caine</strong></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 내 하단 관련 기사(Multimodal Knowledge Agent 벤치마크) 공동 저자로 명시됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Anish Nangia</strong></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 내 하단 관련 기사(Gemini Omni 1.2 Flash) 저자로 명시됨.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sundar Pichai</strong></td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">CEO</td>
+<td style="text-align:left">소스 내 구글 리더십 문서 목록에 링크로 명시됨.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-시점-metrics-timeline">4. 수치·시점 (Metrics &amp; Timeline)</h4>
+<h5 id="발표-및-기본-사양">[발표 및 기본 사양]</h5>
+<ul>
+<li><strong>발표 일자:</strong> 2026년 11월 12일</li>
+<li><strong>소요 시간 데이터:</strong> 오디오 재생 시간 17분 51초 (17:51), 텍스트 읽기 소요 시간 14분 (14 min read)</li>
+<li><strong>가격 정책 (1백만 토큰 기준):</strong> 입력 토큰 $1.50, 출력 토큰 $7.50</li>
+<li><strong>컨텍스트 창 용량:</strong> 입력 최대 1,000,000 토큰 (1백만 토큰), 출력 최대 1,000,000 토큰 지원</li>
+<li><strong>생각 단계 (Thinking Levels):</strong> low, medium, high (기본 설정), xhigh (총 4단계)</li>
+<li><strong>인텔리전스 지수 (Artificial Analysis Intelligence Index):</strong> High 설정 51점 (Argon 50점 상회), Xhigh 설정 54점</li>
+</ul>
+<h5 id="오케스트레이션-및-성능-벤치마크">[오케스트레이션 및 성능 벤치마크]</h5>
+<ul>
+<li><strong>Google Antigravity Orchestrator 성과 (Terminal-Bench 4.0 기준):</strong> Carbon 단독 사용 대비 할당량(Quota) 24% 절감, 완료 속도 19% 향상</li>
+<li><strong>Gemini 3.8 Flash 대비 성능 향상 지표:</strong>
+<ul>
+<li>작업 처리 속도: 2.5배 향상 (기본 high 설정)</li>
+<li>Terminal-Bench 4.1 점수: 57% 기록 (Gemini 3.8 Flash의 18.2% 대비 3배 이상 향상)</li>
+<li>환각/위조 주장 발생율: 5배 이상 감소</li>
+<li>병렬 배치 파일 읽기/검색 처리 속도: 2배 ~ 2.8배 향상</li>
+<li>토큰 사용량 절감: 12% ~ 23% 절감</li>
+</ul>
+</li>
+<li><strong>주요 벤치마크 평가 점수:</strong>
+<ul>
+<li>Agent Arena 실시간 순위: #5위</li>
+<li>HLE-Diamond: 58.8%</li>
+<li>Vals Tax Agent Bench: 52.3% (전체 #1위)</li>
+<li>Vals Legal Research Bench: 55.8% (공동 #1위)</li>
+<li>Multimodal Knowledge Agent (MKA): 53.4%</li>
+<li>Agents' Last Exam v1.1: 71.6%</li>
+</ul>
+</li>
+</ul>
+<h5 id="파트너사-검증-지표">[파트너사 검증 지표]</h5>
+<ul>
+<li><strong>LatchBio:</strong> 항체 개발 벤치마크 통과율 67% (비 Gemini 모델 최고치 37%), 과제당 처리 시간 약 13분</li>
+<li><strong>STAN:</strong> 포맷 준수율 100%, 종단 간 지연 시간 28% 감소, 전체 토큰 사용량 23% 절감, 그래프/SQL 문제 처리 속도 최대 2.8배 향상</li>
+<li><strong>Box:</strong> 실행 속도 약 2배 향상, 토큰 사용량 12% 절감</li>
+<li><strong>Pixelcut:</strong> 총 276회 테스트 수행, 실행 속도 1.8배 향상, 코드 생성 정밀도 30% 향상</li>
+<li><strong>Google Sheets Canvas:</strong> 재무 시나리오 예측 출력 속도 30% 이상 향상</li>
+</ul>
+<h5 id="안전성-및-신뢰성-지표">[안전성 및 신뢰성 지표]</h5>
+<ul>
+<li><strong>에이전트 과제 월권 행위(Overreach) 감소율:</strong> 최대 81% 감소</li>
+<li><strong>서비스 부족(Under-service) 감소율:</strong> 최대 79% 감소</li>
+<li><strong>부적절 행동 및 작업 편법 처리 감소율:</strong> 12배 감소</li>
+<li><strong>권한 경계 우회 억제율:</strong> 최대 2배 감소</li>
+<li><strong>내부 에이전트 정직성 평가 점수:</strong> 96.7% 기록</li>
+<li><strong>사고 사슬 투명성 유지율:</strong> 200,000회 이상 감사 대화 중 99.9% 유지 (기만적 편집 0건)</li>
+<li><strong>Gray Swan IPI 공격 방어력 향상:</strong> 2.3배 이상 방어력 향상</li>
+<li><strong>HealthBench Pro 거짓 거부율:</strong> 0.4% 미만 유지</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<ul>
+<li><strong>무료 Gemini 앱 사용자의 오토 모델 셀렉션 상세 기준 부재:</strong> 무료 사용자의 경우 자동 모델 선택(Auto model selection) 기술을 통해 프롬프트에 따라 Gemini 4 Hydrogen이 자동 할당된다고 명시되어 있으나, 어떠한 정량적 쿼리 조건이나 지연 시간 기준에서 Flash-Lite, Flash, Pro 대신 Hydrogen이 할당되는지 구체적인 메커니즘은 소스상에 밝혀지지 않았습니다 [각주 1 참조].</li>
+<li><strong>모델 하드웨어 아키텍처 및 파라미터 정보 미공개:</strong> 본 소스 텍스트에는 Gemini 4 Hydrogen의 신경망 파라미터(Parameter) 수, 학습 데이터셋의 세부 용량 및 구성, 사용된 하드웨어 칩셋 세부 스펙 정보가 수재되어 있지 않습니다 (소스 내 정보 없음).</li>
+<li><strong>절대적 응답 지연 시간(Latency) 데이터 누락:</strong> Gemini 3.8 Flash 및 타 모델 대비 1.8배~2.5배 빠르다는 상대적 비율 데이터는 제시되어 있으나, 특정 쿼리별 밀리초(ms) 단위의 절대 지연 시간 데이터는 제공되지 않았습니다 (소스 내 정보 없음).</li>
+<li><strong>일부 벤치마크의 세부 비교 대상 비명시:</strong> SWE-sweep 및 AutomationBench-AA 평가에서 &quot;동급 계열 경쟁 모델을 상회함&quot;으로 표기되었으나, 비교 대상이 된 타사 모델의 명칭과 세부 점수는 공개되지 않았습니다 (소스 내 정보 없음).</li>
+<li><strong>관련 기사 저자의 공식 소속 미기재:</strong> Robby Stein, Rohan Doshi, Ben Caine, Anish Nangia 등 하단 관련 기사에 수록된 작성자들의 구체적인 기업 내 직책 및 소속 부서는 본문에서 확인할 수 없습니다 (확인 불가).</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li></ul></section>
+</main>
+</body>
+</html>

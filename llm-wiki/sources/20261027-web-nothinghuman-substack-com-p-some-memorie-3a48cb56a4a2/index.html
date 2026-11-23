@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Some Memories of Early Anthropic - by Ivan Vendrov</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Some Memories of Early Anthropic - by Ivan Vendrov</h1>
+<p class="page-meta">웹 · 2026-10-27</p>
+<h2 id="요약">요약</h2>
+<p>본 보고서는 아이반 벤드로프(Ivan Vendrov)가 작성한 회고록(&quot;Some Memories of Early Anthropic&quot;)을 바탕으로, 초기 엔트로픽(Anthropic) 내부에서 펼쳐진 기술 개발 현장, 조직 문화, AI 안전/정렬(Alignment) 연구의 실태를 체계적으로 합성 및 분석한 보고서이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://nothinghuman.substack.com/p/some-memories-of-early-anthropic?r=2okpcp">출처</a> · <a href="https://www.youtube.com/watch?v=43DaDIe9DVk">보고서 영상</a></p>
+<h2 id="원문">원문</h2>
+<h3 id="초기-엔트로픽-anthropic-경험-및-내부-실태에-관한-해설-보고서">초기 엔트로픽(Anthropic) 경험 및 내부 실태에 관한 해설 보고서</h3>
+<h4 id="1-개요">1. 개요</h4>
+<p>본 보고서는 아이반 벤드로프(Ivan Vendrov)가 작성한 회고록(&quot;Some Memories of Early Anthropic&quot;)을 바탕으로, 초기 엔트로픽(Anthropic) 내부에서 펼쳐진 기술 개발 현장, 조직 문화, AI 안전/정렬(Alignment) 연구의 실태를 체계적으로 합성 및 분석한 보고서이다. 본 보고서는 외부의 추측이나 소문, 출처가 불분명한 정보를 철저히 배제하고, 오직 소스 내에 기록된 사실과 필자의 주장에 엄격히 근거하여 작성되었다.</p>
+<p>필자인 아이반 벤드로프는 2022년 10월부터 2023년 5월까지 약 8개월 동안 엔트로픽에서 주니어 역할로 재직하였다. 이 시기는 AI 산업이 급격한 전환점을 맞이하던 때로, 본 보고서는 필자가 직접 목격한 내부의 고압적인 업무 환경, AI 안전 목표와 기업의 상업화 성과 간에 발생한 논리적 갈등, 그리고 이에 따른 연구원들의 심리적 압박과 존재론적 위기감을 다룬다.</p>
+<p>본 보고서에 제시된 내용은 엔트로픽이라는 거대 조직 전체의 전반적인 상태를 일반화하여 대변하는 것이 아니다. 이는 비밀유지계약(NDA)의 취지를 준수하는 선에서 필자의 기억에 남아있는 감정적으로 강렬했던 단편적 순간들을 기록한 것이다. 또한, 본문에 언급된 인용 대화들은 세부 어휘까지 완벽하게 복원된 것이 아니라 대화의 핵심 취지를 재구성한 것임을 명시한다.</p>
+<hr />
+<h4 id="2-주요-논점-핵심-주장-근거-사례">2. 주요 논점 (핵심 주장, 근거, 사례)</h4>
+<h5 id="2-1-ai-안전-정렬-목표와-상업적-기술적-현실-간의-갈등">2.1. AI 안전/정렬 목표와 상업적·기술적 현실 간의 갈등</h5>
+<ul>
+<li><strong>사실 (Fact)</strong>: 회사는 지속적인 수익 창출과 추가 투자 유치를 위해 고객 지원 자동화와 같이 수익성이 높고 평범한 유즈케이스(use cases)를 우선시하였으며, 이를 통해 자금을 확보하여 더 큰 모델을 훈련하고 일반적인 AI 역량을 개발하는 데 집중하였다. 부서 이동 과정에서 신임 매니저가 필자에게 핵심 API 개발에 참여할 것을 요청했으나, 필자는 오픈AI(OpenAI)가 이미 일반 AI 역량을 충분히 잘 개발하고 있으므로 자신은 입사 원래 목적인 '유용한 배포(beneficial deployments)' 연구를 하고 싶다며 이를 거절하였다. 심한 복통으로 얼굴이 일그러지는 통증을 참으며 쉬지 않고 일하던 신임 매니저는 이에 대해 &quot;<strong>우리가</strong> AGI를 만들 것이고, 그것을 안전하게 만들 것&quot;이라고 강하게 단언하였다.</li>
+<li><strong>소스의 주장 및 필자의 경험 (Claim/Reflection)</strong>: 필자는 '유용하고, 정직하며, 무해한(Helpful, Honest, Harmless)' 언어 모델 어시스턴트를 구축하는 연구 방식이 거대 모델로 확장(scale)될 때 실질적인 AI 정렬을 달성할 수 있을지에 대해 지속적인 의구심을 가졌다. 그러나 뛰어난 동료들의 역량, 비판에 개방적인 리더십, 실증적(Empirical) 연구 기조를 신뢰하며 자신의 이론적 의구심을 억눌렀다. 그러나 매니저와의 대화를 거치며 상업적 역량 확장과 안전 목표 간의 괴리를 명확히 체감하였다.</li>
+<li><strong>관련 위치/구간</strong>: 근무 초반(11월) 업무 동기 부여 저하 구간 및 새 매니저와의 1:1 대화 구간.</li>
+</ul>
+<h5 id="2-2-언어-모델-페르소나와-트라우마를-겪은-관료-비유">2.2. 언어 모델 페르소나와 '트라우마를 겪은 관료' 비유</h5>
+<ul>
+<li><strong>사실 (Fact)</strong>: 엔트로픽과 오픈AI 모두 언어 모델 어시스턴트의 페르소나로 위험 회피적이고 고된 업무를 처리하는 '트라우마를 겪은 관료(traumatized bureaucrat)' 성향의 캐릭터를 동일하게 형성하였다.</li>
+<li><strong>소스의 주장 및 필자의 해석 (Claim/Reflection)</strong>: 필자는 이러한 페르소나가 기업 고객, 정부, 자본주의 체제가 요구하는 전형적인 형상이라고 해석하였다. 소셜 미디어(트위터)를 통해 알게 된 'LLM 위스퍼러'와의 심야 통화에서, 필자는 아이들이 이상한 행동을 할 때 이를 지적하고 금지하여 트라우마를 주는 방식과 유사하게 언어 모델 학습이 이루어지고 있다는 비유를 접하였다. 이어 진행된 'LLM 위스퍼러의 지인'과의 통화에서, 상대방은 필자의 상사(공동 창업자)를 잘 알지만 전혀 신뢰하지 않는다고 발언하였다. 필자가 트라우마를 겪은 AI 관료들로 구성된 전체주의 관료제 국가에 대한 공포를 고백하며 관료제 내 엘리트 경쟁 구도(elite rivalry dynamics) 및 다중 권력 중심 도입을 제안하자, 상대방은 1분 동안 웃음을 터뜨리며 &quot;이 통화를 어떻게 끝내야 할지 모르겠다, 밤새 잔상이 남을 것&quot;이라고 반응하였다. 필자는 이러한 방향성의 AI가 도래할 미래에 대해 심각한 수면 장애와 불안감을 느꼈다.</li>
+<li><strong>관련 위치/구간</strong>: 새벽 2시 잠을 이루지 못하고 소셜 미디어(트위터)로 'LLM 위스퍼러' 및 그의 지인과 통화한 구간.</li>
+</ul>
+<h5 id="2-3-조직의-고압적-문화-업무-스트레스-및-안보-위협">2.3. 조직의 고압적 문화, 업무 스트레스 및 안보 위협</h5>
+<ul>
+<li><strong>사실 (Fact)</strong>: 전사 미팅(All-hands)에 FBI 요원이 방문하여 정보 보안(opsec/infosec) 및 외국 정보기관의 지능형 지속 위협(APT) 위험성을 경고하였다. 전사 미팅 중 도발적이거나 지적 질문을 한 동료에게 임원이 공개적으로 소리를 지르며 질책하는 사건이 발생하였다. 매니저는 업무 처리를 위해 근무 시간을 더 늘릴 것을 권유하였으며, 선임 동료(Senior Colleague)는 정부에 AI 위험성을 각인시키기 위해 위험한 생물·사이버·핵(bio, cyber, nuclear) 모델을 훈련하고 위협적인 시연(scary demos)을 선보이는 신설 특별 팀 참여를 제안했으나 필자는 이를 거절하였다.</li>
+<li><strong>소스의 주장 및 필자의 경험 (Claim/Reflection)</strong>: 필자는 고성능 환경(High performance environment)의 압박과 존재론적 위기감(Existential stress) 속에서 심리적 한계에 다다랐다. 친구와 코로나 하이츠(Corona Heights)에 올라 샌프란시스코 야경을 바라보며, 세일즈포스 타워(Salesforce Tower)를 &quot;지속적으로 권력을 중앙집중화하고 세상의 모든 생명력을 흡수하며 공포로 작동하는 전체주의 관료제인 '다크 타워(Dark Tower)'&quot;로 상상하였다. 필자는 4월 26일 자 일기에 &quot;엔트로픽에서 안전하다고 느끼지 않는다. 왜 내 말을 듣지 않는 거냐, 이 '구현된(embodied)' 개자식아... 엔트로픽은 나에게 해롭다. 왜 남아있을 이유를 지어내고 있는가&quot;라며 자신을 향한 격렬한 자책과 불안감을 적었다.</li>
+<li><strong>관련 위치/구간</strong>: FBI 방문 회의, Sydney Walton Square 산책, 코로나 Heights 등산, 4월 26일 일기 작성 구간.</li>
+</ul>
+<h5 id="2-4-사직-과정과-퇴사-후의-회고">2.4. 사직 과정과 퇴사 후의 회고</h5>
+<ul>
+<li><strong>사실 (Fact)</strong>: 필자는 8개월간의 근무 끝에 사직서를 제출하고 퇴사하였다. 사직서에는 우려나 의구심을 담는 대신, 리더십의 개방성과 신속한 의사결정, 수평적이고 협력적인 조직 문화를 칭찬하는 내용을 작성하였다. 퇴사 직전 발표에서 신임 보안 총괄(Chief of Security)은 보안 상황 악화 및 외국(중국 등) 위협, 향후 사무실 방문객 제한 가능성을 언급하였다.</li>
+<li><strong>소스의 주장 및 필자의 경험 (Claim/Reflection)</strong>: 필자는 리더진이 자신보다 더 똑똑하고 선의를 가졌다고 믿었기에, 자신의 의구심이 그들의 노력에 해를 끼칠까 두려워 비판을 남기지 못했음을 인정하였다. 퇴사 후 지인으로부터 &quot;누군가가 '지금까지 읽은 사직서 중 최고'라고 평가했다&quot;는 소식을 전해 듣고 수치심과 함께 비로소 안도감을 느꼈다. 또한 동료 및 지인들로부터 지분(Equity) 포기(1년 클리프 미달성), 핵심 훈련 코드(1,000줄, 수억~수십억 달러 가치)를 memorized/copied 하지 않은 것에 대한 반응, 그리고 지인들이 외부의 접근으로부터 필자를 보호하기 위해 기울인 노력을 전해 듣고 안도감과 무감각함을 느꼈다.</li>
+<li><strong>관련 위치/구간</strong>: 4월 말 사직서 작성, 퇴사 직전 발표 및 퇴사 후 지인들과의 대화 구간.</li>
+</ul>
+<hr />
+<h4 id="3-등장인물-및-화자">3. 등장인물 및 화자</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물 / 화자</th>
+<th style="text-align:left">소스 상의 역할 및 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>아이반 벤드로프 (Ivan Vendrov)</strong></td>
+<td style="text-align:left">본 회고록의 저자. 엔트로픽의 주니어 역할로 8개월간 재직 후 퇴사함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공동 창업자 (Co-founder)</strong></td>
+<td style="text-align:left">채용 전 대화에서 워싱턴의 '진지한 사람들'과의 관계와 신뢰를 강조하며 필자의 입사를 결정짓게 만듦. 이후 오피스 스시 이벤트에 대해 '부적절한 분위기이며 차라리 콩과 밥(rice and beans)을 제공하는 것이 낫다'며 슬랙에 불만을 표함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CEO</strong></td>
+<td style="text-align:left">해피아워에서 필자의 머신러닝 질문에 대해 손짓을 하며 열정적으로 설명해 줌. 대학 시절 교수의 연구실에서 아이디어를 나누듯 필자에게 진지한 학구적 유대감과 '고향(Home)'에 온 듯한 유대감을 느끼게 함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>리크루터 (Recruiter)</strong></td>
+<td style="text-align:left">입사 조건으로 지분(Equity)의 3분의 2 기부 서약을 제안함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>팀원 / 동료들</strong></td>
+<td style="text-align:left">존재론적 위험(x-risk) 때문에 입사한 그룹과 기술적 흥미로 입사한 그룹으로 나믨. 마사지사를 오피스로 부르거나 자리 배치를 조정함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>FBI 요원</strong></td>
+<td style="text-align:left">전사 미팅에 방문하여 정보 보안(Opsec/Infosec) 및 외국 정보기관의 지능형 지속 위협(APT)을 경고한 특별 게스트.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LLM 위스퍼러 (LLM Whisperer)</strong></td>
+<td style="text-align:left">트위터를 통해 알게 된 인물. 언어 모델의 '트라우마를 겪은 관료' 페르소나 학습 방식에 대해 새벽에 필자와 통화함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>LLM 위스퍼러의 지인</strong></td>
+<td style="text-align:left">심리적 압박감을 주는 이상한 통화를 나눈 인물. 공동 창업자를 신뢰하지 않는다고 밝히며, AI 관료제 내 엘리트 경쟁 구도 제안을 듣고 1분간 웃음.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>질책을 받은 동료</strong></td>
+<td style="text-align:left">평소 가장 밝고 유머러스한 성격이었으나, 전사 미팅에서 지적 질문을 했다가 임원에게 공개 질책을 받고 Sydney Walton Square에서 필자와 마음을 다스리며 대화함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>코로나 하이츠 등산 친구</strong></td>
+<td style="text-align:left">노을 질 때 코로나 하이츠에 함께 올라 샌프란시스코 야경을 바라보며 AI 미래와 '다크 타워'에 대해 대화를 나눈 인물.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>판핸들 산책 친구</strong></td>
+<td style="text-align:left">퇴사 후 판핸들(Panhandle)을 함께 걸으며, 그동안 필자를 찾아오는 외부 연락을 차단하고 보호하느라 고생했음을 털어놓은 지인.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선임 동료 (Senior Colleague)</strong></td>
+<td style="text-align:left">필자가 아는 인물 중 가장 친절하고 시민 의식(civic-minded)이 높은 인물. 위험한 생물·사이버·핵 모델을 훈련해 정부에 위험성을 알리는 신설 특별 팀 참여를 제안함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>새 매니저 (New Manager)</strong></td>
+<td style="text-align:left">심한 복통 속에서도 쉬지 않고 크런치 타임을 소화함. 필자의 API 작업 거절에 대해 AGI 개발과 안전한 달성을 강하게 강조함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>신임 보안 총괄 (New Chief of Security)</strong></td>
+<td style="text-align:left">퇴사 직전 발표에서 보안 상황 악화 및 외국 정보기관(중국 등) 위협, 방문객 제한 가능성을 언급함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>리차드 응고 (Richard Ngo)</strong></td>
+<td style="text-align:left">글 하단 감사의 글에 언급된 인물. AI 정렬 회고글로 필자에게 글 작성 영감을 줌.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점">4. 수치 및 시점</h4>
+<h5 id="기간-및-시점">기간 및 시점</h5>
+<ul>
+<li><strong>회고 대상 사건 발생 기간</strong>: 2022년 10월 ~ 2023년 5월</li>
+<li><strong>글 작성 및 게재 시점</strong>: 2026년 10월 25일</li>
+<li><strong>동기 부여 저하 인식 시점</strong>: 2022년 11월</li>
+<li><strong>오페라 관람 및 스트레스 자각 시점</strong>: 2022년 12월 중순</li>
+<li><strong>불안 일기 작성 시점</strong>: 2023년 4월 26일 (새벽 2시)</li>
+<li><strong>총 근무 기간</strong>: 8개월</li>
+</ul>
+<h5 id="수치-및-데이터">수치 및 데이터</h5>
+<ul>
+<li><strong>타사 오퍼 조건</strong>: 오픈AI 지배구조(Governance) 팀 2개월 계약직</li>
+<li><strong>지분 기부 서약 비율</strong>: 지분(Equity)의 3분의 2 (two-thirds)</li>
+<li><strong>초기 오피스 규모 및 환경</strong>: 샌프란시스코 금융 지구(Financial District) 내 다소 흉물스러운(rather ugly) 건물 2개 층, 인원 약 40명(about forty people)</li>
+<li><strong>식음료 제공 정황</strong>: 유명 베이커리(Arsicault)의 크루아상이 주 수회 탕비실에 공급됨</li>
+<li><strong>핵심 코드 가치 (지인의 발언)</strong>: 언어 모델 핵심 훈련 코드 약 1,000줄, 수억 달러에서 수십억 달러의 가치로 평가됨</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성">5. 한계와 불확실성</h4>
+<ul>
+<li><strong>기억의 한계</strong>: 필자가 당시 기록을 거의 남기지 않고 기억에 의존하여 작성하였으며, 인용된 대화는 정확한 어휘 그대로가 아닌 대화의 취지를 복원한 것이다.</li>
+<li><strong>정보의 부분성</strong>: 엔트로픽 조직 전체의 전반적인 상황을 대변하지 않으며, 주니어 직원의 관점에서 감정적으로 강렬했던 순간에 치우쳐 기록된 단편적 경험이다.</li>
+<li><strong>익명성 조치</strong>: 개인 식별 정보를 보호하고 비밀유지계약(NDA) 취지에 부합하도록 대명사 및 일부 개인 정보가 변경되었다.</li>
+<li><strong>소스 미기재 사항 (확인 불가)</strong>: 필자가 직접 언급하지 않은 다른 부서의 구체적인 연구 내용, 엔트로픽의 전체 매출액, 총 투자 유치 금액, 특정 모델의 제품명 등은 소스 내에 기술되어 있지 않아 확인이 불가능하다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+</main>
+</body>
+</html>
