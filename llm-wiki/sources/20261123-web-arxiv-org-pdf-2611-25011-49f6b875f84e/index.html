@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Near-Quadratic Sample Compression for All VC Classes</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Near-Quadratic Sample Compression for All VC Classes</h1>
+<p class="page-meta">논문 · 2026-11-23</p>
+<h2 id="요약">요약</h2>
+<p>모든 이진 VC 클래스에서 준이차 표본 압축이 증명됐으며, 선형 상한과 계산 시간은 미해결이다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.25011">출처</a> · <a href="https://www.youtube.com/watch?v=lj6ikdTTJ6Q">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alexey-chervonenkis/">Alexey Chervonenkis</a></li>
+<li><a href="../../entities/people/ami-litman/">Ami Litman</a></li>
+<li><a href="../../entities/people/amir-yehudayoff/">Amir Yehudayoff</a></li>
+<li><a href="../../entities/people/aranyak-mehta/">Aranyak Mehta</a></li>
+<li><a href="../../entities/people/chase/">Chase</a></li>
+<li><a href="../../entities/people/chirag-pabbaraju/">Chirag Pabbaraju</a></li>
+<li><a href="../../entities/people/christopher-liaw/">Christopher Liaw</a></li>
+<li><a href="../../entities/people/david-helmbold/">David Helmbold</a></li>
+<li><a href="../../entities/people/david/">데이브</a></li>
+<li><a href="../../entities/people/di-wang/">Di Wang</a></li>
+<li><a href="../../entities/people/grigoris-velegkas/">Grigoris Velegkas</a></li>
+<li><a href="../../entities/people/leslie-valiant/">Leslie Valiant</a></li>
+<li><a href="../../entities/people/manfred-k-warmuth/">Manfred K. Warmuth</a></li>
+<li><a href="../../entities/people/nick-littlestone/">Nick Littlestone</a></li>
+<li><a href="../../entities/people/sally-floyd/">Sally Floyd</a></li>
+<li><a href="../../entities/people/shai-ben-david/">Shai Ben-David</a></li>
+<li><a href="../../entities/people/shay-moran/">Shay Moran</a></li>
+<li><a href="../../entities/people/vineet-gupta/">Vineet Gupta</a></li>
+<li><a href="../../entities/people/vladimir-vapnik/">Vladimir Vapnik</a></li>
+<li><a href="../../entities/people/von-neumann/">폰 노이만</a></li>
+<li><a href="../../entities/people/yanchen-jiang/">Yanchen Jiang</a></li>
+<li><a href="../../entities/people/yang-cai/">Yang Cai</a></li>
+<li><a href="../../entities/people/yoav-freund/">Yoav Freund</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="vc-차원-기반-표본-압축-정리-및-기술-해설-보고서">VC 차원 기반 표본 압축 정리 및 기술 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 이진 개념 클래스(Binary Concept Class)의 일반적 VC 차원(Vapnik–Chervonenkis Dimension)에 대한 표본 압축 문제(Sample Compression Problem)를 다룬 기계학습 이론 연구 논문(<em>&quot;Near-Quadratic Sample Compression for All VC Classes&quot;</em>, arXiv:2611.25011)의 기술적 성과와 수식적 메커니즘을 정보과학 및 학습 이론의 관점에서 정밀하게 해설·분석한다.</p>
+<p>표본 압축(Sample Compression)은 기계학습 이론에서 모델의 일반화(Generalization)와 <strong>단순화(Simplification)</strong> 간의 고유한 상관관계를 정형화한 핵심 프레임워크다. 학습 알고리즘이 주어진 전체 훈련 표본(Training Sample)을 모두 기억하는 대신, 표본의 극히 일부(서브셋)와 짧은 부가 정보만을 유지하면서도 전체 표본의 레이블과 완벽히 일치하는 예측 개념(Concept)을 재구성할 수 있다면, 해당 모델은 오컴의 면도날(Occam's razor) 원칙에 따라 높은 일반화 성능을 보장받는다.</p>
+<p>역사적으로 1986년 Nick Littlestone과 Manfred K. Warmuth는 표본 압축 개념을 최초로 제안하며 Leslie Valiant의 PAC(Probably Approximately Correct) 학습 가능성 체계와의 밀접한 연관성을 정량적으로 증명하였다. 이어 1995년 Sally Floyd와 Manfred K. Warmuth는 VC 차원이 $d$인 모든 이진 개념 클래스가 $O(d)$ 크기의 표본 압축 체계를 가질 것이라는 '표본 압축 추측(Sample Compression Conjecture)'과, 이보다 완화된 다항식(Polynomial) 크기 상한의 존재 가능성을 묻는 추측을 제안하였다.</p>
+<p>그러나 일반 VC 클래스에 대한 표본 크기 상한 연구는 수십 년간 정체되었다. 2016년 Shay Moran과 Amir Yehudayoff가 전체 표본 크기 $m$과 무관하게 오직 $d$에만 의존하는 최초의 상한인 지수적 상한 $2^{O(d)}$를 제시하였으나, 이는 최적 PAC 표본 복잡도인 $\Theta(d/\epsilon)$과 비교할 때 정량적으로 극심한 지수적 격차(Exponential Gap)를 야기하는 한계가 존재하였다.</p>
+<p>본 연구(Cai et al., 2026)는 VC 차원이 $d \ge 1$인 모든 이진 개념 클래스에 대해 $O(d^2 \log^2 d)$ 크기의 표본과 $O(d \log^2 d)$ 비트의 부가 정보(Side-information bits)만으로 임의의 실현 가능한(Realizable) 표본을 완벽히 복원하는 다항 표본 압축 체계를 구축하였다. 이로써 약 30년 동안 미해결 과제로 남아있던 다항 표본 압축 추측을 완전하게 해결하였으며, Moran &amp; Yehudayoff(2016)의 지수 상한을 최초로 획기적인 다항 수준(Near-Quadratic)으로 경신하였다.</p>
+<hr />
+<h4 id="2-주요-논점-main-issues">2. 주요 논점 (Main Issues)</h4>
+<h5 id="2-1-다항-표본-압축-정리-theorem-1-1-및-기본-구조">2.1. 다항 표본 압축 정리 (Theorem 1.1) 및 기본 구조</h5>
+<p>본 연구의 핵심 정리는 다음과 같이 수식화된다.</p>
+<ul>
+<li><strong>[사실] Theorem 1.1 (Main Theorem):</strong> VC 차원이 $d \ge 1$인 모든 개념 클래스 $C \subseteq {0, 1}^X$는 표본 크기 $k = O(d^2 \log^2 d)$와 부가 정보 비트 수 $b = O(d \log^2 d)$로 구성된 레이블 부여 표본 압축 체계(Labeled Sample Compression Scheme)를 갖는다.</li>
+<li><strong>[소스의 주장]:</strong> 본 정리는 기존 Moran &amp; Yehudayoff(2016)의 $2^{O(d)}$ 상한을 다항 복잡도로 낮춘 최초의 결과이며, 압축 표현의 복잡도는 전체 표본의 크기 $m$이나 개념 클래스의 농도(Cardinality) $|C|$에 전혀 의존하지 않고 오직 VC 차원 $d$만으로 유한하게 결정된다.</li>
+<li><strong>[작성자의 해석]:</strong> 본 정리는 오컴의 면도날 원칙이 무한 도메인 상의 일반적 개념 공간에서도 정량적으로 성립함을 밝힌 핵심 이론적 이정표다. 특히 압축 메커니즘을 기하학적 파티션 분할 역할을 수행하는 '레이블 미부여 표본(Unlabeled examples)'과 가중치를 부여하는 '레이블 부여 표본(Labeled examples)'으로 기능적으로 이중화함으로써, 기존 이론들의 걸림돌이었던 이중 VC 차원(Dual VC dimension)의 지수적 폭발 장벽을 성공적으로 우회하였다.</li>
+</ul>
+<p>본 정리 및 구축된 표본 압축 체계의 핵심 기술적 특성은 다음과 같이 요약된다.</p>
+<ol>
+<li><strong>가중 과반수 투표(Weighted Majority Vote) 구조:</strong> 재구성기(Reconstructor)가 출력하는 최종 가중 투표 가측 개념 $h = \rho(T, \sigma)$는 개념 클래스 $C$에 속한 최대 $(k+1)^d$개 개념들의 가중 조합으로 구성되며, 훈련 표본 내의 모든 입력 지점에서 정답 레이블에 1/2을 초과하는 총 가중치를 부여한다.</li>
+<li><strong>레이블 미부여 표본과 레이블 부여 표본의 역할 분담:</strong> 전송되는 표본 $k = O(d^2 \log^2 d)$개 중 대부분에 해당하는 $O(d^2 \log^2 d)$개는 레이블이 없는(Unlabeled) 점들로 구성되어 투표 후보군인 셀 대표자 풀(Representative Cell Pool, $\text{Pool}(W)$)을 형성하며, 나머지 $O(d \log d)$개의 표본만이 레이블이 부여된(Labeled) 상태로 전달되어 MWU 알고리즘을 통한 가중치 갱신 지점으로 기능한다.</li>
+<li><strong>불가지론적(Agnostic) 표본 압축으로의 확장:</strong> 실현 가능한(Realizable) 조건하에서 구축된 본 정리의 결과는 David, Moran, Yehudayoff(2016)의 감축 정리(Reduction)에 의해 동일한 압축 크기 $O(d^2 \log^2 d)$를 유지하면서 불가지론적(Agnostic) 표본 압축 체계로 직접 확장된다. 이는 경험적 위험 최적화(ERM) 개념 $c^* \in C$와 일치하는 서브샘플에 본 압축 체계를 적용함으로써 달성된다.</li>
+</ol>
+<h5 id="2-2-mwu-승수-가중치-갱신-알고리즘과-셀-대표자-풀-representative-cell-pool">2.2. MWU(승수 가중치 갱신) 알고리즘과 셀 대표자 풀(Representative Cell Pool)</h5>
+<p>압축기(Compressor, $\kappa$)와 재구성기(Reconstructor, $\rho$) 간 통신의 핵심은 레이블 미부여 표본 집합 $W$가 형성하는 기하학적 셀 파티션과 승수 가중치 갱신(Multiplicative Weights Update, MWU) 알고리즘의 결합이다.</p>
+<h6 id="셀-대표자-풀의-정의-및-자우어-셸라-페를레스-보조정리">셀 대표자 풀의 정의 및 자우어-셸라-페를레스 보조정리</h6>
+<ul>
+<li><strong>셀(Cell, $C_\tau$):</strong> 레이블 미부여 표본 집합 $W \subseteq X$는 개념 공간 $C$를 실현 가능한 레이블링 $\tau \in C|<em>W$에 따라 동등류(Equivalence Class)로 분할한다:
+$$C</em>\tau := {c \in C : c|_W = \tau} \quad (\tau \in C|_W)$$</li>
+<li><strong>대표자 개념(Representative Concept, $\min_\prec(C_\tau)$):</strong> 미리 고정된 전역 엄격 전순서(Total Order) $\prec$에 따라 각 셀 $C_\tau$ 내에서 가장 앞서는 개념 $\min_\prec(C_\tau)$를 해당 셀의 유일한 대표자로 지정한다.</li>
+<li><strong>대표자 셀 풀(Representative Cell Pool, $\text{Pool}(W)$):</strong> 집합 $W$의 모든 활성 셀 대표자들의 모음이다:
+$$\text{Pool}(W) := {\min_\prec(C_\tau) : \tau \in C|_W} \subseteq C$$</li>
+<li><strong>자우어-셸라-페를레스(Sauer–Shelah–Perles, SSP) 보조정리:</strong> VC 차원이 $d$인 개념 클래스 $C$에 대해, $|W|$개 표본이 분할하는 대표자 풀의 크기는 다항 상한을 넘지 않는다:
+$$|\text{Pool}(W)| = |C|<em>W| \le \sum</em>{i=0}^d \binom{|W|}{i} \le (|W| + 1)^d$$</li>
+</ul>
+<h6 id="mwu-알고리즘-기반-완벽-재구성-절차">MWU 알고리즘 기반 완벽 재구성 절차</h6>
+<ol>
+<li><strong>독립적 대표자 풀 복원:</strong> 재구성기는 전달받은 레이블 미부여 표본 $W$와 순서 $\prec$만을 사용하여 압축기와 완전히 동일한 $\text{Pool}(W)$를 독립적으로 구성한다.</li>
+<li><strong>MWU 갱신 과정:</strong> 압축기는 $\text{Pool}(W)$를 전문가(Expert) 집합으로 지정하고 MWU 알고리즘을 $k_1 = 8d\lceil \log_2(k_0 + 1) \rceil$ 라운드 동안 실행한다. 매 라운드 $j$마다 현재 가중치 분포 $p_j \in \Delta(\text{Pool}(W))$에 대해 예측 오차가 최대인 표본 지점 $u_j \in \arg\max_{x \in X} \text{err}_x(p_j)$를 선정하고 손실 벡터 $\ell_j(c) = \mathbf{1}[c(u_j) \neq c^*(u_j)]$를 MWU에 피드백한다.</li>
+<li><strong>점별 오차 상한 도출:</strong> $k_1$ 라운드 후 산출된 평균 전략 $\bar{p} := \frac{1}{k_1} \sum_{j=1}^{k_1} p_j$는 MWU의 후회(Regret) 상한에 따라 모든 $x \in X$에서 다음과 같이 점별 오차(Pointwise Error)가 $1/2$ 미만임이 보장된다:
+$$\text{err}<em>x(\bar{p}) \le \frac{1}{k_1} \sum</em>{j=1}^{k_1} \text{err}_{u_j}(p_j) \le \frac{1}{4} + \frac{\sqrt{k_1 \ln |\text{Pool}(W)|/2}}{k_1} &lt; \frac{1}{4} + \frac{1}{4} = \frac{1}{2}$$
+(단, $|\text{Pool}(W)| \le (k_0 + 1)^d \le 2^{k_1/8}$ 성질 이용)</li>
+<li><strong>가중 과반수 투표 재연:</strong> 재구성기는 전달받은 $t = k_1 - 1$개의 레이블 지정 점 정보를 통해 MWU를 동일하게 재연(Replay)함으로써 $\bar{p}$를 복원하고, 가중 과반수 투표 함수 $h(x) := \mathbf{1}\left[\sum_{c \in \text{Pool}(W): c(x)=1} \bar{p}(c) &gt; 1/2\right]$를 구축하여 전체 표본 $S$의 레이블을 오차 없이 완벽히 복원한다.</li>
+</ol>
+<h6 id="비트열-부가-정보-sigma-의-구조적-인코딩-및-분리-메커니즘">비트열 부가 정보($\sigma$)의 구조적 인코딩 및 분리 메커니즘</h6>
+<p>압축기는 단일 중복 제거 표본 집합 $T := {(x, c^*(x)) : x \in W \cup {u_1, \dots, u_t}} \subseteq \text{set}(S)$ (단, $|T| \le k = k_0 + k_1$)를 전송한다. $T$는 전역 전순서에 따라 $z_1 &lt; z_2 &lt; \dots &lt; z_{|T|}$로 정렬된다.</p>
+<p>부가 정보 비트열 $\sigma$는 MWU 쿼리 지점 $u_1, \dots, u_t$의 인덱스를 인코딩하기 위해 $t$개의 고정 길이 블록으로 구성된다. 각 블록의 크기는 $B = \lceil \log_2 k \rceil + 1$ 비트다.</p>
+<ul>
+<li><strong>인덱스 비트 ($\lceil \log_2 k \rceil$ bits):</strong> 정렬된 집합 $T$ 내에서 MWU 쿼리 지점 $u_j$의 위치 인덱스 $i_j \in {1, \dots, |T|}$를 기록한다 ($z_{i_j} = (u_j, c^*(u_j))$).</li>
+<li><strong>표본 속성 비트 ($\beta_j$, 1 bit):</strong> $\beta_j := \mathbf{1}[u_j \in W]$로 정의되어, 해당 지점 $u_j$가 레이블 미부여 기하학적 표본 집합 $W$에도 동시에 포함되는지 여부를 명시한다.</li>
+</ul>
+<p>재구성기는 $|\sigma| / B$를 통해 MWU 라운드 수 $t$를 즉시 파악한다. 인덱스 $i_j$를 통해 $u_j$ 지점들을 복원한 후, $T$의 $x$-좌표 중 MWU 비트열에서 한 번도 참조되지 않은 지점들과, 참조되었으나 $\beta_j = 1$로 표시된 지점들을 합집합하여 레이블 미부여 표본 집합 $W$를 완벽하게 분리·재구성한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">통신 구성 요소</th>
+<th style="text-align:left">데이터 구조 및 명세</th>
+<th style="text-align:left">비트 수 / 복잡도</th>
+<th style="text-align:left">역학 및 기능</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>전송 집합 ($T$)</strong></td>
+<td style="text-align:left">$T = {(x, c^*(x)) : x \in W \cup {u_1, \dots, u_t}}$</td>
+<td style="text-align:left">$</td>
+<td style="text-align:left">T</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>정렬 기준</strong></td>
+<td style="text-align:left">$X \times {0, 1}$ 상의 사전 고정된 전순서 정렬</td>
+<td style="text-align:left">$z_1 &lt; z_2 &lt; \dots &lt; z_{</td>
+<td style="text-align:left">T</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>부가 정보 ($\sigma$)</strong></td>
+<td style="text-align:left">$t$개 블록, 각 블록 $B = \lceil \log_2 k \rceil + 1$ 비트</td>
+<td style="text-align:left">$b \le k_1(\lceil \log_2 k \rceil + 1)$</td>
+<td style="text-align:left">MWU 쿼리 지점의 $T$ 내 위치 $i_j$ 및 $W$ 소속 여부 비트 $\beta_j$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-3-맥시멀-로터리-maximal-lotteries-게임과-단일-라운드-점진적-정화-과정">2.3. 맥시멀 로터리(Maximal Lotteries) 게임과 단일 라운드 점진적 정화 과정</h5>
+<p>표본 압축 정리의 최핵심은 $\text{err}<em>x(\mu</em>{\text{fin}}) \le 1/16$을 만족하는 전체 분포 $\mu_{\text{fin}}$의 질량 중 $1/4$ 이상을 담아내는 레이블 미부여 표본 집합 $W_{\text{fin}}$ ($|W_{\text{fin}}| \le O(d^2 \log^2 d)$)을 구축하는 것이다. 이를 위해 라운드 $r=0, 1, \dots, R-1$ 동안 단일 라운드 정화(Purification) 과정을 거친다.</p>
+<h6 id="균일-분포의-한계와-맥시멀-로터리-게임의-도입-appendix-b-통찰">균일 분포의 한계와 맥시멀 로터리 게임의 도입 (Appendix B 통찰)</h6>
+<p>단순한 균일 분포(Uniform Distribution)나 일반적인 오차 최적화 분포는 표본 $W$로 셀을 분할하더라도 특정 cell로 mass가 쏠리거나 대표자 질량이 상실되는 치명적 한계가 존재한다.</p>
+<p>논문의 <strong>Appendix B</strong> 예시에 따르면, VC 차원이 $d=1$인 싱글톤 개념 클래스 $C = {c_0, c_1, \dots, c_m}$ ($c_0$는 zero 개념, $c_i(x) = \mathbf{1}[x=x_i]$)에서 $c_1, \dots, c_m$에 $1/m$의 질량을 할당한 균일 분포 $\mu$를 고려하자. 임의의 크기가 $k &lt; m$인 표본 $W$로 분할할 때, $W$에 속하지 않은 $m-k$개의 개념들은 하나의 거대한 셀 $C_0$에 갇히게 되며, 해당 셀의 대표자 질량은 $\mu(\min_\prec(C_0)) = 1/m$에 불과하다. 이 경우 전체 대표자 질량합 $\mu(\text{Pool}(W)) = (k+1)/m$과 셀 엔트로피 $H_W(\mu)$는 $m \to \infty$에 따라 모두 $0$으로 수렴하여 표본 압축이 불가능해진다.</p>
+<p>이러한 질량 편중 현상을 극복하기 위해, 본 연구는 확률적 사회 선택 이론의 맥시멀 로터리 게임(Maximal Lotteries Game)과 폰 노이만 미니맥스 정리(von Neumann Minimax Theorem)를 도입한다. 이 메커니즘은 동일 셀 내에서 $\prec$-순서상 앞서는 개념으로 질량을 강제로 밀어붙여, 오차 예산을 초과하지 않는 범위 내에서 대표자 질량 확보를 보장한다.</p>
+<h6 id="맥시멀-로터리-게임의-수식적-정의-및-안장점">맥시멀 로터리 게임의 수식적 정의 및 안장점</h6>
+<p>실현 가능한 다듬체 $K(\theta')$ ($w_\tau = \mu_r(C_\tau)$를 보존하고 $\text{err}<em>x(\nu) \le \theta' = (r+1)\delta$를 만족하는 분포들의 집합) 상에서 두 플레이어 분포 $\nu, \eta \in K(\theta')$ 간의 영합 게임 보상 함수(Payoff)를 다음과 같이 정의한다:
+$$M(\nu, \eta) := \sum</em>{\tau \in S} \frac{1}{w_\tau} \sum_{c_1, c_2 \in C_\tau} \nu(c_1) \eta(c_2) K(c_1, c_2)$$
+$$\text{단, } K(c_1, c_2) := \mathbf{1}[c_2 \prec c_1] + \frac{1}{2}\mathbf{1}[c_2 = c_1]$$</p>
+<p>폰 노이만 미니맥스 정리에 의해 대칭 안장점(Symmetric Saddle Point) $\mu^* \in K(\theta')$가 존재하여 다음 최적성 조건을 만족한다:
+$$M(\mu^<em>, \eta) \le \frac{1}{2} = M(\mu^</em>, \mu^<em>) \le M(\nu, \mu^</em>) \quad (\forall \nu, \eta \in K(\theta'))$$</p>
+<h6 id="lp-쌍대성-slater-조건-및-이탈-확률-분포-p-도출">LP 쌍대성, Slater 조건 및 이탈 확률 분포 ($p^*$) 도출</h6>
+<p>$\mu^<em>$가 자신의 최적 대응(Best Response)임을 나타내는 1차 최적성 조건 $\mu^</em> \in \arg\min_{\nu \in K(\theta')} M(\nu, \mu^<em>)$에 선형 계획법 쌍대성(LP Duality) 및 다듬체 $K(\theta')$의 법선 원뿔(Normal Cone) $N_{K(\theta')}(\mu^</em>)$ 분석을 적용한다.</p>
+<p>이전 라운드 분포 $\mu_r \in K(r\delta)$는 $\text{err}<em>x(\mu_r) \le r\delta = \theta' - \delta$를 만족하므로, 새로운 제약조건 상한 $\theta'$에 대해 균일한 $\delta$-슬랙($\delta$-slack)을 가진다. 볼록 최적화의 Slater 조건(Slater's Condition)에 의해 듀얼 승수(Dual Multipliers) $\lambda_x \ge 0$의 $L_1$ 노름 상한 $\Lambda := \sum</em>{x \in X} \lambda_x \le \frac{1}{2\delta}$가 도출된다.</p>
+<p>$\Lambda &gt; 0$일 때, $\lambda_x$를 정규화하여 표본 공간 $X$ 상의 확률 분포 $p^<em>(x) := \lambda_x / \Lambda \in \Delta(X)$를 얻는다. 제약조건의 엄밀성(Tightness, 즉 $\text{err}_x(\mu^</em>) = \theta'$)이 높은 데이터 지점에 손실 가중치 $\lambda_x$가 집중되며, 이를 통해 동일 셀 $C_\tau$ 내의 임의의 두 개념 $c_1 \prec c_2$ ($\mu^<em>(c_2) &gt; 0$) 간 이탈 확률 하한(Disagreement Bound)이 유도된다:
+$$d_{p^</em>}(c_1, c_2) := \Pr_{x \sim p^<em>}[c_1(x) \neq c_2(x)] \ge \frac{r_\tau(c_2) - r_\tau(c_1)}{\Lambda} \ge 2\delta (r_\tau(c_2) - r_\tau(c_1))$$
+(단, $r_\tau(c) := \mu^</em><em>\tau({c' \in C</em>\tau : c' \prec c}) + \frac{1}{2}\mu^*_\tau(c)$는 셀 내 분위수(Quantile)임)</p>
+<h6 id="2가지-정화-케이스-비교-구증-concentrated-cells-vs-spread-cells">2가지 정화 케이스 비교 구증 (Concentrated Cells vs. Spread Cells)</h6>
+<p>맥시멀 로터리 분포 $\mu^*$ 하에서 셀 내 최고 질량 개념의 크기에 따라 셀 집합 $S$는 집중된 셀($S_{\text{conc}}$)과 분산된 셀($S_{\text{spread}}$)로 구분된다.</p>
+<pre><code>                    [맥시멀 로터리 분포 𝜇* 도출]
+                                 │
+                 ┌───────────────┴───────────────┐
+                 ▼                               ▼
+      [집중된 셀 Dominance]            [분산된 셀 Dominance]
+   (∑_{τ∈S_conc} w_τ ≥ 1/2)         (∑_{τ∈S_spread} w_τ &gt; 1/2)
+                 │                               │
+                 ▼                               ▼
+   VC(C ⊕ C) &lt; 10d 기반             p* 분포 상 ⌈2/δ⌉개
+   (δ/2)-net 추출 (Z)               무작위 무보정 추출 (S*)
+                 │                               │
+                 ▼                               ▼
+    [종료 (Termination)]              [엔트로피 이득 (Entropy Gain)]
+    - |Z| = O((d/δ) log(1/δ))          - H_{W ∪ S*}(𝜇*) &gt; H_W(𝜇*) + 1/128
+    - 𝜇*(Pool(W ∪ Z)) &gt; 1/4            - 라운드 진행 (최대 R 라운드)
+</code></pre>
+<ol>
+<li>
+<p><strong>집중된 셀 (Concentrated Cells):</strong> 셀 내에 질량이 $1/2$ 초과인 단일 개념 $m_\tau$가 존재한다 ($\mu^*<em>\tau(m</em>\tau) &gt; 1/2$).</p>
+<ul>
+<li><strong>대칭 차분 클래스의 VC 차원 수치:</strong> 대칭 차분 클래스 $C \oplus C := {c_1 \oplus c_2 : c_1, c_2 \in C}$의 VC 차원은 $\text{VC}(C \oplus C) &lt; 10d$로 엄격히 제한된다 (원문 Section 4.2). 이는 크기 $s \ge 10d$인 임의의 집합 $A$에 대해 $|(C \oplus C)|_A| \le |C|_A|^2 \le (es/d)^{2d} &lt; 2^s$가 성립하기 때문이다.</li>
+<li><strong>$(\delta/2)$-net 표본 구축:</strong> $v = 10d$ 및 $\epsilon = \delta/2$에 대해 VC $\epsilon$-net 정리를 적용하면, 크기 $|Z| \le 25 C_{\text{net}} \frac{d}{\delta} \log_2 \frac{1}{\delta} = O(d^2 \log^2 d)$인 표본 집합 $Z \subseteq X$가 존재하여 모든 $b \prec m_\tau$와의 이탈 지점을 분리한다. 이로써 $m_\tau$가 분할된 셀의 대표자로 등극하여 $\mu^*(\text{Pool}(W \cup Z)) &gt; 1/4$를 달성하고 프로세스가 즉시 종료(Termination)된다.</li>
+</ul>
+</li>
+<li>
+<p><strong>분산된 셀 (Spread Cells):</strong> 셀 내 모든 개념의 질량이 $1/2$ 이하이다 ($\max_c \mu^*_\tau(c) \le 1/2$).</p>
+<ul>
+<li>좌 분위수 블록 $L_\tau(r_\tau \le 3/8)$와 우 분위수 블록 $R_\tau(r_\tau \ge 5/8)$는 각각 조건부 질량 $&gt; 1/8$을 보유하며, 블록 간 쌍은 $d_{p^*} \ge \delta/2$를 만족한다.</li>
+<li>$p^<em>$ 분포에서 $\lceil 2/\delta \rceil$개의 표본 $S^</em> \subseteq X$를 무작위 추출하면, 충돌 하한 보조정리(Lemma 4.4)에 의해 셀 질량 엔트로피 $H_W(\mu^*)$가 <strong>$+1/128$ 비트 이상 확정적으로 증가</strong>하여 <strong>다음 라운드로 진행</strong>한다.</li>
+</ul>
+</li>
+</ol>
+<h6 id="셀-엔트로피-포텐셜과-sauer-보조정리의-선형-vs-로그-경쟁">셀 엔트로피 포텐셜과 Sauer 보조정리의 선형 vs 로그 경쟁</h6>
+<p>라운드당 확정적 엔트로피 증가량($&gt; 1/128$ 비트)과 Sauer–Shelah–Perles 보조정리에 의한 셀 개수 상한($( |W_R| + 1 )^d$) 사이의 수식적 경쟁 관계는 다음과 같다:</p>
+<ul>
+<li>$R$ 라운드 진행 시 누적 엔트로피: $H_{W_R}(\mu_R) &gt; \frac{R}{128} = 32 d L$ (단, $L = \lceil \log_2(d+2) \rceil$)</li>
+<li>Sauer 상한에 따른 엔트로피 상한: $H_{W_R}(\mu_R) \le d \log_2(|W_R| + 1) &lt; d \log_2(2^{32L}) = 32 d L$ (단, $|W_R| \le 32 R^2 = 2^{29} d^2 L^2$)</li>
+</ul>
+<p>이 선형 성장($32 d L$)과 로그 성장($d \log_2(|W_R|+1)$)의 엄격한 수식적 모순에 의해, 프로세스는 반드시 $R = 4096 d L = \Theta(d \log d)$ 라운드 이내에 종료(Termination) 조건을 만족해야만 한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">비교 항목</th>
+<th style="text-align:left">집중된 셀 (Concentrated Cells, $S_{\text{conc}}$)</th>
+<th style="text-align:left">분산된 셀 (Spread Cells, $S_{\text{spread}}$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>정의 조건</strong></td>
+<td style="text-align:left">셀 내 질량 $&gt; 1/2$인 단일 개념 $m_\tau$ 존재</td>
+<td style="text-align:left">셀 내 모든 개념의 질량이 $\le 1/2$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지배 조건</strong></td>
+<td style="text-align:left">$\sum_{\tau \in S_{\text{conc}}} w_\tau \ge 1/2$</td>
+<td style="text-align:left">$\sum_{\tau \in S_{\text{spread}}} w_\tau &gt; 1/2$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>이탈 확률 상한</strong></td>
+<td style="text-align:left">모든 선행 개념 $b \prec m_\tau$에 대해 $d_{p^*}(b, m_\tau) &gt; \delta/2$</td>
+<td style="text-align:left">분위수 블록 $L_\tau$와 $R_\tau$ 간 개념 쌍의 $d_{p^*} \ge \delta/2$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기하학적 표본 전략</strong></td>
+<td style="text-align:left">$C \oplus C$ ($\text{VC} &lt; 10d$) 대상 $(\delta/2)$-net 표본 $Z$ 구축</td>
+<td style="text-align:left">$p^<em>$ 분포 상에서 $\lceil 2/\delta \rceil$개 무작위 표본 $S^</em>$ 추출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>추출 표본 크기</strong></td>
+<td style="text-align:left">$</td>
+<td style="text-align:left">Z</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>수행 결과 및 효용</strong></td>
+<td style="text-align:left">$\mu^*(\text{Pool}(W \cup Z)) &gt; 1/4$ 달성 (<strong>프로세스 즉시 종료</strong>)</td>
+<td style="text-align:left">라운드당 셀 엔트로피 <strong>$+1/128$ 비트 이상 증가</strong> (<strong>다음 라운드 진행</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-4-관련-연구와의-비교-및-기하학적-조합론적-차별성">2.4. 관련 연구와의 비교 및 기하학적/조합론적 차별성</h5>
+<ol>
+<li>
+<p><strong>구조화된 클래스 vs 일반 VC 클래스:</strong></p>
+<ul>
+<li>최대 클래스(Maximum classes) 및 극단 클래스(Extremal classes)는 크기 $d$의 레이블 압축 체계가 존재함이 증명되어 있다 (Floyd &amp; Warmuth 1995; Moran &amp; Warmuth 2016).</li>
+<li>$\mathbb{R}^d$의 반공간(Halfspaces) 및 교집합에 닫힌 클래스는 안정적 압축(Stable compression)을 통해 $O(d)$ 압축이 가능하다.</li>
+<li>반면 일반 VC 클래스는 Moran &amp; Yehudayoff(2016)의 지수 상한 $2^{O(d)}$에 갇혀 있었으나, 본 연구는 일반 VC 클래스 전체에 대해 최초로 다항 상한 $O(d^2 \log^2 d)$을 달성하였다.</li>
+</ul>
+</li>
+<li>
+<p><strong>이중 VC 차원 장벽(Dual VC Dimension Barrier) 우회:</strong></p>
+<ul>
+<li>Floyd &amp; Warmuth(1995)는 VC-$d$ 클래스 $C$를 작은 VC 차원 $k$를 가진 최대 클래스 $C'$로 임베딩하는 구상을 제안했으나, Chase et al.(2024)은 임베딩 방식이 이중 VC 차원 $d^<em>(C)$를 보존하므로 $d^</em>(C)$가 지수적으로 클 경우 지수적 장벽 $\Omega(2^{d^*})$에 직면함을 증명했다.</li>
+<li>본 연구는 개념을 직접 전송하는 대신 레이블 미부여 표본 $W$로 대표자 풀 $\text{Pool}(W)$을 지정하는 메커니즘을 채택하여 이중 VC 차원에 대한 의존성을 완전하게 제거하였다.</li>
+</ul>
+</li>
+<li>
+<p><strong>이진 분류를 넘어선 영역에서의 압축 및 불가능성 결과:</strong></p>
+<ul>
+<li><strong>다중 클래스(Multiclass):</strong> 그래프 차원 $d_G$가 유한할 때 본 정리를 이식하면 $O(d_G^2 \log^2 d_G)$ 표본 및 $O(d_G \log^2 d_G)$ 비트로 개선된다. 그러나 무한 레이블 공간에서는 Pabbaraju(2024)에 의해 DS 차원 $d_{DS}=1$인 PAC 학습 가능 클래스임에도 표본 크기 $m$에 독립인 표본 압축이 불가능함($\Omega((\log m)^{1-o(1)})$ 필요)이 증명되었다.</li>
+<li><strong>연속값 회귀(Real-valued Regression):</strong> 의사 차원(Pseudo-dimension) $d_P$에 대해 $O(d_P^2)$ 크기의 $\epsilon$-근사 압축 체계로 확장된다.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-화자-figures-speakers">3. 등장 인물·화자 (Figures/Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">성명/명칭</th>
+<th style="text-align:left">소속/역할</th>
+<th style="text-align:left">관련 기여 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Yang Cai</td>
+<td style="text-align:left">Google / Yale University</td>
+<td style="text-align:left">본 논문의 다항 표본 압축 체계 공동 도출 및 논문 작성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Vineet Gupta</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">본 논문의 다항 표본 압축 체계 공동 도출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Yanchen Jiang</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">본 논문의 다항 표본 압축 체계 공동 도출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Christopher Liaw</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">본 논문의 다항 표본 압축 체계 공동 도출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Aranyak Mehta</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">본 논문의 다항 표본 압축 체계 공동 도출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Shay Moran</td>
+<td style="text-align:left">Google / Technion</td>
+<td style="text-align:left">본 논문 공동 도출 (2016 지수 상한 $2^{O(d)}$ 연구 주도)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Grigoris Velegkas</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">본 논문의 다항 표본 압축 체계 공동 도출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Di Wang</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">본 논문의 다항 표본 압축 체계 공동 도출</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>연구진 (저자)</strong></td>
+<td style="text-align:left">Manfred K. Warmuth</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">표본 압축 분야 개척자, 1986/1995 핵심 추측 제시 및 본 논문 공동 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기관</strong></td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">연구 기관</td>
+<td style="text-align:left">본 연구를 수행한 주체 연구 기관</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기관</strong></td>
+<td style="text-align:left">Yale University</td>
+<td style="text-align:left">연구 기관 (제휴)</td>
+<td style="text-align:left">Yang Cai의 겸임 소속 기관</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기관</strong></td>
+<td style="text-align:left">Technion</td>
+<td style="text-align:left">연구 기관 (제휴)</td>
+<td style="text-align:left">Shay Moran의 겸임 소속 기관</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시스템/모델</strong></td>
+<td style="text-align:left">Cogentic multi-agent orchestration</td>
+<td style="text-align:left">AI 자동 증명 시스템</td>
+<td style="text-align:left">Gemini 4 Carbon 기반으로 힌트 없이 자율적으로 본 증명을 도출함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시스템/모델</strong></td>
+<td style="text-align:left">Gemini 4 Carbon</td>
+<td style="text-align:left">LLM / AI 엔진</td>
+<td style="text-align:left">Cogentic 에이전트의 구동 기반이 된 AI 모델</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기초 학자</strong></td>
+<td style="text-align:left">Leslie Valiant</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">1984년 PAC(Probably Approximately Correct) 학습 체계 창시</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기초 학자</strong></td>
+<td style="text-align:left">Vladimir Vapnik</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">1971년 VC 차원 및 균일 수렴 이론 창시</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기초 학자</strong></td>
+<td style="text-align:left">Alexey Chervonenkis</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">1971년 VC 차원 및 균일 수렴 이론 공동 창시</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기초 학자</strong></td>
+<td style="text-align:left">Norbert Sauer</td>
+<td style="text-align:left">조합론 수학자</td>
+<td style="text-align:left">1972년 Sauer–Shelah–Perles 보조정리 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기초 학자</strong></td>
+<td style="text-align:left">Saharon Shelah</td>
+<td style="text-align:left">수리논리학자</td>
+<td style="text-align:left">1972년 Sauer–Shelah–Perles 보조정리 독립 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기초 학자</strong></td>
+<td style="text-align:left">Michal Perles</td>
+<td style="text-align:left">조합론 수학자</td>
+<td style="text-align:left">Sauer–Shelah–Perles 보조정리 기여</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">Nick Littlestone</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">1986년 Warmuth와 함께 표본 압축 개념 최초 제안</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">Sally Floyd</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">1995년 Warmuth와 함께 표본 압축 추측($O(d)$ 상한) 제기</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">Amir Yehudayoff</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">2016년 Moran과 함께 $2^{O(d)}$ 지수 상한 증명 및 불가지론적 확장 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">Chirag Pabbaraju</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">다중 클래스 환경에서 표본 독립적 압축의 불가능성 증명 (2024)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">Yoav Freund</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">부스팅 기반 $O(d \log m)$ 표본 압축 기법 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">David Helmbold</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">1990년대 부스팅 및 약학습 기반 압축 기법 연구</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">Shai Ben-David</td>
+<td style="text-align:left">이론 컴퓨터 과학자</td>
+<td style="text-align:left">Ami Litman과 함께 유한/무한 도메인 위상적 위축(Compactness) 정리 증명</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선행 연구자</strong></td>
+<td style="text-align:left">John von Neumann</td>
+<td style="text-align:left">수학자/이론가</td>
+<td style="text-align:left">1928년 미니맥스 정리(Minimax Theorem) 창시 (맥시멀 로터리 게임의 기반)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-시점-figures-timestamps">4. 수치·시점 (Figures/Timestamps)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">수치 / 복잡도 / 표현식 / 시점</th>
+<th style="text-align:left">출처 및 검증 가능성 (Section)</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>본 연구 제안 표본 크기 ($k$)</strong></td>
+<td style="text-align:left">$k = O(d^2 \log^2 d)$</td>
+<td style="text-align:left">Abstract, Theorem 1.1</td>
+<td style="text-align:left">레이블 미부여 + 레이블 부여 표본 총합</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>본 연구 부가 정보 비트 ($b$)</strong></td>
+<td style="text-align:left">$b = O(d \log^2 d)$</td>
+<td style="text-align:left">Abstract, Theorem 1.1</td>
+<td style="text-align:left">인코딩 사이드 정보 비트 수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Littlestone &amp; Warmuth 최초 제안</strong></td>
+<td style="text-align:left">1986년</td>
+<td style="text-align:left">Section 1</td>
+<td style="text-align:left">표본 압축 개념 최초 도입 연도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Floyd &amp; Warmuth 추측 제안</strong></td>
+<td style="text-align:left">1995년</td>
+<td style="text-align:left">Section 1</td>
+<td style="text-align:left">$O(d)$ 선형 상한 및 다항 상한 추측 제기</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Moran &amp; Yehudayoff 지수 상한</strong></td>
+<td style="text-align:left">$2^{O(d)}$ (2016년)</td>
+<td style="text-align:left">Section 1, Section 1.2</td>
+<td style="text-align:left">기존 최선의 표본 독립 상한</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AI 증명 도출 비용</strong></td>
+<td style="text-align:left">약 $344 달러 ($344)</td>
+<td style="text-align:left">AI Disclosure</td>
+<td style="text-align:left">Gemini API 가격 기준 자동증명 도출 총비용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AI 도출 차수 변화 단계</strong></td>
+<td style="text-align:left">$O(d^{16}) \rightarrow O(d^6) \rightarrow O(d^3) \rightarrow O(d^2 \log^3 d) \rightarrow O(d^2 \log^2 d)$</td>
+<td style="text-align:left">AI Disclosure</td>
+<td style="text-align:left">Cogentic 에이전트의 단계별 상한 개선 과정</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최대 정화 라운드 수 ($R$)</strong></td>
+<td style="text-align:left">$R = 4096 d L = 2^{12} d L$</td>
+<td style="text-align:left">Section 3 (Proof of Theorem 1.1)</td>
+<td style="text-align:left">$L := \lceil \log_2 (d + 2) \rceil$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오차 증분 / 파라미터 ($\delta$)</strong></td>
+<td style="text-align:left">$\delta = \frac{1}{16R}$</td>
+<td style="text-align:left">Section 3</td>
+<td style="text-align:left">전체 오차 예산 $R\delta = 1/16$ 유지</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>라운드당 엔트로피 증가량</strong></td>
+<td style="text-align:left">$&gt; 1/128$ 비트 (bits)</td>
+<td style="text-align:left">Section 3, Lemma 3.1, Lemma 4.5</td>
+<td style="text-align:left">Spread cells Case 시 확정적 증가량</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>대표자 풀 크기 상한</strong></td>
+<td style="text-align:left">$\le (</td>
+<td style="text-align:left">W</td>
+<td style="text-align:left">+ 1)^d$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MWU 수행 라운드 수 ($k_1$)</strong></td>
+<td style="text-align:left">$k_1 = 8d\lceil \log_2(k_0 + 1) \rceil$</td>
+<td style="text-align:left">Section 2, Lemma 2.2</td>
+<td style="text-align:left">$k_1 = O(d \log d)$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MWU 목표 pointwise error 상한</strong></td>
+<td style="text-align:left">$&lt; 1/2$</td>
+<td style="text-align:left">Section 2, Lemma 2.2</td>
+<td style="text-align:left">가중 과반수 투표 성공 조건</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Slater Bound 듀얼 승수 합 ($\Lambda$)</strong></td>
+<td style="text-align:left">$\Lambda \le \frac{1}{2\delta}$</td>
+<td style="text-align:left">Section 1.2, Section 4.5 (Claim 4.6)</td>
+<td style="text-align:left">LP Duality 적용 한계값</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>대칭 차분 VC 차원 상한</strong></td>
+<td style="text-align:left">$\text{VC}(C \oplus C) &lt; 10d$</td>
+<td style="text-align:left">Section 4.2</td>
+<td style="text-align:left">Concentrated cell 정화 근거 수치</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Concentrated Cell 정화 기준</strong></td>
+<td style="text-align:left">질량 $&gt; 1/2$ 단일 개념 존재</td>
+<td style="text-align:left">Section 4.1, Section 4.2</td>
+<td style="text-align:left">$m_\tau$ 개념의 존재 조건</td>
+</tr>
+<tr>
+<td style="text-align:left">$(\delta/2)$-net 표본 크기 ($</td>
+<td style="text-align:left">Z</td>
+<td style="text-align:left">$)</td>
+<td style="text-align:left">$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Spread Cell 정화 무작위 표본 수</strong></td>
+<td style="text-align:left">$\lceil 2/\delta \rceil$</td>
+<td style="text-align:left">Section 4.3 (Lemma 4.5)</td>
+<td style="text-align:left">$p^*$ 분포 기반 추출 표본 수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>부속서 B 수치 예시 ($d=1$)</strong></td>
+<td style="text-align:left">$m &gt; 1/\delta$, 균일 분포 적용</td>
+<td style="text-align:left">Appendix B</td>
+<td style="text-align:left">단점 극복을 위한 맥시멀 로터리 필요성 증명 예시</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>계산 복잡도 (시간)</strong></td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+<td style="text-align:left">Section 1, Section 5</td>
+<td style="text-align:left">표현 크기(Size)만 다루며 계산 시간은 다루지 않음</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<p>본 논문은 VC 차원 기반 표본 압축 이론의 지평을 열었으나, 다음과 같은 기술적 한계와 미해결 과제들을 원문에 명시하고 있다.</p>
+<ol>
+<li>
+<p><strong>선형 상한($O(d)$) 미달성 및 최적성 간극 (Linear Bound Gap):</strong></p>
+<ul>
+<li>1995년 Floyd &amp; Warmuth가 제기한 원래의 표본 압축 추측은 크기가 $O(d)$인 선형 표본 압축(Linear Sample Compression)의 존재 여부였다.</li>
+<li>본 연구는 다항 상한인 $O(d^2 \log^2 d)$를 최초로 증명하여 약한 형태의 추측을 해결하였으나, 여전히 선형 상한 $O(d)$와의 사이에 차수적 간극이 존재한다. $O(d)$ 크기의 압축 체계가 모든 VC 클래스에 존재하는가의 문제는 여전히 미해결 과제다 (<em>Section 1 Introduction</em>, <em>Section 5 Conclusion</em>).</li>
+</ul>
+</li>
+<li>
+<p><strong>계산 복잡도(Computational Complexity)의 미다룸:</strong></p>
+<ul>
+<li>본 논문의 모든 상한 수치($k = O(d^2 \log^2 d)$, $b = O(d \log^2 d)$)는 압축 표현의 정보량 및 크기(Size)에 관한 공간적 상한선이다.</li>
+<li>압축기(Compressor)가 최적 표본 집합 $W$와 $T$를 탐색하거나 재구성기(Reconstructor)가 이를 복원하는 데 필요한 알고리즘적 계산 복잡도(Running Time / Computational Complexity)에 대해서는 전혀 다루지 않으며, 이를 효율적인 다항 시간 내에 수행할 수 있는지 여부는 불확실하다 (<em>Section 1 &quot;Our bounds concern the size of the compressed representation, not the computational complexity of finding or reconstructing it&quot;</em>, <em>Section 5</em>).</li>
+</ul>
+</li>
+<li>
+<p><strong>레이블 미부여 표본으로의 편중 구조:</strong></p>
+<ul>
+<li>구축된 압축 체계에서 정작 MWU 오차 복원에 직접 사용되는 레이블 부여 표본은 $O(d \log d)$개에 불과하지만, 기하학적 셀 구조를 고정하기 위해 $O(d^2 \log^2 d)$개에 달하는 대량의 레이블 미부여 표본이 소모된다. 이러한 레이블 미부여 표본의 이차식(Quadratic) 의존성을 선형으로 축소할 수 있는지가 선형 추측 해결의 열쇠로 남아있다 (<em>Section 1.1</em>, <em>Remark 1.2</em>, <em>Section 5</em>).</li>
+</ul>
+</li>
+<li>
+<p><strong>소스 분석 위치 명시:</strong></p>
+<ul>
+<li>선형 상한 미달성 및 계산 복잡도 한계: <em>Section 1 (Introduction, Remark 1.2)</em> 및 <em>Section 5 (Conclusion)</em> 에 기술됨.</li>
+<li>다중 클래스 환경에서의 엄격한 한계(Pabbaraju 2024의 불가능성 결과와의 대비): <em>Section 1.2 (Related Work - Compression beyond binary labels)</em> 에 명시됨.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>30개 페이지</summary><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alexey-chervonenkis/">Alexey Chervonenkis</a></li>
+<li><a href="../../entities/people/ami-litman/">Ami Litman</a></li>
+<li><a href="../../entities/people/amir-yehudayoff/">Amir Yehudayoff</a></li>
+<li><a href="../../entities/people/aranyak-mehta/">Aranyak Mehta</a></li>
+<li><a href="../../entities/people/chase/">Chase</a></li>
+<li><a href="../../entities/people/chirag-pabbaraju/">Chirag Pabbaraju</a></li>
+<li><a href="../../entities/people/christopher-liaw/">Christopher Liaw</a></li>
+<li><a href="../../entities/people/david-helmbold/">David Helmbold</a></li>
+<li><a href="../../entities/people/david/">데이브</a></li>
+<li><a href="../../entities/people/di-wang/">Di Wang</a></li>
+<li><a href="../../entities/people/grigoris-velegkas/">Grigoris Velegkas</a></li>
+<li><a href="../../entities/people/leslie-valiant/">Leslie Valiant</a></li>
+<li><a href="../../entities/people/manfred-k-warmuth/">Manfred K. Warmuth</a></li>
+<li><a href="../../entities/people/nick-littlestone/">Nick Littlestone</a></li>
+<li><a href="../../entities/people/sally-floyd/">Sally Floyd</a></li>
+<li><a href="../../entities/people/shai-ben-david/">Shai Ben-David</a></li>
+<li><a href="../../entities/people/shay-moran/">Shay Moran</a></li>
+<li><a href="../../entities/people/vineet-gupta/">Vineet Gupta</a></li>
+<li><a href="../../entities/people/vladimir-vapnik/">Vladimir Vapnik</a></li>
+<li><a href="../../entities/people/von-neumann/">폰 노이만</a></li>
+<li><a href="../../entities/people/yanchen-jiang/">Yanchen Jiang</a></li>
+<li><a href="../../entities/people/yang-cai/">Yang Cai</a></li>
+<li><a href="../../entities/people/yoav-freund/">Yoav Freund</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li></ul></details></section>
+</main>
+</body>
+</html>

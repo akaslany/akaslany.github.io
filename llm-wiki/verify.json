@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 38922624,
+  "dist_bytes": 39537861,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -7,7 +7,7 @@
       "ok": true
     },
     "escapes": {
-      "checked": 4012,
+      "checked": 4107,
       "html_escapes": 0,
       "html_paths": {},
       "markdown_escapes": 0,
@@ -16,8 +16,8 @@
       "ok": true
     },
     "grounding": {
-      "checked": 4012,
-      "entity_source_links_checked": 6741,
+      "checked": 4107,
+      "entity_source_links_checked": 6883,
       "invalid_extractions": {},
       "issues": {},
       "ok": true,
@@ -25,26 +25,26 @@
     },
     "links": {
       "broken": 0,
-      "html_checked": 108152,
+      "html_checked": 110107,
       "issues": [],
-      "markdown_checked": 32295,
+      "markdown_checked": 32807,
       "ok": true
     },
     "links_recheck": {
       "broken": 0,
-      "checked_associations": 21362,
+      "checked_associations": 21720,
       "missing_associations": [],
       "ok": true
     },
     "markers": {
-      "checked": 4973,
+      "checked": 5077,
       "occurrences": 0,
       "ok": true,
       "pages": 0,
       "paths": {}
     },
     "material": {
-      "checked": 231,
+      "checked": 232,
       "issues": {},
       "min_body_chars": 357,
       "min_evidence_sources": 2,
@@ -53,11 +53,11 @@
       "registry_matches": true
     },
     "orphans": {
-      "edges": 31099,
+      "edges": 31606,
       "graph_valid": true,
       "low_source_inbound": [],
       "min_source_inbound": 6,
-      "nodes": 4973,
+      "nodes": 5077,
       "ok": true,
       "orphan_pages": [],
       "orphans": 0
@@ -82,28 +82,28 @@
         "source_sha256": [],
         "source_url": []
       },
-      "expected_sources": 940,
-      "generated": 4012,
+      "expected_sources": 949,
+      "generated": 4107,
       "index": 5,
       "kinds": 9,
       "ok": true,
-      "search_index_bytes": 803488,
-      "sources": 940,
+      "search_index_bytes": 816429,
+      "sources": 949,
       "symmetric_difference": 0,
       "timeline": 7,
-      "total": 4973
+      "total": 5077
     },
     "people_complete": {
-      "corpus_sources": 940,
-      "distinct": 3767,
+      "corpus_sources": 949,
+      "distinct": 3861,
       "extra": [],
-      "extracted_v2": 940,
+      "extracted_v2": 949,
       "missing": [],
       "ok": true,
-      "pages": 3767,
+      "pages": 3861,
       "symmetric_difference": 0,
       "synthesized": 81,
-      "with_quote": 2846
+      "with_quote": 2906
     },
     "people_nonempty": {
       "empty": 0,
@@ -119,7 +119,7 @@
       "checked": 10,
       "entities": {
         "concept/formal-verification": {
-          "evidence": 9,
+          "evidence": 10,
           "ok": true,
           "page": true
         },
@@ -154,7 +154,7 @@
           "page": true
         },
         "org/nvidia": {
-          "evidence": 57,
+          "evidence": 58,
           "ok": true,
           "page": true
         },
@@ -175,17 +175,17 @@
     "reproducible": {
       "changed_files": 0,
       "changed_paths": [],
-      "compared_files": 4977,
-      "first_sec": 17.726,
+      "compared_files": 5081,
+      "first_sec": 18.408,
       "ok": true,
-      "second_sec": 17.314
+      "second_sec": 17.805
     },
     "schema": {
-      "checked": 4973,
+      "checked": 5077,
       "invalid": 0,
       "issues": {},
       "ok": true,
-      "passed": 4973
+      "passed": 5077
     },
     "selfcontained": {
       "external_resources": 0,

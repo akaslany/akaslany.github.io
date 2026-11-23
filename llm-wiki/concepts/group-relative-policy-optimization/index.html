@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Group Relative Policy Optimization</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Group Relative Policy Optimization</h1>
+<p class="page-meta">근거 소스 3편</p>
+<h2 id="이진-보상과-코드-품질">이진 보상과 코드 품질</h2>
+<p>가가르 보고서는 이진 보상을 쓰는 GRPO가 같은 그룹에서 테스트를 통과한 모든 실행 궤적에 동일한 결과 어드밴티지를 부여해 코드 품질 차이를 반영하기 어렵다고 지적한다. <a href="../../sources/20260930-arxiv-2609-32577/">근거 A</a></p>
+<p>가가르는 성공과 실패가 함께 있는 그룹만 학습에 사용한다. 품질이 낮은 성공 궤적에서 줄인 어드밴티지를 품질이 높은 성공 궤적에 배분해 양의 어드밴티지 총합을 보존하고, 실패 궤적의 어드밴티지는 기존 값을 유지한다. <a href="../../sources/20260930-arxiv-2609-32577/">근거 A</a></p>
+<h2 id="하네스-제안자-학습">하네스 제안자 학습</h2>
+<p>하네스 러닝 연구진은 실행 보고서를 바탕으로 파이썬 하네스 코드의 수정을 제안하는 모델을 GRPO로 학습했다. 실험에서 하네스를 사용하는 솔버의 파라미터는 고정했다. <a href="../../sources/20261013-web-arxiv-org-pdf-2609-35738-e88ac636daf3/">근거 B</a></p>
+<h2 id="실패한-롤아웃-폐기의-영향">실패한 롤아웃 폐기의 영향</h2>
+<p>Rocket 분석 보고서의 작성자는 실패한 롤아웃을 즉시 폐기하면 학습 지연이 줄어드는 한편, 특정 실패 패턴이나 복잡도를 공유하는 샘플이 제외돼 GRPO의 어드밴티지 산출에 편향이나 잡음이 생길 수 있다고 분석했다. <a href="../../sources/20261123-web-microsoft-ai-pdf-nfrastructure-at-icroso-d4aacc6b7a8b/">근거 C</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>테스트를 통과한 성공 궤적(Test-passing trajectories) 모두에 동일한 결과 어드밴티지(Outcome Advantage)를 부여하는 근본적인 한계를 가진다.</p>
+</blockquote>
+<p><a href="../../sources/20260930-arxiv-2609-32577/">근거 A</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260930-arxiv-2609-32577/">Groupwise Agentic Grading and Advantage Redistribution for Code Agent RL</a></li>
+<li><a href="../../sources/20261013-web-arxiv-org-pdf-2609-35738-e88ac636daf3/">하네스 러닝(Harness Learning) 기반 테스트 시간 적응 기술 분석 보고서</a></li>
+<li><a href="../../sources/20261123-web-microsoft-ai-pdf-nfrastructure-at-icroso-d4aacc6b7a8b/">RL infrastructure at Microsoft AI</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260930-arxiv-2609-32577/">Groupwise Agentic Grading and Advantage Redistribution for Code Agent RL</a></li>
+<li><a href="../../sources/20261013-web-arxiv-org-pdf-2609-35738-e88ac636daf3/">하네스 러닝(Harness Learning) 기반 테스트 시간 적응 기술 분석 보고서</a></li>
+<li><a href="../../sources/20261123-web-microsoft-ai-pdf-nfrastructure-at-icroso-d4aacc6b7a8b/">RL infrastructure at Microsoft AI</a></li></ul></section>
+</main>
+</body>
+</html>

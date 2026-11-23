@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discovering formally verified quantum programs with AI</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Discovering formally verified quantum programs with AI</h1>
+<p class="page-meta">논문 · 2026-11-23</p>
+<h2 id="요약">요약</h2>
+<p>Gemini 4 Carbon 에이전트가 찾은 양자 프로그램을 Lean 4로 검증해 5개 응용에서 자원이나 탐색 라운드를 줄였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.09822">출처</a> · <a href="https://www.youtube.com/watch?v=ReEX3cdV_qk">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/formal-verification/">Formal Verification</a></li>
+<li><a href="../../concepts/gemini-4-carbon/">Gemini 4 Carbon</a></li>
+<li><a href="../../concepts/lean/">Lean</a></li>
+<li><a href="../../concepts/multi-agent/">Multi-agent</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/andrew-w-senior/">Andrew W. Senior</a></li>
+<li><a href="../../entities/people/aws-albarghouthi/">Aws Albarghouthi</a></li>
+<li><a href="../../entities/people/ben-jaderberg/">Ben Jaderberg</a></li>
+<li><a href="../../entities/people/eric-wieser/">에릭 위저</a></li>
+<li><a href="../../entities/people/francisco-j-h-heras/">Francisco J.H. Heras</a></li>
+<li><a href="../../entities/people/george-tsoukalas/">조지 츠우칼라스</a></li>
+<li><a href="../../entities/people/guang-hao-low/">Guang Hao Low</a></li>
+<li><a href="../../entities/people/harun-khan/">Harun Khan</a></li>
+<li><a href="../../entities/people/hussain-masoom/">Hussain Masoom</a></li>
+<li><a href="../../entities/people/james-d-watson/">James D. Watson</a></li>
+<li><a href="../../entities/people/johannes-bausch/">Johannes Bausch</a></li>
+<li><a href="../../entities/people/katerina-hristova/">카테리나 흐리스토바</a></li>
+<li><a href="../../entities/people/lei-m-zhang/">Lei M. Zhang</a></li>
+<li><a href="../../entities/people/leopoldo-sarra/">Leopoldo Sarra</a></li>
+<li><a href="../../entities/people/michael-broughton/">Michael Broughton</a></li>
+<li><a href="../../entities/people/nenad-tomasev-19cf580498/">네나드 토마셰프</a></li>
+<li><a href="../../entities/people/nicholas-c-rubin/">Nicholas C. Rubin</a></li>
+<li><a href="../../entities/people/pushmeet-kohli/">푸시밋 코흘리</a></li>
+<li><a href="../../entities/people/ryan-babbush/">Ryan Babbush</a></li>
+<li><a href="../../entities/people/sebastien-racaniere/">Sébastien Racanière</a></li>
+<li><a href="../../entities/people/sergey-shirobokov/">Sergey Shirobokov</a></li>
+<li><a href="../../entities/people/sergio-boixo/">Sergio Boixo</a></li>
+<li><a href="../../entities/people/stavan-jain/">Stavan Jain</a></li>
+<li><a href="../../entities/people/swarat-chaudhuri/">스와랏 차우두리</a></li>
+<li><a href="../../entities/people/tanuj-khattar/">Tanuj Khattar</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="lean-4-및-ai-멀티에이전트-기반-형식-검증-양자-프로그램-발견-해설-보고서">Lean 4 및 AI 멀티에이전트 기반 형식 검증 양자 프로그램 발견 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>양자 컴퓨터가 암호 해독, 분자 동역학, 신소재 설계 및 고에너지 물리학 등 기존 고전 컴퓨터의 한계를 넘어서는 실용적 양자 이득(Practical Quantum Advantage)을 달성하기 위해서는 하드웨어의 물리적 확장뿐만 아니라 알고리즘 차원의 획기적인 시공간 자원 절감이 필수적이다. 역사적으로 이러한 양자 알고리즘의 최적화는 수년에 걸친 인간 전문가들의 수동 분석과 협업에 의존해 왔다. 최근 고전 컴퓨터 과학 및 수학 분야에서는 대규모 언어 모델(LLM) 기반의 자동 탐동 및 코드 생성 루프가 비약적인 진전을 이끌어내고 있으나, 양자 알고리즘 영역에서는 오류 수정 기능이 완비된 논리적 큐비트 하드웨어가 부재하여 LLM이 생성한 프로그램의 정밀한 검증이 고전 시뮬레이션이 가능한 소규모 또는 제한된 수치 영역(Restricted Gate Set 등)에만 국한되는 고유한 한계에 직면해 있었다.</p>
+<p>본 분석 보고서는 이러한 한계를 근본적으로 극복하고, 고전 컴퓨터로 시뮬레이션 불가능한 수천 큐비트 규모의 비-시뮬레이션 영역에서 수학적 정밀 증명을 통해 정답성과 자원 효율성이 보증된 양자 프로그램을 자동 descub르(발견)한 최신 연구 성과를 수석 기술 분석가의 시각에서 체계적으로 해설한다. 연구진은 대규모 언어 모델인 Gemini 4 Carbon을 기반으로 하는 자율 멀티에이전트 탐동 워크플로우를 대화형 정리 증명기인 Lean 4 환경 내 양자 호어 논리(Quantum Hoare Logic, QHL) 형식 검증 라이브러리와 결합함으로써, 물리적 하드웨어 실행이나 고전 시뮬레이션 없이도 고차원 양자 알고리즘을 엄밀하게 생성 및 검증하는 가상 연구 환경을 구현하였다.</p>
+<p>본 체계에서 독립적으로 구성된 AI 에이전트 팀들은 연구자가 사전 작성하여 동결한 문제 명세(Specification)에 대해 정답 정리와 자원 상한(큐비트 수 $Q$, $T$ 게이트 수 $T$, 시공간 자원량 $Q \cdot T$)을 기계 검증(Machine-checking)받으며, 자동화된 공유 위키(Shared Wiki)와 4시간 주기의 정기 포럼 컨퍼런스(Conferences)를 통해 아이디어를 교환하고 연구 성과를 축적했다. 이 결합 프레임워크는 5개 핵심 응용 분야—고정소수점 아크사인(arcsin) 연산, 병렬 그로버 탐색(Parallel Grover Search), 관성 가두기 융합 저지능력(Alpha-particle Stopping Power), 비-보른-오펜하이머(Non-Born–Oppenheimer) 분자 동역학, 시토크롬 P450(Cytochrome P450) 에너지 추정—에서 기존 학계의 최신 기준선(Baseline)을 압도하는 알고리즘 자원 절감 성과를 달성했다. 본 보고서는 대규모 AI 멀티에이전트와 대화형 정리 증명기의 결합이 양자 소프트웨어 공학 및 형식 검증 프레임워크에 가져온 패러다임 전환을 고찰한다.</p>
+<hr />
+<h4 id="2-주요-논점-key-claims-substantive-issues">2. 주요 논점 (Key Claims &amp; Substantive Issues)</h4>
+<h5 id="2-1-검증-프레임워크-및-멀티에이전트-아키텍처">2.1. 검증 프레임워크 및 멀티에이전트 아키텍처</h5>
+<ul>
+<li>
+<p><strong>Lean 4 기반 QHL 라이브러리 및 뢰브너 순서(Löwner Order) 하의 구조적 혁신</strong></p>
+<ul>
+<li><strong>[사실]</strong> 본 연구 프레임워크는 Lean 4 환경에서 Mathlib 및 Physlib의 <code>Lean-QuantumInfo</code> 라이브러리를 기반으로 구축되었으며, 고전 제어 흐름(할당, 조건문, 루프)과 양자 연산(유니터리 변환, 중간 측정, 상태 재설정)을 통합한 고전-양자 하이브리드 명령형 언어를 형식화했다 (1.1절, 부록 A).</li>
+<li><strong>[사실]</strong> 약함 최선 조건(Weakest Precondition, wp) 연산자와 역방향 연쇄 기법을 바탕으로 총 호어 삼조(Total Hoare Triple) ${{\Theta}} P {{\Psi}}$를 검증하며, 힐베르트 공간 상의 관측가능량(Observables) $O(d) = {M \in \mathcal{L}(d) \mid 0 \preceq M \preceq I}$ 간의 뢰브너 순서(Löwner order)를 정의하고 기대 만족도 $E[\Delta \models \Theta] = \sum_\sigma \operatorname{tr}(\Theta(\sigma)\Delta(\sigma)) \in [0, 1]$를 계산하는 <code>CQState</code> 및 <code>CQAssertion</code> 체계를 구현했다 (부록 A).</li>
+<li><strong>[작성자의 해석]</strong> 기존 Lean의 표준 <code>vcgen</code> 타틱이나 Loom 등의 자동 검증 체계는 조건식이 완비 격자(Complete Lattice) 구조를 이룸을 전제로 동작한다. 그러나 차원 2 이상의 힐베르트 공간 상의 양자 관측가능량 집합은 뢰브너 순서 하에서 격자(Lattice) 구조조차 형성하지 않는다. 이로 인해 기존 타틱을 직접 재활용할 수 없었으며, 연구진이 연속 체인 완전 부분 순서인 $\omega$-CPO(chain-complete partial order) 구조를 밑바닥부터 새로 mechanize하여 QHL 및 wp 계산기를 직접 구축해야 했던 기술적 당위성이 존재한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>독립 검증기 'Lean Comparator' 및 AST 파싱 기반 샌드박스 보안</strong></p>
+<ul>
+<li><strong>[사실]</strong> AI 에이전트가 탐색 과정에서 정리 명세를 약화시키거나, 핵심 정의를 변경하고, 혹은 <code>sorry</code> 구문 및 임의의 신규 공리(Axioms)를 도입하여 체계를 기만하는 보안 루프홀(Loophole)을 완벽히 차단하기 위해, 동결된 초기 명세 파일과 독립 검증기인 'Lean Comparator'를 도입했다 (1.2절, 부록 B).</li>
+<li><strong>[사실]</strong> 외부 검증기 프로세스는 제출된 코드의 구문 분석 트리(AST)를 독립 샌드박스에서 파싱하여 (i) 목표 정리 및 정의의 완전한 부합성, (ii) 생성된 증명 용어가 표준 Lean 공리계(<code>propext</code>, <code>Quot.sound</code>, <code>Classical.choice</code>)만을 사용하는지 여부, (iii) 계산된 자원 수치 명세와의 정량적 대조를 강제 검증한다 (부록 B).</li>
+<li><strong>[소스의 주장]</strong> 이러한 신뢰 경계(Trust Boundary)의 분리를 통해 인간 연구자는 초기 형식 명세(Specification)의 정밀성만 사전 검토하면 되며, 검증기를 통과한 에이전트의 알고리즘 및 증명 코드에 대해서는 별도의 수동 코드 리뷰 없이 100% 수학적 엄밀성을 신뢰할 수 있다 (1.2절, 부록 B).</li>
+</ul>
+</li>
+<li>
+<p><strong>Gemini 4 Carbon 기반 자율 탐동 워크플로우</strong></p>
+<ul>
+<li><strong>[사실]</strong> 대규모 자율 알고리즘 탐동 실험에는 Gemini 4 Carbon LLM 모델이 사용되었으며, 연구자는 문제별 모듈 아이디어를 직접 제공하지 않고 고수준 최적화 프롬프트만을 제공했다 (1.2절, 부록 C).</li>
+<li><strong>[사실]</strong> 에이전트 팀은 수치 시뮬레이션, 수치 최적화, 해석적 유도, Kickmix 훠징 기술 등 다양한 외부 도구를 자율적으로 호출하여 세부 서브루틴을 설계하고 Lean 4 증명을 완성했다 (1.2절, 부록 C).</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-5개-응용-분야별-주요-성과-및-기술적-혁신">2.2. 5개 응용 분야별 주요 성과 및 기술적 혁신</h5>
+<p>아래 마크다운 표는 본 연구에서 다룬 5개 문제 영역별 기존 최고 수준 기준선(Baseline)과 본 연구를 통해 증명된 성과, 그리고 자원 절감 지표를 정리한 것이다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">문제 영역 (Application)</th>
+<th style="text-align:left">기존 기준선 ($Q \cdot T$)</th>
+<th style="text-align:left">본 연구 성과 ($Q \cdot T$)</th>
+<th style="text-align:left">절감 배수</th>
+<th style="text-align:left">사용 큐비트 ($Q$)</th>
+<th style="text-align:left">$T$ 게이트 수 ($T$) / 오라클 쿼리 성과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>고정소수점 아크사인 (arcsin)</strong></td>
+<td style="text-align:left">$&gt; 1.08 \times 10^8$</td>
+<td style="text-align:left">$3.70 \times 10^5$</td>
+<td style="text-align:left"><strong>$&gt; 290\times$</strong></td>
+<td style="text-align:left">100</td>
+<td style="text-align:left">3,698 $T$ 게이트</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>관성 가두기 융합 저지능력</strong></td>
+<td style="text-align:left">$5.42 \times 10^{15}$</td>
+<td style="text-align:left">$4.59 \times 10^{14}$</td>
+<td style="text-align:left"><strong>$11.8\times$</strong></td>
+<td style="text-align:left">4,338</td>
+<td style="text-align:left">평균 $1.06 \times 10^{11}$ $T$ 게이트 / run</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비-보른-오펜하이머 동역학</strong></td>
+<td style="text-align:left">$4.98 \times 10^{15}$</td>
+<td style="text-align:left">$6.06 \times 10^{14}$</td>
+<td style="text-align:left"><strong>$8.22\times$</strong></td>
+<td style="text-align:left">6,033</td>
+<td style="text-align:left">$1.00 \times 10^{11}$ $T$ 게이트 ($100,444,225,133$)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시토크롬 P450 화합물 I</strong></td>
+<td style="text-align:left">$1.09 \times 10^{12}$</td>
+<td style="text-align:left">$4.37 \times 10^{11}$</td>
+<td style="text-align:left"><strong>$2.49\times$</strong></td>
+<td style="text-align:left">333</td>
+<td style="text-align:left">$1.31 \times 10^9$ $T$ 게이트 (*유도 수치)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>병렬 그로버 탐색 (Parallel Grover)</strong></td>
+<td style="text-align:left">기존 최적 비할당 기준</td>
+<td style="text-align:left">검증된 회로 발견</td>
+<td style="text-align:left"><strong>최대 $2.57\times$ 속도 향상</strong></td>
+<td style="text-align:left">오라클 쿼리 기반</td>
+<td style="text-align:left">단일 타깃 최대 $1.22\times$, 다중 타깃 최대 $2.57\times$</td>
+</tr>
+</tbody>
+</table>
+<p><em>*주: 시토크롬 P450의 $T$ 게이트 수 $1.31 \times 10^9$개는 소스 논문(Section 2.5, Table S1)에서 공표된 총 시공간 자원량 $Q \cdot T = 4.37 \times 10^{11}$ 및 큐비트 수 $Q=333$으로부터 유도된 역산 수치임 $((Q \cdot T)/Q)$.</em></p>
+<h6 id="세부-분야별-기술적-혁신-및-분석">세부 분야별 기술적 혁신 및 분석:</h6>
+<ul>
+<li>
+<p><strong>고정소수점 아크사인 (Fixed-point arcsin):</strong></p>
+<ul>
+<li><strong>[사실]</strong> 25비트 부호 있는 2의 보수 표기법 입력($y \in [-1, 1]$)에 대해 정밀도 허용 오차 $|z(y) - \operatorname{arcsin}(y)| \le 1.25 \times 10^{-7}$를 만족하는 하이브리드 회로 설계 문제이다 (2.2절, 부록 F.1).</li>
+<li><strong>[사실]</strong> 1단계 탐구로 고전 시뮬레이션이 용이한 Kickmix 게이트셋 기반 훠징을 통해 시공간 자원량을 $4.15 \times 10^5$($T$ 게이트 4,152개, 큐비트 100개)로 1차 축소했다 (부록 F.3).</li>
+<li><strong>[사실]</strong> 2단계로 Lean 4 형식 검증 라이브러리를 적용하여 Kickmix 제한을 해제하고, $T, T^\dagger$ 위상 킥백을 활용하는 41개의 <strong>내적 블록(Inner-product block)</strong> 기술을 도입했다. 이 구조는 계수 비트 로딩 과정의 $T$ 게이트를 1,348개에서 894개로 축소시켰다 (부록 F.4, Figure S11).</li>
+<li><strong>[소스의 주장]</strong> Kickmix 제약 해제 및 내적 블록 도입을 통해 최종 자원량을 $3.70 \times 10^5$($T$ 게이트 3,698개, 큐비트 100개)까지 축소함으로써 구간 다항식(Piecewise-polynomial) 기반 기존 기준선($&gt; 1.08 \times 10^8$) 대비 <strong>290배 이상의 자원 절감</strong>을 달성했다 (2.2절, Figure 3c).</li>
+<li><strong>[작성자의 해석]</strong> 내적 블록은 계수 비트를 계산할 때 엔실라 큐비트를 추가 할당하지 않고 중첩 상태의 위상 간섭만으로 값을 도출하므로, 획기적인 게이트 절감과 동시에 메모리 Footprint를 최소화하는 이중의 이점을 제공한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>병렬 그로버 탐색 (Parallel Grover Search):</strong></p>
+<ul>
+<li><strong>[사실]</strong> $N=2^n$ 탐색 공간에서 $k$개 타깃을 라운드당 최대 $m$개 병렬 쿼리로 찾는 문제에 대해 $(m, k \le 1,024)$ 전 영역의 정확성을 Lean 4로 증명했다 (2.1절, 부록 E.1).</li>
+<li><strong>[사실]</strong> 단일 타깃 찾기(Find-Any)에서는 쿼리 레지스터 간 기함수 패리티 조인트 반사(Odd-parity joint reflection) 메커니즘을 적용하여 기존 최고 기준선(Zalka+WG) 대비 기대 라운드 수 속도를 <strong>최대 1.22배</strong> 향상시켰다 (Figure 3d, 부록 E.3).</li>
+<li><strong>[소스의 주장]</strong> 다중 타깃 찾기(Find-All)에서는 $m$-부분집합들의 코히런트 중첩 상태 생성, 패리티 위상 각인, 및 존슨 그래프 워크(Johnson graph walk)를 결합하여 한 번의 최종 쿼리로 분산 타깃을 배치 기록하는 방식을 통해 <strong>최대 2.57배</strong>의 속도 향상을 달성했다 (2.1절, Figure S9).</li>
+<li><strong>[작성자의 해석]</strong> 존슨 그래프 워크 메커니즘은 양자 단일값 변환(QSVT)을 바탕으로 타깃 정보와 무관한(Target-independent) 반사 집합을 사전 컴파일함으로써, 블록 분할 탐색 시 발생하는 타깃 편중 및 오버슈팅 문제를 코히런트 위상 조율로 완벽히 해결한 이론적 성과이다.</li>
+</ul>
+</li>
+<li>
+<p><strong>관성 가두기 융합 저지능력 (Alpha-particle Stopping Power):</strong></p>
+<ul>
+<li><strong>[사실]</strong> 고온 밀집 수소계 내 $\alpha$ 입자(218개 전자, 216개 고정 양성자, $\alpha$ 입자 1개)의 동역학을 3,948개 시스템 큐비트 상에서 500회 시뮬레이션하는 문제이다 (2.3절, 부록 G.1).</li>
+<li><strong>[사실]</strong> 전자들을 양자 푸리에 변환(QFT)을 통해 실수 공간 격자(Real-space grid)로 전환한 후, 짧은 거리 상호작용 시 파울리 배타 원리를 활용하여 오프-그리드 위상 오차를 억제하는 서브루틴을 구현함으로써 워크 스텝 수를 <strong>12.8배 감소</strong>시켰다 (2.3절, Figure 4b).</li>
+<li><strong>[사실]</strong> 모든 전자의 총 운동량 합($P$)을 42큐비트 레지스터에 스텝 간 유지(Reuse)함으로써 운동량 재계산 횟수를 절반으로 줄여 스텝당 $T$ 게이트를 10% 절감했다 (2.3절, Figure 4c).</li>
+<li><strong>[소스의 주장]</strong> 시공간 자원량을 기존 기준선 $5.42 \times 10^{15}$에서 $4.59 \times 10^{14}$ (11.8배 절감, 4,338 큐비트 사용)로 감소시켰다. 실행 1회당 평균 $T$ 게이트 소비량은 $1.06 \times 10^{11}$개이며, 500회 전체 실행 시 총 $T$ 게이트 소비량은 $2.29 \times 10^{14}$개이다 (2.3절, 부록 G.4).</li>
+<li><strong>[작성자의 해석]</strong> 실수 공간 격자 상에서 동일 스핀 전자가 한 격자에 3개 이상 존재할 수 없다는 물리적 파울리 배타 원리를 호어 삼조의 불변량 조건으로 결합시킴으로써, 불필요한 비물리적 상태 계산 자원을 획기적으로 차단한 뛰어난 형식화 사례이다.</li>
+</ul>
+</li>
+<li>
+<p><strong>비-보른-오펜하이머 동역학 ($C_{23}H_{20}N_3O$):</strong></p>
+<ul>
+<li><strong>[사실]</strong> 47개 양자 핵과 187개 전자를 포함하는 5,616개 시스템 큐비트의 동역학 시뮬레이션 문제이다 (2.4절, 부록 H.1).</li>
+<li><strong>[사실]</strong> 상호작용 입자 좌표를 앤실라 큐비트로 복사한 후 측정 기반 좌표 복원(Measurement-based uncompute) 기법을 적용해 스왑 네트워크 $T$ 게이트 소비를 <strong>46% 절감</strong>했다 (2.4절, Figure 4e).</li>
+<li><strong>[사실]</strong> $1/r$ 정밀 연산을 곱셈기 없이 512개 구간의 번스타인 다항식(Bernstein polynomial) 확률적 표본 추출 방식으로 대체하여 $1/r$ 계산 관련 $T$ 게이트를 <strong>94% 절감</strong>했다 (2.4절, Figure 4f).</li>
+<li><strong>[소스의 주장]</strong> 단일 워크 스텝당 $30,116$개의 $T$ 게이트와 $3,326,847$차 QSP 다항식을 결합하여, 시공간 자원을 기준선 $4.98 \times 10^{15}$에서 $6.06 \times 10^{14}$ (8.22배 절감, 총 6,033 큐비트[시스템 5,616 + 앤실라 417], 총 $T$ 게이트 $1.00 \times 10^{11}$[$100,444,225,133$])로 절감했다 (2.4절, 부록 H.4).</li>
+<li><strong>[작성자의 해석]</strong> 고전적인 복잡한 고정소수점 나누기/제곱근 회로 대신 확률적 표본 추출 기반 번스타인 다항식을 도입함으로써, 양자 알고리즘 설계 시 비선형 함수 계산의 병목을 획기적으로 완화할 수 있음을 증명했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>시토크롬 P450 화합물 I (Cytochrome P450 Compound I):</strong></p>
+<ul>
+<li><strong>[사실]</strong> 63개 전자, 58개 오비탈(116개 시스템 큐비트) DFTHC 해밀토니안의 바닥상태 및 0.1 Ha 이내 정밀 에너지를 추정하는 문제이다 (2.5절, 부록 I.1).</li>
+<li><strong>[사실]</strong> 바이너리 인코딩 및 QROM 룩업 구조를 폐지하고, <strong>1-핫(One-hot) 인코딩 레지스터</strong>를 도입하여 회전 각도 및 가중치 검색을 클리포드(Clifford) 게이트만으로 처리하도록 구현했다 (2.5절).</li>
+<li><strong>[소스의 주장]</strong> 이를 통해 스텝당 $T$ 게이트 절감 효과의 95% 이상을 달성하여, 시공간 자원을 기준선 $1.09 \times 10^{12}$에서 $4.37 \times 10^{11}$ (2.49배 절감, 333 큐비트 사용)로 감소시켰다 (2.5절).</li>
+<li><strong>[작성자의 해석]</strong> 1-핫 인코딩은 큐비트 수를 소폭 증가시키는 반면, expensive한 비-클리포드($T$) 게이트 읽기 연산을 무료에 가까운 클리포드 연산으로 바꾸므로, FTQC 환경에서 시공간 자원량($Q \cdot T$)을 최적화하는 매우 강력한 트레이드오프 전략이다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-3-에이전트-팀-간-협업-및-아이디어-계보">2.3. 에이전트 팀 간 협업 및 아이디어 계보</h5>
+<ul>
+<li>
+<p><strong>공유 위키(Shared Wiki)와 포럼 컨퍼런스(Conferences)의 작동 방식</strong></p>
+<ul>
+<li><strong>[사실]</strong> 공유 위키는 외부 검증기를 통과한 최선 Lean 코드, 재사용 가능한 모듈, 검증/유망/실패 아이디어 노트를 버전 관리 시스템(Git PR)으로 공유하는 채널이다 (1.2절, 부록 C, Figure S4).</li>
+<li><strong>[사실]</strong> 포럼 컨퍼런스는 4시간 주기로 열리는 비동기 토론 채널로, 검증되지 않은 가설 제안, 크로스 팀 비평(Critique), 증명 구조 교안을 교환하는 역할을 수행한다 (1.2절, 부록 C, Figure S5).</li>
+</ul>
+</li>
+<li>
+<p><strong>아이디어 교차 전수 및 정량적 기여도 계보</strong></p>
+<ul>
+<li><strong>[사실]</strong> 비-보른-오펜하이머 문제의 최고 기록은 에이전트 팀 간에 8차례 이전되었으며, 최종 회로는 3개 독립 팀의 기술적 아이디어가 합성된 결과물이다 (2.6절, Figure 5a).</li>
+<li><strong>[사실]</strong> 3개 과학 시뮬레이션 문제에서 달성된 자원 절감 기여도를 분석한 결과, 팀 내부 탐구가 61%, 공유 위키를 통한 코드 전수가 15%, 컨퍼런스 토론을 통한 교차 제안이 24%를 차지했다 (2.6절, Figure 5b).</li>
+<li><strong>[소스의 주장]</strong> 완전 자동화된 머신 체킹 형식 검증 프레임워크가 신뢰 경계를 보장했기 때문에, 인간 연구자의 코드 리뷰 오버헤드 없이 AI 멀티에이전트 간의 대규모 오픈소스 협업 및 아이디어 교차가 안전하게 수행될 수 있었다 (2.6절).</li>
+<li><strong>[작성자의 해석]</strong> 이는 단일 에이전트 탐색 루프의 한계를 뛰어넘는 멀티에이전트 집단 지성(Swarm Intelligence)이 엄밀한 형식 검증 체계와 결합했을 때 발생하는 자율적 연구 생산성의 폭발적 증가를 보여준다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-key-personnel-speakers">3. 등장 인물 및 화자 (Key Personnel &amp; Speakers)</h4>
+<p>소스 논문 출처(Front page 및 저자 정보)에 명시된 저자 25명의 소속 기관 및 확인된 역할 정보는 다음과 같다. 소스에서 구체적인 세부 기여 내용이 명시되지 않은 경우 지침에 따라 &quot;확인 불가&quot;로 표기한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름 (Name)</th>
+<th style="text-align:left">소속 기관 (Affiliation)</th>
+<th style="text-align:left">확인된 역할 / 기여 내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Sergey Shirobokov</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">공동 제1저자, 교신저자 (Co-first author, Corresponding author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ben Jaderberg</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">공동 제1저자, 교신저자 (Co-first author, Corresponding author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Katerina Hristova</strong></td>
+<td style="text-align:left">Google (Research Consultant)</td>
+<td style="text-align:left">공동 제1저자 (Co-first author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>George Tsoukalas</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">공동 제1저자 (Co-first author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Johannes Bausch</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">공동 제1저자 (Co-first author)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Eric Wieser</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Francisco J.H. Heras</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Nicholas C. Rubin</strong></td>
+<td style="text-align:left">Google Quantum AI</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Guang Hao Low</strong></td>
+<td style="text-align:left">Google Quantum AI</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sébastien Racanière</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Nenad Tomašev</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Lei M. Zhang</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>James D. Watson</strong></td>
+<td style="text-align:left">Google Quantum AI</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Tanuj Khattar</strong></td>
+<td style="text-align:left">Google Quantum AI</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aws Albarghouthi</strong></td>
+<td style="text-align:left">Google (Research Consultant)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Stavan Jain</strong></td>
+<td style="text-align:left">Google (Research Consultant)</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Harun Khan</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Leopoldo Sarra</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Andrew W. Senior</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Michael Broughton</strong></td>
+<td style="text-align:left">Google Quantum AI</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hussain Masoom</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sergio Boixo</strong></td>
+<td style="text-align:left">Google Quantum AI</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Ryan Babbush</strong></td>
+<td style="text-align:left">Google Quantum AI</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Swarat Chaudhuri</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Pushmeet Kohli</strong></td>
+<td style="text-align:left">Google DeepMind</td>
+<td style="text-align:left">확인 불가</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-핵심-수치-및-시점-numbers-timeframes">4. 핵심 수치 및 시점 (Numbers &amp; Timeframes)</h4>
+<h5 id="4-1-주요-시점-및-기본-정량-지표">4.1. 주요 시점 및 기본 정량 지표</h5>
+<ul>
+<li><strong>논문 공개 시점:</strong> 2026년 11월 17일 (November 17, 2026)</li>
+</ul>
+<h5 id="4-2-응용-분야별-성과-지표-비교표">4.2. 응용 분야별 성과 지표 비교표</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">문제 영역</th>
+<th style="text-align:left">기존 기준선 ($Q \cdot T$)</th>
+<th style="text-align:left">본 연구 성과 ($Q \cdot T$)</th>
+<th style="text-align:left">절감 배수</th>
+<th style="text-align:left">사용 큐비트 수 ($Q$)</th>
+<th style="text-align:left">$T$ 게이트 수 ($T$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>고정소수점 아크사인</strong></td>
+<td style="text-align:left">$&gt; 1.08 \times 10^8$</td>
+<td style="text-align:left">$3.70 \times 10^5$</td>
+<td style="text-align:left">$&gt; 290\times$</td>
+<td style="text-align:left">100</td>
+<td style="text-align:left">3,698</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>융합 저지능력 ($\alpha$+수소)</strong></td>
+<td style="text-align:left">$5.42 \times 10^{15}$</td>
+<td style="text-align:left">$4.59 \times 10^{14}$</td>
+<td style="text-align:left">$11.8\times$</td>
+<td style="text-align:left">4,338</td>
+<td style="text-align:left">$1.06 \times 10^{11}$ (단일 실행 평균) / $2.29 \times 10^{14}$ (전체 500회 총합)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>비-보른-오펜하이머 동역학</strong></td>
+<td style="text-align:left">$4.98 \times 10^{15}$</td>
+<td style="text-align:left">$6.06 \times 10^{14}$</td>
+<td style="text-align:left">$8.22\times$</td>
+<td style="text-align:left">6,033</td>
+<td style="text-align:left">$1.00 \times 10^{11}$ ($100,444,225,133$)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시토크롬 P450</strong></td>
+<td style="text-align:left">$1.09 \times 10^{12}$</td>
+<td style="text-align:left">$4.37 \times 10^{11}$</td>
+<td style="text-align:left">$2.49\times$</td>
+<td style="text-align:left">333</td>
+<td style="text-align:left">$1.31 \times 10^9$ (*총 자원량 $Q \cdot T$ 및 $Q=333$ 수치 기반 역산 유도값)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>병렬 그로버 탐색</strong></td>
+<td style="text-align:left">확인 불가 (오라클 단위)</td>
+<td style="text-align:left">확인 불가 (오라클 단위)</td>
+<td style="text-align:left">최대 $2.57\times$ (속도)</td>
+<td style="text-align:left">확인 불가 (오라클 쿼리 라운드 기준)</td>
+<td style="text-align:left">확인 불가 (오라클 쿼리 라운드 기준)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4-3-하드웨어-수평선-hardware-horizons-기준-수치">4.3. 하드웨어 수평선(Hardware Horizons) 기준 수치</h5>
+<p>미래 오류 수정 양자 컴퓨터(FTQC)의 예상 범주와 본 연구 성과의 하드웨어 배치 가능성을 비교하기 위한 기준 지표(Midpoint 및 Ceiling)는 다음과 같다 (부록 D.2, Table S1).</p>
+<ul>
+<li><strong>중기 FTQC (Medium-term FTQC / Teraquop Planar):</strong>
+<ul>
+<li><strong>기준 중앙값 (Midpoint):</strong> $Q = 10^3$ (1,000 큐비트), $T = 10^9$ (10억 $T$ 게이트), $Q \cdot T = 10^{12}$</li>
+<li><strong>상한 범주 (Ceiling):</strong> $Q \in [5 \times 10^2, 2 \times 10^3]$, $T \in [3 \times 10^8, 3 \times 10^9]$</li>
+<li><strong>대표 응용 분야:</strong> 시토크롬 P450 에너지 계산 (본 연구 결과 $Q=333, T \approx 1.31 \times 10^9, Q \cdot T = 4.37 \times 10^{11}$로 중기 FTQC 진입 가능 영역 달성)</li>
+</ul>
+</li>
+<li><strong>응용 규모 FTQC (Application-scale FTQC / FASQ / Petaquop):</strong>
+<ul>
+<li><strong>기준 중앙값 (Midpoint):</strong> $Q = 10^4$ (10,000 큐비트), $T = 10^{11}$ (1,000억 $T$ 게이트), $Q \cdot T = 10^{15}$</li>
+<li><strong>상한 범주 (Ceiling):</strong> $Q \in [5 \times 10^3, 2 \times 10^4]$, $T \in [3 \times 10^{10}, 3 \times 10^{11}]$</li>
+<li><strong>대표 응용 분야:</strong> 관성 가두기 융합 저지능력, 비-보른-오펜하이머 분자 동역학 시뮬레이션</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 연구의 획기적인 알고리즘 절감 성과에도 불구하고, 소스 논문 분석을 통해 명확히 규명된 기술적 한계점 및 미해결 불확실 요소들은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>입력 상태 명세의 과도한 일반화 한계 (Specification Constraints):</strong></p>
+<ul>
+<li>비-보른-오펜하이머 동역학 문제의 명세는 기존 기준선과의 엄밀한 비교를 위해 전자 교환 대칭성을 위반하는 '물리적으로 불가능한(Unphysical)' 모든 입력 상태에 대해서도 정답성을 보장하도록 엄격하게 설정되었다 (3절).</li>
+<li>이로 인해 AI 에이전트가 실제 물리적 유효 상태 공간으로만 최적화 범위를 제한하지 못하고 비물리적 상태까지 처리해야 하는 불필요한 명세상의 제약이 존재했다.</li>
+</ul>
+</li>
+<li>
+<p><strong>텐서 인자화 고정 문제 (Fixed Factorization Limitation):</strong></p>
+<ul>
+<li>시토크롬 P450 문제에서는 텐서 인자화 기법(DFTHC) 자체의 표현력을 개선하는 것을 금지하고 사전 고정된 해밀토니안 인자화 데이터를 사용하도록 명세를 제한했다 (2.5절, 3절, 부록 I.1).</li>
+<li>이로 인해 최근 표면 코드 최적화 및 텐서 표현력 자체 개선을 통해 얻어지는 추가적인 자원 절감 가능성이 탐색 공간에서 배제되었다.</li>
+</ul>
+</li>
+<li>
+<p><strong>초기 하드웨어(Early FTQC) 실행 가능성과의 격차:</strong></p>
+<ul>
+<li>본 연구를 통해 대규모 과학 시뮬레이션의 자원량을 8~12배 이상 절감했음에도 불구하고, 비-보른-오펜하이머 동역학($Q=6,033$) 및 저지능력 시뮬레이션($Q=4,338$)의 필요 자원량은 제1세대 초기 오류 수정 양자 컴퓨터(Teraquop 수준: $Q \approx 1,000, T \le 10^9$)의 가용 범위를 여전히 크게 초과하고 있다 (3절, 부록 D.2).</li>
+</ul>
+</li>
+<li>
+<p><strong>소스상 확인 불가 및 미계산 사항 (Uncertainties &amp; Uncomputed Details):</strong></p>
+<ul>
+<li><strong>QSP 회전 각도의 구체적 단어(Word) 미기록:</strong> 비-보른-오펜하이머 동역학에서 $3,326,847$차 다항식에 대한 양자 신호 처리(QSP) 회전 각도 및 이의 Clifford+T 단어 근사는 다항식 시간 내 계산 가능함이 수학적으로 증명(Existence proof)되었으나, 구체적인 단어 데이터는 소스에 기록되지 않았으며 실제로 초고차원 수치 계산이 실행되지는 않았다 (부록 H.4).</li>
+<li><strong>물리적 하드웨어 레이아웃 미반영:</strong> 현재 Lean 명세의 시공간 자원량($Q \cdot T$)은 논리적 수준의 추상화 지표이며, 물리적 표면 코드(Surface Code) 배치, 큐비트 라우팅(Routing), 마법 상태 정제(Magic State Distillation) 공장의 물리적 풋프린트 등 하드웨어 물리 레이아웃 제약 조건은 명세에 직접 포함되지 않았다 (부록 D.1, 3절).</li>
+</ul>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>37개 페이지</summary><ul><li><a href="../../concepts/formal-verification/">Formal Verification</a></li>
+<li><a href="../../concepts/gemini-4-carbon/">Gemini 4 Carbon</a></li>
+<li><a href="../../concepts/lean/">Lean</a></li>
+<li><a href="../../concepts/multi-agent/">Multi-agent</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/andrew-w-senior/">Andrew W. Senior</a></li>
+<li><a href="../../entities/people/aws-albarghouthi/">Aws Albarghouthi</a></li>
+<li><a href="../../entities/people/ben-jaderberg/">Ben Jaderberg</a></li>
+<li><a href="../../entities/people/eric-wieser/">에릭 위저</a></li>
+<li><a href="../../entities/people/francisco-j-h-heras/">Francisco J.H. Heras</a></li>
+<li><a href="../../entities/people/george-tsoukalas/">조지 츠우칼라스</a></li>
+<li><a href="../../entities/people/guang-hao-low/">Guang Hao Low</a></li>
+<li><a href="../../entities/people/harun-khan/">Harun Khan</a></li>
+<li><a href="../../entities/people/hussain-masoom/">Hussain Masoom</a></li>
+<li><a href="../../entities/people/james-d-watson/">James D. Watson</a></li>
+<li><a href="../../entities/people/johannes-bausch/">Johannes Bausch</a></li>
+<li><a href="../../entities/people/katerina-hristova/">카테리나 흐리스토바</a></li>
+<li><a href="../../entities/people/lei-m-zhang/">Lei M. Zhang</a></li>
+<li><a href="../../entities/people/leopoldo-sarra/">Leopoldo Sarra</a></li>
+<li><a href="../../entities/people/michael-broughton/">Michael Broughton</a></li>
+<li><a href="../../entities/people/nenad-tomasev-19cf580498/">네나드 토마셰프</a></li>
+<li><a href="../../entities/people/nicholas-c-rubin/">Nicholas C. Rubin</a></li>
+<li><a href="../../entities/people/pushmeet-kohli/">푸시밋 코흘리</a></li>
+<li><a href="../../entities/people/ryan-babbush/">Ryan Babbush</a></li>
+<li><a href="../../entities/people/sebastien-racaniere/">Sébastien Racanière</a></li>
+<li><a href="../../entities/people/sergey-shirobokov/">Sergey Shirobokov</a></li>
+<li><a href="../../entities/people/sergio-boixo/">Sergio Boixo</a></li>
+<li><a href="../../entities/people/stavan-jain/">Stavan Jain</a></li>
+<li><a href="../../entities/people/swarat-chaudhuri/">스와랏 차우두리</a></li>
+<li><a href="../../entities/people/tanuj-khattar/">Tanuj Khattar</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></details></section>
+</main>
+</body>
+</html>

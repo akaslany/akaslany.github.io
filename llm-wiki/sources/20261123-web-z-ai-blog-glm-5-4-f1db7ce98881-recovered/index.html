@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GLM-5.4: Toward Generalized Coding with Our First Loop Transformer</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>GLM-5.4: Toward Generalized Coding with Our First Loop Transformer</h1>
+<p class="page-meta">문서 · 2026-11-23</p>
+<h2 id="요약">요약</h2>
+<p>Z.ai는 레이어 반복으로 연산 깊이를 늘린 GLM-5.4를 발표하고 추론 실험과 범용 코딩 사례를 공개했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/document/">문서</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=wCQy-z6IQ9U">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/z-ai/">Z.ai</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="z-ai-glm-5-4-기술-분석-보고서-loop-transformer-아키텍처와-generalized-coding의-진화">Z.ai GLM-5.4 기술 분석 보고서: Loop Transformer 아키텍처와 Generalized Coding의 진화</h3>
+<h5 id="1-발표-개요-및-핵심-요약-overview-core-key-takeaways">1. 발표 개요 및 핵심 요약 (Overview &amp; Core Key Takeaways)</h5>
+<p>Z.ai Research는 2026년 11월 23일 공식 블로그(<code>https://z.ai/blog/glm-5.4</code>)를 통해 Loop Transformer 아키텍처 기반의 첫 번째 플래그십 모델인 <strong>GLM-5.4</strong>를 발표했습니다. Z.ai는 지난 3개월 동안 루프 깊이(loop depth)와 모델 규모(model size)를 병행하여 공격적으로 확장해 왔으며, 이러한 연구 결실을 바탕으로 차세대 인공지능 시스템의 아키텍처적 이정표를 제시했습니다.</p>
+<ul>
+<li><strong>공식 발표 및 출처:</strong> 2026년 11월 23일 Z.ai Research 공식 기술 리포트 (<code>https://z.ai/blog/glm-5.4</code>).</li>
+<li><strong>Loop Transformer 아키텍처 최초 적용:</strong> GLM-5.4는 공유된 레이어 블록을 여러 반복(iteration)에 걸쳐 실행함으로써 파라미터 수를 물리적으로 늘리지 않고 연산 깊이(computational depth)를 심화시켰습니다. 이를 통해 2T~3T (2조~3조) 파라미터 규모의 모델에 비견되는 지능 수준을 달성했습니다.</li>
+<li><strong>Generalized Coding 패러다임 전환:</strong> 단순한 소프트웨어 개발 도구를 넘어, 코드를 광범위한 영역의 문제 해결과 신규 역량 확장의 핵심 기반(foundation)으로 삼는 Generalized Coding 시대를 본격화했습니다.</li>
+<li><strong>보고된 기술적 한계점:</strong> 모델이 장기간 성찰하는 &quot;마라톤 사고(marathon thinking)&quot; 루프에 과도하게 진입하는 경향이 관찰되었습니다. 그러나 이러한 extended reflection 및 심층 자기 수정 프로세스는 파라미터 한계를 초과하는 출력 정확도 향상을 일관되게 이끌어내는 것으로 확인되었습니다.</li>
+</ul>
+<hr />
+<h5 id="2-loop-transformer-아키텍처-및-750b-모델-설계-loop-transformer-architecture-750b-implementation">2. Loop Transformer 아키텍처 및 750B 모델 설계 (Loop Transformer Architecture &amp; 750B Implementation)</h5>
+<h6 id="배경-및-시스템-동기-background-system-motivation">배경 및 시스템 동기 (Background &amp; System Motivation)</h6>
+<p>표준 Transformer 아키텍처는 순방향 전개(forward pass) 과정에서 각 레이어를 단 한 번만 실행합니다. 반면 Loop Transformer는 가중치를 공유하는 레이어 그룹을 여러 회 반복 실행하여 이전 패스의 숨겨진 상태(hidden states)를 지속적으로 정제(refine)합니다.</p>
+<p>Z.ai가 파라미터 확장 대신 연산 깊이 확장을 선택한 근본적인 시스템 동기는 아키텍처적 트레이드오프 분석에 있습니다. 메모리 집약적(memory-intensive) 작업은 파라미터 스케일링을 통해 이점을 얻지만, 대규모 소프트웨어 엔지니어링, 사이버 보안, 3D 모델링, 물리적 제어(physical control)와 같은 추론 집약적(reasoning-intensive) 작업은 실질적 연산(effective compute)의 확장을 필요로 합니다. 이러한 극단적 장쇄 추론(ultra-long-chain reasoning) 과제는 다단계 인과 관계를 추적하면서 전역적 논리 일관성을 유지해야 하므로, 단지 파라미터를 쌓고 데이터를 암기하는 방식만으로는 해결할 수 없습니다.</p>
+<p>가중치 공유 깊이 아키텍처는 2018년 Universal Transformer에서 처음 제안되었고 최근 순환 깊이(recurrent depth) 연구에서도 소규모 모델에서의 효율성이 입증되었습니다. 그러나 무작위 초기화 상태에서 처음부터 사전 학습(pre-training from scratch)을 진행하는 가중치 공유 모델은 동일한 사전 학습 컴퓨팅 예산 하에서 미공유 모델보다 성능이 떨어지는 한계가 있었습니다. Z.ai는 이미 고성능으로 사전 학습된 베이스 모델을 지속 학습(continued training) 방식으로 Loop Transformer로 전환하는 전략을 채택함으로써 적은 컴퓨팅 오버헤드로 지능의 상한선(intelligence ceiling)을 대폭 끌어올렸습니다.</p>
+<h6 id="750b-모델-구체적-설정-750b-specific-setup">750B 모델 구체적 설정 (750B Specific Setup)</h6>
+<p>GLM-5.4는 GLM-5 베이스 모델의 28개 레이어를 2회 반복(2 iterations) 실행하도록 설계되었습니다. 750B 스케일에서 성능 향상과 배포 비용의 균형을 유지하기 위해 다음 3가지 핵심 구조적 개작을 적용했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">기법 (Mechanism)</th>
+<th style="text-align:left">작동 원리 (Working Principle)</th>
+<th style="text-align:left">효과 및 이점 (Key Benefit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Gated Progressive Updates</strong></td>
+<td style="text-align:left">각 반복 패스마다 토큰별 독립적인 게이트(per-token gates)를 두어 잔차 스트림(residual stream)에 후보 업데이트를 비례적으로 반영합니다. 1차 패스는 소형 게이트 값을 적용하여 활성화 노름(activation norms)의 스케일을 안정적으로 유지하고 전역 문맥을 구축하며, 2차 패스는 게이트를 크게 열어 출력 정제를 위한 전체 업데이트를 수행합니다. 어려운 토큰(harder tokens)일수록 1차 패스에서 더 공격적으로 게이트를 작성합니다.</td>
+<td style="text-align:left">중간 레이어를 다중 패스 루프로 전환할 때 발생하는 활성화 노름의 폭발 현상을 방지합니다. 또한 복잡한 예측일수록 1차 패스의 적극적인 작성을 통해 2차 패스의 반복 정제 이점을 극대화합니다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hybrid KV Cache (Global Sharing + Independent Sliding Window)</strong></td>
+<td style="text-align:left">1차 패스에서 선택된 희소(sparse) KV를 2차 루프가 재사용함과 동시에, 2차 패스에서 새로 생성된 KV는 독립적인 슬라이딩 윈도우(sliding window) 내에 유지합니다. 동일 위치에서 두 스트림이 오버랩되어 1차 패스의 문맥 표현과 2차 패스의 업데이트된 국소 표현을 동시에 참조합니다.</td>
+<td style="text-align:left">메모리 사용량의 폭증을 방지합니다. 루프 추가 시 전체 문맥 캐시가 아닌 단 하나의 슬라이딩 윈도우 분량 KV Cache 비용만 발생하므로 1M 문맥 길이 환경에서 GLM-5.3 대비 배포 비용 증가를 엄격히 제어합니다.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Sparse Attention Index Reuse</strong></td>
+<td style="text-align:left">GLM-5.4 베이스 모델의 희소 주의(sparse attention) 메커니즘을 활용하여, 1차 루프의 인덱서가 생성한 주의 인덱스(attention indices)를 2차 루프에서 그대로 재사용합니다.</td>
+<td style="text-align:left">매 패스마다 인덱스를 재계산하는 방식과 거의 동일한 추론 성능을 유지하면서 인덱싱 오버헤드를 0으로 완벽히 제거합니다.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="3-30b-대조-실험-및-추론-속도-검증-30b-iso-parameter-ablations-inference-efficiency">3. 30B 대조 실험 및 추론 속도 검증 (30B Iso-Parameter Ablations &amp; Inference Efficiency)</h5>
+<h6 id="스케일링-정당성-및-30b-실험-설정-scaling-correctness-30b-experiment-setup">스케일링 정당성 및 30B 실험 설정 (Scaling Correctness &amp; 30B Experiment Setup)</h6>
+<p>Loop 아키텍처가 대규모 모델에서도 안정적으로 작동하는지 확인하는 스케일링 정당성(Scaling Correctness) 검증을 위해 Z.ai는 플래그십 750B 모델에 아키텍처를 적용하기 앞서 <strong>1B → 4B → 30B → 750B</strong> 베이스 모델 순으로 단계적 실증을 진행했습니다.</p>
+<p>750B 베이스와 동일한 아키텍처 구조를 갖춘 30B 모델 환경에서 통제된 동일 파라미터(iso-parameter) 비교 실험을 수행했습니다. 본 실험은 파라미터 수를 정확히 동일하게 유지하고 전체 학습 컴퓨팅을 단 ~10%만 추가한 상태에서, 200K long-context SFT 및 thinking mode를 활성화한 후 정밀 평가를 실시했습니다.</p>
+<h6 id="핵심-실험-결과-key-experimental-findings">핵심 실험 결과 (Key Experimental Findings)</h6>
+<ul>
+<li><strong>추론 집약적 영역에서의 성과 극대화:</strong> 수학, 과학적 추론, 장문 문맥 처리 등 Generalized Coding의 핵심인 장쇄 추론(long-chain reasoning) 작업에서 가장 가파른 성능 상승이 확인되었습니다.</li>
+<li><strong>생성 토큰 효율성 향상:</strong> GPQA-Diamond 및 MMLU-Pro 등 주요 평가 벤치마크에서 평균 출력 토큰 길이가 <strong>10~14% 감소</strong>했습니다. 이는 추론 과정의 상당 부분이 명시적인 출력 토큰(explicit output tokens)이 아닌 Loop의 암묵적 깊이(implicit depth) 내부로 흡수되어 연산 효율성이 극대화되었음을 입증합니다.</li>
+</ul>
+<h6 id="추론-효율성-지표-inference-performance-metrics">추론 효율성 지표 (Inference Performance Metrics)</h6>
+<p>GLM-5.4는 다중 패스 루프 구조임에도 불구하고 오프피크(off-peak) 시간대에 최대 <strong>200 tokens/s</strong>, 피크(peak) 로드 시에도 <strong>70–80 tokens/s</strong>의 고성능 처리량을 보장합니다.</p>
+<p>이러한 고속 처리량은 Hybrid KV Cache 및 Sparse Attention Index Reuse 설계뿐만 아니라, 모델 구조와 추론 인프라 간의 밀접한 코디자인(co-design)을 통해 달성되었습니다. 시스템 수준에서 핵심 커널 융합(kernel fusion)을 구현하여 루프 반복 실행 시 증폭되기 쉬운 파편화된 메모리 읽기/쓰기 오버헤드를 근본적으로 제거했습니다.</p>
+<hr />
+<h5 id="4-generalized-coding-실체-및-확장-분야-generalized-coding-applications">4. Generalized Coding 실체 및 확장 분야 (Generalized Coding Applications)</h5>
+<p>2025년 초 Agentic Engineering, Long-Horizon Tasks, Cybersecurity 영역을 성공적으로 개척한 이래, Z.ai는 코딩 역량과 비전(vision) 모델 역량의 결합을 통해 전통적인 소프트웨어 개발의 경계를 넘어서는 <strong>Generalized Coding</strong> 패러다임을 확립했습니다.</p>
+<p>GLM-5.4가 직접 입증한 4가지 확장 응용 분야는 다음과 같습니다.</p>
+<ul>
+<li><strong>Video (비디오 생성):</strong> 코드를 통해 GLM-5.4 자체 내레이션이 수록된 뮤직비디오 *&quot;Hello World,&quot;*의 제작 및 편집을 직접 수행했습니다.</li>
+<li><strong>Engineering (엔지니어링):</strong> FreeCAD 환경에서 엔지니어링 등급의 CAD 모델링 코드를 작성하여 정교한 6축 로봇 암(6-axis robotic arm)을 설계 및 구현했습니다.</li>
+<li><strong>Games (게임 제작):</strong> 캐릭터 이동, 물리 엔진, 맵 구성, 전투 시스템, 아트 자산(art assets) 전체를 포함하는 완전한 형태의 게임을 엔드투엔드 코드로 생성했습니다.</li>
+<li><strong>3D Modeling (3D 모델링):</strong> 순수 수학적 기하학(pure mathematical geometry)과 커스텀 GLSL shader 코드를 사용하여 인터랙티브 3D 매크로 탐조(bird-watching) 환경을 정밀하게 구현했습니다.</li>
+</ul>
+<hr />
+<h5 id="5-서비스-제공-현황-및-향후-계획-service-status-access-channels-future-roadmap">5. 서비스 제공 현황 및 향후 계획 (Service Status, Access Channels &amp; Future Roadmap)</h5>
+<h6 id="이용-채널-현황-access-status">이용 채널 현황 (Access Status)</h6>
+<ul>
+<li><strong>즉시 이용 가능 서비스 (Current Access):</strong>
+<ul>
+<li>Z.ai Chat (<code>https://chat.z.ai</code>)</li>
+<li>GLM Coding Plan (<code>https://z.ai/subscribe</code>)</li>
+<li>ZCode (<code>https://zcode.z.ai/</code> 및 <code>https://zcode.z.ai/en</code>)</li>
+</ul>
+</li>
+<li><strong>출시 예정 API (Upcoming API):</strong>
+<ul>
+<li>Model API (<code>https://z.ai/model-api</code>) - 출시 예정(Coming Soon) 상태.</li>
+</ul>
+</li>
+<li><strong>가중치 공개 계획 (Open Weights Plan):</strong>
+<ul>
+<li>필수적인 안전성 강화(safety hardening) 절차를 마치는 대로 책임감 있는 방식으로 모델 가중치를 오픈소스로 공개할 예정입니다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="향후-연구-로드맵-future-research-roadmap">향후 연구 로드맵 (Future Research Roadmap)</h6>
+<p>Z.ai는 GLM-5.4를 시작으로 Loop 아키텍처 연구를 다각도로 확장할 계획입니다. 주요 연구 방향은 다음과 같습니다.</p>
+<ol>
+<li><strong>동적 적응형 연산 (Adaptive Compute):</strong> 입력 토큰의 난이도에 따라 루프 반복 횟수를 동적으로 변형 적용하는 메커니즘 개발.</li>
+<li><strong>스케일링 법칙 탐구 (Scaling Laws):</strong> 루프 횟수(loop count)와 모델 크기(model size)를 동시에 확장할 때 발생하는 성능 및 효율성 스케일링 법칙 정립.</li>
+<li><strong>병행 스케일링 전략:</strong> 깊이 스케일링과 파라미터 스케일링 중 하나를 선택하는 대신 두 축을 동시에 확장하는 전략을 지속 추구하며, GLM-5.4에서 얻은 연구 성과는 한층 더 거대해진 차세대 모델에 전면 적용되어 곧 공개될 예정입니다.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/z-ai/">Z.ai</a></li>
+<li><a href="../../kinds/document/">문서</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

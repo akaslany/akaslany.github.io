@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>공유 문서 n9rGYKcWaG1k</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>공유 문서 n9rGYKcWaG1k</h1>
+<p class="page-meta">AI 대화 공유 · 2026-11-23</p>
+<h2 id="요약">요약</h2>
+<p>보고서는 Claude 보조 Lean 4 리만 가설 증명의 검증 결과와 압축 병목, 인간 해독 전략을 다룬다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/ai-share/">AI 대화 공유</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://share.gemini.google/n9rGYKcWaG1k">출처</a> · <a href="https://www.youtube.com/watch?v=x3i6kLYG7XI">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/large-language-model/">Large Language Model</a></li>
+<li><a href="../../concepts/riemann-hypothesis/">Riemann Hypothesis</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/andrew-sutherland/">앤드루 서더랜드</a></li>
+<li><a href="../../entities/people/bartosz-naskrecki/">바르토시 나스크렝츠키</a></li>
+<li><a href="../../entities/people/elliot-arledge/">엘리엇 아리지</a></li>
+<li><a href="../../entities/people/levent-alpoge-4de21f7195/">레벤트 알푀게</a></li>
+<li><a href="../../entities/people/michael-rubinstein/">마이클 루빈스타인</a></li>
+<li><a href="../../entities/people/robin-zhang/">로빈 장</a></li>
+<li><a href="../../entities/people/simon-dedeo/">사이먼 디데오</a></li>
+<li><a href="../../entities/people/terence-tao/">테렌스 타오</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="claude-및-llm-보조-lean-4-리만-가설-증명-아키텍처-및-해독-압축-현황-해설-보고서">Claude 및 LLM 보조 Lean 4 리만 가설 증명 아키텍처 및 해독·압축 현황 해설 보고서</h3>
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>2026년 11월 20일, Anthropic 소속 수학자 레벤트 알푀게(Levent Alpöge)는 인공지능 모델 Claude와 협업하여 작성한 17만 5,187개 파일(약 1,700만 줄, 비공백 기준 약 1,550만 줄, 약 9억 8,040만 자) 규모의 Lean 4 기반 리만 가설(GRH 포함) 기계 검증 코드베이스를 공개하였다. 이 증명은 공개 직후인 11월 21일, Lean 및 Mathlib 공식 커뮤니티(leanprover-community)의 다중 독립 커널(Comparator, con-leche, con-ron 등) 검증을 거쳐 표준 <code>RiemannHypothesis</code> 명제와 정확히 일치하며 논리적 결함이 없는 참(True) 상태임이 공식 인증되었다.</p>
+<p>그러나 해당 증명은 기계적 검증이 완료되었을 뿐, 인간 언어로 환산할 경우 25만 페이지를 상회하는 미증유의 AI 생성 기계 코드이다. 거대한 뼈대 속에 수많은 군더더기와 인공지능 특유의 우회 추론 단계가 얽혀 있어, 수학자들이 내부 논리를 직접 읽고 정수론적 아이디어를 소화하기 위해서는 체계적인 해독 및 구조적 축약 작업이 필수적으로 요구되는 상황이다.</p>
+<p>기계 검증의 완결성과 인간의 소화 불능 사이의 극심한 간극을 메우기 위해, 공개 대시보드(<code>riemann.verifytask.cn</code>, Bohrium Playground 연동)를 중심으로 대규모 언어 모델(LLM)과 에이전트 하네스를 동원하여 증명 코드를 자동 최적화·압축하는 공개 챌린지가 진행 중이다. 동시에 워털루대, IHES, AMU 등 주요 학계 연구진은 컴퓨터 과학의 역공학(Reverse Engineering) 기법과 멀티-LLM 교차 파이프라인을 가동하여 1,700만 줄의 블랙박스 코드를 자연어 수학 논조로 해독하는 연구를 전개하고 있다.</p>
+<hr />
+<h5 id="2-주요-논점-key-arguments-technical-analysis">2. 주요 논점 (Key Arguments &amp; Technical Analysis)</h5>
+<h6 id="2-1-lean-4-증명-압축의-기술적-원리와-무결성-보장-메커니즘">2.1. Lean 4 증명 압축의 기술적 원리와 무결성 보장 메커니즘</h6>
+<ul>
+<li>
+<p><strong>[사실(Fact)]</strong></p>
+<ul>
+<li>Lean 4 커널은 모든 추론 단계를 기계적으로 엄격히 검사하므로, LLM이 리팩토링한 코드가 컴파일러를 통과하면 압축본의 논리적 무결성은 수학적으로 보장된다.</li>
+<li>공개 대시보드(<code>riemann.verifytask.cn</code>)는 공백·주석·import 구문을 제외한 토큰 수만 채점하는 anti-golf 방식을 채택하고 있으며, 모든 제출물은 Lean 4.34.1 및 4.33.1 컴파일러 환경과 Comparator를 통해 <code>sorry</code> 0개 및 표준 공리만 사용했는지 검증받는다.</li>
+<li>소스에 명시된 주요 압축 성과 데이터:
+<ul>
+<li>Core 1(영점 없는 영역): 코시 적분·오일러-매클로린 추정 코드를 Mathlib의 <code>DSlope</code>와 <code>BorelCaratheodory</code>로 대체하여 21개 파일에서 1개 파일로(-94.7%, 21.6k 토큰 → 1,153 토큰) 압축됨.</li>
+<li>Core 3(절단 명시 공식): Mathlib의 <code>GammaR_eq_zero_iff</code> 등을 활용해 89개 파일에서 2개 파일로(-86.5%) 압축됨.</li>
+<li>Core 4(Siegel-Walfisz): 114개 파일을 1개 파일로(-89.7%) 통합함.</li>
+<li>Core 5(히로나카 특이점 해소): 500개 파일을 10개 모듈로 재구성하고 죽은 보조정리를 삭제하여(-39.5%) 압축함.</li>
+<li>Core 7(기약 복소 다양체 연결성): 584개 파일을 1개 파일로(-98.7%) 대폭 축소함.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[소스의 주장(Source Claim)]</strong></p>
+<ul>
+<li>AI 또는 자동화 파이프라인이 초기에 작성한 Lean 증명은 불필요한 중간 단계, 중복 보조정리, 장황한 수동 증명 등 군더더기가 많다.</li>
+<li>LLM에 기존 코드와 Lean 컴파일러가 출력하는 타입 오류 메시지를 반복적으로 피드백(Feedback Loop)함으로써, 장황한 수동 증명 구문을 <code>tactic?</code> 호출 한두 줄로 통합하거나 Mathlib의 기존 정리를 재사용하도록 리팩토링하여 단시간 내 용량을 대폭 줄일 수 있다.</li>
+<li>리팩토링 과정에서 가동되는 핵심 3대 압축 기법:
+<ol>
+<li><strong>Mathlib 기존 정리 재활용 및 수학적 우회:</strong> 원본 AI 증명이 수십~수백 개 파일에 걸쳐 직접 바닥부터 구현한 대수·해석적 보조정리를 Mathlib 표준 도구(예: <code>DSlope</code>, <code>BorelCaratheodory</code>, <code>GammaR_eq_zero_iff</code>)로 치환하여 모듈 규모를 축소함.</li>
+<li><strong>Lean 4 자동화 전술(Tactic) 집중 투입:</strong> 장황하게 풀어쓴 대수 및 부등식 전개 단계를 <code>grind</code>, <code>grw</code>, <code>simp_all</code>, <code>linarith</code> 등 고성능 자동화 tactic 단일 호출로 통합함.</li>
+<li><strong>모듈 통합 및 죽은 보조정리(Dead Lemma) 가지치기:</strong> 증명 탐색 과정에서 파생된 불필요한 중간 인터페이스와 쓰이지 않는 보조정리를 탐지·정리하여 모듈을 통합함.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[작성자/해설자 해석(Interpretation)]</strong></p>
+<ul>
+<li>형식 검증 관점에서 Lean 4 코드의 기계적 컴파일 통과 및 용량 축소와 리만 가설 증명의 논리적 유효성을 판단하는 것은 철저히 구별되어야 한다. 따라서 압축 성패 판단 시 아래 3가지 핵심 함정을 반드시 검증해야 한다.
+<ol>
+<li><code>sorry</code> 키워드 잔재 여부: 증명을 생략하고 임시 처리하는 구문이 포함되어 있으면 미완성 증명이다.</li>
+<li>임의 공리(<code>axiom</code>) 추가 여부: 표준 공리 외 검증되지 않은 가정을 <code>axiom</code>으로 추가 선언하면 불완전하거나 비논리적인 명제도 짧게 통과할 수 있다.</li>
+<li>명제 정의의 정확성: 코드 최종단에 증명된 대상이 실제 수학계의 리만 가설(제타 함수의 정의 및 조건)과 정확히 동치인지 인간 전문가의 검토가 수반되어야 한다.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-전체-압축-진척도--0-5-와-phase-3-core-14-25-병목-현상">2.2. 전체 압축 진척도(-0.5%)와 Phase 3(Core 14~25) 병목 현상</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>
+<ul>
+<li>독립적인 소규모 고전 정리 영역인 Core 1~13(Phase 1·2)에서는 -39.5%에서 -98.7%에 달하는 높은 압축률이 기록되었다.</li>
+<li>반면 증명 본체이자 핵심 지배(Dominator) 슬라이스인 Phase 3(Core 14~25)의 12개 슬라이스는 현재 모두 -0.0%의 진척도에 머물러 있어 검증을 통과한 압축본이 존재하지 않는다.</li>
+<li>전체 175,187개 파일 중 Core 1~25 합산 규모는 158,020개 파일(9억 383만 자, 전체의 92.19%)이며, 현재 전체 통합 압축 성과는 -0.5%(-287만 토큰 / -1,089만 자 절감) 수준에 그쳐 있다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="증명-구간별-압축-대조-현황표">증명 구간별 압축 대조 현황표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구간/대상 범위</th>
+<th style="text-align:left">규모 및 비중</th>
+<th style="text-align:left">현재 압축 진척도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Core 1~13 (Phase 1·2)</strong>&lt;br&gt;고전 해석적 수론·대수기하·표현론 등 독립적 중·소규모 정리</td>
+<td style="text-align:left">수만~수백만 자 단위&lt;br&gt;(전체 대비 극소 비중)</td>
+<td style="text-align:left">-39.5% ~ -98.7% 돌파</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 14~25 (Phase 3)</strong>&lt;br&gt;Galois Theta Lift, Definite-Side Hyps, Arakelov 기하 등 본체 핵심</td>
+<td style="text-align:left">단일 슬라이스당 4,945만~3억 8,740만 자&lt;br&gt;(Core 16 단일 항목이 전체의 39.51%)</td>
+<td style="text-align:left">전부 -0.0%&lt;br&gt;(첫 검증 통과본 없음)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 1~25 합산</strong>&lt;br&gt;전체 주요 25개 핵심 모듈 통합</td>
+<td style="text-align:left">158,020개 파일 (전체의 90.2%)&lt;br&gt;9억 383만 자 (92.19%)</td>
+<td style="text-align:left">-0.5%&lt;br&gt;(-287만 토큰 / -1,089만 자 절감)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Full RH 본체 (Grand Challenge)</strong>&lt;br&gt;알푀게 원본 저장소 전체 통합 빌드(#93193)</td>
+<td style="text-align:left">175,187개 파일&lt;br&gt;9억 8,040만 자 (100%)</td>
+<td style="text-align:left">0.0%&lt;br&gt;(Core 1~13 압축본 미병합 상태)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>[소스의 주장(Source Claim)]</strong></p>
+<ul>
+<li>Core 1~13은 이미 교과서적으로 잘 알려진 정리들이므로 사전 학습된 수학 지식과 Mathlib API를 결합해 처음부터 새로 작성(Clean-Room Rewrite)하는 것이 매우 유리하다.</li>
+<li>Phase 3(Core 14~25)는 아벨 다양체 이론(Abelian Variety Theory) 한 영역만 전체의 50.46%(99,187개 파일, 4억 9,470만 자)를 차지할 정도로 거대하고 복잡하게 얽혀 있어 압축 난이도가 극도로 높다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[작성자/해설자 해석(Interpretation)]</strong></p>
+<ul>
+<li>LLM 에이전트들이 Phase 3(Core 14~25)에서 성과를 내지 못하고 -0.0%에 머무는 원인은 단순한 단순 난이도 상승이 아니라 아키텍처 차원의 5가지 물리적 요인 때문이다.
+<ol>
+<li><strong>기억 기반 재작성 불가능성:</strong> 사전 학습 데이터에 존재하지 않는, 알푀게와 Claude가 41일간의 시행착오 끝에 새로 창안한 인류 최초의 증명 경로이므로 사전 학습 지식에서 더 짧은 표준 증명을 꺼내 쓸 수 없다.</li>
+<li><strong>물리적 컨텍스트 초과:</strong> 가장 작은 Core 14조차 1,153만 자(1,945개 파일), Core 16은 3억 8,740만 자(62,858개 파일)에 이르러 단일 슬라이스가 수천만~1억 토큰을 훌쩍 넘기므로 모델의 단일 추론 범위를 완전히 이탈한다.</li>
+<li><strong>동결된 상위 파일(Frozen Upstream)의 족쇄:</strong> 하위 슬라이스들이 수만 개의 상위 인터페이스 규격(Core 21: 51,214개, Core 20: 36,241개, Core 19: 27,520개, Core 17: 24,566개 등)에 강하게 결합되어 있어, 입출력 정의를 변경하지 않고 내부 구조를 재설계하기 어렵다.</li>
+<li><strong>Mathlib 기반 인프라 공백:</strong> 지겔 모듈라이 토로이달 콤팩트화(Core 22), 산술 힐베르트-사무엘 정리(Core 23), 푸앵카레-를롱 높이 공식(Core 24), 전역 지겔-베유 공식(Core 25) 등 거대 현대 기하학 이론이 Mathlib에 부재하여 수만 개 파일의 이론 체계를 자체 유지해야 한다.</li>
+<li><strong>컴파일 피드백 지연(Latency):</strong> 파일 수정 시 수천 개 하류 파일의 타입체킹이 유발되고 본체 빌드에 64코어 서버가 필요한 초대형 프로젝트이므로, 에이전트의 피드백 탐색 루프 속도가 수백 분의 일로 떨어져 자동 압축이 작동하기 어렵다.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-3-phase-3-core-14-25-의-4단계-수학적-계층-구조-및-세타-리프트-메커니즘">2.3. Phase 3(Core 14~25)의 4단계 수학적 계층 구조 및 세타 리프트 메커니즘</h6>
+<ul>
+<li><strong>[사실(Fact)]</strong>
+<ul>
+<li>알푀게 증명의 출발점은 모든 디리클레 L-함수 $L(\chi, s)$가 $\text{Re}(s) &gt; 1/2$ 영역에서 영점을 갖지 않음을 증명하기 위해 폰 망골트 가중합 $G(x)$가 임의의 $\varepsilon &gt; 0$에 대해 $G(x) \le x^{1/2+\varepsilon}$ 상계를 도출하는 구조이다.</li>
+<li>정수 $\mathbb{Z}$ 상에서는 다항식 미분을 통한 영점 중복도(multiplicity) 통제(유한체 위 스테파노프 방식)가 불가능하다. 이에 알푀게 증명은 정부호 유니터리 군(definite unitary groups) 사이를 잇는 길이 약 $\sqrt{X}$의 반복적 세타 리프트(theta lift) 사슬을 구성하여 미분과 동일한 중복도 효과를 보형(automorphic) 세계에서 구현한다.</li>
+<li>Phase 3의 12개 슬라이스는 최종적으로 Core 14에서 일반화 리만 가설(<code>EveryCharacter</code>)을 도출하는 4단계 계층 구조(Dominator 트리)를 형성한다.
+<ol>
+<li><strong>거대 기초 이론 기둥 (Macro-Pillars: Core 22~25)</strong>
+<ul>
+<li><code>Core 22</code>: Faltings-Chai 토로이달 콤팩트화 이론을 통한 아벨 다양체 경계 기하 제어.</li>
+<li><code>Core 23</code>: 특이점 해소 및 주이데알화를 결합해 모리와키(Moriwaki) 크기·공체적 추정을 제공하는 산술 힐베르트-사무엘 정리.</li>
+<li><code>Core 24</code>: 산술 교차 미적분 및 순환 높이 탑을 구축하는 푸앵카레-를롱 기반 높이 공식.</li>
+<li><code>Core 25</code>: 국소 에르미트 밀도 정리를 전역 보형 커널 수준으로 확장하는 전역 표준 지겔-베유 공식.</li>
+</ul>
+</li>
+<li><strong>아라켈로프 공체적 추정 허브 (Dominator 3: Core 15)</strong>
+<ul>
+<li><code>Core 15</code>: 히로나카 특이점 해소, 주이데알화, 토로이달 콤팩트화, 차우 형식(Chow-form) 높이 비교를 결합해 상계 <code>CovolumeBoundOfX</code>를 출력하는 핵심 병목.</li>
+</ul>
+</li>
+<li><strong>보형·갈루아 표현 및 기저변환 엔진 (Dominator 4, 2a, 2b: Core 16~18)</strong>
+<ul>
+<li><code>Core 16</code>: 단일 최대 규모 슬라이스로, 세타 리프트에서 갈루아 표현 패키지(<code>Row0b</code>)를 구성하여 창 다리(<code>vwin_of_row</code>)로 전달.</li>
+<li><code>Core 18</code>: 정부호 유니터리 군 상에서의 무조건적 동압 기저변환(<code>BaseChangeIsobaricN</code>) 확립.</li>
+<li><code>Core 17</code>: 랭크-$n$ 보형성을 최종 조립 허브가 소비할 수 있는 <code>VWin</code> 상계로 변환하는 엔진.</li>
+</ul>
+</li>
+<li><strong>세타 대응 가설 조립 및 최종 GRH 도출 (Dominator 1a~1c → 5: Core 19~21, Core 14)</strong>
+<ul>
+<li><code>Core 19 &amp; 20</code>: 실수 하우 쌍대성 기반 세타 평가 격자(<code>EvLgG</code>) 구축 및 제3 소수 세타 급수 푸리에 계수 정합(<code>ConstantFunctionFits</code>) 증명.</li>
+<li><code>Core 21</code>: 공체적 상계와 세타 격자, 푸리에 정합을 융합하여 정부호 측 세타 대응 가설 만족 대상의 존재성(<code>Nonempty (HypsAlt)</code>)을 증명하는 최대 지배 병목.</li>
+<li><code>Core 14</code>: 그린 높이 상계, 보형 창(<code>VWin</code>), <code>Nonempty (HypsAlt)</code>를 최종 결합해 모든 디리클레 지표 $\chi \pmod N$에 대해 $\text{Re}(s) &gt; 1/2 \Rightarrow L(\chi, s) \ne 0$ (<code>EveryCharacter</code>)을 완성하는 최종 결합 허브.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="core-14-25-상세-구조-데이터표">Core 14~25 상세 구조 데이터표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Core 구분</th>
+<th style="text-align:left">역할 및 명칭</th>
+<th style="text-align:left">편집 가능 파일 (비중)</th>
+<th style="text-align:left">동결 상위 파일 수</th>
+<th style="text-align:left">코드 규모 (자 수)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Core 14</strong></td>
+<td style="text-align:left">최종 조립 허브 (<code>EveryCharacter</code> 도출)</td>
+<td style="text-align:left">1,945개 (1.18%)</td>
+<td style="text-align:left">15,332개</td>
+<td style="text-align:left">1,153만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 15</strong></td>
+<td style="text-align:left">아라켈로프 공체적 상계 (<code>CovolumeBoundOfX</code>)</td>
+<td style="text-align:left">34,685개 (21.55%)</td>
+<td style="text-align:left">15,552개</td>
+<td style="text-align:left">2억 1,130만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 16</strong></td>
+<td style="text-align:left">세타 리프트 국소-전역 갈루아 표현 (<code>Row0b</code>)</td>
+<td style="text-align:left">62,858개 (39.51%)</td>
+<td style="text-align:left">3,311개</td>
+<td style="text-align:left">3억 8,740만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 17</strong></td>
+<td style="text-align:left">보형 창 상계 (<code>VWin</code>) 변환 엔진</td>
+<td style="text-align:left">30,502개 (17.27%)</td>
+<td style="text-align:left">24,566개</td>
+<td style="text-align:left">1억 6,930만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 18</strong></td>
+<td style="text-align:left">정부호 유니터리 동압 기저변환</td>
+<td style="text-align:left">34,429개 (25.62%)</td>
+<td style="text-align:left">1,978개</td>
+<td style="text-align:left">2억 5,120만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 19</strong></td>
+<td style="text-align:left">국소 타입 사전 &amp; 세타 평가 격자</td>
+<td style="text-align:left">8,526개 (5.04%)</td>
+<td style="text-align:left">27,520개</td>
+<td style="text-align:left">4,945만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 20</strong></td>
+<td style="text-align:left">제3 소수 세타 급수 푸리에 계수 정합</td>
+<td style="text-align:left">14,814개 (8.82%)</td>
+<td style="text-align:left">36,241개</td>
+<td style="text-align:left">8,647만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 21</strong></td>
+<td style="text-align:left">정부호 측 세타 대응 가설 존재성 (<code>HypsAlt</code>)</td>
+<td style="text-align:left">61,172개 (33.88%)</td>
+<td style="text-align:left">51,214개</td>
+<td style="text-align:left">3억 3,220만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 22</strong></td>
+<td style="text-align:left">지겔 모듈라이 토로이달 콤팩트화</td>
+<td style="text-align:left">20,231개 (13.38%)</td>
+<td style="text-align:left">43개</td>
+<td style="text-align:left">1억 3,120만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 23</strong></td>
+<td style="text-align:left">산술 힐베르트-사무엘 정리</td>
+<td style="text-align:left">20,010개 (16.00%)</td>
+<td style="text-align:left">327개</td>
+<td style="text-align:left">1억 5,690만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 24</strong></td>
+<td style="text-align:left">푸앵카레-를롱 아라켈로프 높이 공식</td>
+<td style="text-align:left">15,277개 (10.73%)</td>
+<td style="text-align:left">408개</td>
+<td style="text-align:left">1억 520만 자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Core 25</strong></td>
+<td style="text-align:left">전역 표준 지겔-베유 공식</td>
+<td style="text-align:left">12,399개 (9.93%)</td>
+<td style="text-align:left">884개</td>
+<td style="text-align:left">9,731만 자</td>
+</tr>
+</tbody>
+</table>
+<p>주: 슬라이스별 편집 영역이 상위·하위 의존성으로 중첩되어 있어 각 비중의 단순 합은 100%를 초과함.</p>
+<ul>
+<li>
+<p><strong>[소스의 주장(Source Claim)]</strong></p>
+<ul>
+<li>세타 리프트 사슬이 0이 아닌 유의미한 대상을 만들어내며 크기가 통제됨을 증명하기 위해 아벨 다양체 및 아라켈로프 기하, 보형표현 및 갈루아 표현, 지겔-베유 공식 및 푸리에 계수 정합이 상호 유기적으로 결합되어 작동한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[작성자/해설자 해석(Interpretation)]</strong></p>
+<ul>
+<li>Phase 3의 첫 압축 돌파구는 수만 개 동결 파일이 얽힌 Dominator 허브(Core 14~21)보다 동결 상위 파일이 43~884개로 적어 독립성이 높은 Macro-Pillars(Core 22~25)에서 먼저 터져 나올 가능성이 높다. 수백만 줄 이하로의 본질적 대폭 압축은 LLM 단독 작업이 아닌, 인간 수학자가 불필요한 우회 트릭을 수학적으로 제거한 청사진을 제시하고 LLM이 이를 재형식화하는 하이브리드 협업 단계에서 달성될 것이다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-4-수학계의-4대-역공학-해독-전략-및-ai-인간-협업-도구-스택">2.4. 수학계의 4대 역공학(해독) 전략 및 AI-인간 협업 도구 스택</h6>
+<ul>
+<li>
+<p><strong>[사실(Fact)]</strong></p>
+<ul>
+<li>1,700만 줄에 달하는 미증유의 기계 코드를 해독하기 위해 주요 연구 그룹이 공개 사흘 만에 역공학 작업을 가동하였다.</li>
+<li>수학자들의 4대 역공학 해독 전략:
+<ol>
+<li><strong>Top-Down 의존성 추적과 지배자(Dominator) 그래프 분해:</strong> 최상위 정리(<code>theorem riemannHypothesis</code>)에서 시작해 역추적하며 수만 개 파일이 모이는 병목 허브(Dominator)를 추려내 지도로 작성.</li>
+<li><strong>특수화·단순화 (GRH → 리만 제타 함수):</strong> 일반화 리만 가설 명제에서 지표 $\chi$를 자명한 지표로 고정해 단순화하고, 렘니스케이트(lemniscate) 타원곡선 사례를 손으로 직접 계산해 수학적 직관을 복원.</li>
+<li><strong>알려진 거대 이론의 블랙박스 격리 (Published Census):</strong> 이미 출판된 기존 학계 정리들을 '참인 가설 목록(Census)'으로 격리하여 새롭게 창안된 핵심 논리 구조와 분리.</li>
+<li><strong>압축을 통한 탈난독화 (Compression as Decompilation):</strong> 압축 과정을 통해 AI 특유의 죽은 보조정리와 중복 보일러플레이트를 제거함으로써 핵심 수학 논리 체계만 노출.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[소스의 주장(Source Claim)]</strong></p>
+<ul>
+<li>학계는 인간이 코드를 직접 독해하는 방식 대신, 컴파일러 정적 분석과 프런티어 LLM 군단을 '역컴파일러(Decompiler)'로 투입하는 워크플로를 도입하였다.</li>
+</ul>
+</li>
+<li>
+<p><strong>[작성자/해설자 해석(Interpretation)]</strong></p>
+<ul>
+<li>학계가 가동 중인 AI-인간 협업 도구 스택은 기계적 검증 무결성과 자연어 수학 해독 사이의 간극을 메우기 위한 고도의 소프트웨어 아키텍처 역공학 파이프라인이다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="주요-해독-프로젝트-비교표">주요 해독 프로젝트 비교표</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">주도 연구자 / 프로젝트</th>
+<th style="text-align:left">산출물 및 규모</th>
+<th style="text-align:left">핵심 해독 방식 및 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>마이클 루빈스타인</strong>&lt;br&gt;(워털루대)</td>
+<td style="text-align:left"><code>zeta-paper.pdf</code>&lt;br&gt;(v1 164쪽 → 11/23 v2 갱신)</td>
+<td style="text-align:left">Claude Fable 5.2, Codex Astra 6.2, Gemini Carbon을 공저자로 병기. 멀티-LLM 파이프라인으로 전반부 고전 해석적 단계 완전 증명 및 렘니스케이트 사례 풀이 수행.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>로빈 장</strong>&lt;br&gt;(프랑스 IHES)</td>
+<td style="text-align:left"><code>GRH note.pdf</code>&lt;br&gt;(67쪽, 11/21 공개)</td>
+<td style="text-align:left">GPT 6 Pro를 활용한 코드 요약 후 인간 재편집. 과거 수학자들의 정리와 아이디어 계보(Lineage Audit)를 매핑하는 데 집중.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>바르토시 나스크렝츠키</strong>&lt;br&gt;(폴란드 AMU)</td>
+<td style="text-align:left"><code>riemann-rev</code>&lt;br&gt;(11쪽 요약 가이드 및 대시보드)</td>
+<td style="text-align:left">최종 정리에서 역추적하는 로드맵(Atlas) 구성 및 모듈별 검증 현황판 제공.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Bohrium / leanprover-community</strong></td>
+<td style="text-align:left">25개 Core Pillar 분해 및 실시간 대시보드</td>
+<td style="text-align:left">전체 저장소를 13개 독립 Core와 12개 Phase 3 Dominator/Macro-Pillar로 분해하여 LaTeX 유도 과정 추출.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>레벤트 알푀게</strong>&lt;br&gt;(원저자, Anthropic)</td>
+<td style="text-align:left">4쪽 개요 메모 (<code>remark.pdf</code>)</td>
+<td style="text-align:left">원저자가 논리 구조를 정제하여 정식 자연어 해설 논문 별도 집필 예고.</td>
+</tr>
+</tbody>
+</table>
+<h6 id="ai-인간-협업-도구-스택">AI-인간 협업 도구 스택</h6>
+<ul>
+<li><strong>Lean 정적 분석 및 커널 감사 도구 (선행 필터링):</strong> 앤드루 서더랜드(MIT), 마이클 루빈스타인, 엘리엇 아리지, 사이먼 디데오 등이 <code>lake build</code>, <code>#print axioms</code>, <code>Comparator</code>, <code>con-leche</code>, <code>con-ron</code>, <code>nanoda</code> 같은 독립 커널 체커로 커스텀 전술(elaboration 우회 여부)과 공리 누출이 없는지 정적 감사를 수행하고 메타프로그래밍 스크립트로 호출 그래프(Call Graph) 및 의존성 지도를 추출.</li>
+<li><strong>멀티-LLM 교차 요약 및 LaTeX 번역 파이프라인:</strong> Claude(Fable 5.2), OpenAI(Codex Astra 6.2), Google(Gemini Carbon), GPT 6 Pro 등에 타입 시그니처와 코드 컨텍스트를 투입하여 고전 해석적 수론 스타일의 LaTeX 논문으로 교차 번역.</li>
+<li><strong>조건부 인간 검증 루프:</strong> LLM이 생성한 LaTeX 초안 중 고전적 구간은 인간 수학자가 직접 완전한 증명으로 재작성하고, 미소화 구간은 코드 위치 앵커(anchor)를 명시하여 블랙박스를 단계적으로 제거.</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-key-figures-entities">3. 등장 인물 및 화자 (Key Figures &amp; Entities)</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름</th>
+<th style="text-align:left">소속 / 그룹</th>
+<th style="text-align:left">주요 역할 및 활동</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>레벤트 알푀게</strong> (Levent Alpöge)</td>
+<td style="text-align:left">Anthropic</td>
+<td style="text-align:left">Claude와 협업하여 1,700만 줄 규모의 Lean 4 리만 가설 증명 생성 및 4쪽 메모(<code>remark.pdf</code>) 공개</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>마이클 루빈스타인</strong> (Michael Rubinstein)</td>
+<td style="text-align:left">워털루대</td>
+<td style="text-align:left">멀티-LLM 파이프라인으로 164쪽 해설 논문(<code>zeta-paper.pdf</code>) 집필 주도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>로빈 장</strong> (Robin Zhang)</td>
+<td style="text-align:left">프랑스 IHES</td>
+<td style="text-align:left">GPT 6 Pro 활용 67쪽 GRH 계보 및 요약 노트(<code>GRH note.pdf</code>) 작성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>바르토시 나스크렝츠키</strong> (Bartosz Naskręcki)</td>
+<td style="text-align:left">폴란드 AMU</td>
+<td style="text-align:left"><code>riemann-rev</code>(11쪽 요약 가이드, 아틀라스 및 대시보드) 공개</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>테렌스 타오</strong> (Terence Tao)</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">증명에 대한 학계 평가(&quot;가장 소화가 덜 된 증명&quot; 등) 제언</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>앤드루 서더랜드</strong> (Andrew Sutherland)</td>
+<td style="text-align:left">MIT</td>
+<td style="text-align:left">Lean 정적 분석 및 커널/공리 감사 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>엘리엇 아리지</strong> (Elliot Arledge)</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">Lean 정적 분석 및 커널/공리 감사 수행</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>사이먼 디데오</strong> (Simon DeDeo)</td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">Lean 정적 분석 및 커널/공리 감사 수행</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점-key-figures-timestamps">4. 수치 및 시점 (Key Figures &amp; Timestamps)</h5>
+<h6 id="주요-시점-데이터">주요 시점 데이터</h6>
+<ul>
+<li><strong>2026년 11월 20일:</strong> 레벤트 알푀게 및 Claude의 Lean 4 리만 가설 증명 175,187개 파일 공개.</li>
+<li><strong>2026년 11월 21일:</strong> Lean 및 Mathlib 커뮤니티(<code>leanprover-community</code>)의 다중 독립 커널 검증 및 공식 인증 완료 / 로빈 장 67쪽 노트 공개.</li>
+<li><strong>2026년 11월 23일:</strong> 마이클 루빈스타인 외 워털루대 연구진 164쪽 해설 논문 v2 갱신 기준 시점.</li>
+</ul>
+<h6 id="코드-및-프로젝트-규모-데이터">코드 및 프로젝트 규모 데이터</h6>
+<ul>
+<li><strong>전체 원본 증명 규모:</strong> 175,187개 파일, 약 1,700만 줄(비공백 기준 약 1,550만 줄), 약 9억 8,040만 자 (인간 언어 환산 시 25만 페이지 초과).</li>
+<li><strong>아벨 다양체 이론(Abelian Variety Theory) 비중:</strong> 전체 증명의 50.46% (99,187개 파일, 4억 9,470만 자).</li>
+<li><strong>Core 1~25 합산 규모:</strong> 158,020개 파일 (전체의 90.2%), 9억 383만 자 (92.19%).</li>
+<li><strong>현재 전체 통합 압축 성과:</strong> -0.5% (-287만 토큰 / -1,089만 자 절감).</li>
+</ul>
+<h6 id="리더보드-집계-모델-및-에이전트-순위-비공식">리더보드 집계 모델 및 에이전트 순위 (비공식)</h6>
+<ul>
+<li><strong>1위:</strong> Gemini 4 Neon + Antigravity (13/25 커버리지, 평균 -68.3%)</li>
+<li><strong>2위:</strong> The Council + pi (평균 -60.2%)</li>
+<li><strong>3·4위:</strong> GPT-6 / GPT-6.2 Astra + Codex CLI</li>
+<li><strong>5위:</strong> Claude Opus 5.5 + Claude Code</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ol>
+<li><strong>웹사이트 직접 접근 불가에 따른 원본 데이터 확인의 한계</strong>
+<ul>
+<li>초기 원본 데이터원 중 하나인 웹사이트(<code>riemann.verifytask.cn</code>)에 대한 직접 접근이 불가능하여 실시간 제출 수치나 코드를 직접 대조하지 못하고 제공된 요약 및 PDF 자료 데이터에만 의존하였음을 명시한다.</li>
+</ul>
+</li>
+<li><strong>번역 충실도 격차(Translation Gap)와 AI 해설 환각 위험</strong>
+<ul>
+<li>Lean 4 코드 자체는 커널 검증을 거쳐 참이 보장되나, LLM이 집필한 67쪽 및 164쪽 LaTeX 해설서가 실제 코드 논리와 1:1로 완전 동치인지는 기계가 검증해 주지 않는다.</li>
+<li>거대한 형식 코드를 자연어로 번역하는 과정에서 LLM이 코드에 존재하지 않는 표준 수학 논리를 임의로 보충하는 '해설 환각' 위험성이 존재한다.</li>
+</ul>
+</li>
+<li><strong>압축 챌린지 리더보드의 비공식성 및 트레이드오프</strong>
+<ul>
+<li>대시보드 리더보드가 참가자 자가 태그 방식이며 인간 개입, 재시도 예산, 파워유저 편중이 존재하여 엄밀히 통제된 벤치마크로 보기 어렵다.</li>
+<li>단일 파일 인라이닝이나 <code>grind</code> 전술을 통한 과도한 압축은 중간 과정의 수학적 아이디어를 덮어버려 인간 수학자의 정수론적 해독을 저해할 수 있는 트레이드오프가 존재한다.</li>
+</ul>
+</li>
+<li><strong>소스 내 정보 확인 불가 항목</strong>
+<ul>
+<li>소속이 명시되지 않은 인물(테렌스 타오, 엘리엇 아리지, 사이먼 디데오)의 구체적인 소속 기관 및 직책은 소스 텍스트에 기재되어 있지 않으므로 &quot;확인 불가&quot;로 표기하였다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>18개 페이지</summary><ul><li><a href="../../concepts/large-language-model/">Large Language Model</a></li>
+<li><a href="../../concepts/riemann-hypothesis/">Riemann Hypothesis</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/andrew-sutherland/">앤드루 서더랜드</a></li>
+<li><a href="../../entities/people/bartosz-naskrecki/">바르토시 나스크렝츠키</a></li>
+<li><a href="../../entities/people/elliot-arledge/">엘리엇 아리지</a></li>
+<li><a href="../../entities/people/levent-alpoge-4de21f7195/">레벤트 알푀게</a></li>
+<li><a href="../../entities/people/michael-rubinstein/">마이클 루빈스타인</a></li>
+<li><a href="../../entities/people/robin-zhang/">로빈 장</a></li>
+<li><a href="../../entities/people/simon-dedeo/">사이먼 디데오</a></li>
+<li><a href="../../entities/people/terence-tao/">테렌스 타오</a></li>
+<li><a href="../../kinds/ai-share/">AI 대화 공유</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/science-research/">과학 연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></details></section>
+</main>
+</body>
+</html>
