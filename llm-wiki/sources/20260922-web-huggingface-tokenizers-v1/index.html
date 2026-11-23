@@ -14,8 +14,15 @@
 <h1>tokenizers v1: encode, decode and scaling, measured</h1>
 <p class="page-meta">웹 · 2026-09-22</p>
 <h2 id="요약">요약</h2>
-<p>머신러닝 워크플로의 역사에서 토크나이저는 모델 연산의 복잡도에 비해 부하가 매우 낮아 성능 병목 지점으로 간주되지 않았습니다.</p>
+<p>Hugging Face의 tokenizers v1은 단일 스레드 벤치마크에서 v0.23 대비 3~30배 빨랐다.</p>
 <p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://huggingface.co/blog/tokenizers-v1">출처</a> · <a href="https://www.youtube.com/watch?v=gpkyQLpwTrg">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
 <h2 id="원문">원문</h2>
 <h3 id="tokenizers-v1-성능-가속-및-확장성-측정-보고서">tokenizers v1: 성능 가속 및 확장성 측정 보고서</h3>
 <h4 id="1-서론-문제-설정-및-v1-개발-배경">1. 서론: 문제 설정 및 v1 개발 배경</h4>
@@ -152,9 +159,13 @@ fn main() -&gt; Result&lt;()&gt; {
 <p>본 보고서는 <code>tokbench</code>의 객관적 데이터를 통해 <code>tokenizers</code> v1이 현대적 워크로드의 병목 현상을 해결하는 강력한 도구임을 입증했습니다. SIMD 가속, 메모리 할당 제거, 그리고 효율적인 캐싱 전략을 통해 실현된 이 성능 향상은 향후 더 많은 모델 제품군으로 확대 적용될 예정이며, 지속적인 업데이트가 이루어질 것입니다.</p>
 
 </article>
-<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
 <li><a href="../">전체 소스</a></li>
-<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
 </main>
 </body>
 </html>

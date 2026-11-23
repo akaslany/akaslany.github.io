@@ -14,8 +14,20 @@
 <h1>Scaling to Tens of Thousands of Test-Time Iterations with Loop-Native Attention Residuals</h1>
 <p class="page-meta">논문 · 2026-10-19</p>
 <h2 id="요약">요약</h2>
-<p>[사실] 본 해설 보고서는 반복형 트랜스포머(Looped Transformers) 아키텍처의 한계를 극복하고, 테스트 시점(Test-time)에서 추론 깊이를 수만 번 이상의 루프까지 무한히 확장할 수 있도록 설계된 새로운 잔차 연결 메커니즘인 '인피루프(InfiLoop)'에 관한 연구 문헌을 엄밀하게 분석하여 정리한…</p>
+<p>인피루프는 루프별 상태를 가중 집계해 메모리를 일정하게 유지하며 테스트 시점 추론 깊이를 늘린다.</p>
 <p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.11570">출처</a> · <a href="https://www.youtube.com/watch?v=Ybf9p5KKB1Q">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/di-he/">허디</a></li>
+<li><a href="../../entities/people/dilxat-muhtar/">딜샤트 무스타</a></li>
+<li><a href="../../entities/people/guinan-su/">수구이난</a></li>
+<li><a href="../../entities/people/lu-yin/">인루</a></li>
+<li><a href="../../entities/people/pengxiang-li/">리펑샹</a></li>
+<li><a href="../../entities/people/shiwei-liu/">리우시웨이</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
 <h2 id="원문">원문</h2>
 <h3 id="해설-보고서-인피루프-infiloop-루프-고유-주의-잔차를-통한-고심도-테스트-시점-추론-확장-분석">[해설 보고서] 인피루프(InfiLoop): 루프 고유 주의 잔차를 통한 고심도 테스트 시점 추론 확장 분석</h3>
 <hr />
@@ -365,9 +377,18 @@ $$h_t = h_{t-1} + \gamma_t (z_t - h_{t-1}), \quad \gamma_t = \frac{e_t}{\beta D_
 </ol>
 
 </article>
-<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/di-he/">허디</a></li>
+<li><a href="../../entities/people/dilxat-muhtar/">딜샤트 무스타</a></li>
+<li><a href="../../entities/people/guinan-su/">수구이난</a></li>
+<li><a href="../../entities/people/lu-yin/">인루</a></li>
+<li><a href="../../entities/people/pengxiang-li/">리펑샹</a></li>
+<li><a href="../../entities/people/shiwei-liu/">리우시웨이</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
 <li><a href="../">전체 소스</a></li>
-<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
 </main>
 </body>
 </html>

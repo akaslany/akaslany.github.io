@@ -12,31 +12,32 @@
 <main>
 <article>
 <h1>ARC-AGI-3</h1>
-<p class="page-meta">근거 소스 3편</p>
-<h2 id="공개-게임-평가">공개 게임 평가</h2>
-<p>VISTA 프로젝트는 평가한 모델들이 공개 게임을 모두 완료했다고 보고했다. 인간 기준보다 환경 행동을 적게 사용한 실행도 보고했으며, 행동 수 집계에서는 내부 추론, 읽기 전용 검사, 토큰, 시간, 비용을 제외했다. 보고서 작성자는 공개 게임이 모델의 학습 데이터에 포함됐을 가능성을 제기했고, 성과의 근거가 프로젝트가 공개한 리플레이이며 모든 실행에 대한 독립 검증은 이뤄지지 않았다고 밝혔다. <a href="../../sources/20260806-web-vista-visual-harness-arc-agi-3/">근거 B</a></p>
-<p>NVIDIA는 AVO가 공개 세트에서 RHAE 만점을 기록했다고 자체 보고했다. 이를 분석한 보고서 작성자는 공개 세트 만점만으로 일반 지능 달성이나 비공개 세트 해결을 입증할 수 없다고 판단했다. <a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">근거 D</a></p>
-<h2 id="실행-기록과-성능">실행 기록과 성능</h2>
-<p>PRO-LONG 논문 실험에서는 에이전트가 이전 관찰, 행동, 결과를 기록하고 검색할 수 있게 했을 때 동일한 기본 에이전트의 별도 로그가 없는 조건보다 공개 게임 성능이 높았다. 보고서 작성자는 비용 효율에 관한 결과의 범위를 과금 대상 모델 토큰으로 한정했다. <a href="../../sources/20260813-arxiv-2607.20064v2-pro-long/">근거 C</a></p>
-<h2 id="자체-평가와-후속-감사">자체 평가와 후속 감사</h2>
-<p>Prime Intellect는 Prime Agent의 ARC-AGI-3 성과를 자체 평가로 보고했다. 당시 보고서에 따르면 독립 재현과 동료 평가는 아직 완료되지 않았다. 후속 감사는 핵심 런타임 구현을 확인했으나 전체 벤치마크 수치를 독립적으로 재현하지 않았다. 감사 작성자는 외부 참조값과의 점수 차이를 전부 하네스의 효과로 돌릴 근거가 부족하다고 판단했다. <a href="../../sources/20260806-web-primeintellect-prime-agent/">근거 A</a> · <a href="../../sources/20260826-arxiv-2608.23552/">근거 E</a></p>
-<h2 id="인용">인용</h2>
+<p class="page-meta">근거 소스 5편</p>
+<h2 id="추출-근거">추출 근거</h2>
 <blockquote>
-<p>public-set 만점은 일반 지능 달성이나 private-set 해결을 입증하지 않는다.</p>
+<p>평가는 ARC-AGI-3 공개 25개 게임에 집중됐고 일부 frontier model은 benchmark 공개 후 출시됐습니다.</p>
 </blockquote>
-<p><a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">근거 D</a></p>
+<p>논문 평가는 ARC-AGI-3 공개 게임 25개에 집중됐으며 일부 최첨단 모델은 벤치마크 공개 이후 출시됐다. <a href="../../sources/20260813-arxiv-2607.20064v2-pro-long/">근거 A</a></p>
+<blockquote>
+<p>25개 환경, 183개 레벨, 100.00 RHAE, 6,624 environment actions.</p>
+</blockquote>
+<p>NVIDIA 자사 보고에 따르면 AVO는 ARC-AGI-3 공개 세트의 25개 환경, 183개 레벨에서 6,624회의 환경 행동으로 100.00 RHAE를 기록했다. <a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">근거 B</a></p>
 <h2 id="근거-소스">근거 소스</h2>
 <ul>
-<li><a href="../../sources/20260806-web-primeintellect-prime-agent/">Prime Agent: A self-improving RLM agent</a></li>
-<li><a href="../../sources/20260806-web-vista-visual-harness-arc-agi-3/">VISTA: A Visual Harness for Reasoning in an Interactive World</a></li>
+<li><a href="../../sources/20260813-arxiv-2607.20064v2-pro-long/">PRO-LONG: Programmatic Memory Enables Long-Horizon Reasoning</a></li>
 <li><a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">NVIDIA AVO Reaches 100% on ARC-AGI-3, Demonstrating a Frontier-Level General-Purpose Architecture for Long-Horizon Auton</a></li>
+<li><a href="../../sources/20260904-web-arcprize-gpt6-astra-arcagi3/">OpenAI's GPT-6 Astra on ARC-AGI-3 | ARC Prize</a></li>
+<li><a href="../../sources/20260907-web-fewshot-gpt6-astra-harness-product/">GPT-6 Astra: the harness is the product</a></li>
+<li><a href="../../sources/20261004-arxiv-2610.02200-vista/">VISTA: A Visual Harness for Reasoning in an Interactive World</a></li>
 </ul>
 
 </article>
 <section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
-<li><a href="../../sources/20260806-web-primeintellect-prime-agent/">Prime Agent: A self-improving RLM agent</a></li>
-<li><a href="../../sources/20260806-web-vista-visual-harness-arc-agi-3/">VISTA: A Visual Harness for Reasoning in an Interactive World</a></li>
-<li><a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">NVIDIA AVO Reaches 100% on ARC-AGI-3, Demonstrating a Frontier-Level General-Purpose Architecture for Long-Horizon Auton</a></li></ul></section>
+<li><a href="../../sources/20260813-arxiv-2607.20064v2-pro-long/">PRO-LONG: Programmatic Memory Enables Long-Horizon Reasoning</a></li>
+<li><a href="../../sources/20260822-web-nvidia-avo-arc-agi3/">NVIDIA AVO Reaches 100% on ARC-AGI-3, Demonstrating a Frontier-Level General-Purpose Architecture for Long-Horizon Auton</a></li>
+<li><a href="../../sources/20260904-web-arcprize-gpt6-astra-arcagi3/">OpenAI&#x27;s GPT-6 Astra on ARC-AGI-3 | ARC Prize</a></li>
+<li><a href="../../sources/20260907-web-fewshot-gpt6-astra-harness-product/">GPT-6 Astra: the harness is the product</a></li>
+<li><a href="../../sources/20261004-arxiv-2610.02200-vista/">VISTA: A Visual Harness for Reasoning in an Interactive World</a></li></ul></section>
 </main>
 </body>
 </html>

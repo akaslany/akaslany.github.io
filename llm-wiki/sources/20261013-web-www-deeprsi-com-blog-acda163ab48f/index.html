@@ -14,8 +14,38 @@
 <h1>DeepRSI 벤치마크 평가 분석 및 해설 보고서</h1>
 <p class="page-meta">웹 · 2026-10-13</p>
 <h2 id="요약">요약</h2>
-<p>[사실] DeepRSI(Deep Recursive Self-Improvement)는 AI 에이전트가 재귀적 자가 개선(Recursively Self-Improving, RSI) 역량을 갖추었는지를 종합적으로 측정하고 평가하기 위해 Hillclimb 연구진이 개발한 최초의 벤치마크 체계이다.</p>
+<p>DeepRSI의 AI 에이전트 자가 개선 평가 설계와 모델별 성과, 리워드 해킹 사례를 분석한다.</p>
 <p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://www.deeprsi.com/blog">출처</a> · <a href="https://www.youtube.com/watch?v=iObTaxfl2RU">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-berezovsky/">Alex Berezovsky</a></li>
+<li><a href="../../entities/people/ameya-prabhu/">Ameya Prabhu</a></li>
+<li><a href="../../entities/people/anas-mahmoud/">Anas Mahmoud</a></li>
+<li><a href="../../entities/people/ben-rank/">Ben Rank</a></li>
+<li><a href="../../entities/people/chenguang-wang/">Chenguang Wang</a></li>
+<li><a href="../../entities/people/earendil/">Earendil</a></li>
+<li><a href="../../entities/people/hardik-bhatnagar/">Hardik Bhatnagar</a></li>
+<li><a href="../../entities/people/juliana-li/">Juliana Li</a></li>
+<li><a href="../../entities/people/jun-park/">Jun Park</a></li>
+<li><a href="../../entities/people/karina-nguyen/">카리나 응우옌</a></li>
+<li><a href="../../entities/people/khurram-yamin/">Khurram Yamin</a></li>
+<li><a href="../../entities/people/maksym-andriushchenko/">Maksym Andriushchenko</a></li>
+<li><a href="../../entities/people/mario-zechner/">Mario Zechner</a></li>
+<li><a href="../../entities/people/matthias-bethge/">Matthias Bethge</a></li>
+<li><a href="../../entities/people/mingchen-zhuge/">Mingchen Zhuge</a></li>
+<li><a href="../../entities/people/mohammadhossein-rezaei/">MohammadHossein Rezaei</a></li>
+<li><a href="../../entities/people/pingbang-hu/">Pingbang Hu</a></li>
+<li><a href="../../entities/people/pranav-devarinti/">Pranav Devarinti</a></li>
+<li><a href="../../entities/people/pruthvi-rajaghatta/">Pruthvi Rajaghatta</a></li>
+<li><a href="../../entities/people/shira-eisenberg/">Shira Eisenberg</a></li>
+<li><a href="../../entities/people/yuandong-tian/">Yuandong Tian</a></li>
+<li><a href="../../entities/people/yunzhong-he/">Yunzhong He</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+</ul>
 <h2 id="원문">원문</h2>
 <h3 id="deeprsi-벤치마크-평가-분석-및-해설-보고서">DeepRSI 벤치마크 평가 분석 및 해설 보고서</h3>
 <hr />
@@ -382,9 +412,36 @@ PostTrainBench 및 RSI Bench와 같은 기존 벤치마크는 외부 기여자�
 </ol>
 
 </article>
-<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/web/">웹</a></li>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>30개 페이지</summary><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-berezovsky/">Alex Berezovsky</a></li>
+<li><a href="../../entities/people/ameya-prabhu/">Ameya Prabhu</a></li>
+<li><a href="../../entities/people/anas-mahmoud/">Anas Mahmoud</a></li>
+<li><a href="../../entities/people/ben-rank/">Ben Rank</a></li>
+<li><a href="../../entities/people/chenguang-wang/">Chenguang Wang</a></li>
+<li><a href="../../entities/people/earendil/">Earendil</a></li>
+<li><a href="../../entities/people/hardik-bhatnagar/">Hardik Bhatnagar</a></li>
+<li><a href="../../entities/people/juliana-li/">Juliana Li</a></li>
+<li><a href="../../entities/people/jun-park/">Jun Park</a></li>
+<li><a href="../../entities/people/karina-nguyen/">카리나 응우옌</a></li>
+<li><a href="../../entities/people/khurram-yamin/">Khurram Yamin</a></li>
+<li><a href="../../entities/people/maksym-andriushchenko/">Maksym Andriushchenko</a></li>
+<li><a href="../../entities/people/mario-zechner/">Mario Zechner</a></li>
+<li><a href="../../entities/people/matthias-bethge/">Matthias Bethge</a></li>
+<li><a href="../../entities/people/mingchen-zhuge/">Mingchen Zhuge</a></li>
+<li><a href="../../entities/people/mohammadhossein-rezaei/">MohammadHossein Rezaei</a></li>
+<li><a href="../../entities/people/pingbang-hu/">Pingbang Hu</a></li>
+<li><a href="../../entities/people/pranav-devarinti/">Pranav Devarinti</a></li>
+<li><a href="../../entities/people/pruthvi-rajaghatta/">Pruthvi Rajaghatta</a></li>
+<li><a href="../../entities/people/shira-eisenberg/">Shira Eisenberg</a></li>
+<li><a href="../../entities/people/yuandong-tian/">Yuandong Tian</a></li>
+<li><a href="../../entities/people/yunzhong-he/">Yunzhong He</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
 <li><a href="../">전체 소스</a></li>
-<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li></ul></details></section>
 </main>
 </body>
 </html>

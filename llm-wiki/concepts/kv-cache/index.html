@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KV cache</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>KV cache</h1>
+<p class="page-meta">근거 소스 3편</p>
+<h2 id="추출-근거">추출 근거</h2>
+<blockquote>
+<p>Table 10에 따르면 스케일링 법칙 적합에 사용한 12개 sparse cell의 최대 절대 mismatch는 FLOPs 3.9%, 총 파라미터 1.0%, KV cache 3.6%다.</p>
+</blockquote>
+<p>논문이 보고한 12개 희소 실험 조건에서 토큰당 학습 FLOPs, 비임베딩 파라미터, KV 캐시의 최대 불일치는 각각 3.9%, 1.0%, 3.6%였다. <a href="../../sources/20260902-arxiv-2609.01343v1-smelt-moe-looped-transformers/">근거 A</a></p>
+<blockquote>
+<p>구현은 attention metadata builder에 hook을 두고 요청의 KV-cache block table을 in-place로 다시 써서 보존 블록만 kernel에 보이게 한다.</p>
+</blockquote>
+<p>저자들은 vLLM에서 요청의 KV 캐시 블록 테이블을 수정해 커널이 보존 대상 블록만 읽도록 구현했다. <a href="../../sources/20260904-arxiv-2609.02737v1-declarative-attention/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260902-arxiv-2609.01343v1-smelt-moe-looped-transformers/">SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers</a></li>
+<li><a href="../../sources/20260904-arxiv-2609.02737v1-declarative-attention/">Language Models Can Control Their Own Attention</a></li>
+<li><a href="../../sources/20260906-arxiv-2609.03807v1-free-pause-tokens/">Free Pause Tokens</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260902-arxiv-2609.01343v1-smelt-moe-looped-transformers/">SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers</a></li>
+<li><a href="../../sources/20260904-arxiv-2609.02737v1-declarative-attention/">Language Models Can Control Their Own Attention</a></li>
+<li><a href="../../sources/20260906-arxiv-2609.03807v1-free-pause-tokens/">Free Pause Tokens</a></li></ul></section>
+</main>
+</body>
+</html>

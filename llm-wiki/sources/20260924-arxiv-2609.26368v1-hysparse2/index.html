@@ -14,8 +14,14 @@
 <h1>HySparse2: Hybrid Sparse Attention with Two-Level KV Sharing</h1>
 <p class="page-meta">논문 · 2026-09-24</p>
 <h2 id="요약">요약</h2>
-<p>본 보고서는 기술 논문 **&quot;HySparse2: Hybrid Sparse Attention with Two-Level KV Sharing (2609.26368v1)&quot;**의 아키텍처 혁신과 성능 지표를 분석한 결과입니다.</p>
+<p>HySparse2는 2단계 KV 공유로 장문맥 처리 비용을 줄였으나 일부 일반 추론 점수는 하락했다.</p>
 <p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-09/">2026년 9월</a> · <a href="https://arxiv.org/abs/2609.26368v1">출처</a> · <a href="https://www.youtube.com/watch?v=_vNUmLDo9Ms">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
 <h2 id="원문">원문</h2>
 <h3 id="hysparse2-2단계-kv-공유를-통한-하이브리드-희소-주의-집중-구조-분석-보고서">HySparse2: 2단계 KV 공유를 통한 하이브리드 희소 주의 집중 구조 분석 보고서</h3>
 <h4 id="1-문서-개요-및-주의사항">1. 문서 개요 및 주의사항</h4>
@@ -103,9 +109,12 @@
 <p>HySparse2는 **2단계 KV 공유(Bridging &amp; Reuse)**를 통해 장기 문맥 처리의 고질적인 문제인 Prefill 연산량과 메모리 점유율을 동시에 해결했습니다. 특히 <strong>Forced SWA 설계</strong>를 통해 계층간 의존성을 제거하고 Prefill 단계를 모델 절반 지점에서 종료시킨 점은 인프라 운영 측면에서 획기적인 진전입니다. 비록 일부 일반 추론 지표에서 하락세가 관찰되었으나, 대규모 에이전트 시스템을 구축하려는 조직에게 HySparse2는 매우 경제적이고 성능 지향적인 아키텍처 대안이 될 것입니다.</p>
 
 </article>
-<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
 <li><a href="../">전체 소스</a></li>
-<li><a href="../../timeline/2026-09/">2026년 9월</a></li></ul></section>
+<li><a href="../../timeline/2026-09/">2026년 9월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
 </main>
 </body>
 </html>

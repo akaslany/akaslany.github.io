@@ -14,8 +14,47 @@
 <h1>A Fix for Softmax and Cross-Entropy</h1>
 <p class="page-meta">논문 · 2026-10-24</p>
 <h2 id="요약">요약</h2>
-<p>구글 딥마인드(Google DeepMind)의 조나단 T. 배런(Jonathan T. Barron), 단 그나나프라가삼(Dan Gnanapragasam), 마이클 차넨(Michael Tschannen) 연구진은 JAX, PyTorch, TensorFlow 등 주요 딥러닝 프레임워크의 표준 소프트맥스(Softmax),…</p>
+<p>소프트맥스의 두 수치 버그를 분석하고 로그 공간 수정법의 그로킹·지식 증류 실험 결과를 정리한다.</p>
 <p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-10/">2026년 10월</a> · <a href="https://arxiv.org/pdf/2610.31642">출처</a> · <a href="https://www.youtube.com/watch?v=gGvAdWMB7To">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/ba/">Ba</a></li>
+<li><a href="../../entities/people/brandon-zhao/">Brandon Zhao</a></li>
+<li><a href="../../entities/people/dan-gnanapragasam/">단 그나나프라가삼</a></li>
+<li><a href="../../entities/people/doshi/">Doshi</a></li>
+<li><a href="../../entities/people/everett/">Everett</a></li>
+<li><a href="../../entities/people/forrester-cole/">Forrester Cole</a></li>
+<li><a href="../../entities/people/geoffrey-hinton/">제프리 힌튼</a></li>
+<li><a href="../../entities/people/higham/">Higham</a></li>
+<li><a href="../../entities/people/hutter/">Hutter</a></li>
+<li><a href="../../entities/people/jean-baptiste-alayrac/">Jean-Baptiste Alayrac</a></li>
+<li><a href="../../entities/people/jonathan-t-barron/">조나단 T. 배런</a></li>
+<li><a href="../../entities/people/keith-rush/">Keith Rush</a></li>
+<li><a href="../../entities/people/kingma/">Kingma</a></li>
+<li><a href="../../entities/people/kosson/">Kosson</a></li>
+<li><a href="../../entities/people/liu/">류</a></li>
+<li><a href="../../entities/people/loshchilov/">Loshchilov</a></li>
+<li><a href="../../entities/people/lyle/">Lyle</a></li>
+<li><a href="../../entities/people/mark-hamilton/">Mark Hamilton</a></li>
+<li><a href="../../entities/people/michael-tschannen/">마이클 차넨</a></li>
+<li><a href="../../entities/people/miki-rubinstein/">Miki Rubinstein</a></li>
+<li><a href="../../entities/people/molybog/">Molybog</a></li>
+<li><a href="../../entities/people/nanda/">Nanda</a></li>
+<li><a href="../../entities/people/power/">Power</a></li>
+<li><a href="../../entities/people/prieto/">Prieto</a></li>
+<li><a href="../../entities/people/rosset/">Rosset</a></li>
+<li><a href="../../entities/people/roy-frostig/">Roy Frostig</a></li>
+<li><a href="../../entities/people/soudry/">Soudry</a></li>
+<li><a href="../../entities/people/thilak/">Thilak</a></li>
+<li><a href="../../entities/people/tieleman/">Tieleman</a></li>
+<li><a href="../../entities/people/varma/">Varma</a></li>
+<li><a href="../../entities/people/wortsman/">Wortsman</a></li>
+<li><a href="../../entities/people/ziyin/">Ziyin</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
 <h2 id="원문">원문</h2>
 <h3 id="소프트맥스-및-크로스-엔트로피-수치-버그-분석과-해결-방안-해설-보고서">소프트맥스 및 크로스 엔트로피 수치 버그 분석과 해결 방안 해설 보고서</h3>
 <h4 id="1-개요">1. 개요</h4>
@@ -320,9 +359,45 @@ def soft_target_cross_entropy(z_S, z_T):
 </ul>
 
 </article>
-<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>39개 페이지</summary><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/ba/">Ba</a></li>
+<li><a href="../../entities/people/brandon-zhao/">Brandon Zhao</a></li>
+<li><a href="../../entities/people/dan-gnanapragasam/">단 그나나프라가삼</a></li>
+<li><a href="../../entities/people/doshi/">Doshi</a></li>
+<li><a href="../../entities/people/everett/">Everett</a></li>
+<li><a href="../../entities/people/forrester-cole/">Forrester Cole</a></li>
+<li><a href="../../entities/people/geoffrey-hinton/">제프리 힌튼</a></li>
+<li><a href="../../entities/people/higham/">Higham</a></li>
+<li><a href="../../entities/people/hutter/">Hutter</a></li>
+<li><a href="../../entities/people/jean-baptiste-alayrac/">Jean-Baptiste Alayrac</a></li>
+<li><a href="../../entities/people/jonathan-t-barron/">조나단 T. 배런</a></li>
+<li><a href="../../entities/people/keith-rush/">Keith Rush</a></li>
+<li><a href="../../entities/people/kingma/">Kingma</a></li>
+<li><a href="../../entities/people/kosson/">Kosson</a></li>
+<li><a href="../../entities/people/liu/">류</a></li>
+<li><a href="../../entities/people/loshchilov/">Loshchilov</a></li>
+<li><a href="../../entities/people/lyle/">Lyle</a></li>
+<li><a href="../../entities/people/mark-hamilton/">Mark Hamilton</a></li>
+<li><a href="../../entities/people/michael-tschannen/">마이클 차넨</a></li>
+<li><a href="../../entities/people/miki-rubinstein/">Miki Rubinstein</a></li>
+<li><a href="../../entities/people/molybog/">Molybog</a></li>
+<li><a href="../../entities/people/nanda/">Nanda</a></li>
+<li><a href="../../entities/people/power/">Power</a></li>
+<li><a href="../../entities/people/prieto/">Prieto</a></li>
+<li><a href="../../entities/people/rosset/">Rosset</a></li>
+<li><a href="../../entities/people/roy-frostig/">Roy Frostig</a></li>
+<li><a href="../../entities/people/soudry/">Soudry</a></li>
+<li><a href="../../entities/people/thilak/">Thilak</a></li>
+<li><a href="../../entities/people/tieleman/">Tieleman</a></li>
+<li><a href="../../entities/people/varma/">Varma</a></li>
+<li><a href="../../entities/people/wortsman/">Wortsman</a></li>
+<li><a href="../../entities/people/ziyin/">Ziyin</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
 <li><a href="../">전체 소스</a></li>
-<li><a href="../../timeline/2026-10/">2026년 10월</a></li></ul></section>
+<li><a href="../../timeline/2026-10/">2026년 10월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></details></section>
 </main>
 </body>
 </html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LoRA</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>LoRA</h1>
+<p class="page-meta">근거 소스 3편</p>
+<h2 id="추출-근거">추출 근거</h2>
+<blockquote>
+<p>즉 첫 시점에서 A는 움직이지 않고, 초기 A가 B의 첫 업데이트를 결정한다.</p>
+</blockquote>
+<p>보고서의 표준 LoRA 초기화 분석에 따르면 초기 A가 B의 첫 업데이트를 결정한다. <a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">근거 A</a></p>
+<blockquote>
+<p>표시값 기준 NoRA의 차이는 5.44퍼센트포인트이며, NoRA-init이 4.45포인트를 차지하고 지속 정규화가 0.99포인트를 더한다.</p>
+</blockquote>
+<p>저자 보고 SFT 평균에서 NoRA는 LoRA보다 5.44퍼센트포인트 높았고, 이 차이 중 4.45퍼센트포인트는 NoRA-init에서도 나타났다. <a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">근거 A</a></p>
+<blockquote>
+<p>NoRA 44.4는 LoRA 42.8보다 1.6포인트 높지만 individual cell은 혼합된다.</p>
+</blockquote>
+<p>저자 보고 RLVR 최종 평균에서 NoRA는 LoRA보다 1.6포인트 높았으며 세부 성적은 평가 항목별로 엇갈렸다. <a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">근거 A</a></p>
+<blockquote>
+<p>NoRA 평균 변화는 +0.02, LoRA -0.56, MiSS -0.70이다.</p>
+</blockquote>
+<p>저자 보고의 SFT 후 유지 성능 평가에서 NoRA의 평균 변화는 +0.02였고 LoRA는 -0.56, MiSS는 -0.70이었다. <a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">근거 A</a></p>
+<blockquote>
+<p>백본 모델 자체의 파라미터는 완전히 동결(Freeze)한 상태에서 **랭크-256(Rank-256) 저순위 적응형(LoRA) 어댑터**와 **라우팅 헤드(Routing head)**를 함께 공동 최적화</p>
+</blockquote>
+<p>보고서는 Clef 학습에서 백본을 동결하고 랭크 256 LoRA 어댑터와 라우팅 헤드를 공동 최적화했다고 설명한다. <a href="../../sources/20261003-cloudflare-clef-decision-models/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">Normalized Low-Rank Adaptation 검증 보고서</a></li>
+<li><a href="../../sources/20261003-cloudflare-clef-decision-models/">Introducing Clef: our open-source decision models, and new RL fine-tuning platform</a></li>
+<li><a href="../../sources/20261107-web-huggingface-co-blog-harness-hub-harness--3f573a5da811/">Harness adapters: Safe RL for efficient agentic development</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260902-arxiv-2608.31036v1-normalized-lora/">Normalized Low-Rank Adaptation 검증 보고서</a></li>
+<li><a href="../../sources/20261003-cloudflare-clef-decision-models/">Introducing Clef: our open-source decision models, and new RL fine-tuning platform</a></li>
+<li><a href="../../sources/20261107-web-huggingface-co-blog-harness-hub-harness--3f573a5da811/">Harness adapters: Safe RL for efficient agentic development</a></li></ul></section>
+</main>
+</body>
+</html>

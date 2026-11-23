@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 24498140,
+  "dist_bytes": 38838606,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -7,7 +7,7 @@
       "ok": true
     },
     "escapes": {
-      "checked": 36,
+      "checked": 4321,
       "html_escapes": 0,
       "html_paths": {},
       "markdown_escapes": 0,
@@ -16,8 +16,8 @@
       "ok": true
     },
     "grounding": {
-      "checked": 36,
-      "entity_source_links_checked": 172,
+      "checked": 4321,
+      "entity_source_links_checked": 6486,
       "invalid_extractions": {},
       "issues": {},
       "ok": true,
@@ -25,30 +25,32 @@
     },
     "links": {
       "broken": 0,
-      "html_checked": 24174,
+      "html_checked": 109873,
       "issues": [],
-      "markdown_checked": 7741,
+      "markdown_checked": 31462,
       "ok": true
     },
     "links_recheck": {
       "broken": 0,
-      "checked_associations": 1744,
+      "checked_associations": 20842,
       "missing_associations": [],
       "ok": true
     },
     "material": {
-      "checked": 22,
+      "checked": 92,
       "issues": {},
-      "min_body_chars": 400,
+      "min_body_chars": 375,
       "min_evidence_sources": 2,
-      "ok": true
+      "missing": [],
+      "ok": true,
+      "registry_matches": true
     },
     "orphans": {
-      "edges": 7477,
+      "edges": 30881,
       "graph_valid": true,
       "low_source_inbound": [],
-      "min_source_inbound": 3,
-      "nodes": 995,
+      "min_source_inbound": 6,
+      "nodes": 5281,
       "ok": true,
       "orphan_pages": [],
       "orphans": 0
@@ -69,14 +71,35 @@
         "source_catalog": []
       },
       "expected_sources": 939,
-      "generated": 36,
-      "index": 4,
+      "generated": 4321,
+      "index": 5,
       "kinds": 9,
       "ok": true,
+      "search_index_bytes": 782462,
       "sources": 939,
       "symmetric_difference": 0,
       "timeline": 7,
-      "total": 995
+      "total": 5281
+    },
+    "people_complete": {
+      "corpus_sources": 939,
+      "distinct": 4215,
+      "extra": [],
+      "extracted_v2": 939,
+      "home_matches": true,
+      "index_matches": true,
+      "missing": [],
+      "ok": true,
+      "pages": 4215,
+      "symmetric_difference": 0,
+      "synthesized": 81,
+      "unmapped_mentions": [],
+      "with_quote": 2846
+    },
+    "people_nonempty": {
+      "empty": 0,
+      "issues": [],
+      "ok": true
     },
     "placeholder": {
       "occurrences": 0,
@@ -86,17 +109,17 @@
     "reproducible": {
       "changed_files": 0,
       "changed_paths": [],
-      "compared_files": 999,
-      "first_sec": 9.424,
+      "compared_files": 5285,
+      "first_sec": 17.506,
       "ok": true,
-      "second_sec": 10.743
+      "second_sec": 16.912
     },
     "schema": {
-      "checked": 995,
+      "checked": 5281,
       "invalid": 0,
       "issues": {},
       "ok": true,
-      "passed": 995
+      "passed": 5281
     },
     "selfcontained": {
       "external_resources": 0,

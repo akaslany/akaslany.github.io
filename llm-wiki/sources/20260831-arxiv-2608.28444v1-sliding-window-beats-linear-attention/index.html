@@ -14,8 +14,19 @@
 <h1>[기술 검증 보고서] Sliding Window Attention의 효율성 및 선형 어텐션 대비 우위 분석</h1>
 <p class="page-meta">논문 · 2026-08-31</p>
 <h2 id="요약">요약</h2>
-<p>본 보고서는 별도의 사후 학습(Post-training) 없이 적용된 슬라이딩 윈도우 어텐션(Sliding Window Attention, 이하 SWA)이 수천만 토큰 이상의 사후 학습을 거친 선형 어텐션(Linear Attention) 모델들을 상회한다는 논문의 주장을 기술적으로 검증한다.</p>
+<p>4개 싱크를 둔 무학습 SWA는 선형 어텐션을 대체로 앞섰지만 4K 장문에서 풀 어텐션에 크게 못 미쳤다.</p>
 <p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-08/">2026년 8월</a> · <a href="https://www.youtube.com/watch?v=zhsD8PmEz3U">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/post-training/">Post-training</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alexia-jolicoeur-martineau/">Alexia Jolicoeur-Martineau</a></li>
+<li><a href="../../entities/people/emy-gervais/">Emy Gervais</a></li>
+<li><a href="../../entities/people/pashmina-cameron/">Pashmina Cameron</a></li>
+<li><a href="../../entities/people/rhea-sanjay-sukthanker/">Rhea Sanjay Sukthanker</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
 <h2 id="원문">원문</h2>
 <h3 id="기술-검증-보고서-sliding-window-attention의-효율성-및-선형-어텐션-대비-우위-분석">[기술 검증 보고서] Sliding Window Attention의 효율성 및 선형 어텐션 대비 우위 분석</h3>
 <h4 id="1-연구의-핵심-명제-및-배경-분석">1. 연구의 핵심 명제 및 배경 분석</h4>
@@ -127,9 +138,17 @@ Table 1과 2에 제시된 선형 어텐션의 수치들은 서로 다른 선행 
 <p>이 글은 논문을 재출판·번역한 것이 아니라 수치와 비교 경계를 감사한 독립 한국어 학술 논평이다.</p>
 
 </article>
-<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../kinds/paper/">논문</a></li>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/post-training/">Post-training</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alexia-jolicoeur-martineau/">Alexia Jolicoeur-Martineau</a></li>
+<li><a href="../../entities/people/emy-gervais/">Emy Gervais</a></li>
+<li><a href="../../entities/people/pashmina-cameron/">Pashmina Cameron</a></li>
+<li><a href="../../entities/people/rhea-sanjay-sukthanker/">Rhea Sanjay Sukthanker</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
 <li><a href="../">전체 소스</a></li>
-<li><a href="../../timeline/2026-08/">2026년 8월</a></li></ul></section>
+<li><a href="../../timeline/2026-08/">2026년 8월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
 </main>
 </body>
 </html>

@@ -12,27 +12,48 @@
 <main>
 <article>
 <h1>Z.ai</h1>
-<p class="page-meta">근거 소스 2편</p>
-<h2 id="사후-학습과-코딩-성능">사후 학습과 코딩 성능</h2>
-<p>Z.ai는 GLM-5.3이 전작과 같은 기반 모델에서 출발했으며, 성능 향상은 사후 학습 규모를 늘린 결과라고 설명했다. Z.ai는 전작 대비 코딩 성능이 크게 향상됐다고 보고했다. 보고서가 검토한 공개 코딩 평가에서는 일부 경쟁 모델보다 점수가 낮았다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 B</a> · <a href="../../../sources/20260815-web-interconnects-glm53-chinese-labs/">근거 C</a></p>
-<h2 id="보안-평가와-가중치-공개-계획">보안 평가와 가중치 공개 계획</h2>
-<p>Z.ai는 사후 학습 규모를 늘린 뒤 다단계 보안 평가 성능이 향상됐다고 보고했으며, 이를 창발적 사이버 역량으로 해석했다. 보고서 작성자는 Z.ai 발표 본문과 보안 공개 원장 요약이 같은 집계에 서로 다른 심각도 범주를 적용했다고 지적했다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 B</a></p>
-<p>발표 당시 가중치는 미공개 상태였다. Z.ai는 안전성 평가와 보안 강화를 마친 뒤 가중치를 공개할 계획이라고 밝혔다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 B</a></p>
-<h2 id="인용">인용</h2>
+<p class="page-meta">근거 소스 3편</p>
+<h2 id="추출-근거">추출 근거</h2>
 <blockquote>
 <p>Z.ai는 GLM-5.3이 GLM-5.2와 **같은 base model에서 출발**했고 성능 증가는 scaled post-training에서 왔다고 설명합니다.</p>
 </blockquote>
-<p><a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 B</a></p>
+<p>Z.ai는 GLM-5.3이 GLM-5.2와 동일한 기반 모델에서 출발했으며, 후훈련 규모를 확대한 결과 성능이 향상됐다고 설명한다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 A</a></p>
+<blockquote>
+<p>GLM-5.3은 전작 대비 큰 향상을 보였다고 Z.ai가 보고하지만, Terminal-Bench 3.0 및 DeepSWE v1.1 표에서 Fable 5나 GPT-5.6 Sol보다 낮습니다.</p>
+</blockquote>
+<p>Z.ai는 전작 대비 큰 향상을 보고했다. 회사가 공개한 표에서 GLM-5.3은 Terminal-Bench 3.0과 DeepSWE v1.1 모두 Fable 5와 GPT-5.6 Sol보다 낮았다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 A</a></p>
+<blockquote>
+<p>**CyberGym (Vulnerability Discovery):** 회사 표에서 GLM-5.3은 **84.5%**로 비교군 중 가장 높습니다.</p>
+</blockquote>
+<p>Z.ai의 CyberGym 평가에서 GLM-5.3은 84.5%로 비교군 중 가장 높았다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 A</a></p>
+<blockquote>
+<p>‘창발적’은 회사의 해석이며 독립적으로 성립이 확인된 과학적 분류가 아닙니다.</p>
+</blockquote>
+<p>보고서 작성자는 사이버 역량의 ‘창발적’이라는 표현을 Z.ai의 해석으로 분류하며, 독립 검증이 필요하다고 본다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 A</a></p>
+<blockquote>
+<p>발표 본문은 &quot;medium-to-high&quot; 1,097건이라고 쓰지만 같은 페이지의 ledger summary는 **Critical 107 + High 990 = 1,097**로 표시합니다.</p>
+</blockquote>
+<p>보고서는 보안 이슈 1,097건의 심각도 분류가 Z.ai 발표 본문과 같은 페이지의 원장 요약에서 다르게 표시된 것을 확인했다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 A</a></p>
+<blockquote>
+<p>Z.ai는 발표 시점에 weights가 아직 공개되지 않았으며, 안전성 평가와 hardening 완료 후 **2주 뒤 공개할 계획**이라고 밝혔습니다.</p>
+</blockquote>
+<p>Z.ai에 따르면 발표 당시 가중치는 미공개 상태였으며, 안전성 평가와 보안 강화 완료 후 2주 뒤 공개할 계획이었다. <a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">근거 A</a></p>
+<blockquote>
+<p>산술적 계산에 기초한 분석진의 유력한 가설(Conspiracy Theory)이며, Z.ai 공식 입장으로 검증되지는 않음.</p>
+</blockquote>
+<p>연산 강도 약 120이 중국산 GPU에 맞춘 설계의 결과라는 설명은 분석진의 가설이며 Z.ai의 공식 확인은 없다. <a href="../../../sources/20261018-youtube-5OwUwMSkO4Y/">근거 B</a></p>
 <h2 id="근거-소스">근거 소스</h2>
 <ul>
 <li><a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</a></li>
-<li><a href="../../../sources/20260815-web-interconnects-glm53-chinese-labs/">GLM-5.3: How Chinese labs keep stride with the frontier</a></li>
+<li><a href="../../../sources/20261018-youtube-5OwUwMSkO4Y/">Ep. 038 - Is GLM 5.3 a Mythos-Class Cyber Model From China? (InferenceX)</a></li>
+<li><a href="../../../sources/share-6ab481b2-24a8-83ee-b963-d7256b72b40a/">중국 프론티어 AI 4개 진영의 ‘효율 아키텍처 도약’ 보고서</a></li>
 </ul>
 
 </article>
 <section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../../">LLM Wiki</a></li>
 <li><a href="../../../sources/20260814-web-zai-glm53-frontier-coding-cyber/">GLM-5.3: Frontier Coding with Emergent Cyber Capabilities</a></li>
-<li><a href="../../../sources/20260815-web-interconnects-glm53-chinese-labs/">GLM-5.3: How Chinese labs keep stride with the frontier</a></li></ul></section>
+<li><a href="../../../sources/20261018-youtube-5OwUwMSkO4Y/">Ep. 038 - Is GLM 5.3 a Mythos-Class Cyber Model From China? (InferenceX)</a></li>
+<li><a href="../../../sources/share-6ab481b2-24a8-83ee-b963-d7256b72b40a/">중국 프론티어 AI 4개 진영의 ‘효율 아키텍처 도약’ 보고서</a></li></ul></section>
 </main>
 </body>
 </html>

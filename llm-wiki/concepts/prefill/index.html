@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prefill</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Prefill</h1>
+<p class="page-meta">근거 소스 3편</p>
+<h2 id="추출-근거">추출 근거</h2>
+<blockquote>
+<p>입력 프롬프트를 처리하는 **Pre-fill 단계는 GPU/HBM**이 담당하고, 한 토큰씩 생성하는 **Decode 단계는 Raptor**가 담당하는 역할 분담이 유력합니다.</p>
+</blockquote>
+<p>작성자는 GPU/HBM이 프리필을 처리하고 Raptor가 디코드를 맡는 역할 분담이 유력하다고 봤다. <a href="../../sources/20260824-chatgpt-6a8bb6f3-dmatrix-raptor-3d-dram/">근거 A</a></p>
+<blockquote>
+<p>단, KV 전송 네트워크(NVLink급)가 빠르고 규모가 있어야 이득이며, 작은 규모에서는 chunked prefill이 더 유리합니다(화자도 동일한 경계를 제시).</p>
+</blockquote>
+<p>보고서는 프리필과 디코딩을 분리하는 이점이 KV 전송 속도와 운영 규모에 달려 있다고 설명한다. <a href="../../sources/20260902-youtube-9Qf_QLt7IWY-ai-semiconductor-kv-cache-roofline/">근거 B</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../sources/20260824-chatgpt-6a8bb6f3-dmatrix-raptor-3d-dram/">d-Matrix Raptor 3D-DRAM은 HBM 시장을 바꿀까</a></li>
+<li><a href="../../sources/20260902-youtube-9Qf_QLt7IWY-ai-semiconductor-kv-cache-roofline/">EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지</a></li>
+<li><a href="../../sources/20260915-youtube-y2W4FNAuPEA-llm-inference-at-scale/">Deep dive on LLM Inference at Scale — Harshul Jain, Audible &amp; Tanmay Sah, Independent AI Researcher</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../">LLM Wiki</a></li>
+<li><a href="../../sources/20260824-chatgpt-6a8bb6f3-dmatrix-raptor-3d-dram/">d-Matrix Raptor 3D-DRAM은 HBM 시장을 바꿀까</a></li>
+<li><a href="../../sources/20260902-youtube-9Qf_QLt7IWY-ai-semiconductor-kv-cache-roofline/">EP 112. AI 반도체 안에서 일어나는 일들: KV Cache부터 Roofline까지</a></li>
+<li><a href="../../sources/20260915-youtube-y2W4FNAuPEA-llm-inference-at-scale/">Deep dive on LLM Inference at Scale — Harshul Jain, Audible &amp; Tanmay Sah, Independent AI Researcher</a></li></ul></section>
+</main>
+</body>
+</html>

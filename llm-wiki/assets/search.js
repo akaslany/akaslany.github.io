@@ -25,6 +25,12 @@ function lower(text) {
   return (text || "").normalize("NFC").toLowerCase();
 }
 
+function resultUrl(page) {
+  if (page.url) return page.url;
+  const directory = page.id.replace(/(?:^|\/)index$/, "");
+  return directory ? directory.split("/").map(encodeURIComponent).join("/") + "/" : "./";
+}
+
 function search(event) {
   event.preventDefault();
   const query = lower(queryInput.value).trim();
@@ -37,9 +43,9 @@ function search(event) {
   for (const page of searchPages) {
     const fields = [
       [lower(page.title), 5],
-      [lower(page.aliases.join(" ")), 4],
+      [lower((page.aliases || []).join(" ")), 4],
       [lower(page.summary_1line), 2],
-      [lower(page.topics.join(" ")), 1],
+      [lower((page.topics || []).join(" ")), 1],
       [lower([page.kind, kindLabels[page.kind], page.type, typeLabels[page.type], page.date].join(" ")), 1],
     ];
     const termScores = terms.map(term =>
@@ -54,7 +60,7 @@ function search(event) {
   for (const {page} of matches) {
     const item = document.createElement("li");
     const anchor = document.createElement("a");
-    anchor.href = page.url;
+    anchor.href = resultUrl(page);
     anchor.textContent = page.title;
     item.append(anchor);
     const description = document.createElement("small");
