@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FrontierCS 2: A Benchmark for Computer Science R D</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>FrontierCS 2: A Benchmark for Computer Science R D</h1>
+<p class="page-meta">논문 · 2026-11-23</p>
+<h2 id="요약">요약</h2>
+<p>FrontierCS 2는 실제 연구 코드로 AI 에이전트의 연구개발 역량을 평가했으며, 최고 통과율은 58%였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2610.29932">출처</a> · <a href="https://www.youtube.com/watch?v=5PhprXMKw4A">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/harness/">Harness</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-dimakis/">알렉스 디마키스</a></li>
+<li><a href="../../entities/people/alvin-cheung/">앨빈 청</a></li>
+<li><a href="../../entities/people/dongruixuan-li/">동루이쉔 리</a></li>
+<li><a href="../../entities/people/hanchen-li/">한천 리</a></li>
+<li><a href="../../entities/people/ion-stoica/">이온 스토이카</a></li>
+<li><a href="../../entities/people/jiantao-jiao/">지앙타오 지아오</a></li>
+<li><a href="../../entities/people/jingbo-shang/">징보 상</a></li>
+<li><a href="../../entities/people/joseph-e-gonzalez/">조셉 E. 곤잘레스</a></li>
+<li><a href="../../entities/people/karthik-r-narasimhan/">카르틱 R. 나라심한</a></li>
+<li><a href="../../entities/people/koushik-sen/">코식 센</a></li>
+<li><a href="../../entities/people/kunle-olukotun/">쿤레 올루코툰</a></li>
+<li><a href="../../entities/people/matei-zaharia/">마테이 자하리아</a></li>
+<li><a href="../../entities/people/ofir-press/">오피르 프레스</a></li>
+<li><a href="../../entities/people/qiuyang-mang/">치양 망</a></li>
+<li><a href="../../entities/people/runyuan-he/">룬위안 허</a></li>
+<li><a href="../../entities/people/wenhao-chai/">원하오 차이</a></li>
+<li><a href="../../entities/people/yujun-he/">유쥔 허</a></li>
+<li><a href="../../entities/people/zihan-zheng/">지한 젠</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="frontiercs-2-컴퓨터-공학-r-d용-ai-에이전트-벤치마크-분석-보고서">FrontierCS 2: 컴퓨터 공학 R&amp;D용 AI 에이전트 벤치마크 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>[사실] <strong>FrontierCS 2</strong>는 대형 언어 모델(LLM) 기반 인공지능 에이전트가 최첨단 컴퓨터 공학 연구개발(R&amp;D) 분야에 실질적으로 기여할 수 있는지를 평가하기 위해 구축된 벤치마크 평가 체계이다. 본 평가 시스템은 에이전트를 실제 연구 환경과 동일한 코드 리포지토리(Repository) 내부로 진입시킨 후, 원본 논문의 핵심 기술 기여 부분을 삭제(Subtraction)하여 제공한다. 에이전트는 삭제된 코드를 재구축하고 개선함으로써, 논문 저자들이 공개한 레퍼런스 코드의 성과를 능가해야 하는 도전적인 과제를 수행한다.</p>
+<p>[사실] 단순 단답형 문제나 단일 프로그램 제출만을 평가하던 기존 벤치마크(FrontierCS 1, ALE-Bench 등)와 달리, FrontierCS 2는 코드베이스 내부에서 지속적인 R&amp;D 작업을 수행하도록 설계되었다. 또한, 소프트웨어 결함 수정 테스트 기반의 SWE-bench나 캐글 리더보드 순위 기반의 MLE-bench와 같은 기존 환경 기반 벤치마크들이 텍스트 문제나 머신러닝 영역에 국한되었던 한계를 넘어선다. FrontierCS 2는 13개 컴퓨터 공학 전 분야의 저자 원본 코드베이스에서 핵심 기여를 삭제하는 '뺄셈' 구조를 취하며, 격리된 심사위원(Judge) 피드백 메커니즘을 통해 실시간 개발 수트 점수를 제공하고, 에이전트에게 비공개된 최종 평가 수트(Held-out Final Suite)로 최종 제출물을 평가한다.</p>
+<p>[사실] FrontierCS 2는 머신러닝 시스템(MLSys), 고성능 연산(HPC), 데이터베이스, 암호학, 네트워크, 보안, 로보틱스 등 13개 컴퓨터 공학 도메인에 걸친 48개 공개 과제와 100개 이상의 미공개 프라이빗 과제로 구성된다. 주요 12개 AI 에이전트를 대상으로 정밀 평가를 수행한 결과, 가장 우수한 성과를 거둔 <strong>Claude Opus 5.5</strong>(Claude Code 하네스)조차 58%의 통과율(Pass Rate)을 기록하는 데 그쳤다. [사실] 특히 48개 공개 과제 중 16개 과제에서는 12개 에이전트 전원이 단 한 번의 실행(Run)도 통과하지 못했으며, 문항 반응 이론 기반 통계 분석 결과 과제 난이도의 중앙값이 최고 성능 에이전트의 역량 수준에 위치하여 현존 최첨단 AI 에이전트에게 매우 높은 R&amp;D 장벽이 존재함을 입증하였다.</p>
+<hr />
+<h4 id="2-주요-논점-key-issues-detailed-analysis">2. 주요 논점 (Key Issues &amp; Detailed Analysis)</h4>
+<h5 id="2-1-뺄셈-기반-과제-구축-및-격리된-평가-환경-task-building-judge-architecture">2.1. 뺄셈 기반 과제 구축 및 격리된 평가 환경 (Task Building &amp; Judge Architecture)</h5>
+<ul>
+<li>
+<p><strong>뺄셈 기반 과제 구축 (Task Building by Subtraction)</strong></p>
+<ul>
+<li><strong>[사실] 논점</strong>: 연구 논문 저자가 공개한 원본 코드베이스에서 핵심 기술 기여 코드를 삭제한 후, 삭제된 코드를 비공개 인간 레퍼런스(Human Reference)로 지정하여 에이전트가 이를 재구성 및 개선하도록 요구한다.</li>
+<li><strong>[사실] 메커니즘</strong>: 핵심 기여 코드가 제거되더라도 코드베이스 내 의존성 구조와 함수 호출 인터페이스는 완벽히 유지된다. 원본 레퍼런스 코드가 해당 리포지토리 내에서 오라클(Oracle) 역할을 수행하므로, 레퍼런스가 보유한 성과 수치가 해당 과제의 절대적 통과 기준(Pass Threshold)이 된다.</li>
+</ul>
+</li>
+<li>
+<p><strong>격리된 심사(Judge) 구조 및 평가 프로세스</strong></p>
+<ul>
+<li><strong>[사실] 샌드박스 격리</strong>: 에이전트 작업 공간과 심사위원(Judge) 평가 시스템은 엄격히 분리된 별도의 샌드박스(Sandbox) 환경에서 오프라인으로 실행된다. 에이전트 샌드박스는 외부에 공개된 저자의 원본 코드를 무단 다운로드하지 못하도록 드라이버(Driver)와의 통신 외 모든 외부 네트워크 연결이 완전히 차단된다.</li>
+<li><strong>[사실] 피드백 및 통제</strong>: 에이전트는 과제당 5시간의 제한 시간 동안 자유롭게 패치(Patch)를 수시로 제출할 수 있다. 심사위원은 개발 수트(Development Suite) 기준 점수와 통과 지표 수만을 담은 정화된(Sanitized) 메시지만 반환하며, 인간 레퍼런스의 실제 점수나 평가 프로그램의 원시 표준 출력(stdout/stderr)은 절대 에이전트에 노출하지 않는다.</li>
+<li><strong>[사실] 최종 평가</strong>: 제한 시간이 종료되면 에이전트는 단 하나의 패치를 최종 제출물로 지정한다. 심사위원은 비공개 보류 평가 수트(Held-out Final Suite)를 활용하여 해당 패치를 검증하며, 모든 성과 지표와 보류 워크로드 전체에서 인간 레퍼런스를 완벽히 능가해야만 '통과(Pass)' 판정을 내린다.</li>
+</ul>
+</li>
+<li>
+<p><strong>구체적 구축 사례 (SVG-EAR 과제)</strong></p>
+<ul>
+<li><strong>[사실] 사례</strong>: Sparse VideoGen 리포지토리에 기반한 SVG-EAR 과제에서는 에러 인지 아텐션(Error-aware attention) 클래스와 3개의 핵심 내부 루틴(클러스터 평균화, 계산할 클러스터 쌍 선택, 나머지 추정 연산)을 삭제한 후 에이전트에 제공했다.</li>
+<li><strong>[사실] 기준</strong>: 에이전트는 처리 지연 시간(Latency)이 레퍼런스의 0.96배 이하이어야 하며, 비디오 화질 지표인 PSNR 오차 0.25 dB 이내, SSIM 오차 0.01 이내, LPIPS 오차 0.005 이내를 동시에 만족하는 패치를 구현해야 한다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-2-에이전트-성능-평가-및-역량-지표-evaluation-results-fci-fdi-analysis">2.2. 에이전트 성능 평가 및 역량 지표 (Evaluation Results &amp; FCI/FDI Analysis)</h5>
+<ul>
+<li>
+<p><strong>주요 평가 지표 정의</strong></p>
+<ul>
+<li><strong>[사실] 통과율 (Pass Rate)</strong>: 에이전트의 전체 실행 중 최종 제출물이 모든 평가 지표와 보류 워크로드 전체에서 레퍼런스를 능가한 실행의 비율(%).</li>
+<li><strong>[사실] 평균 점수 격차 (Mean Margin)</strong>: 각 과제 고유 스케일(0~100점) 상에서 에이전트의 최종 점수와 인간 레퍼런스 점수 간의 평균 차이(0점은 레퍼런스와 동률).</li>
+<li><strong>[사실] FrontierCS 역량 지수 (FCI, FrontierCS Capabilities Index)</strong>: 문항 반응 이론(Item Response Model)을 적용하여 에이전트의 역량을 동일 직선상에서 평가하는 지표. 1 Logit당 10점으로 환산하며, 앵커 모델인 Kimi K2.7을 0점으로 지정한다.</li>
+<li><strong>[사실] FrontierCS 난이도 지수 (FDI, FrontierCS Difficulty Index)</strong>: 특정 과제를 특정 에이전트가 통과할 확률이 50%가 되는 시점의 FCI 역량 점수.</li>
+</ul>
+</li>
+<li>
+<p><strong>12개 에이전트 및 앵커 모델 성과 비교표</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 대상 모델 (Model)</th>
+<th style="text-align:left">사용 하네스 (Harness)</th>
+<th style="text-align:center">통과율 (Pass Rate)</th>
+<th style="text-align:center">평균 점수 격차 (Mean Margin)</th>
+<th style="text-align:center">FrontierCS 역량 지수 (FCI) [90% 신뢰구간]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Claude Opus 5.5</strong></td>
+<td style="text-align:left">Claude Code (v2.1.296)</td>
+<td style="text-align:center"><strong>58%</strong></td>
+<td style="text-align:center"><strong>+9.4</strong></td>
+<td style="text-align:center"><strong>55.7</strong> [46.7, 65.8]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPT-6 Astra</strong></td>
+<td style="text-align:left">Codex CLI (v0.162.1)</td>
+<td style="text-align:center">44%</td>
+<td style="text-align:center">+7.1</td>
+<td style="text-align:center">50.7 [40.9, 62.6]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPT-6.1 Sol</strong></td>
+<td style="text-align:left">Codex CLI (v0.162.1)</td>
+<td style="text-align:center">35%</td>
+<td style="text-align:center">+5.7</td>
+<td style="text-align:center">42.6 [32.8, 54.1]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Gemini 4 Argon</strong></td>
+<td style="text-align:left">Pi (v1.2.0)</td>
+<td style="text-align:center">40%</td>
+<td style="text-align:center">+2.1</td>
+<td style="text-align:center">39.5 [27.7, 52.8]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM 5.3</strong></td>
+<td style="text-align:left">ZCode (v0.16.9)</td>
+<td style="text-align:center">25%</td>
+<td style="text-align:center">+1.8</td>
+<td style="text-align:center">36.6 [25.8, 49.5]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Muse Wonder 1.0</strong></td>
+<td style="text-align:left">Muse Code (v1.4.2)</td>
+<td style="text-align:center">21%</td>
+<td style="text-align:center">+4.1</td>
+<td style="text-align:center">34.5 [24.7, 45.6]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>DeepSeek V4.1 Flash</strong></td>
+<td style="text-align:left">DeepSeek Harness (v0.2.0-rc.2)</td>
+<td style="text-align:center">15%</td>
+<td style="text-align:center">+0.5</td>
+<td style="text-align:center">30.7 [20.0, 44.5]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kimi K3</strong></td>
+<td style="text-align:left">Kimi Code (v0.31.0)</td>
+<td style="text-align:center">21%</td>
+<td style="text-align:center">-1.2</td>
+<td style="text-align:center">26.4 [16.0, 39.8]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM 5.3 Flash</strong></td>
+<td style="text-align:left">ZCode (v0.16.9)</td>
+<td style="text-align:center">12%</td>
+<td style="text-align:center">-8.4</td>
+<td style="text-align:center">22.9 [13.4, 34.7]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Muse Spark 1.3</strong></td>
+<td style="text-align:left">Muse Code (v1.4.2)</td>
+<td style="text-align:center">12%</td>
+<td style="text-align:center">-3.3</td>
+<td style="text-align:center">22.1 [13.7, 34.0]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Qwen 3.8 Max</strong></td>
+<td style="text-align:left">Qwen Code (v0.25.0)</td>
+<td style="text-align:center">12%</td>
+<td style="text-align:center">-6.4</td>
+<td style="text-align:center">21.9 [12.2, 32.5]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Step 5 Preview</strong></td>
+<td style="text-align:left">Step Code (v0.1.0)</td>
+<td style="text-align:center">8%</td>
+<td style="text-align:center">-10.6</td>
+<td style="text-align:center">9.8 [0.0, 25.3]</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Kimi K2.7 (앵커)</strong></td>
+<td style="text-align:left">Kimi Code (v0.31.0)</td>
+<td style="text-align:center"><em>기준점</em></td>
+<td style="text-align:center"><em>기준점</em></td>
+<td style="text-align:center"><strong>0.0</strong> <em>(FCI 기준점)</em></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>평가 결과 심층 분석</strong>
+<ul>
+<li><strong>[작성자 해석] 높은 점수와 통과(Pass)의 불일치</strong>: 최종 평균 점수 격차가 레퍼런스보다 높아도 통과에 실패하는 사례가 빈번하게 발생한다. 단일 스케일 최종 점수는 평균적 우수성을 나타내지만, '통과' 조건은 속도, 메모리, 정확도 등 모든 지표와 미공개 보류 워크로드 전체를 단 하나의 예외 없이 만족해야 하는 엄격한 조건이기 때문이다.</li>
+<li><strong>[사실] FCI와 FDI의 상관관계</strong>: 통계 모델링 분석 결과, 전체 과제 난이도(FDI)의 중앙값은 최고 성능 에이전트(Claude Opus 5.5)의 역량 지수 위치에 형성되어 있다. 다만 개별 과제별 FDI의 90% 부트스트랩 신뢰구간 불확실성이 크므로, FDI 수치만으로 개별 과제 간의 세부 난이도 순위를 단정할 수는 없다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-3-테스트-시간-스케일링-및-비용-대비-효율성-test-time-scaling-cost-efficiency">2.3. 테스트 시간 스케일링 및 비용 대비 효율성 (Test-time Scaling &amp; Cost Efficiency)</h5>
+<ul>
+<li>
+<p><strong>비용 예산(Cost Budget)에 따른 성능 변화</strong></p>
+<ul>
+<li><strong>[사실] 저예산 구간 선두</strong>: 1회 실행당 소요되는 비용 예산이 매우 낮은 초반 구간(1달러 미만)에서는 <strong>DeepSeek V4.1 Flash</strong>가 가장 뛰어난 FCI 역량을 보여준다. 이는 동일 예산 범위 내에서 대량의 추론을 수행할 수 있기 때문이다. 단, DeepSeek V4.1 Flash의 비용 산정 방식은 하한선(lower bound) 기준에 해당하므로, 토큰 가격 책정 방식에 따라 이러한 초기 우위 위치가 변동될 수 있다는 조건부 성격을 지닌다.</li>
+<li><strong>[사실] 고예산 구간 선두</strong>: 예산 제약을 10~20달러 이상의 고예산 영역으로 확장할 경우, <strong>Claude Opus 5.5</strong>의 역량이 가파르게 상승하며 최종적으로 가장 높은 FCI 지수를 달성한다.</li>
+</ul>
+</li>
+<li>
+<p><strong>GPT-6.1 Sol과 GPT-6 Astra의 비용 대비 통과율 비교</strong></p>
+<ul>
+<li><strong>[사실] 효율성 격차</strong>: GPT-6.1 Sol은 절대적 통과율(35%) 면에서 GPT-6 Astra(44%)보다 낮으나, 실행당 평균 비용 축 상에서 GPT-6 Astra 대비 현저히 왼쪽에 위치하여 비용 대비 우수한 과제 수행 효율성을 증명한다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-4-분야별-심층-사례-연구-case-studies">2.4. 분야별 심층 사례 연구 (Case Studies)</h5>
+<h6 id="6-1-암호학-quarterpir-과제">6.1 암호학 (QuarterPIR 과제)</h6>
+<ul>
+<li><strong>[소스크레임/주장] 논점</strong>: 클라이언트가 서버 데이터베이스를 조회할 때 서버가 특정 조회 항목을 인지할 수 없도록 보호하는 프라이버시 보존 정보 검색(PIR) 최적화 과제.</li>
+<li><strong>[사실] 근거 및 메커니즘</strong>: 인간 레퍼런스 코드는 서버 응답 시 데이터베이스 각 그룹의 패리티 값을 모두 반환하여 불필요한 데이터 전송이 발생했다. <strong>Muse Wonder 1.0</strong>은 이 방식을 RAID-6 디스크 어레이의 2개 손상 디스크 복구 알고리즘에서 착안한 2개 체크섬(Checksum) 구조로 완전 대체했다.</li>
+<li><strong>[사실] 결과</strong>: Muse Wonder 1.0은 6,700만 개 엔트리(67 million entries) 환경에서 조회당 데이터 전송량을 레퍼런스(1,760바이트) 대비 <strong>1,280바이트</strong>로 크게 단축하며 통과했다. 다른 통과 모델(GPT-6.1 Sol 1,664바이트 등) 대비 전송량을 대폭 절감했으나, 현행 벤치마크 평가 지표는 절감 폭에 따른 부가 가산점을 부여하지 않는 한계를 드러냈다.</li>
+</ul>
+<h6 id="6-2-네트워크-bbq-패킷-스케줄러-과제">6.2 네트워크 (BBQ 패킷 스케줄러 과제)</h6>
+<ul>
+<li><strong>[소스크레임/주장] 논점</strong>: FPGA 하드웨어 기반 패킷 스케줄러의 비트맵 트리를 제어하여 클록 주기와 처리량을 최적화하는 과제.</li>
+<li><strong>[사실] 근거 및 메커니즘</strong>:
+<ul>
+<li><strong>Claude Opus 5.5</strong>: 온칩 메모리의 모든 카운터를 레지스터(Register)로 이동시켜 단일 주기에 트리 레벨 전체를 업데이트하도록 개조했다.</li>
+<li><strong>Gemini 4 Argon</strong>: 메모리 구조를 유지하면서 카운터 읽기 연산이 진행되는 동안 유효성 검사를 온더플라이(On-the-fly)로 병행 처리하도록 제어 로직을 최적화했다.</li>
+</ul>
+</li>
+<li><strong>[사실] 결과</strong>: Claude Opus 5.5는 통과 모델 중 가장 짧은 클록 주기(최고 속도)를 달성했으나, 4,096개 우선순위 조건에서 룩업 테이블(LUT) 회로 자원을 과도하게 소비하였으며, BBQ가 본래 의도했던 수준의 대형 비트맵 트리 구조로 확장하는 데에는 구조적 한계가 존재했다. 반면 Gemini 4 Argon은 레퍼런스 수준의 회로 크기를 유지했다. 벤치마크의 최종 점수 산정이 회로 크기 감점을 반영하지 않고 속도만 포상함에 따라 Claude Opus 5.5가 1위로 평가되는 단점을 보였다.</li>
+</ul>
+<h6 id="6-3-mlsys-svg-ear-희소-비디오-아텐션-과제">6.3 MLSys (SVG-EAR 희소 비디오 아텐션 과제)</h6>
+<ul>
+<li><strong>[소스크레임/주장] 논점</strong>: 비디오 생성 디퓨전 모델의 희소 아텐션 연산 시 오차를 측정하여 계산 속도와 비디오 화질 간의 균형을 맞추는 과제.</li>
+<li><strong>[사실] 근거 및 메커니즘</strong>: <strong>GPT-6 Astra</strong>는 기존 예측 방식 대신 매 디노이징 단계마다 일부 실제 쿼리의 정확한 아텐션을 직접 계산하고 오차 한계 내 최소 예산을 동적으로 선택하며 중심점 추정 편향을 보정하는 방식을 도입했다.</li>
+<li><strong>[사실] 결과</strong>: 48개 과제 중 12개 에이전트 전원이 통과에 실패한 16개 과제 중 하나다. GPT-6 Astra는 클립당 평균 처리 시간(729초 vs 레퍼런스 891초)과 평균 화질(PSNR 23.8 dB vs 레퍼런스 21.7 dB)에서 레퍼런스를 뛰어넘었으나, 보류된 2개 클립에서 미세한 화질 허용 대역폭 기준을 미달하여 최종 실패 처리되었다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-entities-authors-and-roles">3. 등장 인물 및 화자 (Entities, Authors, and Roles)</h4>
+<p>[사실] 소스 문서에 명시된 주요 저자, 소속 기관, 조언자(Advisors) 및 앵커 모델 정보는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">이름 / 명칭</th>
+<th style="text-align:left">소속 기관 / 하네스 (Harness)</th>
+<th style="text-align:left">비고 및 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>주요 저자 (Co-first)</strong></td>
+<td style="text-align:left">치양 망 (Qiuyang Mang)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">공동 제1저자 및 교신저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 저자 (Co-first)</strong></td>
+<td style="text-align:left">원하오 차이 (Wenhao Chai)</td>
+<td style="text-align:left">Princeton University</td>
+<td style="text-align:left">공동 제1저자 및 교신저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 저자 (Co-first)</strong></td>
+<td style="text-align:left">룬위안 허 (Runyuan He)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">공동 제1저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 저자 (Co-first)</strong></td>
+<td style="text-align:left">동루이쉔 리 (Dongruixuan Li)</td>
+<td style="text-align:left">University of Waterloo</td>
+<td style="text-align:left">공동 제1저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 저자 (Co-first)</strong></td>
+<td style="text-align:left">지한 젠 (Zihan Zheng)</td>
+<td style="text-align:left">New York University</td>
+<td style="text-align:left">공동 제1저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 저자 (Co-first)</strong></td>
+<td style="text-align:left">유쥔 허 (Yujun He)</td>
+<td style="text-align:left">Georgia Tech</td>
+<td style="text-align:left">공동 제1저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>교신저자</strong></td>
+<td style="text-align:left">한천 리 (Hanchen Li)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">교신저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">오피르 프레스 (Ofir Press)</td>
+<td style="text-align:left"><em>확인 불가</em></td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">지앙타오 지아오 (Jiantao Jiao)</td>
+<td style="text-align:left">NVIDIA</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">쿤레 올루코툰 (Kunle Olukotun)</td>
+<td style="text-align:left">Stanford University</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">카르틱 R. 나라심한 (Karthik R. Narasimhan)</td>
+<td style="text-align:left">Princeton University</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">징보 상 (Jingbo Shang)</td>
+<td style="text-align:left">UCSD</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">코식 센 (Koushik Sen)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">마테이 자하리아 (Matei Zaharia)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">알렉스 디마키스 (Alex Dimakis)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">이온 스토이카 (Ion Stoica)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">조셉 E. 곤잘레스 (Joseph E. Gonzalez)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>조언자 (Advisors)</strong></td>
+<td style="text-align:left">앨빈 청 (Alvin Cheung)</td>
+<td style="text-align:left">UC Berkeley</td>
+<td style="text-align:left">연구 자문</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>앵커 모델 (Anchor)</strong></td>
+<td style="text-align:left">Kimi K2.7</td>
+<td style="text-align:left">Kimi Code (v0.31.0)</td>
+<td style="text-align:left">FCI 역량 지수의 0 Logit 기준점 모델</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-주요-수치-및-시점-verifiable-figures-resource-settings">4. 주요 수치 및 시점 (Verifiable Figures &amp; Resource Settings)</h4>
+<ul>
+<li><strong>[사실] 과제 및 벤치마크 규모</strong>: 총 48개 공개 과제(13개 컴퓨터 공학 도메인) 및 미공개 프라이빗 과제 100개 이상 보유.</li>
+<li><strong>[사실] 실행 환경 및 자원 제약</strong>: 에이전트 과제당 작업 제한 시간 5시간, 에이전트 작업 용기(Container) 자원 할당 코어 수 1~8개, 메모리 2~32 GiB, 최종 평가 검증 제한 시간 과제별 2분(Structured LWE)부터 1,800분(Continuum)까지 설정.</li>
+<li><strong>[사실] GPU 자원 설정</strong>: 사용 GPU 종류 NVIDIA A100 (80GB 모델), H100, L4, A10G. 에이전트 자체 실험용 GPU 시간(0.25~15시간) 및 검증용 GPU 시간(0.5~91시간) 할당.</li>
+<li><strong>[사실] 에이전트별 하네스 설정값</strong>:
+<ul>
+<li>Claude Opus 5.5: Claude Code v2.1.296, reasoning effort: max, output limit: 미표기.</li>
+<li>GPT-6 Astra / GPT-6.1 Sol: Codex CLI v0.162.1, reasoning effort: xhigh, output limit: not set.</li>
+<li>Gemini 4 Argon: Pi v1.2.0, reasoning effort: high, output limit: rest of context.</li>
+<li>GLM 5.3 / GLM 5.3 Flash: ZCode v0.16.9, reasoning effort: max, output limit: 262,144.</li>
+<li>Muse Wonder 1.0 / Muse Spark 1.3: Muse Code v1.4.2, reasoning effort: max/high, output limit: 128,000.</li>
+<li>DeepSeek V4.1 Flash: DeepSeek Harness v0.2.0-rc.2, reasoning effort: max, output limit: 262,144.</li>
+<li>Kimi K3 / Kimi K2.7: Kimi Code v0.31.0, reasoning effort: high/medium, output limit: 최대 131,072.</li>
+<li>Step 5 Preview: Step Code v0.1.0, reasoning effort: high, output limit: 64,000.</li>
+<li>Qwen 3.8 Max: Qwen Code v0.25.0, reasoning effort: high, output limit: not set.</li>
+</ul>
+</li>
+<li><strong>[사실] 수학적 통계 모델 파라미터 (FCI/FDI Fit)</strong>:
+<ul>
+<li>통계 피팅에 사용된 총 624개 실행 결과(624 runs).</li>
+<li>리샘플링 부트스트랩 횟수: FCI 500회, 예산 제약 FCI 100회, FDI 2,000회 가중 추출(Weighted draws).</li>
+<li>모델 적합 파라미터: 실행 효과 표준편차 ($\sigma_u = 2.041$ logit / 20.41 FCI pts), 마진 기울기 ($\alpha = 0.597$), 과제 난이도 오프셋 ($\delta = 1.276$ logit / 12.76 FCI pts), 그룹 난이도 산포 ($\tau = 3.954$ logit / 39.54 FCI pts), 마진 잡음 ($\sigma_e = 2.323$), 마진 단위 하한 ($c = 5.78$ 점).</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<ul>
+<li>
+<p><strong>[사실] 에이전트 전원 실패 과제 존재</strong>: 48개 공개 과제 중 16개 과제(33.3%)에서는 평가된 12개 에이전트 전체의 모든 실행이 단 한 번도 통과 기준을 충족하지 못했다. 이는 최첨단 LLM 에이전트라 할지라도 고난도 R&amp;D 문제 해결에 명확한 역량적 한계가 존재함을 보여준다.</p>
+</li>
+<li>
+<p><strong>[사실] 제공자 차원의 거부 건</strong>: Gemini 4 Argon 평가 과정 중 2회의 실행은 제출 전 제공자(Provider) 차원에서 요청이 거부되어 최종 제출물 없음(0점 및 통과 실패)으로 처리되었다.</p>
+</li>
+<li>
+<p><strong>[사실] 하네스 설정값 미확인 항목</strong>: GPT-6 Astra, GPT-6.1 Sol, Qwen 3.8 Max의 출력 토큰 제한 수치는 하네스 설정상 &quot;미설정(Not set)&quot;으로 명시되어 정확한 제한 값을 소스 문서에서 확인할 수 없다.</p>
+</li>
+<li>
+<p><strong>[작성자 해석] 평가 지표의 부작용 미반영 한계</strong>:</p>
+<ol>
+<li><strong>BBQ 과제</strong>: Claude Opus 5.5가 회로 크기(LUT 수)를 비정상적으로 늘려 속도를 높였으나, 평가 시스템이 하드웨어 자원 비용 오버헤드를 점수에 감안하지 못하고 1위로 평정하는 단점이 존재한다.</li>
+<li><strong>QuarterPIR 과제</strong>: Muse Wonder 1.0이 RAID-6 체크섬으로 전송량을 획기적으로 줄였음에도, 통과 기준만 간신히 넘긴 다른 모델들과 동일한 '통과(Pass)'로 처리되어 알고리즘적 우수성을 변별하지 못했다.</li>
+<li><strong>SVG-EAR 과제</strong>: 평균 처리 속도와 화질이 레퍼런스보다 뛰어남에도 단 2개 클립의 미세한 지표 미달로 인해 실패 처리되는 등, 단일 기준점 이분법 통과 방식이 가지는 경직성이 존재한다.</li>
+<li><strong>시사점</strong>: 향후 차세대 벤치마크 평가 시스템 설계자들은 단순 통과 여부(Pass/Fail) 단일 지표를 넘어, 회로 크기·전송 바이트 수·자원 오버헤드와 같은 물리적 부작용 지표(Side costs)를 최종 평가 수식에 동적으로 결합하는 다차원 평가지표 체계를 도입해야 할 것이다.</li>
+</ol>
+</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>27개 페이지</summary><ul><li><a href="../../concepts/harness/">Harness</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-dimakis/">알렉스 디마키스</a></li>
+<li><a href="../../entities/people/alvin-cheung/">앨빈 청</a></li>
+<li><a href="../../entities/people/dongruixuan-li/">동루이쉔 리</a></li>
+<li><a href="../../entities/people/hanchen-li/">한천 리</a></li>
+<li><a href="../../entities/people/ion-stoica/">이온 스토이카</a></li>
+<li><a href="../../entities/people/jiantao-jiao/">지앙타오 지아오</a></li>
+<li><a href="../../entities/people/jingbo-shang/">징보 상</a></li>
+<li><a href="../../entities/people/joseph-e-gonzalez/">조셉 E. 곤잘레스</a></li>
+<li><a href="../../entities/people/karthik-r-narasimhan/">카르틱 R. 나라심한</a></li>
+<li><a href="../../entities/people/koushik-sen/">코식 센</a></li>
+<li><a href="../../entities/people/kunle-olukotun/">쿤레 올루코툰</a></li>
+<li><a href="../../entities/people/matei-zaharia/">마테이 자하리아</a></li>
+<li><a href="../../entities/people/ofir-press/">오피르 프레스</a></li>
+<li><a href="../../entities/people/qiuyang-mang/">치양 망</a></li>
+<li><a href="../../entities/people/runyuan-he/">룬위안 허</a></li>
+<li><a href="../../entities/people/wenhao-chai/">원하오 차이</a></li>
+<li><a href="../../entities/people/yujun-he/">유쥔 허</a></li>
+<li><a href="../../entities/people/zihan-zheng/">지한 젠</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></details></section>
+</main>
+</body>
+</html>
