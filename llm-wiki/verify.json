@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 39537861,
+  "dist_bytes": 40058802,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -7,7 +7,7 @@
       "ok": true
     },
     "escapes": {
-      "checked": 4107,
+      "checked": 4170,
       "html_escapes": 0,
       "html_paths": {},
       "markdown_escapes": 0,
@@ -16,8 +16,8 @@
       "ok": true
     },
     "grounding": {
-      "checked": 4107,
-      "entity_source_links_checked": 6883,
+      "checked": 4170,
+      "entity_source_links_checked": 7009,
       "invalid_extractions": {},
       "issues": {},
       "ok": true,
@@ -25,26 +25,26 @@
     },
     "links": {
       "broken": 0,
-      "html_checked": 110107,
+      "html_checked": 111656,
       "issues": [],
-      "markdown_checked": 32807,
+      "markdown_checked": 33263,
       "ok": true
     },
     "links_recheck": {
       "broken": 0,
-      "checked_associations": 21720,
+      "checked_associations": 22048,
       "missing_associations": [],
       "ok": true
     },
     "markers": {
-      "checked": 5077,
+      "checked": 5149,
       "occurrences": 0,
       "ok": true,
       "pages": 0,
       "paths": {}
     },
     "material": {
-      "checked": 232,
+      "checked": 235,
       "issues": {},
       "min_body_chars": 357,
       "min_evidence_sources": 2,
@@ -53,11 +53,11 @@
       "registry_matches": true
     },
     "orphans": {
-      "edges": 31606,
+      "edges": 32051,
       "graph_valid": true,
       "low_source_inbound": [],
       "min_source_inbound": 6,
-      "nodes": 5077,
+      "nodes": 5149,
       "ok": true,
       "orphan_pages": [],
       "orphans": 0
@@ -82,28 +82,28 @@
         "source_sha256": [],
         "source_url": []
       },
-      "expected_sources": 949,
-      "generated": 4107,
+      "expected_sources": 958,
+      "generated": 4170,
       "index": 5,
       "kinds": 9,
       "ok": true,
-      "search_index_bytes": 816429,
-      "sources": 949,
+      "search_index_bytes": 826943,
+      "sources": 958,
       "symmetric_difference": 0,
       "timeline": 7,
-      "total": 5077
+      "total": 5149
     },
     "people_complete": {
-      "corpus_sources": 949,
-      "distinct": 3861,
+      "corpus_sources": 958,
+      "distinct": 3921,
       "extra": [],
-      "extracted_v2": 949,
+      "extracted_v2": 958,
       "missing": [],
       "ok": true,
-      "pages": 3861,
+      "pages": 3921,
       "symmetric_difference": 0,
       "synthesized": 81,
-      "with_quote": 2906
+      "with_quote": 2959
     },
     "people_nonempty": {
       "empty": 0,
@@ -119,7 +119,7 @@
       "checked": 10,
       "entities": {
         "concept/formal-verification": {
-          "evidence": 10,
+          "evidence": 11,
           "ok": true,
           "page": true
         },
@@ -129,12 +129,12 @@
           "page": true
         },
         "org/anthropic": {
-          "evidence": 73,
+          "evidence": 74,
           "ok": true,
           "page": true
         },
         "org/federal-reserve": {
-          "evidence": 33,
+          "evidence": 35,
           "ok": true,
           "page": true
         },
@@ -154,7 +154,7 @@
           "page": true
         },
         "org/nvidia": {
-          "evidence": 58,
+          "evidence": 60,
           "ok": true,
           "page": true
         },
@@ -164,7 +164,7 @@
           "page": true
         },
         "org/samseongjeonja": {
-          "evidence": 15,
+          "evidence": 16,
           "ok": true,
           "page": true
         }
@@ -175,17 +175,17 @@
     "reproducible": {
       "changed_files": 0,
       "changed_paths": [],
-      "compared_files": 5081,
-      "first_sec": 18.408,
+      "compared_files": 5153,
+      "first_sec": 17.544,
       "ok": true,
-      "second_sec": 17.805
+      "second_sec": 18.029
     },
     "schema": {
-      "checked": 5077,
+      "checked": 5149,
       "invalid": 0,
       "issues": {},
       "ok": true,
-      "passed": 5077
+      "passed": 5149
     },
     "selfcontained": {
       "external_resources": 0,

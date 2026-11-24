@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Massive AI Data Centers Will Shift to Modular Compute | Palantir</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Massive AI Data Centers Will Shift to Modular Compute | Palantir</h1>
+<p class="page-meta">YouTube · 2026-11-24</p>
+<h2 id="요약">요약</h2>
+<p>팔란티어의 모듈형 데이터센터, 소버린 AI, 에지 컴퓨팅과 현장 배치 제품 전략을 다룬다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=MAngqVza390">출처</a> · <a href="https://www.youtube.com/watch?v=39JH3tOukQs">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/chad-walquist/">채드 월퀴스트</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+<li><a href="../../topics/product-business/">제품·사업</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="palantir의-모듈형-컴퓨팅-및-소버린-ai-sovereign-ai-전환-전략-해설-보고서">Palantir의 모듈형 컴퓨팅 및 소버린 AI(Sovereign AI) 전환 전략 해설 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 Enterprise AI 인프라 기업인 Palantir Technologies의 현장 배치 엔지니어(Forward Deployed Engineer) 겸 현장 배치 아키텍트(Forward Deployed Architect)인 채드 월퀴스트(Chad Walquist)와의 인터뷰를 바탕으로, 현대 AI 인프라 시장에서 나타나고 있는 거대 데이터센터 중심 패러다임의 변화와 주권적 AI(Sovereign AI) 및 주권적 연산(Sovereign Compute) 전환 전략을 다룬다.</p>
+<p>현재 AI 인프라 구축 및 기술 도입 흐름은 단일 국가나 대규모 중앙집중형 거대 데이터센터 일변도에서 벗어나, 수요가 발생하는 현장에 맞춰 며칠 이내에 신속히 구축 및 배치 가능한 목적 특화형 소형 모듈형 데이터센터(1, 5, 10 MW 단위)로 패러다임이 전환되고 있다. 이러한 인프라 폼팩터 및 배치 방식의 변화는 기업과 국가가 자체 데이터, 인프라, 지식재산권(IP), 모델 통제권을 온전히 소유하려는 '주권(Sovereignty)' 확보 요구와 직접적으로 연계되어 있다.</p>
+<p>Palantir는 플랫폼의 오픈 포맷 제공, 높은 상호운용성, 데이터 및 연산 자율성 보장, 그리고 클라우드 사용량(consumption)에 의존하지 않고 결과(outcome) 중심의 인센티브 구조를 통해 시장의 정치적·기술적 불확실성과 우려(FUD)를 해소하고 있다. 나아가 경영진의 비전(Executive vision)과 현장 실무의 실제 상황(Ground truth) 간 정보 격차(Arbitrage)를 메우는 '현장 배치 엔지니어링(Forward Deployed Engineering)' 활동을 핵심 제품 전략으로 삼아, 극단적인 에지(edge) 환경 및 핵심 인프라에서의 AI 오케스트레이션과 실무 운영 적용을 지원하고 있다.</p>
+<hr />
+<h4 id="2-등장-인물-및-화자-key-figures-speakers">2. 등장 인물 및 화자 (Key Figures &amp; Speakers)</h4>
+<ul>
+<li><strong>채드 월퀴스트 (Chad Walquist)</strong>: Palantir의 현장 배치 엔지니어 겸 현장 배치 아키텍트 (Forward Deployed Engineer / Forward Deployed Architect). 기업 고객이 Palantir의 AIP(Artificial Intelligence Platform) 상에서 AI를 실제 운영 환경(Production)에 성공적으로 적용하도록 현장에서 지원하는 역할을 수행함.</li>
+<li><strong>진행자 (MTS 채널 인터뷰어)</strong>: 이름 미기재 (소스 텍스트 내 명시적 성명 및 세부 소속 확인 불가).</li>
+</ul>
+<hr />
+<h4 id="3-주요-논점-key-arguments-cases">3. 주요 논점 (Key Arguments &amp; Cases)</h4>
+<h5 id="3-1-대형-데이터센터에서-모듈형-데이터센터-modular-compute-로의-전환">3.1 대형 데이터센터에서 모듈형 데이터센터(Modular Compute)로의 전환</h5>
+<ul>
+<li><strong>[사실]</strong>: 모듈형 데이터센터 솔루션 기업인 Armada와의 파트너십을 통해 B300 장비 등을 포함한 인프라를 원격지에 며칠 이내(a matter of days)에 배치하는 사례가 존재하며, 모듈형 데이터센터의 용량 단위는 1, 5, 10 메가와트(MW) 수준으로 언급된다.</li>
+<li><strong>[소스의 주장]</strong>: 인프라 패러다임이 거대한 단일 데이터센터 건설 위주에서, 연산 자원 수요가 발생하는 장소에 분산 배치되는 목적 특화형·고객 소유의 모듈형 데이터센터(Modular Compute)로 전환될 것이다.</li>
+<li><strong>[작성자 해석]</strong>: 이는 중앙집중식 전력 수급 및 입지 선정의 병목을 극복하고, 현장 수요에 맞추어 연산 용량을 적시에 투입하는 하이브리드·분산형 엔터프라이즈 인프라 아키텍처로의 전환을 의미한다.</li>
+</ul>
+<h6 id="근거-및-사례-rationale-examples">근거 및 사례 (Rationale &amp; Examples)</h6>
+<ul>
+<li><strong>근거</strong>: 대형 데이터센터 증설에 대한 지리적·사회적 거부감과 전력 인프라 한계가 존재하는 상황에서, 부지 제약을 극복하고 연산 능력을 즉각적으로 공급할 수 있는 모듈형 폼팩터 혁신이 필수적임.</li>
+<li><strong>사례</strong>: Armada 파트너십을 기반으로 B300 기기를 원격지 공장, 제조 시설 또는 인-컨트리(in-country) 요구 지역에 며칠 만에 구축하여 구동하는 1 MW, 5 MW, 10 MW 단위의 모듈형 데이터센터 배치 모델.</li>
+</ul>
+<hr />
+<h5 id="3-2-주권적-ai-sovereign-ai-와-주권적-연산-sovereign-compute-의-개념-및-fud-해소">3.2 주권적 AI(Sovereign AI)와 주권적 연산(Sovereign Compute)의 개념 및 FUD 해소</h5>
+<ul>
+<li><strong>[사실]</strong>: Palantir는 &quot;Stay Sovereign&quot; 기조 아래 고객의 데이터, 인프라, 지식재산권(IP), 온톨로지(Ontology)에 대한 완전한 소유권을 고객에게 부여한다. 영국 NHS(국가보건서비스) 관련 정치적 논란이나 '블랙박스' 오해에 대해 오픈 포맷, 높은 상호운용성, outcome(결과) 중심 비즈니스 모델로 대응하고 있다. 프랑스(Mistral), 한국, 일본 등 각국은 고유 모델 및 자체 인프라 위에서 Palantir 플랫폼을 구동할 수 있다.</li>
+<li><strong>[소스의 주장]</strong>: 주권(Sovereignty)이란 Palantir를 포함한 특정 벤더의 정책 변경이나 공급망 변수에 영향받지 않고 고객이 비즈니스 연속성과 자체 의사결정 권한을 유지하는 것이다. Palantir 플랫폼은 락인(Lock-in)을 유도하는 '폐쇄형 시스템(Walled Garden)'이 아닌 '담장이 없는 정원(Unwalled Garden)'이며, 클라우드 사용량(consumption) 증가에 의존하지 않는 결과(outcome) 중심 인센티브 구조를 통해 고객의 주권을 실질적으로 보장한다.</li>
+<li><strong>[작성자 해석]</strong>: 소모량 기반의 빅테크 SaaS 비즈니스 모델과 달리, 오픈 아키텍처와 인-컨트리(in-country) 연산 배치를 결합하여 고객의 공급망 종속 우려를 근본적으로 해소하고 엔터프라이즈 및 정부 기관의 신뢰를 확보하는 전략이다.</li>
+</ul>
+<h6 id="근거-및-사례-rationale-examples-2">근거 및 사례 (Rationale &amp; Examples)</h6>
+<ul>
+<li><strong>근거</strong>: 미국 프론티어 랩(Frontier Labs) 인프라 및 모델에 대한 해외 국가들의 종속 우려와 자체 데이터/지식재산권 통제권 유지 욕구.</li>
+<li><strong>사례</strong>:
+<ul>
+<li><strong>프랑스</strong>: 프랑스 자체 AI 챔피언인 미스트랄(Mistral) 모델을 프랑스 국내 고객 소유 인프라 위에서 구동.</li>
+<li><strong>일본</strong>: 일본어 특화 자체 모델을 국가 내 인프라(in-country infrastructure) 및 Palantir 플랫폼 상에서 구동.</li>
+<li><strong>영국 NHS</strong>: 데이터 소유권 및 플랫폼 종속성에 대한 정치권의 FUD(공포·불확실성·의구심)를 오픈 포맷 및 플랫폼 전 레이어에서의 높은 상호운용성 입증, 결과 중심 사업 모델 제시를 통해 해소.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-3-에지-컴퓨팅-edge-compute-및-산업별-실제-적용-사례">3.3 에지 컴퓨팅(Edge Compute) 및 산업별 실제 적용 사례</h5>
+<ul>
+<li><strong>[사실]</strong>: 네트워크 연결이 제한되거나 엄격한 보안·운영 환경에서 AI 연산을 현지화하여 적용하는 산업별 프로젝트가 진행 중이다. Palantir는 거대언어모델(LLM), 전통적인 결정론적 모델(Deterministic models), 비즈니스 로직, 인간-AI 협업(Human-AI collaboration)을 유기적으로 결합하고 관리하는 '오케스트레이션 레이어(Orchestration Layer)' 역할을 수행한다.</li>
+<li><strong>[소스의 주장]</strong>: 다운타임이나 지연시간(Latency)을 허용할 수 없는 미션 크리티컬한 핵심 인프라 환경에서는 에지 단에서의 로컬 모델 실행과 이에 기초한 의사결정 오케스트레이션 체계가 필수적이다.</li>
+<li><strong>[작성자 해석]</strong>: 단일 LLM의 단순 호출 및 호스팅 수준을 넘어, 불확실성이 높은 에지 현장에서 복수의 확률적·결정론적 모델과 비즈니스 규칙, 인간 제어 권한을 하나의 복합 시스템으로 통합 조정하는 제어 인프라 레이어를 구축하는 전략이다.</li>
+</ul>
+<h6 id="근거-및-사례-rationale-examples-3">근거 및 사례 (Rationale &amp; Examples)</h6>
+<ul>
+<li><strong>근거</strong>: 네트워크 단절, 높은 지연시간, 외부 시스템 개입을 허용할 수 없는 핵심 인프라 및 에지 현장에서 실시간 의사결정 자율성을 확보할 필요성이 존재함.</li>
+<li><strong>산업별 실제 적용 사례 (Summary Table)</strong>:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">산업 분야</th>
+<th style="text-align:left">대상 기업 / 환경</th>
+<th style="text-align:left">주요 내용 및 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>해양 / 조선</strong></td>
+<td style="text-align:left">한국 선박 바닥 (Bottom of a Ship)</td>
+<td style="text-align:left">선박 가장 아랫바닥에 직접 컴퓨팅 시스템을 설치하여 파인튜닝된 소형 모델을 현지 실행. 인터넷이 차단된 극단적 환경에서 현장 엔지니어들의 진단, 작업 이해 및 번역을 로컬에서 지원.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>의료 (Healthcare)</strong></td>
+<td style="text-align:left">탬파 제너럴 (Tampa General)</td>
+<td style="text-align:left">의료 분야의 고유한 운영·운영상 요구사항에 맞춰 자체 연산 인프라 활용. 특화된 의료 목적을 위한 소형 모델 파인튜닝 및 실시간 운영 결정 통제권 유지.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>건설 (Construction)</strong></td>
+<td style="text-align:left">매카시 빌딩 (McCarthy Building)</td>
+<td style="text-align:left">건설 현장별 독립적인 컴퓨팅 자원을 배치하여 작업 현장에서 즉각적인 의사결정을 지원하는 모델 실행 및 데이터 연산 수행.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="3-4-데이터센터-건설-여론-및-개인-부지-연산-협동조합-compute-co-op-구상">3.4 데이터센터 건설 여론 및 개인 부지·연산 협동조합(Compute Co-op) 구상</h5>
+<ul>
+<li><strong>[사실]</strong>: 미국 내에서는 소음, 미관 손상, 지역사회에 대한 직접적 혜택 부재 등으로 인해 거대 데이터센터 증설에 대한 반대 여론이 존재한다. 채드 월퀴스트는 약 3~4개월 전 개인 부지에 GPU를 설치하는 구상 및 '연산 협동조합(Compute Co-op)' 개념에 대한 게시글을 작성한 바 있다.</li>
+<li><strong>[소스의 주장]</strong>: 데이터센터에 대한 주민 거부감을 극복하기 위해서는 대중 교육과 함께 AI 인프라가 개인의 삶에 가져다주는 실질적 결과(Outcome)를 직접 연결해야 한다. 또한 거대 시설 대신 눈에 띄지 않는 소형 모듈형 데이터센터 배치가 대안이 될 수 있으며, 토지 소유자 및 주민이 연산 인프라 수익을 공유받는 협동조합 방식의 인센티브 구조 재설계가 요구된다.</li>
+<li><strong>[작성자 해석]</strong>: 인프라 확장에 있어 단순 기술적 컴퓨팅 배치보다 전력 수급 및 입지 주민과의 수익 공유를 통한 사회적 수용성(Social Acceptance) 확보가 보다 핵심적인 병목으로 작용하고 있음을 보여준다.</li>
+</ul>
+<h6 id="근거-및-사례-rationale-examples-4">근거 및 사례 (Rationale &amp; Examples)</h6>
+<ul>
+<li><strong>근거 및 병목 요인</strong>: 채드 월퀴스트의 개인 부지 구상 적용 시 인허가(Permitting)는 큰 문제가 아니었던 반면, 오지 환경 특성상 '전력 수급(Power)'이 결정적인 기술적 병목이었음. 전력, 인허가, 적절한 인센티브 조건을 모두 갖춘 주체들을 연결하는 '매칭메이킹(Matchmaking)' 과정 전체가 매우 까다로움.</li>
+<li><strong>대안 구조</strong>: 토지 소유자 및 지역 주민이 인프라 소유권에 참여하는 '연산 협동조합(Compute Co-op)' 구조를 통해, 거대 기업만 이익을 독점하는 구조를 탈피하고 연산 자원 수익을 지역사회와 공유하는 창의적 인센티브 체계 구상.</li>
+</ul>
+<hr />
+<h5 id="3-5-현장-배치-엔지니어-forward-deployed-engineer-fde-의-역할과-제품-전략">3.5 현장 배치 엔지니어(Forward Deployed Engineer, FDE)의 역할과 제품 전략</h5>
+<ul>
+<li><strong>[사실]</strong>: Palantir에서 FDE(Forward Deployed Engineer / Architect)는 단순한 직함이나 명사(noun)가 아니라 '동사 및 활동(verb/activity)'을 의미하며, 고투마켓(Go-To-Market) 영업 전략이 아닌 Palantir의 '제품 전략(Product Strategy)' 그 자체이다.</li>
+<li><strong>[소스의 주장]</strong>: FDE의 임무는 경영진이 구상하는 비전(Executive vision)과 실제 현장 실무(Ground truth) 사이에서 발생하는 정보 격차 및 불일치(Gap/Arbitrage)를 분해(Decompile)하여, 현장 작업자의 의사결정을 전체적으로 최적화하고 이를 지원할 고유 기능(Feature)을 Palantir 플랫폼의 기본 제품 기능으로 구현·개선하는 것이다.</li>
+<li><strong>[작성자 해석]</strong>: 엔지니어가 최전선 현장의 페인 포인트와 마찰 요소를 직접 경험하고 플랫폼 코드로 환원함으로써, 제품의 현장 적응성과 생산 환경(Production) 안착률을 극대화하는 현장 밀착형 제품 피드백 루프 구축 전략이다.</li>
+</ul>
+<h6 id="근거-및-사례-rationale-examples-5">근거 및 사례 (Rationale &amp; Examples)</h6>
+<ul>
+<li><strong>근거</strong>: 경영진의 비전과 현장 실무진의 현실 사이의 정보 격차(Arbitrage)를 메우지 못하면 AI는 실제 운영 환경(Production)에서 실패함.</li>
+<li><strong>사례</strong>: 한국 선박 가장 아랫바닥(bottom of a ship)에 직접 들어가 인터넷이 차단된 극단적 환경에서 모델을 배치·업데이트·관리할 때 발생하는 제품 마찰(Product friction) 요소를 파악하고, 이를 에지 컴퓨팅 오케스트레이션 기능으로 상용 플랫폼에 직접 환원 개발하는 활동 수행.</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-data-points-timelines">4. 수치 및 시점 (Data Points &amp; Timelines)</h4>
+<p>소스 텍스트에서 확인되는 정량적 수치, 전력 용량, 시간 간격 및 시점 정보는 다음과 같다.</p>
+<ul>
+<li><strong>모듈형 데이터센터 연산 용량 단위</strong>: <code>1 MW</code>, <code>5 MW</code>, <code>10 MW</code> (메가와트)</li>
+<li><strong>원격지 인프라 구축 소요 기간</strong>: <code>며칠 이내 (a matter of days)</code> (Armada 파트너십 관련 모듈형 인프라 배치 소요 시간)</li>
+<li><strong>채드 월퀴스트의 개인 부지 활용 게시글 작성 시점</strong>: 인터뷰 시점 기준 <code>약 3~4개월 전 (3 4 months ago)</code></li>
+<li><strong>배치 장비 모델명</strong>: <code>B300</code> (Armada 파트너십 기반 원격지 모듈형 데이터센터에 배치되는 컴퓨팅 장비)</li>
+<li><strong>기타 프로젝트 상세 수치 및 시점</strong>:
+<ul>
+<li>한국 선박 프로젝트, 탬파 제너럴, 매카시 빌딩 관련 구체적 계약 금액, 도입된 GPU 수량, 정확한 착수/완료 날짜: <code>확인 불가</code> (소스 텍스트 내 미기재)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 보고서는 제공된 소스 텍스트에 엄격히 기초하여 작성되었으며, 소스 내에서 명시적으로 확인되지 않은 한계 및 불확실 요소는 다음과 같다.</p>
+<ol>
+<li><strong>진행자 성명 및 소속 미기재</strong>: 인터뷰를 진행한 MTS 채널 인터뷰어의 명확한 성명, 이력 및 세부 소속 정보 부재 (<code>확인 불가</code>).</li>
+<li><strong>개인 부지 프로젝트의 기술적 스펙 및 입지 미언급</strong>: 채드 월퀴스트가 언급한 개인 부지의 정확한 지목, 위치, 면적 및 전력 수급 난제를 해결할 오프그리드/신기술 발전 설비의 상세 스펙 부재.</li>
+<li><strong>개별 산업 적용 사례의 계약·운영 데이터 부재</strong>: 한국 선박 프로젝트, 탬파 제너럴(Tampa General), 매카시 빌딩(McCarthy Building) 등 개별 실증 사례의 구체적 사업 규모, 자원 투입량, 도입된 GPU 대수 및 구체적 계약 기간 미기재.</li>
+<li><strong>국가별 법적·규제 인허가 세부 규정 부재</strong>: 프랑스, 한국, 일본, 영국 등 각국의 데이터 주권 관련 인-컨트리(in-country) 법적 규제 조건, 컴퓨팅 시설 인허가 기준 및 세부 법률 조항 미언급.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/chad-walquist/">채드 월퀴스트</a></li>
+<li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+<li><a href="../../topics/product-business/">제품·사업</a></li></ul></section>
+</main>
+</body>
+</html>
