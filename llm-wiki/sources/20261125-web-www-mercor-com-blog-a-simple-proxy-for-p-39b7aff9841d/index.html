@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A simple proxy for perplexity | Mercor Blog</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>A simple proxy for perplexity | Mercor Blog</h1>
+<p class="page-meta">웹 · 2026-11-25</p>
+<h2 id="요약">요약</h2>
+<p>공개 객관식 벤치마크 6종의 평균 점수가 OpenAI 모델의 퍼플렉서티와 강한 순위 상관을 보였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.mercor.com/blog/a-simple-proxy-for-perplexity">출처</a> · <a href="https://www.youtube.com/watch?v=eZi2hgVqYkM">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/anthropic/">Anthropic</a></li>
+<li><a href="../../entities/orgs/google-deepmind/">Google DeepMind</a></li>
+<li><a href="../../entities/orgs/openai/">OpenAI</a></li>
+<li><a href="../../entities/people/edward-hu/">에드워드 후</a></li>
+<li><a href="../../entities/people/jakub-pachocki/">야쿠프 파초츠키</a></li>
+<li><a href="../../entities/people/jason-wei/">제이슨 웨이</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="퍼플렉서티-대리-지표-a-simple-proxy-for-perplexity-기술-분석-보고서">&quot;퍼플렉서티 대리 지표(A simple proxy for perplexity)&quot; 기술 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 분석 보고서는 2026년 11월 24일 Mercor Blog에 게재된 제이슨 웨이(Jason Wei)와 에드워드 후(Edward Hu)의 기술 포스트 &quot;퍼플렉서티를 위한 단순 대리 지표(A simple proxy for perplexity)&quot;를 바탕으로 작성되었다. OpenAI의 수석 과학자인 야쿠프 파초키(Jakub Pachocki)는 앞서 발표한 &quot;Perplexity and Intelligence&quot; 포스트에서 지난 5년간의 모델 진보 추이를 제시하며, 퍼플렉서티(Perplexity)가 인공지능의 전반적 지능(General Intelligence)을 측정할 수 있는 강력한 단일 수치 지표임을 밝힌 바 있다.</p>
+<p>그러나 야쿠프 파초키가 제시한 퍼플렉서티 측정 결과는 외부 연구 커뮤니티가 접근할 수 없는 OpenAI 내부 코드베이스(Internal Codebase)를 기반으로 도출되었기 때문에, 오픈소스 커뮤니티가 동일하게 검증하거나 활용할 수 있는 공개 데이터셋이 부재하다는 기술적 한계가 존재했다. 이에 본 보고서의 대상 소스 저자들은 OpenAI가 공개한 퍼플렉서티 수치와 높은 상관관계를 나타내는 오픈소스 대리 지표(Proxy Metric)를 새로이 제안하였다.</p>
+<p>제안된 대리 지표는 6개의 다중 선택(Multiple-Choice Question, MCQ) 데이터셋 평가 결과의 가중치 없는 평균(Unweighted Average)으로 산출된다. 이 평가 체계는 프론티어 AI 모델을 평가할 때 높은 비용 효율성(예: GPT-6.2 Astra 모델 기준 6개 데이터셋에 대해 최대 300개 예시 평가 시 7달러 소요)을 제공하며, 사후 학습(Post-training) 개입을 최소화하여 사전 학습(Pre-trained) 단계의 원시 범용 지능 수준을 효과적으로 모사하도록 설계되었다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-논점-1-퍼플렉서티-측정-대리-지표-proxy-metric-의-필요성과-공개">2.1. 논점 1: 퍼플렉서티 측정 대리 지표(Proxy Metric)의 필요성과 공개</h5>
+<ul>
+<li><strong>핵심 주장:</strong> 연구 커뮤니티가 자유롭게 접근하여 인공지능의 일반 지능 발전을 측정할 수 있는 오픈소스 퍼플렉서티 대리 지표가 필요하다.</li>
+<li><strong>제시된 근거:</strong> 야쿠프 파초키는 퍼플렉서티를 인공지능 진보의 공통 지표로 강조했으나, 해당 측정 방식은 공개 데이터셋이 아닌 OpenAI 내부 코드베이스에 의존하고 있어 외부 연구자의 재현 및 검증이 불가능했다.</li>
+<li><strong>해결책 및 배경:</strong> 제이슨 웨이와 에드워드 후는 OpenAI API를 통해 제공되는 모델들의 기존 발표 퍼플렉서티 수치와 강한 스피어만 상관관계를 보이는 6개 오픈소스 MCQ 데이터셋 기반의 대리 지표를 구성하여 커뮤니티에 공개하였다.</li>
+</ul>
+<h5 id="2-2-논점-2-6개-다중-선택-mcq-데이터셋의-구성-및-생성-메커니즘">2.2. 논점 2: 6개 다중 선택(MCQ) 데이터셋의 구성 및 생성 메커니즘</h5>
+<p>대리 지표는 다음 6가지 다중 선택 벤치마크 평가 점수의 가중치 없는 평균으로 계산된다. 각 데이터셋은 모델의 특정 지능 영역을 정밀하게 측정한다.</p>
+<ul>
+<li><strong>MMLU-Pro:</strong> STEM, 비즈니스, 사회과학, 법률, 인문학, 보건 등 다양한 분야를 아우르는 대규모 다중 태스크(Massively Multitask) 데이터셋.</li>
+<li><strong>GPQA-Diamond:</strong> 화학, 물리학, 생물학 영역의 문항으로 구성되어 세계 지식(World Knowledge)과 과학적 추론 능력을 동시에 측정.</li>
+<li><strong>MedXpertQA-text:</strong> 의학 시험 및 교과서 데이터베이스에서 필터링된 고난도 텍스트 기반 전문 문항 데이터셋.</li>
+<li><strong>MedXpertQA-mm:</strong> 의학 분야의 고난도 다중 모달(Multimodal) 질문으로 구성된 데이터셋.</li>
+<li><strong>BrowseComp-MCQ:</strong> 압축(Compression) 능력 및 지능의 대리 지표 역할을 하는 정밀한 사실 회상(Factual Recall) 능력을 측정하는 데이터셋. 원본 질문에 <strong>GPT-OSS를 활용하여 9개의 오답 선택지(Distractors)를 생성</strong>하는 방식으로 MCQ 변환이 이루어졌다.</li>
+<li><strong>SimpleQA-verified-MCQ:</strong> BrowseComp-MCQ와 동일하게 엄밀한 사실 회상 능력을 측정하는 데이터셋으로, 원본 질문에 <strong>GPT-OSS를 통해 9개의 오답 선택지(Distractors)를 생성</strong>하여 MCQ 형태로 구축되었다.</li>
+</ul>
+<h5 id="2-3-논점-3-다중-선택-평가와-퍼플렉서티-간-상관관계-및-실험-방법론">2.3. 논점 3: 다중 선택 평가와 퍼플렉서티 간 상관관계 및 실험 방법론</h5>
+<ul>
+<li><strong>다중 선택 평가와 퍼플렉서티의 기술적 연관성:</strong>
+<ul>
+<li><strong>대규모 다중 태스크 학습 관점의 통합:</strong> 퍼플렉서티를 수많은 태스크에 걸친 대규모 다중 태스크 학습(Massively Multitask Learning)으로 해석할 때, 제안된 6개 MCQ 데이터셋은 세계 지식과 추론이라는 동일한 핵심 기술을 요구하므로 퍼플렉서티와 직관적으로 부합한다.</li>
+<li><strong>원시 지능(Raw Intelligence) 측정:</strong> 다중 선택 문제는 실제 활용 사례를 직접 반영하지는 않으나, 응답의 포괄성이나 작성 스타일의 영향을 받지 않아 원시 지능을 강건하게 측정한다.</li>
+<li><strong>다음 단어 예측과의 구조적 유사성:</strong> 다중 선택 문제는 소거법을 적용하고 후보군 중 최선의 답을 추측하는 과정을 포함하므로 다음 단어 예측(Next-word Prediction) 메커니즘과 유사하게 연속적인 성능 개선을 매끄럽게 반영한다.</li>
+</ul>
+</li>
+<li><strong>사전 학습 성능 모사를 위한 실험 방법론:</strong>
+<ul>
+<li><strong>추론 강도 최소화:</strong> 퍼플렉서티는 사후 학습 이전의 사전 학습 모델 성능을 측정하는 지표이다. 연구진은 사후 학습 및 체인 오브 소트(CoT) 추론의 영향을 최소화하기 위해 API 호출 시 이용 가능한 가장 낮은 추론 강도(Lowest Reasoning Strength) 또는 추론 없음 조건으로 실험을 진행했다.</li>
+<li><strong>서브셋 활용:</strong> MMLU-Pro 데이터셋 평가 시에는 전체 데이터 중 2,000개(2k) 서브셋만을 추출하여 평가를 실행했다.</li>
+<li><strong>채점 방식의 엄밀성:</strong> 모델 응답 평가 및 채점은 완전 일치(<strong>Exact Match</strong>) 방식을 적용하여 정답 여부를 판정했다.</li>
+<li><strong>동일 퍼플렉서티 모델 처리:</strong> OpenAI가 동일한 퍼플렉서티 수치를 보고한 사후 학습 모델 쌍(예: GPT-4.1 및 o3)의 경우, 두 모델을 모두 실행하여 도출된 평가 점수의 평균값을 산출해 상관관계 분석에 반영했다.</li>
+</ul>
+</li>
+<li><strong>실험 결과 및 스피어만 상관관계:</strong>
+<ul>
+<li>OpenAI API에서 제공되는 9개 모델을 대상으로 평가한 결과, 공개된 퍼플렉서티 측정치와 강한 스피어만 상관관계(Spearman Correlation)를 형성했다.</li>
+<li>동일 평가 체계를 타사 프론티어 모델에 확장 적용한 결과, Anthropic의 Claude Fable 5.2, Google DeepMind의 Gemini 4 Neon, OpenAI의 GPT-6.2 Astra가 가장 우수한 성과를 보였으며, 버전 번호가 올라감에 따라 벤치마크 점수가 전반적으로 상승함이 확인되었다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-people-and-speakers">3. 등장 인물 및 화자 (People and Speakers)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물/화자 성명</th>
+<th style="text-align:left">역할 및 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>제이슨 웨이 (Jason Wei)</strong></td>
+<td style="text-align:left">Mercor Blog 기술 포스트의 공동 저자. (소속 부서 및 연구 기관 등 구체적 정보는 소스 텍스트에 미기재되어 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>에드워드 후 (Edward Hu)</strong></td>
+<td style="text-align:left">Mercor Blog 기술 포스트의 공동 저자. (소속 부서 및 연구 기관 등 구체적 정보는 소스 텍스트에 미기재되어 확인 불가)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>야쿠프 파초키 (Jakub Pachocki)</strong></td>
+<td style="text-align:left">OpenAI의 수석 과학자(Chief Scientist). 블로그 포스트 &quot;Perplexity and Intelligence&quot;를 통해 5년간의 퍼플렉서티 진보 추이를 발표함.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="4-수치-및-시점-figures-and-timeframes">4. 수치 및 시점 (Figures and Timeframes)</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">데이터/수치</th>
+<th style="text-align:left">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>보고서 작성 일자</strong></td>
+<td style="text-align:left">2026년 11월 24일</td>
+<td style="text-align:left">원문 기술 블로그 포스트가 게재된 시점</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>대리 메트릭 데이터셋 수</strong></td>
+<td style="text-align:left">6개</td>
+<td style="text-align:left">퍼플렉서티 대리 지표를 구성하는 다중 선택(MCQ) 데이터셋 총개수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MMLU-Pro 평가 샘플 수</strong></td>
+<td style="text-align:left">2k (2,000개)</td>
+<td style="text-align:left">실험 시 MMLU-Pro 전체 데이터셋 중 추출하여 실제 평가에 사용한 서브셋 크기</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GPT-OSS 생성 오답지 수</strong></td>
+<td style="text-align:left">9개</td>
+<td style="text-align:left">BrowseComp 및 SimpleQA 질문을 다중 선택형으로 변환하기 위해 GPT-OSS가 생성한 오답 선택지(Distractors) 개수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평가 대상 OpenAI 모델 수</strong></td>
+<td style="text-align:left">9개</td>
+<td style="text-align:left">OpenAI API를 통해 스피어만 상관관계 검증에 사용된 모델 총수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평가 실행 비용</strong></td>
+<td style="text-align:left">7달러 ($7)</td>
+<td style="text-align:left">GPT-6.2 Astra 모델 기준, 6개 데이터셋 각각에 대해 최대 300개 예시를 평가할 때 발생한 비용</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>주요 언급 AI 모델</strong></td>
+<td style="text-align:left">GPT-6.2 Astra, Claude Fable 5.2, Gemini 4 Neon, GPT-4.1, o3 등</td>
+<td style="text-align:left">성능 평가 및 퍼플렉서티 상관관계 검증 대상 모델. OpenAI의 동일 퍼플렉서티 모델 쌍(GPT-4.1/o3)은 점수를 평균하여 분석에 사용했으며, Anthropic(Claude Fable 5.2), Google DeepMind(Gemini 4 Neon), OpenAI(GPT-6.2 Astra)의 최신 모델들이 가장 우수한 성능을 기록함</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<ol>
+<li><strong>굿하트의 법칙(Goodhart's Law) 적용에 따른 변동성:</strong> 제안된 6개 데이터셋 대리 지표 역시 여타 평가 기준과 마찬가지로 굿하트의 법칙 대상이 된다. 따라서 연구 분야에서 활용하는 퍼플렉서티 대리 지표의 형태는 시간이 흐름에 따라 지속적으로 변화하고 진화할 수 있다.</li>
+<li><strong>타사 모델의 퍼플렉서티 수치 부재:</strong> Anthropic(Claude Fable 5.2) 및 Google DeepMind(Gemini 4 Neon) 모델의 벤치마크 평가 결과는 제시되었으나, 타사 모델에 대한 공식 퍼플렉서티 수치는 공개되어 있지 않으므로 퍼플렉서티와의 직접적인 상관관계를 검증할 수 없다. <code>[소스에서 다루지 않음]</code></li>
+<li><strong>OpenAI 내부 데이터 및 코드베이스 미공개:</strong> OpenAI가 퍼플렉서티 측정에 사용한 고유 데이터셋 및 내부 코드베이스의 구체적인 구현 세부사항은 소스 텍스트에 공개되어 있지 않아 외부에서 직접 검증할 수 없다. <code>[확인 불가]</code></li>
+<li><strong>기타 대리 지표 후보군 미제시:</strong> 6개 데이터셋 외에도 퍼플렉서티 대리 지표로 활용 가능한 다른 다중 선택 벤치마크 조합이 존재할 가능성이 높다고 언급되었으나, 구체적인 대안 데이터셋 목록에 대해서는 소스 텍스트에서 명시하지 않는다. <code>[소스에서 다루지 않음]</code></li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/anthropic/">Anthropic</a></li>
+<li><a href="../../entities/orgs/google-deepmind/">Google DeepMind</a></li>
+<li><a href="../../entities/orgs/openai/">OpenAI</a></li>
+<li><a href="../../entities/people/edward-hu/">에드워드 후</a></li>
+<li><a href="../../entities/people/jakub-pachocki/">야쿠프 파초츠키</a></li>
+<li><a href="../../entities/people/jason-wei/">제이슨 웨이</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hfe_tech_paper</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>hfe_tech_paper</h1>
+<p class="page-meta">PDF · 2026-11-25</p>
+<h2 id="요약">요약</h2>
+<p>HFE 평가에서 상위 5개 언어 모델의 반복·변형 과제 신뢰성은 평균 85.8%였고, 오답의 73%는 시각 인식 오류였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/pdf/">PDF</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://storage.googleapis.com/deepmind-media/papers/hfe_tech_paper.pdf">출처</a> · <a href="https://www.youtube.com/watch?v=ygYekyW1wcU">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/reasoning-effort/">Reasoning Effort</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-yakubovich/">Alex Yakubovich</a></li>
+<li><a href="../../entities/people/alison-snyder/">앨리슨 스나이더</a></li>
+<li><a href="../../entities/people/alpoge-0e27f04685/">Alpöge</a></li>
+<li><a href="../../entities/people/anand-rao/">아난드 라오</a></li>
+<li><a href="../../entities/people/anastasios-kementsietsidis/">Anastasios Kementsietsidis</a></li>
+<li><a href="../../entities/people/apurv-suman/">Apurv Suman</a></li>
+<li><a href="../../entities/people/beat-weichsler/">Beat Weichsler</a></li>
+<li><a href="../../entities/people/chrysovalantis-anastasiou/">Chrysovalantis Anastasiou</a></li>
+<li><a href="../../entities/people/dellacqua/">Dell’Acqua</a></li>
+<li><a href="../../entities/people/demis-hassabis/">데미스 허사비스</a></li>
+<li><a href="../../entities/people/karpathy/">Karpathy</a></li>
+<li><a href="../../entities/people/kate-olszewska/">케이트 올셰프스카</a></li>
+<li><a href="../../entities/people/logan-kilpatrick/">로건 킬패트릭</a></li>
+<li><a href="../../entities/people/natalie-ha/">Natalie Ha</a></li>
+<li><a href="../../entities/people/nico-duduta/">Nico Duduta</a></li>
+<li><a href="../../entities/people/oran-kelly/">Oran Kelly</a></li>
+<li><a href="../../entities/people/orhan-firat/">Orhan Firat</a></li>
+<li><a href="../../entities/people/parth-modi/">Parth Modi</a></li>
+<li><a href="../../entities/people/ryan-burnell/">Ryan Burnell</a></li>
+<li><a href="../../entities/people/samuel-albanie/">사무엘 알바니</a></li>
+<li><a href="../../entities/people/sean-nakamoto/">Sean Nakamoto</a></li>
+<li><a href="../../entities/people/tulsee-doshi/">툴시 도시</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="해설-보고서-프론티어-대형-언어-모델-llm-의-신뢰성-바닥-측정-humanity-s-first-exam-hfe-벤치마크-상세-분석">[해설 보고서] 프론티어 대형 언어 모델(LLM)의 신뢰성 바닥 측정: Humanity’s First Exam(HFE) 벤치마크 상세 분석</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 프론티어 대형 언어 모델(LLM)의 성과 평가 체계에 존재하는 근본적 맹점을 파악하고, 이를 극복하기 위해 제안된 새로운 평가 벤치마크인 <strong>Humanity’s First Exam (HFE)</strong> 기술 보고서(Kelly et al., 2026-11-24)의 주요 방법론과 실증적 분석 결과를 종합 고찰한다.</p>
+<p>최근 최첨단 LLM은 국제프로그래밍경시대회(ICPC) World Finals 금메달 수준의 문제 해결(Google DeepMind, 2025), 나비에-스토크스(Navier-Stokes) 방정식 관련 정리 증명 지원(OpenAI, 2026a), Lean 4를 활용한 일반화된 리만 가설 수식화(Alpöge, 2026) 등 최상위 학술·기술 영역에서 뛰어난 성능을 입증하고 있다. 그러나 동일한 프론티어 모델들이 인간이 직관적으로 해결할 수 있는 초등 수준의 시각 및 논리 과제에서 기이한 오답을 반복하는 현상이 지속적으로 보고되고 있다. 소스 문서(Abstract, Section 1)에 따르면, 이러한 불일치는 기존 벤치마크가 단일 시도 정확도($\text{pass}@1$)나 다중 샘플링 최상위 성공률($\text{pass}@k$)에 기반하여 모델의 최상위 성능 한계인 '역량 상한선(Capability Ceiling)'만을 측정하도록 설계되어, 일관되고 안정적인 기초 수행 능력인 '신뢰성 바닥(Reliability Floor)'의 결함을 가리기 때문이다.</p>
+<p>HFE 벤치마크는 평가 패러다임을 전환하여, 모델이 기초적인 원자적 과제와 그 표면적 변형 프롬프트들에 대해 '매번 일관되게 정답에 도달할 수 있는가'를 종합 측정한다. HFE는 20개 기초 하위 카테고리에 걸쳐 136개 프롬프트 패밀리(총 544개 프롬프트)로 구성되어 있다. 프롬프트 패밀리 평가 방식인 $\text{family pass}^4$는 1개 패밀리를 구성하는 4개 프롬프트(시드 1개 + 변형 3개) 각각에 대해 $n=6$회 시도 중 4회 무작위 추출을 시행함으로써, 총 $4 \times 4 = 16$회의 결합 로아웃(Joint Rollouts) 전회 성공 여부를 측정한다.</p>
+<p>이러한 결합 측정 방식에서는 단일 프롬프트 정확도가 95%(오류율 5%)로 비교적 우수하더라도, 16회 연속 성공을 달성할 확률은 수식적으로 $0.95^{16} \approx 44.4%$에 불과하게 된다. 즉, 프롬프트 단위의 미세한 오답 확률이 반복 시행과 표면적 변형을 거치면서 기하급수적으로 누적 붕괴(Compound Degradation)를 일으키는 수학적 메커니즘이 작용한다.</p>
+<p>주요 제공업체(Google, OpenAI, Anthropic)의 18개 프론티어 및 패스트 티어(Fast-tier) 모델을 평가한 결과, 최상위 5개 모델의 단일 시도 정확도($\text{pass}@1$)는 95.6%~97.8%, 16회 시도 중 1회 이상 성공률을 뜻하는 역량 상한선 지표($\text{family pass}@4$)는 100%에 달했으나, 신뢰성 바닥 지표인 $\text{family pass}^4$ 점수는 평균 85.8%(80.5%~92.4%) 수준으로 급락했다. 전체 18개 모델 범위에서는 최상위와 최하위 간 신뢰성 격차(Family Reliability Gap = $\text{family pass}@4 - \text{family pass}^4$)가 최소 7.6 pp에서 최대 80.1 pp까지 형성되었다. 아울러 오답의 73%가 시각 인식(Visual Perception) 오류에 집중되어 있으며, 테스트 시 추론 노력(Thinking Level)을 증대시키는 기법이 텍스트 및 기호 과제와 달리 시각 과제에서는 신뢰성 바닥을 끌어올리는 효과가 매우 제약적임이 입증되었다 (Abstract, Section 3.1, Section 4.1, Section 4.2).</p>
+<hr />
+<h4 id="2-주요-논점-key-issues">2. 주요 논점 (Key Issues)</h4>
+<h5 id="2-1-기존-llm-평가의-한계와-신뢰성-바닥-reliability-floor-측정의-필요성">2.1 기존 LLM 평가의 한계와 '신뢰성 바닥(Reliability Floor)' 측정의 필요성</h5>
+<p>기존 LLM 평가의 핵심 지표인 $\text{pass}@k$는 모델이 $k$번의 독립적인 시도 중 최소 1번 이상 정답을 맞힐 확률을 측정한다. 이는 모델이 발휘할 수 있는 잠재적 최고 역량인 '역량 상한선(Capability Ceiling)'을 확인하는 데 적합하지만, 동일 과제의 반복 시행이나 무해한 표면적 프롬프트 변형에 대응하는 일관성인 '신뢰성 바닥(Reliability Floor)'의 결함을 가리는 효과를 유발한다 (Section 1).</p>
+<p>이러한 성능 불일치는 학계에서 논의되는 <strong>'울퉁불퉁한 국경(Jagged Frontier)'</strong> 개념(Dell'Acqua et al., 2023; Karpathy, 2024)으로 설명된다. 모델의 능력 경계선은 고르게 확장되지 않으며, 매우 복잡한 기술적 문제 해결 능력을 포함하면서도 상식적이고 직관적인 기초 인지 과제를 외면하는 거친 양상을 보인다.</p>
+<p>본 논점과 관련된 사실, 소스 주장, 작성자 해석은 다음과 같이 구별된다.</p>
+<ul>
+<li><strong>[사실 (Fact)]</strong>: 프론티어 LLM은 ICPC World Finals 금메달 달성(Google DeepMind, 2025), 나비에-스토크스 밀레니엄 문제 관련 성과(OpenAI, 2026a), Lean 4 기반 리만 가설 수식화(Alpöge, 2026) 등 매우 고난도의 정밀 과제를 수행할 수 있다. 반면, 동일한 모델들이 다음과 같은 초등 수준의 시각·텍스트 과제에서 오답을 낸다 (Figure 2).
+<ol>
+<li><strong>객체 개수 세기 (Object Counting)</strong>: 시골풍 선반 위에 놓인 찻잔들 중 김(Steam)이 올라오지 않는 찻잔의 개수를 세는 과제 (정답: 4개).</li>
+<li><strong>색상 식별 (Color Identification)</strong>: &quot;DANCE WHILE THE MUSIC PLAYS&quot;라고 적힌 네온사인 이미지에서 각 단어의 세 번째 글자 색상을 순서대로 추출하는 과제 (정답: green; yellow; white; blue; blue).</li>
+</ol>
+</li>
+<li><strong>[소스 주장 (Source Claim)]</strong>: 동일 과제의 반복 시행 시 일부만 성공하거나 표면적 편집 프롬프트 중 하나만 실패하는 모델의 일관성 부재 현상은 사용자에게 큰 혼란을 야기하며, 자동화된 워크플로우, 시간 제약적 과제, 미션 크리티컬한 실무 환경으로의 LLM 도입을 저해하는 핵심 원인이다 (Section 1).</li>
+<li><strong>[작성자 해석 (Writer Interpretation)]</strong>: AI 평가 체계가 최고 역량 검증 위주에서 실무 적용 시의 실패 위험 관리(신뢰성 바닥 측정) 위주로 재편되지 않는다면, 벤치마크 수치와 실제 사용자 체감 성능 간의 불일치 문제는 지속될 수밖에 없다.</li>
+</ul>
+<hr />
+<h5 id="2-2-hfe-벤치마크-설계-및-프롬프트-패밀리-구축-방법론">2.2 HFE 벤치마크 설계 및 프롬프트 패밀리 구축 방법론</h5>
+<p>HFE 벤치마크는 프론티어 모델이 당연히 맞힐 것으로 기대되는 기초 과제에서의 신뢰성 바닥을 측정하기 위해 엄격한 순차 정제 프로세스를 거쳐 구축되었다 (Section 2.1 ~ Section 2.5, Table 2).</p>
+<h6 id="데이터셋-구축-프로세스">데이터셋 구축 프로세스</h6>
+<ol>
+<li><strong>실패 사례 수집 및 하위 능력 추출 (Section 2.1)</strong>: 소셜 미디어(X, Reddit)에 공유된 500개 파일럿 오류 프롬프트를 수집·분석하여 단일 기술 단위의 23개 원자적 하위 능력(Sub-abilities)을 추출하였다.</li>
+<li><strong>시드 프롬프트(Seed Prompt) 작성 및 캘리브레이션 (Section 2.2)</strong>: 23개 하위 카테고리별로 유출되지 않은 시드 프롬프트를 신규 작성했다. 모든 시드는 5개 보정 패널 모델(Gemini 3.1 Flash-Lite, Gemini 3.1 Pro, Claude Opus 4.7, Claude Sonnet 4.6, GPT-5.5)의 4회 무작위 시도 중 최소 1회 이상 오답을 유발해야 하는 조건(2026년 5월~6월 작성)을 충족해야 했다.</li>
+<li><strong>바이럴 3대 기준(Virality Criteria) 검증 (Section 2.2)</strong>:
+<ul>
+<li><strong>단순성 (Simplicity)</strong>: 과제와 실패 모드를 직관적으로 설명할 수 있음.</li>
+<li><strong>공감성 (Relatability)</strong>: 전문 지식 없이 상식이나 기본 지각으로 인간이 쉽게 해결할 수 있음.</li>
+<li><strong>충격성 (Shock Value)</strong>: 프론티어 모델이 실패했을 때 황당함과 체감 역량과의 현격한 대비를 유발함.
+검증을 통과한 <strong>321개 시드 프롬프트</strong>가 선별되었다.</li>
+</ul>
+</li>
+<li><strong>프롬프트 패밀리 확장 및 보정 (Section 2.3)</strong>: 각 시드 프롬프트에 대해 로직, 인지 난이도, 하위 능력을 유지하되 표면적 편집(개체명 변경, 문장 순서 변경, 시각적 레이아웃 변경 등)을 가한 변형(Variant) 프롬프트를 작성했다 (2026년 6월 26일~7월 26일). 7개 모델 패널 평가에서 오답을 유발하는 변형을 구축하지 못한 6개 시드를 제외하고 315개 5-프롬프트 패밀리(총 1,575개 프롬프트)를 완성했다.</li>
+<li><strong>인간 베이스라인 측정 (Section 2.4)</strong>: 315개 시드 프롬프트에 대해 4명의 독립적 인간 평가자가 도구 없이(계산기, 검색, LLM 사용 금지) 개별 수행한 결과, 단일 평가자 정답률은 <strong>80.3%</strong>, 시드당 풀이 시간 중앙값은 <strong>1.5분</strong>(IQR 1.0~2.5분)이었다. 251개 시드(79.7%)가 4명 중 3명 이상 정답을 기록했다.</li>
+<li><strong>3단계 품질 정제 (Quality Subsampling) (Section 2.5, Table 2)</strong>:
+<ul>
+<li><strong>1단계 (인간 단순성 검증)</strong>: 인간 평가자 4명 중 3명 이상이 맞힌 패밀리만 유지 (-64개 패밀리 제거 $\rightarrow$ 251개 패밀리 남음).</li>
+<li><strong>2단계 (QA 감사)</strong>: 지각적/텍스트적 모호성, 변형 시 유효성 왜곡, 정답지(Ground Truth) 오류 등을 검증하여 문제가 있는 패밀리 전체 제거 (-115개 패밀리 제거 $\rightarrow$ 136개 패밀리 남음).</li>
+<li><strong>3단계 (변형 표준화)</strong>: 남아있는 패밀리별로 1개의 변형을 제거하여, 패밀리당 정확히 <strong>1개의 시드 프롬프트 + 3개의 변형 프롬프트</strong>로 구성된 4-프롬프트 패밀리로 균일화 (-136개 변형 제거).</li>
+</ul>
+</li>
+</ol>
+<p>최종 데이터셋은 <strong>136개 프롬프트 패밀리, 총 544개 프롬프트</strong>로 구성되었다. 정제 후 136개 최종 시드에 대한 인간 단일 평가자 정답률은 <strong>90.8%</strong>(494/544)로 상승했으며, 풀이 시간 중앙값은 <strong>1.0분</strong>(IQR 1.0~2.0분)으로 단축되었다. 인간 평가자의 오답 50건은 프롬프트 모호성이 아닌 단순 기계적 실수(Rater Clerical Error)에 기인한 것으로 확인되었다 (Section 2.4).</p>
+<blockquote>
+<p><strong>참고 (하위 카테고리 최종 구성)</strong>: 데이터셋 정제 과정을 거치면서 파이럿 단계의 23개 하위 카테고리 중 3개 카테고리(구조적 유의 추론, 귀납/확률적 추론, 시간 연산)는 생존한 패밀리가 없어 최종 데이터셋에서는 제거되고 <strong>20개 하위 카테고리</strong>만 남게 되었다 (Section 2.2, Table 1 각주).</p>
+</blockquote>
+<h6 id="hfe-4-프롬프트-패밀리-구조-요약">HFE 4-프롬프트 패밀리 구조 요약</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">구조 및 규격</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>패밀리 구성</strong></td>
+<td style="text-align:left">1개 시드 프롬프트(Seed) + 3개 변형 프롬프트(Variants)</td>
+<td style="text-align:left">총 4개 프롬프트 / 1개 패밀리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>최종 데이터셋 규모</strong></td>
+<td style="text-align:left">136개 패밀리 (총 544개 프롬프트)</td>
+<td style="text-align:left">텍스트 전용 57개 패밀리(228개), 멀티모달 79개 패밀리(316개)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평가 메커니즘</strong></td>
+<td style="text-align:left">프롬프트당 $n=6$회 독립 시도 ($4 \times 6 = 24$회 로아웃/패밀리)</td>
+<td style="text-align:left">$\text{family pass}^4$는 16개 결합 로아웃($4 \times 4$) 전체 성공 여부 측정</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="2-3-프론티어-llm-평가-결과-및-신뢰성-격차-family-reliability-gap">2.3 프론티어 LLM 평가 결과 및 신뢰성 격차(Family Reliability Gap)</h5>
+<p>18개 프론티어 및 패스트 티어 모델을 평가한 결과, 단일 시도 정확도($\text{pass}@1$)와 신뢰성 바닥($\text{family pass}^4$) 간에 거대한 성능 격차가 확인되었다 (Section 4.1, Table 4, Figure 1).</p>
+<ul>
+<li><strong>상위권 모델의 상한선 포화</strong>: 최상위 5개 모델은 $\text{pass}@1$에서 95.6%~97.8%를 기록했으며, 16회 시행 중 1회 이상 성공을 의미하는 $\text{family pass}@4$ 지표에서는 상위 12개 모델 전체가 99.3%~100.0%에 달해 상한선 지표가 완벽히 포화되었다.</li>
+<li><strong>신뢰성 바닥의 급격한 하락</strong>: 동일한 상위 모델들이 4개 변형 프롬프트에 대해 각각 4회 시도(총 16회 시행) 모두 정답을 맞혀야 하는 $\text{family pass}^4$ 지표에서는 최고 92.4%(GPT-6.2 Astra)에 그쳤으며, 상위 5개 모델 평균도 85.8%에 불과했다.</li>
+</ul>
+<h6 id="주요-모델-그룹별-평가-지표-비교-table-4-figure-1-기반">주요 모델 그룹별 평가 지표 비교 (Table 4, Figure 1 기반)</h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">모델 그룹</th>
+<th style="text-align:left">pass@1 범위</th>
+<th style="text-align:left">family pass@4 범위 (상한선)</th>
+<th style="text-align:left">family pass^4 범위 (신뢰성 바닥)</th>
+<th style="text-align:left">Family Reliability Gap 범위</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>상위 5개 모델</strong> &lt;br&gt;<em>(GPT-6.2 Astra ~ Gemini 4 Carbon)</em></td>
+<td style="text-align:left">95.6% ~ 97.8%</td>
+<td style="text-align:left">100.0%</td>
+<td style="text-align:left">80.5% ~ 92.4%</td>
+<td style="text-align:left">7.6 pp ~ 19.5 pp</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상위 12개 모델</strong> &lt;br&gt;<em>(GPT-6.2 Astra ~ Claude Opus 5.5)</em></td>
+<td style="text-align:left">91.2% ~ 97.8%</td>
+<td style="text-align:left">99.3% ~ 100.0%</td>
+<td style="text-align:left">63.0% ~ 92.4%</td>
+<td style="text-align:left">7.6 pp ~ 36.2 pp</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>전체 18개 모델</strong> &lt;br&gt;<em>(GPT-6.2 Astra ~ Gemini 3.5 Flash-Lite)</em></td>
+<td style="text-align:left">68.7% ~ 97.8%</td>
+<td style="text-align:left">98.5% ~ 100.0%</td>
+<td style="text-align:left">18.6% ~ 92.4%</td>
+<td style="text-align:left">7.6 pp ~ 80.1 pp</td>
+</tr>
+</tbody>
+</table>
+<h6 id="티어별-비단조적-non-monotonic-성과-양상">티어별 비단조적(Non-monotonic) 성과 양상</h6>
+<p>일반적으로 모델의 체급(Tier)이 올라갈수록 성능이 단조 증가할 것으로 예상되나, 실제 신뢰성 바닥 측면에서는 비단조적 현상이 관찰되었다 (Figure 4, Section 4.1).</p>
+<ul>
+<li><strong>Google 모델군</strong>: 밸런스드 티어인 <strong>Gemini 4 Neon</strong>(Tier 2, $\text{family pass}^4 = 85.8%$)이 플래그십 티어인 <strong>Gemini 4 Carbon</strong>(Tier 3, $\text{family pass}^4 = 80.5%$)을 상회했다.</li>
+<li><strong>Anthropic 모델군</strong>: <strong>Claude Opus 5.5</strong>(Tier 2, 63.0%)가 <strong>Claude Sonnet 5.5</strong>(Tier 1, 67.6%)보다 낮은 점수를 기록했다. 이는 Opus 5.5 특유의 과도한 거부 반응(Refusal, 전체 로아웃의 1.6%)에 기인하며, 최상위 모델인 <strong>Claude Fable 5.2</strong>(Tier 3, 73.7%)에 이르러 성능이 회복되었다.</li>
+</ul>
+<hr />
+<h5 id="2-4-입력-모달리티-및-추론-노력-thinking-level-의-영향">2.4 입력 모달리티 및 추론 노력(Thinking Level)의 영향</h5>
+<h6 id="모달리티별-신뢰성-격차-section-4-2-table-5-figure-5">모달리티별 신뢰성 격차 (Section 4.2, Table 5, Figure 5)</h6>
+<p>HFE 평가 프롬프트는 텍스트 전용(Text-only, 41.9%)과 멀티모달(Multimodal/Vision, 58.1%)로 나뉜다. 모든 모델에서 입력 모달리티에 따른 신뢰성 격차가 뚜렷하게 관찰되었다.</p>
+<ul>
+<li>상위 9개 모델의 경우 텍스트 전용 과제에서는 $\text{family pass}^4$ 점수가 83%~97% 수준을 유지했으나, 멀티모달 과제에서는 64%~89%로 하락했다.</li>
+<li>모달리티별 하락 폭은 모델에 따라 격차를 보였다. GPT-6.2 Astra(8.0 pp 하락) 및 GPT-6.1 Terra(11.5 pp 하락)는 하락 폭이 적었던 반면, Claude Haiku 5.5(44.8 pp 하락), Gemini 4 Hydrogen(45.5 pp 하락), Claude Fable 5.1(46.4 pp 하락) 등은 시각 정보가 입력될 때 신뢰성이 대폭 하락했다.</li>
+</ul>
+<h6 id="추론-노력-thinking-level-thought-tokens-의-효과-section-4-3-table-a2-table-a3-figure-6">추론 노력(Thinking Level / Thought Tokens)의 효과 (Section 4.3, Table A2, Table A3, Figure 6)</h6>
+<p>테스트 시 추론 컴퓨팅(Thought Tokens)을 늘리는 것은 역량 상한선($\text{family pass}@4$)에는 영향을 주지 않지만, <strong>신뢰성 바닥($\text{family pass}^4$)을 끌어올리는 데 핵심적 역할</strong>을 수행한다.</p>
+<ul>
+<li>Gemini 4 Carbon의 경우 추론 노력을 Low에서 High로 올렸을 때 $\text{family pass}^4$가 63.1%에서 80.5%(+17.4 pp)로 상승했으며, Claude Sonnet 5.5는 35.3%에서 67.6%(+32.3 pp)로 상승했다.</li>
+<li><strong>분야별 반응성의 대조 현상</strong>: 추론 노력 증대는 수리/기호 및 논리 과제에는 효과적이었으나, 시각 인식 과제에는 영향이 매우 미미했다 (Table A2, Table A3).
+<ul>
+<li><strong>Gemini 4 Carbon 수치 비교 (Table A2)</strong>: 추론 노력을 High에서 Low로 낮출 때, 수리 및 알고리즘 과제(Math &amp; Algorithmic)에서는 <strong>42.4 pp 하락</strong>(97.5% $\rightarrow$ 55.1%)하는 치명적인 신뢰성 붕괴가 발생한 반면, 시각 과제(Vision)에서는 단 <strong>3.1 pp 하락</strong>(69.9% $\rightarrow$ 66.8%)하는 데 그쳤다.</li>
+<li><strong>하위 카테고리별 반응성</strong>: 논리적 연쇄 추론(Logical Deduction, 평균 +29.7 pp), 제약 조건 충족(Constraint Satisfaction, +28.5 pp), 알고리즘 및 기호 실행(+26.2 pp)은 추론 노력 증대 효과가 높았다. 반면 객체 개수 세기(Object Counting, 평균 +1.9 pp), 화살표/지시자 해석(+2.0 pp), 색상 식별(+4.9 pp), 그래프/차트 이해(+5.0 pp) 등 시각 인식 영역은 추론 노력이 거의 영향을 미치지 못했다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-5-인간-대-모델-수행-능력-비교-및-실패-유형-failure-modes-분석">2.5 인간 대 모델 수행 능력 비교 및 실패 유형(Failure Modes) 분석</h5>
+<h6 id="인간-대-모델-수행-능력-비교-section-4-5-figure-8">인간 대 모델 수행 능력 비교 (Section 4.5, Figure 8)</h6>
+<p>독립적인 인간 평가자 4명을 대상으로 한 시험 결과와 모델 성능 간에는 뚜렷한 대비와 음의 상관관계가 확인되었다.</p>
+<ul>
+<li><strong>카테고리별 역전 현상</strong>: 인간은 텍스트 수리/알고리즘(76%) 및 논리 추론(77%) 시드에서 정답률이 상대적으로 낮고 시각(Vision) 시드(84%)에서 가장 높은 정답률을 보였다. 반면 모델은 수리/알고리즘(98%)에서 최고 성능을 내고 시각(83%)에서 최저 성능을 기록했다.</li>
+<li><strong>하위 카테고리 음의 상관관계</strong>: 19개 주요 하위 카테고리 기준 인간과 모델 정확도 간 스피어만 상관계수는 $\rho = -0.64$로 강한 음의 상관관계를 보였다. 인간이 가장 어려워하는 '논리적 연쇄 추론'을 모델은 거의 완벽히 해결하는 반면, 인간에게 지극히 단순한 '객체 개수 세기'나 '이미지 내 텍스트 읽기'에서 모델 오답이 집중되었다.</li>
+<li><strong>인간 오류의 원인</strong>: 인간 오답 248개 중 244개(98.4%)는 프롬프트 모호성이 아닌 단순 기계적 실수(Rater Clerical Error, 예: 실제 존재했던 조약명 기재, 철자 누락 등)로 확인되었다.</li>
+</ul>
+<h6 id="실패-유형-failure-modes-분류-및-원인-분석-section-4-6-table-6-figure-9a-figure-9b">실패 유형(Failure Modes) 분류 및 원인 분석 (Section 4.6, Table 6, Figure 9A, Figure 9B)</h6>
+<p>18개 평가 대상 모델에서 발생한 총 5,823개의 실패 로아웃(Rollouts)을 분석한 결과는 다음과 같다.</p>
+<pre><code>[총 5,823개 실패 로아웃 구성]
+├── 1. 오답 (Wrong Answer): 95% (5,552개 로아웃 / 모델 능력 결함)
+├── 2. 거부 (Refusal): 3% (안전 필터 작동)
+├── 3. 출력 제한 잘림 (Output-limit Truncation): 2% (생성 토큰 초과)
+└── 4. 하네스 오류 (Harness Error): 0.1% (5개 로아웃 / API 시스템 오류)
+</code></pre>
+<ol>
+<li><strong>오답 (Wrong Answer, 95%) 세부 원인</strong>:
+<ul>
+<li><strong>시각 인식 오류 (73%)</strong>: 오답의 약 3/4이 시각 지각 실패에서 기인했다. 세부적으로 방향/경로/위치 오판(31%), 객체 개수 오측(23%)이 과반을 차지했다.</li>
+<li><strong>단순 오차 (Near Misses, 40%)</strong>: 실패 프롬프트-모델 쌍의 40%는 답이 1 차이로 틀리거나(off-by-one) 단 하나의 요소만 틀린 근접 오답이었다 (개수 세기 오류 303개 중 173개 해당).</li>
+<li><strong>가려짐/중첩 (Occlusion, 16%)</strong>: 물체가 부분적으로 가려지거나 겹쳐 있는 경우(예: 열쇠고리에 겹친 열쇠 개수 세기) 오류가 집중되었다.</li>
+<li><strong>고정관념 및 거짓 전제 수용 (8%)</strong>: 변형된 조건을 읽지 않고 알려진 수수께끼의 기존 교과서적 정답을 출력하는 편향을 보였다.</li>
+<li><strong>소형 모델의 절차 실행 실수</strong>: 소형 모델(Flash-Lite, Luna, Haiku 등)의 절차 수행 오류 132건 중 111건이 발생했으며, 이 중 42건은 단계별 추론 과정에서는 맞았으나 최종 답안 작성 시 다른 값을 출력했다.</li>
+</ul>
+</li>
+<li><strong>제공업체별 모호 표현 및 회피(Hedging) 동작 차이 (Figure 9B)</strong>: 오답 출력 시 확신을 갖지 못하고 의구심을 표현하거나 대안을 제시하는 회피 동작(Hedging)은 Anthropic 모델군에서 39%로 가장 높았으며, Google 모델군은 <strong>14%</strong>, OpenAI 모델군은 7%로 확인되었다.</li>
+<li><strong>거부 (Refusal, 3%)</strong>: Anthropic 모델군에 집중되었다. Claude Opus 5.5의 경우 전체 로아웃의 1.6%를 거부하여 $\text{family pass}^4$ 점수가 4.4 pp 하락했다.</li>
+<li><strong>출력 제한 잘림 (Output-limit Truncation, 2%)</strong>: 긴 사고 토큰을 사용하는 소형 모델(Claude Haiku 5.5, 2.0% 발생)에서 주 원인으로 나타났다.</li>
+<li><strong>하네스 오류 (Harness Error, 0.1%)</strong>: 58,752회 전체 로아웃 중 단 5건만 발생했다.</li>
+</ol>
+<hr />
+<h4 id="3-등장-인물-화자-key-figures-speakers-authors">3. 등장 인물 · 화자 (Key Figures / Speakers / Authors)</h4>
+<p>논문 소스 문서에 명시된 연구진, 후원자, 자문진 및 관련 인물의 목록은 다음과 같다.</p>
+<h5 id="주요-저자-primary-authors">주요 저자 (Primary Authors)</h5>
+<ul>
+<li><strong>Oran Kelly</strong> (Google DeepMind / 교신 저자: <code>orankelly@google.com</code>) - 벤치마크 설계 및 주저자</li>
+<li><strong>Anastasios Kementsietsidis</strong> (Google DeepMind) - 공동 저자</li>
+<li><strong>Chrysovalantis Anastasiou</strong> (Google DeepMind) - 공동 저자</li>
+<li><strong>Alex Yakubovich</strong> (Google Cloud) - 공동 저자</li>
+<li><strong>Beat Weichsler</strong> (Google Research) - 공동 저자</li>
+<li><strong>Natalie Ha</strong> (Google Cloud) - 공동 저자</li>
+<li><strong>Ryan Burnell</strong> (Google DeepMind) - 공동 저자</li>
+<li><strong>Samuel Albanie</strong> (Google DeepMind) - 공동 저자</li>
+<li><strong>Orhan Firat</strong> (Google DeepMind) - 공동 저자</li>
+</ul>
+<h5 id="후원자-자문-및-운영-지원-sponsors-advisors-support">후원자, 자문 및 운영 지원 (Sponsors, Advisors &amp; Support)</h5>
+<ul>
+<li><strong>Demis Hassabis</strong> (Google DeepMind) - 역할: Project Sponsor (후원자)</li>
+<li><strong>Logan Kilpatrick</strong> (Google DeepMind) - 역할: Project Sponsor (후원자)</li>
+<li><strong>Tulsee Doshi</strong> (Google DeepMind) - 역할: Project Sponsor (후원자)</li>
+<li><strong>Kate Olszewska</strong> - 역할: Project Advisor (자문)</li>
+<li><strong>Apurv Suman</strong> - 역할: Project Advisor (자문)</li>
+<li><strong>Nico Duduta</strong> - 역할: Project Advisor (자문)</li>
+<li><strong>Alison Snyder</strong> - 역할: Operational, Editorial &amp; Release Support (운영, 편집 및 출시 지원)</li>
+<li><strong>Parth Modi</strong> - 역할: Operational, Editorial &amp; Release Support (운영, 편집 및 출시 지원)</li>
+<li><strong>Sean Nakamoto</strong> - 역할: Operational, Editorial &amp; Release Support (운영, 편집 및 출시 지원)</li>
+<li><strong>Anand Rao</strong> - 역할: Operational, Editorial &amp; Release Support (운영, 편집 및 출시 지원)</li>
+</ul>
+<h5 id="인용-및-관련-연구자-cited-researchers">인용 및 관련 연구자 (Cited Researchers)</h5>
+<ul>
+<li><strong>Dell’Acqua et al.</strong> (2023) - 'Jagged Frontier' 개념 연구자</li>
+<li><strong>Karpathy</strong> (2024) - 'Jagged Intelligence' 논평 연구자</li>
+<li><strong>Alpöge</strong> (2026) - Lean 4 기반 리만 가설 수식화 연구자</li>
+</ul>
+<p>*(※ 위 목록에 기재된 역할 이외의 세부 담당 업무나 인구통계학적 정보는 소스 문서 내 &quot;확인 불가&quot;*<em>임)</em></p>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-metrics-and-timepoints">4. 주요 수치 및 시점 (Key Metrics and Timepoints)</h4>
+<p>소스 문서에 기록된 타임라인, 데이터 규모, 주요 수치 지표를 정리한 표는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">항목</th>
+<th style="text-align:left">수치 및 시점</th>
+<th style="text-align:left">비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>시점</strong></td>
+<td style="text-align:left">논문 공개일</td>
+<td style="text-align:left"><strong>2026년 11월 24일</strong></td>
+<td style="text-align:left">논문 공식 발행일</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시점</strong></td>
+<td style="text-align:left">시드 프롬프트 작성 및 캘리브레이션</td>
+<td style="text-align:left"><strong>2026년 5월 ~ 6월</strong></td>
+<td style="text-align:left">5개 모델 보정 패널 기반</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시점</strong></td>
+<td style="text-align:left">변형 프롬프트(Variant) 작성</td>
+<td style="text-align:left"><strong>2026년 6월 26일 ~ 7월 26일</strong></td>
+<td style="text-align:left">7개 모델 보정 패널 기반</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>시점</strong></td>
+<td style="text-align:left">특정 모델 출시일</td>
+<td style="text-align:left"><strong>2026년 7월 21일</strong></td>
+<td style="text-align:left">Gemini 3.5 Flash-Lite 및 Gemini 3.6 Flash 출시일</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>규모</strong></td>
+<td style="text-align:left">최종 벤치마크 프롬프트 총수</td>
+<td style="text-align:left"><strong>544개</strong></td>
+<td style="text-align:left">품질 정제 후 최종 수량</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>규모</strong></td>
+<td style="text-align:left">프롬프트 패밀리 총수</td>
+<td style="text-align:left"><strong>136개</strong></td>
+<td style="text-align:left">패밀리당 4개 프롬프트 (1 시드 + 3 변형)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>규모</strong></td>
+<td style="text-align:left">메타 카테고리 / 하위 카테고리 수</td>
+<td style="text-align:left"><strong>4개 / 20개</strong></td>
+<td style="text-align:left">(3개 파이럿 카테고리 제외 후)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>규모</strong></td>
+<td style="text-align:left">평가 모델 수</td>
+<td style="text-align:left"><strong>18개 핵심</strong> (전체 29개)</td>
+<td style="text-align:left">부록 포함 52개 추론 설정 평가</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>규모</strong></td>
+<td style="text-align:left">프롬프트당 평가 샘플링 횟수 ($n$)</td>
+<td style="text-align:left"><strong>6회</strong></td>
+<td style="text-align:left">독립 생성 시도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>규모</strong></td>
+<td style="text-align:left">18개 모델 주 분석 로아웃 총수</td>
+<td style="text-align:left"><strong>58,752회</strong></td>
+<td style="text-align:left">$18 \text{ 모델} \times 544 \text{ 프롬프트} \times 6 \text{ 회}$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>규모</strong></td>
+<td style="text-align:left">전체 평가 설정 로아웃 총수</td>
+<td style="text-align:left"><strong>169,728회</strong></td>
+<td style="text-align:left">부록 A1 포함 전체 52개 평가 설정</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지표</strong></td>
+<td style="text-align:left">최상위 5개 모델 pass@1 범주</td>
+<td style="text-align:left"><strong>95.6% ~ 97.8%</strong></td>
+<td style="text-align:left">단일 시도 정확도</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지표</strong></td>
+<td style="text-align:left">최상위 12개 모델 family pass@4 범주</td>
+<td style="text-align:left"><strong>99.3% ~ 100.0%</strong></td>
+<td style="text-align:left">역량 상한선 포화</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지표</strong></td>
+<td style="text-align:left">전체 18개 모델 family pass^4 범주</td>
+<td style="text-align:left"><strong>18.6% ~ 92.4%</strong></td>
+<td style="text-align:left">신뢰성 바닥 점수</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>지표</strong></td>
+<td style="text-align:left">Family Reliability Gap 범위</td>
+<td style="text-align:left"><strong>7.6 pp ~ 80.1 pp</strong></td>
+<td style="text-align:left">최상위 GPT-6.2 Astra ~ 최하위 Gemini 3.5 Flash-Lite</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오류</strong></td>
+<td style="text-align:left">오답 중 시각 인식 오류 비율</td>
+<td style="text-align:left"><strong>73%</strong></td>
+<td style="text-align:left">Wrong Answer 로아웃 중 비중</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오류</strong></td>
+<td style="text-align:left">오답 시 회피(Hedging) 비율</td>
+<td style="text-align:left">Anthropic <strong>39%</strong>, Google <strong>14%</strong>, OpenAI <strong>7%</strong></td>
+<td style="text-align:left">지각 및 답변 불확실성 표명 비율</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오류</strong></td>
+<td style="text-align:left">실패 로아웃 원인별 비중</td>
+<td style="text-align:left">오답 <strong>95%</strong>, 거부 <strong>3%</strong>, 잘림 <strong>2%</strong>, 하네스 <strong>0.1%</strong></td>
+<td style="text-align:left">총 5,823개 실패 로아웃 분석</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>인간</strong></td>
+<td style="text-align:left">시드 프롬프트 단일 평가자 정확도</td>
+<td style="text-align:left"><strong>80.3%</strong> (315개 시드) / <strong>90.8%</strong> (최종 136개)</td>
+<td style="text-align:left">풀이 시간 중앙값: 1.5분 $\rightarrow$ 1.0분</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공개</strong></td>
+<td style="text-align:left">Kaggle 공개 데이터셋 비율</td>
+<td style="text-align:left"><strong>약 20% (112개 / 28패밀리)</strong></td>
+<td style="text-align:left">CC-BY-4.0 라이선스</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>공개</strong></td>
+<td style="text-align:left">비공개 홀드아웃 비율</td>
+<td style="text-align:left"><strong>약 80% (432개 / 108패밀리)</strong></td>
+<td style="text-align:left">오염 방지 목적 유지</td>
+</tr>
+</tbody>
+</table>
+<p>*(※ 외부 모델들의 구체적 파라미터 크기, 훈련 데이터셋 구성 등 소스 미기재 항목은 &quot;확인 불가&quot;*<em>임)</em></p>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h4>
+<h5 id="소스-문서상-명시된-연구의-한계점-section-6-2">소스 문서상 명시된 연구의 한계점 (Section 6.2)</h5>
+<ol>
+<li><strong>단일 회차(Single-turn) 평가의 한계</strong>: HFE는 외부 도구 미사용 및 단일 회차 독립 프롬프트 환경으로 제한되어 있다. 따라서 실제 에이전트(Agentic) 환경이나 다중 회차(Multi-turn) 대화에서 나타나는 누적적 신뢰성 결함을 직접 측정하지는 못한다.</li>
+<li><strong>단일 오토레이터 편향 가능성</strong>: 모델 응답 평가가 단일 오토레이터(Gemini 3.1 Pro, Temperature 0)에 의존하여 수행되었다. 정답지와 결정론적 루브릭을 적용하고 크로스 파티 검증(Claude Fable 5.2 교차 검증 시 3%만 잠재적 정답 가능성 있음)을 거쳤으나, 동일 제공업체(Google) 모델에 대한 미세한 편향 가능성을 완벽히 배제할 수는 없다.</li>
+<li><strong>인간 베이스라인의 한계</strong>: 인간 성능 측정은 전체 프롬프트의 25%에 해당하는 시드 프롬프트에 대해서만 진행되었으며, 계산기나 검색 도구 없이 단일 회차로 수행되었다. 이로 인해 인지적 난이도가 아닌 기계적 단순 실수(Clerical Slips)가 인간 오류에 포함되었다.</li>
+<li><strong>텍스트 출력 모달리티 제한</strong>: HFE는 객관적인 채점이 가능한 텍스트 출력으로만 제한하여 평가를 진행했으므로, 이미지 생성, 아웃풋 비디오, 오디오 출력 등 멀티모달 생성 영역에서의 신뢰성 바닥은 측정하지 못한다.</li>
+</ol>
+<h5 id="소스-문서-내-미기재-및-확인-불가-요소-uncertainties">소스 문서 내 미기재 및 확인 불가 요소 (Uncertainties)</h5>
+<ul>
+<li><strong>외부 모델의 세부 파라미터 및 아키텍처</strong>: OpenAI(GPT-6 시리즈) 및 Anthropic(Claude 5.5 시리즈) 등 타사 모델의 매개변수(Parameter) 크기, 모달리티 결합 방식, 훈련 데이터셋 구성 등은 소스 문서에 기술되어 있지 않아 &quot;확인 불가&quot;이다.</li>
+<li><strong>인간 평가자의 인구통계학적 정보</strong>: 인간 베이스라인 수집 시 참여한 4명 평가자의 전문성 수준, 언어적 배경, 인구통계학적 세부 정보는 소스 문서에 명시되지 않아 &quot;확인 불가&quot;이다.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>29개 페이지</summary><ul><li><a href="../../concepts/reasoning-effort/">Reasoning Effort</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-yakubovich/">Alex Yakubovich</a></li>
+<li><a href="../../entities/people/alison-snyder/">앨리슨 스나이더</a></li>
+<li><a href="../../entities/people/alpoge-0e27f04685/">Alpöge</a></li>
+<li><a href="../../entities/people/anand-rao/">아난드 라오</a></li>
+<li><a href="../../entities/people/anastasios-kementsietsidis/">Anastasios Kementsietsidis</a></li>
+<li><a href="../../entities/people/apurv-suman/">Apurv Suman</a></li>
+<li><a href="../../entities/people/beat-weichsler/">Beat Weichsler</a></li>
+<li><a href="../../entities/people/chrysovalantis-anastasiou/">Chrysovalantis Anastasiou</a></li>
+<li><a href="../../entities/people/dellacqua/">Dell’Acqua</a></li>
+<li><a href="../../entities/people/demis-hassabis/">데미스 허사비스</a></li>
+<li><a href="../../entities/people/karpathy/">Karpathy</a></li>
+<li><a href="../../entities/people/kate-olszewska/">케이트 올셰프스카</a></li>
+<li><a href="../../entities/people/logan-kilpatrick/">로건 킬패트릭</a></li>
+<li><a href="../../entities/people/natalie-ha/">Natalie Ha</a></li>
+<li><a href="../../entities/people/nico-duduta/">Nico Duduta</a></li>
+<li><a href="../../entities/people/oran-kelly/">Oran Kelly</a></li>
+<li><a href="../../entities/people/orhan-firat/">Orhan Firat</a></li>
+<li><a href="../../entities/people/parth-modi/">Parth Modi</a></li>
+<li><a href="../../entities/people/ryan-burnell/">Ryan Burnell</a></li>
+<li><a href="../../entities/people/samuel-albanie/">사무엘 알바니</a></li>
+<li><a href="../../entities/people/sean-nakamoto/">Sean Nakamoto</a></li>
+<li><a href="../../entities/people/tulsee-doshi/">툴시 도시</a></li>
+<li><a href="../../kinds/pdf/">PDF</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></details></section>
+</main>
+</body>
+</html>

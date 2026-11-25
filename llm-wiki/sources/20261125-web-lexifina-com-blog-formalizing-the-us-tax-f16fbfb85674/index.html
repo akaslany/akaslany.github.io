@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formalizing the US tax code | Lexifina</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Formalizing the US tax code | Lexifina</h1>
+<p class="page-meta">웹 · 2026-11-25</p>
+<h2 id="요약">요약</h2>
+<p>미국 연방 세법을 린으로 형식화해 입법 결함 138건을 찾고 소득세 계산과 신고 서식을 검증한 연구를 해설한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://lexifina.com/blog/formalizing-the-us-tax-code">출처</a> · <a href="https://www.youtube.com/watch?v=ebwylQWzi60">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alan-yahya/">알란 야히아</a></li>
+<li><a href="../../entities/people/kitces/">키체스</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/policy-regulation/">정책·규제</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="미국-세무-코드의-형식화-formalization-및-버그-탐지-연구-해설-보고서">미국 세무 코드의 형식화(Formalization) 및 버그 탐지 연구 해설 보고서</h3>
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p>본 보고서는 소프트웨어 시스템 분석 및 기술 감사 관점에서, 알란 야히아(Alan Yahya)가 2026년 11월 10일 발표한 연구 아티클(&quot;Formalizing the US tax code | Lexifina&quot;)을 검토하고 이에 대한 시스템적·기계적 감사 결과를 종합 해설합니다.</p>
+<p>본 연구의 핵심 전제는 의존 타입 체계(Dependent Type System)를 갖춘 수학적 증명 검증 언어인 린(Lean)을 최신 연방법령 텍스트에 적용함으로써 인간 검수자가 쉽게 놓치는 논리적 불일치와 기계적 결함(버그)을 완벽하게 탐지할 수 있다는 점입니다. 연구진은 글로벌 법률 저장소 프로젝트인 <code>global-law</code>의 일환으로 미국 법전 Title 26(연방 세법) 전체를 린(Lean) 코드 데이터 구조로 정형화(Formalization)했습니다. 이 파싱 및 검증 과정을 통해 법률 조문 자체에 내재된 138개의 입법 드래프팅 오류를 발굴했으며, 조문 정형화가 세법의 기계적·구조적 결함 탐지에 매우 유효함을 실증했습니다. (소스 출처: 서론 및 섹션 1)</p>
+<p>소득세 계산 코드화 단계에서는 2025년 가구별 연방 소득세 산식(Form 1040 서식 체계 및 2025년 7월 제정된 'One Big Beautiful Bill Act' 개정안 포함)을 소득(AGI), 공제, 세금/대체한심세(AMT), 세액공제의 4단계 알고리즘 프로세스로 정밀하게 구현했습니다. 정형화된 세금 계산 엔진의 타당성을 검증하기 위해 기존 대표 세무 소프트웨어 3종(PolicyEngine-US, Tax-Calculator, UsTaxes)을 대상으로 5,000개의 가상 가구 무작위 및 경계값 샘플을 입력하여 비교 검증(Cross-Verification)을 수행했습니다. (소스 출처: 섹션 2, 3)</p>
+<p>또한, 증명 검증 엔진 상에서 실행된 제약 조건 탐색 알고리즘은 기존 절세 문헌에 수록된 7가지 대표적 절세 기법을 자동 재발견함은 물론, 기존 세무 자문 문헌이나 국세청(IRS) 지침에 보고된 바 없는 3가지 신규 루프홀(법률의 허점) 및 서식 오류를 적발했습니다. 소스 작성자인 알란 야히아는 이러한 단일 연도 개인 소득세 모델의 한계를 지적하며, 초대형 루프홀은 법인·파트너십 등 주체 간 가치 이동(Inter-entity Value Transfer) 영역에 존재한다는 분석적 주장을 제시합니다. 본 보고서는 소스 텍스트의 정밀한 사실 관계와 소스 작성자의 기술적·분석적 주장을 구별하여 정형 검증 시스템 감사 보고서 형식으로 기술합니다. (소스 출처: 서론, 섹션 4, 5, 6)</p>
+<hr />
+<h5 id="2-주요-논점-key-points-arguments">2. 주요 논점 (Key Points &amp; Arguments)</h5>
+<h6 id="2-1-세법-조문-텍스트-내-138개-입법-드래프팅-오류-발견">2.1. 세법 조문 텍스트 내 138개 입법 드래프팅 오류 발견</h6>
+<p>미국 하원 법률 개정 사무국(Office of the Law Revision Counsel)이 발행한 2026년 11월 3일 자 미국 법전 Title 26 XML structured data를 정적 구문 분석(AST Parsing)하여 조문 간 상호 참조(Cross-reference) 및 조건식을 정형 검증했습니다. 하이퍼링크가 없는 텍스트 표현(“paragraph (2) of subsection (b)”, “sections 922 through 927” 등)까지 파싱하여 검증 수트를 실행한 결과 총 257개의 지적 사항이 도출되었습니다.</p>
+<p>257개 지적 사항 중 98개는 과거 기간 적용 규칙 및 미시행 개정안 등 의도된 조항이며, 21개는 편집자의 하이퍼링크 오보(False Alarm)로 분류되었습니다. 이를 제외한 <strong>실제 입법 결함은 총 138개</strong>로 확정되었습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">결함 유형</th>
+<th style="text-align:left">건수</th>
+<th style="text-align:left">기술적 세부 설명 및 대표 예시 조항</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>폐지·이동·재작성 조항 참조 오류</strong></td>
+<td style="text-align:left">67건</td>
+<td style="text-align:left">경합 조항 개정 시 개정 반영 누락.&lt;br&gt;- §1(f)(7)(A): 재작성된(rewritten) 조항 참조&lt;br&gt;- §168(n)(2)(G): 이동된(moved) 조항 참조</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>오타, 잘못된 세부 분할, 미명명 법률</strong></td>
+<td style="text-align:left">24건</td>
+<td style="text-align:left">구문 인용 내 오타 및 서브섹션 잘못 할당.&lt;br&gt;- §1400Z-2(f)(1): 잘못된 서브섹션 인용&lt;br&gt;- §72(t)(2)(A)(viii): 인용 텍스트 내 오타 존재</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>위계 단어 오류 (Wrong level word)</strong></td>
+<td style="text-align:left">8건</td>
+<td style="text-align:left">법률 구조 위계 명칭의 기계적 오기.&lt;br&gt;- §9818(a)(1)(A): 서브섹션(Subsection)을 패러그래프(Paragraph)로 명칭 오류</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>동일 번호 조항 중복 존재</strong></td>
+<td style="text-align:left">9건</td>
+<td style="text-align:left">동일한 하위 식별 부호가 이중 부여됨.&lt;br&gt;- §1202(b)(4): 동일 번호 조항 이중 존재&lt;br&gt;- §45X(d)(4): 동일 번호 조항 이중 존재</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>닫히지 않은 괄호 (Unclosed Parentheses)</strong></td>
+<td style="text-align:left">30건</td>
+<td style="text-align:left">구문 해석 시 트리 파싱 오류를 유발하는 괄호 미닫힘.&lt;br&gt;- §165(h)(1), §38(c)(6)(C) 등 (편집자 주석 처리 13건, 미주석 17건)</td>
+</tr>
+</tbody>
+</table>
+<p>발견된 138개 결함은 각각 명확한 증거를 담은 단문 린 증명서(Certificate of Proof)로 작성되어 자동화 검증 수트(CI/CD 파이프라인 형태)로 관리됩니다. 린(Lean) 엔진이 138개 결함 전체를 재증명하는 데 소요되는 시간은 약 2분 30초입니다. 본 시스템은 1994년 판까지 소급되는 깃(git) 커밋 이력 체계를 갖추고 있어, 커밋 추적(<code>git blame</code>)을 통해 각 입법 결함을 유발한 개별 공공법(Public Law)을 특정할 수 있습니다.</p>
+<h6 id="2-2-소득세-계산-코드화-및-법률-텍스트의-구조적-이상점">2.2. 소득세 계산 코드화 및 법률 텍스트의 구조적 이상점</h6>
+<p>2025년 연방 소득세 산식 알고리즘은 다음 4단계 파이프라인으로 구현되었습니다:</p>
+<ol>
+<li><strong>소득 (Income)</strong>: 조정후총소득(AGI) 산출 단계 (IRA 납입금, 학자금 대출 이자 공제 등 반영).</li>
+<li><strong>공제 (Deductions)</strong>: 표준공제 및 항목공제, 2025년 신설된 팁, 연장근무 수당, 자동차 대출 이자, 65세 이상 추가 공제 연산.</li>
+<li><strong>세금 (Tax &amp; AMT)</strong>: 기본 산출 세액 및 고소득자 공제 제한을 위한 대체한심세(AMT) 이중 계산.</li>
+<li><strong>세액공제 (Credits)</strong>: 자녀세액공제 및 저소득층 근로세액공제(EITC) 차감.</li>
+</ol>
+<p>해당 비즈니스 로직을 코드화하는 과정에서 법률 텍스트 자체에 내재된 5가지 구조적 이상점(Anomalies)이 정형적으로 입증되었습니다:</p>
+<ul>
+<li><strong>2025년 및 2026년 법률 조문 혼재</strong>: 법전 내 6개 위치에서 2026년 시행 예정 개정안이 소급/사전 통합되어 있었습니다. 시행일 주석 없이 조문만 해석할 경우 2025년 AMT 단계적 축소(phase-out) 비율이 25%가 아닌 50%로 계산되거나, 미적용 기부금 감축선 및 항목공제 상한이 잘못 적용되는 과세 오류가 발생합니다.</li>
+<li><strong>반대 방향의 반올림 처리 규정</strong>: 팁 및 연장근무 공제 규정은 소득 한도 초과액 &quot;매 풀 $1,000(full $1,000)&quot;당 $100씩 축소되는 내림(절사) 구조인 반면, 자동차 대출 이자 공제 규정은 &quot;매 $1,000 또는 그 일부(portion thereof)&quot;당 $200씩 축소되는 올림(절상) 구조로 작성되어 있습니다. 이 구문상의 차이로 인해 자동차 대출 이자 공제 혜택은 정수 단위 경계보다 $999 일찍 소멸합니다.</li>
+<li><strong>부부 개별 신고(MFS) 시 주 및 지방세(SALT) 공제 한도액 감축 구조의 유리함</strong>: 주 및 지방세(SALT) 공제 상한 감축 계산 시, 부부 합산 신고(Joint)는 소득 $500,000 초과분의 달러당 30센트씩 한도가 감축됩니다. 반면 부부 개별 신고(MFS) 시에는 감축 산출 후 한도를 절반으로 나누므로 달러당 15센트만 감축됩니다. 결과적으로 각 $300,000(합계 $600,000)를 버는 부부의 경우 Joint 신고 시 공제 한도가 $10,000로 캡(Cap)이 씌워지는 반면, MFS 신고 시 두 사람의 공제 합계액이 최대 $25,000($12,500씩)에 달하여 Joint 신고 시 대비 구조적으로 유리함이 증명되었습니다.</li>
+<li><strong>IRS 세액표(Tax Table)와 법률 산식 간 오차 범위</strong>: 과세 소득 $100,000 미만 구간에서 대다수 납세자가 참조하는 IRS 세액표의 구간 대표값 수치와 법률 조문 산식 간에 -$5 ~ +$6 범위의 불일치가 존재함이 린(Lean) 전칭 증명(Universal Quantification)을 통해 입증되었습니다.</li>
+<li><strong>1달러 경계값에 따른 급격한 혜택 상실 절벽 효과 (Cliff Effect)</strong>: 자녀 3명 가구 기준 투자 소득이 한도선인 $11,950를 단 1달러 초과하는 순간 최대 $8,046에 달하는 EITC 세액공제 전액이 즉시 소멸합니다. 저축세액공제(Saver's credit) 또한 소득 $47,500 시 $2,000 공제에서 $47,501 소득 도달 시 $800 공제로 공제액이 급전직하합니다.</li>
+</ul>
+<h6 id="2-3-기존-세무-소프트웨어-3종과의-비교-검증-결과">2.3. 기존 세무 소프트웨어 3종과의 비교 검증 결과</h6>
+<p>구현된 모델의 타당성 검증을 위해 5,000개의 가상 가구 샘플(일반 가구 2,000개, 복잡한 경계 조건 가구 3,000개)을 구축하여 외부 세액 계산 엔진 3종과 결과를 대조했습니다.</p>
+<pre><code>[5,000 가상 가구 샘플 입력 데이터 파이프라인]
+       │
+       ├──────────────► PolicyEngine-US ────► 4,993가구 완벽 일치 (7가구 EITC ±$11 오차)
+       ├──────────────► Tax-Calculator ─────► 비즈니스 로직 경계 조건 미비 (MFS EITC 오류, AMT $14,881 누락)
+       ├──────────────► UsTaxes ────────────► 양식 간 데이터 연동 결함 14개 (Schedule C 누락 등 일반가구 1/6 영향)
+       └──────────────► 본 정형화 모델 ─────► 이종 시스템 대조를 통해 자체 엔진 오류 2건 교정 완료
+</code></pre>
+<ul>
+<li><strong>PolicyEngine-US</strong>: 4,993개 가구에서 결과가 완벽하게 일치했습니다. 차이가 발생한 7개 가구의 오차는 최대 $11였으며, 이는 본 연구 모델이 IRS 인쇄용 EITC 수치 테이블을 직접 파싱한 반면 PolicyEngine-US는 수식 산식을 그대로 적용한 지점 차이에서 기인했습니다.</li>
+<li><strong>Tax-Calculator</strong>: 별거 여부를 확인하는 경계 조건 검증 미비(Boundary Condition Validation Failure)로 인해 별거하지 않는 MFS 가구에 EITC 및 자녀돌봄공제를 잘못 부여했습니다. 또한 고소득 MFS 가구의 AMT 계산 로직을 누락하여 타 엔진 대비 $14,881의 세액 계산 오류를 유발했습니다.</li>
+<li><strong>UsTaxes</strong>: 일반 가구 6곳 중 1곳에 영향을 미치는 14가지 소프트웨어 버그가 확인되었습니다. 2025년 서식 연동 과정에서 양식 간 데이터 데이터 파이프라인 연동 결함(Form Integration Bug)으로 Schedule C(자영업 사업 소득 서식)를 첨부하지 않아 자영업 소득을 전체 누락했고, 자녀돌봄공제 서식 누락, EITC 연령 테스트 무조건 통과, 배우자 임금을 자영업세 상한선에 잘못 감산하는 결함이 발견되었습니다.</li>
+<li><strong>본 모델의 자체 오류 교정</strong>: 이종 세무 엔진과의 대조를 통해 본 모델 내 (1) 자영업 이익에 대한 소상공인 공제(§199A, 20%) 누락 및 (2) AMT 절감을 위해 항목공제액을 의도적으로 축소 선택하는 옵션 처리 누락을 발견하여 수정했습니다(수정 후 $2,070 세액 절감 확인).</li>
+</ul>
+<h6 id="2-4-탐지-알고리즘이-재발견한-기존-합법-루프홀">2.4. 탐지 알고리즘이 재발견한 기존 합법 루프홀</h6>
+<p>모델상에서 실행된 무차별 탐색 알고리즘은 절세 문헌에 기재되어 있는 7가지 주요 절세 기법을 자동 탐지했습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">절세 기법 및 전략</th>
+<th style="text-align:left">최대 절감액 / 효과</th>
+<th style="text-align:left">기존 문헌 및 출처</th>
+<th style="text-align:left">구조적 메커니즘 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>§199A 한도 미만을 위한 MFS 신고</strong></td>
+<td style="text-align:left">연간 $6,317</td>
+<td style="text-align:left">Kitces</td>
+<td style="text-align:left">소득 합산 시 공제 단계적 축소 구간에 진입하는 것을 MFS로 소득 분할하여 한도 이하 유지</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>저소득 배우자의 자녀 부양공제 신청</strong></td>
+<td style="text-align:left">연간 $3,090</td>
+<td style="text-align:left">실무자 가이드 (Taxstra)</td>
+<td style="text-align:left">MFS 신고 시 한계 세율 및 세액공제 적용 효율이 높은 배우자 쪽에 공제 이관</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EITC 투자소득 한도 준수를 위한 이익 유예</strong></td>
+<td style="text-align:left">$6,798 절감 ($5,000 실현 유예)</td>
+<td style="text-align:left">IRS Publication 596</td>
+<td style="text-align:left">자본이득 $5,000 실현을 유예하여 EITC 투자소득 상한선($11,950) 미만을 유지함</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AMT 감소를 위한 소액 항목공제 선택</strong></td>
+<td style="text-align:left">연간 $2,070</td>
+<td style="text-align:left">Form 1040 지침서</td>
+<td style="text-align:left">표준공제 대신 의도적으로 적은 항목공제를 선택하여 AMT 과세표준 재상승 차단</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>사회보장 수급 전 갭 연도 Roth 전환</strong></td>
+<td style="text-align:left">평생 +$84만</td>
+<td style="text-align:left">Kitces</td>
+<td style="text-align:left">사회보장 수급 개시 전 저소득 갭 연도(Gap years)에 낮은 세율로 Roth IRA 사전 전환</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>자녀 고용 및 자녀 명의 Roth IRA 개설</strong></td>
+<td style="text-align:left">+$46만</td>
+<td style="text-align:left">Kitces</td>
+<td style="text-align:left">가족 사업체에서 자녀에게 임금을 지급(표준공제 범위 내 면세) 후 Roth IRA 복리 투자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>상속 IRA 10년 인출 중첩 방지 전환</strong></td>
+<td style="text-align:left">+$43만 ~ $57만</td>
+<td style="text-align:left">Journal of Accountancy</td>
+<td style="text-align:left">상속 후 10년 내 강제 인출 시 최고세율 적용을 피하기 위해 피상속인 생전 사전 전환</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-5-새로-발견된-신규-루프홀-및-서식-상의-오류">2.5. 새로 발견된 신규 루프홀 및 서식 상의 오류</h6>
+<p>기존 세무 자문 문헌, IRS 공식 지침, 소프트웨어 포럼에 보고된 바 없는 신규 결함 3가지가 정형 알고리즘을 통해 발견되었습니다.</p>
+<ol>
+<li>
+<p><strong>동거 부부의 개별 신고를 통한 사회보장세 절감 (Social Security Tax Reduction)</strong>:</p>
+<ul>
+<li><strong>구조적 원인</strong>: 통상 동거 부부의 MFS 신고는 불리한 것으로 알려져 있으나, 과세 대상 연금 수급액 상한이 '연금 수급액의 85%' 또는 '임시 소득(Provisional Income)의 85%' 중 적은 금액으로 설정되는 조문(26 USC §86)의 상한 구조에서 틈새가 발생합니다.</li>
+<li><strong>세부 메커니즘</strong>: Joint 신고 시 근로 배우자의 임금이 '임시 소득'에 그대로 합산되어 연금 수급액의 85% 과세 상한을 즉시 채우게 됩니다. 반면 MFS 신고 시 수급 배우자 본인의 소득만을 기준으로 임시 소득을 독립 평가합니다.</li>
+<li><strong>수치 입증</strong>: 연금 $48,000 수급자와 임금 $60,000 근로자로 구성된 동거 부부의 경우, Joint 신고 시 $7,050의 세금이 부과되나 MFS 신고 시 $5,568로 감소하여 <strong>$1,482의 세금이 절감</strong>됩니다. (단, 배우자 임금이 $100,000에 도달하면 과세 역전 현상 발생).</li>
+</ul>
+</li>
+<li>
+<p><strong>임금 소득과 투자 소득의 MFS 분리 (NIIT Arbitrage)</strong>:</p>
+<ul>
+<li><strong>구조적 원인</strong>: 3.8% 순투자소득세(NIIT, 26 USC §1411) 적용 임계값은 Joint $250,000, MFS $125,000입니다.</li>
+<li><strong>세부 메커니즘</strong>: Joint 신고 체계에서는 임금 소득이 면세 임계값을 먼저 소진(Consume)하여 투자 소득 전액이 3.8% 과세 구간에 노출됩니다. 그러나 MFS 신고를 통해 임금 소득과 투자 소득을 물리적으로 분리하면, 투자 담당 배우자는 상대 배우자의 임금 합산 없이 자신의 0% 면세 구간($125,000)을 온전히 확보합니다.</li>
+<li><strong>수치 입증</strong>: 각각 $200,000의 임금과 $200,000의 투자소득을 보유한 부부의 경우, MFS 분리 신고를 통해 <strong>$1,621의 세액을 절감</strong>할 수 있습니다.</li>
+</ul>
+</li>
+<li>
+<p><strong>Schedule 8812 서식의 법령 초과 환급 결함 (Statutory-Form Discrepancy)</strong>:</p>
+<ul>
+<li><strong>구조적 원인</strong>: 세법 조문(26 USC §24)과 IRS 공식 양식(Schedule 8812) 간의 비즈니스 로직 불일치 결함입니다.</li>
+<li><strong>세부 메커니즘</strong>: 조문 상 환급형 자녀세액공제(ACTC) 상한 산출 시 기타 부양가족 공제($500)는 환급 대상 계산에서 엄격히 배제되어야 합니다. 그러나 IRS Schedule 8812 양식은 두 공제를 일괄 합산한 후 차감 한도를 적용하도록 설계되어 있어, 결정 세액이 0원이라 세액 차감이 불가능한 구간에서 비환급성 공제여야 할 기타 부양가족 공제 $500를 현금으로 과다 환급하는 오류를 유발합니다.</li>
+<li><strong>수치 입증</strong>: 소득 $240,000, 적격 자녀 1명, 기타 부양가족 1명 가구의 경우, 법률 조문 규정상 환급액은 $200이나 IRS 양식 적용 시 <strong>$700가 환급되어 $500의 과다 환급</strong>이 발생함이 린(Lean) 정리 증명을 통해 입증되었습니다.</li>
+</ul>
+</li>
+</ol>
+<h6 id="2-6-소득세-루프홀의-한계-및-탐지-자동화-체계">2.6. 소득세 루프홀의 한계 및 탐지 자동화 체계</h6>
+<ul>
+<li><strong>단일 연도 소득세 루프홀의 수치적 한계</strong>: 단일 연도 개인 소득세 체계는 과세표준 구간(Bracket)과 공제 한도가 조문상 엄격히 캡(Cap)이 씌워져 있어, 탐지된 루프홀의 세액 변동 폭이 수천 달러 수준으로 제약됩니다. 수십만~수백만 달러 규모의 초대형 루프홀(Roth 급)은 단일 연도 소득세가 아닌, 파트너십, S 법인, C 법인 등 <strong>주체 간 가치 이동(Inter-entity Value Transfer)</strong> 영역에 주로 존재합니다.</li>
+<li><strong>기술 감사 및 검증 자동화 체계</strong>: 조문 정형화 및 파싱 검증 수트는 완전 자동화가 가능합니다. 신규 법령 개정판이 고시되면 단 1회의 명령어 실행으로 새로운 입법 결함을 자동 탐지하며, <code>git blame</code>을 통해 오류 유발 개별 공공법(Public Law)을 특정합니다. 세금 산식 모델은 일회성 구축 비용이 소요되나, 일단 구축 및 증명이 완료되면 향후 세법 개정 시 변경된 조문 스펙만 수정 투입하여 비교 검증 체계를 유지할 수 있습니다.</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자-persons-and-speakers">3. 등장 인물 및 화자 (Persons and Speakers)</h5>
+<ul>
+<li><strong>알란 야히아 (Alan Yahya)</strong>: 소스 아티클 작성자이자 린(Lean) 기반 세법 정형화 연구 및 탐지 프로젝트 주도자.</li>
+<li><strong>렉시피나 (Lexifina)</strong>: 연구 아티클 게시 주체이자, 법률 버전 관리 저장소인 <code>global-law</code>를 운영 및 관리하는 법률 소프트웨어 기업.</li>
+<li><strong>미국 하원 법률 개정 사무국 (Office of the Law Revision Counsel)</strong>: 미국 법전(US Code) Title 26의 구조화 데이터(XML)를 편찬 및 제공하는 미국 하원 산하 공식 발행 기관.</li>
+<li><strong>키체스 (Kitces)</strong>: §199A 소상공인 공제 전략, 자녀 고용을 통한 Roth IRA 활용, Roth 갭 연도 전환 전략 등을 작성한 기존 세무 문헌 저자.</li>
+<li><strong>기타 소스 미언급 인물 (특정 세무 조사 대상자, 피의자 등)</strong>: 소스 텍스트 내 미등재로 인해 확인 불가.</li>
+</ul>
+<hr />
+<h5 id="4-수치-및-시점-numbers-and-timestamps-dates">4. 수치 및 시점 (Numbers and Timestamps/Dates)</h5>
+<ul>
+<li><strong>발행 및 수집 시점</strong>:
+<ul>
+<li>소스 아티클 게시일: 2026년 11월 10일</li>
+<li>미국 법전 데이터 수집 기준일: 2026년 11월 3일</li>
+<li>깃(git) 이력 소급 추적 범위: 1994년 판 연방 세법 조문까지 확정 추적</li>
+</ul>
+</li>
+<li><strong>조문 분석 결과 데이터</strong>:
+<ul>
+<li>파싱 및 검증 총 건수: 257개 (의도된 조항 98개, 하이퍼링크 오보 21개, 실제 입법 결함 138개)</li>
+<li>린(Lean) 전체 증명 검증 소요 시간: 약 2분 30초</li>
+</ul>
+</li>
+<li><strong>비교 검증 가구 및 엔진 수치</strong>:
+<ul>
+<li>검증용 가상 가구 데이터 셋: 총 5,000개 가구 (일반 가구 2,000개, 복잡/경계 가구 3,000개)</li>
+<li>비교 대상 세무 계산 소프트웨어: PolicyEngine-US, Tax-Calculator, UsTaxes (총 3종)</li>
+</ul>
+</li>
+<li><strong>절세액, 오차 금액 및 경계 수치 데이터</strong>:
+<ul>
+<li>PolicyEngine-US 일치율: 5,000개 중 4,993개 완벽 일치 (나머지 7개 가구 오차 범위 최대 $11)</li>
+<li>Tax-Calculator AMT 계산 누락 세액: $14,881</li>
+<li>EITC 투자소득 제한 경계값 및 절벽 상실액: 투자소득 $11,950 1달러 초과 시 최대 $8,046 공제액 전액 소멸</li>
+<li>저축세액공제 절벽 구간: 소득 $47,500 시 $2,000 공제 혜택 ──► 소득 $47,501 도달 시 $800 공제로 급감</li>
+<li>동거 부부 MFS 사회보장세 절약액: 연금 $48,000 + 임금 $60,000 부부 기준 $1,482 절감</li>
+<li>MFS 순투자소득세(NIIT) 절약액: 각각 $200,000 임금/투자소득 보유 부부 기준 $1,621 절감</li>
+<li>Schedule 8812 서식 법률 대비 과다 환급액: 법률 조문 $200 vs IRS 양식 $700 ($500 현금 과다 환급)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-and-uncertainties">5. 한계와 불확실성 (Limitations and Uncertainties)</h5>
+<ul>
+<li><strong>모델 커버리지(Coverage)의 한계</strong>: 2025년 단일 연도 개인 소득세 모델 구축 시, 단일 연도 자녀 소득세(Kiddie tax), 28% 및 §1250 자본이득, 해외 소득 규정, 수동적 활동 손실 규칙(Passive activity rules), 대부분의 AMT 가산 항목(Preferences)이 산식 체계에서 제외되었습니다. 다년도 분석 모델의 경우 2025년 세법이 향후에도 고정된 것으로 가정했습니다.</li>
+<li><strong>검증 주체의 기술적 한계</strong>: 입법 결함 텍스트의 분류(Triage) 및 소스 코드 리뷰 작업은 AI 에이전트에 의해 자동 수행되었으며, 세무 전문 변호사나 공인회계사(CPA)에 의한 실체적 법률 검수를 거치지 않았습니다.</li>
+<li><strong>일치의 한계 (Agreement is not truth)</strong>: 비교 대상인 4개의 세금 계산 엔진이 특정 샘플에서 동일한 계산 결과를 산출하더라도, 이는 세법 조문에 대한 동일한 법령 오독(Misreading)을 공유한 결과일 가능성이 존재합니다. (이러한 시스템적 한계를 보완하기 위해 Lean 정률 정리 증명 및 IRS 공식 실증 사례 테스팅을 병행함).</li>
+<li><strong>법인 세제 영역의 루프홀 존재 여부</strong>: 본 소스 텍스트는 파트너십, S 법인, C 법인 등 법인 세제 영역에 존재하는 구체적인 루프홀을 다루지 않았으므로 관련 세부 정보 확인 불가.</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alan-yahya/">알란 야히아</a></li>
+<li><a href="../../entities/people/kitces/">키체스</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/policy-regulation/">정책·규제</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

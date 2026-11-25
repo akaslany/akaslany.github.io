@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poetiq | LLM into Code: Intelligence without a GPU</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Poetiq | LLM into Code: Intelligence without a GPU</h1>
+<p class="page-meta">웹 · 2026-11-24</p>
+<h2 id="요약">요약</h2>
+<p>Poetiq는 LLM의 판단을 코드로 옮겨 불만 분류 비용과 WikiRacer의 의사결정 시간을 줄였다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://poetiq.ai/posts/llm_to_code">출처</a> · <a href="https://www.youtube.com/watch?v=t2-5z6WClnI">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/large-language-model/">Large Language Model</a></li>
+<li><a href="../../concepts/pareto-frontier/">Pareto Frontier</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/poetiq/">Poetiq</a></li>
+<li><a href="../../entities/people/ashwin-baluja/">아슈빈 발루자</a></li>
+<li><a href="../../entities/people/michele-covell/">미셸 코벨</a></li>
+<li><a href="../../entities/people/nash-luxsuwong/">내시 룩수웡</a></li>
+<li><a href="../../entities/people/saurabh-singh/">소라브 싱</a></li>
+<li><a href="../../entities/people/yair-alon/">야이르 알론</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="poetiq-메타시스템을-통한-llm의-코드-환원-reduce-to-code-최적화-분석-보고서">Poetiq 메타시스템을 통한 LLM의 코드 환원(Reduce to Code) 최적화 분석 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>기업 인프라 환경에서 대규모 언어 모델(LLM)을 티켓 라우팅, 클레임 태깅, 불만 사항 분류 등 고통량(High-throughput) 업무의 의사결정에 직접 활용하는 방식은 극심한 컴퓨팅 비용 증대와 비결정론적(Non-deterministic) 응답이라는 구조적 문제를 수반합니다. 본 분석 보고서는 이러한 기술적 한계를 극복하기 위해 제시된 &quot;GPU 없는 지능: LLM의 코드 환원(LLM into Code: Intelligence without a GPU)&quot; 파라다임과 Poetiq 메타시스템의 오케스트레이션 메커니즘을 소프트웨어 아키텍처 관점에서 정밀하게 분석합니다.</p>
+<p>Poetiq 메타시스템은 설계 단계(during design)에서 LLM이 보유한 추론 및 분류 지식을 직접 실행 가능한 Python 코드(Executable Code)로 증류(Distill)하여 정적 의사결정 모듈로 변환합니다. 이후 배포 단계(during deployment)에서는 생성된 코드가 1차적으로 모든 입력을 우선 처리하며, 시스템 신뢰도 임계값에 미달하여 코드가 스스로 해결하지 못하는 예외적 입력에 한해서만 LLM을 Fallback(대체) 수단으로 제한적으로 호출합니다. 이러한 하이브리드 제어 흐름을 &quot;코드로의 환원(Reducing to Code)&quot;이라고 정의합니다.</p>
+<p>본 보고서에서는 Poetiq 메타시스템의 검증을 위해 소스 문서가 다루는 두 가지 핵심 실증 과제인 미국 소비자기능보호국(CFPB) 불만 사항 분류 및 모델 라우팅(Task 1)과 위키레이서(WikiRacer) 경로 탐색 및 순차적 선택(Task 2)의 파레토 전선(Pareto Frontier) 결과, 소거 연구, 그리고 하네스 독립성 메커니즘을 상세히 다룹니다.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-evidence">2. 주요 논점 (Key Arguments &amp; Evidence)</h4>
+<h5 id="2-1-코드로의-환원이-필요한-이유-why-reduce-to-code">2.1. 코드로의 환원이 필요한 이유 (Why Reduce to Code?)</h5>
+<p>기업용 프로덕션 시스템에서 단독 LLM API 호출 연동 방식 대신 코드 기반 분류기로의 환원을 적용해야 하는 기술적·운영적 근거는 5가지 핵심 축으로 정리됩니다.</p>
+<ul>
+<li><strong>비용 및 지연 시간 (Cost and Latency):</strong> 고통량 애플리케이션에서 지속적으로 누적되는 토큰 비용과 추론 지연 시간의 불확실성은 대규모 시스템 배포의 장애 요소입니다. 코드로 환원된 로직은 GPU 자원 없이 범용 CPU 기반 하드웨어에서 미초(microsecond) 단위로 즉시 실행되므로 무제한 확장성과 뛰어난 경제성을 확보합니다.</li>
+<li><strong>일관성 (Consistency):</strong> LLM은 동일한 프롬프트 입력에 대해서도 확률적 변동성으로 인해 다른 결과를 반환할 수 있으며, 모델 버전 업데이트 시 동작이 드리프트(Drift)할 위험이 있습니다. 반면 환원된 코드는 결정론적(Deterministic)으로 작동하여 동일 입력에 대해 상시 동일한 출력을 보장합니다. 또한 단체 테스트(Unit test), Git 버전 관리, 파이프라인 롤백이 가능합니다.</li>
+<li><strong>이해 가능성 (Understandability):</strong> 오결정(Misclassification)이 발생할 경우, 코드 기반 분류기는 제어 흐름과 조건을 직접 추적(Tracing)하고 검사할 수 있습니다. 오류 원인을 정확히 식별하여 정적 로직을 수정할 수 있으며, 감사자(Auditor), 운영자, 고객에게 의사결정 근거를 투명하게 설명할 수 있습니다.</li>
+<li><strong>개인정보 보호 (Privacy):</strong> 코드로 처리되는 입력 데이터는 조직의 자체 온프레미스 또는 프라이빗 인프라 내부를 벗어나지 않으며, 제3자 LLM API 제공업체로 민감한 개인정보가 유출되는 경로를 근본적으로 차단합니다.</li>
+<li><strong>가용성 (Availability):</strong> GPU 컴퓨팅 자원은 공급 희소성이 존재하며 API 공급업체의 초당 요청 수 제한(Rate limits) 및 할당량(Quotas) 제약에 노출되어 있습니다. 환원된 코드는 GPU를 필요로 하지 않으므로 이미 운용 중인 범용 CPU 인프라를 그대로 활용해 100% 가용성을 확보합니다.</li>
+</ul>
+<h5 id="2-2-메타시스템의-작동-및-코드화-생성-메커니즘-how-it-works">2.2. 메타시스템의 작동 및 코드화 생성 메커니즘 (How it Works)</h5>
+<p>Poetiq 메타시스템은 하드코딩된 규칙 작성을 직접 지시받지 않았음에도 불구하고, 최적화 목적 함수에 비용 벌점이 부여됨에 따라 코드를 자동 생성하는 유기적 창출 특성(Emergent Property)을 보여줍니다.</p>
+<ul>
+<li><strong>유기적 창출 (Emergent Property):</strong> 메타시스템의 손실 함수(Loss Function)에 컴퓨팅 및 토큰 비용 지출에 대한 벌점(Cost Penalty) 요소를 부여하면, 메타시스템 스스로 추론 지식을 정적 파이썬 코드 규칙 및 통계 모델로 이전하는 동작을 창출합니다. 시스템은 라벨링된 예시 데이터셋과 비용 벌점 점수체계만을 제공받으며, 시스템의 전체 출력 품질을 유지하는 범위 내에서 결정을 코드로 자동 이관합니다.</li>
+<li><strong>통계 모델과 결정 트리의 결합:</strong> 단어 피처(word features) 기반의 <strong>로지스틱 회귀(Logistic Regression) 통계 모델</strong>과 결정 트리(Decision Tree)가 쌍(Paired)을 이루어 작동합니다. 통계 모델이 입력 문맥의 신뢰도 수치를 산출하고 결정 트리가 이를 검증하여, 코드가 자체적으로 정답을 내릴 수 있는지 또는 LLM 예외 처리 모듈로 이관할지를 실시간 판단합니다.</li>
+<li><strong>비용-지연 시간 상호 최적화 원리:</strong> 시스템 아키텍처 관점에서 달러 비용(Cost) 최적화를 수행하면 LLM 호출 빈도가 줄어들어 응답 지연 시간(Latency)이 즉각 단축됩니다. 반대로 지연 시간 단축을 최적화 목표로 설정하더라도 연산량이 적은 코드 파트로 처리가 이급되면서 달러 비용이 동시에 절감되는 <strong>이중 이점(Dual-benefit)</strong> 특성이 발현됩니다.</li>
+</ul>
+<hr />
+<h5 id="2-3-과제-1-소비자-불만-사항-분류-및-모델-라우팅-consumer-complaints">2.3. 과제 1: 소비자 불만 사항 분류 및 모델 라우팅 (Consumer Complaints)</h5>
+<h6 id="데이터셋-및-과제-정의">데이터셋 및 과제 정의</h6>
+<p>미국 소비자기능보호국(CFPB)이 공개한 금융 불만 사항 데이터셋을 활용합니다. 소비자의 서술문(narrative)을 입력받아 5개 금융 상품 분야(<strong>체킹/저축, 신용카드, 채권 추심, 송금, 학생 대출</strong>) 중 하나로 분류하는 닫힌 집합 선택(Closed-set selection) 과제입니다.</p>
+<h6 id="파레토-전선-pareto-frontier-분석">파레토 전선 (Pareto Frontier) 분석</h6>
+<p>단일 LLM 단독 사용 방식과 비교할 때, 메타시스템이 생성한 <strong>&quot;코드+라우팅&quot;</strong> 결합 솔루션이 파레토 전선상의 모든 경계면을 압도적(Dominates)으로 지배합니다.</p>
+<ul>
+<li><strong>DeepSeek 대비:</strong> DeepSeek 단독 비용 47¢의 약 5분의 1에 불과한 10¢ 비용으로 94.08%의 정확도를 달성하였으며, 이는 DeepSeek 단독 대비 정확도가 오히려 1.56% 향상된 수치입니다.</li>
+<li><strong>Gemini 대비:</strong> Gemini 단독 모델의 최고 정확도(94.08%)를 Gemini 전체 운용 비용의 <strong>2% 미만</strong>으로 완벽히 재현했습니다.</li>
+<li><strong>Opus 대비:</strong> Opus 단독 비용 $61.25 (정확도 95.06%) 대비 코드+라우팅 솔루션은 <strong>$41.41</strong>의 비용으로 Opus 단독 정확도를凌駕(능가)했습니다.</li>
+<li><strong>Jev 대비:</strong> Jev 단독 사용 시 8¢가 소요되는 반면, 극단적 코드 솔루션은 비용 0원(Free, $0)으로 Jev와 동등한 정확도를 기록했습니다.</li>
+<li><strong>파레토 노드 데이터 예시:</strong> 파레토 전선상의 <code>51% code, 15% Gemini, 13% Luna, 12% DeepSeek, 6% Opus, 3% Jev</code> 조합 솔루션은 총 $8.94의 비용으로 94.96%의 정확도를 달성했습니다.</li>
+</ul>
+<pre><code>[파레토 전선 성능 비교 요약]
+- Code-only Solution        : 비용 $0 (Free)   | Jev 단독(8¢)과 동일 정확도 달성
+- Optimized Code+Routing 1  : 비용 10¢          | 정확도 94.08% (DeepSeek 47¢ 대비 +1.56%p)
+- Optimized Code+Routing 2  : 비용 $8.94        | 정확도 94.96% (51% Code 처리)
+- Best Pareto Code+Routing  : 비용 $41.41       | Opus 단독($61.25, 95.06%) 정확도 초과 달성
+</code></pre>
+<h6 id="초기-하네스-harness-독립성">초기 하네스(Harness) 독립성</h6>
+<p>소프트웨어 아키텍처 관점에서 파이프라인의 초기 출발점이 되는 LLM 하네스는 최종 최적화 결과에 영향을 미치지 않습니다. Jev 모델을 초기 Fallback 하네스로 설정하여 최적화를 시작한 실험에서도, 시스템은 손실 함수의 비용 가중치에 반응하여 코드가 불만 사항의 92%를 직접 처리하도록 유도했습니다. 잔여 케이스는 Luna와 DeepSeek로 우선 배치되고 Jev에는 단 1%만을 할당함으로써 2¢ 비용으로 92% 정확도에 도달했으며, 이는 Gemini 기반 출발점과 동일한 파레토 전선에 수렴함을 입증했습니다.</p>
+<h6 id="자동-학습된-키워드-기반-라우팅-규칙-세트">자동 학습된 키워드 기반 라우팅 규칙 세트</h6>
+<p>파이썬 함수 내에서 분류 로직과 모델 라우터가 공동 학습(Jointly trained)되며, 입력 키워드에 따라 최적의 LLM이 결정 트리를 통해 동적으로 배치됩니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">조건 / 키워드 범주</th>
+<th style="text-align:left">감지 키워드 예시</th>
+<th style="text-align:left">할당 모델</th>
+<th style="text-align:left">성과 및 비용 이점 구조</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>돈 이동 및 사기 관련</strong></td>
+<td style="text-align:left">transfer, wire, Zelle, ACH, electronic funds, Regulation E, crypto, bitcoin, Coinbase, wallet, scam, impersonation</td>
+<td style="text-align:left"><strong>Luna</strong></td>
+<td style="text-align:left">Gemini와 동일 정확도를 단 <strong>4% 비용</strong>으로 달성</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>은행업 및 신용 보고 관련</strong></td>
+<td style="text-align:left">bank, checking, savings, debit, deposit, direct deposit, payroll, Social Security, benefits, unemployment</td>
+<td style="text-align:left"><strong>DeepSeek</strong></td>
+<td style="text-align:left">복합 상품 케이스 다수 포함. Gemini 대비 <strong>1/12 이하 비용</strong>으로 정답 분류</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>법적 및 선불 관련</strong></td>
+<td style="text-align:left">UCC, holder in due course, notice of understanding, prepaid, Netspend, Direct Express</td>
+<td style="text-align:left"><strong>DeepSeek</strong></td>
+<td style="text-align:left">여러 상품 경계를 넘나드는 법적 문맥을 저비용 처리</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>마이너스 통장/인출 초과</strong></td>
+<td style="text-align:left">overdraft, insufficient funds, NSF</td>
+<td style="text-align:left"><strong>Jev</strong></td>
+<td style="text-align:left">비교적 명확한 단일 범주 케이스를 초경량 모델로 라우팅</td>
+</tr>
+</tbody>
+</table>
+<h6 id="실제-불만-사항-추적-사례-an-example-complaint-execution-trace">실제 불만 사항 추적 사례 (An Example Complaint Execution Trace)</h6>
+<p>Poetiq 메타시스템이 서술문 입력을 수신하여 정적 코드 판단과 예외 라우팅을 수행하는 실제 실행 추적 내역은 다음과 같습니다.</p>
+<blockquote>
+<p><strong>[입력 데이터: 소비자기능보호국(CFPB) 불만 서술문]</strong><br />
+<em>&quot;I am writing in response to your correspondence regarding my student loan dispute filed via the CFPB […] Validation of Debt and Legal Authority: As stated in my initial dispute, I am requesting competent evidence of the alleged debts under the FDCPA (Fair Debt Collection Practices Act), FCRA, and FERPA. Specifically, I demanded: A Copy of the Original Promissory Note […]&quot;</em></p>
+<ul>
+<li><strong>결정 1: 코드 단독 처리 여부 판단 (Code Decision 1 - No LLM Call)</strong>
+<ul>
+<li><em>사명 규칙(Name rules) 검사:</em> 서비서 사명(Navient, MOHELA 등) 및 채권 추심업체 사명(Midland, LVNV 등) 미포함 확인.</li>
+<li><em>통계 모델 산출:</em> &quot;FERPA&quot;, &quot;student loan&quot;, &quot;promissory&quot;, &quot;debt&quot;, &quot;collection&quot;, &quot;FDCPA&quot; 단어 피처 기반 계산 결과 $\rightarrow$ <code>student_loan = 0.70</code>, <code>debt_collection = 0.26</code>.</li>
+<li><em>신뢰도 검증:</em> 자체 정답 처리 임계값(0.95) 미달 $\rightarrow$ <strong>LLM 이관(Pass) 결정</strong>.</li>
+</ul>
+</li>
+<li><strong>결정 2: 예외 모델 라우팅 (Code Decision 2 - No LLM Call)</strong>
+<ul>
+<li><em>결정 트리 분류:</em> &quot;student loan&quot; + &quot;collection&quot; 복합 키워드 조합 감지 $\rightarrow$ <strong>Jev 모델 선택</strong>.</li>
+</ul>
+</li>
+<li><strong>최종 실행 및 결과 (Final Result)</strong>
+<ul>
+<li>Jev 모델 호출 $\rightarrow$ <code>student_loan</code>으로 최종 정답 분류 성공.</li>
+<li>소요 비용: <strong>0.004¢</strong> (기본 Fallback 모델인 Gemini 호출 대비 <strong>1/78 비용</strong> 달성).</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p><em>(보고서 종합 평가: CFPB 불만 사항 분석 과제 결과는 기존 단일 LLM 의존 파이프라인의 극심한 경제적·기술적 비효율성을 완전히 극복하고, 코드 증류와 동적 라우팅 결합이 비용 대비 정확도 극대화를 달성함을 증명합니다.)</em></p>
+<hr />
+<h5 id="2-4-소거-연구-라우팅-없는-코드-분류-ablation-study">2.4. 소거 연구: 라우팅 없는 코드 분류 (Ablation Study)</h5>
+<p>동일 데이터셋에서 라우팅 로직을 제거하고, 1단계 코드 분류기 이후 단일 예외 모델(Claude Opus 5.5, Gemini 3.6 Flash, DeepSeek V4 Flash, GPT-6 Luna, Jev 1.13)만을 결합하는 소거 연구를 수행하였습니다.</p>
+<pre><code>[단일 예외 모델 결합 시 코드로의 이관 비율 및 성과 대조]
+
+           [Jev 1.13 모델 (경량형)]
+           - 78% 코드로 전환  : 정확도 향상 (91.4% vs 90.9%), 비용 &lt; 1/4 절감
+           - 99% 코드로 전환  : 정확도 손실 0.6%p 극소, 비용 &lt; 1% 수준 절감
+           
+           [Claude Opus 5.5 모델 (초고성능형)]
+           - 정확도 손실 없는 최대 코드 전환 비중: 45% 로 제한됨
+           
+           [전체 모델 공통 경향]
+           - 전체 불만 사항의 75% (3/4)를 코드로 처리해도 정확도 손실은 1%p 미만 유지
+</code></pre>
+<ul>
+<li><strong>정확도 유지 및 비용 구조 절감:</strong> 테스트된 5개 예외 모델 모두에서 코드를 1단계 선행 분류기로 적용하는 구조가 단독 모델 사용 대비 현격히 낮은 비용으로 동등 이상의 정확도를 달성했습니다.</li>
+<li><strong>75% 코드 이관 임계점:</strong> 전체 불만 사항의 약 3/4(75%)를 정적 코드가 직접 처리하도록 설계하더라도, 전체 시스템 정확도 손실은 1% 미만(less than a point)으로 억제됩니다.</li>
+<li><strong>Jev vs Opus 극단적 사례 대조:</strong>
+<ul>
+<li><em>Jev (경량 모델 극단 사례):</em> 코드가 전체 판단의 78%를 직접 처리할 때, 코드+Jev 조합은 Jev 단독 모델 대비 비용을 1/4 이하로 감축하면서 정확도는 오히려 90.9%에서 91.4%로 상승했습니다. 99%를 코드로 처리할 때도 정확도 손실은 0.6포인트에 불과하며 비용은 1% 미만으로 절감됩니다.</li>
+<li><em>Opus (고성능 모델 극단 사례):</em> 초고성능 모델인 Opus의 경우 정확도 손실 없이 정적 코드로 안전하게 이관할 수 있는 비중이 최대 45%로 제한되었습니다. 이는 경량 모델일수록 코드 기반 1단계 분류를 통한 이점이 극대화되며, 초고성능 모델은 코드화하기 어려운 고난도 경계 케이스에 특화되어 있음을 대조적으로 보여줍니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-5-과제-2-wikiracer의-순차적-선택-및-지연-시간-최적화-sequential-selection">2.5. 과제 2: WikiRacer의 순차적 선택 및 지연 시간 최적화 (Sequential Selection)</h5>
+<h6 id="연속적-의사결정-및-벤치마크-평가-제약-조건">연속적 의사결정 및 벤치마크 평가 제약 조건</h6>
+<p>WikiRacer 과제는 무작위로 주어진 시작 위키피디아 페이지에서 목표 페이지까지 하이퍼링크를 클릭하여 최단 경로를 탐색하는 연속적 의사결정 문제로, 의사결정 지연 시간(Latency) 단축이 핵심 평가 요소입니다.</p>
+<p>본 벤치마크에서 모델 및 파이프라인이 접하는 정보는 다음과 같은 <strong>엄격한 정보 접근 제약 조건</strong>을 가집니다:</p>
+<ol>
+<li>시작 페이지와 목표 페이지의 '제목(Title)' 및 '요약(Summary)'만 관찰 가능.</li>
+<li>현재 위치한 페이지의 <strong>'출구 하이퍼링크 목록(Outgoing links)'</strong> 및 <strong>'이미 방문한 페이지 목록(Visited pages)'</strong> 정보만 입력으로 제공됨.</li>
+</ol>
+<h6 id="코드-기반-규칙-생성-및-시가지연-최적화">코드 기반 규칙 생성 및 시가지연 최적화</h6>
+<p>Jev 모델 기반 파이프라인을 Poetiq 메타시스템으로 최적화한 결과, 연속 의사결정 과정에서 정적 파이썬 코드가 유기적으로 생성되어 불필요한 LLM 호출을 대체했습니다.</p>
+<ul>
+<li><strong>방문 목록 제거:</strong> 이미 방문한 페이지 링크는 정적 코드가 목록에서 자동으로 스크리닝하여 즉시 제거합니다.</li>
+<li><strong>연도/패턴 자동 선택:</strong> 명확한 규칙성이 존재하는 링크 이동은 코드가 직접 의사결정을 내립니다 (예: 목표 페이지가 &quot;1987 in Brazil&quot;인 경우, 인접 연도인 &quot;1986 in Brazil&quot; 링크를 LLM 호출 없이 코드가 즉시 클릭).</li>
+</ul>
+<pre><code>[WikiRacer 성능 측정 비교]
+- Jev 단독 모델 baseline : 평균 41.7 Hops  | 의사결정 시간 4.15초 | LLM 선택 비중 100%
+- Poetiq 최적화 솔루션   : Hops 33%~39% 절감 | 의사결정 시간 1.8초~2.4초 | 코드 지능 처리 비중 최대 32%
+</code></pre>
+<ul>
+<li><strong>실증 데이터 성과:</strong> Jev 단독 모델이 평균 41.7 홉(hop)과 4.15초의 의사결정 시간을 소비한 반면, Poetiq 최적화 솔루션은 홉 수를 <strong>33%~39% 절감</strong>하고 의사결정 시간을 <strong>1.8초~2.4초</strong> 수준으로 단축했습니다. 이 과정에서 코드가 전체 의사결정의 최대 32%를 직접 수행했으며, 달러 비용 및 시간 비용 모두 Jev 단독 대비 절반 수준으로 절감되는 이중 최적화(Dual-benefit)를 검증했습니다.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-speakers">3. 등장 인물 및 화자 (Figures &amp; Speakers)</h4>
+<p>소스 문서에 명시된 작성자 연구진 목록 및 개별 역할은 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">인물명</th>
+<th style="text-align:left">소스 상 명시 역할 및 특징</th>
+<th style="text-align:left">세부 직책 및 소속</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>야이르 알론 (Yair Alon)</strong></td>
+<td style="text-align:left">논문 및 블로그 공동 저자 (방문 시마다 무작위 성명 순서 표기)</td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>아슈빈 발루자 (Ashwin Baluja)</strong></td>
+<td style="text-align:left">논문 및 블로그 공동 저자 (방문 시마다 무작위 성명 순서 표기)</td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>미셸 코벨 (Michele Covell)</strong></td>
+<td style="text-align:left">논문 및 블로그 공동 저자 (방문 시마다 무작위 성명 순서 표기)</td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>내시 룩수웡 (Nash Luxsuwong)</strong></td>
+<td style="text-align:left">논문 및 블로그 공동 저자 (방문 시마다 무작위 성명 순서 표기)</td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소라브 싱 (Saurabh Singh)</strong></td>
+<td style="text-align:left">논문 및 블로그 공동 저자 (방문 시마다 무작위 성명 순서 표기)</td>
+<td style="text-align:left"><strong>확인 불가</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>주: 소스 본문에는 상기 5인 저자의 공동 작성 사실 및 웹사이트 방문 시 무작위 순서로 성명이 표기된다는 설명 외에 개별 저자의 구체적인 직책, 기관 소속, 세부 연구 역할은 기술되어 있지 않습니다 (확인 불가).</em></p>
+<hr />
+<h4 id="4-수치-및-시점-metrics-timelines">4. 수치 및 시점 (Metrics &amp; Timelines)</h4>
+<h5 id="4-1-시점-데이터">4.1. 시점 데이터</h5>
+<ul>
+<li><strong>발행일 (Publication Date):</strong> 2026년 11월 24일</li>
+</ul>
+<h5 id="4-2-성능-정확도-및-비용-수치-데이터">4.2. 성능, 정확도 및 비용 수치 데이터</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 과제 및 비교 항목</th>
+<th style="text-align:left">구체적 정량 데이터 및 지표</th>
+<th style="text-align:left">소스 내 비고 및 세부 조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Task 1: DeepSeek 대비</strong></td>
+<td style="text-align:left">47¢ 중 약 1/5 비용인 <strong>10¢</strong>로 <strong>94.08%</strong> 정확도 달성</td>
+<td style="text-align:left">DeepSeek 단독 대비 정확도 +1.56%p 향상</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 1: Gemini 대비</strong></td>
+<td style="text-align:left">Gemini 단독 정확도(94.08%)를 <strong>2% 미만의 비용</strong>으로 달성</td>
+<td style="text-align:left">파레토 전선 노드 데이터</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 1: Opus 대비</strong></td>
+<td style="text-align:left">Opus 단독 비용 $61.25(정확도 95.06%) 대비 <strong>$41.41</strong>로 능가</td>
+<td style="text-align:left">코드+라우팅 결합 솔루션</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 1: Jev 대비</strong></td>
+<td style="text-align:left">Jev 단독 비용 8¢ 대비 비용 0원(Free, $0)으로 동등 정확도 달성</td>
+<td style="text-align:left">코드 100% 처리 극단 노드</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 1: Pareto Node (51% Code)</strong></td>
+<td style="text-align:left">정확도 <strong>94.96%</strong>, 소요 비용 <strong>$8.94</strong></td>
+<td style="text-align:left">51% Code, 15% Gemini, 13% Luna, 12% DeepSeek, 6% Opus, 3% Jev</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 1: Ablation (Jev 78% Code)</strong></td>
+<td style="text-align:left">비용 <strong>1/4 이하</strong>, 정확도 향상 (<strong>91.4%</strong> vs 90.9%)</td>
+<td style="text-align:left">라우팅 없는 단일 Fallback 결합</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 1: Ablation (75% Code)</strong></td>
+<td style="text-align:left">3/4 코드로 이관 시 전체 정확도 손실 <strong>1%p 미만</strong></td>
+<td style="text-align:left">전 모델 공통 한계선</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 1: Ablation (Opus Max Code)</strong></td>
+<td style="text-align:left">정확도 손실 없이 이관 가능한 코드 비중 <strong>최대 45%</strong></td>
+<td style="text-align:left">Opus 고성능 모델 제약선</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 2: Jev Baseline 기준</strong></td>
+<td style="text-align:left">평균 <strong>41.7 Hops</strong>, 의사결정 시간 <strong>4.15초</strong> 소요</td>
+<td style="text-align:left">100% LLM 링크 선택 기준</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Task 2: Poetiq 최적화 솔루션</strong></td>
+<td style="text-align:left">Hops <strong>33% ~ 39% 절감</strong>, 의사결정 시간 <strong>1.8초 ~ 2.4초</strong> 단축</td>
+<td style="text-align:left">비용 절반 수준, 코드 비중 최대 32%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="4-3-확인-불가-수치-항목">4.3. 확인 불가 수치 항목</h5>
+<ul>
+<li>CFPB 훈련 및 검증에 활용된 불만 사항 전체 데이터셋 건수: <strong>확인 불가</strong></li>
+<li>WikiRacer 벤치마크 평가에 사용된 전체 무작위 레이스 테스트 케이스 총 수량: <strong>확인 불가</strong></li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-및-성격-구분-limitations-categorization">5. 한계와 불확실성 및 성격 구분 (Limitations &amp; Categorization)</h4>
+<p>본 기술 보고서의 객관성과 기술적 엄밀성을 보장하기 위해 수집된 정보의 성격을 4개 범주로 엄격히 구분하여 명시합니다.</p>
+<h5 id="5-1-객관적-사실-objective-facts">5.1. 객관적 사실 (Objective Facts)</h5>
+<ul>
+<li>Poetiq 메타시스템은 설계 단계에서 LLM 지식을 정적 파이썬 코드로 증류하고, 배포 단계에서 코드가 처리하지 못하는 예외 입력에 대해서만 LLM을 호출하는 2단계 파이프라인 아키텍처를 가짐.</li>
+<li>CFPB 불만 사항 및 WikiRacer 벤치마크에서 입증된 구체적 비용, 지연 시간, 정확도 및 홉 수 측정값.</li>
+<li>통계 모델(로지스틱 회귀)과 결정 트리의 결합을 통해 코드 분류 로직이 구현된다는 점.</li>
+</ul>
+<h5 id="5-2-소스-문서의-주장-source-claims">5.2. 소스 문서의 주장 (Source Claims)</h5>
+<ul>
+<li>프로덕션 파이프라인에서 LLM이 스스로의 역할을 최소화하도록 시스템을 구축하게 허용하는 것이 비용 감소와 정확도 향상 모두를 가져온다.</li>
+<li>비용 벌점을 목표 함수에 반영하면 정적 코드를 생성하는 행위가 메타시스템의 유기적 창출 특성(Emergent Property)으로 나타난다.</li>
+</ul>
+<h5 id="5-3-작성자의-해석-author-s-interpretation">5.3. 작성자의 해석 (Author's Interpretation)</h5>
+<ul>
+<li><strong>아키텍처 합성 관점의 해석:</strong> Poetiq 메타시스템은 단순한 프롬프트 엔지니어링이나 API 래핑 타협안이 아닌, 결정론적 정적 규칙 엔진과 확률적 LLM을 수직 결합한 &quot;샌드위치형 소프트웨어 아키텍처(Sandwiched Architecture)&quot;의 완성형 모델로 해석됩니다. 이는 메인 파이프라인의 연산 부하와 비결정론적 위험을 코드로 완전 차단하고, LLM을 오직 극소수의 고난도 판단용 예외 처리 엔진으로 격리시킴으로써 프로덕션 AI 시스템의 안정성과 경제성을 동시에 달성하는 패러다임 전환을 시사합니다.</li>
+</ul>
+<h5 id="5-4-한계-및-불확실성-limitations-uncertainties">5.4. 한계 및 불확실성 (Limitations &amp; Uncertainties)</h5>
+<ul>
+<li><strong>기업 인프라 구축 및 증류 비용 미다룸:</strong> 메타시스템을 상용 생산 환경에 도입하여 초기에 코드 및 라우터를 증류·학습시키는 데 소요되는 컴퓨팅 자원 및 구축 비용에 대해서는 소스 문서에서 <strong>소스 미다룸</strong>.</li>
+<li><strong>생성형 과제 적용 확장성 미지수:</strong> 닫힌 집합 선택(Closed-set selection) 및 라우팅 과제 외에, 자유 형식 텍스트 생성(Free-form text generation) 등 복잡한 오픈엔드 생성 과제에 대한 코드 환원 적용 가능 여부는 <strong>확인 불가</strong>.</li>
+<li><strong>저자 및 시스템 상용화 세부 정보 부재:</strong> 저자 5인의 소속 기관, 직책 및 Poetiq 메타시스템의 구체적 상용화 제품 출시 일정 등은 소스 문서에 명시되지 않음 (<strong>확인 불가</strong>).</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/large-language-model/">Large Language Model</a></li>
+<li><a href="../../concepts/pareto-frontier/">Pareto Frontier</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/poetiq/">Poetiq</a></li>
+<li><a href="../../entities/people/ashwin-baluja/">아슈빈 발루자</a></li>
+<li><a href="../../entities/people/michele-covell/">미셸 코벨</a></li>
+<li><a href="../../entities/people/nash-luxsuwong/">내시 룩수웡</a></li>
+<li><a href="../../entities/people/saurabh-singh/">소라브 싱</a></li>
+<li><a href="../../entities/people/yair-alon/">야이르 알론</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Claude Code is used in practice \ Anthropic</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>How Claude Code is used in practice \ Anthropic</h1>
+<p class="page-meta">웹 · 2026-11-25</p>
+<h2 id="요약">요약</h2>
+<p>Claude Code 세션 분석에서 도메인 전문성이 높을수록 성공률이 높았고, 운영·분석·문서 작성 비중이 늘었다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/web/">웹</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.anthropic.com/research/claude-code-expertise">출처</a> · <a href="https://www.youtube.com/watch?v=dvPjYUNab8k">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-tamkin/">Alex Tamkin</a></li>
+<li><a href="../../entities/people/amie-rotherham/">Amie Rotherham</a></li>
+<li><a href="../../entities/people/ankur-rathi/">Ankur Rathi</a></li>
+<li><a href="../../entities/people/anton-korinek/">Anton Korinek</a></li>
+<li><a href="../../entities/people/baumann/">Baumann</a></li>
+<li><a href="../../entities/people/boris-cherny/">Boris Cherny</a></li>
+<li><a href="../../entities/people/cat-wu/">Cat Wu</a></li>
+<li><a href="../../entities/people/eleanor-dorfman/">Eleanor Dorfman</a></li>
+<li><a href="../../entities/people/eva-lyubich/">Eva Lyubich</a></li>
+<li><a href="../../entities/people/hanah-ho/">Hanah Ho</a></li>
+<li><a href="../../entities/people/heather-whitney/">Heather Whitney</a></li>
+<li><a href="../../entities/people/jack-clark/">잭 클라크</a></li>
+<li><a href="../../entities/people/jake-eaton/">Jake Eaton</a></li>
+<li><a href="../../entities/people/jennifer-martinez/">Jennifer Martinez</a></li>
+<li><a href="../../entities/people/kacie-jenkins/">Kacie Jenkins</a></li>
+<li><a href="../../entities/people/kerry-persen/">Kerry Persen</a></li>
+<li><a href="../../entities/people/maxim-massenkoff/">Maxim Massenkoff</a></li>
+<li><a href="../../entities/people/miles-mccain/">Miles McCain</a></li>
+<li><a href="../../entities/people/peter-mccrory/">Peter McCrory</a></li>
+<li><a href="../../entities/people/ryan-heller/">Ryan Heller</a></li>
+<li><a href="../../entities/people/santi-ruiz/">Santi Ruiz</a></li>
+<li><a href="../../entities/people/sarah-pollack/">Sarah Pollack</a></li>
+<li><a href="../../entities/people/sarkar/">Sarkar</a></li>
+<li><a href="../../entities/people/shaoyi-zhang/">Shaoyi Zhang</a></li>
+<li><a href="../../entities/people/szymon-sacher/">Szymon Sacher</a></li>
+<li><a href="../../entities/people/zoe-hitzig/">Zoe Hitzig</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/society-labor/">사회·노동</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="claude-code-실무-활용-양상-및-도메인-전문성-효용-분석-보고서">Claude Code 실무 활용 양상 및 도메인 전문성 효용 분석 보고서</h3>
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p>본 보고서는 2025년 10월부터 2026년 4월까지 약 7개월간 집계된 약 235,000명의 고유 사용자 및 약 400,000건의 Claude Code 대화형 세션 분석 데이터를 바탕으로 작성되었습니다 <code>[사실]</code>. 앤스로픽(Anthropic) 경제학 연구팀이 수행한 본 연구는 에이전틱 코딩(Agentic Coding)의 급격한 확산 실태를 정량적으로 추적하고, 이러한 AI 에이전트 도구가 소프트웨어 개발 직무를 넘어 지식 노동 전반 및 노동 시장 구조에 미치는 파급 효과를 다각도로 분석하기 위해 추진되었습니다 <code>[소스의 주장]</code>. 2025년 말 이후 깃허브(GitHub) 프로젝트 내 코딩 에이전트 채택률이 2배 이상 급증(2025년 10월 기준 공개 저장소의 16~23%에서 대폭 상승)하고 Claude Code 활성 사용자의 주당 평균 이용 시간이 20시간에 달하는 등 거시적 활용이 본격화됨에 따라 본 연구의 중요성이 더욱 부각되고 있습니다 <code>[사실]</code>.</p>
+<p>본 연구의 분석 대상은 명령 줄 인터페이스(CLI), Claude.ai, 클로드 코드 데스크톱 애플리케이션을 통해 이뤄진 대화형 세션에 한정되었으며, 프라이버시가 보호되는 데이터 분석 프레임워크(Clio)를 활용해 세션별 과업 구성, 인간과 AI 간의 협업 양상, 과업 성공률 등을 평가하였습니다 <code>[사실]</code>. 연구의 핵심 발견에 따르면, 인간 사용자 및 Claude 간에는 명확한 역할 분업 체계가 확립되어 있으며, 에이전트 구동 효율성과 성공률을 결정짓는 핵심 요인은 단순한 프로그래밍 언어 숙련도나 코딩 직무 여부가 아닌 해당 과업 영역에 대한 '도메인 전문성(Domain Expertise)'인 것으로 나타났습니다 <code>[소스의 주장]</code>. 또한, 7개월의 분석 기간 동안 Claude Code를 통해 수행된 과업의 평균 경제적 가치가 지속적으로 상승했음이 확인되었습니다 <code>[사실]</code>.</p>
+<p>이러한 분석 결과는 AI 에이전트가 단순 코드 자동 완성을 넘어 복잡한 지식 노동 과업을 엔드투엔드(End-to-End)로 수행하는 자율적 실행 주체로 진화하고 있음을 시사합니다 <code>[작성자 해석]</code>. 코딩 배경지식이 부족한 비엔지니어 직군이라 할지라도 자신이 속한 영역의 도메인 전문성을 명확히 갖추고 있다면 에이전트를 효과적으로 지휘하여 전문 엔지니어 수준에 육박하는 성과를 거둘 수 있다는 점에서, 에이전틱 코딩은 지식 노동의 생산성 및 노동 가치의 기준을 근본적으로 재편하고 있습니다 <code>[작성자 해석]</code>.</p>
+<hr />
+<h4 id="2-주요-논점-key-points-arguments">2. 주요 논점 (Key Points &amp; Arguments)</h4>
+<h5 id="2-1-인간과-ai의-명확한-역할-분담-의사결정-및-행동-위임">2.1. 인간과 AI의 명확한 역할 분담 (의사결정 및 행동 위임)</h5>
+<p>인간 사용자와 Claude 간의 대화형 세션에서는 의사결정 권한 분배와 행동 위임 측면에서 매우 정교하고 뚜렷한 분업 구조가 관측됩니다 <code>[소스의 주장]</code>.</p>
+<ul>
+<li><strong>의사결정 권한의 분담:</strong> 사용자는 세션 내 기획 의사결정(무엇을 만들 것인가, 어떤 접근 방식을 취할 것인가, 완료 기준은 무엇인가)의 평균 70%를 직접 결정합니다 <code>[사실]</code>. 반면 Claude는 실행 의사결정(어떤 파일을 수정할 것인가, 어떤 코드를 작성할 것인가, 어떤 명령어와 프로그래밍 언어를 사용할 것인가)의 평균 80%를 전담합니다 <code>[사실]</code>.</li>
+<li><strong>행동 위임 및 상위 꼬리(Long-tail) 분포:</strong> 일반적인 세션은 인간과 에이전트 간 평균 4회의 주고받음(turn)으로 구성됩니다 <code>[사실]</code>. 사용자가 프롬프트 1회를 전송할 때마다 Claude는 파일 읽기, 코드 수정, 명령어 실행 등 평균 10회의 연속적 행동을 수행하며, 턴당 평균 2,400단어의 출력을 생성합니다 <code>[사실]</code>. 행동 위임의 분포는 매우 긴 상위 꼬리(Long-tail) 특성을 나타내어, 전체 세션의 상위 2%는 프롬프트당 평균 100회 이상의 행동을 유발하며, 270분 의 1(약 0.37%)은 200회 이상, 2,300분 의 1(약 0.043%)은 500회 이상의 행동을 자율적으로 수행합니다 <code>[사실]</code>.</li>
+<li><strong>의사결정 주도권에 따른 작업량 변화:</strong> 사용자가 실행 의사결정 권한의 80% 이상을 직접 유지하는 세션에서는 턴당 Claude의 행동 수가 평균 약 8회로 줄어듭니다 <code>[사실]</code>. 반면 사용자가 Claude에게 기획 의사결정 권한의 80% 이상까지 위임하는 자율형 세션에서는 턴당 행동 수가 평균 16회까지 확대됩니다 <code>[사실]</code>.</li>
+</ul>
+<p>이러한 수치는 사용자가 전체적인 목적과 방향성을 설정하는 기획 주도권을 유지하면서 에이전트에게 구체적인 실행 권한을 대폭 위임할 때 에이전틱 코딩의 작업 생산성이 최대로 발휘됨을 증명합니다 <code>[작성자 해석]</code>.</p>
+<h5 id="2-2-업무-모드의-재편-및-과업-가치-변화">2.2. 업무 모드의 재편 및 과업 가치 변화</h5>
+<p>본 연구는 Claude Code 세션을 상호 배타적인 9가지 업무 모드(Work Modes)로 분류하여 분석을 진행하였습니다 <code>[사실]</code>.</p>
+<p><strong>9가지 업무 모드의 개념 요약 <code>[사실]</code>:</strong></p>
+<ol>
+<li><strong>새 코드 작성 (Building):</strong> 새로운 소프트웨어 기능, 모듈 및 전체 코드베이스 작성</li>
+<li><strong>코드 수정 (Fixing):</strong> 소프트웨어 결함 해결, 버그 디버깅 및 오류 수정</li>
+<li><strong>테스트 (Testing):</strong> 코드 테스트 케이스 작성, 실행 및 검증</li>
+<li><strong>오케스트레이션 (Orchestrating):</strong> 다른 AI 에이전트 관리 및 자동화 파이프라인 제어</li>
+<li><strong>소프트웨어 운영 (Operating):</strong> 시스템 배포, 환경 설정, 빌드 실행, 모니터링 및 파이프라인 관리</li>
+<li><strong>이해 (Understanding):</strong> 기존 코드베이스 구조, 아키텍처 및 동작 논리 파악</li>
+<li><strong>기획 (Planning):</strong> 코드 변경 적용 전에 작업 단계 및 전략 수립</li>
+<li><strong>데이터 분석 (Analyzing):</strong> 데이터 처리, 통계 분석 및 결과 도출</li>
+<li><strong>문서 작성 (Communicating):</strong> 발표 자료, 보고서, 슬라이드 및 비코드 형태의 서술형 문서 작성</li>
+</ol>
+<p>2025년 10월부터 2026년 4월까지 7개월간 관측된 업무 모드별 비중 및 프리랜서 마켓플레이스 공고 대조 데이터 기준 과업 가치 변화 추이는 아래 표와 같습니다 <code>[사실]</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">업무 모드 구분</th>
+<th style="text-align:left">2025년 10월 비중</th>
+<th style="text-align:left">2026년 4월 비중</th>
+<th style="text-align:left">추정 과업 가치 변동 및 세부 특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>코드 수정 (Fixing)</strong></td>
+<td style="text-align:left">33%</td>
+<td style="text-align:left">19%</td>
+<td style="text-align:left">비중 약 절반 대폭 감소, 과업 가치는 32% 상승</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>소프트웨어 운영 (Operating)</strong></td>
+<td style="text-align:left">14%</td>
+<td style="text-align:left">21%</td>
+<td style="text-align:left">비중 지속적 증가, 과업 가치는 34% 상승</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>데이터 분석 &amp; 문서 작성 (Analyzing &amp; Communicating)</strong></td>
+<td style="text-align:left">약 10%</td>
+<td style="text-align:left">약 20%</td>
+<td style="text-align:left">비중 약 2배 증가 (엔드투엔드 종합 활용)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>새 코드 작성 (Building)</strong></td>
+<td style="text-align:left">25%</td>
+<td style="text-align:left">25%</td>
+<td style="text-align:left">주요 개발 과업 비중 유지, 과업 가치는 43% 상승</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 (Testing, Orchestrating, Understanding, Planning)</strong></td>
+<td style="text-align:left">나머지 약 18%</td>
+<td style="text-align:left">나머지 약 15%</td>
+<td style="text-align:left">기획/탐색 14%, 테스트/오케스트레이션 5% 수준 유지</td>
+</tr>
+</tbody>
+</table>
+<p>위 표에 나타난 바와 같이, 7개월간 세션당 평균 추정 과업 가치는 약 27%(전체 평균 25%~27%) 상승하였습니다 <code>[사실]</code>. 단 순 코드 수정(Fixing) 비중이 대폭 감소하고 운영(Operating), 분석(Analyzing), 문서화(Communicating) 비중이 급증한 점은 사용자들이 Claude Code를 단순히 오타나 버그를 잡는 보조 도구로 쓰던 단계에서 벗어나, 시스템 운영 및 종합 지식 업무를 엔드투엔드로 수행하는 고가치 통합 생산성 플랫폼으로 적극 활용하고 있음을 보여줍니다 <code>[작성자 해석]</code>.</p>
+<h5 id="2-3-도메인-전문성에-따른-효용과-과업-성공률">2.3. 도메인 전문성에 따른 효용과 과업 성공률</h5>
+<p>연구팀이 정의한 '도메인 전문성(Domain Expertise)'은 프로그래밍 언어 자체의 숙련도나 공식 직함이 아니라, 특정 과업 영역의 요구사항, 맥락, 제약 조건을 명확하게 프레임화하고 에이전트의 출력을 검증할 수 있는 과업 특화적 능력(Task-specific Ability)을 의미합니다 <code>[소스의 주장]</code>.</p>
+<ul>
+<li><strong>전문성 수준별 행동 및 출력량:</strong> 프롬프트 1회당 발생하는 에이전트의 행동과 출력량은 사용자의 도메인 전문성에 비례하여 급격히 증가합니다 <code>[사실]</code>. 초보자(Novice) 세션은 프롬프트당 평균 5회의 행동과 600단어의 출력을 유발하는 데 그쳤으나, 전문가(Expert) 세션은 프롬프트당 평균 12회의 행동과 3,200단어의 출력을 유발하였습니다 <code>[사실]</code>.</li>
+<li><strong>성공률 측정 방법론 및 예외 처리:</strong> 연구팀은 모델 기반의 평가인 '판단된 성공(Judged Success)'과 git 커밋, PR, 테스트 통과, 사용자의 명시적 승인 등 객관적 증거가 수반되는 '검증된 성공(Verified Success)'으로 지표를 구별하였습니다 <code>[사실]</code>. 성공률 정량 분석 시 전체 세션의 7.7%를 차지하는 '목표가 불명확한 세션(No Clear Goal)'은 분석 표본에서 제외되었습니다 <code>[사실]</code>.</li>
+<li><strong>전문성 수준별 성공률 비교:</strong> 검증된 성공률을 기준으로 초보자 세션은 15%에 그친 반면, 중급자(Intermediate) 이상 세션은 28~33%(중급자 28%, 전문가 33%)의 성공률을 기록하였습니다 <code>[사실]</code>. 최소 부분 성공 이상을 거둔 비율 역시 초보자 77%, 중급자 91%, 전문가 92%로 나타났습니다 <code>[사실]</code>. 성과 격차의 대부분은 초보자에서 중급자로 이동하는 구간에서 발생하며, 중급자와 전문가 간의 성과 차이는 완만하였습니다 <code>[소스의 주장]</code>.</li>
+<li><strong>문제 발생 시 복구력 및 복구 세션의 과업 가치:</strong> 오류나 테스트 실패 등 검증된 실패 신호가 나타난 문제(Trouble, 실패 신호 &gt; 3) 발생 세션 분석 결과, 초보자 그룹은 19%가 세션을 중단 및 포기(Abandoned: 실패로 평가되고 작성된 코드가 0줄인 경우)한 반면, 중급자 및 전문가 그룹의 포기율은 5~7%에 불과했습니다 <code>[사실]</code>. 문제 발생 세션에서 최소 부분 성공 이상을 거둔 비율은 초보자 60%, 중급자 및 전문가 80~81%였으며, 검증된 성공률은 초보자 4%, 전문가 15%를 기록하였습니다 <code>[사실]</code>. 각주 9에 따르면 전문가가 다루다 문제에 봉착한 세션은 초보자 세션에 비해 추정 과업 가치가 2배 이상 높은 복잡한 과업이었습니다 <code>[사실]</code>.</li>
+</ul>
+<p>전문가가 다루는 과업이 훨씬 복잡하고 난이도가 높음에도 불구하고 문제 발생 시 포기율이 현저히 낮고 복구 성공률이 높은 이유는, 도메인 전문가일수록 에이전트가 오작동할 때 문제의 본질을 정확히 파악하여 올바른 방향으로 에이전트를 다시 재지휘할 수 있는 통찰력을 갖추고 있기 때문입니다 <code>[작성자 해석]</code>.</p>
+<h5 id="2-4-직업군별-성공률-비교-코딩-직무-vs-비코딩-직무">2.4. 직업군별 성공률 비교: 코딩 직무 vs 비코딩 직무</h5>
+<p>미국 노동통계국(BLS)의 표준 직무 분류(SOC) 23개 상위 직업군 체계에 따라 세션 트랜스크립트를 분류한 결과(전체 세션의 약 70% 분류 성공), 코딩 직무와 비코딩 직무 간의 성과 차이가 예상보다 매우 작다는 점이 확인되었습니다 <code>[사실]</code>.</p>
+<ul>
+<li><strong>직군별 성공률 데이터:</strong> 컴퓨터 및 수학 관련 직군(Computer and Mathematical Occupations, 코딩 직군) 사용자의 검증된 성공률은 전체 세션 기준 30%, 비코딩 직군 사용자는 26%를 기록하였습니다 <code>[사실]</code>. 실제 코드를 새로 작성하거나 변경한 세션(Code-producing sessions)으로 한정할 경우, 코딩 직군의 검증된 성공률은 34%, 비코딩 직군은 29%를 기록해 단 5%p의 격차만을 보였습니다 <code>[사실]</code>. 최소 부분 성공 이상을 거둔 비율은 코딩 직군 89%, 비코딩 직군 88%로 격차가 1%p에 불과했습니다 <code>[사실]</code>.</li>
+<li><strong>상위 10개 직업군 및 경영(Management) 직군의 특수성:</strong> 코드 생성 세션에서 상위 10개 주요 비코딩 직업군(경영, 비즈니스/재무, 예술/디자인/미디어, 자연과학/사회과학 등) 모두 소프트웨어 엔지니어 직군의 검증된 성공률과 7%p 이내의 근소한 격차를 유지하였습니다 <code>[사실]</code>. 특히 경영(Management) 직군은 소프트웨어 엔지니어 직군보다 소폭 높은 검증된 성공률을 나타냈습니다 <code>[사실]</code>.</li>
+<li><strong>경영 직군 성과의 복합적 원인 분석 (각주 10 반영):</strong> 경영 직군 사용자의 높은 검증된 성공률에 대해 연구팀은 두 가지 복합적 원인을 제시합니다 <code>[소스의 주장]</code>. 첫째, 과업 명세화, 목표 설정, 권한 위임 등 전통적인 관리자(Managerial) 기술이 에이전트를 효과적으로 지휘하는 데 직접적인 효용을 발휘했을 가능성입니다 <code>[소스의 주장]</code>. 둘째, 성공 검증 지표가 트랜스크립트상 사용자의 명시적 승인 텍스트에 일부 의존하므로 관리자 직급 사용자들이 피드백을 분명하게 기록하는 경향성에 기인한 측정상의 특성일 가능성입니다 <code>[소스의 주장]</code>.</li>
+</ul>
+<p>이러한 결과는 AI 에이전트 시대의 노동 시장에서 핵심 경쟁력이 전통적인 '프로그래밍 코드 작성 능력'에서 '해결하고자 하는 도메인 문제를 명확하게 정의하고 지휘하는 관리 및 도메인 역량'으로 신속하게 이동하고 있음을 명확하게 입증합니다 <code>[작성자 해석]</code>.</p>
+<hr />
+<h4 id="3-등장-인물-및-화자-entities-speakers">3. 등장 인물 및 화자 (Entities &amp; Speakers)</h4>
+<p>본 연구 보고서 작성 및 기반 데이터 분석과 관련된 연구진, 감사의 글 대상자 및 인용된 연구자 목록은 아래와 같습니다 <code>[사실]</code>.</p>
+<ul>
+<li><strong>보고서 저자 (Authors):</strong>
+<ul>
+<li>Zoe Hitzig (소속: Anthropic Economics Team) <code>[사실]</code></li>
+<li>Maxim Massenkoff (소속: Anthropic Economics Team) <code>[사실]</code></li>
+<li>Eva Lyubich (소속: Anthropic Economics Team) <code>[사실]</code></li>
+<li>Shaoyi Zhang (소속: Anthropic Economics Team) <code>[사실]</code></li>
+<li>Ryan Heller (소속: Anthropic Economics Team) <code>[사실]</code></li>
+<li>Peter McCrory (소속: Anthropic Economics Team) <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>감사 대상 인물 (Acknowledgements):</strong>
+<ul>
+<li>Jake Eaton, Sarah Pollack, Hanah Ho, Szymon Sacher, Anton Korinek, Santi Ruiz, Kerry Persen, Ankur Rathi, Alex Tamkin, Heather Whitney, Cat Wu, Kacie Jenkins, Jennifer Martinez, Amie Rotherham, Boris Cherny, Eleanor Dorfman, Miles McCain, Jack Clark (소속 및 상세 역할: 소스 Context 내 미기재로 인해 <strong>확인 불가</strong>) <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>선행/인용 연구자:</strong>
+<ul>
+<li>Sarkar (2026) (연구 분야: Cursor IDE 환경에서의 에이전틱 코딩 사용 양상 연구) <code>[사실]</code></li>
+<li>Baumann et al. (2026) (연구 분야: 공개 세션 데이터를 활용한 에이전틱 코딩 협업 패턴 연구) <code>[사실]</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="4-수치-및-시점-metrics-timeframes">4. 수치 및 시점 (Metrics &amp; Timeframes)</h4>
+<p>본 연구 보고서에 포함된 체계적인 수치 데이터 및 시점/기간 지표는 다음과 같습니다 <code>[사실]</code>.</p>
+<ul>
+<li><strong>분석 대상 기간:</strong> 2025년 10월 ~ 2026년 4월 (총 7개월간) <code>[사실]</code></li>
+<li><strong>연구 보고서 발행일:</strong> 2026년 6월 16일 <code>[사실]</code></li>
+<li><strong>분석 표본 규모:</strong> 약 235,000명의 고유 사용자, 약 400,000건의 대화형 Claude Code 세션 <code>[사실]</code></li>
+<li><strong>거시 채택률 변화:</strong> 2025년 10월 말 기준 공개 저장소의 16~23%에서 2026년 상반기까지 2배 이상 채택률 급증 <code>[사실]</code></li>
+<li><strong>사용자 주당 활성 이용 시간:</strong> Claude Code 활성 실행 시간 기준 주당 평균 20시간 <code>[사실]</code></li>
+<li><strong>인간 대 AI 의사결정 비중:</strong> 인간의 기획 의사결정 비중 평균 70%, Claude의 실행 의사결정 비중 평균 80% <code>[사실]</code></li>
+<li><strong>턴당 평균 구성 및 프롬프트당 위임 수치:</strong> 세션당 평균 4턴, 턴당 평균 출력 2,400단어, 프롬프트당 평균 10회 행동 <code>[사실]</code></li>
+<li><strong>행동 위임 롱테일 분포:</strong> 상위 2% 세션 프롬프트당 100회 이상, 1/270 세션 200회 이상, 1/2,300 세션 500회 이상 행동 <code>[사실]</code></li>
+<li><strong>권한 위임 수준별 행동 수:</strong> 실행 권한 80% 이상 인간 유지 시 턴당 8회 행동 vs 기획 권한 80% 이상 Claude 위임 시 턴당 16회 행동 <code>[사실]</code></li>
+<li><strong>전문성 수준별 프롬프트당 행동 및 출력량:</strong>
+<ul>
+<li>초보자(Novice): 5회 행동 / 600단어 출력 <code>[사실]</code></li>
+<li>전문가(Expert): 12회 행동 / 3,200단어 출력 <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>업무 모드 구성비 변화 (2025년 10월 대비 2026년 4월):</strong>
+<ul>
+<li>코드 수정 (Fixing): 33% → 19% (감소) <code>[사실]</code></li>
+<li>소프트웨어 운영 (Operating): 14% → 21% (증가) <code>[사실]</code></li>
+<li>데이터 분석 및 문서 작성 (Analyzing &amp; Communicating): 약 10% → 약 20% (증가) <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>추정 과업 가치 상승률 (7개월간):</strong> 전체 세션 평균 약 27%(25%~27%) 상승 <code>[사실]</code>
+<ul>
+<li>새 코드 작성 (Building): +43% 상승 <code>[사실]</code></li>
+<li>소프트웨어 운영 (Operating): +34% 상승 <code>[사실]</code></li>
+<li>코드 수정 (Fixing): +32% 상승 <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>목표 불명확 세션 비중:</strong> 전체 분석 세션 표본의 7.7% (성공률 정량 분석 시 제외) <code>[사실]</code></li>
+<li><strong>전문성 수준별 성공률 및 복구 지표:</strong>
+<ul>
+<li>검증된 성공률 (Verified Success): 초보자 15%, 중급자 28%, 전문가 33% <code>[사실]</code></li>
+<li>부분 성공 이상 비율 (At least partial success): 초보자 77%, 중급자 91%, 전문가 92% <code>[사실]</code></li>
+<li>문제(Trouble) 세션 내 부분 성공 이상 비율: 초보자 60%, 중급자/전문가 80~81% <code>[사실]</code></li>
+<li>문제(Trouble) 세션 내 검증된 성공률: 초보자 4%, 전문가 15% <code>[사실]</code></li>
+<li>문제(Trouble) 세션 포기/중단율 (Abandoned): 초보자 19%, 타 그룹(중급 이상) 5~7% <code>[사실]</code></li>
+</ul>
+</li>
+<li><strong>직군별 성공률 비교 (코드 생성 세션 기준):</strong>
+<ul>
+<li>검증된 성공률: 코딩 직군(Computer &amp; Math) 34% vs 비코딩 직군 29% <code>[사실]</code></li>
+<li>부분 성공 이상 비율: 코딩 직군 89% vs 비코딩 직군 88% (단 1%p 격차) <code>[사실]</code></li>
+<li>비코딩 상위 10개 직업군 모두 소프트웨어 엔지니어 성과와 7%p 이내 격차 유지 <code>[사실]</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 연구 프레임워크가 지니는 방법론적 한계 및 소스 보고서에서 언급된 불확실성 항목은 다음과 같습니다 <code>[소스의 주장]</code>.</p>
+<ol>
+<li><strong>실제 운용 환경 결과물 측정의 불가:</strong> 본 연구는 대화 트랜스크립트 및 인터랙션 테두리에 기반하여 성과를 평가하므로, 생성된 코드가 실제 운용 환경에 성공적으로 배포되어 지속적인 경제적 가치를 창출했는지 등 현실 세계의 최종 결과(Real-world outcomes)는 직접 확인할 수 없습니다 <code>[사실]</code>.</li>
+<li><strong>분석 대상 세션 범위의 제약:</strong> 본 연구는 CLI, Claude.ai, 데스크톱 앱을 통한 대화형 세션만을 수집 대상으로 삼았습니다 <code>[사실]</code>. 제3자 IDE 통합 환경, SDK 활용 세션, 그리고 CLI 기반의 단일 프롬프트 실행 명령어(<code>claude -p &quot;&lt;prompt&gt;&quot;</code>)와 같은 비대화형 자동화 파이프라인(&quot;Headless&quot; 모드) 세션은 전체 사용량의 상당한 비중을 차지함에도 불구하고 분석 대상에서 제외되었습니다 <code>[사실]</code>.</li>
+<li><strong>AI 분류기(Classifier) 의존성 및 검증 한계:</strong> 업무 모드, 사용자 직군, 전문성, 성공 여부 등의 핵심 변수를 식별하기 위해 AI 모델(Claude Sonnet 4.6) 기반 분류기를 활용하였습니다 <code>[사실]</code>. 세션의 전개 길이가 길고 내용 구조가 매우 복잡하여 인간 평가자의 실측 자료(Ground Truth)를 대규모로 구축해 검증하는 데 현실적 한계가 존재합니다 <code>[소스의 주장]</code>.</li>
+<li><strong>과업 가치 추정 가격의 상대적 유효성:</strong> 프리랜서 마켓플레이스의 공고 데이터를 텍스트 매칭하여 산출한 경제적 과업 가치는 추정치에 불과하므로 absolute 정량 금액으로 해석되어서는 안 되며, 시간에 따른 과업 유형별 상대적 가치 변동 흐름을 비교 분석하는 용도로만 유효합니다 <code>[소스의 주장]</code>.</li>
+<li><strong>비대화형 자동화 파이프라인 성과 지표 (확인 불가):</strong> 본 연구 분석 대상에서 제외된 비대화형 파이프라인 및 헤드리스(Headless) 모드에서의 구체적인 성과 지표, 세부 성공률 및 생산성 지수 등은 소스 Context 내 미기재로 인해 <strong>확인 불가</strong>합니다 <code>[사실]</code>.</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>34개 페이지</summary><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/alex-tamkin/">Alex Tamkin</a></li>
+<li><a href="../../entities/people/amie-rotherham/">Amie Rotherham</a></li>
+<li><a href="../../entities/people/ankur-rathi/">Ankur Rathi</a></li>
+<li><a href="../../entities/people/anton-korinek/">Anton Korinek</a></li>
+<li><a href="../../entities/people/baumann/">Baumann</a></li>
+<li><a href="../../entities/people/boris-cherny/">Boris Cherny</a></li>
+<li><a href="../../entities/people/cat-wu/">Cat Wu</a></li>
+<li><a href="../../entities/people/eleanor-dorfman/">Eleanor Dorfman</a></li>
+<li><a href="../../entities/people/eva-lyubich/">Eva Lyubich</a></li>
+<li><a href="../../entities/people/hanah-ho/">Hanah Ho</a></li>
+<li><a href="../../entities/people/heather-whitney/">Heather Whitney</a></li>
+<li><a href="../../entities/people/jack-clark/">잭 클라크</a></li>
+<li><a href="../../entities/people/jake-eaton/">Jake Eaton</a></li>
+<li><a href="../../entities/people/jennifer-martinez/">Jennifer Martinez</a></li>
+<li><a href="../../entities/people/kacie-jenkins/">Kacie Jenkins</a></li>
+<li><a href="../../entities/people/kerry-persen/">Kerry Persen</a></li>
+<li><a href="../../entities/people/maxim-massenkoff/">Maxim Massenkoff</a></li>
+<li><a href="../../entities/people/miles-mccain/">Miles McCain</a></li>
+<li><a href="../../entities/people/peter-mccrory/">Peter McCrory</a></li>
+<li><a href="../../entities/people/ryan-heller/">Ryan Heller</a></li>
+<li><a href="../../entities/people/santi-ruiz/">Santi Ruiz</a></li>
+<li><a href="../../entities/people/sarah-pollack/">Sarah Pollack</a></li>
+<li><a href="../../entities/people/sarkar/">Sarkar</a></li>
+<li><a href="../../entities/people/shaoyi-zhang/">Shaoyi Zhang</a></li>
+<li><a href="../../entities/people/szymon-sacher/">Szymon Sacher</a></li>
+<li><a href="../../entities/people/zoe-hitzig/">Zoe Hitzig</a></li>
+<li><a href="../../kinds/web/">웹</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/society-labor/">사회·노동</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></details></section>
+</main>
+</body>
+</html>

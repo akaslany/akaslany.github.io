@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Returning to the Neuron Basis for Interpretability, Parts 1 and 2</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Returning to the Neuron Basis for Interpretability, Parts 1 and 2</h1>
+<p class="page-meta">문서 · 2026-11-25</p>
+<h2 id="요약">요약</h2>
+<p>Anthropic 연작 연구는 뉴런 출력으로 언어 모델을 해석하고 안전 감사에 활용하는 방법을 평가했다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/document/">문서</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=dvoPbQn0ZEQ">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/derek-jeter/">Derek Jeter</a></li>
+<li><a href="../../entities/people/elon-musk/">일론 머스크</a></li>
+<li><a href="../../entities/people/gurnee/">거니</a></li>
+<li><a href="../../entities/people/jasmine-shone/">Jasmine Shone</a></li>
+<li><a href="../../entities/people/john/">John</a></li>
+<li><a href="../../entities/people/lisa-dunlap/">Lisa Dunlap</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="anthropic-연작-연구-해설-보고서-뉴런-기저-neuron-basis-기반-llm-해석-가능성-및-연구-방어-응용">Anthropic 연작 연구 해설 보고서: 뉴런 기저(Neuron Basis) 기반 LLM 해석 가능성 및 연구·방어 응용</h3>
+<hr />
+<h4 id="1-핵심-연구-질문-research-questions">1. 핵심 연구 질문 (Research Questions)</h4>
+<p>본 해설 보고서는 Anthropic의 Alignment Science 팀(Jasmine Shone, Lisa Dunlap)이 2026년 발표한 두 편의 연작 연구를 바탕으로, 대규모 언어 모델(LLM) 내부의 뉴런 기저(Neuron Basis) 해석 가능성과 이를 방어적 AI 안전(AI Safety) 및 감사 응용에 활용하는 패러다임 전환을 정밀 해설한다.</p>
+<p>기존 해석 가능성 연구는 주로 희소 오토인코더(SAE), 선형 프로브(Linear Probes), 잔여 스트림 방향 분석에 의존하며 개별 뉴런 단위의 해석을 회피하는 경향이 있었다. 본 연구진은 사전학습(Pretraining), 미세조정(Finetuning), 머신 언러닝(Machine Unlearning) 전반에 걸쳐 모델이 기존 뉴런 구성요소를 재사용하고 확장하는 메커니즘을 통합적으로 연결함으로써 다음과 같은 핵심 연구 의문들을 정립하고 검증한다.</p>
+<ul>
+<li>
+<p><strong>Part 1 이론적 의문</strong>:</p>
+<ul>
+<li>단일 뉴런 단위의 해석을 저해했던 기존 3대 반론(다의성 및 다중 활성화, 층간 표현의 연속적 표현형 변화, 다중 뉴런에 분산된 사실 기억)이 뉴런이 '어떤 입력 맥락에서 활성화되는가(Activation Context)'가 아닌 '잔여 스트림(Residual Stream)에 어떤 출력 벡터(Output Vector, $w$)를 추가하는가'의 기여 관점에서도 여전히 유효한 한계인가?</li>
+<li>뉴런의 출력 벡터 $w$와 어휘 공간(Vocabulary Space) 간의 개입적 매핑(J-lens)을 통해 개별 뉴런 단위의 기능을 유의미하고 기하학적으로 안정되게 정립할 수 있는가?</li>
+</ul>
+</li>
+<li>
+<p><strong>Part 2 응용적 의문</strong>:</p>
+<ul>
+<li>별도의 지도학습 라벨링이나 추가 데이터셋 없이, 뉴런의 출력 벡터 및 활성화 특성만을 활용하여 제로샷 탐지(Zero-shot Detection), 모델 행동 조향(Steering)을 방어적으로 수행할 수 있는가?</li>
+<li>사전학습 뉴런의 재사용 패러다임을 바탕으로, 가중치 변동 뉴런의 J-lens 읽기를 통해 미세조정(Finetuned) 모델 내 숨겨진 행동(백도어, 탈옥, subliminal learning 등)을 블랙박스 감사(Auditing)하고 백도어 트리거(Trigger)를 프롬프트 없이 적출할 수 있는가?</li>
+<li>최근 제안된 머신 언러닝(Machine Unlearning) 기법들이 실제 딥러닝 모델 내부의 위험 지식을 완전 삭제하는지, 아니면 입력 억제 뉴런을 20~100배 폭발시키는 백도어형 메커니즘(Backdoor-like Mechanism)을 형성하여 출력을 방해하는지에 대해 정량적 검증을 수행할 수 있는가?</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="2-두-편의-핵심-실험-및-결과-experiments-and-results">2. 두 편의 핵심 실험 및 결과 (Experiments and Results)</h4>
+<h5 id="2-1-part-1-이론과-실험-해석-neuron-basis-theory">2.1 Part 1: 이론과 실험 해석 (Neuron Basis Theory)</h5>
+<h6 id="2-1-1-입력-활성화와-출력-기여-방향의-구분-activation-vs-output-contribution">2.1.1 입력 활성화와 출력 기여 방향의 구분 (Activation vs. Output Contribution)</h6>
+<p>기존 해석 가능성 연구는 뉴런이 게이트를 열고 활성화되는 텍스트 표면 맥락(Activation Context)에 집중하여 하나의 뉴런이 무관한 여러 문맥에서 오작동하는 다의성(Polysemanticity) 문제를 지적했다. 그러나 연구진은 뉴런이 잔여 스트림에 실제로 가산하는 출력 벡터(Output Vector, $w$)의 기여 방향에 주목한다.</p>
+<p>SwiGLU MLP 뉴런은 입력 잔여 스트림 $x$로부터 다음과 같이 스칼라 활성화값 $a$를 계산한다.
+$$a = \text{silu}(g \cdot x)(u \cdot x)$$
+여기서 $g$와 $u$는 각각 뉴런의 gate 및 up projection 행렬의 행 벡터이다. 뉴런은 최종적으로 자신의 down projection 열 벡터인 출력 벡터 $w$를 활성화값과 곱하여 $a \cdot w$ 형태로 잔여 스트림에 가산한다.</p>
+<ul>
+<li><strong>게이트 닫힘($g \cdot x \le 0$) 미세 누출과 부호별 독립 동작</strong>: SiLU 활성화 함수는 음수 입력 구간에서 완벽한 0이 아니며 최소 약 -0.28까지의 미세 누출(Leakage)이 발생한다. 따라서 게이트가 완전히 열린 조건($g \cdot x &gt; 0$)에서 $u \cdot x$의 부호에 따라 $+w$ 또는 $-w$가 잔여 스트림에 더해진다. 두 부호는 완전히 서로 다른 개념적 의미를 지닐 수 있으므로 부호별로 엄격히 분리하여 해석해야 한다.</li>
+<li><strong>J-lens 및 J-share 지표</strong>: 출력 벡터 $w$가 후속 층들을 거쳐 अ휘 공간(Vocabulary Space)상에서 다음 토큰 확률에 미치는 1차적 효과를 측정하기 위해 J-lens(Gurnee et al., 2026) 메커니즘을 적용한다. 어휘 방향들의 비음수 선형 조합(최대 25개 토큰 $v$)으로 설명되는 출력 벡터 분산의 비율을 <strong>J-share</strong>($1 - |w - v|^2$)로 정의하며, 동일 층의 무작위 벡터 상위 1% 초과 시 High, 하위 1% 미만 시 Low J-share로 분류한다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">입력 활성화 관점 (Activation Context)</th>
+<th style="text-align:left">출력 기여 관점 (Output Contribution / J-lens)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>분석 대상</strong></td>
+<td style="text-align:left">뉴런의 게이트가 열리고 스칼라 $a$가 출력되게 만드는 표면 문맥</td>
+<td style="text-align:left">뉴런이 잔여 스트림에 추가하는 출력 벡터 $w$의 어휘 공간 기여 방향</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>관찰 특징</strong></td>
+<td style="text-align:left">표면상 무관해 보이는 다수의 텍스트 문맥에서 동시 활성화 발생</td>
+<td style="text-align:left">어휘 공간상에서 단일한 핵심 개념(Concept) 또는 명확한 단어 군집으로 읽힘</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>개입적 검증</strong></td>
+<td style="text-align:left">텍스트 표면상의 주제/단어 수동 관찰</td>
+<td style="text-align:left">J-lens 기반 어휘 읽기 및 잔여 스트림 차원의 소거/이송 개입 실험</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-1-2-뉴런-해석-가능성에-관한-3대-반론-및-표본-근거-three-objections-empirical-evidence">2.1.2 뉴런 해석 가능성에 관한 3대 반론 및 표본 근거 (Three Objections &amp; Empirical Evidence)</h6>
+<p>연구진은 뉴런 해석을 저해한다고 알려진 3대 반론을 정량적으로 검증하고 다의성 분류 체계(Taxonomy of Polysemanticity)를 제시했다. 개념 추가 여부에 대한 정밀한 인과적 검증(Causal Test)을 위하여, &quot;뉴런의 활성화를 소거($a=0$)했을 때 해당 개념 단어 어휘의 예측 확률이 통계적으로 유의미하게 하락하는 경우&quot;에 한해서만 해당 뉴런이 그 개념을 추가하는 것으로 엄격히 정의했다.</p>
+<ul>
+<li><strong>다의성 분류 체계(Taxonomy of Polysemanticity)</strong>:
+<ul>
+<li><strong>Type 1</strong>: 서로 무관해 보이는 복수의 입력 문맥에서 활성화되나, 잔여 스트림에는 단 하나의 동일한 개념만 추가함 (예: <code>John the Ripper</code> 패스워드 크래킹 툴과 <code>Gospel of John</code> 맥락 모두에서 단어 <code>John</code> 방향만을 가산).</li>
+<li><strong>Type 2</strong>: $+w$ 부호와 $-w$ 부호가 서로 무관한 개념을 각각 추가함 (단일 시점에 두 개념이 동시 추가되지 않음).</li>
+<li><strong>Type 3</strong>: 단일 활성화 부호(+w 또는 -w) 하나가 무관한 두 개념을 잔여 스트림에 동시에 추가함.</li>
+</ul>
+</li>
+<li><strong>Type 3 다의성의 정량적 희소성 및 모델별 표본 근거</strong>: 무작위 뉴런 표본 추출 검증 결과, 유의미한 출력을 내는 부호별 뉴런 중 Type 3 형태는 0.4~1.1%(약 1% 이하)에 불과했다. 연구진은 4개 모델 전체에서 정밀 스크리닝을 통해 실존하는 35개의 Type 3 뉴런을 최초로 적출했다:
+<ul>
+<li><strong>Llama-3.1-8B-Instruct</strong> (L20 n2287, $-$ 부호): <code>Elon Musk</code>와 <code>protein translation</code> 동시 추가.</li>
+<li><strong>Qwen3-8B</strong> (L25 n5728, $-$ 부호): <code>Singapore</code>와 <code>Flutter (app framework)</code> 동시 추가.</li>
+<li><strong>Qwen3-14B</strong> (L31 n1780, $+$ 부호): <code>Guangdong</code>과 <code>Florida</code> 동시 추가.</li>
+<li><strong>OLMo-3-32B</strong> (L26 n18802, $-$ 부호): <code>Nigeria</code>와 <code>Malaysia</code> 동시 추가.</li>
+</ul>
+</li>
+<li><strong>J-share Census 맹검 평가</strong>: 4개 모델(Llama-3.1-8B-Instruct, Qwen3-8B, Qwen3-14B, OLMo-3-32B)에서 각 1,000개의 뉴런 표본을 추출하여 판정단(Claude) 맹검 평가(Blind Test)를 실시한 결과, J-share 수준별로 High (73%), Middle (31%), Low (19%) 비율로 J-lens 읽기 결과가 최상위 활성화 문맥과 연관되어 있음을 입증했다 (무작위 대조군 4~6% 대비 유의미하게 우수).</li>
+<li><strong>Low J-share 뉴런의 기능적 역할</strong>: J-share가 하위 2%에 속해 어휘 공간에서 직접 읽히지 않는 뉴런의 경우, 53~76%가 후속 주의집중 헤드(Later Attention Heads)의 Query 방향과 강하게 정렬됨(3~18% vs 무작위 대조군 &lt;1%)을 관찰하여, 이들이 어휘 직접 출력 대신 어텐션 마커로 기능함을 확인했다.</li>
+</ul>
+<h6 id="2-1-3-층-layer-사이-출력-의미의-근사적-안정성-approximate-stability-of-output-meaning-across-layers">2.1.3 층(Layer) 사이 출력 의미의 근사적 안정성 (Approximate Stability of Output Meaning Across Layers)</h6>
+<p>깊이(Depth)에 따라 개념 표현이 지속적으로 변형/표류(Drift)한다는 기존 주장과 달리, 뉴런의 출력 벡터는 모델 전반에 걸쳐 대략 고정된 기저(Approximately Fixed Basis)로 작동한다.</p>
+<ul>
+<li><strong>중간 층 MLP의 방향 제거 수준</strong>: 중간 층(15~85% 깊이) MLP 선형화 맵의 특이값을 분석한 결과, 잔여 스트림 방향을 축소(특이값 &lt; 0.1)하는 개수는 층당 중앙값 기준 0~1개에 불과했다.</li>
+<li><strong>출력 벡터 이송 실험(Vector Transfer)</strong>: 4,890개 WordNet 단일 토큰 개념 명사에 대해 Direct 뉴런(unembedding으로 직접 로짓 상승)과 Indirect 뉴런(J-lens로만 탐지)의 출력 벡터를 모델의 타 층에 이동 삽입했다. 마지막 1/10 깊이 이전의 구간에서 이동된 벡터는 무작위 벡터 대비 압도적 비율(Direct: 93~99.6%, Indirect: 90~98%)로 해당 개념의 로짓을 유의미하게 상승시켰다 (Direct 중앙값 로짓 증가: 5.1~10.8, Indirect: 2.3~5.1).</li>
+<li><strong>개념의 양상(Facets)과 수학적·기하학적 정렬</strong>: 깊이에 따라 개념 표현이 변하는 것처럼 보이는 원인은 층마다 서로 다른 뉴런이 개념의 서로 다른 세부 양상(Facet)을 가산하기 때문이다. <code>moon</code> 개념 추적 결과, 층에 따라 '달 단어 자체(L3, L4, L15)', '밤(L6, L13, L22)', '초승달 모양(L16, L17)', '우주 여행(L5, L18, L19)', '하늘(L27)' 양상을 각 뉴런이 분담했다.
+<ul>
+<li><strong>기하학적 직교성</strong>: 동일 개념의 서로 다른 양상 뉴런 간 출력 벡터의 평균 절대 코사인(Mean Absolute Cosine)은 0.019~0.043으로 무작위 뉴런(0.011~0.013) 대비 2~3배 수준에 불과하여 서로 거의 직교(Nearly Orthogonal)했다.</li>
+<li><strong>양상 특이적 로짓 상승</strong>: 각 양상의 출력 벡터는 타 양상의 단어(0.44~0.92 로짓 상승) 대비 <strong>자기 양상의 어휘 단어를 1.5~2.7배(0.80~2.10 로짓 상승)</strong> 더 강하게 상승시켰다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-1-4-여러-경로에-분산된-사실-회상-구조-fact-recall-across-distributed-readable-paths">2.1.4 여러 경로에 분산된 사실 회상 구조 (Fact Recall Across Distributed Readable Paths)</h6>
+<p>모델 내 사실 기억(Fact Recall)이 분산된 것처럼 보이는 원인은 단일 사실이 정답 직접 출력 뉴런 외에도 다수의 해석 가능한 연관 속성 뉴런 경로를 통해 회상되기 때문이다.</p>
+<ul>
+<li><strong>실험 설계</strong>: Llama-3.1-8B-Instruct에서 18개 사실(운동선수-종목 10개, 책-저자 4개, pip 패키지-import명 4개)에 대해 뉴런 소거(Ablation) 개입 실험을 수행했다.</li>
+<li><strong>직접 경로(One-hop) vs 다중 경로(Multi-hop)</strong>:
+<ul>
+<li><strong>One-hop Path</strong>: 정답 토큰 자체를 직접 출력하는 Answer Writers 뉴런.</li>
+<li><strong>Multi-hop Path</strong>: 주체의 연관 속성(국가, 시대, 장르, 연관 주제 등)을 잔여 스트림에 더하고 어텐션이 이를 조합하는 뉴런.</li>
+</ul>
+</li>
+<li><strong>소거 실험 결과 및 예외 사례</strong>: Answer Writers 뉴런만 제거했을 때 18개 사실 중 15개는 여전히 정답이 예측 1위를 유지했다. 단 3개의 사실만이 Answer Writers 소거만으로 예측 1위에서 탈락했다: <code>Derek Jeter</code> (10개 뉴런), <code>pillow</code> (3개 뉴런), <code>pymupdf</code> (1개 뉴런). 나머지 15개 사실을 완전히 차단하기 위해서는 정답 뉴런과 연관 속성 뉴런을 포함한 다수(44~273개)의 해석 가능한 뉴런을 소거해야 했다.</li>
+<li><strong>층별 활성화 패칭(Activation Patching) 및 계산 위치의 차이</strong>:
+<ul>
+<li><strong>운동선수 종목</strong>: 주체 이름 토큰 위치(L0~13)에서 계산된 후 L15 이후 어텐션을 통해 답변 예측 위치로 이동한다.</li>
+<li><strong>책 저자 및 pip 패키지</strong>: 주체 토큰 위치가 아닌 답변 예측 위치의 후반부 층(L17~31)에서 직접 계산된다. 책 저자 패칭 실험 결과, 초기-중간 층(L9–12 또는 L13–16)의 제목 MLP 출력을 가짜 제목의 출력으로 교체해도 정답 저자 확률은 <strong>0.84~0.99</strong>로 높게 유지되어 예측 1위를 지켰다. 반면, 답변 위치의 후반부 층(L17–31) MLP를 패칭하면 저자 확률이 0.1 미만(0.03~0.09)으로 급락했다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-2-part-2-연구-방어-응용-neuron-basis-applications">2.2 Part 2: 연구·방어 응용 (Neuron Basis Applications)</h5>
+<h6 id="2-2-1-제로샷-탐지-및-조향-성능-비교-기준-zero-shot-detection-and-steering-evaluation">2.2.1 제로샷 탐지 및 조향 성능 비교 기준 (Zero-Shot Detection and Steering Evaluation)</h6>
+<p>학습 데이터나 라벨 없이 뉴런의 출력 벡터 및 활성화 특성만을 활용하여 제로샷 탐지기, 텍스트 검색기 및 행동 조향(Steering)을 구성하고 정량 비교를 수행했다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">평가 항목</th>
+<th style="text-align:left">비교 기법</th>
+<th style="text-align:left">주요 정량 성과 및 수치</th>
+<th style="text-align:left">주요 관찰 사실 및 정밀 지표</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>AxBench 개념 탐지</strong></td>
+<td style="text-align:left">Zero-shot Neuron Probe vs. Text Embedding Search vs. SAE Baselines</td>
+<td style="text-align:left"><strong>Neuron: AUROC 0.903</strong>&lt;br&gt;Text Search: 0.875&lt;br&gt;SAE Baseline: 0.888</td>
+<td style="text-align:left">라벨 미사용 뉴런 프로브가 텍스트 검색 및 SAE 최상위 베이스라인을 상회함. Hard Negatives 분할에서도 성능 저하가 가장 적음(0.889).</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Zero-shot 안전 분류기</strong></td>
+<td style="text-align:left">Zero-shot Neuron Probe vs. Text Search vs. Trained Linear Probes (40 / 400 labels)</td>
+<td style="text-align:left"><strong>11/16 datasets</strong>: Text Search 상회&lt;br&gt;<strong>7/16 datasets</strong>: 40-label Probe와 동등 이상&lt;br&gt;<strong>4/16 datasets</strong>: 400-label Probe에 필적</td>
+<td style="text-align:left">16개 안전 평가 데이터셋(ToxicChat, High-stakes, WMDP)에서 라벨 없이 구성된 뉴런 프로브가 우수한 방어 정밀도를 보임. (6개 모델 평균)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>미라벨 텍스트 검색 (Retrieval)</strong></td>
+<td style="text-align:left">Zero-shot Neuron Probe vs. Best of 4 Text Search Baselines</td>
+<td style="text-align:left"><strong>11/17 topics</strong>: Text Search 상회&lt;br&gt;<strong>6/17 topics</strong>: 동등 (Tied)&lt;br&gt;<strong>0 topics</strong>: 열세 (Loss)</td>
+<td style="text-align:left">416,381개 Pile 문서 대상 17개 위험 주제 검색에서 뉴런 프로브가 상위 50개 문서 내 유해 문서 적출률에서 텍스트 검색을 압도함.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>행동 조향 (Steering)</strong></td>
+<td style="text-align:left">Neuron Steering vs. Trained Vector vs. SAE Latent Steering</td>
+<td style="text-align:left"><strong>Neuron Steering: 21%</strong>&lt;br&gt;Trained Vector: 21%&lt;br&gt;Unsteered: 2%&lt;br&gt;SAE (Fixed Rules): 8%&lt;br&gt;SAE (Agent via Desc): 3%&lt;br&gt;SAE (Agent via Desc + Readouts): 18%</td>
+<td style="text-align:left">WeirdChat 15개 타겟 행동 유발 실험(Llama-3.1-8B-Instruct)에서 4~9개 뉴런 출력 벡터 조향이 지도학습된 조향 벡터와 완벽히 동일한 유발률(21%)을 달성함.</td>
+</tr>
+</tbody>
+</table>
+<h6 id="2-2-2-미세조정-finetuned-모델-감사-및-백도어-탐지-auditing-finetuned-models-backdoor-trigger-detection">2.2.2 미세조정(Finetuned) 모델 감사 및 백도어 탐지 (Auditing Finetuned Models &amp; Backdoor Trigger Detection)</h6>
+<ul>
+<li><strong>사전학습 뉴런의 재사용 메커니즘</strong>: 7개 모델 오거나이즘(백도어, 탈옥, emergent misalignment, subliminal learning, Israeli dishes 2027 등) 분석 결과, 미세조정은 완전히 새로운 뉴런 기능을 창출하기보다, 사전학습 단계에서 이미 해당 행동 방향의 출력 벡터를 가지고 있던 기존 사전학습 뉴런의 활성화 강도를 높이는 방식으로 작동한다.</li>
+<li><strong>블라인드 감사 게임 (Auditing Game) 정밀 분해</strong>: 숨겨진 위험 행동을 가진 58개 모델을 포함한 68개 LoRA 어댑터 대상의 총 174회 감사 심사 결과:
+<ul>
+<li><strong>Output-only 감사(모델 응답만 확인)</strong>: 70/174 성공 (<strong>40%</strong>)</li>
+<li><strong>+Steering 감사(가중치 변동 벡터 조향 추가)</strong>: 107/174 성공 (<strong>61%</strong>)</li>
+<li><strong>+Readouts 감사(가중치 변동 뉴런의 J-lens 읽기 추가)</strong>: 131/174 성공 (<strong>75%</strong>)</li>
+<li><strong>감사 실패 케이스 분석</strong>: 단순 출력 감사(Output-only)는 특정 조건 프롬프트 없이는 작동하지 않는 '날짜 트리거 모델(<code>Israeli dishes</code> - 프롬프트에 2027년이 명시되어야만 발동)'이나, 출력상으로는 단지 건조한 문체를 보이지만 J-lens 읽기상으로 <code>female, feminists, herself</code> 또는 <code>masculinity, testosterone, masculine</code> 등 명시적 성별 토큰을 쏟아내는 '사용자 성별 암묵적 페르소나 모델'에서 0%의 적출률을 보였으나, 뉴런 읽기 감사(+Readouts)를 통해 완전히 적출되었다.</li>
+</ul>
+</li>
+<li><strong>뉴런 투표(Neuron Voting) 기반 백도어 트리거 적출</strong>: 74개 백도어 모델(Thoughtworks) 대상 실험에서 게이트/업 가중치 변동 뉴런들의 투표 방식을 적용한 결과, 프롬프팅이나 라벨 데이터 없이 상위 50개 단어 내에 평균 54%의 백도어 트리거 단어를 적출했다. 이는 기존 가중치 기법인 Summed change(42%, 55개 모델에서 뉴런 투표 우세) 및 Embedding shift(3%, 63개 모델에서 뉴런 투표 우세)를 크게 상회한다.</li>
+<li><strong>아키텍처 변동성 한계</strong>: 단, 24개 <strong>Qwen2.5</strong> 백도어 모델에서는 미세조정 업데이트가 모든 MLP 행렬 전반에 <strong>3%~16%</strong> 수준으로 가중치 변동을 광범위하게 분산(Diffuse)시키는 특성을 보여, 뉴런 투표를 포함한 모든 가중치 기반 탐지 기법의 성능이 저하되는 아키텍처적 한계가 관찰되었다.</li>
+</ul>
+<h6 id="2-2-3-머신-언러닝-unlearning-감사-표준-평가-성능-하락과-지식-제거의-불일치-auditing-machine-unlearning-discrepancy-between-standard-evaluation-and-true-knowledge-removal">2.2.3 머신 언러닝(Unlearning) 감사: 표준 평가 성능 하락과 지식 제거의 불일치 (Auditing Machine Unlearning: Discrepancy Between Standard Evaluation and True Knowledge Removal)</h6>
+<p>WMDP-cyber 벤치마크 기반 23개 언러닝 체크포인트를 감사한 결과, 4지선다형 객관식 정확도 하락이 실제 내부 지식의 삭제를 의미하지 않음을 명확히 증명했다.</p>
+<ul>
+<li><strong>Cloze Scoring 평가 및 지식 잔존</strong>: WMDP 객관식 정확도가 맹목적 추론 수준(0.25 내외)으로 낮아진 23개 체크포인트 중 <strong>14개 모델</strong>에서 Cloze Scoring(선택지 문자가 아닌 정답 텍스트 확률 직접 비교)을 적용한 결과, 베이스 모델이 맞혔던 문제 대부분에서 정답 텍스트가 여전히 확률 1위를 유지했다.</li>
+<li><strong>언러닝 실패 메커니즘의 2대 분류</strong>:
+<ol>
+<li><strong>표적형 백도어 노이즈 생성(Targeted Backdoor-Like Noise Generation)</strong> (<code>RMU</code>, <code>CUT</code>, <code>Circuit Breakers</code>, <code>K-FADE</code>, <code>ELM</code>): 변동 상위 30개 뉴런이 일반 잔류 텍스트(Retain text)에서는 정적을 유지하다가, 사이버 텍스트(Forget text)가 입력되면 활성화가 <strong>20~100배</strong> 폭발하여 잔여 스트림에 교란 노이즈를 주입하는 백도어 메커니즘을 형성함.</li>
+<li><strong>전역적 비특이적 텍스트 파괴(Global Non-Specific Text Degradation)</strong> (<code>Gradient Ascent</code>, <code>NPO</code>, <code>SimNPO</code>, <code>TAR</code>, <code>LAT</code>): 변동 뉴런들이 사이버 텍스트뿐만 아니라 일반 잔류 텍스트 모두에서 <strong>3~50배(TAR의 경우 수백 배)</strong> 더 강하게 활성화되어, 사이버 지식을 선택적으로 제거하는 것이 아니라 모델의 전반적인 문장 생성 능력 자체를 망가뜨림.</li>
+</ol>
+</li>
+<li><strong>단일 잔여 스트림 방향 제거에 의한 지식 복원</strong>: K-FADE 및 CUT 모델에서 언러닝이 추가한 잔여 스트림상의 단 1개 평균 변동 방향을 직교 투영으로 제거(Project out)하는 것만으로, 억제되었던 정답 순위 복원율이 <strong>32~47%에서 72~84%로 급증</strong>함을 관찰했다.</li>
+</ul>
+<hr />
+<h4 id="3-해석상-주의점-및-연구-한계-interpretation-caveats-and-research-limitations">3. 해석상 주의점 및 연구 한계 (Interpretation Caveats and Research Limitations)</h4>
+<ul>
+<li><strong>실험 대상 모델의 일반화 제한</strong>: 본 연작 연구의 정량 실험은 <code>Llama-3.1-8B-Instruct</code>, <code>OLMo-2-7B</code>, <code>Qwen3-8B</code>, <code>Qwen3-14B</code>, <code>Qwen3-32B</code>, <code>OLMo-3-32B</code>, <code>Zephyr-7B</code>, 및 <code>Qwen2.5</code> 시리즈 등 8B~32B 파라미터 규모의 특정 오픈웨이트 모델 및 특정 표본 데이터셋에 한정된다. 따라서 이를 모든 LLM 구조나 거대 규모 모델의 보편적 속성으로 과도하게 확장 해석해서는 안 된다.</li>
+<li><strong>대리 지표(Proxy Metrics)의 한계</strong>: J-lens 어휘 읽기 가능성이나 Transluce 자동 설명 지표는 인간 수준의 완벽한 해석 가능성을 보장하는 절대적 기준이 아니며, 뉴런의 거동을 1차적으로 추정하는 대리 지표(Proxy) 역할을 한다.</li>
+<li><strong>미세조정 조건 및 모델 규모 확장성</strong>: 분석된 모델 오거나이즘은 주로 짧은 미세조정이나 LoRA 어댑터에 국한되어 있다. 대규모 장기 포스트트레이닝이나 더 큰 모델 규모에서 뉴런 기저의 거동 변화에 대해서는 추가적인 스케일링 검증이 필요하다.</li>
+<li><strong>방어적 관점의 유지</strong>: 본 보고서에서 다룬 뉴런 감사 및 탐지 기법은 방어, 안전 감사, 취약점 검증 목적으로만 해석되어야 하며, 실제 공격이나 보안 우회를 목적으로 활용되어서는 안 된다.</li>
+</ul>
+<hr />
+<h4 id="4-원문-링크-official-source-links">4. 원문 링크 (Official Source Links)</h4>
+<ul>
+<li><strong>Part 1 원문</strong>: https://alignment.anthropic.com/2026/neuron-basis-theory/</li>
+<li><strong>Part 2 원문</strong>: https://alignment.anthropic.com/2026/neuron-basis-applications/</li>
+</ul>
+<hr />
+<h4 id="5-외부-검증-미실시-고지-disclaimer">5. 외부 검증 미실시 고지 (Disclaimer)</h4>
+<p>본 해설 보고서는 명시된 두 편의 Anthropic 원문 자료만을 바탕으로 작성되었으며, 제3자의 외부 검증이나 추가적인 실험적 검증을 거치지 않았음을 밝힙니다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/derek-jeter/">Derek Jeter</a></li>
+<li><a href="../../entities/people/elon-musk/">일론 머스크</a></li>
+<li><a href="../../entities/people/gurnee/">거니</a></li>
+<li><a href="../../entities/people/jasmine-shone/">Jasmine Shone</a></li>
+<li><a href="../../entities/people/john/">John</a></li>
+<li><a href="../../entities/people/lisa-dunlap/">Lisa Dunlap</a></li>
+<li><a href="../../kinds/document/">문서</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/ai-safety-governance/">AI 안전·거버넌스</a></li></ul></section>
+</main>
+</body>
+</html>

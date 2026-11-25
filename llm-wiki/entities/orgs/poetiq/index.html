@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poetiq</title>
+<link rel="stylesheet" href="../../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../../">홈</a><a href="../../../topics/">주제</a><a href="../../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../../timeline/">연대기</a><a href="../../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Poetiq</h1>
+<p class="page-meta">근거 소스 3편</p>
+<h2 id="augur와-모델-평가">Augur와 모델 평가</h2>
+<p>Augur는 질문을 점진적으로 정교화해 모델이 어느 지점에서 실패하는지 탐색한다. 맞춤형 벤치마크로 모델을 비교해 과업에 맞는 모델을 비용과 성능을 고려해 고를 수 있도록 돕는다. <a href="../../../sources/20260811-web-poetiq-augur-official/">근거 A</a> · <a href="../../../sources/20260811-web-thedeepview-poetiq-rsi-augur/">근거 B</a></p>
+<p>Poetiq은 모델이 필요한 개별 사실을 알고 있고 정답 일치 여부로 보상을 검증할 수 있는 추론 실패를 강화학습 후보로 본다. 이 분석에 쓰인 내부 측정 결과는 독립 검증을 거치지 않았다. <a href="../../../sources/20260811-web-poetiq-augur-official/">근거 A</a></p>
+<h2 id="과업별-반복-개선">과업별 반복 개선</h2>
+<p>보도에 따르면 Poetiq은 언어 모델 외부에서 평가, 수정, 재평가를 반복해 특정 과업의 최적화 절차를 다듬는다. 보고서 작성자는 공개된 절차만으로 강한 형태의 재귀적 자기 개선이 입증됐다고 판단하기 어렵다고 봤다. <a href="../../../sources/20260811-web-thedeepview-poetiq-rsi-augur/">근거 B</a> · <a href="../../../sources/20260811-web-poetiq-augur-official/">근거 A</a></p>
+<h2 id="코드와-모델을-결합한-실행">코드와 모델을 결합한 실행</h2>
+<p>Poetiq의 메타시스템은 설계 단계에서 언어 모델의 판단을 파이썬 코드로 옮기고, 배포 단계에서는 코드로 처리하기 어려운 입력에만 모델을 호출한다. 실험 보고서는 이 방식으로 불만 분류 비용을 줄였고 WikiRacer에서 이동 횟수와 의사결정 시간을 줄였다고 설명한다. <a href="../../../sources/20261124-web-poetiq-ai-posts-llm-to-code-791ec9dd0031/">근거 C</a></p>
+<h2 id="인용">인용</h2>
+<blockquote>
+<p>모델의 능력이 끝나는 지점(Capability boundary)을 찾기 위해 질문을 점진적으로 정교화하는 '날카롭게 만들기(Sharpening)' 메커니즘을 사용합니다.</p>
+</blockquote>
+<p><a href="../../../sources/20260811-web-poetiq-augur-official/">근거 A</a></p>
+<h2 id="근거-소스">근거 소스</h2>
+<ul>
+<li><a href="../../../sources/20260811-web-poetiq-augur-official/">Augur: Model Routing, Training Data, and Benchmark Creation for LLMs</a></li>
+<li><a href="../../../sources/20260811-web-thedeepview-poetiq-rsi-augur/">Why former DeepMind engineers are targeting RSI</a></li>
+<li><a href="../../../sources/20261124-web-poetiq-ai-posts-llm-to-code-791ec9dd0031/">Poetiq | LLM into Code: Intelligence without a GPU</a></li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../../">LLM Wiki</a></li>
+<li><a href="../../../sources/20260811-web-poetiq-augur-official/">Augur: Model Routing, Training Data, and Benchmark Creation for LLMs</a></li>
+<li><a href="../../../sources/20260811-web-thedeepview-poetiq-rsi-augur/">Why former DeepMind engineers are targeting RSI</a></li>
+<li><a href="../../../sources/20261124-web-poetiq-ai-posts-llm-to-code-791ec9dd0031/">Poetiq | LLM into Code: Intelligence without a GPU</a></li></ul></section>
+</main>
+</body>
+</html>
