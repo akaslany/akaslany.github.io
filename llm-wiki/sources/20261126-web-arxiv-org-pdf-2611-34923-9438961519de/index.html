@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mixture-of-Loops Transformer</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Mixture-of-Loops Transformer</h1>
+<p class="page-meta">논문 · 2026-11-26</p>
+<h2 id="요약">요약</h2>
+<p>MoLT의 루프 간 KV 재사용 설계와 학습 효율·추론 지연 실험 결과, 대규모 검증 한계를 정리한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.34923">출처</a> · <a href="https://www.youtube.com/watch?v=V441CUtI698">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../concepts/pretraining/">Pretraining</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/bo-wang/">Bo Wang</a></li>
+<li><a href="../../entities/people/jinze-bai/">Jinze Bai</a></li>
+<li><a href="../../entities/people/lianghui-zhu/">Lianghui Zhu</a></li>
+<li><a href="../../entities/people/shijie-wang/">Shijie Wang</a></li>
+<li><a href="../../entities/people/xiang-bai/">Xiang Bai</a></li>
+<li><a href="../../entities/people/xinggang-wang/">Xinggang Wang</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="mixture-of-loops-transformer-molt-기술-해설-보고서">Mixture-of-Loops Transformer (MoLT) 기술 해설 보고서</h3>
+<hr />
+<h5 id="1-개요-overview">1. 개요 (Overview)</h5>
+<p><strong>[사실(Fact)]</strong> 본 보고서는 Lianghui Zhu 외 연구진이 제안한 논문 &quot;Mixture-of-Loops Transformer (MoLT)&quot;의 아키텍처적 혁신, 수학적 정밀성, 실증적 성과 및 기술적 한계를 분석한 종합 기술 보고서입니다. 본 보고서의 모든 기술적 사실, 연구진의 가설, 분석가의 구조적 해석은 소스 문헌(Source Context)의 엄밀한 정보에 근거하며, 서술 객관성을 보장하기 위해 이하의 3단계 태깅 체계를 엄격히 준수합니다.</p>
+<ul>
+<li><strong>[사실(Fact)]</strong>: 소스 문서 내 데이터, 수치, 아키텍처 명세, 실험 결과로 검증된 사항</li>
+<li><strong>[소스의 주장(Source Claim)]</strong>: 연구진이 논문 내에서 제시한 구조적 우수성 논리, 가설 및 메커니즘적 주장</li>
+<li><strong>[작성자의 해석(Author Interpretation)]</strong>: 소스의 아키텍처적 명세를 바탕으로 인공지능 아키텍처 분석가 관점에서 논리적으로 체계화한 분석 내용</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> 기존 반복형 트랜스포머(Looped Transformer)는 동일한 레이어 파라미터를 복수의 루프(Loop)에 걸쳐 재사용함으로써 모델 크기를 늘리지 않고 표현력(Expressivity)을 극대화하는 아키텍처입니다. 그러나 종래의 반복형 모델은 이전 루프의 최종 출력 상태를 다음 루프의 잔 여 스트림(Residual Stream) 입력으로 직접 전달하는 '잔루프(Loop Residual)' 연결 방식만을 채택해 왔습니다.</p>
+<p><strong>[소스의 주장(Source Claim)]</strong> 연구진은 기존 잔루프 연결 방식이 표현력과 연산 효율성 모두에서 심각한 구조적 병목을 유발한다고 지적합니다. 첫째, 매 루프 및 레이어의 계산 결과를 단일 은닉 벡터 스트림에 반복적으로 압축·누적함에 따라 정보 희석(Information Dilution)이 발생하여 심층 루프에서의 표현력이 정체되거나 저하됩니다. 둘째, 추론 시 동일 위치(Same-position)의 토큰 은닉 상태 $X_{t}^{r,0}$가 이전 루프의 자기 자신 위치 출력 $z_{t}^{r-1}$에 직접 의존하므로, 모든 루프를 순차적으로 실행해야만 하는 직렬 병목이 발생하여 추론 레이턴시(Latency)가 급증합니다.</p>
+<p><strong>[작성자의 해석(Author Interpretation)]</strong> 아키텍처 분석적 시각에서 볼 때, 기존 반복형 모델의 한계는 &quot;루프 간 무엇을 넘겨줄 것인가?&quot;라는 인터페이스 설계의 본질적 제약에서 유래합니다. 기존 방식이 국소적 은닉 상태 벡터의 피드백에 갇혀 있었다면, MoLT 패러다임은 계산된 키(Key) 및 값(Value) 메모리 자체를 깊이(Depth) 및 루프(Loop) 간 선택적 재사용 자원으로 전환합니다. 이를 통해 잔여 스트림 중심의 정보 희석 현상을 해소함과 동시에, cross-loop 직렬 의존성을 끊어내어 반복형 모델의 추론 레이턴시 한계를 근본적으로 해결합니다.</p>
+<p><strong>[사실(Fact)]</strong> 연구진은 이러한 패러다임 전환을 구현하기 위해 <strong>MoLA(Mixture-of-Loops Attention)</strong> 메커니즘을 제안하고, 이를 기반으로 구별되는 설계 목적을 가진 <strong>MoLT 아키텍처 패밀리 3종</strong>을 제시합니다.</p>
+<ol>
+<li><strong>MoLT-R (Loop Residual)</strong>: 기존 잔루프 방식을 유지하되, MoLA를 통해 현재 및 이전 루프의 국소 KV(Local KV)를 어텐션 수준에서 직접 읽어 들여 극대화된 표현력을 제공하는 모델.</li>
+<li><strong>MoLT-KV (Loop Loop KV)</strong>: 매 루프마다 토큰 임베딩에서 연산을 재시작(Embedding Restart)하고, 이전 루프의 출력을 엄격-프레픽스(Strict-prefix, $j &lt; t$) 메모리 KV로 참조하여 동일 위치 의존성을 제거하고 단일 순회(Single-traversal) MoL 디코딩을 가능하게 한 플레인 스택(Plain Stack) 구조.</li>
+<li><strong>U-MoLT (U-shaped MoLT)</strong>: 루프 메모리를 구축하는 'MoLT 인코더'와 예측을 전담하는 '인과적 크로스 전용(Cross-only) MoLT 디코더'를 분리하여, 품질 손실 없이 불필요한 디코더 루프 순회를 생략하고 컴퓨팅 자원 효율성과 모델 품질 간 최적의 균형을 이룬 인코더-디코더 구조.</li>
+</ol>
+<hr />
+<h5 id="2-주요-논점-key-claims-and-architectural-analysis">2. 주요 논점 (Key Claims and Architectural Analysis)</h5>
+<h6 id="2-1-기존-반복형-트랜스포머의-한계와-molt의-패러다임-전환">2.1 기존 반복형 트랜스포머의 한계와 MoLT의 패러다임 전환</h6>
+<ul>
+<li><strong>소스 위치:</strong> Section 1, Section 3.1~3.2, Figure 1, Figure 3</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> 기존 Loop Model에서 루프 $r$의 레이어 0 입력 $X_{t}^{r,0}$는 이전 루프의 최종 정규화 출력 $z_{t}^{r-1}$로 설정됩니다. 이는 $t$번째 토큰의 루프 $r$ 연산이 동일한 $t$ 위치의 이전 루프 상태에 구속됨을 의미합니다.</p>
+<p><strong>[소스의 주장(Source Claim)]</strong> 이 동일 위치 cross-loop 의존성은 추론 단계에서 토큰 1개를 생성하기 위해 $N$개의 루프를 반드시 순차적으로 실행하게 강제하며, 복잡한 레이어 출력이 잔여 스트림에 중첩되면서 하위 레이어의 국소 특징 표현이 정체 및 소멸되는 정보 희석 현상을 유발합니다.</p>
+<p><strong>[작성자의 해석(Author Interpretation)]</strong> MoLT는 키-값(KV) 상태를 루프 간 명시적 메모리로 재정의함으로써 은닉 벡터의 직접적 전달 의존성을 해제합니다. 어텐션 레이어가 서열 차원의 시퀀스 KV(Sequence KV)와 동일 토큰 위치의 깊이 차원 KV(Depth KV)를 단일 어텐션 분포 내에서 동시 처리하도록 설계하여, 정체 없는 다층 정보 엑세스와 동일 위치 직렬 병목 해소를 동시에 달성합니다.</p>
+<p><strong>[사실(Fact)]</strong> MoLA(Mixture-of-Loops Attention)의 정밀한 수학적 연산 프로젝션 및 어텐션 통합 구조(Eq. 3~5)는 다음과 같이 정의됩니다.</p>
+<ul>
+<li>
+<p><strong>1. 국소 KV (Local Key/Value) 프로젝션 ($j = t$ 또는 서열 연산 시):</strong>
+$$k_{j,\text{loc}}^{r,\ell} = \text{RoPE}<em>j\left(\text{RMSNorm}(X</em>{j}^{r,\ell} W_{K,\text{loc}}^\ell)\right), \quad v_{j,\text{loc}}^{r,\ell} = X_{j}^{r,\ell} W_{V,\text{loc}}^\ell$$</p>
+</li>
+<li>
+<p><strong>2. 메모리 KV (Memory Key/Value) 프로젝션 ($j &lt; t$, 이전 루프 출력 $z^{r-1}$ 기반):</strong>
+$$k_{j,\text{mem}}^{r,\ell} = \text{RoPE}<em>j\left(\text{RMSNorm}(z_j^{r-1} W</em>{K,\text{mem}}^\ell)\right), \quad v_{j,\text{mem}}^{r,\ell} = z_j^{r-1} W_{V,\text{mem}}^\ell$$</p>
+</li>
+<li>
+<p><strong>3. 쿼리(Query) 프로젝션 및 소프트맥스 어텐션 분산 계산:</strong>
+$$q_{t}^{r,\ell} = \text{RoPE}<em>t\left(\text{RMSNorm}(X</em>{t}^{r,\ell} W_Q^\ell)\right)$$
+$$o_{t}^{r,\ell} = \frac{\sum_{(k,v) \in S_{t}^{r,\ell} \sqcup D_{t}^{r,\ell}} \exp(s(q_{t}^{r,\ell}, k)) v}{\sum_{(k,v) \in S_{t}^{r,\ell} \sqcup D_{t}^{r,\ell}} \exp(s(q_{t}^{r,\ell}, k))}$$
+$$\text{where } s(q, k) = h^{-1/2} q^\top k \quad (h\text{: head width})$$</p>
+</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> MoLA 연산은 쿼리 및 키 프로젝션 직후 헤드 단위 독립 아핀 RMS QK Normalization을 적용한 후 RoPE(Rotary Position Embedding)를 결합합니다.</p>
+<p><strong>[작성자의 해석(Author Interpretation)]</strong> 아핀 RMS QK Normalization을 각 헤드 차원별로 독립 적용하는 것은 서열 방향(Sequence) 및 깊이 방향(Depth)에서 유입되는 서로 다른 출처의 Key 스케일 불균형을 방지하고, 소프트맥스 분포가 특정 소스로 쏠리는 현상(Logit Explosion/Collapse)을 기하학적으로 방지하기 위함입니다. Stored Depth Key는 개별 생성 시점의 정규화 및 회전 상태를 유지하므로, Reader 레이어는 스케일 왜곡 없이 다층 KV 메모리를 직접 병합($\sqcup$) 참조할 수 있습니다.</p>
+<hr />
+<h6 id="2-2-molt-아키텍처-패밀리-3종-메커니즘-비교-molt-r-molt-kv-u-molt">2.2 MoLT 아키텍처 패밀리 3종 메커니즘 비교 (MoLT-R, MoLT-KV, U-MoLT)</h6>
+<ul>
+<li><strong>소스 위치:</strong> Section 3.1~3.3, Section 5, Table 1, Table 9, Figure 1, Figure 3</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> 아래 비교 표는 소스 문헌의 Table 1, Table 9 및 관련 명세를 바탕으로 기존 반복형 모델과 MoLT 패밀리 3종의 구조적 차이를 정리한 결과입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분</th>
+<th style="text-align:left">루프 입력 형태 (Loop Input)</th>
+<th style="text-align:left">메모리/어텐션 재사용 방식 (KV Sources)</th>
+<th style="text-align:left">디코더 구조 및 특성 (Decoder Design)</th>
+<th style="text-align:left">토큰당 추론 순회 횟수 (Decode Traversals)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>기존 Loop Model</strong></td>
+<td style="text-align:left">Residual State ($z_{t}^{r-1}$)</td>
+<td style="text-align:left">시퀀스 KV ($j \le t$) 재사용 없음</td>
+<td style="text-align:left">플레인 스택 (별도 디코더 없음)</td>
+<td style="text-align:left">$N$회 (모든 루프 직렬 실행)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MoLT-R</strong></td>
+<td style="text-align:left">Loop Residual ($z_{t}^{r-1}$)</td>
+<td style="text-align:left">현재 루프 ($j \le t$) 및 이전 루프 ($r-1$) 동일 위치 $t$의 Local KV</td>
+<td style="text-align:left">플레인 $L$-레이어 스택</td>
+<td style="text-align:left">$N$회 (직렬 $N \times L$ 레이어 실행)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MoLT-KV</strong></td>
+<td style="text-align:left">Embedding Restart ($e(x_t)$)</td>
+<td style="text-align:left">이전 루프 메모리 KV ($j &lt; t$) + 현재 루프 국소 KV ($j = t$)</td>
+<td style="text-align:left">플레인 $L$-레이어 스택</td>
+<td style="text-align:left"><strong>1회 (MoL 디코딩: $L$ 레이어 1회)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>U-MoLT</strong></td>
+<td style="text-align:left">Embedding Restart ($e(x_t)$)</td>
+<td style="text-align:left">인코더: 이전 루프 메모리 KV ($j &lt; t$) + 현재 국소 KV ($j = t$)</td>
+<td style="text-align:left">인과적 크로스 전용 디코더 ($L_D$ 레이어, 독립 KV)</td>
+<td style="text-align:left"><strong>1회 (인코더 $L_E$ + 디코더 $L_D = L$)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>[작성자의 해석(Author Interpretation)] 각 변형 모델의 핵심 아키텍처적 유도 및 이론적 가치 분석:</strong></p>
+<ul>
+<li><strong>MoLT-R (표현력 극대화):</strong>
+<ul>
+<li><strong>[사실(Fact)]</strong> 파라미터 증가 없이 잔루프 스트림을 유지하면서, MoLA를 통해 이전 루프의 모든 레이어 국소 KV($D_{\text{prev}}$)를 현재 레이어 쿼리가 직접 읽어 들입니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong> 단일 잔여 스트림의 정보 희석을 직접 막아내어 700M 사전 학습 수치에서 가장 높은 표현력(정확도 59.2%, PPL 14.84)을 기록하였으며, 컴퓨팅 지연 시간보다 모델 정확도가 최우선인 환경에 적합합니다.</li>
+</ul>
+</li>
+<li><strong>MoLT-KV (플레인 스택 효율성):</strong>
+<ul>
+<li><strong>[사실(Fact)]</strong> 매 루프마다 토큰 임베딩 $e(x_t)$에서 연산을 재시작(Embedding Restart)하며, 이전 루프의 출력 $z^{r-1}$은 오직 $j &lt; t$ (엄격-프레픽스) 위치의 메모리 KV로만 읽힙니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong> 동일 위치 cross-loop 의존성을 완전히 제거하여, 플레인 스택 아키텍처에서도 추론 시 이전 루프를 스킵하는 단일 순회(Single-traversal) MoL 디코딩을 구현합니다.</li>
+</ul>
+</li>
+<li><strong>U-MoLT (품질과 효율성의 균형 및 표현 상태 파괴 방지):</strong>
+<ul>
+<li><strong>[사실(Fact)]</strong> 전체 스택을 메모리를 구축하는 'MoLT 인코더($L_E$ 레이어)'와 예측을 수행하는 'MoLT 디코더($L_D$ 레이어)'로 물리적으로 분리합니다. 디코더는 인코더 피드백 루프 외부에 위치하며, 정규화된 인코더 출력 $z^r$을 독립적인 레이어별 디코더 KV 프로젝션($W_{K,\text{enc}}^d, W_{V,\text{enc}}^d$)을 통해 참조합니다.</li>
+<li><strong>[작성자의 해석(Author Interpretation)]</strong> 기존 심층 트랜스포머 레이어는 &quot;다음 토큰 예측을 위한 표현 상태 수축(Logit Collapse/Prediction)&quot;과 &quot;미래 토큰을 위한 풍부한 정보 보존(Memory Construction)&quot;이라는 이중의 충돌하는 압력을 받습니다. U-MoLT는 정규화된 인코더 출력 $z^r$을 네트워크 중간에 위치시켜 표현 상태 파괴 없는 고품질 메모리로 유지하고, 디코더가 예측을 전담하도록 물성을 분리했습니다. 그 결과 인코더 메모리의 훼손을 방지하면서, 프롬프트 중간 위치 및 중간 루프에서의 불필요한 디코더 연산을 완전 생략(Omission)하는 아키텍처적 이점을 획득합니다.</li>
+<li><strong>[작성자의 해석(Author Interpretation)]</strong> <strong>유효 인과적 경로 깊이(Causal Path Depth) 확장</strong>: U-MoLT가 $L_E = L_D = L/2$의 동일 분할 구조를 가질 때, 추론 시 단일 순회 디코딩만으로 처리하더라도 이전 토큰들에 대해 최소 $3L/2$ 블록 이상의 인과적 경로 깊이($L_E \times N + L_D$ 중 $N=2$ 기준 $2L_E + L_D = 3L/2$)를 형성합니다. 이는 비반복 모델($L$ 레이어) 대비 확연히 깊은 문맥 수용 범위를 확보하여 단일 순회 시에도 월등한 표현력을 유지하게 돕습니다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h6 id="2-3-학습-및-추론-기술-루프-포싱-loop-forcing-과-mol-mol-hybrid-디코딩">2.3 학습 및 추론 기술: 루프 포싱(Loop Forcing)과 MoL / MoL-Hybrid 디코딩</h6>
+<ul>
+<li><strong>소스 위치:</strong> Section 3.4~3.5, Section B.1~B.3</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> <strong>루프 포싱(Loop Forcing):</strong> MoLT-KV 및 U-MoLT 학습 시, 모든 루프 $r \in {1, \dots, N}$의 예측 손실을 다중 루프 손실 함수(Eq. 8: $\mathcal{L} = \sum \alpha_r \mathcal{L}_r$)로 결합하여 공유 파라미터를 동시에 감독 학습시킵니다.</p>
+<p><strong>[소스의 주장(Source Claim)]</strong> 루프 포싱은 이전 루프의 메모리 KV를 교사 포싱(Teacher Forcing) 방식으로 참조하여, $T$개 토큰 서열에 대해 $T$번의 순차적 단계를 거치지 않고 $N$번의 병렬 패스만으로 다중 루프 피드백을 신속하게 학습시킵니다.</p>
+<p><strong>[작성자의 해석(Author Interpretation)]</strong> <strong>수렴 안정성(Finite-Prefix Stabilization)과 오토레그레시브 수렴 직관</strong>:
+MoLT-KV 및 U-MoLT의 각 루프 연산은 삼각 재귀 지도 $z_{t}^r = F_t(x_t, z_{&lt;t}^{r-1})$로 정형화됩니다. 본 구조는 대각선(동일 위치 $t$) cross-loop 의존성이 완전히 배제된 strictly triangular recurrence 형태를 띱니다.
+따라서 별도의 수축 조건(Contraction Assumption)이나 반복적 루트 파인딩(Root Finding) 없이도, 위치 $t=0$은 첫 루프만으로 안정화되고 매 토큰 위치 $t$는 $r \ge t + 2$ 루프 이상에서 고유 수렴 해(Unique Stabilized Solution $z_t^\star$)에 반드시 도달함이 수학적으로 보장됩니다(Proposition 1). Empty-cache MoL 디코딩은 이 토큰 순서상 수렴을 단 1회의 순회만으로 완벽히 복원해 냅니다.</p>
+<pre><code>[루프 포싱 및 추론 디코딩 패러다임 메커니즘]
+
+학습 (Loop Forcing - N회 병렬 패스):
+  Prompt Tokens (병렬) ──&gt; Loop 1 Memory KV 구축 ──&gt; Loop 2 Memory KV 연산 (N회 병렬 패스)
+
+추론 (MoL Decoding - Single Traversal):
+  Step t (토큰 1개) ──&gt; [e(x_t) restart] ──&gt; Read Cached Prefix Memory KV (j &lt; t) + Local KV (j = t)
+                       └─&gt; 1회 순회만으로 x_{t+1} 예측 및 신규 Memory KV 캐시 추가
+</code></pre>
+<p><strong>[사실(Fact)]</strong> <strong>MoL 및 MoL-Hybrid 디코딩:</strong></p>
+<ol>
+<li><strong>MoL 디코딩 (Mixture-of-Loops Decoding)</strong>: 캐시된 프레픽스 메모리 KV($j &lt; t$)와 현재 루프의 국소 KV($j = t$)를 결합하여, 토큰 생성 시 공유 스택을 단 1회 순회(Single-traversal)합니다.</li>
+<li><strong>MoL-Hybrid 디코딩</strong>: 긴 프롬프트 처리(Prefill) 시에는 1루프(MoL-Hybrid-1) 또는 2루프(MoL-Hybrid-2) 병렬 연산으로 고속 프레픽스 캐시를 생성한 뒤, 디코딩 단계에서는 단일 순회 MoL 디코딩으로 전환하는 하이브리드 디코딩 스케줄입니다.</li>
+</ol>
+<p><strong>[소스의 주장(Source Claim)]</strong> MoL-Hybrid 디코딩은 동일 위치 cross-loop 의존성 제거를 활용하여, 고정 루프(Fixed-loop) 방식 대비 디코딩 레이턴시를 32~50% 절감하면서 non-looped 베이스라인 모델 수준의 고속 디코딩을 달성합니다.</p>
+<hr />
+<h6 id="2-4-실증적-검증-결과-사전-학습-계속-사전-학습-및-추론-속도">2.4 실증적 검증 결과: 사전 학습, 계속 사전 학습 및 추론 속도</h6>
+<ul>
+<li><strong>소스 위치:</strong> Section 4.3~4.5, Table 4, 5, 6, 7, 8, 10, 11, Figure 2, 5, 6, 7</li>
+</ul>
+<p><strong>[사실(Fact)] 1. 400B 토큰 사전 학습 성과 (OLMo3 베이스라인 대비):</strong>
+연구진은 700M Dense, 1.5B Dense 및 3B MoE(660M Active) 파라미터 스케일에 걸쳐 400B 토큰 사전 학습을 수행하여 성능을 평가하였습니다.</p>
+<ul>
+<li><strong>700M Dense 모델 평가:</strong>
+<ul>
+<li>Downstream 10개 태스크 평균 정확도: OLMo3 (56.6%) 대비 <strong>U-MoLT 59.1% (+2.5%p)</strong>, <strong>MoLT-R 59.2% (+2.6%p)</strong> 기록 (Table 4).</li>
+<li>10개 도메인 평균 Perplexity(PPL): OLMo3 (15.64) 대비 <strong>U-MoLT 14.86</strong>, <strong>MoLT-R 14.84</strong>로 개선 (Table 5).</li>
+<li>토큰 효율성: U-MoLT는 232.8B 토큰 시점에서 OLMo3의 400B 토큰 최종 CE 손실에 도달하여 <strong>1.7배 토큰 효율성</strong> 달성 (Figure 6, Table 10).</li>
+</ul>
+</li>
+<li><strong>1.5B Dense 모델 평가:</strong>
+<ul>
+<li>Downstream 10개 태스크 평균 정확도: OLMo3 (61.2%) 대비 <strong>U-MoLT 62.6% (+1.4%p)</strong> 상승 (Table 4).</li>
+<li>10개 도메인 평균 Perplexity(PPL): OLMo3 (13.86) 대비 <strong>U-MoLT 13.15로 0.71 PPL 개선</strong> (Table 5).</li>
+</ul>
+</li>
+<li><strong>3B MoE 모델 평가 (660M Active Parameters):</strong>
+<ul>
+<li>Downstream 10개 태스크 평균 정확도: OLMo3 (60.1%) 대비 <strong>U-MoLT 62.2% (+2.1%p)</strong> 상승 (Table 4).</li>
+<li>10개 도메인 평균 Perplexity(PPL): OLMo3 (13.99) 대비 <strong>U-MoLT 13.24로 0.75 PPL 감소</strong> (Table 5).</li>
+</ul>
+</li>
+</ul>
+<p><strong>[사실(Fact)] 2. Qwen3.5 계속 사전 학습(CT) 성과 (100B 토큰, CT1 vs CT2 세부 비교):</strong>
+Qwen3.5-0.8B-Base 모델을 기반으로 100B 토큰 계속 사전 학습을 진행한 정량적 비교 수치(Table 8)는 아래와 같습니다.</p>
+<ul>
+<li><strong>Qwen3.5-CT (원본 구조 베이스라인)</strong>: 11개 도메인 평균 CE <strong>2.496</strong></li>
+<li><strong>U-MoLT-CT1 (디코더 GDN 메모리를 자가 입력 <code>self</code> 기반 구축)</strong>: 평균 CE <strong>2.480</strong> (11개 도메인 전체 최저 손실 기록)</li>
+<li><strong>U-MoLT-CT2 (디코더 GDN 메모리를 인코더 출력 재프로젝션 <code>re-proj</code> 기반 구축)</strong>: 평균 CE <strong>2.483</strong></li>
+</ul>
+<p><strong>[작성자의 해석(Author Interpretation)]</strong> Qwen3.5 아키텍처는 비어텐션 시퀀스 믹서인 Gated DeltaNet(GDN) 18개 레이어와 풀 어텐션 6개 레이어가 혼합된 하이브리드 구조입니다. U-MoLT-CT1이 U-MoLT-CT2보다 0.003 CE 우수했던 이유는, 디코더 GDN 레이어가 이전 디코더 상태 의존성을 유지할 때 하이브리드 백본의 순차적 상태 전달 궤적을 훼손하지 않기 때문입니다. U-MoLT-CT1은 Qwen3.5-CT의 100B 성능을 평균 66.3B~78.3B 토큰 지점에서 조기 달성하여 <strong>평균 1.4배의 토큰 효율성</strong>을 입증했습니다.</p>
+<p><strong>[사실(Fact)] 3. 추론 레이턴시 비교 (S-size 약 113M 모델, 4,096 Prefill / 64 Decode Steps, Table 7):</strong></p>
+<ul>
+<li><strong>OLMo3 Fixed 1-loop (Non-looped Baseline)</strong>: 1,000.6 ms</li>
+<li><strong>Loop OLMo3 Fixed 2-loop</strong>: 1,974.3 ms</li>
+<li><strong>U-MoLT Fixed 2-loop</strong>: 1,467.5 ms</li>
+<li><strong>MoLT-KV MoL-Hybrid-1</strong>: <strong>989.5 ms</strong> (Fixed 2-loop 대비 50.0% 단축)</li>
+<li><strong>U-MoLT MoL-Hybrid-2</strong>: <strong>996.6 ms</strong> (Fixed 2-loop 대비 32.1% 단축, Non-looped OLMo3 수준 동등 달성)</li>
+</ul>
+<p><strong>[소스의 주장(Source Claim)]</strong> U-MoLT에 MoL-Hybrid-2를 적용하면 반복 루프 모델임에도 불구하고 반복을 수행하지 않는 단일 루프 OLMo3(1,000.6 ms)보다 빠른 996.6 ms의 지연 시간을 기록하여, 반복형 모델의 추론 속도 저하 문제를 완전히 해결할 수 있습니다.</p>
+<hr />
+<h5 id="3-등장-인물-화자-및-소속-기관-figures-authors-and-institutions">3. 등장 인물 · 화자 및 소속 기관 (Figures, Authors, and Institutions)</h5>
+<ul>
+<li><strong>소스 위치:</strong> 소스 표지 (Page 1)</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> 소스 문헌 표지에 명시된 연구진, 소속 기관 및 프로젝트 담당 정보는 다음과 같습니다. 저자별 세부 기여 비율 및 발표 화자 정보는 소스 상에 명시되어 있지 않아 &quot;확인 불가&quot;로 표기합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">저자 이름 (Authors)</th>
+<th style="text-align:left">소속 기관 (Institutions)</th>
+<th style="text-align:left">역할 및 관련 정보 (Roles &amp; Note)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Lianghui Zhu</strong></td>
+<td style="text-align:left">화중과학기술대학교 (Huazhong University of Science &amp; Technology) &lt;sup&gt;1&lt;/sup&gt;&lt;br&gt;바이트댄스 시드 (ByteDance Seed) &lt;sup&gt;2&lt;/sup&gt;</td>
+<td style="text-align:left">제1저자</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Shijie Wang</strong></td>
+<td style="text-align:left">바이트댄스 시드 (ByteDance Seed) &lt;sup&gt;2&lt;/sup&gt;</td>
+<td style="text-align:left"><strong>† 프로젝트 리드 (Project Lead) / 교신저자</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Xinggang Wang</strong></td>
+<td style="text-align:left">화중과학기술대학교 (Huazhong University of Science &amp; Technology) &lt;sup&gt;1&lt;/sup&gt;</td>
+<td style="text-align:left">교신저자 (이메일: xgwang@hust.edu.cn)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Jinze Bai</strong></td>
+<td style="text-align:left">바이트댄스 시드 (ByteDance Seed) &lt;sup&gt;2&lt;/sup&gt;</td>
+<td style="text-align:left">공동 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Bo Wang</strong></td>
+<td style="text-align:left">토론토 대학교 (University of Toronto) &lt;sup&gt;3&lt;/sup&gt;</td>
+<td style="text-align:left">공동 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Xiang Bai</strong></td>
+<td style="text-align:left">화중과학기술대학교 (Huazhong University of Science &amp; Technology) &lt;sup&gt;1&lt;/sup&gt;</td>
+<td style="text-align:left">공동 연구원</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>저자별 세부 담당 비율</em></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 내 미기재</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>발표 화자 (Speaker)</em></td>
+<td style="text-align:left">확인 불가</td>
+<td style="text-align:left">소스 내 미기재</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-주요-수치-및-데이터-평가-시점-key-metrics-and-evaluation-timelines">4. 주요 수치 및 데이터·평가 시점 (Key Metrics and Evaluation Timelines)</h5>
+<ul>
+<li><strong>소스 위치:</strong> Abstract, Section 4.1~4.5, Table 4~11, Figure 2, 5~7</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> 본 보고서의 분석 근거가 되는 핵심 정량 수치와 평가 시점은 다음과 같습니다.</p>
+<ul>
+<li>
+<p><strong>사전 학습 데이터 규모 및 평가 시점:</strong></p>
+<ul>
+<li><strong>400B 토큰:</strong> 700M/1.5B Dense 및 3B MoE 스케일링 사전 학습 비교 평가 시점.</li>
+<li><strong>3B 토큰:</strong> S-size (약 113M 파라미터) 32개 변형 아키텍처 소급 소멸 실험(Ablation Study, Table 2).</li>
+<li><strong>100B 토큰:</strong> Qwen3.5-0.8B-Base 계속 사전 학습(Continued Pretraining) 평가 시점.</li>
+</ul>
+</li>
+<li>
+<p><strong>700M Dense 모델 정량 평가 수치 (400B 토큰 기준):</strong></p>
+<ul>
+<li><strong>토큰 효율성:</strong> U-MoLT가 OLMo3 대비 <strong>1.7배</strong> 달성 (232.8B 토큰에서 OLMo3 400B CE 도달, 토큰 41.8% 절감).</li>
+<li><strong>10개 태스크 평균 정확도:</strong> Baseline OLMo3 (56.6%) 대비 <strong>U-MoLT 59.1% (+2.5%p)</strong>, <strong>MoLT-R 59.2% (+2.6%p)</strong>.</li>
+<li><strong>10개 도메인 평균 PPL:</strong> Baseline OLMo3 (15.64) 대비 <strong>U-MoLT 14.86</strong>, <strong>MoLT-R 14.84</strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>1.5B Dense 모델 정량 평가 수치 (400B 토큰 기준):</strong></p>
+<ul>
+<li><strong>10개 태스크 평균 정확도:</strong> Baseline OLMo3 (61.2%) 대비 <strong>U-MoLT 62.6% (+1.4%p)</strong>.</li>
+<li><strong>10개 도메인 평균 PPL:</strong> Baseline OLMo3 (13.86) 대비 <strong>U-MoLT 13.15 (0.71 PPL 개선)</strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>3B MoE 모델 정량 평가 수치 (660M Active Parameters, 400B 토큰 기준):</strong></p>
+<ul>
+<li><strong>10개 태스크 평균 정확도:</strong> Baseline OLMo3 (60.1%) 대비 <strong>U-MoLT 62.2% (+2.1%p)</strong>.</li>
+<li><strong>10개 도메인 평균 PPL:</strong> Baseline OLMo3 (13.99) 대비 <strong>U-MoLT 13.24 (0.75 PPL 개선)</strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Qwen3.5 계속 사전 학습 정량 평가 수치 (100B 토큰 기준, 11개 도메인 평균 CE):</strong></p>
+<ul>
+<li><strong>Qwen3.5-CT (Baseline):</strong> 2.496</li>
+<li><strong>U-MoLT-CT1 (<code>self</code> GDN Memory):</strong> <strong>2.480</strong> (평균 1.4배 토큰 효율성, 66.3B~78.3B 토큰 시점에 Baseline 100B 성능 도달)</li>
+<li><strong>U-MoLT-CT2 (<code>re-proj</code> GDN Memory):</strong> <strong>2.483</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>S-size (약 113M) 추론 지연 시간 측정 결과 (4,096 Prefill + 64 Decode Steps, H20 GPU BF16):</strong></p>
+<ul>
+<li><strong>OLMo3 Fixed 1-loop (Non-looped Baseline):</strong> 1,000.6 ms</li>
+<li><strong>Loop OLMo3 Fixed 2-loop:</strong> 1,974.3 ms</li>
+<li><strong>MoLT-R Fixed 2-loop:</strong> 1,976.8 ms</li>
+<li><strong>MoLT-KV Fixed 2-loop:</strong> 1,980.1 ms</li>
+<li><strong>U-MoLT Fixed 2-loop:</strong> 1,467.5 ms</li>
+<li><strong>MoLT-KV MoL-Hybrid-1:</strong> <strong>989.5 ms</strong> (Fixed 2-loop 대비 50.0% 단축)</li>
+<li><strong>MoLT-KV MoL-Hybrid-2:</strong> <strong>1,006.6 ms</strong> (Fixed 2-loop 대비 49.2% 단축)</li>
+<li><strong>U-MoLT MoL-Hybrid-1:</strong> <strong>989.5 ms</strong> (Fixed 2-loop 대비 32.6% 단축)</li>
+<li><strong>U-MoLT MoL-Hybrid-2:</strong> <strong>996.6 ms</strong> (Fixed 2-loop 대비 32.1% 단축, Non-looped OLMo3 수치 동등 달성)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성-limitations-unconfirmed-items-and-scope-bounds">5. 한계와 불확실성 (Limitations, Unconfirmed Items, and Scope Bounds)</h5>
+<ul>
+<li><strong>소스 위치:</strong> Section 4.5, Section 5</li>
+</ul>
+<p><strong>[사실(Fact)]</strong> 소스 문헌 분석을 통해 도출된 아키텍처적 한계 및 미확인 영역은 다음과 같습니다.</p>
+<ol>
+<li>
+<p><strong>초대형 모델(70B+)로의 스케일링 미확인:</strong></p>
+<ul>
+<li><strong>[사실(Fact)]</strong> 본 논문의 검증 스케일은 700M, 1.5B Dense 및 3B MoE(660M Active) 모델까지로 제한되어 있습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong> 70B 이상의 초대형 매개변수 LLM 및 비동기 파라미터 대 루프 연산 예산 배분 최적화는 향후 추가 연구 과제로 남아 있습니다([Section 5]).</li>
+</ul>
+</li>
+<li>
+<p><strong>3단계 아키텍처 (Giraffe Network) 미완성:</strong></p>
+<ul>
+<li><strong>[사실(Fact)]</strong> 소스 논문에서는 비반복 인코더 - 반복 목(Neck) - 비반복 디코더 형태의 3단계 &quot;기린(Giraffe)&quot; 네트워크 아키텍처의 이론적 우수성을 언급하였습니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong> 그러나 3단계 구조의 구체적인 레이어 파티셔닝 규칙 및 최적 디코딩 스케줄링에 관한 실증 연구는 본 논문 범위 내에서 완료되지 않았습니다([Section 5]).</li>
+</ul>
+</li>
+<li>
+<p><strong>비어텐션 하이브리드 백본에서의 구조적 제약:</strong></p>
+<ul>
+<li><strong>[사실(Fact)]</strong> Qwen3.5와 같이 Gated DeltaNet(GDN) 등의 비어텐션 시퀀스 믹서가 포함된 하이브리드 아키텍처에서는 GDN 내의 인과적 컨벌루션(Causal Convolution, 길이 4) 및 은닉 상태 재귀로 인해 pure-attention U-MoLT와 같은 완전한 단일 위치 프레필 생략(Single-position prefill omission)이 불가능합니다.</li>
+<li><strong>[소스의 주장(Source Claim)]</strong> 디코더 GDN 레이어 상에 28토큰 미니 윈도우 수준의 숏레인지 크로스 위치 의존성이 잔존하는 기술적 한계가 존재합니다([Section 4.5, Section 5]).</li>
+</ul>
+</li>
+<li>
+<p><strong>소스 내 미확인 정보 (Unconfirmed Scope):</strong></p>
+<ul>
+<li><strong>[사실(Fact)]</strong> 제공된 소스 문헌 내에서 모델 구동에 따른 하드웨어 소모 전력량(Wattage/Power Consumption), 실시간 멀티배치(Multi-batch) 서빙 환경 지연 시간 데이터, 저자별 구체적 기여 비율 등은 제공되지 않아 &quot;확인 불가&quot;합니다.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../concepts/pretraining/">Pretraining</a></li>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/bo-wang/">Bo Wang</a></li>
+<li><a href="../../entities/people/jinze-bai/">Jinze Bai</a></li>
+<li><a href="../../entities/people/lianghui-zhu/">Lianghui Zhu</a></li>
+<li><a href="../../entities/people/shijie-wang/">Shijie Wang</a></li>
+<li><a href="../../entities/people/xiang-bai/">Xiang Bai</a></li>
+<li><a href="../../entities/people/xinggang-wang/">Xinggang Wang</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

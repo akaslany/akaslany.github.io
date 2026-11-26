@@ -112,6 +112,11 @@
     },
     {
       "kind": "link",
+      "source": "concepts/ai-agent",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "concepts/ai-alignment",
       "target": "sources/20261027-web-nothinghuman-substack-com-p-some-memorie-3a48cb56a4a2"
     },
@@ -1462,6 +1467,11 @@
     },
     {
       "kind": "link",
+      "source": "concepts/human-in-the-loop",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
       "source": "concepts/hybrid-bonding",
       "target": "sources/20260805-chatgpt-samsung-zhbm-fms2026-analysis"
     },
@@ -1822,6 +1832,11 @@
     },
     {
       "kind": "link",
+      "source": "concepts/large-language-model",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "concepts/latent-reasoning",
       "target": "sources/20261015-web-arxiv-org-pdf-2610-18861-9da64a500797"
     },
@@ -1874,6 +1889,11 @@
       "kind": "link",
       "source": "concepts/lean",
       "target": "sources/20261123-youtube-XqgnJyQZGG4"
+    },
+    {
+      "kind": "link",
+      "source": "concepts/lean",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -2492,6 +2512,11 @@
     },
     {
       "kind": "link",
+      "source": "concepts/pretraining",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
       "source": "concepts/price-to-book-ratio",
       "target": "sources/20260801-youtube-xnBuJow6Ukk-hynix-rebound"
     },
@@ -3078,6 +3103,11 @@
     {
       "kind": "link",
       "source": "concepts/reward-hacking",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "concepts/reward-hacking",
       "target": "sources/20261125-web-share-gemini-google-n5-mn-gyy-3-4418d04776ca"
     },
     {
@@ -3542,6 +3572,16 @@
     },
     {
       "kind": "link",
+      "source": "concepts/test-time-compute",
+      "target": "sources/20261111-web-share-gemini-google-r6-lx-2-i-c924606ae9d0"
+    },
+    {
+      "kind": "link",
+      "source": "concepts/test-time-compute",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
       "source": "concepts/theory-building",
       "target": "sources/20261017-youtube-LKrwhjOI8Nc"
     },
@@ -3574,6 +3614,11 @@
       "kind": "link",
       "source": "concepts/time-to-first-token",
       "target": "sources/20261121-youtube-HQlk9RGx2dk"
+    },
+    {
+      "kind": "link",
+      "source": "concepts/time-to-first-token",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
     },
     {
       "kind": "link",
@@ -3714,6 +3759,16 @@
       "kind": "link",
       "source": "concepts/unique-games-conjecture",
       "target": "sources/20261028-youtube-ZAzWPE9CItg"
+    },
+    {
+      "kind": "link",
+      "source": "concepts/value-at-risk",
+      "target": "sources/20260809-youtube-semiconductor-foreign-flow-moon-hongcheol"
+    },
+    {
+      "kind": "link",
+      "source": "concepts/value-at-risk",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
     },
     {
       "kind": "link",
@@ -8623,6 +8678,11 @@
     {
       "kind": "link",
       "source": "contradictions",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
     },
     {
@@ -8669,6 +8729,56 @@
       "kind": "link",
       "source": "contradictions",
       "target": "sources/20261125-youtube-o6KIjtkRdOI"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
+    },
+    {
+      "kind": "link",
+      "source": "contradictions",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -9178,12 +9288,22 @@
     {
       "kind": "link",
       "source": "entities/orgs/anthropic",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "entities/orgs/anthropic",
       "target": "sources/20261125-web-www-anthropic-com-research-employment-at-ac92bb3d5c09"
     },
     {
       "kind": "link",
       "source": "entities/orgs/anthropic",
       "target": "sources/20261125-web-www-mercor-com-blog-a-simple-proxy-for-p-39b7aff9841d"
+    },
+    {
+      "kind": "link",
+      "source": "entities/orgs/anthropic",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
     },
     {
       "kind": "link",
@@ -9872,6 +9992,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/orgs/github",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/orgs/goldman-sachs",
       "target": "sources/20260906-chatgpt-goldman-astra-ai-capex-bull-case"
     },
@@ -10177,6 +10302,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/orgs/google",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/orgs/gray-swan",
       "target": "sources/20261008-web-www-cdn-anthropic-com-e1080d6bf5ae2018ea-0f949f38c3d5"
     },
@@ -10224,6 +10354,11 @@
       "kind": "link",
       "source": "entities/orgs/hangukeunhaeng",
       "target": "sources/20261118-pdf-bok-ai-productivity-2026-29"
+    },
+    {
+      "kind": "link",
+      "source": "entities/orgs/hangukeunhaeng",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -11562,6 +11697,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/orgs/openai",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/orgs/openrouter",
       "target": "sources/20260811-youtube-K72oZoloA4M-openrouter-ceo"
     },
@@ -11634,6 +11774,11 @@
       "kind": "link",
       "source": "entities/orgs/polymarket",
       "target": "sources/20261031-youtube-p1Dy4e4ff0s"
+    },
+    {
+      "kind": "link",
+      "source": "entities/orgs/polymarket",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
     },
     {
       "kind": "link",
@@ -11809,6 +11954,11 @@
       "kind": "link",
       "source": "entities/orgs/sec",
       "target": "sources/20261123-web-share-gemini-google-9-o-n-t-g-74050e91530c"
+    },
+    {
+      "kind": "link",
+      "source": "entities/orgs/sec",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
     },
     {
       "kind": "link",
@@ -12234,6 +12384,16 @@
       "kind": "link",
       "source": "entities/people/aaron-friel",
       "target": "sources/20261103-web-openai-com-index-scaling-git-at-openai-277870ffc8d7"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/aaron-rotenberg",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/aaron",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
     },
     {
       "kind": "link",
@@ -12822,6 +12982,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/albert-t",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/alberto-montes",
       "target": "sources/20261103-web-arxiv-org-pdf-2610-37364-d58f6be6010b"
     },
@@ -12902,6 +13067,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/alex-c",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/alex-cabrera",
       "target": "sources/20261013-web-blog-google-innovation-and-ai-models-and-ed1be8ea5f53"
     },
@@ -12914,6 +13084,11 @@
       "kind": "link",
       "source": "entities/people/alex-dimakis",
       "target": "sources/20261123-web-arxiv-org-pdf-2610-29932-c6273702ca03"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/alex-fischer",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -13012,6 +13187,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/alex-meiburg",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/alex-mueller",
       "target": "sources/20261010-youtube-YHiqVRxGViM"
     },
@@ -13104,6 +13284,11 @@
       "kind": "link",
       "source": "entities/people/alexa-tartaglini",
       "target": "sources/20261029-web-share-google-h6vzw-q-b-tendj-01f2628bd8b9"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/alexander-arefiev",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -13527,6 +13712,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/amir-livne-bar-on",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/amir-o",
       "target": "sources/20261014-web-www-anthropic-com-engineering-redesignin-56ee56e48ed2"
     },
@@ -13717,6 +13907,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/andrej-karpathy",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/andres-nava",
       "target": "sources/20261119-web-arxiv-org-pdf-2602-15029-dba0974cc966"
     },
@@ -13844,6 +14039,11 @@
       "kind": "link",
       "source": "entities/people/andrew-sutherland",
       "target": "sources/20261123-web-share-gemini-google-n9r-c-a-1k-d528b35e9c2e"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/andrew-sutherland",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -14062,6 +14262,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/anish",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/anjelra-biyeseukaseu",
       "target": "sources/20261106-web-share-gemini-google-54q-f-m8j-2a9a2988b837"
     },
@@ -14144,6 +14349,11 @@
       "kind": "link",
       "source": "entities/people/annmarie-hordern",
       "target": "sources/20261116-youtube-PNMBn-tPLIM"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/anonymous-coward",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -14377,6 +14587,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/arvin-aminpour",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/arvind-nithrakashyap",
       "target": "sources/20261109-web-www-anthropic-com-claude-fable-and-mytho-a989f1582084"
     },
@@ -14419,6 +14634,11 @@
       "kind": "link",
       "source": "entities/people/ashok-elluswamy",
       "target": "sources/20261022-youtube-tFezqXBF-gw"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/ashoke-sen",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
     },
     {
       "kind": "link",
@@ -14554,6 +14774,11 @@
       "kind": "link",
       "source": "entities/people/baegeummi",
       "target": "sources/20261022-youtube-FsZXQEAg3E8"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/baegeummi",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -14967,6 +15192,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/ben-helyer",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/ben-horowitz",
       "target": "sources/20261017-youtube-_b3LfMflIGs"
     },
@@ -15332,6 +15562,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/bertie-vidgen",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/beseu-maek",
       "target": "sources/20261115-youtube-ANaEc2zSI2Y"
     },
@@ -15364,6 +15599,11 @@
       "kind": "link",
       "source": "entities/people/beto-o-rourke",
       "target": "sources/20261106-web-share-gemini-google-o-g-ulp1-y-3-fc3a1730286c"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/bharat-mediratta",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
     },
     {
       "kind": "link",
@@ -15532,6 +15772,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/bjarne-stroustrup",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/blake-wiedenheft",
       "target": "sources/20261016-youtube-yFEMRYQFkyE"
     },
@@ -15559,6 +15804,11 @@
       "kind": "link",
       "source": "entities/people/bo-sundborg",
       "target": "sources/20261120-web-www-anthropic-com-research-claude-black--5fe21d2b4eca"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/bo-wang",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
     },
     {
       "kind": "link",
@@ -15759,6 +16009,11 @@
       "kind": "link",
       "source": "entities/people/bram-cohen",
       "target": "sources/20261008-web-scottaaronson-blog-p-10169-9b955ce8af27"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/bram-cohen",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -16119,6 +16374,11 @@
       "kind": "link",
       "source": "entities/people/caio-perona",
       "target": "sources/20261013-web-blog-google-innovation-and-ai-models-and-ed1be8ea5f53"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/caitlin-love",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
     },
     {
       "kind": "link",
@@ -18122,6 +18382,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/david-brown",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/david-celis-garcia",
       "target": "sources/20261018-web-www-microsoft-com-en-us-research-story-n-b5254a8f820c"
     },
@@ -18254,6 +18519,11 @@
       "kind": "link",
       "source": "entities/people/david-heinemeier-hansson",
       "target": "sources/20261122-youtube-TtOoLanFzGw"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/david-heinemeier-hansson",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
     },
     {
       "kind": "link",
@@ -19442,6 +19712,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/douglas-knight",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/douglas-lenat",
       "target": "sources/20261014-youtube-IBFkgyTXR2A"
     },
@@ -19564,6 +19839,11 @@
       "kind": "link",
       "source": "entities/people/dwight-eisenhower",
       "target": "sources/20260927-youtube-pdRW3fts9rI-goldman-waldron-english-majors"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/dylan-m",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -19717,6 +19997,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/edsger-w-dijkstra",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/edsger-wybe-dijkstra",
       "target": "sources/20261013-web-drive-google-com-uc-export-download-id-1-4e1263b047fb"
     },
@@ -19749,6 +20034,11 @@
       "kind": "link",
       "source": "entities/people/edward-glaeser",
       "target": "sources/20260901-youtube-918qslcfwfY"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/edward-hu",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
     },
     {
       "kind": "link",
@@ -19889,6 +20179,11 @@
       "kind": "link",
       "source": "entities/people/einstein",
       "target": "sources/20261119-youtube-KrVH-MKJviI"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/einstein",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
     },
     {
       "kind": "link",
@@ -20547,6 +20842,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/emma-webb",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/emmanuel-candes",
       "target": "sources/20260829-youtube-TtOMM8HrT64-terence-tao-ai-math"
     },
@@ -20797,6 +21097,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/ernest-davis",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/ernie-davis",
       "target": "sources/20260805-web-cacm-openai-astra-oversold"
     },
@@ -20867,6 +21172,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/euclid",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/eugene-brooks",
       "target": "sources/20261021-web-www-a16z-news-p-why-hardware-specializat-926612991c47"
     },
@@ -20914,6 +21224,11 @@
       "kind": "link",
       "source": "entities/people/euporion",
       "target": "sources/20261018-source-bundle-a10b864ba34346c10b2f0776e6d6849c90a8d5b0003a36335a2f81b2fc240977"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/eva-lu",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -21387,13 +21702,18 @@
     },
     {
       "kind": "link",
-      "source": "entities/people/galileo-galilei",
+      "source": "entities/people/galileo",
+      "target": "sources/20260901-youtube-918qslcfwfY"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/galileo",
       "target": "sources/20261124-youtube-nQpTIhVk7eM"
     },
     {
       "kind": "link",
       "source": "entities/people/galileo",
-      "target": "sources/20260901-youtube-918qslcfwfY"
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -21552,6 +21872,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/gauss",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/gavin-baker",
       "target": "sources/20260804-youtube-ai-selloff-vs-data-gavin-baker"
     },
@@ -21694,6 +22019,11 @@
       "kind": "link",
       "source": "entities/people/george-hotz",
       "target": "sources/20261015-web-x-com-0x-odila-status-210962343176329264-199bf45c7e8c"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/george-hotz",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
     },
     {
       "kind": "link",
@@ -21904,6 +22234,11 @@
       "kind": "link",
       "source": "entities/people/gimbyeol",
       "target": "sources/20261022-youtube-FsZXQEAg3E8"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/gimbyeol",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -22129,6 +22464,11 @@
       "kind": "link",
       "source": "entities/people/giovanni-monea",
       "target": "sources/20260906-arxiv-2609.03807v1-free-pause-tokens"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/glassmind-duo",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -22497,6 +22837,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/guanghua-yu",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/guangyu-chen",
       "target": "sources/20261121-web-thinkingmachines-ai-news-inkling-2-mini-bd3614c30b5d"
     },
@@ -22644,6 +22989,11 @@
       "kind": "link",
       "source": "entities/people/h-neven",
       "target": "sources/20261016-web-arxiv-org-pdf-2512-13908-98aa65aaabb6"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/h-squash",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -22852,6 +23202,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/haodi-lei",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/haoyang-yan",
       "target": "sources/20260904-arxiv-2609.01481v1-harness-of-harness"
     },
@@ -22909,6 +23264,11 @@
       "kind": "link",
       "source": "entities/people/harry-stebbings",
       "target": "sources/20260811-youtube-K72oZoloA4M-openrouter-ceo"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/harsha-v",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -23207,6 +23567,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/hilbert",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/hillary",
       "target": "sources/20261119-youtube-zWeT91uH7LI"
     },
@@ -23264,6 +23629,11 @@
       "kind": "link",
       "source": "entities/people/homunkulruseu",
       "target": "sources/20261018-source-bundle-a10b864ba34346c10b2f0776e6d6849c90a8d5b0003a36335a2f81b2fc240977"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/hong-liu",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -23442,6 +23812,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/humphrey-drummond",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/hung-le",
       "target": "sources/20261015-web-arxiv-org-pdf-2606-28277v1-4213bdc9374a"
     },
@@ -23474,6 +23849,11 @@
       "kind": "link",
       "source": "entities/people/hwanggeonil",
       "target": "sources/20260827-youtube-6h6VwTP0RSY-bok-monetary-policy"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/hwanggwanil",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -23874,6 +24254,16 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/aaron-friel"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/aaron-rotenberg"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/aaron"
     },
     {
       "kind": "link",
@@ -24318,6 +24708,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/albert-t"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/alberto-montes"
     },
     {
@@ -24393,6 +24788,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/alex-c"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/alex-cabrera"
     },
     {
@@ -24404,6 +24804,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/alex-dimakis"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/alex-fischer"
     },
     {
       "kind": "link",
@@ -24454,6 +24859,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/alex-mashrabov"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/alex-meiburg"
     },
     {
       "kind": "link",
@@ -24519,6 +24929,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/alexa-tartaglini"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/alexander-arefiev"
     },
     {
       "kind": "link",
@@ -24834,6 +25249,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/amir-bohanian-emma"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/amir-livne-bar-on"
     },
     {
       "kind": "link",
@@ -25353,6 +25773,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/anonymous-coward"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/anous"
     },
     {
@@ -25533,6 +25958,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/arvin-aminpour"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/arvind-nithrakashyap"
     },
     {
@@ -25569,6 +25999,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/ashok-elluswamy"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/ashoke-sen"
     },
     {
       "kind": "link",
@@ -25963,6 +26398,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/ben-helyer"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/ben-horowitz"
     },
     {
@@ -26163,6 +26603,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/bertie-vidgen"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/beseu-maek"
     },
     {
@@ -26194,6 +26639,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/beto-o-rourke"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/bharat-mediratta"
     },
     {
       "kind": "link",
@@ -26313,6 +26763,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/bjarne-stroustrup"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/blake-wiedenheft"
     },
     {
@@ -26329,6 +26784,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/bo-sundborg"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/bo-wang"
     },
     {
       "kind": "link",
@@ -26794,6 +27254,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/caio-perona"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/caitlin-love"
     },
     {
       "kind": "link",
@@ -28143,6 +28608,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/david-brown"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/david-celis-garcia"
     },
     {
@@ -28713,6 +29183,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/douglas-knight"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/douglas-lenat"
     },
     {
@@ -28804,6 +29279,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/dwight-eisenhower"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/dylan-m"
     },
     {
       "kind": "link",
@@ -28914,6 +29394,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/edsger-dijkstra"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/edsger-w-dijkstra"
     },
     {
       "kind": "link",
@@ -29173,6 +29658,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/emma-webb"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/emmanuel-candes"
     },
     {
@@ -29363,6 +29853,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/ernest-davis"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/ernie-davis"
     },
     {
@@ -29429,6 +29924,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/euporion"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/eva-lu"
     },
     {
       "kind": "link",
@@ -29849,11 +30349,6 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/gale"
-    },
-    {
-      "kind": "link",
-      "source": "entities/people/index",
-      "target": "entities/people/galileo-galilei"
     },
     {
       "kind": "link",
@@ -30408,6 +30903,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/glassmind-duo"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/glenn-brier"
     },
     {
@@ -30633,6 +31133,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/guanghua-yu"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/guangyu-chen"
     },
     {
@@ -30734,6 +31239,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/h-neven"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/h-squash"
     },
     {
       "kind": "link",
@@ -30918,6 +31428,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/haodi-lei"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/haoyang-yan"
     },
     {
@@ -30974,6 +31489,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/harry-stebbings"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/harsha-v"
     },
     {
       "kind": "link",
@@ -31243,6 +31763,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/hong-liu"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/hong-wang"
     },
     {
@@ -31388,6 +31913,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/humphrey-drummond"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/hung-le"
     },
     {
@@ -31419,6 +31949,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/hwanggeonil"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/hwanggwanil"
     },
     {
       "kind": "link",
@@ -31763,6 +32298,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/isuyeong"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/ivakhnenko"
     },
     {
@@ -31928,6 +32468,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/jacob-cole"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/jacob-coxin"
     },
     {
@@ -31999,6 +32544,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/jajangyulsa"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/jake-a"
     },
     {
       "kind": "link",
@@ -32343,6 +32893,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/jason-polak"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/jason-pruet"
     },
     {
@@ -32478,6 +33033,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/jeff-huntley"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/jeff-landry"
     },
     {
@@ -32504,6 +33064,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/jeff"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/jeffrey-emanuel"
     },
     {
       "kind": "link",
@@ -32793,6 +33358,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/jianchen-zhu"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/jiang-gang-janguin"
     },
     {
@@ -32834,6 +33404,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/jie-tang"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/jiebin-zhang"
     },
     {
       "kind": "link",
@@ -32964,6 +33539,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/jingrui-he"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/jinze-bai"
     },
     {
       "kind": "link",
@@ -33443,6 +34023,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/jonathan-blow"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/jonathan-gabor"
     },
     {
@@ -33708,6 +34293,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/joshua-zelinsky"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/josiah-aklilu"
     },
     {
@@ -33829,6 +34419,16 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/jun-park"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/junhan-shi"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/junqiang-zheng"
     },
     {
       "kind": "link",
@@ -33974,6 +34574,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/kamesh-krishnamurthy"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/kamil-pabis"
     },
     {
       "kind": "link",
@@ -34383,6 +34988,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/kishor-bharti"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/kitces"
     },
     {
@@ -34593,6 +35203,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/lance-martin"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/lapa"
     },
     {
@@ -34738,6 +35353,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/leo-marcus"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/leo-xiv"
     },
     {
@@ -34804,6 +35424,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/lev-vygotsky"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/levant-alpoge"
     },
     {
       "kind": "link",
@@ -34903,6 +35528,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/lianghui-zhu"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/liangzu-peng"
     },
     {
@@ -34919,6 +35549,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/limaye"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/lin-niu"
     },
     {
       "kind": "link",
@@ -35204,6 +35839,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/luke-gromen"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/luke-sernau"
     },
     {
       "kind": "link",
@@ -35738,6 +36378,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/martin-dimakis"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/martin-eisemann"
     },
     {
@@ -35949,6 +36594,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/matt-putz"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/matt-reed"
     },
     {
       "kind": "link",
@@ -36239,6 +36889,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/metcalfe"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/mg"
     },
     {
       "kind": "link",
@@ -37583,6 +38238,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/onyebuchi-ekenta"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/op7418"
     },
     {
@@ -38773,6 +39433,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/ravi-trivedi"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/ray-dalio"
     },
     {
@@ -39138,6 +39803,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/robert-c-martin"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/robert-c-merton"
     },
     {
@@ -39483,6 +40153,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/rui-cen"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/rui-meng"
     },
     {
@@ -39519,6 +40194,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/runyuan-he"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/runzhi-fan"
     },
     {
       "kind": "link",
@@ -39724,6 +40404,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/saikat-chakrabarti"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/saiyong-yang"
     },
     {
       "kind": "link",
@@ -40053,7 +40738,17 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/scott-caveny"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/scott-gordon"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/scott-moeller"
     },
     {
       "kind": "link",
@@ -40074,6 +40769,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/scronkfinkle"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/se-gyges"
     },
     {
       "kind": "link",
@@ -40174,6 +40874,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/sema-amble"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/seniormars"
     },
     {
       "kind": "link",
@@ -40519,6 +41224,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/shih-yang-liu"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/shijie-wang"
     },
     {
       "kind": "link",
@@ -41159,6 +41869,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/steve-yaggi"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/steve-yegge"
     },
     {
       "kind": "link",
@@ -42273,6 +42988,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/van-leeuwenhoek"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/van-vleck"
     },
     {
@@ -42338,6 +43058,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/venkatesa-chandrasekaran"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/vera-rubin"
     },
     {
@@ -42369,6 +43094,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/vicomte-de-chabot"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/victor-barres"
     },
     {
       "kind": "link",
@@ -42519,6 +43249,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/vladimir-vapnik"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/volker-strassen"
     },
     {
       "kind": "link",
@@ -42968,6 +43703,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/xiang-bai"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/xiang-li"
     },
     {
@@ -42994,6 +43734,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/xin-yu"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/xinggang-wang"
     },
     {
       "kind": "link",
@@ -43493,6 +44238,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/yupan-liu"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/yuseunghun"
     },
     {
@@ -43643,6 +44393,11 @@
     {
       "kind": "link",
       "source": "entities/people/index",
+      "target": "entities/people/zhaojing-zhou"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
       "target": "entities/people/zhe-li"
     },
     {
@@ -43654,6 +44409,11 @@
       "kind": "link",
       "source": "entities/people/index",
       "target": "entities/people/zheng-zhan"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/index",
+      "target": "entities/people/zhenghai-xue"
     },
     {
       "kind": "link",
@@ -43987,6 +44747,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/isuyeong",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/ivakhnenko",
       "target": "sources/20260907-web-schmidhuber-metalearning-rsi"
     },
@@ -44157,6 +44922,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/jack",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/jackie-lee",
       "target": "sources/20261104-web-openai-com-index-accelerating-engineerin-25493a43cba5"
     },
@@ -44189,6 +44959,11 @@
       "kind": "link",
       "source": "entities/people/jacob-bekenstein",
       "target": "sources/20261120-web-www-anthropic-com-research-claude-black--5fe21d2b4eca"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/jacob-cole",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
     },
     {
       "kind": "link",
@@ -44312,8 +45087,18 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/jake-a",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/jake-eaton",
       "target": "sources/20261125-web-www-anthropic-com-research-claude-code-e-a6ebb163a6c3"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/jake-eaton",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
     },
     {
       "kind": "link",
@@ -44767,6 +45552,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/jason-polak",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/jason-pruet",
       "target": "sources/20261016-web-drive-google-com-uc-export-download-id-1-db618b4eb821"
     },
@@ -44779,6 +45569,11 @@
       "kind": "link",
       "source": "entities/people/jason-wei",
       "target": "sources/20261122-youtube-woUuAHLkM7g"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/jason-wei",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
     },
     {
       "kind": "link",
@@ -44997,6 +45792,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/jeff-huntley",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/jeff-landry",
       "target": "sources/20261107-web-share-gemini-google-ioqcvors4ok-df00a5511a5d"
     },
@@ -45029,6 +45829,16 @@
       "kind": "link",
       "source": "entities/people/jeff",
       "target": "sources/20261106-youtube-YX44XDt0gXI"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/jeff",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/jeffrey-emanuel",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
     },
     {
       "kind": "link",
@@ -45642,6 +46452,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/jianchen-zhu",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/jiang-gang-janguin",
       "target": "sources/20261116-youtube-EF-nBNW6y5c"
     },
@@ -45689,6 +46504,11 @@
       "kind": "link",
       "source": "entities/people/jie-tang",
       "target": "sources/20261018-youtube-5OwUwMSkO4Y"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/jiebin-zhang",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -45829,6 +46649,11 @@
       "kind": "link",
       "source": "entities/people/jingrui-he",
       "target": "sources/20261015-web-arxiv-org-pdf-2610-18861-9da64a500797"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/jinze-bai",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
     },
     {
       "kind": "link",
@@ -46432,6 +47257,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/jonathan-blow",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/jonathan-gabor",
       "target": "sources/20261121-web-metr-org-blog-2026-11-20-q4-2026-capabil-7673c7bd7213"
     },
@@ -46727,6 +47557,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/joshua-zelinsky",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/josiah-aklilu",
       "target": "sources/20261103-web-arxiv-org-pdf-2610-37364-d58f6be6010b"
     },
@@ -46854,6 +47689,16 @@
       "kind": "link",
       "source": "entities/people/jun-park",
       "target": "sources/20261013-web-www-deeprsi-com-blog-acda163ab48f"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/junhan-shi",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/junqiang-zheng",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -47019,6 +47864,11 @@
       "kind": "link",
       "source": "entities/people/kamesh-krishnamurthy",
       "target": "sources/20261103-web-zyphra-com-our-work-zyphra-hierarchical--f152b3aeaf8b"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/kamil-pabis",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -47357,6 +48207,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/kent-beck",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/kepeulreo",
       "target": "sources/20261113-youtube-wvUxj9W3cog"
     },
@@ -47692,6 +48547,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/kishor-bharti",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/kitces",
       "target": "sources/20261125-web-lexifina-com-blog-formalizing-the-us-tax-f16fbfb85674"
     },
@@ -47952,6 +48812,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/lance-martin",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/lapa",
       "target": "sources/20260907-web-schmidhuber-metalearning-rsi"
     },
@@ -48202,6 +49067,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/leo-marcus",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/leo-xiv",
       "target": "sources/20260929-web-simonw-2026-in-llms"
     },
@@ -48299,6 +49169,11 @@
       "kind": "link",
       "source": "entities/people/lev-vygotsky",
       "target": "sources/20261007-youtube-6ffvuZ1RBYc"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/levant-alpoge",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -48422,6 +49297,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/lex-fridman",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/lexing-ying",
       "target": "sources/20261009-web-arxiv-org-pdf-2609-36322-4173cd321269"
     },
@@ -48492,6 +49372,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/lianghui-zhu",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/liangzu-peng",
       "target": "sources/20261114-web-arxiv-org-pdf-2611-17309v1-ef4d68a45e47"
     },
@@ -48509,6 +49394,11 @@
       "kind": "link",
       "source": "entities/people/limaye",
       "target": "sources/20261123-web-raw-githubusercontent-com-anthropics-for-1fd7b16d06af"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/lin-niu",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -48559,6 +49449,11 @@
       "kind": "link",
       "source": "entities/people/linus-torvalds",
       "target": "sources/20260912-text-linus-ai-professional-adoption-verified"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/linus-torvalds",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
     },
     {
       "kind": "link",
@@ -48874,6 +49769,11 @@
       "kind": "link",
       "source": "entities/people/luke-gromen",
       "target": "sources/20261124-youtube-H9AxUtUmp-U"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/luke-sernau",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -49692,6 +50592,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/martin-dimakis",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/martin-eisemann",
       "target": "sources/20261014-web-arxiv-org-abs-2610-13860-f3889ffd2786"
     },
@@ -49919,6 +50824,11 @@
       "kind": "link",
       "source": "entities/people/matt-putz",
       "target": "sources/20261121-web-metr-org-blog-2026-11-20-q4-2026-capabil-7673c7bd7213"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/matt-reed",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -50264,6 +51174,11 @@
       "kind": "link",
       "source": "entities/people/metcalfe",
       "target": "sources/20261025-web-latent-space-p-ai-is-getting-good-at-mat-c87632915228"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/mg",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -50672,6 +51587,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/mike",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/miki-rubinstein",
       "target": "sources/20261024-web-arxiv-org-pdf-2610-31642-d441172030b0"
     },
@@ -50809,6 +51729,11 @@
       "kind": "link",
       "source": "entities/people/mitchell-hashimoto",
       "target": "sources/20261122-youtube-TtOoLanFzGw"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/mitchell-hashimoto",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
     },
     {
       "kind": "link",
@@ -51742,6 +52667,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/nohyeonu",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/noja",
       "target": "sources/20260913-youtube-OUICU4ut0-8-lacan-freud-language"
     },
@@ -51959,6 +52889,11 @@
       "kind": "link",
       "source": "entities/people/onur-celebi",
       "target": "sources/20261019-web-scontent-ssn1-1-xx-fbcdn-net-v-t39-2365--f6c08b7d2e3a"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/onyebuchi-ekenta",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -52927,6 +53862,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/poisson",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/pol-singeo",
       "target": "sources/20261106-youtube-lkRnKBODrN0"
     },
@@ -53527,6 +54467,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/ravi-trivedi",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/ray-dalio",
       "target": "sources/20261004-youtube-SEd1OB2qaAg"
     },
@@ -54047,6 +54992,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/robert-c-martin",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/robert-c-merton",
       "target": "sources/20261018-web-share-gemini-google-u-y-fb-1x1-0af6fc2e8b4e"
     },
@@ -54467,6 +55417,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/rui-cen",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/rui-meng",
       "target": "sources/20261025-web-arxiv-org-pdf-2610-28380-de1f0ff8bc88"
     },
@@ -54509,6 +55464,11 @@
       "kind": "link",
       "source": "entities/people/runyuan-he",
       "target": "sources/20261123-web-arxiv-org-pdf-2610-29932-c6273702ca03"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/runzhi-fan",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -54744,6 +55704,11 @@
       "kind": "link",
       "source": "entities/people/saikat-chakrabarti",
       "target": "sources/20261106-youtube-aq1H71h-gYE"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/saiyong-yang",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -55387,6 +56352,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/scott-aaronson",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/scott-bessent",
       "target": "sources/20260801-chatgpt-bessent-yen-treasury-signal"
     },
@@ -55507,8 +56477,18 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/scott-caveny",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/scott-gordon",
       "target": "sources/20261119-youtube-zWeT91uH7LI"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/scott-moeller",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -55539,6 +56519,11 @@
       "kind": "link",
       "source": "entities/people/scronkfinkle",
       "target": "sources/20260803-epub-superintelligence-bostrom"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/se-gyges",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -55639,6 +56624,11 @@
       "kind": "link",
       "source": "entities/people/sema-amble",
       "target": "sources/20261027-youtube-9v42ZOdiBJY"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/seniormars",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -56067,6 +57057,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/shijie-wang",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/shira-eisenberg",
       "target": "sources/20261013-web-www-deeprsi-com-blog-acda163ab48f"
     },
@@ -56287,6 +57282,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/sinhyeonsong",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/sinjeonggyu",
       "target": "sources/20261015-youtube-IUDl4bD1UMA"
     },
@@ -56344,6 +57344,11 @@
       "kind": "link",
       "source": "entities/people/sniffnoy",
       "target": "sources/20261008-web-scottaaronson-blog-p-10169-9b955ce8af27"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/sniffnoy",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -56864,6 +57869,16 @@
       "kind": "link",
       "source": "entities/people/steve-yaggi",
       "target": "sources/20261109-youtube-dpY7YzZo4kE"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/steve-yegge",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/steve-yegge",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
     },
     {
       "kind": "link",
@@ -58582,6 +59597,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/van-leeuwenhoek",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/van-vleck",
       "target": "sources/20261031-web-arxiv-org-pdf-2610-29111-49df437022b3"
     },
@@ -58647,6 +59667,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/venkatesa-chandrasekaran",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/vera-rubin",
       "target": "sources/20261114-youtube-GZrDapFXk0I"
     },
@@ -58689,6 +59714,11 @@
       "kind": "link",
       "source": "entities/people/vicomte-de-chabot",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/victor-barres",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
     },
     {
       "kind": "link",
@@ -58897,6 +59927,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/volker-strassen",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/volodymyr-zelenskyy",
       "target": "sources/20261027-youtube-ECVqUU4uCY8"
     },
@@ -58959,6 +59994,11 @@
       "kind": "link",
       "source": "entities/people/von-neumann",
       "target": "sources/20261123-web-arxiv-org-pdf-2611-25011-49f6b875f84e"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/von-neumann",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
     },
     {
       "kind": "link",
@@ -59567,6 +60607,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/xiang-bai",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/xiang-li",
       "target": "sources/20260926-web-anthropic-claude-nine-loops"
     },
@@ -59594,6 +60639,11 @@
       "kind": "link",
       "source": "entities/people/xin-yu",
       "target": "sources/20261120-web-arxiv-org-pdf-2611-18856-4bd7b1d452d9"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/xinggang-wang",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
     },
     {
       "kind": "link",
@@ -60222,6 +61272,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/yupan-liu",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/yuseunghun",
       "target": "sources/20260805-web-slownews-semiconductor-renewable-grid"
     },
@@ -60447,6 +61502,11 @@
     },
     {
       "kind": "link",
+      "source": "entities/people/zhaojing-zhou",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
       "source": "entities/people/zhe-li",
       "target": "sources/20261103-web-arxiv-org-pdf-2610-37364-d58f6be6010b"
     },
@@ -60464,6 +61524,11 @@
       "kind": "link",
       "source": "entities/people/zheng-zhan",
       "target": "sources/20260906-arxiv-2609.03807v1-free-pause-tokens"
+    },
+    {
+      "kind": "link",
+      "source": "entities/people/zhenghai-xue",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -61288,6 +62353,11 @@
     {
       "kind": "link",
       "source": "index",
+      "target": "concepts/test-time-compute"
+    },
+    {
+      "kind": "link",
+      "source": "index",
       "target": "concepts/theory-building"
     },
     {
@@ -61329,6 +62399,11 @@
       "kind": "link",
       "source": "index",
       "target": "concepts/unique-games-conjecture"
+    },
+    {
+      "kind": "link",
+      "source": "index",
+      "target": "concepts/value-at-risk"
     },
     {
       "kind": "link",
@@ -62848,6 +63923,11 @@
     {
       "kind": "link",
       "source": "kinds/ai-share",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/ai-share",
       "target": "sources/share-6ab481b2-24a8-83ee-b963-d7256b72b40a"
     },
     {
@@ -62994,6 +64074,16 @@
       "kind": "link",
       "source": "kinds/document",
       "target": "sources/20261125-anthropic-neuron-basis-theory-applications-0097d1db1c"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/document",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/document",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
     },
     {
       "kind": "link",
@@ -63399,6 +64489,21 @@
       "kind": "link",
       "source": "kinds/paper",
       "target": "sources/20261123-web-arxiv-org-pdf-2611-27008-1d6d5c203e6f"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/paper",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/paper",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/paper",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
     },
     {
       "kind": "link",
@@ -65179,6 +66284,16 @@
       "kind": "link",
       "source": "kinds/web",
       "target": "sources/20261125-web-www-withplayground-ai-research-robot-fro-e7e5ed9512ec"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/web",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/web",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
     },
     {
       "kind": "link",
@@ -67009,6 +68124,21 @@
       "kind": "link",
       "source": "kinds/youtube",
       "target": "sources/20261125-youtube-o6KIjtkRdOI"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/youtube",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/youtube",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
+    },
+    {
+      "kind": "link",
+      "source": "kinds/youtube",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -71813,6 +72943,11 @@
     {
       "kind": "link",
       "source": "overview",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
     },
     {
@@ -71859,6 +72994,56 @@
       "kind": "link",
       "source": "overview",
       "target": "sources/20261125-youtube-o6KIjtkRdOI"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
+    },
+    {
+      "kind": "link",
+      "source": "overview",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -75689,6 +76874,11 @@
       "kind": "link",
       "source": "sources/20260809-pdf-openai-huggingface-incident-plain-language",
       "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20260809-youtube-semiconductor-foreign-flow-moon-hongcheol",
+      "target": "concepts/value-at-risk"
     },
     {
       "kind": "link",
@@ -127528,6 +128718,11 @@
     {
       "kind": "link",
       "source": "sources/20261111-web-share-gemini-google-r6-lx-2-i-c924606ae9d0",
+      "target": "concepts/test-time-compute"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261111-web-share-gemini-google-r6-lx-2-i-c924606ae9d0",
       "target": "contradictions"
     },
     {
@@ -141313,7 +142508,7 @@
     {
       "kind": "link",
       "source": "sources/20261124-youtube-nQpTIhVk7eM",
-      "target": "entities/people/galileo-galilei"
+      "target": "entities/people/galileo"
     },
     {
       "kind": "link",
@@ -141478,6 +142673,91 @@
     {
       "kind": "link",
       "source": "sources/20261125-anthropic-neuron-basis-theory-applications-0097d1db1c",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "concepts/reward-hacking"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "concepts/test-time-compute"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "entities/orgs/anthropic"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "entities/people/bertie-vidgen"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "entities/people/edward-hu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "entities/people/jacob-cole"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "entities/people/jason-wei"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "entities/people/martin-dimakis"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "entities/people/victor-barres"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "kinds/paper"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "topics/agents-tooling"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "topics/ai-models-research"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "target": "topics/ai-safety-governance"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
       "target": "topics/index"
     },
     {
@@ -142419,6 +143699,921 @@
       "kind": "link",
       "source": "sources/20261125-youtube-o6KIjtkRdOI",
       "target": "topics/software-engineering"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "entities/people/ashoke-sen"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "entities/people/einstein"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "entities/people/gauss"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "entities/people/hilbert"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "entities/people/poisson"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "entities/people/venkatesa-chandrasekaran"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "entities/people/von-neumann"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "kinds/document"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "target": "topics/science-research"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/guanghua-yu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/haodi-lei"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/hong-liu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/jianchen-zhu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/jiebin-zhang"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/junhan-shi"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/junqiang-zheng"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/lin-niu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/rui-cen"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/runzhi-fan"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/saiyong-yang"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/zhaojing-zhou"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "entities/people/zhenghai-xue"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "kinds/paper"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "topics/ai-models-research"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "topics/energy-compute"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "concepts/pretraining"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "entities/people/bo-wang"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "entities/people/jinze-bai"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "entities/people/lianghui-zhu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "entities/people/shijie-wang"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "entities/people/xiang-bai"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "entities/people/xinggang-wang"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "kinds/paper"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "topics/ai-models-research"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "entities/orgs/polymarket"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "kinds/document"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "topics/agents-tooling"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "topics/ai-models-research"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "concepts/lean"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/orgs/github"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/orgs/google"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/orgs/openai"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/aaron-rotenberg"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/albert-t"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/alex-c"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/alex-fischer"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/alex-meiburg"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/alexander-arefiev"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/amir-livne-bar-on"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/andrew-sutherland"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/anish"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/anonymous-coward"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/ben-helyer"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/bram-cohen"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/david-brown"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/douglas-knight"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/dylan-m"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/ernest-davis"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/euclid"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/eva-lu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/galileo"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/glassmind-duo"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/h-squash"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/harsha-v"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/humphrey-drummond"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/jack"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/jake-a"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/jason-polak"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/jeff"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/joshua-zelinsky"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/kamil-pabis"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/kishor-bharti"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/leo-marcus"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/levant-alpoge"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/luke-sernau"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/matt-reed"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/mg"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/mike"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/onyebuchi-ekenta"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/scott-aaronson"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/scott-caveny"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/scott-moeller"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/se-gyges"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/seniormars"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/sniffnoy"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/van-leeuwenhoek"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/volker-strassen"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "entities/people/yupan-liu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "kinds/web"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "topics/ai-models-research"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "target": "topics/science-research"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "concepts/value-at-risk"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "entities/orgs/sec"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "kinds/ai-share"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "topics/capital-markets"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "target": "topics/policy-regulation"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "concepts/human-in-the-loop"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "concepts/time-to-first-token"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/orgs/anthropic"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/people/arvin-aminpour"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/people/bharat-mediratta"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/people/caitlin-love"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/people/emma-webb"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/people/jake-eaton"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/people/lance-martin"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "entities/people/ravi-trivedi"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "kinds/web"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "topics/agents-tooling"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "target": "topics/software-engineering"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "concepts/ai-agent"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "concepts/large-language-model"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/andrej-karpathy"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/bjarne-stroustrup"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/david-heinemeier-hansson"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/edsger-w-dijkstra"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/george-hotz"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/jonathan-blow"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/kent-beck"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/lex-fridman"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/linus-torvalds"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/robert-c-martin"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "entities/people/steve-yegge"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "kinds/youtube"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "topics/agents-tooling"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-HYNzbxII8oQ",
+      "target": "topics/software-engineering"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "entities/people/aaron"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "entities/people/jeff-huntley"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "entities/people/jeffrey-emanuel"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "entities/people/mitchell-hashimoto"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "entities/people/steve-yegge"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "kinds/youtube"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "topics/agents-tooling"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-SRhXgeNluIk",
+      "target": "topics/software-engineering"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "contradictions"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "entities/orgs/hangukeunhaeng"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "entities/people/baegeummi"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "entities/people/gimbyeol"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "entities/people/hwanggwanil"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "entities/people/isuyeong"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "entities/people/nohyeonu"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "entities/people/sinhyeonsong"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "kinds/youtube"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "overview"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "timeline/2026-11"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "topics/capital-markets"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "topics/index"
+    },
+    {
+      "kind": "link",
+      "source": "sources/20261126-youtube-eoeKrvsIIV8",
+      "target": "topics/policy-regulation"
     },
     {
       "kind": "link",
@@ -147218,6 +149413,11 @@
     {
       "kind": "link",
       "source": "sources/index",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
     },
     {
@@ -147264,6 +149464,56 @@
       "kind": "link",
       "source": "sources/index",
       "target": "sources/20261125-youtube-o6KIjtkRdOI"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
+    },
+    {
+      "kind": "link",
+      "source": "sources/index",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -152193,6 +154443,11 @@
     {
       "kind": "link",
       "source": "timeline/2026-11",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
     },
     {
@@ -152239,6 +154494,56 @@
       "kind": "link",
       "source": "timeline/2026-11",
       "target": "sources/20261125-youtube-o6KIjtkRdOI"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
+    },
+    {
+      "kind": "link",
+      "source": "timeline/2026-11",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -153523,6 +155828,11 @@
     {
       "kind": "link",
       "source": "topics/agents-tooling",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "topics/agents-tooling",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
     },
     {
@@ -153544,6 +155854,26 @@
       "kind": "link",
       "source": "topics/agents-tooling",
       "target": "sources/20261125-youtube-o6KIjtkRdOI"
+    },
+    {
+      "kind": "link",
+      "source": "topics/agents-tooling",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "topics/agents-tooling",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
+      "source": "topics/agents-tooling",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "topics/agents-tooling",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
     },
     {
       "kind": "link",
@@ -155698,6 +158028,11 @@
     {
       "kind": "link",
       "source": "topics/ai-models-research",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
+    },
+    {
+      "kind": "link",
+      "source": "topics/ai-models-research",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
     },
     {
@@ -155714,6 +158049,26 @@
       "kind": "link",
       "source": "topics/ai-models-research",
       "target": "sources/20261125-web-www-withplayground-ai-research-robot-fro-e7e5ed9512ec"
+    },
+    {
+      "kind": "link",
+      "source": "topics/ai-models-research",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
+    },
+    {
+      "kind": "link",
+      "source": "topics/ai-models-research",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de"
+    },
+    {
+      "kind": "link",
+      "source": "topics/ai-models-research",
+      "target": "sources/20261126-web-epochal-time-portal-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "topics/ai-models-research",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -156634,6 +158989,11 @@
       "kind": "link",
       "source": "topics/ai-safety-governance",
       "target": "sources/20261125-anthropic-neuron-basis-theory-applications-0097d1db1c"
+    },
+    {
+      "kind": "link",
+      "source": "topics/ai-safety-governance",
+      "target": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42"
     },
     {
       "kind": "link",
@@ -157728,6 +160088,16 @@
     {
       "kind": "link",
       "source": "topics/capital-markets",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
+    },
+    {
+      "kind": "link",
+      "source": "topics/capital-markets",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
+    },
+    {
+      "kind": "link",
+      "source": "topics/capital-markets",
       "target": "sources/n2y-youtube-live-12JrGCgH9JY"
     },
     {
@@ -158559,6 +160929,11 @@
       "kind": "link",
       "source": "topics/energy-compute",
       "target": "sources/20261124-youtube-MAngqVza390"
+    },
+    {
+      "kind": "link",
+      "source": "topics/energy-compute",
+      "target": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86"
     },
     {
       "kind": "link",
@@ -159839,6 +162214,16 @@
       "kind": "link",
       "source": "topics/policy-regulation",
       "target": "sources/20261125-web-lexifina-com-blog-formalizing-the-us-tax-f16fbfb85674"
+    },
+    {
+      "kind": "link",
+      "source": "topics/policy-regulation",
+      "target": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f"
+    },
+    {
+      "kind": "link",
+      "source": "topics/policy-regulation",
+      "target": "sources/20261126-youtube-eoeKrvsIIV8"
     },
     {
       "kind": "link",
@@ -161379,6 +163764,16 @@
       "kind": "link",
       "source": "topics/science-research",
       "target": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca"
+    },
+    {
+      "kind": "link",
+      "source": "topics/science-research",
+      "target": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle"
+    },
+    {
+      "kind": "link",
+      "source": "topics/science-research",
+      "target": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b"
     },
     {
       "kind": "link",
@@ -162974,6 +165369,21 @@
       "kind": "link",
       "source": "topics/software-engineering",
       "target": "sources/20261125-youtube-o6KIjtkRdOI"
+    },
+    {
+      "kind": "link",
+      "source": "topics/software-engineering",
+      "target": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8"
+    },
+    {
+      "kind": "link",
+      "source": "topics/software-engineering",
+      "target": "sources/20261126-youtube-HYNzbxII8oQ"
+    },
+    {
+      "kind": "link",
+      "source": "topics/software-engineering",
+      "target": "sources/20261126-youtube-SRhXgeNluIk"
     }
   ],
   "nodes": [
@@ -162999,7 +165409,7 @@
       "url": "concepts/agentic-ai/"
     },
     {
-      "degree": 21,
+      "degree": 23,
       "id": "concepts/ai-agent",
       "title": "AI Agent",
       "type": "concept",
@@ -163349,7 +165759,7 @@
       "url": "concepts/high-bandwidth-memory/"
     },
     {
-      "degree": 7,
+      "degree": 9,
       "id": "concepts/human-in-the-loop",
       "title": "Human-in-the-Loop",
       "type": "concept",
@@ -163426,7 +165836,7 @@
       "url": "concepts/labor-share/"
     },
     {
-      "degree": 37,
+      "degree": 39,
       "id": "concepts/large-language-model",
       "title": "Large Language Model",
       "type": "concept",
@@ -163440,7 +165850,7 @@
       "url": "concepts/latent-reasoning/"
     },
     {
-      "degree": 19,
+      "degree": 21,
       "id": "concepts/lean",
       "title": "Lean",
       "type": "concept",
@@ -163643,7 +166053,7 @@
       "url": "concepts/preparedness-framework/"
     },
     {
-      "degree": 7,
+      "degree": 9,
       "id": "concepts/pretraining",
       "title": "Pretraining",
       "type": "concept",
@@ -163769,7 +166179,7 @@
       "url": "concepts/reverse-engineering/"
     },
     {
-      "degree": 15,
+      "degree": 17,
       "id": "concepts/reward-hacking",
       "title": "Reward Hacking",
       "type": "concept",
@@ -163917,13 +166327,20 @@
     },
     {
       "degree": 5,
+      "id": "concepts/test-time-compute",
+      "title": "Test-Time Compute",
+      "type": "concept",
+      "url": "concepts/test-time-compute/"
+    },
+    {
+      "degree": 5,
       "id": "concepts/theory-building",
       "title": "Theory Building",
       "type": "concept",
       "url": "concepts/theory-building/"
     },
     {
-      "degree": 11,
+      "degree": 13,
       "id": "concepts/time-to-first-token",
       "title": "Time to First Token",
       "type": "concept",
@@ -163979,6 +166396,13 @@
       "url": "concepts/unique-games-conjecture/"
     },
     {
+      "degree": 5,
+      "id": "concepts/value-at-risk",
+      "title": "Value at Risk",
+      "type": "concept",
+      "url": "concepts/value-at-risk/"
+    },
+    {
       "degree": 9,
       "id": "concepts/vertical-integration",
       "title": "Vertical Integration",
@@ -164014,7 +166438,7 @@
       "url": "concepts/zero-data-retention/"
     },
     {
-      "degree": 1943,
+      "degree": 1965,
       "id": "contradictions",
       "title": "모순과 쟁점",
       "type": "contradictions",
@@ -164070,7 +166494,7 @@
       "url": "entities/orgs/andreessen-horowitz/"
     },
     {
-      "degree": 153,
+      "degree": 157,
       "id": "entities/orgs/anthropic",
       "title": "Anthropic",
       "type": "org",
@@ -164259,7 +166683,7 @@
       "url": "entities/orgs/geumyungwiwonhoe/"
     },
     {
-      "degree": 5,
+      "degree": 7,
       "id": "entities/orgs/github",
       "title": "GitHub",
       "type": "org",
@@ -164287,7 +166711,7 @@
       "url": "entities/orgs/google-deepmind/"
     },
     {
-      "degree": 75,
+      "degree": 77,
       "id": "entities/orgs/google",
       "title": "Google",
       "type": "org",
@@ -164308,7 +166732,7 @@
       "url": "entities/orgs/gukjetonghwagigeum/"
     },
     {
-      "degree": 9,
+      "degree": 11,
       "id": "entities/orgs/hangukeunhaeng",
       "title": "한국은행",
       "type": "org",
@@ -164469,7 +166893,7 @@
       "url": "entities/orgs/nvidia/"
     },
     {
-      "degree": 213,
+      "degree": 215,
       "id": "entities/orgs/openai",
       "title": "OpenAI",
       "type": "org",
@@ -164497,7 +166921,7 @@
       "url": "entities/orgs/poetiq/"
     },
     {
-      "degree": 5,
+      "degree": 7,
       "id": "entities/orgs/polymarket",
       "title": "Polymarket",
       "type": "org",
@@ -164546,7 +166970,7 @@
       "url": "entities/orgs/scale-ai/"
     },
     {
-      "degree": 15,
+      "degree": 17,
       "id": "entities/orgs/sec",
       "title": "SEC",
       "type": "org",
@@ -164747,6 +167171,20 @@
       "title": "Aaron Friel",
       "type": "person",
       "url": "entities/people/aaron-friel/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/aaron-rotenberg",
+      "title": "Aaron Rotenberg",
+      "type": "person",
+      "url": "entities/people/aaron-rotenberg/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/aaron",
+      "title": "Aaron",
+      "type": "person",
+      "url": "entities/people/aaron/"
     },
     {
       "degree": 3,
@@ -165366,6 +167804,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/albert-t",
+      "title": "Albert T",
+      "type": "person",
+      "url": "entities/people/albert-t/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/alberto-montes",
       "title": "알베르토 몬테스",
       "type": "person",
@@ -165471,6 +167916,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/alex-c",
+      "title": "Alex C",
+      "type": "person",
+      "url": "entities/people/alex-c/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/alex-cabrera",
       "title": "알렉스 카브레라",
       "type": "person",
@@ -165489,6 +167941,13 @@
       "title": "알렉스 디마키스",
       "type": "person",
       "url": "entities/people/alex-dimakis/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/alex-fischer",
+      "title": "Alex Fischer",
+      "type": "person",
+      "url": "entities/people/alex-fischer/"
     },
     {
       "degree": 3,
@@ -165559,6 +168018,13 @@
       "title": "Alex Mashrabov",
       "type": "person",
       "url": "entities/people/alex-mashrabov/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/alex-meiburg",
+      "title": "Alex Meiburg",
+      "type": "person",
+      "url": "entities/people/alex-meiburg/"
     },
     {
       "degree": 3,
@@ -165650,6 +168116,13 @@
       "title": "Alexa Tartaglini",
       "type": "person",
       "url": "entities/people/alexa-tartaglini/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/alexander-arefiev",
+      "title": "Alexander Arefiev",
+      "type": "person",
+      "url": "entities/people/alexander-arefiev/"
     },
     {
       "degree": 3,
@@ -166094,6 +168567,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/amir-livne-bar-on",
+      "title": "Amir Livne Bar-on",
+      "type": "person",
+      "url": "entities/people/amir-livne-bar-on/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/amir-o",
       "title": "아미르 오",
       "type": "person",
@@ -166317,7 +168797,7 @@
       "url": "entities/people/andrei/"
     },
     {
-      "degree": 9,
+      "degree": 11,
       "id": "entities/people/andrej-karpathy",
       "title": "안드레이 카파시",
       "type": "person",
@@ -166478,7 +168958,7 @@
       "url": "entities/people/andrew-ross-sorkin/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/andrew-sutherland",
       "title": "앤드루 서더랜드",
       "type": "person",
@@ -166709,7 +169189,7 @@
       "url": "entities/people/anish-nangia/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/anish",
       "title": "아니시",
       "type": "person",
@@ -166812,6 +169292,13 @@
       "title": "앤마리 호던",
       "type": "person",
       "url": "entities/people/annmarie-hordern/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/anonymous-coward",
+      "title": "Anonymous Coward",
+      "type": "person",
+      "url": "entities/people/anonymous-coward/"
     },
     {
       "degree": 3,
@@ -167067,6 +169554,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/arvin-aminpour",
+      "title": "Arvin Aminpour",
+      "type": "person",
+      "url": "entities/people/arvin-aminpour/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/arvind-nithrakashyap",
       "title": "아르빈드 니트라카시압",
       "type": "person",
@@ -167120,6 +169614,13 @@
       "title": "아쇼크 엘루스 와미",
       "type": "person",
       "url": "entities/people/ashok-elluswamy/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/ashoke-sen",
+      "title": "Ashoke Sen",
+      "type": "person",
+      "url": "entities/people/ashoke-sen/"
     },
     {
       "degree": 3,
@@ -167297,7 +169798,7 @@
       "url": "entities/people/baedeokman/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/baegeummi",
       "title": "배금미",
       "type": "person",
@@ -167668,6 +170169,13 @@
       "url": "entities/people/ben-green/"
     },
     {
+      "degree": 3,
+      "id": "entities/people/ben-helyer",
+      "title": "Ben Helyer",
+      "type": "person",
+      "url": "entities/people/ben-helyer/"
+    },
+    {
       "degree": 9,
       "id": "entities/people/ben-horowitz",
       "title": "벤 호로위츠",
@@ -167949,6 +170457,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/bertie-vidgen",
+      "title": "Bertie Vidgen",
+      "type": "person",
+      "url": "entities/people/bertie-vidgen/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/beseu-maek",
       "title": "베스 맥",
       "type": "person",
@@ -167995,6 +170510,13 @@
       "title": "Beto O'Rourke",
       "type": "person",
       "url": "entities/people/beto-o-rourke/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/bharat-mediratta",
+      "title": "Bharat Mediratta",
+      "type": "person",
+      "url": "entities/people/bharat-mediratta/"
     },
     {
       "degree": 3,
@@ -168159,6 +170681,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/bjarne-stroustrup",
+      "title": "비야네 스트롭스트룹",
+      "type": "person",
+      "url": "entities/people/bjarne-stroustrup/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/blake-wiedenheft",
       "title": "블레이크 위든헤프트",
       "type": "person",
@@ -168184,6 +170713,13 @@
       "title": "Bo Sundborg",
       "type": "person",
       "url": "entities/people/bo-sundborg/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/bo-wang",
+      "title": "Bo Wang",
+      "type": "person",
+      "url": "entities/people/bo-wang/"
     },
     {
       "degree": 5,
@@ -168389,7 +170925,7 @@
       "url": "entities/people/brady/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/bram-cohen",
       "title": "Bram Cohen",
       "type": "person",
@@ -168835,6 +171371,13 @@
       "title": "카이오 페로나",
       "type": "person",
       "url": "entities/people/caio-perona/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/caitlin-love",
+      "title": "Caitlin Love",
+      "type": "person",
+      "url": "entities/people/caitlin-love/"
     },
     {
       "degree": 3,
@@ -170721,6 +173264,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/david-brown",
+      "title": "David Brown",
+      "type": "person",
+      "url": "entities/people/david-brown/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/david-celis-garcia",
       "title": "David Celis Garcia",
       "type": "person",
@@ -170811,7 +173361,7 @@
       "url": "entities/people/david-ha/"
     },
     {
-      "degree": 7,
+      "degree": 9,
       "id": "entities/people/david-heinemeier-hansson",
       "title": "데이비드 하이네마이어 한슨",
       "type": "person",
@@ -171519,6 +174069,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/douglas-knight",
+      "title": "Douglas Knight",
+      "type": "person",
+      "url": "entities/people/douglas-knight/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/douglas-lenat",
       "title": "더글러스 러넷",
       "type": "person",
@@ -171649,6 +174206,13 @@
       "title": "드와이트 아이젠하워",
       "type": "person",
       "url": "entities/people/dwight-eisenhower/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/dylan-m",
+      "title": "Dylan M",
+      "type": "person",
+      "url": "entities/people/dylan-m/"
     },
     {
       "degree": 3,
@@ -171806,6 +174370,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/edsger-w-dijkstra",
+      "title": "에드스허르 다익스트라",
+      "type": "person",
+      "url": "entities/people/edsger-w-dijkstra/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/edsger-wybe-dijkstra",
       "title": "에스허르 베이커 다이크스트라",
       "type": "person",
@@ -171854,7 +174425,7 @@
       "url": "entities/people/edward-glaeser/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/edward-hu",
       "title": "에드워드 후",
       "type": "person",
@@ -171917,7 +174488,7 @@
       "url": "entities/people/ehud-hrushovski/"
     },
     {
-      "degree": 32,
+      "degree": 34,
       "id": "entities/people/einstein",
       "title": "아인슈타인",
       "type": "person",
@@ -172160,6 +174731,13 @@
       "title": "에마 콜",
       "type": "person",
       "url": "entities/people/emma-call/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/emma-webb",
+      "title": "Emma Webb",
+      "type": "person",
+      "url": "entities/people/emma-webb/"
     },
     {
       "degree": 3,
@@ -172429,6 +175007,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/ernest-davis",
+      "title": "Ernest Davis",
+      "type": "person",
+      "url": "entities/people/ernest-davis/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/ernie-davis",
       "title": "Ernie Davis",
       "type": "person",
@@ -172484,7 +175069,7 @@
       "url": "entities/people/etienne-ghys/"
     },
     {
-      "degree": 11,
+      "degree": 13,
       "id": "entities/people/euclid",
       "title": "유클리드",
       "type": "person",
@@ -172524,6 +175109,13 @@
       "title": "에우포리온",
       "type": "person",
       "url": "entities/people/euporion/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/eva-lu",
+      "title": "Eva Lu",
+      "type": "person",
+      "url": "entities/people/eva-lu/"
     },
     {
       "degree": 3,
@@ -173114,16 +175706,9 @@
       "url": "entities/people/gale/"
     },
     {
-      "degree": 3,
-      "id": "entities/people/galileo-galilei",
-      "title": "갈릴레오 갈릴레이",
-      "type": "person",
-      "url": "entities/people/galileo-galilei/"
-    },
-    {
-      "degree": 3,
+      "degree": 7,
       "id": "entities/people/galileo",
-      "title": "Galileo",
+      "title": "갈릴레오 갈릴레이",
       "type": "person",
       "url": "entities/people/galileo/"
     },
@@ -173254,7 +175839,7 @@
       "url": "entities/people/gaurst/"
     },
     {
-      "degree": 11,
+      "degree": 13,
       "id": "entities/people/gauss",
       "title": "가우스",
       "type": "person",
@@ -173366,7 +175951,7 @@
       "url": "entities/people/george-hotz-geohot/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/george-hotz",
       "title": "조지 호츠",
       "type": "person",
@@ -173611,7 +176196,7 @@
       "url": "entities/people/gimbeomjun/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/gimbyeol",
       "title": "김별",
       "type": "person",
@@ -173889,6 +176474,13 @@
       "title": "Giovanni Monea",
       "type": "person",
       "url": "entities/people/giovanni-monea/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/glassmind-duo",
+      "title": "Glassmind Duo",
+      "type": "person",
+      "url": "entities/people/glassmind-duo/"
     },
     {
       "degree": 3,
@@ -174207,6 +176799,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/guanghua-yu",
+      "title": "광화 유",
+      "type": "person",
+      "url": "entities/people/guanghua-yu/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/guangyu-chen",
       "title": "광유 첸",
       "type": "person",
@@ -174351,6 +176950,13 @@
       "title": "하르트무트 네벤",
       "type": "person",
       "url": "entities/people/h-neven/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/h-squash",
+      "title": "H. Squash",
+      "type": "person",
+      "url": "entities/people/h-squash/"
     },
     {
       "degree": 3,
@@ -174606,6 +177212,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/haodi-lei",
+      "title": "하오디 레이",
+      "type": "person",
+      "url": "entities/people/haodi-lei/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/haoyang-yan",
       "title": "Haoyang Yan",
       "type": "person",
@@ -174687,6 +177300,13 @@
       "title": "Harry Stebbings",
       "type": "person",
       "url": "entities/people/harry-stebbings/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/harsha-v",
+      "title": "Harsha V",
+      "type": "person",
+      "url": "entities/people/harsha-v/"
     },
     {
       "degree": 3,
@@ -174976,7 +177596,7 @@
       "url": "entities/people/hike-simon/"
     },
     {
-      "degree": 24,
+      "degree": 26,
       "id": "entities/people/hilbert",
       "title": "힐베르트",
       "type": "person",
@@ -175058,6 +177678,13 @@
       "title": "호문쿨루스",
       "type": "person",
       "url": "entities/people/homunkulruseu/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/hong-liu",
+      "title": "홍 리우",
+      "type": "person",
+      "url": "entities/people/hong-liu/"
     },
     {
       "degree": 3,
@@ -175264,6 +177891,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/humphrey-drummond",
+      "title": "Humphrey Drummond",
+      "type": "person",
+      "url": "entities/people/humphrey-drummond/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/hung-le",
       "title": "훙 레",
       "type": "person",
@@ -175310,6 +177944,13 @@
       "title": "황건일",
       "type": "person",
       "url": "entities/people/hwanggeonil/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/hwanggwanil",
+      "title": "황관일",
+      "type": "person",
+      "url": "entities/people/hwanggwanil/"
     },
     {
       "degree": 3,
@@ -175627,7 +178268,7 @@
       "url": "entities/people/inbar-mosseri/"
     },
     {
-      "degree": 4002,
+      "degree": 4078,
       "id": "entities/people/index",
       "title": "전체 인물",
       "type": "index",
@@ -175793,6 +178434,13 @@
       "title": "이사 스기우라",
       "type": "person",
       "url": "entities/people/issa-sugiura/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/isuyeong",
+      "title": "이수영",
+      "type": "person",
+      "url": "entities/people/isuyeong/"
     },
     {
       "degree": 3,
@@ -175984,7 +178632,7 @@
       "url": "entities/people/jack-sebastian/"
     },
     {
-      "degree": 5,
+      "degree": 7,
       "id": "entities/people/jack",
       "title": "잭",
       "type": "person",
@@ -176024,6 +178672,13 @@
       "title": "Jacob Bekenstein",
       "type": "person",
       "url": "entities/people/jacob-bekenstein/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/jacob-cole",
+      "title": "Jacob Cole",
+      "type": "person",
+      "url": "entities/people/jacob-cole/"
     },
     {
       "degree": 3,
@@ -176132,6 +178787,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/jake-a",
+      "title": "Jake A",
+      "type": "person",
+      "url": "entities/people/jake-a/"
+    },
+    {
+      "degree": 5,
       "id": "entities/people/jake-eaton",
       "title": "Jake Eaton",
       "type": "person",
@@ -176608,6 +179270,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/jason-polak",
+      "title": "Jason Polak",
+      "type": "person",
+      "url": "entities/people/jason-polak/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/jason-pruet",
       "title": "제이슨 프루에트",
       "type": "person",
@@ -176621,7 +179290,7 @@
       "url": "entities/people/jason-taylor/"
     },
     {
-      "degree": 5,
+      "degree": 7,
       "id": "entities/people/jason-wei",
       "title": "제이슨 웨이",
       "type": "person",
@@ -176797,6 +179466,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/jeff-huntley",
+      "title": "Jeff Huntley",
+      "type": "person",
+      "url": "entities/people/jeff-huntley/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/jeff-landry",
       "title": "제프 랜드리",
       "type": "person",
@@ -176831,11 +179507,18 @@
       "url": "entities/people/jeff-wu/"
     },
     {
-      "degree": 5,
+      "degree": 7,
       "id": "entities/people/jeff",
       "title": "Jeff",
       "type": "person",
       "url": "entities/people/jeff/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/jeffrey-emanuel",
+      "title": "Jeffrey Emanuel",
+      "type": "person",
+      "url": "entities/people/jeffrey-emanuel/"
     },
     {
       "degree": 5,
@@ -177238,6 +179921,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/jianchen-zhu",
+      "title": "지안첸 주",
+      "type": "person",
+      "url": "entities/people/jianchen-zhu/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/jiang-gang-janguin",
       "title": "장구인",
       "type": "person",
@@ -177298,6 +179988,13 @@
       "title": "Jie Tang",
       "type": "person",
       "url": "entities/people/jie-tang/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/jiebin-zhang",
+      "title": "지에빈 장",
+      "type": "person",
+      "url": "entities/people/jiebin-zhang/"
     },
     {
       "degree": 3,
@@ -177480,6 +180177,13 @@
       "title": "Jingrui He",
       "type": "person",
       "url": "entities/people/jingrui-he/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/jinze-bai",
+      "title": "Jinze Bai",
+      "type": "person",
+      "url": "entities/people/jinze-bai/"
     },
     {
       "degree": 3,
@@ -178148,6 +180852,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/jonathan-blow",
+      "title": "조나단 블로우",
+      "type": "person",
+      "url": "entities/people/jonathan-blow/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/jonathan-gabor",
       "title": "Jonathan Gabor",
       "type": "person",
@@ -178519,6 +181230,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/joshua-zelinsky",
+      "title": "Joshua Zelinsky",
+      "type": "person",
+      "url": "entities/people/joshua-zelinsky/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/josiah-aklilu",
       "title": "조시아 아클릴루",
       "type": "person",
@@ -178691,6 +181409,20 @@
       "title": "Jun Park",
       "type": "person",
       "url": "entities/people/jun-park/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/junhan-shi",
+      "title": "준한 시",
+      "type": "person",
+      "url": "entities/people/junhan-shi/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/junqiang-zheng",
+      "title": "준창 정",
+      "type": "person",
+      "url": "entities/people/junqiang-zheng/"
     },
     {
       "degree": 3,
@@ -178894,6 +181626,13 @@
       "title": "Kamesh Krishnamurthy",
       "type": "person",
       "url": "entities/people/kamesh-krishnamurthy/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/kamil-pabis",
+      "title": "Kamil Pabis",
+      "type": "person",
+      "url": "entities/people/kamil-pabis/"
     },
     {
       "degree": 3,
@@ -179225,7 +181964,7 @@
       "url": "entities/people/kenneth-stanley/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/kent-beck",
       "title": "켄트 백",
       "type": "person",
@@ -179461,6 +182200,13 @@
       "title": "Kinzler",
       "type": "person",
       "url": "entities/people/kinzler/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/kishor-bharti",
+      "title": "Kishor Bharti",
+      "type": "person",
+      "url": "entities/people/kishor-bharti/"
     },
     {
       "degree": 3,
@@ -179758,6 +182504,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/lance-martin",
+      "title": "Lance Martin",
+      "type": "person",
+      "url": "entities/people/lance-martin/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/lapa",
       "title": "Lapa",
       "type": "person",
@@ -179960,6 +182713,13 @@
       "url": "entities/people/leo-he/"
     },
     {
+      "degree": 3,
+      "id": "entities/people/leo-marcus",
+      "title": "Leo Marcus",
+      "type": "person",
+      "url": "entities/people/leo-marcus/"
+    },
+    {
       "degree": 7,
       "id": "entities/people/leo-xiv",
       "title": "레오 14세",
@@ -180059,6 +182819,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/levant-alpoge",
+      "title": "레반트 알파게",
+      "type": "person",
+      "url": "entities/people/levant-alpoge/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/levant-levantel-poer",
       "title": "르방 / 르방텔 포어",
       "type": "person",
@@ -180135,7 +182902,7 @@
       "url": "entities/people/lewis-tunstall/"
     },
     {
-      "degree": 9,
+      "degree": 11,
       "id": "entities/people/lex-fridman",
       "title": "렉스 프라이드먼",
       "type": "person",
@@ -180192,6 +182959,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/lianghui-zhu",
+      "title": "Lianghui Zhu",
+      "type": "person",
+      "url": "entities/people/lianghui-zhu/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/liangzu-peng",
       "title": "Liangzu Peng",
       "type": "person",
@@ -180217,6 +182991,13 @@
       "title": "Limaye",
       "type": "person",
       "url": "entities/people/limaye/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/lin-niu",
+      "title": "린 뉴",
+      "type": "person",
+      "url": "entities/people/lin-niu/"
     },
     {
       "degree": 3,
@@ -180268,7 +183049,7 @@
       "url": "entities/people/linlu-qiu/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/linus-torvalds",
       "title": "리누스 토발즈",
       "type": "person",
@@ -180616,6 +183397,13 @@
       "title": "루크 그로만",
       "type": "person",
       "url": "entities/people/luke-gromen/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/luke-sernau",
+      "title": "루크 서노",
+      "type": "person",
+      "url": "entities/people/luke-sernau/"
     },
     {
       "degree": 3,
@@ -181361,6 +184149,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/martin-dimakis",
+      "title": "Martin Dimakis",
+      "type": "person",
+      "url": "entities/people/martin-dimakis/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/martin-eisemann",
       "title": "마르틴 아이제만",
       "type": "person",
@@ -181659,6 +184454,13 @@
       "title": "Matt Putz",
       "type": "person",
       "url": "entities/people/matt-putz/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/matt-reed",
+      "title": "Matt Reed",
+      "type": "person",
+      "url": "entities/people/matt-reed/"
     },
     {
       "degree": 3,
@@ -182065,6 +184867,13 @@
       "title": "메트칼프",
       "type": "person",
       "url": "entities/people/metcalfe/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/mg",
+      "title": "MG",
+      "type": "person",
+      "url": "entities/people/mg/"
     },
     {
       "degree": 3,
@@ -182536,7 +185345,7 @@
       "url": "entities/people/mike-woodford/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/mike",
       "title": "마이크",
       "type": "person",
@@ -182718,7 +185527,7 @@
       "url": "entities/people/miswel-bohoman/"
     },
     {
-      "degree": 5,
+      "degree": 7,
       "id": "entities/people/mitchell-hashimoto",
       "title": "미첼 하시모토",
       "type": "person",
@@ -183698,7 +186507,7 @@
       "url": "entities/people/nogueira/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/nohyeonu",
       "title": "노현우",
       "type": "person",
@@ -183941,6 +186750,13 @@
       "title": "Onur Çelebi",
       "type": "person",
       "url": "entities/people/onur-celebi/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/onyebuchi-ekenta",
+      "title": "Onyebuchi Ekenta",
+      "type": "person",
+      "url": "entities/people/onyebuchi-ekenta/"
     },
     {
       "degree": 3,
@@ -184923,7 +187739,7 @@
       "url": "entities/people/po-shen-loh/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/poisson",
       "title": "푸아송",
       "type": "person",
@@ -185609,6 +188425,13 @@
       "url": "entities/people/raushan-turganbay/"
     },
     {
+      "degree": 3,
+      "id": "entities/people/ravi-trivedi",
+      "title": "Ravi Trivedi",
+      "type": "person",
+      "url": "entities/people/ravi-trivedi/"
+    },
+    {
       "degree": 7,
       "id": "entities/people/ray-dalio",
       "title": "레이 달리오",
@@ -186121,6 +188944,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/robert-c-martin",
+      "title": "로버트 C. 마틴",
+      "type": "person",
+      "url": "entities/people/robert-c-martin/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/robert-c-merton",
       "title": "머튼",
       "type": "person",
@@ -186603,6 +189433,13 @@
       "url": "entities/people/rudyard-kipling/"
     },
     {
+      "degree": 3,
+      "id": "entities/people/rui-cen",
+      "title": "루이 센",
+      "type": "person",
+      "url": "entities/people/rui-cen/"
+    },
+    {
       "degree": 5,
       "id": "entities/people/rui-meng",
       "title": "루이 멩",
@@ -186657,6 +189494,13 @@
       "title": "룬위안 허",
       "type": "person",
       "url": "entities/people/runyuan-he/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/runzhi-fan",
+      "title": "런즈 판",
+      "type": "person",
+      "url": "entities/people/runzhi-fan/"
     },
     {
       "degree": 3,
@@ -186944,6 +189788,13 @@
       "title": "사키코 트라르디",
       "type": "person",
       "url": "entities/people/saikat-chakrabarti/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/saiyong-yang",
+      "title": "사이용 양",
+      "type": "person",
+      "url": "entities/people/saiyong-yang/"
     },
     {
       "degree": 3,
@@ -187387,9 +190238,9 @@
       "url": "entities/people/schulto-douglas/"
     },
     {
-      "degree": 13,
+      "degree": 15,
       "id": "entities/people/scott-aaronson",
-      "title": "스콧 애런슨",
+      "title": "스콧 아론슨",
       "type": "person",
       "url": "entities/people/scott-aaronson/"
     },
@@ -187402,10 +190253,24 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/scott-caveny",
+      "title": "Scott Caveny",
+      "type": "person",
+      "url": "entities/people/scott-caveny/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/scott-gordon",
       "title": "스콧 고든",
       "type": "person",
       "url": "entities/people/scott-gordon/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/scott-moeller",
+      "title": "Scott Moeller",
+      "type": "person",
+      "url": "entities/people/scott-moeller/"
     },
     {
       "degree": 3,
@@ -187434,6 +190299,13 @@
       "title": "스크롱크핑클",
       "type": "person",
       "url": "entities/people/scronkfinkle/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/se-gyges",
+      "title": "SE Gyges",
+      "type": "person",
+      "url": "entities/people/se-gyges/"
     },
     {
       "degree": 3,
@@ -187574,6 +190446,13 @@
       "title": "Sema Amble",
       "type": "person",
       "url": "entities/people/sema-amble/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/seniormars",
+      "title": "SeniorMars",
+      "type": "person",
+      "url": "entities/people/seniormars/"
     },
     {
       "degree": 3,
@@ -188060,6 +190939,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/shijie-wang",
+      "title": "Shijie Wang",
+      "type": "person",
+      "url": "entities/people/shijie-wang/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/shira-eisenberg",
       "title": "Shira Eisenberg",
       "type": "person",
@@ -188332,7 +191218,7 @@
       "url": "entities/people/sindong/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/sinhyeonsong",
       "title": "신현송",
       "type": "person",
@@ -188402,7 +191288,7 @@
       "url": "entities/people/smith-kenny/"
     },
     {
-      "degree": 3,
+      "degree": 5,
       "id": "entities/people/sniffnoy",
       "title": "Sniffnoy",
       "type": "person",
@@ -188953,6 +191839,13 @@
       "title": "스티브 야기",
       "type": "person",
       "url": "entities/people/steve-yaggi/"
+    },
+    {
+      "degree": 5,
+      "id": "entities/people/steve-yegge",
+      "title": "스티브 예기",
+      "type": "person",
+      "url": "entities/people/steve-yegge/"
     },
     {
       "degree": 3,
@@ -190510,6 +193403,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/van-leeuwenhoek",
+      "title": "앤터니 판 레이우엔훅",
+      "type": "person",
+      "url": "entities/people/van-leeuwenhoek/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/van-vleck",
       "title": "반 플렉",
       "type": "person",
@@ -190600,6 +193500,13 @@
       "url": "entities/people/venita-leo/"
     },
     {
+      "degree": 3,
+      "id": "entities/people/venkatesa-chandrasekaran",
+      "title": "Venkatesa Chandrasekaran",
+      "type": "person",
+      "url": "entities/people/venkatesa-chandrasekaran/"
+    },
+    {
       "degree": 5,
       "id": "entities/people/vera-rubin",
       "title": "베라 루빈",
@@ -190647,6 +193554,13 @@
       "title": "샤보 자작",
       "type": "person",
       "url": "entities/people/vicomte-de-chabot/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/victor-barres",
+      "title": "Victor Barres",
+      "type": "person",
+      "url": "entities/people/victor-barres/"
     },
     {
       "degree": 3,
@@ -190859,6 +193773,13 @@
       "url": "entities/people/vladimir-vapnik/"
     },
     {
+      "degree": 3,
+      "id": "entities/people/volker-strassen",
+      "title": "폴커 슈트라센",
+      "type": "person",
+      "url": "entities/people/volker-strassen/"
+    },
+    {
       "degree": 9,
       "id": "entities/people/volodymyr-zelenskyy",
       "title": "볼로디미르 제렌스키",
@@ -190880,7 +193801,7 @@
       "url": "entities/people/von-mangoldt/"
     },
     {
-      "degree": 15,
+      "degree": 17,
       "id": "entities/people/von-neumann",
       "title": "폰 노이만",
       "type": "person",
@@ -191483,6 +194404,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/xiang-bai",
+      "title": "Xiang Bai",
+      "type": "person",
+      "url": "entities/people/xiang-bai/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/xiang-li",
       "title": "시앙 리",
       "type": "person",
@@ -191522,6 +194450,13 @@
       "title": "Xin Yu",
       "type": "person",
       "url": "entities/people/xin-yu/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/xinggang-wang",
+      "title": "Xinggang Wang",
+      "type": "person",
+      "url": "entities/people/xinggang-wang/"
     },
     {
       "degree": 3,
@@ -192218,6 +195153,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/yupan-liu",
+      "title": "유판 리우",
+      "type": "person",
+      "url": "entities/people/yupan-liu/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/yuseunghun",
       "title": "유승훈",
       "type": "person",
@@ -192428,6 +195370,13 @@
     },
     {
       "degree": 3,
+      "id": "entities/people/zhaojing-zhou",
+      "title": "자오징 주",
+      "type": "person",
+      "url": "entities/people/zhaojing-zhou/"
+    },
+    {
+      "degree": 3,
       "id": "entities/people/zhe-li",
       "title": "제 리",
       "type": "person",
@@ -192446,6 +195395,13 @@
       "title": "Zheng Zhan",
       "type": "person",
       "url": "entities/people/zheng-zhan/"
+    },
+    {
+      "degree": 3,
+      "id": "entities/people/zhenghai-xue",
+      "title": "정하이 쉐",
+      "type": "person",
+      "url": "entities/people/zhenghai-xue/"
     },
     {
       "degree": 3,
@@ -192644,14 +195600,14 @@
       "url": "entities/people/zygi-straznickas/"
     },
     {
-      "degree": 309,
+      "degree": 311,
       "id": "index",
       "title": "LLM Wiki",
       "type": "index",
       "url": "./"
     },
     {
-      "degree": 277,
+      "degree": 279,
       "id": "kinds/ai-share",
       "title": "AI 대화 공유",
       "type": "kind",
@@ -192672,14 +195628,14 @@
       "url": "kinds/code/"
     },
     {
-      "degree": 51,
+      "degree": 55,
       "id": "kinds/document",
       "title": "문서",
       "type": "kind",
       "url": "kinds/document/"
     },
     {
-      "degree": 163,
+      "degree": 169,
       "id": "kinds/paper",
       "title": "논문",
       "type": "kind",
@@ -192700,14 +195656,14 @@
       "url": "kinds/social/"
     },
     {
-      "degree": 499,
+      "degree": 503,
       "id": "kinds/web",
       "title": "웹",
       "type": "kind",
       "url": "kinds/web/"
     },
     {
-      "degree": 735,
+      "degree": 741,
       "id": "kinds/youtube",
       "title": "YouTube",
       "type": "kind",
@@ -192721,7 +195677,7 @@
       "url": "log/"
     },
     {
-      "degree": 1943,
+      "degree": 1965,
       "id": "overview",
       "title": "위키 개관",
       "type": "overview",
@@ -193253,7 +196209,7 @@
       "url": "sources/20260809-pdf-openai-huggingface-incident-plain-language/"
     },
     {
-      "degree": 16,
+      "degree": 18,
       "id": "sources/20260809-youtube-semiconductor-foreign-flow-moon-hongcheol",
       "title": "“반도체 끝났다”는 공포, 외국인은 왜 지금 흔들고 있을까?ㅣ문홍철 DB증권 자산전략팀장",
       "type": "source",
@@ -198426,7 +201382,7 @@
       "url": "sources/20261111-web-share-gemini-google-h-kqsfj-12c35587384b/"
     },
     {
-      "degree": 30,
+      "degree": 32,
       "id": "sources/20261111-web-share-gemini-google-r6-lx-2-i-c924606ae9d0",
       "title": "공유 문서 r6JlxE2MiPQH",
       "type": "source",
@@ -199441,6 +202397,13 @@
       "url": "sources/20261125-anthropic-neuron-basis-theory-applications-0097d1db1c/"
     },
     {
+      "degree": 34,
+      "id": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42",
+      "title": "2611.30017v1",
+      "type": "source",
+      "url": "sources/20261125-web-arxiv-org-pdf-2611-30017-aa1c25656c42/"
+    },
+    {
       "degree": 60,
       "id": "sources/20261125-web-latent-space-p-ainews-gemini-4-neon-mark-2ec26a87fbca",
       "title": "Gemini 4 Neon marks GDM's full return as a Frontier Lab — Latent Space",
@@ -199511,7 +202474,77 @@
       "url": "sources/20261125-youtube-o6KIjtkRdOI/"
     },
     {
-      "degree": 972,
+      "degree": 26,
+      "id": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle",
+      "title": "An algebraic quantization of gravity from the null cone",
+      "type": "source",
+      "url": "sources/20261126-arxiv-2611-34924v1-cinematic-file-bundle/"
+    },
+    {
+      "degree": 40,
+      "id": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86",
+      "title": "DFly2: Turbocharging Long-Context Speculative Decoding by Sharing the Target's Sparsity",
+      "type": "source",
+      "url": "sources/20261126-web-arxiv-org-pdf-2611-34776-312d9b24cd86/"
+    },
+    {
+      "degree": 26,
+      "id": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de",
+      "title": "Mixture-of-Loops Transformer",
+      "type": "source",
+      "url": "sources/20261126-web-arxiv-org-pdf-2611-34923-9438961519de/"
+    },
+    {
+      "degree": 16,
+      "id": "sources/20261126-web-epochal-time-portal-file-bundle",
+      "title": "Introducing the Time Portal",
+      "type": "source",
+      "url": "sources/20261126-web-epochal-time-portal-file-bundle/"
+    },
+    {
+      "degree": 114,
+      "id": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b",
+      "title": "Shtetl-Optimized » Blog Archive » HOLY SHIT HOLY SHIT HOLY SHIT HOLY SHIT",
+      "type": "source",
+      "url": "sources/20261126-web-scottaaronson-blog-p-10379-c38f09864b6b/"
+    },
+    {
+      "degree": 18,
+      "id": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f",
+      "title": "공유 문서 SYXICNIqtRqz",
+      "type": "source",
+      "url": "sources/20261126-web-share-gemini-google-qt-qz-86c7c1c1841f/"
+    },
+    {
+      "degree": 34,
+      "id": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8",
+      "title": "Migrating our Messages API to Rust \\ Anthropic",
+      "type": "source",
+      "url": "sources/20261126-web-www-anthropic-com-research-migrating-api-69fbec9981f8/"
+    },
+    {
+      "degree": 40,
+      "id": "sources/20261126-youtube-HYNzbxII8oQ",
+      "title": "Programming Legends Are at War Over AI",
+      "type": "source",
+      "url": "sources/20261126-youtube-HYNzbxII8oQ/"
+    },
+    {
+      "degree": 24,
+      "id": "sources/20261126-youtube-SRhXgeNluIk",
+      "title": "Software Factories: Escape from Trash Mountain — Steve Yegge, Gas Town",
+      "type": "source",
+      "url": "sources/20261126-youtube-SRhXgeNluIk/"
+    },
+    {
+      "degree": 28,
+      "id": "sources/20261126-youtube-eoeKrvsIIV8",
+      "title": "통화정책방향 관련 총재 기자간담회 (2026.11.26)",
+      "type": "source",
+      "url": "sources/20261126-youtube-eoeKrvsIIV8/"
+    },
+    {
+      "degree": 983,
       "id": "sources/index",
       "title": "전체 소스",
       "type": "index",
@@ -199560,7 +202593,7 @@
       "url": "timeline/2026-10/"
     },
     {
-      "degree": 487,
+      "degree": 509,
       "id": "timeline/2026-11",
       "title": "2026년 11월",
       "type": "timeline",
@@ -199581,35 +202614,35 @@
       "url": "timeline/undated/"
     },
     {
-      "degree": 504,
+      "degree": 514,
       "id": "topics/agents-tooling",
       "title": "에이전트·도구",
       "type": "topic",
       "url": "topics/agents-tooling/"
     },
     {
-      "degree": 872,
+      "degree": 882,
       "id": "topics/ai-models-research",
       "title": "AI 모델·연구",
       "type": "topic",
       "url": "topics/ai-models-research/"
     },
     {
-      "degree": 370,
+      "degree": 372,
       "id": "topics/ai-safety-governance",
       "title": "AI 안전·거버넌스",
       "type": "topic",
       "url": "topics/ai-safety-governance/"
     },
     {
-      "degree": 438,
+      "degree": 442,
       "id": "topics/capital-markets",
       "title": "자본시장",
       "type": "topic",
       "url": "topics/capital-markets/"
     },
     {
-      "degree": 338,
+      "degree": 340,
       "id": "topics/energy-compute",
       "title": "에너지·컴퓨팅",
       "type": "topic",
@@ -199623,14 +202656,14 @@
       "url": "topics/geopolitics/"
     },
     {
-      "degree": 984,
+      "degree": 995,
       "id": "topics/index",
       "title": "주제 색인",
       "type": "index",
       "url": "topics/"
     },
     {
-      "degree": 342,
+      "degree": 346,
       "id": "topics/policy-regulation",
       "title": "정책·규제",
       "type": "topic",
@@ -199644,7 +202677,7 @@
       "url": "topics/product-business/"
     },
     {
-      "degree": 286,
+      "degree": 290,
       "id": "topics/science-research",
       "title": "과학 연구",
       "type": "topic",
@@ -199665,7 +202698,7 @@
       "url": "topics/society-labor/"
     },
     {
-      "degree": 162,
+      "degree": 168,
       "id": "topics/software-engineering",
       "title": "소프트웨어 공학",
       "type": "topic",

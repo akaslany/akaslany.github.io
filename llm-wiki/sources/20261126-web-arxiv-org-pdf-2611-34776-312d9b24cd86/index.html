@@ -1,0 +1,1175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DFly2: Turbocharging Long-Context Speculative Decoding by Sharing the Target&#x27;s Sparsity</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>DFly2: Turbocharging Long-Context Speculative Decoding by Sharing the Target&#x27;s Sparsity</h1>
+<p class="page-meta">논문 · 2026-11-26</p>
+<h2 id="요약">요약</h2>
+<p>DFly2는 타겟의 KV 캐시와 희소 인덱스를 재사용해 긴 문맥 추측 디코딩을 가속한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/paper/">논문</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://arxiv.org/pdf/2611.34776">출처</a> · <a href="https://www.youtube.com/watch?v=dvHlrnePwC0">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/guanghua-yu/">광화 유</a></li>
+<li><a href="../../entities/people/haodi-lei/">하오디 레이</a></li>
+<li><a href="../../entities/people/hong-liu/">홍 리우</a></li>
+<li><a href="../../entities/people/jianchen-zhu/">지안첸 주</a></li>
+<li><a href="../../entities/people/jiebin-zhang/">지에빈 장</a></li>
+<li><a href="../../entities/people/junhan-shi/">준한 시</a></li>
+<li><a href="../../entities/people/junqiang-zheng/">준창 정</a></li>
+<li><a href="../../entities/people/lin-niu/">린 뉴</a></li>
+<li><a href="../../entities/people/rui-cen/">루이 센</a></li>
+<li><a href="../../entities/people/runzhi-fan/">런즈 판</a></li>
+<li><a href="../../entities/people/saiyong-yang/">사이용 양</a></li>
+<li><a href="../../entities/people/zhaojing-zhou/">자오징 주</a></li>
+<li><a href="../../entities/people/zhenghai-xue/">정하이 쉐</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="dfly2-타겟의-희소성-공유를-통한-긴-문맥-추측-디코딩-가속화-해설-보고서">DFly2: 타겟의 희소성 공유를 통한 긴 문맥 추측 디코딩 가속화 해설 보고서</h3>
+<hr />
+<h4 id="1-개요-overview">1. 개요 (Overview)</h4>
+<p><strong>[사실]</strong> 대규모 언어 모델(LLM)이 에이전트(Agent) 및 다중 대화(Multi-turn chat) 워크로드로 확장됨에 따라 처리해야 할 문맥의 길이가 수만에서 수십만 토큰으로 늘어나고 있습니다 <code>[Section 1]</code>. 이러한 긴 문맥(Long-context) 환경에서는 모든 토큰 간의 연산을 수행하는 기존 밀집 주의 집중(Dense Attention) 방식이 문맥 길이의 2차 비례($O(N^2)$)로 증가하는 연산 및 메모리 병목 현상을 유발합니다 <code>[Abstract, Section 1]</code>. 이를 해결하기 위해 최근 등장한 타겟 모델들(DeepSeek-V4.1-Flash, GLM-5.3-Flash, Hy4 flash)은 특정 토큰 위치만을 선택적으로 참조하는 자생적 희소 주의 집중(Natively Sparse Attention) 구조를 채택하여 KV 캐시(Key-Value Cache) 용량과 토큰당 계산량을 비약적으로 절감하고 있습니다 <code>[Abstract, Section 1, Section 2]</code>.</p>
+<p><strong>[사실]</strong> 추측 디코딩(Speculative Decoding)은 상대적으로 작은 드래프터(Drafter) 모델이 여러 토큰 후보(블록)를 먼저 생성하고 타겟 모델이 이를 한 번에 검증함으로써 디코딩 지연을 줄이는 무손실 가속 기법입니다 <code>[Abstract, Section 2]</code>. 디코딩 속도가 가장 느린 긴 문맥 환경일수록 추측 디코딩의 필요성이 더욱 크지만, 기존의 블록 병렬 드래프터(Block-parallel drafter; 예: DFlash, DSpark 등)들은 밀집 타겟 모델용으로 설계된 패러다임을 그대로 유지하고 있습니다 <code>[Abstract, Section 1]</code>. 이들은 프롬프트 전체 또는 슬라이딩 윈도우(Sliding window) 영역에 대해 드래프터 전용 KV 캐시를 독립적으로 생성하고 유지합니다 <code>[Abstract, Section 1, Section 3.1]</code>.</p>
+<p><strong>[소스의 주장]</strong> 소스 문서에서는 기존 블록 병렬 드래프터 방식이 드래프터 전용 캐시를 유지함에 따라 프리필(Prefill) 지연 시간 증가, 접두사 캐싱(Prefix Caching) 히트율 및 길이 저하, 디코드 동시성(Decode Concurrency) 감소라는 명확한 한계를 지닌다고 지적합니다 <code>[Abstract, Section 3.1]</code>. 또한, 드래프터가 타겟의 쿼리(Query) 특성을 반영하지 않은 채 고정된 위치(전체 또는 윈도우)만을 참조하거나, 드래프터 내부에서 위치 선택을 위한 스코어링을 별도로 수행할 경우 문맥 길이에 비례하는 연산 비용이 다시 발생하게 됩니다 <code>[Abstract, Section 3.1, Section 3.2]</code>.</p>
+<p><strong>[작성자의 해석]</strong> 소스에서 제안하는 DFly2는 이러한 한계를 극복하기 위해 타겟 모델이 이미 수행하여 지불한 희소성(Sparsity) 정보를 직접 공유하는 패러다임을 제안합니다 <code>[Abstract, Section 4]</code>. 즉, 타겟 모델이 구축한 콤팩트(compact)한 KV 캐시를 직접 읽어오는 KV 공유(KV Sharing)와, 타겟의 색인기(Indexer)가 각 쿼리별로 선별한 희소 위치 인덱스를 공유하는 인덱스 공유(Index Sharing)를 동시 구현합니다 <code>[Abstract, Section 4]</code>. 이를 통해 DFly2는 자체 KV 캐시를 전혀 유지하지 않고 별도의 위치 스코어링 단계도 거치지 않음으로써 메모리 및 연산 오버헤드를 근본적으로 제거하면서도, 긴 문맥 및 에이전트 워크로드(최대 128K 토큰)에서 기존 최선책 대비 수용 토큰 길이 및 처리량을 크게 향상시켰습니다 <code>[Abstract, Section 5.2, Section 5.3]</code>.</p>
+<hr />
+<h4 id="2-주요-논점-key-arguments-technical-details">2. 주요 논점 (Key Arguments &amp; Technical Details)</h4>
+<h5 id="2-1-기존-드래프터-방식의-한계와-타겟-희소성-공유의-당위성">2.1 기존 드래프터 방식의 한계와 타겟 희소성 공유의 당위성</h5>
+<p>소스 문서의 Section 3(Observations)에서는 기존 드래프터 구조가 독립적인 KV 캐시를 유지할 때 발생하는 4가지 메모리 및 비용적 한계와, 타겟의 인덱스 선택을 블록 전체에 재사용할 수 있는 당위성을 정량적 데이터로 증명합니다 <code>[Section 3.1, Section 3.3]</code>.</p>
+<h6 id="1-프리필-prefill-비용">(1) 프리필(Prefill) 비용</h6>
+<ul>
+<li><strong>[사실]</strong> 프리필-디코드 분리(Prefill-decode disaggregation) 환경에서 드래프터가 자체 캐시를 가지려면 프리필 인스턴스에 드래프터 가중치를 로드하고 모든 프롬프트 위치에 대해 임베딩 프로젝션을 실행하여 캐시를 생성한 뒤 디코드 인스턴스로 전송해야 합니다 <code>[Section 3.1]</code>.</li>
+<li><strong>[소스의 주장]</strong> KV 공유를 적용하면 드래프터가 읽는 잠재 상태(Latents)는 타겟이 이미 프리필 단계에서 작성한 것이므로, 프리필 인스턴스에 드래프터 전용 연산이나 전송 지연이 전혀 추가되지 않습니다 <code>[Section 3.1]</code>.</li>
+</ul>
+<h6 id="2-접두사-캐싱-prefix-caching-손실">(2) 접두사 캐싱(Prefix Caching) 손실</h6>
+<ul>
+<li><strong>[사실]</strong> 드래프터의 자체 캐시는 타겟의 은닉 상태(Hidden states)로부터 프로젝션되는데, 일반적인 접두사 캐싱 기법은 이 은닉 상태를 저장하지 않습니다 <code>[Section 3.1]</code>. 따라서 드래프터 캐시를 접두사 캐시 메모리에 함께 유지하거나, 히트(Hit) 시 타겟을 재연산하여 복원해야 합니다 <code>[Section 3.1]</code>.</li>
+<li><strong>[사실]</strong> DeepSeek-V4.1-Flash(DS-V4.1-Flash) 기준, 3개 레이어 드래프터의 자체 캐시(3.4 KiB/토큰)는 타겟 고유의 KV 캐시(4.4 KiB/토큰) 대비 캐시된 접두사 메모리의 2/5(40% 이상) 이상을 차지합니다 <code>[Table 2, Section 3.1]</code>.</li>
+<li><strong>[소스의 주장]</strong> 드래프터 자체 캐시를 저장하면 캐시 풀에 담을 수 있는 접두사 수(대화 이력)가 줄어들고, 복원 방식을 쓰면 타겟 히트 길이가 단축됩니다 <code>[Section 3.1]</code>. KV 공유를 사용하면 드래프터 전용 캐시가 없으므로 타겟의 모든 접두사 캐시 히트를 100% 그대로 상속받습니다 <code>[Table 3]</code>.</li>
+</ul>
+<h6 id="3-디코드-동시성-decode-concurrency-감소">(3) 디코드 동시성(Decode Concurrency) 감소</h6>
+<ul>
+<li><strong>[사실]</strong> 디코딩 단계에서 요청별 KV 캐시 메모리 사용량이 늘어나면 GPU 메모리 내 동시 처리 가능 요청 수(Concurrency)가 감소합니다 <code>[Section 3.1]</code>.</li>
+<li><strong>[사실]</strong> 32K 문맥 길이 환경에서 타겟 전용 KV 캐시 대비 드래프터 캐시가 추가되면 메모리 증폭률이 DS-V4.1-Flash 1.76배, GLM-5.3-Flash 1.26배, Hy4 flash 1.20배에 달합니다 <code>[Figure 2a, Table 2]</code>.</li>
+<li><strong>[소스의 주장]</strong> KV 공유를 통해 드래프터 캐시를 제거하면 DS-V4.1-Flash 32K 환경에서 동일한 메모리 풀로 최대 동시 요청 수를 1.73배 향상시킬 수 있습니다 <code>[Figure 2a, Table 3]</code>.</li>
+</ul>
+<h6 id="4-문맥-길이에-따른-디코딩-시간-증가">(4) 문맥 길이에 따른 디코딩 시간 증가</h6>
+<ul>
+<li><strong>[사실]</strong> 드래프터 디코딩 시간($T_{\text{draft}}$)은 문맥 독립적 연산($T_0$)과 문맥 위치 수($m$)에 비례하는 주의집중 연산($T_{\text{attn}}(m)$)의 합으로 구성됩니다 <code>[Section 2, Eq. 2]</code>:
+$$T_{\text{draft}} = T_0 + T_{\text{attn}}(m)$$</li>
+<li><strong>[사실]</strong> 프롬프트 전체에 대한 드래프터 캐시를 읽는 DFlash 방식의 경우, 디코딩 연산에서 드래프팅이 차지하는 시간 비중이 4K 토큰에서는 3.6%~5.6%에 불과하지만 128K 토큰에서는 14%~23%(부하 증가 시 최대 22.6%)까지 지속적으로 상승합니다 <code>[Figure 2b]</code>.</li>
+<li><strong>[소스의 주장]</strong> 긴 문맥 환경에서는 읽는 위치 수($m$)를 고정된 예산으로 제한해야 디코딩 시간이 문맥 길이에 따라 폭증하는 것을 막을 수 있습니다 <code>[Section 3.1]</code>.</li>
+</ul>
+<h6 id="5-블록-내-타겟-선택-유지력-block-coverage">(5) 블록 내 타겟 선택 유지력 (Block Coverage)</h6>
+<ul>
+<li><strong>[사실]</strong> 블록 병렬 드래프트 시, 1개 블록은 $\gamma$개 토큰(실험 설정 $\gamma=5$)으로 구성됩니다. 블록 시작 시점에서는 앵커 토큰 바로 전 위치($A-1$ 행)에서 타겟 모델이 선택한 희소 인덱스 집합($S_{A-1}$)만 활용 가능합니다 <code>[Section 2, Section 3.3]</code>.</li>
+<li><strong>[사실]</strong> DS-V4.1-Flash의 긴 문맥 평가 데이터(158,638개 블록)에서 $A-1$ 행의 상위 512개 인덱스 선택 집합($S_{A-1}$)이 블록 내 이후 위치($A+k-1$)들의 실제 상위 512개 선택과 얼마나 겹치는지(Top-$k$ Mass Coverage) 측정한 결과, 레이어 및 슬롯 평균 커버리지가 87.3% ~ 88.0% (90% 근접)에 달했습니다 <code>[Figure 3a, Figure 3b]</code>. 반면 동일 크기(512)의 최근 슬라이딩 윈도우 커버리지는 14.7% ~ 17.5% (20% 미만)에 그쳤습니다 <code>[Figure 3a, Figure 3b]</code>.</li>
+<li><strong>[소스의 주장 및 작성자의 해석]</strong> 타겟 모델의 인덱서 쿼리는 저주파 RoPE 성분에 에너지가 집중되어 있어 몇 토큰 위치 이동에도 선택 위치가 급변하지 않고 문맥 내용을 따라 점진적으로 변화합니다 <code>[Section 3.3]</code>. 따라서 $A-1$ 단계에서 결정된 타겟의 인덱스를 블록 전체에 재사용하더라도 높은 커버리지가 유지되므로 인덱스 공유 방식은 이론적·실험적으로 완전히 정당화됩니다 <code>[Section 3.3]</code>.</li>
+</ul>
+<hr />
+<h5 id="2-2-dfly2의-핵심-메커니즘-kv-공유와-인덱스-공유">2.2 DFly2의 핵심 메커니즘: KV 공유와 인덱스 공유</h5>
+<p>DFly2는 타겟 모델의 희소성 구조를 완전히 공유하며, 3개의 드래프터 레이어가 각각 타겟 모델의 특정 희소 레이어와 페어링되는 방식으로 작동합니다 <code>[Section 4, Figure 4]</code>.</p>
+<h6 id="1-kv-공유-kv-sharing">(1) KV 공유 (KV Sharing)</h6>
+<ul>
+<li><strong>[사실]</strong> 기존 DFlash/DSpark는 타겟 은닉 상태를 받아 드래프터 고유의 K, V를 모든 문맥 위치에 대해 새로 프로젝션하고 저장합니다 <code>[Section 4, Eq. 3]</code>.</li>
+<li><strong>[사실]</strong> DFly2의 드래프터 레이어 $i$는 별도 캐시 생성 없이, 페어링된 타겟 레이어 $L_i$가 이미 메모리에 저장해 둔 잠재 상태(Latent) $c_s^{L_i}$를 직접 읽어옵니다 <code>[Section 4, Eq. 6]</code>.</li>
+<li><strong>[사실]</strong> 드래프터 레이어 $i$가 문맥에 대해 형상화하는 Key 및 Value 잠재 행렬 $(X_i, Y_i)$는 다음과 같습니다 <code>[Section 4, Eq. 6]</code>:
+$$X_i = W_i^{UK} C_{R_i}^{L_i}, \quad Y_i = W_i^{UV} C_{R_i}^{L_i}, \quad C_{R_i}^{L_i} = { c_s^{L_i} }_{s \in R_i}$$</li>
+<li><strong>[사실]</strong> 블록 내부 갱신 시에는 축소 프로젝션 행렬 $W_i^D$ 및 확장 프로젝션 행렬 $(W_i^{UK}, W_i^{UV})$와의 인수분해 결합 구조를 통해 문맥과 블록 토큰의 은닉 상태 $H_{\text{blk}}$를 하나의 텐서 결합 주의집중 연산으로 동시 처리합니다 <code>[Section 4, Eq. 7]</code>:
+$$K_i = [ W_i^{UK} C_{R_i}^{L_i} ; ; ; W_i^{UK} W_i^D H_{\text{blk}} ], \quad V_i = [ W_i^{UV} C_{R_i}^{L_i} ; ; ; W_i^{UV} W_i^D H_{\text{blk}} ]$$</li>
+</ul>
+<h6 id="2-인덱스-공유-index-sharing">(2) 인덱스 공유 (Index Sharing)</h6>
+<ul>
+<li><strong>[사실]</strong> 드래프터 레이어 $i$가 읽어오는 문맥 위치 집합 $R_i$는 타겟 레이어 $L_i$의 색인기가 $A-1$ 위치에서 선택한 top-$k$ 인덱스 집합($S_{A-1}^{(L_i)}$)과 타겟의 근접 윈도우($N$)의 합집합으로 정의되며, 전체 읽기 위치 수 $m$은 고정됩니다 <code>[Section 4, Eq. 8]</code>:
+$$R_i = S_{A-1}^{(L_i)} \cup N, \quad m = |R_i|$$</li>
+<li><strong>[사실]</strong> 타겟 모델의 색인기 연산은 검증 패스에서 이미 완료되었으므로, DFly2는 자체적인 색인기나 스코어링 패스를 전혀 실행하지 않습니다 <code>[Section 4, Figure 5b]</code>. 읽는 위치 수($m$)는 프롬프트 길이가 증가해도 고정되어 연산량이 유효하게 제한됩니다 <code>[Section 4]</code>.</li>
+</ul>
+<h6 id="3-타겟-모델별-사양-비교표">(3) 타겟 모델별 사양 비교표</h6>
+<p><strong>[사실]</strong> 소스 문서에 명시된 3개 타겟 모델별 DFly2 적용 사양은 다음과 같습니다 <code>[Table 4]</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">타겟 모델명</th>
+<th style="text-align:left">페어링 레이어 $L$</th>
+<th style="text-align:left">Top-$k$ 방식</th>
+<th style="text-align:left">근접 창 (Near Window)</th>
+<th style="text-align:left">스텝당 읽는 위치 수 ($m$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DS-V4.1-Flash</strong></td>
+<td style="text-align:left">[28, 32, 36]</td>
+<td style="text-align:left">512개 단일 위치</td>
+<td style="text-align:left">128 토큰</td>
+<td style="text-align:left">646 (512 + 128 + 블록 6)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM-5.3-Flash</strong></td>
+<td style="text-align:left">[35, 39, 43]</td>
+<td style="text-align:left">512개 그룹 (4개 인접 토큰 풀링)</td>
+<td style="text-align:left">– (top-$k$ 내 이미 포함)</td>
+<td style="text-align:left">2,054 (512×4 + 블록 6)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hy4 flash</strong></td>
+<td style="text-align:left">[33, 37, 41]</td>
+<td style="text-align:left">2,048개 위치</td>
+<td style="text-align:left">– (top-$k$ 내 이미 포함)</td>
+<td style="text-align:left">2,054 (2048 + 블록 6)</td>
+</tr>
+</tbody>
+</table>
+<h6 id="4-타겟-가중치-초기화-initialization-from-target">(4) 타겟 가중치 초기화 (Initialization from Target)</h6>
+<ul>
+<li><strong>[사실]</strong> DFly2의 드래프터 레이어 가중치는 페어링된 타겟 레이어의 가중치로부터 직접 초기화됩니다 <code>[Section 4, Eq. 9, Eq. 10]</code>:
+$$O_i = W_i^O \text{Attn}(Q_i, K_i, V_i), \quad Q_i = W_i^{UQ} W_i^{DQ} \text{Norm}(W_i^D H_{\text{blk}}), \quad W_i^\star \mid_{\text{init}} = W_{L_i}^\star$$</li>
+<li><strong>[사실]</strong> 주의집중 파라미터 초기화 시 타겟의 쿼리 프로젝션 가중치($W_{L_i}^{DQ}$)를 복사함으로써, 드래프터의 쿼리 잠재 공간이 타겟 색인기의 top-$k$ 선택이 생성된 쿼리 공간과 동기화된 상태로 학습을 시작합니다 <code>[Section 4, Eq. 9, Figure 5b]</code>.</li>
+<li><strong>[사실]</strong> FFN(Feed-Forward Network) 파라미터는 타겟의 MoE 라우팅 전문가(Routed experts) 중 일부분($E$)을 무작위 추출하여 초기화하고, 라우터 및 공유 전문가는 그대로 복사합니다 <code>[Section 4, Eq. 10]</code>:
+$$\theta_i^{\text{exp}} \mid_{\text{init}} = \theta_{L_i}^{\text{exp}}[E_i], \quad E_i \sim \text{Unif}<em>{B \subseteq E</em>{L_i} : |B|=E}$$</li>
+</ul>
+<hr />
+<h5 id="2-3-추가-구성-요소-최종-레이어-은닉-상태-주입-및-블록-내-보정">2.3 추가 구성 요소: 최종 레이어 은닉 상태 주입 및 블록 내 보정</h5>
+<p>DFly2는 KV 및 인덱스 공유 외에도 추측 성공률을 극대화하기 위한 2가지 보조 메커니즘을 포함합니다 <code>[Section 4]</code>.</p>
+<h6 id="1-최종-레이어-은닉-주입-last-layer-hidden-injection">(1) 최종 레이어 은닉 주입 (Last-layer Hidden Injection)</h6>
+<ul>
+<li><strong>[사실]</strong> 타겟 모델의 최종 레이어 은닉 상태($h^{(\text{last})}$)는 캐시에 저장되지 않지만, 타겟이 앵커 토큰을 생성한 최신 정보를 직접 담고 있습니다 <code>[Section 4]</code>.</li>
+<li><strong>[사실]</strong> DFly2는 $A-1$ 위치의 $h^{(\text{last})}$를 앵커 토큰 임베딩과 게이트 융합(Gated Fusion)하여 블록 입력 시점에 주입합니다 <code>[Section 4, Figure 4]</code>. 게이트 값은 0에서 시작하여 학습됩니다 <code>[Section 4]</code>.</li>
+</ul>
+<h6 id="2-블록-내-보정-intra-block-correction">(2) 블록 내 보정 (Intra-block Correction)</h6>
+<ul>
+<li><strong>[사실]</strong> 블록 내부의 슬롯 $k$를 디코딩할 때, 이전 슬롯($k-1$)에서 생성된 드래프트 토큰 정보와 은닉 상태를 바탕으로 순차 보정을 수행합니다 <code>[Section 4, Eq. 11, Figure 6]</code>.</li>
+<li><strong>[사실]</strong> 기존 TreeFlash의 SwiGLU 기반 은닉 보정(Hidden Correction)에 더해, 공유된 타겟 문맥 캐시를 재참조하는 <strong>문맥 주의집중(Context attn)</strong> 및 블록 내 이전 드래프트 토큰을 참조하는 게이트 접두사 주의집중(Gated prefix attn)을 결합하여 실행합니다 <code>[Section 4, Eq. 11, Figure 6]</code>:
+$$h_k \leftarrow h_k + \text{SwiGLU}(z_k) + W_c^O \text{Attn}(q_k, C_{R_i}) + g_k \odot \text{Attn}(q_k, h_{0:k})$$
+여기서 $z_k = [\text{Norm}(h_k) ; \text{Norm}(\text{Emb}(y_{k-1}))]$이며, 쿼리 $q_k$와 헤드별 게이트 $g_k$는 해당 쌍으로부터 프로젝션됩니다 <code>[Section 4, Eq. 11]</code>. 이 연산은 순차적으로 진행되지만, 이미 생성된 타겟 캐시를 이용하므로 연산 추가량이 매우 작습니다(디코딩 시간의 1% 미만) <code>[Section 4, Section 5.4]</code>.</li>
+</ul>
+<hr />
+<h5 id="2-4-벤치마크-평가-및-성능-결과">2.4 벤치마크 평가 및 성능 결과</h5>
+<p>소스 문서에서는 DS-V4.1-Flash, GLM-5.3-Flash, Hy4 flash 3개 타겟 모델 환경에서 동일한 조건으로 학습된 DFlash, DSpark 및 DFlash†(윈도우 제한 버전)와 DFly2의 성능을 비교 검증하였습니다 <code>[Section 5.1]</code>.</p>
+<h6 id="1-수용-토큰-길이-tau-평가-결과">(1) 수용 토큰 길이 ($\tau$) 평가 결과</h6>
+<p><strong>[사실]</strong> 표 6 및 표 7은 일반, 긴 문맥, 에이전트 벤치마크(2K Chat 설정, Greedy 및 Stochastic)에서의 세부 수용 토큰 길이($\tau$, 보너스 토큰 포함 $1 \le \tau \le 6$) 수치입니다 <code>[Table 6, Table 7]</code>.</p>
+<h6 id="표-6-일반-워크로드-개별-벤치마크-수용-토큰-길이-tau-데이터-table-6">[표 6] 일반 워크로드 개별 벤치마크 수용 토큰 길이 ($\tau$) 데이터 <code>[Table 6]</code></h6>
+<p><em>(표기 방식: Greedy (T=0) / Stochastic (T=1, Hy4는 T=0.9))</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">타겟 모델</th>
+<th style="text-align:left">드래프터 모델</th>
+<th style="text-align:left">GSM8K</th>
+<th style="text-align:left">MATH</th>
+<th style="text-align:left">AIME25</th>
+<th style="text-align:left">MBPP</th>
+<th style="text-align:left">HumanEval</th>
+<th style="text-align:left">LCB</th>
+<th style="text-align:left">Chat MT-Bench</th>
+<th style="text-align:left">Overall Avg.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DS-V4.1-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">3.95/3.64</td>
+<td style="text-align:left">3.93/3.42</td>
+<td style="text-align:left">3.54/2.97</td>
+<td style="text-align:left">3.82/3.63</td>
+<td style="text-align:left">4.25/3.99</td>
+<td style="text-align:left">3.34/2.80</td>
+<td style="text-align:left">2.70/2.51</td>
+<td style="text-align:left">3.65/3.28</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">3.94/3.59</td>
+<td style="text-align:left">3.91/3.40</td>
+<td style="text-align:left">3.51/2.94</td>
+<td style="text-align:left">3.81/3.58</td>
+<td style="text-align:left">4.08/3.82</td>
+<td style="text-align:left">3.26/2.77</td>
+<td style="text-align:left">2.68/2.53</td>
+<td style="text-align:left">3.60/3.23</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">4.24/4.00</td>
+<td style="text-align:left">4.18/3.74</td>
+<td style="text-align:left">3.69/3.24</td>
+<td style="text-align:left">4.00/3.83</td>
+<td style="text-align:left">4.27/4.07</td>
+<td style="text-align:left">3.44/3.04</td>
+<td style="text-align:left">2.82/2.67</td>
+<td style="text-align:left">3.81/3.51</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>4.62/4.45</strong></td>
+<td style="text-align:left"><strong>4.43/4.10</strong></td>
+<td style="text-align:left"><strong>4.01/3.60</strong></td>
+<td style="text-align:left"><strong>4.28/4.17</strong></td>
+<td style="text-align:left"><strong>4.70/4.56</strong></td>
+<td style="text-align:left"><strong>3.76/3.38</strong></td>
+<td style="text-align:left"><strong>3.03/2.91</strong></td>
+<td style="text-align:left"><strong>4.12/3.88</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM-5.3-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">3.93/3.65</td>
+<td style="text-align:left">3.73/3.29</td>
+<td style="text-align:left">3.25/2.77</td>
+<td style="text-align:left">3.76/3.38</td>
+<td style="text-align:left">3.84/3.44</td>
+<td style="text-align:left">2.91/2.64</td>
+<td style="text-align:left">2.58/2.34</td>
+<td style="text-align:left">3.43/3.07</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">4.00/3.73</td>
+<td style="text-align:left">3.83/3.38</td>
+<td style="text-align:left">3.36/2.92</td>
+<td style="text-align:left">3.79/3.43</td>
+<td style="text-align:left">3.74/3.40</td>
+<td style="text-align:left">2.99/2.73</td>
+<td style="text-align:left">2.66/2.35</td>
+<td style="text-align:left">3.48/3.13</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">4.23/3.97</td>
+<td style="text-align:left">4.06/3.61</td>
+<td style="text-align:left">3.58/3.17</td>
+<td style="text-align:left">4.02/3.66</td>
+<td style="text-align:left">3.91/3.62</td>
+<td style="text-align:left">3.16/2.92</td>
+<td style="text-align:left">2.80/2.50</td>
+<td style="text-align:left">3.68/3.35</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>4.53/4.37</strong></td>
+<td style="text-align:left"><strong>4.31/4.00</strong></td>
+<td style="text-align:left"><strong>3.88/3.51</strong></td>
+<td style="text-align:left"><strong>4.24/4.01</strong></td>
+<td style="text-align:left"><strong>4.36/4.03</strong></td>
+<td style="text-align:left"><strong>3.41/3.24</strong></td>
+<td style="text-align:left"><strong>2.96/2.72</strong></td>
+<td style="text-align:left"><strong>3.96/3.69</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hy4 flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">3.86/3.77</td>
+<td style="text-align:left">4.11/3.95</td>
+<td style="text-align:left">3.80/3.69</td>
+<td style="text-align:left">3.81/3.68</td>
+<td style="text-align:left">3.02/3.04</td>
+<td style="text-align:left">3.59/3.51</td>
+<td style="text-align:left">2.90/2.71</td>
+<td style="text-align:left">3.58/3.48</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">3.87/3.78</td>
+<td style="text-align:left">4.13/3.98</td>
+<td style="text-align:left">3.80/3.67</td>
+<td style="text-align:left">3.83/3.69</td>
+<td style="text-align:left">3.00/3.01</td>
+<td style="text-align:left">3.61/3.52</td>
+<td style="text-align:left">2.91/2.74</td>
+<td style="text-align:left">3.59/3.48</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">4.16/4.09</td>
+<td style="text-align:left">4.42/4.29</td>
+<td style="text-align:left">4.05/3.98</td>
+<td style="text-align:left">4.02/3.92</td>
+<td style="text-align:left">3.17/3.22</td>
+<td style="text-align:left">3.79/3.72</td>
+<td style="text-align:left">3.07/2.92</td>
+<td style="text-align:left">3.81/3.73</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>4.40/4.43</strong></td>
+<td style="text-align:left"><strong>4.55/4.52</strong></td>
+<td style="text-align:left"><strong>4.22/4.20</strong></td>
+<td style="text-align:left"><strong>4.16/4.11</strong></td>
+<td style="text-align:left"><strong>3.34/3.42</strong></td>
+<td style="text-align:left"><strong>3.92/3.91</strong></td>
+<td style="text-align:left"><strong>3.16/3.03</strong></td>
+<td style="text-align:left"><strong>3.96/3.95</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="표-7-긴-문맥-및-에이전트-워크로드-개별-벤치마크-수용-토큰-길이-tau-데이터-table-7">[표 7] 긴 문맥 및 에이전트 워크로드 개별 벤치마크 수용 토큰 길이 ($\tau$) 데이터 <code>[Table 7]</code></h6>
+<p><em>(표기 방식: Greedy (T=0) / Stochastic (T=1, Hy4는 T=0.9))</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">타겟 모델</th>
+<th style="text-align:left">드래프터 모델</th>
+<th style="text-align:left">LongSpec 32K</th>
+<th style="text-align:left">CodeSpan 64K</th>
+<th style="text-align:left">LSWE 128K</th>
+<th style="text-align:left">ALB 64K</th>
+<th style="text-align:left">MemAgent</th>
+<th style="text-align:left">BFCL-v3 long</th>
+<th style="text-align:left">SWE 64K</th>
+<th style="text-align:left">Long Avg.</th>
+<th style="text-align:left">Agen. Avg.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DS-V4.1-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">2.98/2.55</td>
+<td style="text-align:left">3.81/3.13</td>
+<td style="text-align:left">3.42/2.96</td>
+<td style="text-align:left">4.38/4.13</td>
+<td style="text-align:left">2.84/2.60</td>
+<td style="text-align:left">3.40/3.11</td>
+<td style="text-align:left">3.58/3.14</td>
+<td style="text-align:left">3.40/2.88</td>
+<td style="text-align:left">3.55/3.25</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">2.74/2.40</td>
+<td style="text-align:left">3.43/2.86</td>
+<td style="text-align:left">3.15/2.77</td>
+<td style="text-align:left">3.78/3.62</td>
+<td style="text-align:left">2.80/2.52</td>
+<td style="text-align:left">3.21/2.98</td>
+<td style="text-align:left">3.19/2.80</td>
+<td style="text-align:left">3.11/2.68</td>
+<td style="text-align:left">3.24/2.98</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">2.82/2.48</td>
+<td style="text-align:left">3.58/2.92</td>
+<td style="text-align:left">3.29/2.98</td>
+<td style="text-align:left">3.87/3.59</td>
+<td style="text-align:left">2.85/2.65</td>
+<td style="text-align:left">3.33/3.09</td>
+<td style="text-align:left">3.35/2.99</td>
+<td style="text-align:left">3.23/2.79</td>
+<td style="text-align:left">3.35/3.08</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>3.12/2.81</strong></td>
+<td style="text-align:left"><strong>4.14/3.59</strong></td>
+<td style="text-align:left"><strong>3.97/3.55</strong></td>
+<td style="text-align:left"><strong>5.10/4.72</strong></td>
+<td style="text-align:left"><strong>3.36/3.13</strong></td>
+<td style="text-align:left"><strong>3.77/3.55</strong></td>
+<td style="text-align:left"><strong>4.02/3.60</strong></td>
+<td style="text-align:left"><strong>3.74/3.32</strong></td>
+<td style="text-align:left"><strong>4.06/3.75</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM-5.3-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">2.55/2.17</td>
+<td style="text-align:left">3.12/2.48</td>
+<td style="text-align:left">2.92/2.64</td>
+<td style="text-align:left">3.12/1.92</td>
+<td style="text-align:left">2.79/2.50</td>
+<td style="text-align:left">2.99/2.75</td>
+<td style="text-align:left">2.91/2.60</td>
+<td style="text-align:left">2.86/2.43</td>
+<td style="text-align:left">2.95/2.44</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">2.69/2.23</td>
+<td style="text-align:left">3.22/2.60</td>
+<td style="text-align:left">2.97/2.65</td>
+<td style="text-align:left">3.50/3.45</td>
+<td style="text-align:left">2.68/2.48</td>
+<td style="text-align:left">3.00/2.73</td>
+<td style="text-align:left">2.86/2.61</td>
+<td style="text-align:left">2.96/2.50</td>
+<td style="text-align:left">3.01/2.82</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">2.75/2.37</td>
+<td style="text-align:left">3.32/2.77</td>
+<td style="text-align:left">3.08/2.79</td>
+<td style="text-align:left">3.53/3.73</td>
+<td style="text-align:left">2.74/2.58</td>
+<td style="text-align:left">3.15/2.91</td>
+<td style="text-align:left">2.98/2.74</td>
+<td style="text-align:left">3.05/2.64</td>
+<td style="text-align:left">3.10/2.99</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>3.31/2.92</strong></td>
+<td style="text-align:left"><strong>4.40/3.63</strong></td>
+<td style="text-align:left"><strong>3.82/3.52</strong></td>
+<td style="text-align:left"><strong>5.49/4.77</strong></td>
+<td style="text-align:left"><strong>3.30/3.12</strong></td>
+<td style="text-align:left"><strong>3.61/3.35</strong></td>
+<td style="text-align:left"><strong>3.73/3.48</strong></td>
+<td style="text-align:left"><strong>3.85/3.36</strong></td>
+<td style="text-align:left"><strong>4.03/3.68</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hy4 flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">2.59/2.41</td>
+<td style="text-align:left">1.17/1.10</td>
+<td style="text-align:left">1.12/1.09</td>
+<td style="text-align:left">1.50/1.36</td>
+<td style="text-align:left">1.08/1.06</td>
+<td style="text-align:left">3.18/3.20</td>
+<td style="text-align:left">2.26/1.88</td>
+<td style="text-align:left">1.63/1.53</td>
+<td style="text-align:left">2.00/1.88</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">2.68/2.50</td>
+<td style="text-align:left">3.47/3.28</td>
+<td style="text-align:left">3.23/3.06</td>
+<td style="text-align:left">3.32/3.06</td>
+<td style="text-align:left">2.63/2.47</td>
+<td style="text-align:left">2.90/2.92</td>
+<td style="text-align:left">3.40/2.94</td>
+<td style="text-align:left">3.13/2.95</td>
+<td style="text-align:left">3.06/2.85</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">2.74/2.56</td>
+<td style="text-align:left">3.54/3.35</td>
+<td style="text-align:left">3.31/3.11</td>
+<td style="text-align:left">3.32/3.10</td>
+<td style="text-align:left">2.77/2.56</td>
+<td style="text-align:left">3.08/2.98</td>
+<td style="text-align:left">3.45/3.14</td>
+<td style="text-align:left">3.20/3.01</td>
+<td style="text-align:left">3.16/2.95</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>2.94/2.75</strong></td>
+<td style="text-align:left"><strong>4.12/4.03</strong></td>
+<td style="text-align:left"><strong>3.83/3.60</strong></td>
+<td style="text-align:left"><strong>5.41/5.22</strong></td>
+<td style="text-align:left"><strong>3.23/2.95</strong></td>
+<td style="text-align:left"><strong>3.69/3.67</strong></td>
+<td style="text-align:left"><strong>4.12/3.70</strong></td>
+<td style="text-align:left"><strong>3.63/3.46</strong></td>
+<td style="text-align:left"><strong>4.11/3.88</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>일반 워크로드 성능:</strong> DFly2는 가장 강력한 베이스라인(DSpark) 대비 평균 수용 길이가 <strong>3.9% ~ 10.5% 향상</strong>되었습니다 <code>[Abstract, Section 5.2, Table 6]</code>.</li>
+<li><strong>긴 문맥 및 에이전트 워크로드 성능:</strong> 프롬프트가 학습 길이(32K)를 초과하여 최대 128K까지 늘어나는 환경에서 DFly2의 우위가 폭 10.0% ~ 31.5%로 확대되었습니다 <code>[Abstract, Section 5.2, Table 7]</code>.</li>
+<li><strong>[소스의 주장]</strong> Hy4 flash 타겟에서 전체 문맥 캐시를 유지하는 DFlash는 32K 초과 시 수용 길이가 1.08~1.17 토큰 수준으로 급락한 반면, DFly2는 타겟의 인덱스 선택을 상속받아 학습 길이를 초과하는 프롬프트에서도 우수한 일반화 성능(Length generalization)을 보였습니다 <code>[Section 5.2, Table 7]</code>.</li>
+</ul>
+<h6 id="2-디코딩-및-종단-간-가속도-speedup">(2) 디코딩 및 종단 간 가속도 (Speedup)</h6>
+<p><strong>[사실]</strong> 단일 동시성(Concurrency=1, Greedy $T=0$) 환경에서 타겟 단독 대비 디코딩 배율 및 종단 간(End-to-end, 프리필 포함) 가속도 배율 측정 수치는 표 8 및 표 9와 같습니다 <code>[Table 8, Table 9]</code>.</p>
+<h6 id="표-8-일반-워크로드-가속도-수치-디코딩-가속도-종단-간-가속도-table-8">[표 8] 일반 워크로드 가속도 수치 (디코딩 가속도 / 종단 간 가속도) <code>[Table 8]</code></h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">타겟 모델</th>
+<th style="text-align:left">드래프터 모델</th>
+<th style="text-align:left">GSM8K</th>
+<th style="text-align:left">MATH</th>
+<th style="text-align:left">AIME25</th>
+<th style="text-align:left">MBPP</th>
+<th style="text-align:left">HumanEval</th>
+<th style="text-align:left">LCB</th>
+<th style="text-align:left">Chat MT-Bench</th>
+<th style="text-align:left">Overall Avg.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DS-V4.1-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">3.23/2.87</td>
+<td style="text-align:left">3.26/3.14</td>
+<td style="text-align:left">2.86/2.73</td>
+<td style="text-align:left">3.11/3.04</td>
+<td style="text-align:left">3.41/3.29</td>
+<td style="text-align:left">2.67/2.54</td>
+<td style="text-align:left">2.21/2.16</td>
+<td style="text-align:left">2.96/2.82</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">3.21/2.83</td>
+<td style="text-align:left">3.19/3.06</td>
+<td style="text-align:left">2.75/2.71</td>
+<td style="text-align:left">3.09/3.02</td>
+<td style="text-align:left">3.28/3.17</td>
+<td style="text-align:left">2.62/2.49</td>
+<td style="text-align:left">2.19/2.14</td>
+<td style="text-align:left">2.91/2.77</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">3.30/2.91</td>
+<td style="text-align:left">3.24/3.11</td>
+<td style="text-align:left">2.80/2.76</td>
+<td style="text-align:left">3.09/3.02</td>
+<td style="text-align:left">3.31/3.18</td>
+<td style="text-align:left">2.63/2.52</td>
+<td style="text-align:left">2.15/2.11</td>
+<td style="text-align:left">2.93/2.80</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>3.56/3.09</strong></td>
+<td style="text-align:left"><strong>3.42/3.27</strong></td>
+<td style="text-align:left"><strong>3.03/2.98</strong></td>
+<td style="text-align:left"><strong>3.28/3.20</strong></td>
+<td style="text-align:left"><strong>3.57/3.36</strong></td>
+<td style="text-align:left"><strong>2.87/2.74</strong></td>
+<td style="text-align:left"><strong>2.27/2.15</strong></td>
+<td style="text-align:left"><strong>3.14/2.97</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM-5.3-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">2.69/2.31</td>
+<td style="text-align:left">2.54/2.42</td>
+<td style="text-align:left">2.20/2.17</td>
+<td style="text-align:left">2.57/2.44</td>
+<td style="text-align:left">2.59/2.50</td>
+<td style="text-align:left">1.98/1.89</td>
+<td style="text-align:left">1.79/1.77</td>
+<td style="text-align:left">2.34/2.21</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">2.77/2.39</td>
+<td style="text-align:left">2.62/2.50</td>
+<td style="text-align:left">2.26/2.22</td>
+<td style="text-align:left">2.63/2.49</td>
+<td style="text-align:left">2.56/2.47</td>
+<td style="text-align:left">2.04/1.98</td>
+<td style="text-align:left">1.83/1.80</td>
+<td style="text-align:left">2.39/2.26</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">2.85/2.42</td>
+<td style="text-align:left">2.67/2.55</td>
+<td style="text-align:left">2.32/2.28</td>
+<td style="text-align:left">2.71/2.57</td>
+<td style="text-align:left">2.62/2.54</td>
+<td style="text-align:left">2.10/2.04</td>
+<td style="text-align:left">1.85/1.82</td>
+<td style="text-align:left">2.45/2.32</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>2.90/2.40</strong></td>
+<td style="text-align:left"><strong>2.71/2.56</strong></td>
+<td style="text-align:left"><strong>2.43/2.39</strong></td>
+<td style="text-align:left"><strong>2.71/2.56</strong></td>
+<td style="text-align:left"><strong>2.74/2.64</strong></td>
+<td style="text-align:left"><strong>2.16/2.10</strong></td>
+<td style="text-align:left"><strong>1.88/1.85</strong></td>
+<td style="text-align:left"><strong>2.50/2.36</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hy4 flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">3.23/2.98</td>
+<td style="text-align:left">3.47/3.35</td>
+<td style="text-align:left">3.21/3.16</td>
+<td style="text-align:left">3.21/3.09</td>
+<td style="text-align:left">2.55/2.50</td>
+<td style="text-align:left">3.03/2.84</td>
+<td style="text-align:left">2.44/2.39</td>
+<td style="text-align:left">3.02/2.90</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">3.25/3.00</td>
+<td style="text-align:left">3.49/3.38</td>
+<td style="text-align:left">3.22/3.18</td>
+<td style="text-align:left">3.24/3.13</td>
+<td style="text-align:left">2.53/2.48</td>
+<td style="text-align:left">3.04/2.87</td>
+<td style="text-align:left">2.44/2.38</td>
+<td style="text-align:left">3.03/2.92</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">3.47/3.16</td>
+<td style="text-align:left">3.71/3.57</td>
+<td style="text-align:left">3.42/3.37</td>
+<td style="text-align:left">3.38/3.26</td>
+<td style="text-align:left">2.67/2.60</td>
+<td style="text-align:left">3.17/2.97</td>
+<td style="text-align:left">2.58/2.51</td>
+<td style="text-align:left">3.20/3.06</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>3.70/3.34</strong></td>
+<td style="text-align:left"><strong>3.85/3.69</strong></td>
+<td style="text-align:left"><strong>3.56/3.51</strong></td>
+<td style="text-align:left"><strong>3.51/3.38</strong></td>
+<td style="text-align:left"><strong>2.81/2.75</strong></td>
+<td style="text-align:left"><strong>3.30/3.07</strong></td>
+<td style="text-align:left"><strong>2.66/2.59</strong></td>
+<td style="text-align:left"><strong>3.34/3.19</strong></td>
+</tr>
+</tbody>
+</table>
+<h6 id="표-9-긴-문맥-및-에이전트-워크로드-가속도-수치-디코딩-가속도-종단-간-가속도-table-9">[표 9] 긴 문맥 및 에이전트 워크로드 가속도 수치 (디코딩 가속도 / 종단 간 가속도) <code>[Table 9]</code></h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">타겟 모델</th>
+<th style="text-align:left">드래프터 모델</th>
+<th style="text-align:left">LongSpec 32K</th>
+<th style="text-align:left">CodeSpan 64K</th>
+<th style="text-align:left">LSWE 128K</th>
+<th style="text-align:left">ALB 64K</th>
+<th style="text-align:left">MemAgent</th>
+<th style="text-align:left">BFCL-v3 long</th>
+<th style="text-align:left">SWE 64K</th>
+<th style="text-align:left">Long Avg.</th>
+<th style="text-align:left">Agen. Avg.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DS-V4.1-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">2.46/1.75</td>
+<td style="text-align:left">3.05/1.67</td>
+<td style="text-align:left">2.59/1.16</td>
+<td style="text-align:left">3.46/0.69</td>
+<td style="text-align:left">2.22/0.63</td>
+<td style="text-align:left">2.67/0.78</td>
+<td style="text-align:left">2.79/1.49</td>
+<td style="text-align:left">2.70/1.52</td>
+<td style="text-align:left">2.78/0.90</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">2.32/1.70</td>
+<td style="text-align:left">2.70/1.55</td>
+<td style="text-align:left">2.52/1.13</td>
+<td style="text-align:left">3.09/0.83</td>
+<td style="text-align:left">2.25/0.69</td>
+<td style="text-align:left">2.63/0.84</td>
+<td style="text-align:left">2.55/1.47</td>
+<td style="text-align:left">2.51/1.46</td>
+<td style="text-align:left">2.63/0.96</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">2.28/1.99</td>
+<td style="text-align:left">2.63/2.06</td>
+<td style="text-align:left">2.49/1.68</td>
+<td style="text-align:left">2.95/1.21</td>
+<td style="text-align:left">2.37/1.27</td>
+<td style="text-align:left">2.58/1.37</td>
+<td style="text-align:left">2.54/1.89</td>
+<td style="text-align:left">2.47/1.91</td>
+<td style="text-align:left">2.61/1.44</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>2.44/2.10</strong></td>
+<td style="text-align:left"><strong>3.23/2.37</strong></td>
+<td style="text-align:left"><strong>2.94/1.86</strong></td>
+<td style="text-align:left"><strong>3.82/1.25</strong></td>
+<td style="text-align:left"><strong>2.60/1.24</strong></td>
+<td style="text-align:left"><strong>2.97/1.36</strong></td>
+<td style="text-align:left"><strong>3.00/2.13</strong></td>
+<td style="text-align:left"><strong>2.87/2.11</strong></td>
+<td style="text-align:left"><strong>3.10/1.50</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>GLM-5.3-Flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">1.70/1.47</td>
+<td style="text-align:left">2.03/1.46</td>
+<td style="text-align:left">1.89/1.28</td>
+<td style="text-align:left">2.15/1.09</td>
+<td style="text-align:left">1.83/1.01</td>
+<td style="text-align:left">2.02/1.16</td>
+<td style="text-align:left">1.88/1.36</td>
+<td style="text-align:left">1.87/1.40</td>
+<td style="text-align:left">1.97/1.15</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">1.86/1.56</td>
+<td style="text-align:left">2.12/1.48</td>
+<td style="text-align:left">2.04/1.28</td>
+<td style="text-align:left">2.45/1.07</td>
+<td style="text-align:left">1.92/0.97</td>
+<td style="text-align:left">2.08/1.09</td>
+<td style="text-align:left">1.99/1.50</td>
+<td style="text-align:left">2.00/1.44</td>
+<td style="text-align:left">2.11/1.16</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">1.84/1.53</td>
+<td style="text-align:left">2.24/1.58</td>
+<td style="text-align:left">2.12/1.38</td>
+<td style="text-align:left">2.48/1.08</td>
+<td style="text-align:left">1.90/0.97</td>
+<td style="text-align:left">2.17/1.13</td>
+<td style="text-align:left">2.02/1.49</td>
+<td style="text-align:left">2.07/1.49</td>
+<td style="text-align:left">2.14/1.17</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>2.14/1.75</strong></td>
+<td style="text-align:left"><strong>2.82/1.79</strong></td>
+<td style="text-align:left"><strong>2.40/1.39</strong></td>
+<td style="text-align:left"><strong>3.57/1.10</strong></td>
+<td style="text-align:left"><strong>2.20/0.98</strong></td>
+<td style="text-align:left"><strong>2.34/1.17</strong></td>
+<td style="text-align:left"><strong>2.35/1.62</strong></td>
+<td style="text-align:left"><strong>2.45/1.64</strong></td>
+<td style="text-align:left"><strong>2.61/1.22</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Hy4 flash</strong></td>
+<td style="text-align:left">DFlash</td>
+<td style="text-align:left">2.15/1.93</td>
+<td style="text-align:left">0.96/0.96</td>
+<td style="text-align:left">0.90/1.00</td>
+<td style="text-align:left">1.23/1.06</td>
+<td style="text-align:left">0.87/0.97</td>
+<td style="text-align:left">2.64/1.87</td>
+<td style="text-align:left">1.87/1.46</td>
+<td style="text-align:left">1.34/1.30</td>
+<td style="text-align:left">1.65/1.34</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DFlash†</td>
+<td style="text-align:left">2.28/2.03</td>
+<td style="text-align:left">2.96/2.26</td>
+<td style="text-align:left">2.75/1.60</td>
+<td style="text-align:left">2.81/1.26</td>
+<td style="text-align:left">2.18/1.29</td>
+<td style="text-align:left">2.46/1.82</td>
+<td style="text-align:left">2.90/1.80</td>
+<td style="text-align:left">2.66/1.96</td>
+<td style="text-align:left">2.59/1.54</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">DSpark</td>
+<td style="text-align:left">2.32/2.06</td>
+<td style="text-align:left">3.00/2.28</td>
+<td style="text-align:left">2.79/1.60</td>
+<td style="text-align:left">2.80/1.26</td>
+<td style="text-align:left">2.23/1.27</td>
+<td style="text-align:left">2.59/1.85</td>
+<td style="text-align:left">2.92/1.81</td>
+<td style="text-align:left">2.70/1.98</td>
+<td style="text-align:left">2.63/1.55</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>2.47/2.17</strong></td>
+<td style="text-align:left"><strong>3.48/2.51</strong></td>
+<td style="text-align:left"><strong>3.22/1.68</strong></td>
+<td style="text-align:left"><strong>4.55/1.35</strong></td>
+<td style="text-align:left"><strong>2.54/1.31</strong></td>
+<td style="text-align:left"><strong>3.08/2.04</strong></td>
+<td style="text-align:left"><strong>3.46/1.96</strong></td>
+<td style="text-align:left"><strong>3.06/2.12</strong></td>
+<td style="text-align:left"><strong>3.41/1.67</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[소스의 주장]</strong> DFlash는 긴 프롬프트 프리필 시 자체 캐시를 생성하느라 종단 간 속도가 추측 디코딩 미사용(1.0×)보다 느려지는 현상(0.90×)이 발생한 반면, DFly2는 프리필 오버헤드가 전혀 없어 모든 워크로드에서 최선의 종단 간 가속을 달성했습니다 <code>[Section 5.3, Table 9]</code>.</li>
+</ul>
+<h6 id="3-고동시성-high-concurrency-처리량">(3) 고동시성(High-Concurrency) 처리량</h6>
+<p><strong>[사실]</strong> DS-V4.1-Flash 모델을 대상으로 고동시성 무작위 요청 환경(H20 GPU 서버 그룹)에서 처리량(Throughput)을 측정한 결과는 다음과 같습니다 <code>[Figure 7]</code>.</p>
+<ul>
+<li>동일한 사용자당 디코딩 속도(Per-user decode speed) 조건에서 DFly2는 DSpark 대비:
+<ul>
+<li>단문 텍스트(Short text): 처리량 <strong>28% 증가</strong> <code>[Abstract, Figure 7]</code>.</li>
+<li>CodeSpan 64K 문맥: 처리량 <strong>62% 증가</strong> <code>[Abstract, Figure 7]</code>.</li>
+<li>SWE-bench 64K 에이전트: 처리량 <strong>81% 증가</strong> <code>[Abstract, Figure 7]</code>.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="2-5-절제-연구-및-동인-분석-ablation-study-analysis">2.5 절제 연구 및 동인 분석 (Ablation Study &amp; Analysis)</h5>
+<p>Section 5.4 및 5.5에서는 DFly2의 각 구성 요소가 수용 토큰 길이 및 성능에 미치는 영향을 다각도로 분석하였습니다 <code>[Section 5.4, Section 5.5]</code>.</p>
+<h6 id="1-읽기-구성-요소-제거에-따른-수용-길이-변화">(1) 읽기 구성 요소 제거에 따른 수용 길이 변화</h6>
+<p><strong>[사실]</strong> DS-V4.1-Flash, GLM-5.3-Flash, Hy4 flash에서 구성 요소를 하나씩 제거하며 12개 샘플링 설정 전체 평균 수용 길이를 구한 결과는 다음과 같습니다 <code>[Table 10]</code>.</p>
+<h6 id="표-10-읽기-구성-요소별-절제-연구-수용-길이-tau-table-10">[표 10] 읽기 구성 요소별 절제 연구 수용 길이 ($\tau$) <code>[Table 10]</code></h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">읽기 조건</th>
+<th style="text-align:left">DS-V4.1-Flash (Gen/Long/Agen)</th>
+<th style="text-align:left">GLM-5.3-Flash (Gen/Long/Agen)</th>
+<th style="text-align:left">Hy4 flash (Gen/Long/Agen)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>전체 (DFly2)</strong></td>
+<td style="text-align:left"><strong>3.57 / 3.62 / 3.75</strong></td>
+<td style="text-align:left"><strong>3.56 / 3.67 / 3.91</strong></td>
+<td style="text-align:left"><strong>3.36 / 3.46 / 3.76</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">w/o 근접 창 ($N$) 제거</td>
+<td style="text-align:left">3.45 / 3.50 / 3.63</td>
+<td style="text-align:left">3.57 / 3.68 / 3.86</td>
+<td style="text-align:left">3.36 / 3.45 / 3.77</td>
+</tr>
+<tr>
+<td style="text-align:left">w/o 타겟 top-$k$ 제거</td>
+<td style="text-align:left">3.14 / 2.76 / 2.95</td>
+<td style="text-align:left">3.42 / 3.10 / 3.34</td>
+<td style="text-align:left">3.31 / 3.12 / 3.13</td>
+</tr>
+<tr>
+<td style="text-align:left">w/o 공유 미적용 (자체 캐시)</td>
+<td style="text-align:left">3.46 / 3.34 / 3.37</td>
+<td style="text-align:left">3.46 / 3.18 / 3.43</td>
+<td style="text-align:left">3.32 / 3.14 / 3.17</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[작성자의 해석]</strong> 타겟의 top-$k$ 인덱스 공유를 제거하고 윈도우만 남길 경우 특히 긴 문맥(Long)에서 수용 길이가 급락합니다 <code>[Table 10]</code>. 근접 창($N$)의 경우 DS-V4.1-Flash에서는 약 3%의 성능 기여가 있으나, GLM 및 Hy4에서는 top-$k$ 내에 윈도우가 포함되어 있어 영향이 거의 없습니다 <code>[Section 5.4, Table 10]</code>.</li>
+</ul>
+<h6 id="2-레이어-페어링-가중치-초기화-보정-및-주입-기여도-ds-v4-1-flash-기준">(2) 레이어 페어링, 가중치 초기화, 보정 및 주입 기여도 (DS-V4.1-Flash 기준)</h6>
+<p><strong>[사실]</strong> DS-V4.1-Flash 모델을 기반으로 페어링 레이어 선택, 가중치 초기화 기법, 블록 내 보정 및 은닉 주입 기여도를 측정한 결과는 아래 표 11과 같습니다 <code>[Table 11]</code>.</p>
+<h6 id="표-11-ds-v4-1-flash-세부-모듈-절제-연구-수용-길이-tau-table-11">[표 11] DS-V4.1-Flash 세부 모듈 절제 연구 수용 길이 ($\tau$) <code>[Table 11]</code></h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">차원 (Dimension)</th>
+<th style="text-align:left">적용 변경 사항 (Change)</th>
+<th style="text-align:left">General Avg.</th>
+<th style="text-align:left">Long Avg.</th>
+<th style="text-align:left">Agentic Avg.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>기본 모델</strong></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>3.57</strong></td>
+<td style="text-align:left"><strong>3.62</strong></td>
+<td style="text-align:left"><strong>3.75</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>레이어 페어링 (Pairing)</strong></td>
+<td style="text-align:left">인접 레이어 [37, 38, 39] 적용</td>
+<td style="text-align:left">3.36</td>
+<td style="text-align:left">3.47</td>
+<td style="text-align:left">3.61</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>가중치 초기화 (Initialization)</strong></td>
+<td style="text-align:left">Attention 파라미터만 복사</td>
+<td style="text-align:left">3.51</td>
+<td style="text-align:left">3.56</td>
+<td style="text-align:left">3.69</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">FFN 파라미터만 복사</td>
+<td style="text-align:left">3.51</td>
+<td style="text-align:left">3.58</td>
+<td style="text-align:left">3.72</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>블록 내 보정 (Correction)</strong></td>
+<td style="text-align:left">w/o 주의집중 재참조 (Context/Prefix Attn 제거)</td>
+<td style="text-align:left">3.47</td>
+<td style="text-align:left">3.51</td>
+<td style="text-align:left">3.65</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>은닉 주입 (Injection)</strong></td>
+<td style="text-align:left">w/o 최종 레이어 은닉 주입 제거</td>
+<td style="text-align:left">3.51</td>
+<td style="text-align:left">3.56</td>
+<td style="text-align:left">3.68</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">은닉 주입 브로드캐스트 (Broadcast)</td>
+<td style="text-align:left">3.58</td>
+<td style="text-align:left">3.64</td>
+<td style="text-align:left">3.77</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[사실]</strong> DS-V4.1-Flash의 레이어 페어링 방식을 인덱서가 존재하는 레이어 [28, 32, 36]에서 인접 레이어 [37, 38, 39]로 변경하면 성능이 평균 <strong>4.6% 하락</strong>합니다 <code>[Section 5.4, Table 11]</code>. (인접 레이어들은 동일한 top-$k$ 선택을 재사용하므로 문맥의 다양성이 떨어짐) <code>[Section 5.4]</code>.</li>
+<li><strong>[사실]</strong> 타겟 가중치 초기화 시 Attention만 복사하거나 FFN만 복사하는 경우 각각 <strong>1.6%</strong>, 1.1%의 성능 하락이 발생하였고, 은닉 보정 시 주의집중 재참조를 제거하면 <strong>2.8%</strong>, 최종 레이어 은닉 주입을 제거하면 1.6%의 하락이 관찰되었습니다 <code>[Table 11]</code>.</li>
+</ul>
+<h6 id="3-yoco-구조에서의-확장-가능-차원-분석">(3) YOCO 구조에서의 확장 가능 차원 분석</h6>
+<p><strong>[사실]</strong> DS-V4.1-Flash와 같이 하나의 잠재 캐시를 모든 레이어가 공유하는 YOCO(You Only Cache Once) 구조에서는 읽기 영역을 추가 확장할 수 있으며, 이에 대한 정량적 성능 결과는 표 12와 같습니다 <code>[Section 5.5, Figure 8, Table 12]</code>.</p>
+<h6 id="표-12-yoco-확장-차원별-수용-토큰-길이-tau-분석-table-12">[표 12] YOCO 확장 차원별 수용 토큰 길이 ($\tau$) 분석 <code>[Table 12]</code></h6>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">확장 차원 (Axis Widened)</th>
+<th style="text-align:left">확장 방식 (Change)</th>
+<th style="text-align:left">General Avg.</th>
+<th style="text-align:left">Long Avg.</th>
+<th style="text-align:left">Agentic Avg.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>기본 모델</strong></td>
+<td style="text-align:left"><strong>DFly2</strong></td>
+<td style="text-align:left"><strong>3.57</strong></td>
+<td style="text-align:left"><strong>3.62</strong></td>
+<td style="text-align:left"><strong>3.75</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>이전 행 (History rows)</strong></td>
+<td style="text-align:left">이전 2개 행 포함 (hist-2: A-1, A-2)</td>
+<td style="text-align:left">3.53</td>
+<td style="text-align:left">3.63</td>
+<td style="text-align:left">3.76</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">이전 3개 행 포함 (hist-3: A-1, A-2, A-3)</td>
+<td style="text-align:left">3.57</td>
+<td style="text-align:left">3.67</td>
+<td style="text-align:left">3.79</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>행당 예산 (Per-row budget)</strong></td>
+<td style="text-align:left">top-1024 예산 확대</td>
+<td style="text-align:left">3.57</td>
+<td style="text-align:left">3.68</td>
+<td style="text-align:left">3.79</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>교차 레이어 (Cross-layer)</strong></td>
+<td style="text-align:left">5개 색인기 레이어 선택 합집합 (Union)</td>
+<td style="text-align:left">3.57</td>
+<td style="text-align:left">3.68</td>
+<td style="text-align:left">3.81</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>결합 형태 (Both)</strong></td>
+<td style="text-align:left">합집합 및 이전 3개 행 통합 (Union+hist-3)</td>
+<td style="text-align:left">3.57</td>
+<td style="text-align:left">3.71</td>
+<td style="text-align:left">3.84</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>선택 단계 (Selection stage)</strong></td>
+<td style="text-align:left">모든 1단계 후보 블록 참조 (Candidates)</td>
+<td style="text-align:left">3.58</td>
+<td style="text-align:left">3.72</td>
+<td style="text-align:left">3.82</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>[소스의 주장]</strong> 합집합 및 이전 3개 행 인덱스를 통합(Union+hist-3)하여 읽는 예산을 2.6K 토큰까지 확대할 경우, 긴 문맥 및 에이전트 수용 길이가 DFly2 단독 대비 추가로 <strong>2.4% ~ 2.6% 상승</strong>합니다 <code>[Section 5.5, Table 12]</code>. 이때 추가되는 연산 시간은 디코딩 스텝당 0.19%에 불과하여 매우 효율적입니다 <code>[Section 5.5]</code>.</li>
+</ul>
+<hr />
+<h4 id="3-등장-인물-및-화자-figures-speakers">3. 등장 인물 및 화자 (Figures &amp; Speakers)</h4>
+<ul>
+<li><strong>저자 목록:</strong> <strong>[사실]</strong> 홍 리우(Hong Liu), 루이 센(Rui Cen), 준한 시(Junhan Shi), 린 뉴(Lin Niu), 런즈 판(Runzhi Fan), 자오징 주(Zhaojing Zhou), 하오디 레이(Haodi Lei), 지에빈 장(Jiebin Zhang), 사이용 양(Saiyong Yang), 준창 정(Junqiang Zheng), 정하이 쉐(Zhenghai Xue), 광화 유(Guanghua Yu *교신저자: <code>lucayu@tencent.com</code>), 지안첸 주(Jianchen Zhu) <code>[Title Page]</code>.</li>
+<li><strong>소속 기관:</strong> <strong>[사실]</strong> 텐센트 (Tencent Inc.) <code>[Title Page]</code>.</li>
+<li><strong>발표 및 오픈소스 코드 출처:</strong> <strong>[사실]</strong> 텐센트 앤젤스펙 (Tencent/AngelSpec GitHub repository: <code>https://github.com/Tencent/AngelSpec</code>) <code>[Title Page]</code>.</li>
+<li><strong>기타 발표자 / 인터뷰 화자 / 개별 저자별 구체적 역할:</strong> <strong>[확인 불가]</strong> 해당 없음 (소스 문서 내 미기재) <code>[Title Page]</code>.</li>
+</ul>
+<hr />
+<h4 id="4-주요-수치-및-시점-key-numbers-timeframes">4. 주요 수치 및 시점 (Key Numbers &amp; Timeframes)</h4>
+<p><strong>[사실]</strong> 소스 문서에서 확인할 수 있는 정량적 실험 수치, 데이터셋 크기, 하드웨어 사양 및 주요 결과 지표는 아래 표와 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">구분 항목</th>
+<th style="text-align:left">주요 수치 및 내용</th>
+<th style="text-align:left">소스 내 출처</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>학습 데이터셋 (DFly-SFT)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 총 989,861개 대화 샘플, 7.42B (74.2억) 토큰, 시퀀스 최대 길이 32,768 (32K) 토큰</td>
+<td style="text-align:left"><code>[Table 5]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>학습 데이터 구성 비율</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 고급 수학(19.2%), 경진 프로그래밍(11.1%), 기술 프로그래밍(9.6%), 지식&amp;STEM(15.2%) 등 10개 영역</td>
+<td style="text-align:left"><code>[Table 5]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>드래프터 모델 규모</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 3개 Transformer 레이어, 128개 루팅 전문가 MoE 구조, 총 6B~14B 파라미터 (토큰당 0.4B~1.1B 활성화)</td>
+<td style="text-align:left"><code>[Section 5.1]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>추측 블록 크기 ($\gamma$)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> $\gamma = 5$ (스텝당 5개 토큰 드래프트 제안)</td>
+<td style="text-align:left"><code>[Section 5.1]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>실험 하드웨어 및 병렬성</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 엔비디아(NVIDIA) H20 GPU, Tensor Parallelism (tp8) 환경</td>
+<td style="text-align:left"><code>[Section 5.1]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>평가 문맥 길이 범위</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 2K, 4K, 8K, 16K, 32K, 64K, 128K 토큰 범위</td>
+<td style="text-align:left"><code>[Section 1, Section 5.1]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>수용 길이 ($\tau$) 상승 폭</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> 일반 워크로드: 3.9% ~ 10.5% 향상 / 긴 문맥 및 에이전트 워크로드: 10.0% ~ 31.5% 향상</td>
+<td style="text-align:left"><code>[Abstract, Section 5.2]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>동시 처리량 향상률 (64K)</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> DS-V4.1-Flash 64K 기준 동일 사용자 디코딩 속도에서 처리량 62% (CodeSpan), 81% (SWE) 증가</td>
+<td style="text-align:left"><code>[Abstract, Figure 7]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>접두사 캐시 메모리 비중</strong></td>
+<td style="text-align:left"><strong>[사실]</strong> DS-V4.1-Flash 기준 드래프터 자체 캐시가 접두사 캐시 메모리의 40% 이상 차지 (KV 공유로 제거)</td>
+<td style="text-align:left"><code>[Section 3.1, Table 2]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>논문 작성 및 실험 정확한 시점</strong></td>
+<td style="text-align:left"><strong>[확인 불가]</strong> 소스 문서 내 구체적 작성 연도/날짜 표기 없음</td>
+<td style="text-align:left"><strong>[확인 불가]</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="5-한계와-불확실성-limitations-uncertainties">5. 한계와 불확실성 (Limitations &amp; Uncertainties)</h4>
+<p>본 보고서는 작성 지침에 따라 소스 컨텍스트에 명시된 사실만을 기반으로 작성되었으며, 이에 따른 기술적·실험적 한계 및 불확실 요소를 다음과 같이 정리합니다.</p>
+<ol>
+<li>
+<p><strong>소스 미기재 정보 (확인 불가 항목):</strong></p>
+<ul>
+<li><strong>[확인 불가]</strong> 연구진 개별 저자의 구체적 역할 분담(예: 구현, 이론 설계 등)은 문서에 기재되어 있지 않아 확인 불가합니다 <code>[Title Page]</code>.</li>
+<li><strong>[확인 불가]</strong> 본 연구의 정확한 논문 작성 시점 및 학회 제출 연도/날짜는 표기되어 있지 않아 확인 불가합니다 <code>[Title Page]</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>타겟 모델 의존성 (Target Model Dependency):</strong></p>
+<ul>
+<li><strong>[사실]</strong> 본 연구는 DeepSeek-V4.1-Flash, GLM-5.3-Flash, Hy4 flash와 같은 자생적 희소 주의집중(DSA 등)을 갖춘 타겟 모델만을 대상으로 검증되었습니다 <code>[Abstract, Section 5.1]</code>.</li>
+<li><strong>[작성자의 해석]</strong> 희소 주의집중 인덱서가 아예 존재하지 않는 순수 밀집(Fully Dense) 타겟 모델에 DFly2의 인덱스 공유 메커니즘을 그대로 적용할 수 있는지 여부 및 이때의 성능 한계는 소스 문서에서 다루지 않으므로 불확실성이 존재합니다 <code>[Section 1, Section 6]</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>하드웨어 아키텍처의 한계:</strong></p>
+<ul>
+<li><strong>[사실]</strong> 소스 문서의 모든 가속도 및 처리량 실험 수치는 엔비디아(NVIDIA) H20 GPU (tp8) 환경에서 측정되었습니다 <code>[Section 5.1]</code>.</li>
+<li><strong>[작성자의 해석]</strong> H20 이외의 타사 NPU 시스템이나 다른 엔비디아 GPU 아키텍처(예: H100, B200 등)에서의 연산 및 메모리 대역폭 차이에 따른 정량적 가속 성능은 문서 내 검증 데이터가 부재합니다 <code>[Section 5.1]</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>학습 데이터 시퀀스 길이 한계와 일반화 경계:</strong></p>
+<ul>
+<li><strong>[사실]</strong> DFly2의 학습 데이터셋(DFly-SFT)은 시퀀스 길이가 최대 32,768 (32K) 토큰으로 제한되어 있습니다 <code>[Section 5.1, Table 5]</code>.</li>
+<li><strong>[작성자의 해석]</strong> 평가 과정에서 64K 및 128K까지의 수용 길이가 안정적으로 유지된 것은 타겟 모델 색인기의 길이 일반화 성능에 전적으로 귀속됩니다 <code>[Section 5.2]</code>. 만약 타겟 색인기 자체가 초장문에서 성능 저하를 일으킬 경우 드래프터 성능 역시 이에 종속되는 경계 한계가 존재합니다 <code>[Section 5.2]</code>.</li>
+</ul>
+</li>
+</ol>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><details><summary>20개 페이지</summary><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/guanghua-yu/">광화 유</a></li>
+<li><a href="../../entities/people/haodi-lei/">하오디 레이</a></li>
+<li><a href="../../entities/people/hong-liu/">홍 리우</a></li>
+<li><a href="../../entities/people/jianchen-zhu/">지안첸 주</a></li>
+<li><a href="../../entities/people/jiebin-zhang/">지에빈 장</a></li>
+<li><a href="../../entities/people/junhan-shi/">준한 시</a></li>
+<li><a href="../../entities/people/junqiang-zheng/">준창 정</a></li>
+<li><a href="../../entities/people/lin-niu/">린 뉴</a></li>
+<li><a href="../../entities/people/rui-cen/">루이 센</a></li>
+<li><a href="../../entities/people/runzhi-fan/">런즈 판</a></li>
+<li><a href="../../entities/people/saiyong-yang/">사이용 양</a></li>
+<li><a href="../../entities/people/zhaojing-zhou/">자오징 주</a></li>
+<li><a href="../../entities/people/zhenghai-xue/">정하이 쉐</a></li>
+<li><a href="../../kinds/paper/">논문</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+<li><a href="../../topics/energy-compute/">에너지·컴퓨팅</a></li></ul></details></section>
+</main>
+</body>
+</html>

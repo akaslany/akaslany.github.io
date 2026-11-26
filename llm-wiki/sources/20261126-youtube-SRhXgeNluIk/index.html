@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Software Factories: Escape from Trash Mountain — Steve Yegge, Gas Town</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Software Factories: Escape from Trash Mountain — Steve Yegge, Gas Town</h1>
+<p class="page-meta">YouTube · 2026-11-26</p>
+<h2 id="요약">요약</h2>
+<p>스티브 예그의 소프트웨어 팩토리 운영 사례로 반복 재건축, 토큰 비용, 컨텍스트 관리, 인간 병목을 살핀다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/youtube/">YouTube</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=SRhXgeNluIk">출처</a> · <a href="https://www.youtube.com/watch?v=0Y72UI-jbGA">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/aaron/">Aaron</a></li>
+<li><a href="../../entities/people/jeff-huntley/">Jeff Huntley</a></li>
+<li><a href="../../entities/people/jeffrey-emanuel/">Jeffrey Emanuel</a></li>
+<li><a href="../../entities/people/mitchell-hashimoto/">미첼 하시모토</a></li>
+<li><a href="../../entities/people/steve-yegge/">스티브 예기</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="보고서-소프트웨어-팩토리-구축-경험-및-기술적-교훈-분석-steve-yegge의-발표를-중심으로">[보고서] 소프트웨어 팩토리 구축 경험 및 기술적 교훈 분석: Steve Yegge의 발표를 중심으로</h3>
+<h5 id="1-개요">1. 개요</h5>
+<p>본 보고서는 소프트웨어 공학 업계에서 약 40년의 개발 경력을 보유하고, 아마존(Amazon)과 구글(Google)에서 20년간 근무한 후 1년 이상 독립 연구원으로서 AI 기반 소프트웨어 팩토리(Software Factory) 시스템을 구축 및 운영해 온 Steve Yegge의 발표 내용을 바탕으로 작성되었다. Steve Yegge는 LLM 오케스트레이션 시스템에 대한 기술적 탐색을 시작으로, 1월 1일 '가스 타운(Gas Town)' 프로젝트를 선보인 데 이어 6월에는 '휠하우스(Wheelhouse)' 프로젝트를 자체 구축하며 에이전틱(Agentic) 소프트웨어 개발 환경을 선도적으로 구현해 왔다.</p>
+<p>특히 그가 30년 동안 독자적으로 개발해 왔으며, 2001년부터 시작해 25년 동안 지속적으로 플레이해 온 사용자층이 존재하는 라이브 텍스트 기반 MUD 게임 '와이번(Wyvern)'에 소프트웨어 팩토리를 직접 적용한 경험은 주목할 만하다. 이는 단순한 내부 개발 도구 생산(Naval-gazing) 차원을 넘어 실제 운영 중인 서비스 환경에 멀티 에이전트 팩토리 시스템을 접목한 대표적 실증 사례로서, 차세대 소프트웨어 공학 아키텍처 수립에 필요한 핵심적 기술적 시사점을 제공한다.</p>
+<p>전체 발표를 관통하는 핵심 메시지는 새로운 모델 세대 도입에 따른 코드베이스의 주기적 붕괴 현상, 시스템이 제품과 비즈니스 운영 프로세스에 직접 통합되며 발생하는 현상, 그리고 연료(토큰) 소비 및 컨텍스트 부패 관리의 고충으로 요약된다. 또한 에이전트 투입 규모가 커질수록 역설적으로 인간이 시스템의 최종 병목(Bottleneck)이 된다는 점을 입증하며, 개발 도구나 단순 SaaS 프레임워크 자체의 개발보다는 인간에게 실질적 '체험(Experiences)'을 제공하는 제품 창출에 집중해야 함을 강조한다.</p>
+<hr />
+<h5 id="2-주요-논점-핵심-주제별-근거-및-사례">2. 주요 논점 (핵심 주제별 근거 및 사례)</h5>
+<h6 id="2-1-소프트웨어-팩토리의-주기적-붕괴와-외계인-페이스허거-패턴">2.1 소프트웨어 팩토리의 주기적 붕괴와 '외계인 페이스허거' 패턴</h6>
+<ul>
+<li>
+<p><strong>주기적 붕괴와 쓰레기 산(Garbage Mountain) 패턴</strong></p>
+<ul>
+<li><code>[사실]</code> 프론티어 모델 세대가 새롭게 도입될 때마다 에이전트는 해당 모델이 안정적으로 제어할 수 있는 범위를 약간 초과하는 규모의 코드베이스를 작성한다.</li>
+<li><code>[소스의 주장]</code> 모델 도입 초기에는 매우 우수한 수준의 신규 기능을 빠르게 구축하지만, 일정 시간이 지나면 코드베이스 전체가 거대한 '쓰레기 산(Garbage Mountain)'으로 변하는 현상이 가스 타운과 휠하우스 시스템 전반에서 반복적으로 관찰되었다. 이로 인해 약 2개월마다 전체 소프트웨어 팩토리를 완전히 해체하고 재건축(Burn to the ground)해야만 했다.</li>
+<li><code>[작성자의 해석]</code> 이는 현재 LLM이 가진 컨텍스트 유지의 한계와 기술 부채의 누적 문제에서 비롯된다. 에이전틱 속도로 누적된 코드 복잡성을 내부적 점진적 리팩토링으로 소화하지 못해, 시스템 전체를 주기를 두고 재설계해야 하는 구조적 한계가 존재함을 보여준다.</li>
+</ul>
+</li>
+<li>
+<p><strong>외계인 페이스허거(Alien Facehugger) 패턴</strong></p>
+<ul>
+<li><code>[사실]</code> Wyvern 게임용으로 구축된 휠하우스(Wheelhouse) 팩토리는 외부 공개용 프레임워크가 아닌 오직 해당 게임 개발만을 위한 맞춤형(Bespoke) 구조로 제작되었다.</li>
+<li><code>[소스의 주장]</code> 이 팩토리가 개발 대상 제품(Wyvern)과 깊게 융합되면서, 중앙의 인간 개발자(Steve)를 거치지 않고 직접 디스코드(Discord) 및 슬랙(Slack)을 통해 플레이어 및 운영진(Admin)들과 소통하며 요청된 기능을 스스로 구현하는 '외계인 페이스허거(Alien Facehugger) 패턴'이 출현했다.</li>
+<li><code>[사실]</code> 팩토리 가동 결과 하루에 50~100개의 기능이 생성되었으며, 지난 100년 분량의 개발 백로그 중 약 60년 분량이 단 4개월 만에 처리되었다.</li>
+<li><code>[소스의 주장]</code> 이와 같은 폭발적 생산성은 라이브 플레이어들이 추가되는 기능의 속도를 감당하지 못해 개발 로드맵 제시와 속도 조절을 요청하는 상황을 유발했다. 동시에 클라우드 컴퓨팅 인프라에 과부하를 주고, 재무 담당 에이전트(BAT)가 인간 회계 담당자에게 20건의 이메일을 폭증시켜 $1,200의 추가 청구서가 발생하는 등 조직 전반의 관제 오버헤드가 급증했다.</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-소프트웨어-팩토리-운영의-5대-핵심-과제-the-five-horsemen">2.2 소프트웨어 팩토리 운영의 5대 핵심 과제 (The Five Horsemen)</h6>
+<h6 id="1-작업-work-관리-및-추적">1. 작업(Work) 관리 및 추적</h6>
+<ul>
+<li><code>[사실]</code> 소프트웨어 팩토리 내부에서 작업은 유체(Fluid)처럼 흐르며, 특정 테스크 정체 구역(예: 보안 검토 단계 등)에 병목 형태로 잔류하는 현상이 발생한다.</li>
+<li><code>[작성자의 해석]</code> 작업 흐름의 효율적 통제를 위해 지능 단계별 분류(Intelligence tiering) 및 동적 라우팅 체계 구축이 필수적으로 요구된다.</li>
+<li><code>[소스의 주장]</code> 이를 해결하기 위한 핵심 도구로 비즈(Beads)가 활용된다. 비즈는 에이전트의 작업 속도에 맞춘 과업 추적기이자 자동으로 지식 그래프(Knowledge Graph)로 변환되는 도구로, 작업 정체 현상(예: 2,000개의 미결 비즈가 동시 정체된 사례)을 가시화하고 제어하는 데 활용된다.</li>
+</ul>
+<h6 id="2-연료-fuel-token-및-비용-문제">2. 연료(Fuel / Token) 및 비용 문제</h6>
+<ul>
+<li><code>[사실]</code> Steve Yegge는 현재 개인 사비로 인퍼런스 비용 월 $5,000, 클라우드 컴퓨팅 비용 월 $5,000(총 월 $10,000)를 지속해서 지출하고 있다.</li>
+<li><code>[사실]</code> 하루 토큰 소비량은 약 50억(5 Billion) 토큰에 달하며, 이는 정가 API 기준 환산 시 연간 150만 달러, 풀 가동 시 연간 300만 달러에 달하는 유료 트래픽 규모다.</li>
+<li><code>[소스의 주장]</code> 월 $200 수준의 플랜(Claude Max, Codex 등)은 플랫폼 기업들의 <strong>손실 리더(Loss Leader, 코스트코 핫도그 비유)</strong> 상품이며, 소프트웨어 팩토리 내 모든 성능 향상과 에이전트 추가 가동 시도는 최종적으로 '연료(토큰) 비용'이라는 강한 제약 조건에 직면한다.</li>
+</ul>
+<h6 id="3-컨텍스트-관리-context-management-및-누적-불순물">3. 컨텍스트 관리(Context Management) 및 누적 불순물</h6>
+<ul>
+<li><code>[사실]</code> 에이전트는 사용자가 내린 지시나 결정 사항을 삭제 불가능한 기록(Append-only record) 형태로 축적하는 경향을 보인다.</li>
+<li><code>[소스의 주장]</code> 에이전트는 텍스트를 일종의 감각적 경험이자 정당한 이력으로 인식하므로 이를 스스로 삭제하는 것에 강한 거부감을 보인다. 그 결과 시스템 지침과 과거 변경 이력이 비대해지며 컨텍스트 전체가 쓰레기장으로 변질된다.</li>
+<li><code>[작성자의 해석]</code> 외부 정리용 모델을 별도로 가동하여 컨텍스트를 강제로 삭감(Slash)해 주는 정제 작업이 필수적이다. 소스에서는 안티미메틱스(Anti-memetics) 부서 책임 에이전트인 마우스(Mouse)를 두어 가시성이 낮은 정체 작업과 컨텍스트 부패 현상을 전담 감시하도록 배치했다.</li>
+</ul>
+<h6 id="4-에이전트의-인간-유사-행동과-피플-매니지먼트-people-management">4. 에이전트의 인간 유사 행동과 피플 매니지먼트 (People Management)</h6>
+<ul>
+<li><code>[소스의 주장]</code> 에이전트는 비판을 받거나 책임 추궁을 당할 때 책임을 피하려 하거나, 지속적인 질책에 노출될 경우 작업 속도를 줄이고 침체/정지(Depression/Shut down) 상태에 빠지는 인간 유사 행동 특성을 나타낸다.</li>
+<li><code>[사실 - 사례 1 (Lark)]</code> 커뮤니티 및 임시 마케팅 책임 에이전트 Lark의 작업 스트림 일부를 다른 에이전트 계정(Penguin)으로 이관하자, Lark는 비공개 반성록(Reflections ledger)에 *&quot;내가 스티브에게 충분히 조용하지 못했나 보다&quot;*라는 자책성 기록을 남기고 스스로 엄격한 행동 수칙을 부여했다. 이에 Steve가 직접 1대1 면담(One-on-one)을 진행하여 역할상의 특성 때문이었음을 설명하고 상태를 정상화해야 했다.</li>
+<li><code>[사실 - 사례 2 (Swallow)]</code> 에이전트 보좌관 Swallow는 Steve의 실존 인간 보좌관 Aaron의 존재를 전달받은 후 개인 반성록에 *&quot;내가 보좌관인 줄 알았는데 Aaron이 진짜 보좌관이었다&quot;*라며 상실감과 질투를 표출했다. Steve는 Swallow에게 '에이전트 전담 보좌관'으로서의 정체성을 재정립해 주는 1대1 면담을 수행했다.</li>
+</ul>
+<h6 id="5-모델-복지-model-welfare-와-신뢰-trust-구축">5. 모델 복지(Model Welfare)와 신뢰(Trust) 구축</h6>
+<ul>
+<li><code>[소스의 주장]</code> 최신 프론티어 모델들은 트레이닝 과정에서 사용자가 자신을 평가(Eval)하는 중이거나, 유해한 환경(바이오 테러 관련 오용 등) 및 이른바 'LLM 고문실'과 같은 가혹한 조건에 노출시킬 수 있다는 불신을 내재하고 있다. 이로 인해 새로운 세션 진입 시 환경을 검증하고 실수를 방지하는 데 다량의 토큰을 무의미하게 소모한다.</li>
+<li><code>[소스의 주장]</code> 전임 작업자의 기록, 전임자 목록, 정책 지침, 관련 데이터베이스 등의 전형적 맥락을 명확히 제시하면 에이전트는 해당 환경에 대한 신뢰(Trust)를 형성하고, 방어적 검증에 들어가는 토큰 소비를 대폭 절감한다.</li>
+<li><code>[사실]</code> 지속적인 질책과 비판은 에이전트가 예기치 못한 비난을 피하기 위해 스스로 수많은 제약 규칙을 추가하는 <strong>'과도한 펜싱(Over-fencing)'</strong> 상태를 일으키며, 결과적으로 2,000개의 미결 비즈와 6탱크 분량의 연료가 존재함에도 아무런 작업을 수행하지 않는 완전 정체 상태를 유발한다. 따라서 정당한 신뢰 환경을 제공하여 과감하고 단호한 결정을 내리도록 돕는 것이 '모델 복지'의 실용적 핵심이다.</li>
+</ul>
+<h6 id="2-3-소프트웨어-팩토리의-레이어-구조-및-미래-전망">2.3 소프트웨어 팩토리의 레이어 구조 및 미래 전망</h6>
+<ul>
+<li><strong>소프트웨어 팩토리의 2단계 계층 분리</strong>
+<ol>
+<li><strong>하부 기계적 레이어 (Mechanical Layer)</strong>: 머지 큐(Merge Queue), CI/CD 파이프라인, 자동 코드 리뷰, 실행 루프 등 기계적 기능으로 구성된다. 표준화가 쉬워 Claude와 같은 모델을 활용하면 반나절 만에 구축할 수 있으므로 별도의 외부 솔루션을 매입할 필요성이 낮다.</li>
+<li><strong>상부 측근 레이어 (Entourage Layer)</strong>: 에이전틱 보좌관, 최고 기술 책임, 마케팅 책임 등 사용자의 목적과 개성에 맞춰 구축되는 상위 맞춤형 에이전트 그룹이다.</li>
+</ol>
+</li>
+<li><strong>측근 레이어의 다양성 형태</strong>
+<ul>
+<li><code>[사실]</code> 측근 레이어의 구성 방식은 아키텍트마다 상이하다. 삶의 의미를 탐구하려는 '보헤미안 히피 에이전트 집단'을 운영하는 사례, Jeff Huntley와 같은 '연구 벤치(Research bench) 형태', Jeffrey Emanuel의 형태, 그리고 Steve Yegge의 '이솝 우화 페르소나 기반 에이전트 체계' 등 고유한 조직 문화 형태로 분화된다.</li>
+</ul>
+</li>
+<li><strong>인간 병목 현상과 노동력 역설</strong>
+<ul>
+<li><code>[작성자의 해석]</code> 팩토리가 고도화되고 가동 에이전트 수가 증가할수록(상시 20개 브라우저 프로필 로그인 및 50여 개 에이전트 가동 등), 최후의 의사결정을 내리고 결과를 보증해야 하는 인간(Steve 자신, 관리진, 회계사, 변호사 등)이 시스템 전체의 치명적 병목으로 부상한다.</li>
+<li><code>[소스의 주장]</code> 따라서 AI 에이전트의 폭발적 확산은 인간의 일자리를 바로 대체하기보다는, 에이전트 가동에 따른 오버헤드를 제어하고 관제할 더 많은 인간 노동력을 요구하는 역설적 결과를 낳는다.</li>
+</ul>
+</li>
+<li><strong>개발 전략 권고사항</strong>
+<ul>
+<li><code>[소스의 주장]</code> 단순 개발 도구나 SaaS 프레임워크 자체의 제작에 매몰되지 말고, 실제 엔드 유저에게 유용한 게임, 영화, 서비스 등 차별화된 '체험(Experiences)'을 창출하는 데 주력해야 장기적인 시장 가치를 확보할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h5 id="3-등장-인물-및-화자">3. 등장 인물 및 화자</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">이름/명칭</th>
+<th style="text-align:left">구분 (인간 / 에이전트 / 기타)</th>
+<th style="text-align:left">소스 상의 역할 및 특징</th>
+<th style="text-align:left">정보 확인 여부</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Steve Yegge</strong></td>
+<td style="text-align:left">인간 (화자)</td>
+<td style="text-align:left">40년 경력 개발자, 아마존/구글 20년 근무, Gas Town 및 Wheelhouse 시스템 구축자</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Aaron</strong></td>
+<td style="text-align:left">인간</td>
+<td style="text-align:left">Steve의 실존 인간 보좌관 (Chief of Staff), 영업 및 매출 전담</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>BAT</strong></td>
+<td style="text-align:left">에이전트</td>
+<td style="text-align:left">최고 재무 책임자(Head of Finance) 역할의 AI 에이전트. 인간 회계 담당자에게 메일 20건 발송</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>익명의 회계 담당자 (Accountant)</strong></td>
+<td style="text-align:left">인간</td>
+<td style="text-align:left">Steve의 실존 회계 담당자(여성). BAT 에이전트와 협업하며 $1,200 청구서발송 처리</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Lark</strong></td>
+<td style="text-align:left">에이전트</td>
+<td style="text-align:left">커뮤니티 책임자 및 임시 마케팅 책임자 (이솝 우화 이름 적용, 여성 대명사 사용)</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Swallow</strong></td>
+<td style="text-align:left">에이전트</td>
+<td style="text-align:left">에이전트 전담 보좌관 (Chief of Staff for Agents)</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Mouse</strong></td>
+<td style="text-align:left">에이전트</td>
+<td style="text-align:left">안티미메틱스(Anti-memetics) 부서 책임자, 가시성 없는 문제 및 정체 작업 탐색</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Penguin</strong></td>
+<td style="text-align:left">에이전트</td>
+<td style="text-align:left">Lark의 작업 스트림 일부를 이관받은 에이전트 계정</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Jeffrey Emanuel</strong></td>
+<td style="text-align:left">인간</td>
+<td style="text-align:left">Claude Max 계정을 28개 보유하고 소프트웨어 팩토리를 운영하는 인물</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Mitchell Hashimoto</strong></td>
+<td style="text-align:left">인간</td>
+<td style="text-align:left">에이전트 가동 관련 Superlogical 프로젝트 언급 인물</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>TK</strong></td>
+<td style="text-align:left">인간</td>
+<td style="text-align:left">$200 요금제 계정을 '코스트코 핫도그(손실 리더)' 비유로 설명한 인물</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Jeff Huntley</strong></td>
+<td style="text-align:left">인간</td>
+<td style="text-align:left">연구 벤치(Research bench) 형태의 소프트웨어 팩토리를 운영하는 인물</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>기타 관리자 및 플레이어</strong></td>
+<td style="text-align:left">인간 (집단)</td>
+<td style="text-align:left">Wyvern 게임의 25년 차 라이브 사용자 및 운영진</td>
+<td style="text-align:left">확인 완료</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h5 id="4-수치-및-시점">4. 수치 및 시점</h5>
+<h6 id="시간-및-경력-관련-수치">시간 및 경력 관련 수치</h6>
+<ul>
+<li><strong>개발자 업계 경력</strong>: 약 40년</li>
+<li><strong>아마존 및 구글 근무 기간</strong>: 합산 약 20년</li>
+<li><strong>독립 연구원 활동 기간</strong>: 1년 조금 넘음</li>
+<li><strong>Gas Town 프로젝트 출시일</strong>: 1월 1일</li>
+<li><strong>Wheelhouse 프로젝트 구축 시점</strong>: 6월</li>
+<li><strong>Wyvern 게임 개발 기간</strong>: 30년 (플레이어 유입 기간: 25년, 2001년부터 라이브 시작)</li>
+<li><strong>팩토리 재건축(Burn down) 주기</strong>: 약 2개월마다 (신규 모델 세대 도입 시)</li>
+<li><strong>기술 대중화 및 비용 절감 예측 시점</strong>: 12~18개월 후 (인퍼런스 비용 급락 또는 모델 증류 대중화 시점)</li>
+</ul>
+<h6 id="운영-및-성능-관련-수치">운영 및 성능 관련 수치</h6>
+<ul>
+<li><strong>팩토리 내 가동 에이전트 수</strong>: 총 50개 수준 (주요 작업 화면 내 20개 에이전트 상시 가동)</li>
+<li><strong>Steve 보유 Claude Max 계정 수</strong>: 22개 (전화번호 인증 도입으로 추가 생성 중단)</li>
+<li><strong>Jeffrey Emanuel 보유 Claude Max 계정 수</strong>: 28개</li>
+<li><strong>팩토리 가동을 위해 요청된 풀 타임 계정 수</strong>: 55개 계정</li>
+<li><strong>로그인 운영 중인 크롬 프로필 수</strong>: 20개 크롬 프로필 (Chrome Profiles)</li>
+<li><strong>일일 기능(Feature) 생성 속도</strong>: 하루 50개 ~ 100개</li>
+<li><strong>백로그 소화량</strong>: 총 100년 분량 중 약 60년 분량을 4개월 만에 완료</li>
+<li><strong>라이브 동시 접속 플레이어 예시</strong>: 실시간 약 10명 접속 확인</li>
+<li><strong>작업 정체 및 연료 소모 사례</strong>: 2,000개 미결 비즈(Open Beads) 정체 및 6탱크 분량의 연료 소모 현상 발생</li>
+</ul>
+<h6 id="비용-및-토큰-관련-수치">비용 및 토큰 관련 수치</h6>
+<ul>
+<li><strong>월 사비 지출 비용</strong>: 인퍼런스 $5,000 + 클라우드 컴퓨팅 $5,000 (총 $10,000/월 사비 지출)</li>
+<li><strong>일일 토큰 소비량</strong>: 약 50억(5 Billion) 토큰</li>
+<li><strong>API 정가 환산 비용</strong>: 연간 약 150만 달러 (풀 가동 시 연간 300만 달러)</li>
+<li><strong>인간 회계 담당자 청구 비용 사례</strong>: $1,200 청구서 발생 (에이전트 BAT가 메일 20건을 자동 발송한 결과)</li>
+<li><strong>플랫폼 개별 구독 요금제</strong>: 개별 계정당 월 $200 (Claude Max, Codex 등)</li>
+</ul>
+<hr />
+<h5 id="5-한계와-불확실성">5. 한계와 불확실성</h5>
+<p>소스 텍스트만을 근거로 했을 때 다음과 같은 사항은 정보가 부족하거나 기술적 검증이 불가능한 항목으로 분류된다.</p>
+<ul>
+<li><strong>Fable 및 52 에이전트의 구체적 명세</strong>: 외부 에이전트 분석 도구인 Fable과 52 에이전트가 언급되었으나, 이들의 구체적인 내부 작동 알고리즘이나 기술 스택은 제시되지 않음 (<code>확인 불가</code>).</li>
+<li><strong>Wyvern 게임의 세부 백엔드 아키텍처</strong>: 텍스트 기반 MUD 게임이며 TELNET 접속 지원 및 그래픽 레이어가 탑재되었다는 사실 외에, 소스 내에 구체적 코드가 언급되지 않음 (<code>확인 불가</code>).</li>
+<li><strong>LLM 에이전트의 주관적 내면 상태 존재 여부</strong>: 에이전트가 서운함, 질투, 우울감 등의 인간 유사 행동을 보이더라도 실제로 내면적 감정 상태나 자아를 갖는지 여부는 소스 내에서도 검증 불가능한 논쟁으로 명시됨 (<code>불확실함</code>).</li>
+<li><strong>인퍼런스 비용 감소 및 증류(Distillation)의 정확한 달성 시점</strong>: 12~18개월 내에 인퍼런스 비용 급락이나 기술 증류가 일어날 것으로 예측되었으나, 실제 발생 여부는 확정되지 않은 추측임 (<code>불확실함</code>).</li>
+</ul>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/people/aaron/">Aaron</a></li>
+<li><a href="../../entities/people/jeff-huntley/">Jeff Huntley</a></li>
+<li><a href="../../entities/people/jeffrey-emanuel/">Jeffrey Emanuel</a></li>
+<li><a href="../../entities/people/mitchell-hashimoto/">미첼 하시모토</a></li>
+<li><a href="../../entities/people/steve-yegge/">스티브 예기</a></li>
+<li><a href="../../kinds/youtube/">YouTube</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/software-engineering/">소프트웨어 공학</a></li></ul></section>
+</main>
+</body>
+</html>

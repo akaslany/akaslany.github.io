@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing the Time Portal</title>
+<link rel="stylesheet" href="../../assets/style.css">
+
+</head>
+<body>
+<header class="site-header"><nav aria-label="주 내비게이션"><a href="../../">홈</a><a href="../../topics/">주제</a><a href="../../#%EC%9D%B8%EB%AC%BC">인물</a><a href="../../#%EA%B0%9C%EB%85%90">개념</a><a href="../../#%EC%A2%85%ED%95%A9">종합</a><a href="../../timeline/">연대기</a><a href="../../#%EC%9C%A0%ED%98%95">유형</a><a href="../../#%EA%B2%80%EC%83%89">검색</a></nav></header>
+<main>
+<article>
+<h1>Introducing the Time Portal</h1>
+<p class="page-meta">문서 · 2026-11-26</p>
+<h2 id="요약">요약</h2>
+<p>Epochal Time Portal의 과거 웹 환경 복원 방식과 예측 오차 재현 실험의 한계를 분석한다.</p>
+<p><a href="../../topics/">주제 색인</a> · <a href="../../kinds/document/">문서</a> · <a href="../../timeline/2026-11/">2026년 11월</a> · <a href="https://www.youtube.com/watch?v=YjJcs5Yq2qY">보고서 영상</a></p>
+<h2 id="관련-위키-페이지">관련 위키 페이지</h2>
+<ul>
+<li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/polymarket/">Polymarket</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li>
+</ul>
+<h2 id="원문">원문</h2>
+<h3 id="epochal-time-portal의-시점-한정-point-in-time-ai-평가-환경-및-예측-재현성-분석-보고서">Epochal Time Portal의 시점 한정(Point-in-Time) AI 평가 환경 및 예측 재현성 분석 보고서</h3>
+<h5 id="1-미래-정보-오염과-ai-예측-평가의-구조적-문제">1. 미래 정보 오염과 AI 예측 평가의 구조적 문제</h5>
+<p>고급 AI 에이전트를 시계열 기반 예측 및 의사결정 과제에 투입하고 그 성능을 정밀하게 측정하는 과정에서는 지식 컷오프(knowledge cutoff), 정보 커버리지(information coverage), 시점 제한(time-gating) 등과 관련된 구조적 과제들이 발생한다. 미래의 불확실한 사건을 추론하는 모델을 제대로 평가하려면 해당 모델이 의사결정을 내리던 과거 특정 시점의 정보 환경만을 엄격하게 복원하여 제시해야 한다.</p>
+<p>그러나 기존 평가 방식에서는 예측 대상 사건이 이미 종료된 이후의 사후 결과 정보(hindsight)나 특권 정보(privileged information)가 모델에 노출되는 정보 누출 문제가 빈번하게 일어난다. 이러한 사후 정보가 유출될 경우 모델은 손쉽게 확정된 정답을 확인(cheating)할 수 있으며, 이로 인해 오차가 0에 가깝게 감소하는 현상이 나타난다. 이러한 오차 감소는 해당 모델이 과거 시점에 주어진 제한된 정보와 가용한 웹 자원만으로 미래를 통찰해 낸 실제 '예측 능력'을 증명하는 객관적 지표가 될 수 없다. 따라서 평가 시점 이후의 모든 미래 데이터를 완전히 격리하는 시점 한정 평가 환경의 구축이 필수적이다.</p>
+<hr />
+<h5 id="2-epochal-time-portal의-시점-복원-3단계-아키텍처">2. Epochal Time Portal의 시점 복원 3단계 아키텍처</h5>
+<p>Epochal Time Portal은 30년 이상의 인터넷 역사, 1조 개 이상의 아카이브 웹페이지, 그리고 7조 개 이상의 URL 추적 데이터를 기반으로 에이전트를 과거 특정 시점의 정보 생태계로 위치시키는 시점 한정 인프라이다.</p>
+<p>Time Portal은 엔드포인트 베이스 경로인 <code>https://api.epochal.com/v1/time-portal/{search,fetch,sandbox}</code> 아래에서 다음과 같이 역할이 명확히 구분된 3가지 핵심 API 서비스를 제공한다.</p>
+<ul>
+<li><strong><code>search</code> API</strong>: 지정된 기준 시점(as-of instant) 이전에 존재했던 웹페이지 및 아카이브 인덱스를 탐색한다. 동일한 URL이라도 시간에 따라 변화된 여러 버전을 추적하여 변경 이력(change log) 체인 형태로 제공한다.</li>
+<li><strong><code>fetch</code> API</strong>: 시간에 따른 버전 체인 중에서 특정 기준 시점에 실제 존재했던 웹페이지의 버전을 가져와 원본 콘텐츠를 읽어온다.</li>
+<li><strong><code>sandbox</code> API</strong>: 에이전트가 동작하는 시스템 전체를 과거 시점으로 완전히 통제하기 위한 마이크로가상머신(microVM) 기반의 격리 환경을 제공한다.</li>
+</ul>
+<p>시점 제한(time-gating) 도구만으로는 에이전트가 <code>date</code> 명령어를 실행하거나 파일 시스템 구조를 확인하여 시스템 시각과 외부 시각 간의 불일치를 감지하는 문제를 완전히 막을 수 없다. <code>sandbox</code> API는 이러한 불일치를 차단하기 위해 4가지 레이어 전반에 걸쳐 시점 한정 환경을 구축한다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">레이어</th>
+<th style="text-align:left">역할 및 시점 제한 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Linux kernel</strong></td>
+<td style="text-align:left">시스템 시계를 지정된 기준 시점(as-of instant)의 시각으로 직접 고정 설정</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>image</strong></td>
+<td style="text-align:left">기준 시점에 존재했던 Ubuntu 버전, 시스템 라이브러리, 언어 런타임(language runtimes), CLI 도구로 환경 부팅</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>packages</strong></td>
+<td style="text-align:left">pip, npm, apt 등 패키지 관리자의 미러(mirror)를 해당 시점에 존재했던 상태로 통제</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>network</strong></td>
+<td style="text-align:left">curl, requests 등을 포함한 모든 아웃바운드 웹 요청이 Time Portal 아카이브 네트워크를 경유하도록 강제</td>
+</tr>
+</tbody>
+</table>
+<p>Time Portal API를 호출할 때에는 다음 두 가지 핵심 헤더를 통해 시점과 접근 권한을 제어한다.</p>
+<ul>
+<li><strong><code>x-api-key</code></strong>: API 요청의 인증 및 접근 권한을 확인하는 인증 헤더.</li>
+<li><strong><code>Accept-Datetime</code></strong>: 평가 환경의 기준이 되는 과거 특정 시점(as-of instant, 예: <code>2025-03-01T00:00:00Z</code>)을 지정하는 시점 헤더.</li>
+</ul>
+<hr />
+<h5 id="3-평가-환경의-핵심-기준-커버리지-coverage-대-누출-leakage">3. 평가 환경의 핵심 기준: 커버리지(Coverage) 대 누출(Leakage)</h5>
+<p>시점 한정 평가 환경의 품질은 평가 환경과 실제 과거 환경 사이의 격차, 즉 시뮬레이션 대 실제 격차(sim-to-real gap)를 얼마나 최소화하느냐에 달려 있다.</p>
+<p>이 개념은 타 산업 분야의 시뮬레이션 평가 구조와 동일한 논리를 공유한다:</p>
+<ol>
+<li><strong>정량적 금융(Quantitative Finance)</strong>: 금융 공학 연구자가 트레이딩 전략 알고리즘을 실제 시장에 투입하기 전, 과거 시장 데이터를 기반으로 구축된 고도화된 시뮬레이션 환경에서 검증을 거치는 것과 같다.</li>
+<li><strong>로봇 공학(Robotics)</strong>: 로봇 공학자가 정교한 손 모델(dexterous hand model)을 실제 물리 모터에 배포하기 전에 제어 알고리즘을 시뮬레이터에서 먼저 테스트하는 것과 같다.</li>
+</ol>
+<p>시뮬레이션에서의 성능 개선이 실제 현장(production)에서의 성과로 직결되기 위해서는 시뮬레이션 환경이 현실을 완벽히 모사해야 한다. Time Portal 환경의 신뢰성을 결정하는 두 가지 핵심 축은 커버리지와 누출 통제이다.</p>
+<ul>
+<li><strong>Coverage (커버리지)</strong>: 기준 시점(as-of instant) 당시 실시간 라이브 웹에 존재했던 정보에 대해 에이전트가 접근할 수 있는 범위와 수준.</li>
+<li><strong>Leakage (누출 통제)</strong>: 미래의 사후 결과나 특권 정보가 유출되어 에이전트가 비현실적인 편법 예측을 수행하지 못하도록 완전히 차단하는 수준.</li>
+</ul>
+<p><strong>시간 세분성(Time granularity)의 한계</strong>:
+Time Portal 인프라가 지원하는 분 단위(1 min) 보존 세분성은 주식 가격, 실시간 뉴스 등 변화가 매우 빈번하게 일어나는 일부 동적 웹페이지에 한정되어 적용되는 수준이다. 이는 인터넷상에 존재하는 모든 웹페이지가 매 분마다 수집 및 보존되고 있음을 의미하는 것이 아니다.</p>
+<hr />
+<h5 id="4-347개-예측시장-과제-재현-실험-결과-및-해석">4. 347개 예측시장 과제 재현 실험 결과 및 해석</h5>
+<p>Epochal은 예측시장 플랫폼인 Kalshi와 Polymarket의 347개 실시간 과제를 대상으로 평가 실험을 진행하였다. 본 실험에서는 실시간(live) 상태에서 수행되었던 예측 에이전트를 수 주 후 동일하게 재현하되, 재현 에이전트의 기준 시점(<code>as-of instant</code>)을 과거 실시간 수행 당시의 정확한 시각으로 설정하여 성능을 측정하였다.</p>
+<p>실험은 조건에 따라 (1) Time Portal 사용, (2) 결과 확정 후 라이브 웹(Live web, after resolution) 사용, (3) 웹 접근 불가(No web)의 3가지 환경으로 구분하여 진행되었으며, 원 실시간 실행 대비 예측 오차 패턴의 상관계수($r$) 수치는 다음과 같다.</p>
+<ul>
+<li><strong>Time Portal 재현 실행</strong>: 상관계수 $r = 0.98$ (원문 작성자의 주장)</li>
+<li><strong>결과 확정 후 Live web 사용</strong>: 상관계수 $r = 0.16$ (원문 작성자의 주장)</li>
+<li><strong>No web (웹 접근 불가)</strong>: 상관계수 $r = 0.49$ (원문 작성자의 주장)</li>
+</ul>
+<p><strong>수치 해석 및 한계 설정</strong>:</p>
+<ul>
+<li><strong>상관계수 $r=0.98$의 정확한 의미</strong>: 이 수치는 과거 실시간 환경에서 발생했던 에이전트의 오차 패턴과 Time Portal을 통해 재현된 오차 패턴 간의 통계적 상관관계가 매우 높음을 의미하며 (원문 작성자의 주장), 해당 AI 에이전트의 &quot;예측 정확도가 98%&quot;라는 의미가 아니다. 이는 Time Portal이 과거 실시간 웹 환경을 높은 충실도로 재현해 냈음을 보여주는 지표이다.</li>
+<li><strong>결과 확정 후 Live web 사용 시 오차 패턴 ($r=0.16$)</strong>: 사건의 결과가 이미 확정된 이후의 라이브 웹에 접근한 재현 에이전트는 오차가 0에 가깝게 감소하면서 원 실시간 오차 패턴과의 상관계수가 $r=0.16$으로 급격히 떨어진다 (원문 작성자의 주장). 이는 에이전트가 정답을 직접 읽어왔음을 나타내며, 시점 통제 없이는 과거의 실제 예측 능력을 측정할 수 없음을 입증한다.</li>
+<li><strong>결과 해석의 경계 선언</strong>: 본 실험 결과는 시점 한정 환경의 오차 패턴 재현성을 검증한 결과일 뿐이며, 이를 모델 전반의 예측 능력 향상이나 인터넷상의 모든 미래 정보 누출이 완전하게 차단되었다는 보장으로 과잉 확장하여 해석해서는 안 된다.</li>
+</ul>
+<hr />
+<h5 id="5-종합-요약-및-한계-고지">5. 종합 요약 및 한계 고지</h5>
+<p>Epochal Time Portal은 아카이브 인덱스와 기술적으로 통제된 Linux 마이크로가상머신 기법을 결합하여 사후 정보 누출(Leakage)을 격리하고 당대의 정보 접근성(Coverage)을 제공하는 시점 한정 AI 평가 인프라이다. 실험을 통해 과거 실시간 예측 환경의 오차 패턴을 매우 높은 통계적 연관성으로 재현할 수 있음이 확인되었다. 본 분석 보고서는 특정 AI 모델, 플랫폼, 기술 자산에 대한 매수·매도 제안이나 투자·법률적 판단을 위한 권유가 아니며, 순수하게 AI 평가 시스템에 대한 기술적 분석을 목적으로 작성되었다.</p>
+<p>이 해설은 원문 하나만을 근거로 했고 외부 검증을 거치지 않았다.</p>
+
+</article>
+<section class="backlinks"><h2>역링크 (Backlinks)</h2><ul><li><a href="../../contradictions/">모순과 쟁점</a></li>
+<li><a href="../../entities/orgs/polymarket/">Polymarket</a></li>
+<li><a href="../../kinds/document/">문서</a></li>
+<li><a href="../../overview/">위키 개관</a></li>
+<li><a href="../">전체 소스</a></li>
+<li><a href="../../timeline/2026-11/">2026년 11월</a></li>
+<li><a href="../../topics/agents-tooling/">에이전트·도구</a></li>
+<li><a href="../../topics/ai-models-research/">AI 모델·연구</a></li></ul></section>
+</main>
+</body>
+</html>

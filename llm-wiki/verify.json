@@ -1,5 +1,5 @@
 {
-  "dist_bytes": 40732090,
+  "dist_bytes": 41373741,
   "gates": {
     "dist_current": {
       "changed_files": 0,
@@ -7,7 +7,7 @@
       "ok": true
     },
     "escapes": {
-      "checked": 4250,
+      "checked": 4328,
       "html_escapes": 0,
       "html_paths": {},
       "markdown_escapes": 0,
@@ -16,8 +16,8 @@
       "ok": true
     },
     "grounding": {
-      "checked": 4250,
-      "entity_source_links_checked": 7150,
+      "checked": 4328,
+      "entity_source_links_checked": 7276,
       "invalid_extractions": {},
       "issues": {},
       "ok": true,
@@ -25,26 +25,26 @@
     },
     "links": {
       "broken": 0,
-      "html_checked": 113586,
+      "html_checked": 115357,
       "issues": [],
-      "markdown_checked": 33812,
+      "markdown_checked": 34300,
       "ok": true
     },
     "links_recheck": {
       "broken": 0,
-      "checked_associations": 22434,
+      "checked_associations": 22772,
       "missing_associations": [],
       "ok": true
     },
     "markers": {
-      "checked": 5242,
+      "checked": 5331,
       "occurrences": 0,
       "ok": true,
       "pages": 0,
       "paths": {}
     },
     "material": {
-      "checked": 235,
+      "checked": 237,
       "issues": {},
       "min_body_chars": 357,
       "min_evidence_sources": 2,
@@ -53,11 +53,11 @@
       "registry_matches": true
     },
     "orphans": {
-      "edges": 32595,
+      "edges": 33077,
       "graph_valid": true,
       "low_source_inbound": [],
       "min_source_inbound": 6,
-      "nodes": 5242,
+      "nodes": 5331,
       "ok": true,
       "orphan_pages": [],
       "orphans": 0
@@ -82,28 +82,28 @@
         "source_sha256": [],
         "source_url": []
       },
-      "expected_sources": 971,
-      "generated": 4250,
+      "expected_sources": 982,
+      "generated": 4328,
       "index": 5,
       "kinds": 9,
       "ok": true,
-      "search_index_bytes": 839052,
-      "sources": 971,
+      "search_index_bytes": 850361,
+      "sources": 982,
       "symmetric_difference": 0,
       "timeline": 7,
-      "total": 5242
+      "total": 5331
     },
     "people_complete": {
-      "corpus_sources": 971,
-      "distinct": 4001,
+      "corpus_sources": 982,
+      "distinct": 4077,
       "extra": [],
-      "extracted_v2": 971,
+      "extracted_v2": 982,
       "missing": [],
       "ok": true,
-      "pages": 4001,
+      "pages": 4077,
       "symmetric_difference": 0,
       "synthesized": 81,
-      "with_quote": 3010
+      "with_quote": 3029
     },
     "people_nonempty": {
       "empty": 0,
@@ -129,7 +129,7 @@
           "page": true
         },
         "org/anthropic": {
-          "evidence": 76,
+          "evidence": 78,
           "ok": true,
           "page": true
         },
@@ -144,7 +144,7 @@
           "page": true
         },
         "org/hangukeunhaeng": {
-          "evidence": 4,
+          "evidence": 5,
           "ok": true,
           "page": true
         },
@@ -159,7 +159,7 @@
           "page": true
         },
         "org/openai": {
-          "evidence": 106,
+          "evidence": 107,
           "ok": true,
           "page": true
         },
@@ -175,17 +175,17 @@
     "reproducible": {
       "changed_files": 0,
       "changed_paths": [],
-      "compared_files": 5246,
-      "first_sec": 16.936,
+      "compared_files": 5335,
+      "first_sec": 17.597,
       "ok": true,
-      "second_sec": 16.703
+      "second_sec": 16.966
     },
     "schema": {
-      "checked": 5242,
+      "checked": 5331,
       "invalid": 0,
       "issues": {},
       "ok": true,
-      "passed": 5242
+      "passed": 5331
     },
     "selfcontained": {
       "external_resources": 0,
