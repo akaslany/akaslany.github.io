@@ -28,7 +28,8 @@
   <div class="chips dir" id="dirChips" role="radiogroup" aria-label="방향 선택">
     <button type="button" role="radio" aria-checked="true" class="chip active" data-d="up">▲ 양의 방향</button>
     <button type="button" role="radio" aria-checked="false" class="chip" data-d="down">▼ 음의 방향</button>
-    <button type="button" role="radio" aria-checked="false" class="chip" data-d="turn">↗ 60·120 전환</button>
+    <button type="button" role="radio" aria-checked="false" class="chip" data-d="turn">↗ 60·120 상승전환</button>
+    <button type="button" role="radio" aria-checked="false" class="chip" data-d="turn-down">↘ 60·120 하락전환</button>
   </div>
   <p class="dirnote" id="dirNote"></p>
 </div>
@@ -56,7 +57,7 @@
       <option value="3">3거래일 이내</option>
       <option value="5" selected>5거래일 이내</option>
       <option value="10">10거래일 이내</option>
-      <option value="99">제한 없음</option>
+      <option value="Infinity">제한 없음</option>
     </select>
   </label>
   <label class="chk" id="soonMinWrap" hidden>최소 강도

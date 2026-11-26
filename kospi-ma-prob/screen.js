@@ -17,19 +17,32 @@
   // '전체'는 등급 필터를 걸지 않은 상태를 뜻한다(한 번에 하나만 선택).
   var ALL = '전체';
   var KINDS = ['all', 'stock', 'etf', 'etn'];
-  var SOURCES = { up: 'screen.json', down: 'screen.down.json', turn: 'screen.turn.json' };
-  var DIR_LABEL = { up: '양의 방향', down: '음의 방향', turn: '60·120 전환' };
+  var SOURCES = {
+    up: 'screen.json',
+    down: 'screen.down.json',
+    turn: 'screen.turn.json',
+    'turn-down': 'screen.turn-down.json'
+  };
+  var DIR_LABEL = {
+    up: '양의 방향',
+    down: '음의 방향',
+    turn: '60·120 상승전환',
+    'turn-down': '60·120 하락전환'
+  };
+  var DIR_ORDER = ['up', 'down', 'turn', 'turn-down'];
   // 전환 화면에는 MA5/MA20 행이 없다 — 두 지평만 본다.
   var COLS = {
     up: ['5', '20', '60', '120'],
     down: ['5', '20', '60', '120'],
-    turn: ['60', '120']
+    turn: ['60', '120'],
+    'turn-down': ['60', '120']
   };
   var state = {
     data: null,
     rows: [],
     dir: 'up',
     cache: {},
+    loadSeq: 0,
     sortKey: 'cap',
     sortDir: -1,
     activeGrade: ALL,
@@ -43,15 +56,26 @@
 
   function $(id) { return document.getElementById(id); }
 
+  function isFiniteNum(v) {
+    return typeof v === 'number' && isFinite(v);
+  }
+
   function fmtPct(v) {
-    if (v === null || v === undefined || isNaN(v)) return '—';
-    return (v > 0 ? '+' : '') + Number(v).toFixed(1);
+    if (v === null || v === undefined || v === '' || !isFinite(Number(v))) return '—';
+    var n = Number(v);
+    return (n > 0 ? '+' : '') + n.toFixed(1);
   }
 
   function fmtCap(v) {
-    if (!v) return '—';
-    if (v >= 1) return v.toFixed(1) + '조';
-    return Math.round(v * 10000).toLocaleString('ko-KR') + '억';
+    if (!v || !isFinite(Number(v))) return '—';
+    var n = Number(v);
+    if (n >= 1) return n.toFixed(1) + '조';
+    return Math.round(n * 10000).toLocaleString('ko-KR') + '억';
+  }
+
+  function fmtClose(v) {
+    if (v === null || v === undefined || v === '' || !isFinite(Number(v))) return '—';
+    return Number(v).toLocaleString('ko-KR');
   }
 
   function escapeHtml(s) {
@@ -72,8 +96,27 @@
   }
 
   function isDown() { return state.dir === 'down'; }
-  function isTurn() { return state.dir === 'turn'; }
+  function isTurnDown() { return state.dir === 'turn-down'; }
+  function isTurn() { return state.dir === 'turn' || state.dir === 'turn-down'; }
   function cols() { return COLS[state.dir] || COLS.up; }
+
+  function parseSoonMax(val) {
+    if (val === '' || val === null || val === undefined ||
+        val === 'all' || val === 'unlimited' || val === 'Infinity' || val === Infinity) {
+      return Infinity;
+    }
+    var n = Number(val);
+    return isFinite(n) && n > 0 ? n : Infinity;
+  }
+
+  function resetSoonInputs() {
+    state.soonMax = 5;
+    state.soonMinStrength = 0;
+    var daysEl = $('soonDays');
+    if (daysEl) daysEl.value = '5';
+    var minEl = $('soonMin');
+    if (minEl) minEl.value = '0';
+  }
 
   function filtered() {
     var q = state.query.trim().toLowerCase();
@@ -86,34 +129,66 @@
       if (r.k === 'stock' && floor > 0 && r.cap < floor) return false;
       if (isTurn() && !passesSoon(r)) return false;
       if (q) {
-        var hit = r.t.indexOf(q) === 0 || (r.n && r.n.toLowerCase().indexOf(q) !== -1);
+        var code = r.t === null || r.t === undefined ? '' : String(r.t).toLowerCase();
+        var hit = code.indexOf(q) === 0 || (r.n && r.n.toLowerCase().indexOf(q) !== -1);
         if (!hit) return false;
       }
       return true;
     });
   }
 
-  // 전환 탭: 이미 전환(state=turn)은 항상 남기고, 예상(soon)만 사용자가 고른 조건으로 거른다.
-  // 예상은 '지금 속도가 유지되면'이라는 가정이라 |강도| 가 작으면 쉽게 뒤집힌다.
-  function soonDays(r) {
-    var best = null;
-    ['60', '120'].forEach(function (p) {
-      var v = (r.r && r.r[p]);
-      if (v === null || v === undefined) return;
-      if (best === null || v < best) best = v;
-    });
-    return best;
+  function axisConfirmAge(r, axis) {
+    if (!state.data || state.data.turn_age_basis !== 'market_sessions' || r.state === 'soon') return null;
+    var v = r['k' + axis];
+    return isFiniteNum(v) && v >= 0 ? v : null;
   }
 
-  function soonStrength(r) {
-    return Math.min(Math.abs(r.p['60']), Math.abs(r.p['120']));
+  function isFreshTurn(r, axis) {
+    return axisConfirmAge(r, axis) === 0 && r.stale === 0 && r.d === state.data.latest_trade_date;
+  }
+
+  function isConfirmedRow(r) {
+    return axisConfirmAge(r, '60') !== null || axisConfirmAge(r, '120') !== null;
+  }
+
+  function axisRawP(r, axis) {
+    if (r.p_raw && Object.prototype.hasOwnProperty.call(r.p_raw, axis)) {
+      return r.p_raw[axis];
+    }
+    return r.p ? r.p[axis] : null;
+  }
+
+  function axisEta(r, axis) {
+    var v = r.r ? r.r[axis] : null;
+    return isFiniteNum(v) && v > 0 ? v : null;
+  }
+
+  function axisPassesSoon(r, axis) {
+    var eta = axisEta(r, axis);
+    if (eta === null) return false;
+    var maxAge = (state.soonMax === null || state.soonMax === undefined) ? Infinity : state.soonMax;
+    if (eta > maxAge) return false;
+    var raw = axisRawP(r, axis);
+    if (!isFiniteNum(raw)) return false;
+    return Math.abs(raw) >= state.soonMinStrength;
+  }
+
+  // 전환 탭: 확정 전환은 예상 필터와 무관하게 남기고, 예상(soon)만 같은 축의 기간·최소|원강도|를 함께 검사한다.
+  function soonDays(r) {
+    var bestQual = null;
+    var bestAny = null;
+    ['60', '120'].forEach(function (axis) {
+      var v = axisEta(r, axis);
+      if (v === null) return;
+      if (bestAny === null || v < bestAny) bestAny = v;
+      if (axisPassesSoon(r, axis) && (bestQual === null || v < bestQual)) bestQual = v;
+    });
+    return bestQual !== null ? bestQual : bestAny;
   }
 
   function passesSoon(r) {
-    if (r.state === 'turn') return true;      // 이미 전환된 종목은 필터와 무관
-    var days = soonDays(r);
-    if (days === null || days > state.soonMax) return false;
-    return soonStrength(r) >= state.soonMinStrength;
+    if (isConfirmedRow(r)) return true;      // 확정 전환 종목은 예상 필터와 무관
+    return axisPassesSoon(r, '60') || axisPassesSoon(r, '120');
   }
 
   // 도달 예상: 네 축 중 0에 가장 빨리 닿는 축과 그 거래일. 계산이지 예측이 아니다.
@@ -156,12 +231,62 @@
     }
   }
 
+  function turnSortTuple(r, key) {
+    if (key === 'k60' || key === 'k120') {
+      var kAxis = key === 'k60' ? '60' : '120';
+      var age = axisConfirmAge(r, kAxis);
+      if (age !== null) return { g: 0, v: age };
+      var eta = axisEta(r, kAxis);
+      if (eta !== null) return { g: 1, v: eta };
+      return null;
+    }
+    if (key === 'r60' || key === 'r120') {
+      var rAxis = key === 'r60' ? '60' : '120';
+      var rEta = axisEta(r, rAxis);
+      return rEta !== null ? { g: 0, v: rEta } : null;
+    }
+    if (key === 'p60' || key === 'p120') {
+      var pAxis = key === 'p60' ? '60' : '120';
+      var pv = r.p ? r.p[pAxis] : null;
+      return isFiniteNum(pv) ? { g: 0, v: pv } : null;
+    }
+    if (key === 'state') {
+      if (isConfirmedRow(r)) {
+        var a60 = axisConfirmAge(r, '60');
+        var a120 = axisConfirmAge(r, '120');
+        var minAge = (a60 !== null && a120 !== null) ? Math.min(a60, a120)
+          : (a60 !== null ? a60 : (a120 !== null ? a120 : 999));
+        return { g: 0, v: minAge };
+      }
+      var soon = soonDays(r);
+      return soon !== null ? { g: 1, v: soon } : null;
+    }
+    if (key === 'close') {
+      var c = (r.c === null || r.c === undefined || r.c === '') ? NaN : Number(r.c);
+      return isFiniteNum(c) ? { g: 0, v: c } : null;
+    }
+    return null;
+  }
+
   function compareRows(a, b) {
     // 시총 열 정렬에서는 종목을 먼저, ETF/ETN은 최신 거래대금으로 정렬한다.
     // 다른 강도·등급 열은 선택한 기준 그대로 전체 유형에 걸쳐 정렬한다.
     if (state.sortKey === 'cap') {
       var group = Number(a.k !== 'stock') - Number(b.k !== 'stock');
       if (group) return group;
+    }
+    if (isTurn() && state.sortKey !== 'cap') {
+      var ta = turnSortTuple(a, state.sortKey);
+      var tb = turnSortTuple(b, state.sortKey);
+      if (ta === null && tb === null) {
+        return ((b.cap || 0) - (a.cap || 0)) || String(a.t).localeCompare(String(b.t));
+      }
+      if (ta === null) return 1;
+      if (tb === null) return -1;
+      var td = (ta.g - tb.g) || (ta.v - tb.v);
+      if (td !== 0) return td * state.sortDir;
+      var tc = ((a.cap || 0) - (b.cap || 0)) * state.sortDir;
+      return tc || String(a.t).localeCompare(String(b.t));
     }
     var d = sortValue(a, state.sortKey) - sortValue(b, state.sortKey);
     if (d === 0) d = a.cap - b.cap;
@@ -191,13 +316,14 @@
         return '<th class="sortable num" data-k="p' + p + '">MA' + p +
           '<span class="arrow"></span></th>';
       }).join('') +
-      (turn ? '<th class="sortable" data-k="state">구분<span class="arrow"></span></th>' +
-              '<th class="num sortable" data-k="k60">60전환<span class="arrow"></span></th>' +
-              '<th class="num sortable" data-k="k120">120전환<span class="arrow"></span></th>'
+      (turn ? '<th class="sortable" data-k="state" title="확정 전환 또는 현재 속도 유지 시 예상">구분<span class="arrow"></span></th>' +
+              '<th class="num sortable" data-k="k60" title="MA60 확정 전환 후 시장 거래일 수(오늘=최신 거래일) 또는 현재 속도 유지 시 예상 거래일">60전환<span class="arrow"></span></th>' +
+              '<th class="num sortable" data-k="k120" title="MA120 확정 전환 후 시장 거래일 수(오늘=최신 거래일) 또는 현재 속도 유지 시 예상 거래일">120전환<span class="arrow"></span></th>'
             : '<th class="num sortable" data-k="edge" title="가장 낮은 강도 (등급 기준)">최저<span class="arrow"></span></th>' +
               '<th class="num sortable" data-k="reach" title="현재 속도가 유지된다고 가정할 때 0에 닿는 예상 거래일(계산값)">도달(추정)<span class="arrow"></span></th>') +
       '<th class="num sortable" data-k="close">종가<span class="arrow"></span></th></tr>';
     var thead = document.querySelector('#grid thead');
+    if (!thead) return;
     thead.innerHTML = head;
     // 정렬 핸들러는 thead를 다시 그릴 때마다 새로 붙인다.
     thead.querySelectorAll('th.sortable').forEach(function (th) {
@@ -207,11 +333,33 @@
           state.sortDir = -state.sortDir;
         } else {
           state.sortKey = k;
-          state.sortDir = (k === 'grade' || k === 'k60' || k === 'k120') ? 1 : -1;
+          state.sortDir = (k === 'grade' || k === 'state' || k === 'k60' || k === 'k120' || k === 'r60' || k === 'r120') ? 1 : -1;
         }
         render();
       });
     });
+  }
+
+  function axisTurnCell(r, axis) {
+    var turnDown = isTurnDown();
+    var age = axisConfirmAge(r, axis);
+    if (age !== null) {
+      var fresh = age <= 5 ? ' fresh' : '';
+      var today = isFreshTurn(r, axis);
+      var label = today ? '오늘' : (age + '일');
+      var tip = today
+        ? 'MA' + axis + ' 오늘 ' + (turnDown ? '하락' : '상승') + '전환 (0거래일 경과)'
+        : 'MA' + axis + ' ' + (turnDown ? '하락' : '상승') + '전환 후 ' + age + '거래일 경과';
+      if (r.stale === 1) tip += ' · 마지막 시세(' + r.d + ') 기준 확정';
+      return '<td class="num' + fresh + '" title="' + escapeHtml(tip) + '">' + label + '</td>';
+    }
+    var eta = axisEta(r, axis);
+    if (eta !== null) {
+      var etaTip = 'MA' + axis + ' 현재 속도가 유지될 경우 약 ' + eta.toFixed(1) + '거래일 뒤 0 도달 추정 (예측 아님)';
+      return '<td class="num soon" title="' + escapeHtml(etaTip) + '">예상 ' + eta.toFixed(1) + '일</td>';
+    }
+    var missing = isFiniteNum(axisRawP(r, axis)) ? ' 전환 시점 확인 불가' : ' 데이터 부족';
+    return '<td class="num muted" title="MA' + axis + missing + '">—</td>';
   }
 
   function render() {
@@ -243,58 +391,49 @@
         (turn ? '' : '<td><span class="grade ' + gradeClass(r.g, state.dir) + '">' +
           escapeHtml(r.g) + '</span></td>');
       cells += cols().map(function (p) {
+        var pv = r.p ? r.p[p] : null;
+        if (!isFiniteNum(pv)) {
+          return '<td class="num muted" title="MA' + p + ' 데이터 부족">—</td>';
+        }
         var ax = (r.a && r.a[p]) || {};
-        var vel = ax.v;
+        var vel = isFiniteNum(ax.v) ? ax.v : null;
         // 속도: 5일간 강도 변화(포인트). ±0.5p 미만은 보합으로 본다(백테스트에서 유의미한 구분이 없던 구간).
         // v > 0 = 0을 향해 움직임(▲), v < 0 = 0에서 멀어짐(▼).
-        var dir = (vel === null || vel === undefined) ? 'flat'
+        var dir = vel === null ? 'flat'
                 : (vel > 0.5 ? 'toward' : (vel < -0.5 ? 'away' : 'flat'));
         var arrow = dir === 'toward' ? '▲' : (dir === 'away' ? '▼' : '·');
         var tip = [];
-        if (vel !== null && vel !== undefined) {
+        if (vel !== null) {
           tip.push('5일 강도 변화 ' + (vel > 0 ? '+' : '') + vel.toFixed(1) + 'p ' +
                    (vel > 0 ? '(0에 접근)' : '(0에서 이탈)'));
         }
-        if (ax.reach !== null && ax.reach !== undefined) {
+        if (isFiniteNum(ax.reach)) {
           tip.push('현재 속도 유지 시 ' + ax.reach.toFixed(1) + '거래일 뒤 0 도달(추정)');
-          if (ax.need !== null && ax.need !== undefined) {
+          if (isFiniteNum(ax.need)) {
             tip.push('그러려면 종가가 하루 ' + (ax.need > 0 ? '+' : '') + ax.need.toFixed(2) + '% 필요');
           }
-        } else if (vel !== null && vel !== undefined) {
+        } else if (vel !== null) {
           tip.push('0에서 멀어지는 중');
         }
-        return '<td class="num ' + pctClass(r.p[p]) + '" title="' + escapeHtml(tip.join(' · ')) + '">' +
-          fmtPct(r.p[p]) + '<span class="vel ' + dir + '">' + arrow + '</span></td>';
+        return '<td class="num ' + pctClass(pv) + '" title="' + escapeHtml(tip.join(' · ')) + '">' +
+          fmtPct(pv) + '<span class="vel ' + dir + '">' + arrow + '</span></td>';
       }).join('');
       if (turn) {
-        // 구분: 전환 = 이미 양전, 예상 = 음수지만 5일 내 0 도달(속도 유지 가정).
-        if (r.state === 'turn') {
+        // 구분: 확정 전환 vs 예상(현재 속도 유지 가정, 예측 아님).
+        if (isConfirmedRow(r)) {
           cells += '<td><span class="tag turn">전환</span></td>';
         } else {
           var d = soonDays(r);
-          cells += '<td><span class="tag soon" title="현재 속도 유지 가정에서 ' +
-            (d === null ? '—' : d.toFixed(1)) + '거래일 뒤 0 도달(계산값, 예측 아님)">예상</span>' +
-            '<span class="code">' + (d === null ? '' : d.toFixed(1) + '일') + '</span></td>';
+          cells += '<td><span class="tag soon" title="현재 속도가 유지될 경우 ' +
+            (d === null ? '—' : d.toFixed(1)) + '거래일 뒤 0 도달 추정 (예측 아님)">예상</span>' +
+            (d === null ? '' : ' <span class="code">' + d.toFixed(1) + '일</span>') + '</td>';
         }
-        // 전환 후 경과일. 오늘이 전환일이면 0. 흐린 색은 이력 내 계속 양수(None)다.
-        cells += ['k60', 'k120'].map(function (k) {
-          var v = r[k];
-          var axis = k === 'k60' ? '60' : '120';
-          if (v === null || v === undefined) {
-            // 아직 음수인 축이면 '계속 양수'가 아니라 '아직 전환 전'이다.
-            var neg = r.p[axis] <= 0;
-            return neg
-              ? '<td class="num muted" title="MA' + axis + ' 는 아직 음수 — 전환 전">—</td>'
-              : '<td class="num muted" title="최근 15거래일 동안 계속 양수">›15</td>';
-          }
-          var fresh = v <= 5 ? ' fresh' : '';
-          return '<td class="num' + fresh + '">' + v + '일</td>';
-        }).join('');
+        cells += axisTurnCell(r, '60') + axisTurnCell(r, '120');
       } else {
         cells += '<td class="num mono">' + fmtPct(down ? r.hi : r.lo) + '</td>';
         cells += reachCell(r);
       }
-      cells += '<td class="num">' + Number(r.c).toLocaleString('ko-KR') + '</td>';
+      cells += '<td class="num">' + fmtClose(r.c) + '</td>';
       return '<tr' + (fundCaution(r)
         ? ' class="fund-caution" title="이름 분류상 제외 대상입니다. 데이터 확인이 필요합니다."' : '') +
         '>' + cells + '</tr>';
@@ -310,16 +449,17 @@
     rows.forEach(function (r) { byGrade[r.g] = (byGrade[r.g] || 0) + 1; });
     var dist;
     if (turn) {
-      var zero = rows.filter(function (r) {
-        return r.k60 === 0 || r.k120 === 0;
+      var confirmed = rows.filter(isConfirmedRow);
+      var confirmedCount = confirmed.length;
+      var estimatedCount = rows.length - confirmedCount;
+      var zero = confirmed.filter(function (r) {
+        return isFreshTurn(r, '60') || isFreshTurn(r, '120');
       }).length;
-      var both = rows.filter(function (r) {
-        return r.k60 !== null && r.k120 !== null;
-      }).length;
-      var stale = rows.length - both;
-      dist = (zero ? '오늘 전환 <strong>' + zero + '</strong>종목 · ' : '') +
-        '둘 다 5일 내 ' + both + '종목 · 한 축만 5일 내 ' + stale + '종목(다른 축은 이미 양수) · ' +
-        '기준 ' + (state.data.window_days || 5) + '거래일';
+      var winDays = (state.data && isFiniteNum(state.data.window_days)) ? state.data.window_days : 5;
+      dist = '확정 전환 <strong>' + confirmedCount + '</strong>종목' +
+        (zero ? ' (오늘 <strong>' + zero + '</strong>)' : '') +
+        ' · 예상 <strong>' + estimatedCount + '</strong>종목' +
+        ' · 기준 ' + winDays + '거래일';
     } else if (state.activeGrade === ALL) {
       dist = GRADES.map(function (g) {
         return '<span class="grade ' + gradeClass(g, state.dir) + '">' + g + '</span> ' + (byGrade[g] || 0);
@@ -328,7 +468,7 @@
       dist = '<span class="grade ' + gradeClass(state.activeGrade, state.dir) + '">' +
         escapeHtml(state.activeGrade) + '</span> ' + (byGrade[state.activeGrade] || 0) + '종목';
     }
-    $('summary').innerHTML = (turn ? '60·120 전환 · ' : (down ? '음의 방향 · ' : '양의 방향 · ')) +
+    $('summary').innerHTML = (DIR_LABEL[state.dir] || '양의 방향') + ' · ' +
       '표시 <strong>' + rows.length + '</strong> / 전체 ' + state.rows.length + '종목 · ' + dist;
 
     document.querySelectorAll('#grid th.sortable').forEach(function (th) {
@@ -343,11 +483,19 @@
   // 방향에 맞춰 문서 제목·설명·상단 라디오를 갱신한다.
   function updateHead() {
     var down = isDown();
-    document.title = '이평선 강도 스크리너 — ' + DIR_LABEL[state.dir];
-    $('dirNote').innerHTML = isTurn()
-      ? 'MA 60·120일 <strong>상승 강도가 둘 다 양수</strong>이면서, 그중 <strong>하나 이상이 최근 5거래일 안에 ' +
-        '음에서 양으로 전환</strong>한 종목입니다. 전환일은 이 페이지의 강도식 기준 실제 부호 전환일이며 ' +
-        '이동평균선 돌파와는 다릅니다.<span class="bands">등급 없음 · 종목은 시총순, ETF/ETN은 거래대금순 · 전환일 열은 경과 거래일</span>'
+    var turnOn = isTurn();
+    var turnDown = isTurnDown();
+    document.title = '이평선 강도 스크리너 — ' + (DIR_LABEL[state.dir] || '');
+    $('dirNote').innerHTML = turnDown
+      ? 'MA 60일 또는 120일 강도가 <strong>최근 5거래일 안에 0 이상에서 음수로 전환</strong>해 유지 중인 종목(확정 전환)과, ' +
+        '아직 양수 구간에서 <strong>현재 속도가 유지될 경우</strong> 0 도달이 계산되는 종목(예상·예측 아님)을 함께 보여줍니다. ' +
+        '전환 경과일은 시장 거래일 기준입니다. 오늘은 데이터의 최신 거래일이며, 시세가 오래된 종목은 마지막 시세까지 확인합니다.' +
+        '<span class="bands">등급 없음 · 종목은 시총순, ETF/ETN은 거래대금순 · 예상은 현재 속도 유지 가정(예측 아님)</span>'
+      : turnOn
+      ? 'MA 60일 또는 120일 강도가 <strong>최근 5거래일 안에 0 이하에서 양수로 전환</strong>해 유지 중인 종목(확정 전환)과, ' +
+        '아직 음수 구간에서 <strong>현재 속도가 유지될 경우</strong> 0 도달이 계산되는 종목(예상·예측 아님)을 함께 보여줍니다. ' +
+        '전환 경과일은 시장 거래일 기준입니다. 오늘은 데이터의 최신 거래일이며, 시세가 오래된 종목은 마지막 시세까지 확인합니다.' +
+        '<span class="bands">등급 없음 · 종목은 시총순, ETF/ETN은 거래대금순 · 예상은 현재 속도 유지 가정(예측 아님)</span>'
       : down
       ? 'MA 5·20·60·120일 <strong>상승 강도가 모두 음수</strong>인 종목입니다. 등급은 ' +
         '<strong>0에 가장 가까운 값</strong>으로 매기므로, <strong>강</strong>은 네 축이 모두 −20% 이하인 ' +
@@ -360,9 +508,9 @@
       btn.classList.toggle('active', on);
       btn.setAttribute('aria-checked', on ? 'true' : 'false');
     });
-    document.body.classList.toggle('down-mode', down);
-    // 예상 필터는 전환 탭에서만 의미가 있다.
-    var turnOn = isTurn();
+    document.body.classList.toggle('down-mode', down || turnDown);
+    // 예상 필터는 전환 탭에서만 의미가 있으며, 전환 탭 밖에서는 기본값으로 초기화한다.
+    if (!turnOn) resetSoonInputs();
     ['soonDaysWrap', 'soonMinWrap'].forEach(function (id) {
       var el = $(id);
       if (el) el.hidden = !turnOn;
@@ -370,21 +518,59 @@
   }
 
   function setDirection(dir) {
-    if (state.dir === dir) return;
+    if (!SOURCES[dir] || state.dir === dir) return;
     state.dir = dir;
     state.capFloor = 0;
     var capFloor = $('capFloor');
     if (capFloor) capFloor.value = '0';
+    if (!isTurn()) resetSoonInputs();
     // 열 구성이 방향마다 다르므로(전환은 60/120만) 헤더를 새로 만든다.
-    if (dir === 'turn') state.sortKey = 'cap';
+    if (isTurn() || ['state', 'k60', 'k120', 'r60', 'r120'].indexOf(state.sortKey) !== -1) {
+      state.sortKey = 'cap';
+    }
     state.sortDir = -1;
     buildHead();
     load();
   }
 
+  function clearView(metaText, metaClass, withRetry) {
+    state.data = null;
+    state.rows = [];
+    state.activeGrade = ALL;
+    syncChips();
+    var sortInfo = $('sortInfo');
+    if (sortInfo) sortInfo.textContent = '';
+    var summary = $('summary');
+    if (summary) {
+      summary.innerHTML = '';
+      summary.textContent = '';
+    }
+    var tbody = document.querySelector('#grid tbody');
+    if (tbody) tbody.innerHTML = '';
+    var status = $('meta');
+    if (status) {
+      status.className = metaClass || 'meta';
+      if (withRetry) {
+        status.innerHTML = escapeHtml(metaText) +
+          ' <button type="button" class="chip" id="retryBtn" data-retry="1">다시 시도</button>';
+        var retryBtn = (status.querySelector && status.querySelector('#retryBtn')) || $('retryBtn');
+        if (retryBtn && retryBtn.addEventListener) {
+          retryBtn.addEventListener('click', function () { load(); });
+        }
+      } else {
+        status.innerHTML = '';
+        status.textContent = metaText;
+      }
+    }
+    updateHead();
+  }
+
   function load() {
     var dir = state.dir;
-    if (state.cache[dir]) {
+    var seq = ++state.loadSeq;
+    var label = DIR_LABEL[dir] || dir;
+    var turn = isTurn();
+    if (state.cache[dir] && (!turn || state.cache[dir].turn_age_basis === 'market_sessions')) {
       state.data = state.cache[dir];
       state.rows = state.data.rows || [];
       showMeta();
@@ -394,18 +580,22 @@
       render();
       return;
     }
-    var status = $('meta');
-    status.className = 'meta';
-    status.textContent = (dir === 'down' ? '음의 방향' : '양의 방향') + ' 데이터 불러오는 중…';
+    clearView(label + ' 데이터 불러오는 중…', 'meta', false);
     fetch(SOURCES[dir], { cache: 'no-cache' })
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
       .then(function (data) {
+        if (turn && data.turn_age_basis !== 'market_sessions') {
+          throw new Error('시장 거래일 기준 데이터가 필요합니다');
+        }
+        // 응답이 도착하는 사이 사용자가 방향을 바꿨거나 재시도했을 수 있다.
+        if (seq !== state.loadSeq || state.dir !== dir) {
+          if (state.dir !== dir && !state.cache[dir]) state.cache[dir] = data;
+          return;
+        }
         state.cache[dir] = data;
-        // 응답이 도착하는 사이 사용자가 방향을 다시 바꿨을 수 있다.
-        if (state.dir !== dir) return;
         state.data = data;
         state.rows = data.rows || [];
         state.activeGrade = ALL;
@@ -414,18 +604,23 @@
         render();
       })
       .catch(function (err) {
-        if (state.dir !== dir) return;
-        status.textContent = (dir === 'down' ? '음의 방향' : '양의 방향') +
-          ' 데이터를 불러오지 못했습니다: ' + err.message;
-        status.className = 'meta warn';
+        if (seq !== state.loadSeq || state.dir !== dir) return;
+        var msg = label + ' 데이터를 불러오지 못했습니다: ' + (err && err.message ? err.message : String(err));
+        clearView(msg, 'meta warn', true);
       });
   }
 
   function showMeta() {
     var d = state.data;
-    $('meta').className = 'meta';
-    $('meta').textContent = '기준일 ' + d.latest_trade_date + ' · ' + state.rows.length +
-      '종목 · 시가총액 단위 ' + d.market_cap_unit;
+    if (!d) return;
+    var meta = $('meta');
+    meta.className = 'meta';
+    var parts = [];
+    if (d.latest_trade_date) parts.push('기준일 ' + d.latest_trade_date);
+    parts.push(state.rows.length + '종목');
+    if (d.market_cap_unit) parts.push('시가총액 단위 ' + d.market_cap_unit);
+    meta.innerHTML = '';
+    meta.textContent = parts.join(' · ');
   }
 
   function initDirection() {
@@ -438,11 +633,11 @@
     });
     box.addEventListener('keydown', function (e) {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      var order = ['up', 'down', 'turn'];
-      var i = order.indexOf(state.dir);
-      var next = order[(i + (e.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
+      var i = DIR_ORDER.indexOf(state.dir);
+      var next = DIR_ORDER[(i + (e.key === 'ArrowRight' ? 1 : DIR_ORDER.length - 1)) % DIR_ORDER.length];
       setDirection(next);
-      document.querySelector('#dirChips button[data-d="' + next + '"]').focus();
+      var nextBtn = document.querySelector('#dirChips button[data-d="' + next + '"]');
+      if (nextBtn) nextBtn.focus();
     });
   }
 
@@ -529,21 +724,21 @@
       render();
     });
     $('soonDays').addEventListener('change', function (e) {
-      state.soonMax = Number(e.target.value);
+      state.soonMax = parseSoonMax(e.target.value);
       render();
     });
     $('soonMin').addEventListener('change', function (e) {
-      state.soonMinStrength = Number(e.target.value);
+      state.soonMinStrength = Number(e.target.value) || 0;
       render();
     });
     $('search').addEventListener('input', function (e) {
       state.query = e.target.value;
       render();
     });
-    // URL ?dir=down 으로 음의 방향을 바로 열 수 있게 한다.
+    // URL ?dir=down / ?dir=turn / ?dir=turn-down 으로 해당 방향을 바로 열 수 있게 한다.
     buildHead();
     var wanted = new URLSearchParams(location.search).get('dir');
-    if (wanted === 'down' || wanted === 'turn') setDirection(wanted);
+    if (wanted && wanted !== 'up' && SOURCES[wanted]) setDirection(wanted);
     else load();
   }
 

@@ -10,13 +10,19 @@
   p{line-height:1.65}.meta,footer{color:#536174;font-size:.9rem}.tabs,.tools{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
   button,input,select{font:inherit;border:1px solid #bac5d3;border-radius:6px;padding:10px;background:white}
   button{cursor:pointer}button[aria-pressed=true]{color:white;background:#172f50;border-color:#172f50}
+  button:disabled{opacity:.6;cursor:not-allowed}[hidden]{display:none!important}
   input{flex:1;min-width:180px}.tools label{display:flex;gap:8px;align-items:center}.tablewrap{overflow:auto;border:1px solid #dce3eb;border-radius:8px;background:white}
   table{border-collapse:collapse;width:100%;white-space:nowrap}th,td{text-align:right;padding:13px;border-bottom:1px solid #e5eaf0}
   th{font-size:.85rem;background:#edf1f6;color:#415168}th:first-child,td:first-child{text-align:left}td.name{text-align:left;max-width:260px;overflow:hidden;text-overflow:ellipsis}
   a{color:#172f50;text-underline-offset:3px}.pos{color:#dc2626}.neg{color:#2563eb}.grade{font-weight:700}
   .kind-chips{display:flex;gap:8px;margin:16px 0}.fund-badge{display:inline-block;margin-left:6px;padding:2px 5px;border-radius:4px;background:#e0e7ff;color:#3730a3;font-size:.75rem}
+  .turn-tools{background:#eef3f9;border:1px solid #d5e0ec;border-radius:8px;padding:12px 14px;margin:14px 0}
+  .turn-tools-note{color:#475569;font-size:.85rem;margin:0;flex:1 1 260px}
+  .status-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0}.status-bar #summary{margin:0}
+  .state-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.8rem;font-weight:700}
+  .state-turn-up{background:#fee2e2;color:#b91c1c}.state-turn-down{background:#dbeafe;color:#1d4ed8}.state-soon{background:#f1f5f9;color:#475569}
   footer{margin-top:28px}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
-  @media(max-width:600px){body{padding:20px 12px}h1{font-size:1.4rem}.tabs button{flex:1;padding:10px 6px}th,td{padding:11px}}
+  @media(max-width:600px){body{padding:20px 12px}h1{font-size:1.4rem}.tabs button{flex:1 1 45%;padding:10px 6px}th,td{padding:11px}}
   .us-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:26px 0 0;padding-top:14px;border-top:1px solid #cbd5e1}
   .us-nav-label{font-weight:700;color:#64748b;margin-right:2px}
   .us-nav a{flex:1 1 auto;text-align:center;padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;
@@ -35,9 +41,15 @@
 <div class="tabs" role="group" aria-label="방향 선택">
   <button id="up" type="button" aria-pressed="true">▲ 상승</button>
   <button id="down" type="button" aria-pressed="false">▼ 하락</button>
-  <button id="turn" type="button" aria-pressed="false">↗ 60·120 전환</button>
+  <button id="turn" type="button" aria-pressed="false">↗ 60·120 상승전환</button>
+  <button id="turn-down" type="button" aria-pressed="false">↘ 60·120 하락전환</button>
 </div>
 <p id="direction-note" class="meta"></p>
+<div id="turn-tools" class="tools turn-tools" hidden>
+  <label>예상 기간 (현 속도) <select id="turn-max-age" aria-label="예상 전환 기간 상한" disabled><option value="3">3거래일</option><option value="5" selected>5거래일</option><option value="10">10거래일</option><option value="unlimited">제한 없음</option></select></label>
+  <label>최소 강도 절댓값 <select id="turn-min-strength" aria-label="예상 종목 최소 강도 절댓값" disabled><option value="0" selected>0 이상</option><option value="1">1 이상</option><option value="3">3 이상</option><option value="5">5 이상</option><option value="10">10 이상</option></select></label>
+  <span class="turn-tools-note">예상 필터는 미확정(예상) 종목의 동일 축에만 적용되며 확정 종목은 항상 유지됩니다. 예상 거래일은 예측이 아닌 현재 2거래일 속도 유지 가정입니다.</span>
+</div>
 <div id="kind-chips" class="kind-chips" role="group" aria-label="유형 선택">
   <button type="button" data-kind="all" aria-pressed="true">전체</button>
   <button type="button" data-kind="stock" aria-pressed="false">종목</button>
@@ -50,10 +62,16 @@
   <input id="search" type="search" aria-label="티커 또는 종목명 검색" placeholder="티커·종목명 검색" spellcheck="false">
   <label>정렬 <select id="sort"><option value="strength">최약축 강도순</option><option value="ticker">티커순</option><option value="name">종목명순</option><option value="cap-desc">시총 큰 순</option><option value="cap-asc">시총 작은 순</option></select></label>
 </div>
-<p id="summary" role="status" aria-live="polite"></p>
+<div class="status-bar">
+  <p id="summary" role="status" aria-live="polite"></p>
+  <button id="retry" type="button" hidden>다시 시도</button>
+</div>
 <main class="tablewrap">
   <table aria-label="미국 이평선 강도 종목">
-    <thead><tr><th scope="col">티커</th><th scope="col">종목명</th><th scope="col">시총 (USD)</th><th scope="col">5축</th><th scope="col">20축</th><th scope="col">60축</th><th scope="col">120축</th><th scope="col">등급</th><th scope="col">전환</th><th scope="col">종목 기준일</th></tr></thead>
+    <thead>
+      <tr id="head-general"><th scope="col">티커</th><th scope="col">종목명</th><th scope="col">시총 (USD)</th><th scope="col">5축</th><th scope="col">20축</th><th scope="col">60축</th><th scope="col">120축</th><th scope="col">등급</th><th scope="col">전환</th><th scope="col">종목 기준일</th></tr>
+      <tr id="head-turn" hidden><th scope="col">티커</th><th scope="col">종목명</th><th scope="col">시총 (USD)</th><th scope="col">상태</th><th scope="col">60축 (확정·예상)</th><th scope="col">120축 (확정·예상)</th><th scope="col">등급</th><th scope="col">종목 기준일</th></tr>
+    </thead>
     <tbody id="rows"></tbody>
   </table>
 </main>
@@ -68,40 +86,309 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  let payload, direction = 'up', activeKind = 'all';
-  const labels = {up:'상승', down:'하락', turn:'60·120 전환'};
+  const directions = ['up', 'down', 'turn', 'turn-down'];
+  const labels = {up: '상승', down: '하락', turn: '60·120 상승전환', 'turn-down': '60·120 하락전환'};
+  const prefixes = {up: '▲ ', down: '▼ ', turn: '↗ ', 'turn-down': '↘ '};
   const notes = {
-    up:'네 축의 강도가 모두 양수인 종목입니다.',
-    down:'네 축의 강도가 모두 음수인 종목입니다.',
-    turn:'상승 목록 중 60·120축이 모두 양수이고, 하나 이상이 최근 5거래일 이내 양전한 종목입니다.'
+    up: '네 축의 강도가 모두 양수인 종목입니다.',
+    down: '네 축의 강도가 모두 음수인 종목입니다.',
+    turn: '60축 또는 120축이 최근 5거래일 이내 양전(확정)했거나, 현재 2거래일 변화 속도가 유지된다고 가정할 때 양전까지 남은 거래일이 계산되는 종목입니다. 예상 거래일은 예측이 아닌 현재 속도 기준 참고치입니다.',
+    'turn-down': '60축 또는 120축이 최근 5거래일 이내 음전(확정)했거나, 현재 2거래일 변화 속도가 유지된다고 가정할 때 음전까지 남은 거래일이 계산되는 종목입니다. 예상 거래일은 예측이 아닌 현재 속도 기준 참고치입니다.'
   };
+  const generalSortOptions = [
+    ['strength', '최약축 강도순'],
+    ['ticker', '티커순'],
+    ['name', '종목명순'],
+    ['cap-desc', '시총 큰 순'],
+    ['cap-asc', '시총 작은 순']
+  ];
+  const turnSortOptions = [
+    ['turn-default', '기본순 (확정·예상)'],
+    ['k-asc', '최근 전환일순 (60·120)'],
+    ['k60-asc', '60축 전환일 최신순'],
+    ['k120-asc', '120축 전환일 최신순'],
+    ['r-asc', '예상 거래일 짧은 순 (60·120)'],
+    ['r60-asc', '60축 예상 거래일순'],
+    ['r120-asc', '120축 예상 거래일순'],
+    ['ticker', '티커순'],
+    ['name', '종목명순'],
+    ['cap-desc', '시총 큰 순'],
+    ['cap-asc', '시총 작은 순']
+  ];
+  const sharedSortValues = new Set(['ticker', 'name', 'cap-desc', 'cap-asc']);
+
+  let payload = null;
+  let direction = 'up';
+  let activeKind = 'all';
+  let isLoading = false;
+  let loadStatus = '';
+  const unavailable = '데이터 제공 안 됨';
+
+  if (typeof location !== 'undefined' && typeof URLSearchParams !== 'undefined' && location.search) {
+    const dirParam = new URLSearchParams(location.search).get('dir');
+    if (directions.includes(dirParam)) direction = dirParam;
+  }
+
+  function isTurnDirection(dir) {
+    return dir === 'turn' || dir === 'turn-down';
+  }
+
+  function isPlainObject(v) {
+    return v !== null && typeof v === 'object' && !Array.isArray(v);
+  }
+
+  function isNullableFinite(v) {
+    return v === null || (typeof v === 'number' && Number.isFinite(v));
+  }
+
+  function isAxisMap(obj, positiveOnly) {
+    if (!isPlainObject(obj) || !('60' in obj) || !('120' in obj)) return false;
+    for (const ax of ['60', '120']) {
+      const v = obj[ax];
+      if (v === null) continue;
+      if (typeof v !== 'number' || !Number.isFinite(v)) return false;
+      if (positiveOnly && v <= 0) return false;
+    }
+    return true;
+  }
+
+  function isValidAge(v) {
+    return v === null || (Number.isInteger(v) && v >= 0 && v <= 4);
+  }
+
+  function isValidBaseRow(row) {
+    if (!isPlainObject(row)) return false;
+    if (typeof row.t !== 'string' || !row.t) return false;
+    if (typeof row.n !== 'string') return false;
+    if (row.mc !== undefined && !isNullableFinite(row.mc)) return false;
+    if (row.k !== undefined && row.k !== null && typeof row.k !== 'string') return false;
+    if (row.g !== undefined && row.g !== null && typeof row.g !== 'string') return false;
+    if (row.sc !== undefined && row.sc !== null && typeof row.sc !== 'string') return false;
+    if (row.d !== undefined && row.d !== null && typeof row.d !== 'string') return false;
+    return true;
+  }
+
+  function isValidGeneralRow(row) {
+    if (!isValidBaseRow(row)) return false;
+    return Array.isArray(row.s) && row.s.length === 4 && row.s.every(isNullableFinite);
+  }
+
+  function isValidTurnRow(row) {
+    if (!isValidBaseRow(row)) return false;
+    if (row.state !== 'turn' && row.state !== 'soon') return false;
+    if (!isValidAge(row.k60) || !isValidAge(row.k120)) return false;
+    const hasK = row.k60 !== null || row.k120 !== null;
+    if (row.state === 'turn' && !hasK) return false;
+    if (row.state === 'soon' && hasK) return false;
+    if (!isAxisMap(row.p, false) || !isAxisMap(row.p_raw, false) || !isAxisMap(row.r, true)) return false;
+    if (row.state === 'soon' && !['60', '120'].some(axis => row.r[axis] !== null && row.p_raw[axis] !== null)) return false;
+    if (row.s !== undefined && row.s !== null && (!Array.isArray(row.s) || row.s.length !== 4 || !row.s.every(isNullableFinite))) return false;
+    return true;
+  }
+
+  function parsePayload(data) {
+    if (!isPlainObject(data) || data.schema !== 'us-ma-strength-screen.v1') return null;
+    if (typeof data.session !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(data.session)) return null;
+    const session = new Date(data.session);
+    if (!Number.isFinite(session.getTime()) || session.toISOString().slice(0, 10) !== data.session) return null;
+    if (!Array.isArray(data.up) || !Array.isArray(data.down) ||
+        !data.up.every(isValidGeneralRow) || !data.down.every(isValidGeneralRow)) return null;
+
+    if (Object.hasOwn(data, 'turn_up') || Object.hasOwn(data, 'turn_down')) {
+      if (!Array.isArray(data.turn_up) || !Array.isArray(data.turn_down) ||
+          !data.turn_up.every(isValidTurnRow) || !data.turn_down.every(isValidTurnRow)) return null;
+      return {...data, modern: true};
+    }
+
+    // The original v1 renderer used the boolean turn marker on Up rows.
+    const confirmedUp = data.up.every(row => typeof row.turn === 'boolean')
+      ? data.up.filter(row => row.turn === true)
+      : null;
+    return {...data, modern: false, turn_up: confirmedUp, turn_down: null};
+  }
+
+  function sourceFor(dir) {
+    const keys = {up: 'up', down: 'down', turn: 'turn_up', 'turn-down': 'turn_down'};
+    return payload?.[keys[dir]] ?? null;
+  }
+
+  function parseMaxAge(val) {
+    if (val === 'unlimited') return Infinity;
+    if (val === '' || val == null) return 5;
+    const n = Number(val);
+    return Number.isFinite(n) && n > 0 ? n : 5;
+  }
+
+  function parseMinStrength(val) {
+    if (val === '' || val == null) return 0;
+    const n = Number(val);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  }
+
+  function isConfirmedRow(row) {
+    return row.state === 'turn' ||
+      (typeof row.k60 === 'number' && Number.isFinite(row.k60) && row.k60 >= 0) ||
+      (typeof row.k120 === 'number' && Number.isFinite(row.k120) && row.k120 >= 0);
+  }
+
+  function axisMatchesEstimate(row, axis, maxAge, minStrength) {
+    const rVal = row.r ? row.r[axis] : null;
+    const rawP = row.p_raw ? row.p_raw[axis] : null;
+    if (typeof rVal !== 'number' || !Number.isFinite(rVal) || rVal <= 0 || rVal > maxAge) return false;
+    if (typeof rawP !== 'number' || !Number.isFinite(rawP)) return false;
+    return Math.abs(rawP) >= minStrength;
+  }
 
   function formatCap(value) {
     if (!Number.isFinite(value)) return '—';
     const [unit, suffix, digits] = value >= 1e12 ? [1e12, '조', 1] : value >= 1e8 ? [1e8, '억', 0] : value >= 1e4 ? [1e4, '만', 0] : [1, '', 0];
-    return `$${(value / unit).toLocaleString('ko-KR', {maximumFractionDigits:digits})}${suffix}`;
+    return `$${(value / unit).toLocaleString('ko-KR', {maximumFractionDigits: digits})}${suffix}`;
+  }
+
+  function formatPercent(value) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) return '—';
+    const rounded = Math.abs(value) < 0.005 ? 0 : value;
+    return `${rounded > 0 ? '+' : ''}${rounded.toFixed(2)}%`;
+  }
+
+  function formatEta(rVal) {
+    if (rVal < 0.1) return rVal.toFixed(2);
+    return Number.isInteger(rVal) ? String(rVal) : rVal.toFixed(1);
+  }
+
+  function formatTurnAxis(row, axis) {
+    const pVal = row.p ? row.p[axis] : null;
+    const kVal = axis === '60' ? row.k60 : row.k120;
+    const rVal = row.r ? row.r[axis] : null;
+    const pText = formatPercent(pVal);
+    const cls = typeof pVal === 'number' && Number.isFinite(pVal) ? (pVal > 0 ? 'pos' : pVal < 0 ? 'neg' : '') : '';
+    let tag = '';
+    if (typeof kVal === 'number' && Number.isFinite(kVal) && kVal >= 0) {
+      tag = kVal === 0 ? '확정 · 오늘' : `확정 · ${kVal}거래일 전`;
+    } else if (typeof rVal === 'number' && Number.isFinite(rVal) && rVal > 0) {
+      tag = `현 속도 약 ${formatEta(rVal)}거래일`;
+    }
+    if (pText === '—' && !tag) return {text: '—', cls: ''};
+    if (!tag) return {text: pText, cls};
+    if (pText === '—') return {text: tag, cls};
+    return {text: `${pText} (${tag})`, cls};
+  }
+
+  function minFinite(a, b) {
+    const aOk = typeof a === 'number' && Number.isFinite(a);
+    const bOk = typeof b === 'number' && Number.isFinite(b);
+    if (aOk && bOk) return Math.min(a, b);
+    return aOk ? a : bOk ? b : null;
+  }
+
+  function compareNullLast(aVal, bVal, a, b, desc = false) {
+    const aKnown = typeof aVal === 'number' && Number.isFinite(aVal);
+    const bKnown = typeof bVal === 'number' && Number.isFinite(bVal);
+    if (aKnown !== bKnown) return aKnown ? -1 : 1;
+    const diff = aKnown ? (desc ? bVal - aVal : aVal - bVal) : 0;
+    return diff || a.t.localeCompare(b.t);
+  }
+
+  function rebuildSortOptions(turnMode) {
+    const sortEl = $('sort');
+    const prev = sortEl.value;
+    const options = turnMode ? turnSortOptions : generalSortOptions;
+    sortEl.replaceChildren();
+    options.forEach(([value, label]) => {
+      const opt = document.createElement('option');
+      opt.value = value;
+      opt.textContent = label;
+      sortEl.appendChild(opt);
+    });
+    if (sharedSortValues.has(prev) || options.some(([value]) => value === prev)) {
+      sortEl.value = prev;
+    } else {
+      sortEl.value = turnMode ? 'turn-default' : 'strength';
+    }
+  }
+
+  function syncDirectionUI(updateUrl) {
+    const turnMode = payload?.modern && isTurnDirection(direction);
+    directions.forEach(id => $(id).setAttribute('aria-pressed', String(id === direction)));
+    $('direction-note').textContent = !isTurnDirection(direction) || turnMode ? notes[direction]
+      : sourceFor(direction) ? '기존 상승전환 확정 목록입니다. 예상 데이터는 제공되지 않습니다.' : '';
+    $('turn-tools').hidden = !turnMode;
+    $('turn-max-age').disabled = !turnMode;
+    $('turn-min-strength').disabled = !turnMode;
+    $('grade').disabled = Boolean(turnMode);
+    if (turnMode) {
+      $('grade').value = '';
+    } else {
+      $('turn-max-age').value = '5';
+      $('turn-min-strength').value = '0';
+    }
+    $('head-general').hidden = Boolean(turnMode);
+    $('head-turn').hidden = !turnMode;
+    rebuildSortOptions(turnMode);
+    if (updateUrl && typeof history !== 'undefined' && typeof location !== 'undefined' && typeof URL !== 'undefined') {
+      try {
+        const url = new URL(location.href);
+        if (direction === 'up') url.searchParams.delete('dir');
+        else url.searchParams.set('dir', direction);
+        history.replaceState(null, '', url.toString());
+      } catch {}
+    }
+  }
+
+  function sortRows(rows, sort, turnMode) {
+    if (sort === 'ticker') rows.sort((a, b) => a.t.localeCompare(b.t));
+    else if (sort === 'name') rows.sort((a, b) => a.n.localeCompare(b.n) || a.t.localeCompare(b.t));
+    else if (sort === 'cap-desc') rows.sort((a, b) => compareNullLast(a.mc, b.mc, a, b, true));
+    else if (sort === 'cap-asc') rows.sort((a, b) => compareNullLast(a.mc, b.mc, a, b, false));
+    else if (turnMode) {
+      if (sort === 'k60-asc') rows.sort((a, b) => compareNullLast(a.k60, b.k60, a, b, false));
+      else if (sort === 'k120-asc') rows.sort((a, b) => compareNullLast(a.k120, b.k120, a, b, false));
+      else if (sort === 'k-asc') rows.sort((a, b) => compareNullLast(minFinite(a.k60, a.k120), minFinite(b.k60, b.k120), a, b, false));
+      else if (sort === 'r60-asc') rows.sort((a, b) => compareNullLast(a.r['60'], b.r['60'], a, b, false));
+      else if (sort === 'r120-asc') rows.sort((a, b) => compareNullLast(a.r['120'], b.r['120'], a, b, false));
+      else if (sort === 'r-asc') rows.sort((a, b) => compareNullLast(minFinite(a.r['60'], a.r['120']), minFinite(b.r['60'], b.r['120']), a, b, false));
+    }
   }
 
   function render() {
-    if (!payload) return;
-    const source = direction === 'down' ? payload.down : direction === 'turn' ? payload.up.filter(row => row.turn) : payload.up;
+    const turnMode = payload?.modern && isTurnDirection(direction);
+    const source = sourceFor(direction);
+    if (!source) {
+      const message = payload ? unavailable : loadStatus;
+      $('summary').textContent = payload ? `${labels[direction]} · ${message}` : message;
+      $('rows').replaceChildren();
+      showTableMessage(message, 10);
+      return;
+    }
     const query = $('search').value.trim().toLowerCase();
-    const sector = $('sector').value, minCap = Number($('min-cap').value);
-    let rows = source.filter(row => (!$('grade').value || row.g === $('grade').value) &&
-      (activeKind === 'all' || (row.k || 'stock') === activeKind) &&
-      (!sector || row.sc === sector) &&
-      (row.k === 'etf' || !minCap || (Number.isFinite(row.mc) && row.mc >= minCap)) &&
-      (!query || row.t.toLowerCase().includes(query) || row.n.toLowerCase().includes(query)));
-    const sort = $('sort').value;
-    if (sort === 'ticker') rows.sort((a, b) => a.t.localeCompare(b.t));
-    if (sort === 'name') rows.sort((a, b) => a.n.localeCompare(b.n) || a.t.localeCompare(b.t));
-    if (sort === 'cap-desc' || sort === 'cap-asc') rows.sort((a, b) => {
-      const aKnown = Number.isFinite(a.mc), bKnown = Number.isFinite(b.mc);
-      if (aKnown !== bKnown) return aKnown ? -1 : 1;
-      return (aKnown ? (sort === 'cap-desc' ? b.mc - a.mc : a.mc - b.mc) : 0) || a.t.localeCompare(b.t);
+    const grade = $('grade').value;
+    const sector = $('sector').value;
+    const minCap = Number($('min-cap').value) || 0;
+    const maxAge = parseMaxAge($('turn-max-age').value);
+    const minStrength = parseMinStrength($('turn-min-strength').value);
+
+    const rows = source.filter(row => {
+      if (!turnMode && grade && row.g !== grade) return false;
+      if (activeKind !== 'all' && (row.k || 'stock') !== activeKind) return false;
+      if (sector && row.sc !== sector) return false;
+      if (row.k !== 'etf' && minCap && !(Number.isFinite(row.mc) && row.mc >= minCap)) return false;
+      if (query && !row.t.toLowerCase().includes(query) && !row.n.toLowerCase().includes(query)) return false;
+      if (turnMode && !isConfirmedRow(row)) {
+        return axisMatchesEstimate(row, '60', maxAge, minStrength) ||
+          axisMatchesEstimate(row, '120', maxAge, minStrength);
+      }
+      return true;
     });
-    $('direction-note').textContent = notes[direction];
-    $('summary').textContent = `${labels[direction]} ${source.length.toLocaleString('ko-KR')}종목 중 ${rows.length.toLocaleString('ko-KR')}종목 표시`;
+
+    sortRows(rows, $('sort').value, turnMode);
+    if (turnMode) {
+      const confirmedCount = rows.filter(isConfirmedRow).length;
+      const estimatedCount = rows.length - confirmedCount;
+      $('summary').textContent = `${labels[direction]} ${source.length.toLocaleString('ko-KR')}종목 중 ${rows.length.toLocaleString('ko-KR')}종목 표시 (확정 ${confirmedCount.toLocaleString('ko-KR')} · 현재 속도 기준 예상 ${estimatedCount.toLocaleString('ko-KR')})`;
+    } else {
+      $('summary').textContent = `${labels[direction]} ${source.length.toLocaleString('ko-KR')}종목 중 ${rows.length.toLocaleString('ko-KR')}종목 표시`;
+    }
+
     $('rows').replaceChildren();
     rows.forEach(row => {
       const tr = document.createElement('tr');
@@ -126,29 +413,117 @@
       name.title = [row.n, row.m || row.x, row.sc, row.in].filter(Boolean).join(' · ');
       const cap = cell(formatCap(row.mc));
       if (Number.isFinite(row.mc)) cap.title = `$${row.mc.toLocaleString('ko-KR')} USD`;
-      row.s.forEach(value => cell(Number.isFinite(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—', value > 0 ? 'pos' : value < 0 ? 'neg' : ''));
-      cell(row.g, 'grade');
-      cell(row.turn ? '↗' : '—');
-      cell(row.d || payload.session);
+
+      if (turnMode) {
+        const confirmed = isConfirmedRow(row);
+        const stateTd = cell('');
+        const stateBadge = document.createElement('span');
+        stateBadge.className = `state-badge ${confirmed ? (direction === 'turn-down' ? 'state-turn-down' : 'state-turn-up') : 'state-soon'}`;
+        stateBadge.textContent = confirmed ? '확정' : '예상';
+        stateTd.appendChild(stateBadge);
+        const ax60 = formatTurnAxis(row, '60');
+        const ax120 = formatTurnAxis(row, '120');
+        cell(ax60.text, ax60.cls);
+        cell(ax120.text, ax120.cls);
+        cell(row.g || '—', 'grade');
+        cell(row.d || payload.session);
+      } else {
+        row.s.forEach(value => {
+          const percent = payload.modern ? formatPercent(value)
+            : Number.isFinite(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—';
+          cell(percent, value > 0 ? 'pos' : value < 0 ? 'neg' : '');
+        });
+        cell(payload.modern ? row.g || '—' : row.g ?? '', 'grade');
+        cell(row.turn ? '↗' : '—');
+        cell(row.d || payload.session);
+      }
       $('rows').appendChild(tr);
     });
+
     if (!rows.length) {
-      const tr = document.createElement('tr'), td = document.createElement('td');
-      td.colSpan = 10;
-      td.textContent = '조건에 맞는 종목이 없습니다.';
-      tr.appendChild(td);
-      $('rows').appendChild(tr);
+      showTableMessage(source.length ? '조건에 맞는 종목이 없습니다.' : '목록에 종목이 없습니다.',
+        turnMode ? 8 : 10);
     }
   }
 
-  ['up', 'down', 'turn'].forEach(value => {
+  function showTableMessage(message, colSpan) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = colSpan;
+    td.textContent = message;
+    tr.appendChild(td);
+    $('rows').appendChild(tr);
+  }
+
+  function updateCounts(status) {
+    const counts = directions.map(id => sourceFor(id)?.length.toLocaleString('ko-KR') ?? status);
+    $('meta').textContent = payload
+      ? `${payload.session} · 미국 정규장 마감 기준 · 상승 ${counts[0]} / 하락 ${counts[1]} / 상승전환 ${counts[2]} / 하락전환 ${counts[3]}`
+      : `미국 정규장 마감 기준 · ${status}`;
+    directions.forEach((id, index) => {
+      $(id).textContent = `${prefixes[id]}${labels[id]} (${counts[index]})`;
+    });
+  }
+
+  function populateSectors(data) {
+    const prevSector = $('sector').value;
+    $('sector').replaceChildren();
+    const allOpt = document.createElement('option');
+    allOpt.value = '';
+    allOpt.textContent = '전체';
+    $('sector').appendChild(allOpt);
+    const sectors = [...new Set([...data.up, ...data.down, ...(data.turn_up ?? []), ...(data.turn_down ?? [])].map(row => row.sc).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'ko-KR'));
+    sectors.forEach(sector => {
+      const option = document.createElement('option');
+      option.value = option.textContent = sector;
+      $('sector').appendChild(option);
+    });
+    $('sector').value = sectors.includes(prevSector) ? prevSector : '';
+  }
+
+  async function loadData() {
+    if (isLoading) return;
+    isLoading = true;
+    $('retry').disabled = true;
+    loadStatus = '데이터를 불러오는 중…';
+    payload = null;
+    updateCounts('불러오는 중');
+    syncDirectionUI(false);
+    render();
+    try {
+      const response = await fetch('us-screen.json', {cache: 'no-cache'});
+      if (!response.ok) throw new Error(`데이터를 불러올 수 없습니다 (${response.status}).`);
+      const data = parsePayload(await response.json().catch(() => null));
+      if (!data) throw new Error('데이터 형식을 확인해 주세요.');
+      payload = data;
+      populateSectors(payload);
+      updateCounts(unavailable);
+      $('retry').hidden = true;
+    } catch (error) {
+      payload = null;
+      loadStatus = error && error.message ? error.message : '데이터를 불러올 수 없습니다.';
+      updateCounts('오류');
+      $('retry').hidden = false;
+    } finally {
+      isLoading = false;
+      $('retry').disabled = false;
+      syncDirectionUI(false);
+      render();
+    }
+  }
+
+  $('turn-max-age').value = '5';
+  $('turn-min-strength').value = '0';
+
+  directions.forEach(value => {
     $(value).addEventListener('click', () => {
       direction = value;
-      ['up', 'down', 'turn'].forEach(id => $(id).setAttribute('aria-pressed', String(id === value)));
+      syncDirectionUI(true);
       render();
     });
   });
-  ['grade', 'sort', 'sector', 'min-cap'].forEach(id => $(id).addEventListener('change', render));
+  ['grade', 'sort', 'sector', 'min-cap', 'turn-max-age', 'turn-min-strength'].forEach(id => $(id).addEventListener('change', render));
   const kindButtons = [...document.querySelectorAll('#kind-chips button[data-kind]')];
   kindButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -158,23 +533,8 @@
     });
   });
   $('search').addEventListener('input', render);
-  (async () => {
-    try {
-      const response = await fetch('us-screen.json', {cache:'no-cache'});
-      if (!response.ok) throw new Error(`데이터를 불러올 수 없습니다 (${response.status}).`);
-      payload = await response.json();
-      if (payload.schema !== 'us-ma-strength-screen.v1' || !Array.isArray(payload.up) || !Array.isArray(payload.down)) throw new Error('데이터 형식을 확인해 주세요.');
-      const sectors = [...new Set([...payload.up, ...payload.down].map(row => row.sc).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ko-KR'));
-      sectors.forEach(sector => {
-        const option = document.createElement('option');
-        option.value = option.textContent = sector;
-        $('sector').appendChild(option);
-      });
-      $('meta').textContent = `${payload.session} · 미국 정규장 마감 기준 · 상승 ${payload.counts.up.toLocaleString('ko-KR')} / 하락 ${payload.counts.down.toLocaleString('ko-KR')} / 전환 ${payload.counts.turn.toLocaleString('ko-KR')}`;
-      ['up', 'down', 'turn'].forEach(id => { $(id).textContent = `${labels[id]} (${payload.counts[id].toLocaleString('ko-KR')})`; });
-      render();
-    } catch (error) { $('summary').textContent = error.message; }
-  })();
+  $('retry').addEventListener('click', () => { loadData(); });
+  loadData();
 })();
 </script>
 </body>
