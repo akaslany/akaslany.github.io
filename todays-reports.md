@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **07:10 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-11-28](/2026/11/28/global-economic-risk-briefing/)
 - **07:00 KST** — [미국 국채 수요 4주 리포트 — 경매·포지셔닝·해외 보관·유동성 (2026-11-28)](/us-treasury-demand/2026-11-28/)
 - **06:07 KST** — [AI Daily Intel — 2026-11-27](/ai-intel/2026-11-27/)
 - **02:02 KST** — [한국은행 보도자료 브리핑 — 2026-11-27](/bok-briefing/2026-11-27/)
