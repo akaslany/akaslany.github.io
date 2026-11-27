@@ -12,6 +12,7 @@ permalink: /todays-report/
 
 오늘 GitHub Pages에 게시된 보고서입니다.
 
+- **07:32 KST** — [미국 유동성·자금시장 인텔리전스 v2 — 2026-11-28](/liquidity/2026-11-28/)
 - **07:30 KST** — [Trump Truth Social 발언 요약 — 2026-11-28](/trump-truth/2026-11-28/)
 - **07:10 KST** — [글로벌 경제 및 리스크 브리핑 — 2026-11-28](/2026/11/28/global-economic-risk-briefing/)
 - **07:00 KST** — [미국 국채 수요 4주 리포트 — 경매·포지셔닝·해외 보관·유동성 (2026-11-28)](/us-treasury-demand/2026-11-28/)
